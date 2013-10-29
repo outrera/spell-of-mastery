@@ -1,0 +1,2 @@
+editor: tree_dead
+height: 3
