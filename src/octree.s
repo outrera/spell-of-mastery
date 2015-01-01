@@ -19,10 +19,6 @@ ot_phash X,Y,Z = Z*#10000+Y*#100+X //point's hash
 ot_p2i X,Y,Z = Z*4 + Y*2 + X
 ot_merge$_ [X<1.is_int @1.all{(same ? X)}] = X
 
-ot_nh L F =
-| Xs = dup I L*L: F [I%L I/L]
-| @list: Xs.fold{(heap) |Heap X => Heap.push{X.1^ot_phash X}}
-
 ot_get O L P T =
 | if T.is_int then T,O,L // Value,Origin,Dimension
   else | !L / 2
@@ -64,7 +60,7 @@ octree.neibs P =
 | Up    = $z_neibs{[X Y L L] [X   Y   Z+L]}
 | [@West @East @North @South @Down @Up]
 
-octree.pilar X,Y =
+octree.getPilar X,Y =
 | Xs = on [] 0 | @r R &$size => R
                | R Z => | S,O,L = $get{X,Y,Z}
                         | r [] [@R L,S] Z+L

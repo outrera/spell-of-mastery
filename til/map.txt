@@ -1,9 +1,9 @@
 // Legend: Type CornersElevation @Args @Variations
 // Note: corners elevation order is clockwise
-empty 1111 tid/0 empty/1 elev/0 renderer/none 0
-pad 1111 tid/1 empty/1 renderer/none 0
+empty 1111 id/0 empty/1 elev/0 renderer/none 0
+pad 1111 id/1 empty/1 renderer/none 0
 
-base 1111 tid/100 trn/1 16 17 16 17 16 17 19
+base 1111 id/100 trn/1 16 17 16 17 16 17 19
 base 1000 0
 base 1100 1
 base 1001 2
@@ -19,7 +19,7 @@ base 1110 11
 base 1010 12
 base 0101 13
 
-rock 1111 tid/103 trn/1 36 37
+rock 1111 id/103 trn/1 36 37
 rock 1000 20
 rock 1100 21
 rock 1001 22
@@ -29,7 +29,7 @@ rock 0110 25
 rock 0011 26
 rock 0010 27
 
-water 1111 tid/2 empty/1 elev/0.5 alpha/127 56 57 59
+water 1111 id/2 empty/1 elev/0.5 alpha/127 56 57 59
 water 1000 alpha/127 40
 water 1100 alpha/127 41
 water 1001 alpha/127 42
@@ -43,7 +43,7 @@ water 1011 alpha/127 49
 water 1101 alpha/127 50
 water 1110 alpha/127 51
 
-sand 1111 tid/105 trn/1 76 77 76 77 76 77 79
+sand 1111 id/105 trn/1 76 77 76 77 76 77 79
 sand 1000 60
 sand 1100 61
 sand 1001 62
@@ -57,7 +57,7 @@ sand 1011 69
 sand 1101 70
 sand 1110 71
 
-grass 1111 tid/106 elev/0.5 empty/1 96
+grass 1111 id/106 elev/0.5 empty/1 96
 grass 1000 80
 grass 1100 81
 grass 1001 82
@@ -67,7 +67,7 @@ grass 0110 85
 grass 0011 86
 grass 0010 87
 
-stairs 1111 tid/107 trn/1 role/wall 116 117
+stairs 1111 id/107 trn/1 role/wall 116 117
 stairs 1000 100
 stairs 1100 101
 stairs 1001 102
@@ -77,9 +77,9 @@ stairs 0110 105
 stairs 0011 106
 stairs 0010 107
 
-house_base 1111 tid/108 aux/1 137
-house_wall 1111 tid/109 aux/1 136
-house_roof 1111 tid/110 aux/1 136
+house_base 1111 id/108 aux/1 137
+house_wall 1111 id/109 aux/1 136
+house_roof 1111 id/110 aux/1 136
 house_roof 1000 120
 house_roof 1100 121
 house_roof 1001 122
@@ -91,26 +91,26 @@ house_roof 0010 127
 house_roof 1101 130
 house_roof 0000 120
 
-house 1111 tid/111 trn/1 stack house_base house_wall house_roof
+house 1111 id/111 trn/1 stack house_base house_wall house_roof
 
-house_door 1111 tid/112 role/house 135
-house_window_l0 1111 tid/113 role/house 139
-house_window_l1 1111 tid/114 role/house 138
+house_door 1111 id/112 role/house 135
+house_window_l0 1111 id/113 role/house 139
+house_window_l1 1111 id/114 role/house 138
 
-wall 1111 tid/115 no_lineup/1 tiling/side 116 117
+wall 1111 id/115 no_lineup/1 tiling/side 116 117
 wall 0110 140
 wall 0011 141
 wall 1001 142
 wall 1100 143
 
-column0 1111 tid/116 aux/1 144
-column1 1111 tid/117 aux/1 145
-column2 1111 tid/118 aux/1 146
-column 1111 tid/119 role/wall stack column0 column1 column2
+column0 1111 id/116 aux/1 144
+column1 1111 id/117 aux/1 145
+column2 1111 id/118 aux/1 146
+column 1111 id/119 role/wall stack column0 column1 column2
 
-cloud 1111 tid/120 empty/1 alpha/127 176
+cloud 1111 id/120 empty/1 alpha/127 176
 
-gold 1111 tid/121 196
+gold 1111 id/121 196
 gold 1000 180
 gold 1100 181
 gold 1001 182
@@ -120,7 +120,7 @@ gold 0110 185
 gold 0011 186
 gold 0010 187
 
-dirt 1111 tid/122 trn/1 216
+dirt 1111 id/122 trn/1 216
 dirt 1000 200
 dirt 1100 201
 dirt 1001 202
@@ -138,7 +138,7 @@ dirt 0101 213
 
 // 240-259/ transition tiles
 
-trns 1111 tid/123 aux/1 236
+trns 1111 id/123 aux/1 236
 trns 0000 237
 trns 1000 220
 trns 1100 221
