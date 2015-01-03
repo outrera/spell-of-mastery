@@ -40,10 +40,9 @@ ot_set L P V T =
        | T
 
 // gets cube at P in the form of [Value OriginXYZ EdgeLength]
-octree.get P = ot_get 0,0,0 $size P%$size $root
+octree.get P = ot_get 0,0,0 $size P $root
 
-octree.set P V =
-| $root <= ot_merge: ot_set $size P%$size V $root
+octree.set P V = $root <= ot_merge: ot_set $size P V $root
 
 genOctNeibFn x_neibs 0 X
 genOctNeibFn y_neibs 1 Y
@@ -60,11 +59,15 @@ octree.neibs P =
 | Up    = $z_neibs{[X Y L L] [X   Y   Z+L]}
 | [@West @East @North @South @Down @Up]
 
-octree.getPilar X,Y =
-| Xs = on [] 0 | @r R &$size => R
-               | R Z => | S,O,L = $get{X,Y,Z}
-                        | r [] [@R L,S] Z+L
-| on Xs | @r$_ [@H A,V B,&V @T] => [@H @[A+B,V @T]^r]
+octree.getPilar X Y =
+| Size = $size
+| Xs = []
+| Z = 0
+| while Z < Size
+  | S,O,L = $get{X,Y,Z}
+  | Xs <= [L,S @Xs]
+  | !Z + L
+| on Xs.flip | @r$_ [@H A,V B,&V @T] => [@H @[A+B,V @T]^r]
 
 
 export octree

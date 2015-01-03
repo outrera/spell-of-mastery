@@ -4,16 +4,19 @@ TileW = 64
 TileH = 32
 
 
-M = main: main_root
-World = No
+Main = main: main_root
+World = world Main 16
 
-set_skin "[M.data]ui"
+set_skin "[Main.data]ui"
 
 
-T = octree 128
-T.set{3,3,3 123}
+//T = octree 128
+//T.set{3,3,3 123}
 //say T.get{3,3,3}
-say T.neibs{3,3,3}
+//say T.neibs{3,3,3}
+
+say 'Succeed!'
+
 
 /*
 Tabs = No

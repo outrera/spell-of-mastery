@@ -5,9 +5,6 @@ transparentize Base Alpha =
 | as R Base.copy
   | for [X Y] points{0 0 64 64}: when X^^1 >< Y^^1: R.set{X Y Empty}
 
-GetSideElev =
-GetCornerElev =
-GetCornerTrns =
 DummyGfx = gfx 1 1
 
 genTransition M F T = //Mask From To
@@ -15,39 +12,44 @@ genTransition M F T = //Mask From To
 | as R T.copy
   | for [X Y] points{0 0 64 32}: less M.get{X Y} >< Alpha: R.put{X Y F.get{X Y}}
 
-type tile{Type Role Id Elev Trn Empty Tiling Lineup Renderer Ds Ms Us Trns Base}
-  type/Type role/Role id/Id elev/Elev trn/Trn empty/Empty tiling/Tiling neib_elevs/[0 0 0 0]
-  lineup/Lineup renderer/Renderer ds/Ds ms/Ms us/Us trns/Trns base/Base
+type tile{Main Type Role Id Elev Trn Empty Tiling Lineup Renderer Ds Ms Us Trns Base}
+  main/Main type/Type role/Role id/Id elev/Elev trn/Trn empty/Empty tiling/Tiling
+  neib_elevs/[0 0 0 0] lineup/Lineup renderer/Renderer ds/Ds ms/Ms us/Us trns/Trns base/Base
 
 tile.slope = case $neib_elev
   []+[1 1 1 1]+[0 0 0 0] | 0
   _ | 16
 
-tile.render P Z D U S = if $renderer >< none then DummyGfx else
+TrnsCache = t
+
+tile.render P Z D U Seed = if $renderer >< none then DummyGfx else
 | DE = D.empty
 | DR = D.role
 | UH = U.heavy
 | UR = U.role
 | UPad = UR >< pad
+| World = $main.world
 | Gs = if DR <> $role then $ds
        else if UR <> $role and not UPad then $us
        else $ms
 | G = if $lineup and (UH or UPad or UR >< $role)
         then | $neib_elevs.init{[1 1 1 1]}
              | Gs.$neib_elevs
-      else | World = $main.worl
-           | Elev = if $tiling >< side then World.getSideElev{P Z} else World.getCornerElev{P Z}
+      else | Elev = if $tiling >< side then World.getSideElev{P Z} else World.getCornerElev{P Z}
            | $neib_elevs.init{Elev{E => if E < $elev then 0 else 1}}
            | R = Gs.$neib_elevs
            | less got R
              | Gs.$neib_elevs.init{[1 1 1 1]}
              | R <= Gs.$neib_elevs
            | R
-| G = G.(S%G.len)
+| G = G.(Seed%G.size)
 | when not $trn or $neib_elevs <> [1 1 1 1]: leave G
-| Rs = GetCornerTrns{P Z $role}
-| when Rs.all{1}: leave G
-| genTransition $trns.Rs.0 G $base
+| Cs = World.getCornerTrns{P Z $role}
+| when Cs.all{1}: leave G
+| Index = [Cs G.address $base.address]
+| as R TrnsCache.Index: less got R
+  | R <= genTransition $trns.Cs.0 G $base
+  | TrnsCache.Index <= R
 
 tile.heavy = not $empty
 
@@ -76,7 +78,7 @@ main.load_tiles =
   | [Ds Ms Us] = case V.gfxes
                       T<1^got | [T T T]
                       Else | V.stack{}{Tiles.?.gfxes}
-  | $tiles.K <= tile K V.role^~{K} V.id V.elev^~{1}
+  | $tiles.K <= tile Me K V.role^~{K} V.id V.elev^~{1}
                      V.trn V.empty V.tiling V.no_lineup^~{0}^not V.renderer
                      Ds Ms Us Trns Base
 

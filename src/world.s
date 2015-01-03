@@ -1,21 +1,26 @@
 use util octree
 
-type world{Main Size} main/Main size/Size cells/(octree) gfxes seed tid_map/Main.tid_map
+type world{Main Size} main/Main size/Size cells/octree{256} gfxes seed tid_map/Main.tid_map
+| $main.world <= Me
 | Filler = $main.tiles.base.id
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
-| for P points{0 0 Size Size}: $cells.set{[@P 0] Filler}
+| for P points{0 0 Size+1 Size+1}: $cells.set{[@P 0] Filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
+
+world.get X Y Z = $cells.get{[X+1 Y+1 Z]}
+
+world.set X Y Z V = $cells.set{[X+1 Y+1 Z] V}
 
 world.p2i X,Y =
 | S = $size
 | (Y%S)*S + X%S
 
-world.getElev P Z = $tid_map.($cells.get{[@P Z]}.0).elev
+world.getElev X,Y Z = $tid_map.($get{X Y Z}.0).elev
 
-world.getTrn P Z =
-| C = $tid_map.($cells.get{[@P Z]}.0)
+world.getTrn X,Y Z =
+| C = $tid_map.($get{X Y Z}.0)
 | C.trn and C.role
 
 world.getCornerElev P Z = `[]`
@@ -33,12 +38,13 @@ world.getCornerTrns P Z R = `[]`
   [$getTrn{P+[ 1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[ 1 0] Z}].all{R}
   [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{R}
 
-world.getPilar P = $cells.getPilar{P}
+world.getPilar X Y = $cells.getPilar{X+1 Y+1}
 
 world.updPilarGfxes P =
 | I = $p2i{P}
 | S = $seed.I
-| Cs = $getPilar{P}
+| X,Y = P
+| Cs = $getPilar{X Y}
 | Gs = []
 | Z = 0
 | B = $tid_map.0 // Base
@@ -50,7 +56,7 @@ world.updPilarGfxes P =
     | _goto for_break
   | C = $tid_map.V
   | times I N
-    | A = if I+1 < N then B else $tid_map.($cells.get{[@P Z+1]}.0)
+    | A = if I+1 < N then B else $tid_map.($get{X Y Z+1}.0)
       // B=Below, A=Above, S=Seed
     | push C.render{P Z B A S} Gs
     | B <= C
@@ -59,7 +65,6 @@ world.updPilarGfxes P =
 | $gfxes.I <= Gs.flip
 
 world.drawPilar P BX BY Blit CursorI =
-| !P % $size
 | I = $p2i{P}
 | Gs = $gfxes.I
 | Cursor = same I CursorI
@@ -78,14 +83,16 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
-world.height XY = $size - $getPilar{XY}.last.0
+world.height X Y = $size - $getPilar{X Y}.last.0
 
-world.push XY C =
-| $cells.set{[@XY XY.height] C.id}
-| $updElev{XY}
+world.push X,Y C =
+| $set{X Y $height{X Y} C.id}
+| $updElev{X,Y}
 
-world.pop XY =
-| H = XY.height
+world.pop X,Y =
+| H = $height{X Y}
 | less H: leave 0
-| $cells.set{[@XY H-1] 0}
-| $updElev{XY}
+| $set{X Y H-1 0}
+| $updElev{X,Y}
+
+export world
