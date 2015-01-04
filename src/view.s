@@ -1,16 +1,16 @@
 use gui util widgets
 
 
-type view.widget{W H M} g w/W h/H xy main/M player paused/1 last_click
-                        units notes speed/20 frame cursor selection
-                        keys/(t) mice_xy/[0 0] anchor
+TileW = 64
+TileH = 32
+
+type view.widget{M W H}
+  main/M g w/W h/H cursor
+  view_origin/[0 0] blit_origin/[360 -170] mice_xy/[0 0] mice_z cell_xy/[0 0] cell_index
+  brush/[tile base]
 | $g <= gfx W H
 
 view.init =
-| $paused <= 0
-| $selection <= []
-| $notes <= []
-| $clear_clicks
 | $move{$xy} //normalize view
 
 view.world = $main.world
@@ -27,12 +27,24 @@ view.center_at XY = $move{XY*32-[$w $h]/2}
 
 view.render =
 | G = $g
+| G.clear{#929292/*#00A0C0*/}
 | G
 
-view.mice_to_cell XY =
-| [X Y] = ($xy+XY)/32
-| $world.get{X.clip{0 $world.w-1} Y.clip{0 $world.h-1}}
+view.worldToView P =
+| [X Y] = P - $view_origin
+| RX = (X*TileW - Y*TileW)/2
+| RY = (X*TileH - Y*TileH)/2
+| [RX RY] + $blit_origin
 
+view.viewToWorld P =
+| [X Y] = P - $blit_origin
+| !X - 32
+| WH = TileW*TileH
+| RX = (Y*TileW + X*TileH)/WH
+| RY = (Y*TileW - X*TileH)/WH
+| [RX RY] = [RX RY] + $view_origin
+| S = $world.size
+| [RX.clip{0 S} RY.clip{0 S}]
 
 view.mice_rect =
 | [AX AY] = if $anchor then $anchor else $mice_xy
@@ -44,12 +56,12 @@ view.mice_rect =
 | [X Y U-X V-Y]
 
 view.pick_cursor =
-| $cursor <= skin_cursor if $act.0 then \ch_red
+| $cursor <= skin_cursor /*if $act.0 then \ch_red
                          else if $anchor then \cross
                          //else if $input_select_single{$mice_xy}.size then \glass
-                         else \point
+                         else*/ \point
 
-view.input In = case In
+view.input In = /*case In
   [mice_move _ XY]
     | $mice_xy.init{XY}
     | $pick_cursor 
@@ -80,7 +92,7 @@ view.input In = case In
   [key down  1] | $move{$xy+[0 64]}
   [key left  1] | $move{$xy-[64 0]}
   [key right 1] | $move{$xy+[64 0]}
-  [key Name  S] | $keys.Name <= S
+  [key Name  S] | $keys.Name <= S*/
 
 view.pause = $paused <= 1
 view.unpause = $paused <= 0

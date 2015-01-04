@@ -1,13 +1,14 @@
 use common tile macros world util heap octree gui widgets view
 
-TileW = 64
-TileH = 32
-
 
 Main = main: main_root
 World = world Main 16
 
 set_skin "[Main.data]ui"
+
+View = view Main 800 600
+
+gui View cursor/skin_cursor{point}
 
 
 //T = octree 128

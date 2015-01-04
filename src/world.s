@@ -6,7 +6,7 @@ type world{Main Size} main/Main size/Size cells/octree{256} gfxes seed tid_map/M
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
-| for P points{0 0 Size+1 Size+1}: $cells.set{[@P 0] Filler}
+| for P points{0 0 Size+2 Size+2}: $cells.set{[@P 0] Filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 
 world.get X Y Z = $cells.get{[X+1 Y+1 Z]}
