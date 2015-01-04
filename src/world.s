@@ -65,6 +65,8 @@ world.updPilarGfxes P =
 | $gfxes.I <= Gs.flip
 
 world.drawPilar P BX BY Blit CursorI =
+| when BX < 0 or BX >> $size: leave 0
+| when BY < 0 or BY >> $size: leave 0
 | I = $p2i{P}
 | Gs = $gfxes.I
 | Cursor = same I CursorI
@@ -72,10 +74,10 @@ world.drawPilar P BX BY Blit CursorI =
 | Os = []
 //| case P X,Y: Os <= Objs.X.Y
 | for G Gs: case G
-  0.is_int | !Z+G
+  1.is_int | !Z+G
   Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h+32-Z*32 R
        | Blit BX BY-G.h+32-Z*32 G
-       | for O Os.(Z+1): O.render{Blit BX BY-Z*32}
+       //| when Z+1 < Os.size: for O Os.(Z+1): O.render{Blit BX BY-Z*32}
        | when Cursor | R = $main.rect_front; Blit BX BY-R.h+32-Z*32 R
        | !Z+1
 

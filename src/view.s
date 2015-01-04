@@ -6,7 +6,7 @@ TileH = 32
 
 type view.widget{M W H}
   main/M g w/W h/H cursor
-  view_origin/[0 0] blit_origin/[360 -170] mice_xy/[0 0] mice_z cell_xy/[0 0] cell_index
+  view_origin/[0 0] blit_origin/[360 -170] mice_xy/[0 0] mice_z cell_xy/[0 0] cursor_cell
   brush/[tile base]
 | $g <= gfx W H
 
@@ -28,6 +28,24 @@ view.center_at XY = $move{XY*32-[$w $h]/2}
 view.render =
 | G = $g
 | G.clear{#929292/*#00A0C0*/}
+| Blit = X Y Src => G.blit{X,Y Src}
+| D = 32
+| [TX TY] = $blit_origin
+| Y = 0
+| YY = D
+| while Y < D
+  | times N Y+1
+    | BX = TX - Y*TileH + N*TileW
+    | BY = TY + Y*TileH/2
+    | $world.drawPilar{$view_origin+[N Y-N] BX BY Blit $cursor_cell}
+  | !Y + 1
+| while YY > 0
+  | !YY - 1
+  | times N YY+1
+    | BX = TX - (YY-1)*TileH + N*TileW
+    | BY = TY + Y*TileH/2
+    | $world.drawPilar{$view_origin+[N-YY+N D-N-1] BX BY Blit $cursor_cell}
+  | !Y + 1
 | G
 
 view.worldToView P =
