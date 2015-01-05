@@ -183,7 +183,7 @@ droplist.input In = case In
                   | $xs.$p.state <= \normal
                   | $picked <= $p
 
-type litems.~{Xs w/300 lines/5 f/(V=>)} f/F ih/No lines/Lines xs/Xs box picked o/No
+type litems.~{Xs w/160 lines/5 f/(V=>)} f/F ih/No lines/Lines xs/Xs box picked o/No
 | $box <= lay v 0: dup $lines: litem '' w/W
 | $offset <= 0
 heir litems $box
@@ -206,16 +206,18 @@ litems.`!data` Ys =
 | $picked <= 0
 | $o <= No
 | $offset <= 0
+litems.pick NP =
+| NP <= @clip 0 $xs.size-1 NP
+| when NP <> $picked
+  | K = $picked - $o
+  | when K >> 0 and K < $lines:
+    | $box.items.K.state <= \normal
+  | $picked <= NP
+  | $f $xs.NP
+  | $box.items.(NP-$o).state <= \picked
 litems.input In = case In
   [mice left 1 P] | have $ih: $box.items.0.render.h
-                  | NP = @clip 0 $xs.size-1 P.1/$ih+$o
-                  | when NP <> $picked
-                    | K = $picked - $o
-                    | when K >> 0 and K < $lines:
-                      | $box.items.K.state <= \normal
-                    | $picked <= NP
-                    | $f $xs.NP
-                    | $box.items.(NP-$o).state <= \picked
+                  | $pick{P.1/$ih+$o}
 litems.itemAt Point XY WH = [Me XY WH] //override lay's method
 
 folder_nomalized Path = 

@@ -8,12 +8,16 @@ type view.widget{M W H}
   main/M g w/W h/H cursor keys/(t)
   view_origin/[0 0] blit_origin/[360 -170]
   mice_xy/[0 0] mice_z cell_xy/[0 0] cell_index
-  brush/[tile base]
+  brush/[0 0]
 | $g <= gfx W H
 
 view.init =
 | $view_origin.init{-[$world.size $world.size]/2}
 | $move{$view_origin} //normalize view
+
+view.set_brush NewBrush =
+| say NewBrush
+| $brush.init{NewBrush}
 
 view.world = $main.world
 

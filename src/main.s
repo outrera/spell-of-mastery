@@ -6,13 +6,21 @@ World = world Main 16
 
 set_skin "[Main.data]ui"
 
-View = view Main 800 600
+View = view Main 600 600-6
+
+
+TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}
+
+TileList = litems lines/33 TileNames f/(N => View.set_brush{[tile N]})
+TileList.pick{TileNames.locate{base}}
+
+Panel = TileList
+
+GUI = lay h 0: list Panel View
 
 View.init
 
-TileList = litems lines/31 Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}
-
-gui TileList cursor/skin_cursor{point}
+gui GUI cursor/skin_cursor{point}
 
 //gui View cursor/skin_cursor{point}
 
