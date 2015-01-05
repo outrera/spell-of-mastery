@@ -10,7 +10,7 @@ DummyGfx = gfx 1 1
 genTransition M F T = //Mask From To
 | Alpha = rgba 0 0 0 255
 | as R T.copy
-  | for [X Y] points{0 0 64 32}: less M.get{X Y} >< Alpha: R.put{X Y F.get{X Y}}
+  | for [X Y] points{0 0 64 32}: less M.get{X Y} >< Alpha: R.set{X Y F.get{X Y}}
 
 type tile{Main Type Role Id Elev Trn Empty Tiling Lineup Renderer Ds Ms Us Trns Base}
   main/Main type/Type role/Role id/Id elev/Elev trn/Trn empty/Empty tiling/Tiling
@@ -39,14 +39,14 @@ tile.render P Z D U Seed = if $renderer >< none then DummyGfx else
            | $neib_elevs.init{Elev{E => if E < $elev then 0 else 1}}
            | R = Gs.$neib_elevs
            | less got R
-             | Gs.$neib_elevs.init{[1 1 1 1]}
+             | $neib_elevs.init{[1 1 1 1]}
              | R <= Gs.$neib_elevs
            | R
 | G = G.(Seed%G.size)
 | when not $trn or $neib_elevs <> [1 1 1 1]: leave G
 | Cs = World.getCornerTrns{P Z $role}
 | when Cs.all{1}: leave G
-| Index = [Cs G.address $base.address]
+| Index = [Cs G^address $base^address]
 | as R TrnsCache.Index: less got R
   | R <= genTransition $trns.Cs.0 G $base
   | TrnsCache.Index <= R

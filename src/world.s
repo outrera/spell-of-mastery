@@ -1,12 +1,17 @@
 use util octree
 
-type world{Main Size} main/Main size/Size cells/octree{256} gfxes seed tid_map/Main.tid_map
+MaxSize = 256
+
+type world{Main Size}
+   main/Main size/Size cells/octree{MaxSize} gfxes seed tid_map/Main.tid_map
+   cycle
 | $main.world <= Me
 | Filler = $main.tiles.base.id
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
 | for P points{0 0 Size+2 Size+2}: $cells.set{[@P 0] Filler}
+| $push{1,1 Filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 
 world.get X Y Z = $cells.get{[X+1 Y+1 Z]}
@@ -30,7 +35,8 @@ world.getCornerElev P Z = `[]`
   [$getElev{P+[-1  1] Z} $getElev{P+[0  1] Z} $getElev{P+[-1 0] Z}].min
 
 world.getSideElev P Z = `[]`
-  $getElev{P+[0 -1] Z} $getElev{P+[1 0] Z} $getElev{P+[0 1] Z} $getElev{P+[-1 0] Z}
+  $getElev{P+[0 -1] Z} $getElev{P+[ 1 0] Z}
+  $getElev{P+[0  1] Z} $getElev{P+[-1 0] Z}
 
 world.getCornerTrns P Z R = `[]`
   [$getTrn{P+[-1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[-1 0] Z}].all{R}
@@ -86,10 +92,10 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
-world.height X Y = $size - $getPilar{X Y}.last.0
+world.height X Y = MaxSize - $getPilar{X Y}.last.0
 
 world.push X,Y C =
-| $set{X Y $height{X Y} C.id}
+| $set{X Y $height{X Y} C}
 | $updElev{X,Y}
 
 world.pop X,Y =
@@ -97,5 +103,8 @@ world.pop X,Y =
 | less H: leave 0
 | $set{X Y H-1 0}
 | $updElev{X,Y}
+
+world.update =
+| !$cycle + 1
 
 export world

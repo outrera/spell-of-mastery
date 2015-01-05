@@ -5,9 +5,10 @@ TileW = 64
 TileH = 32
 
 type view.widget{M W H}
-  main/M g w/W h/H cursor keys/(t)
+  main/M g w/W h/H frame paused cursor keys/(t)
   view_origin/[0 0] blit_origin/[360 -170]
-  mice_xy/[0 0] mice_z cell_xy/[0 0] cell_index
+  mice_left mice_right mice_right_xy/[0 0] mice_left_xy/[0 0]
+  mice_xy/[0 0] cell_xy/[0 0] cell_z cell_index
   brush/[0 0]
 | $g <= gfx W H
 
@@ -22,6 +23,7 @@ view.set_brush NewBrush =
 view.world = $main.world
 
 view.render =
+| $update
 | G = $g
 | G.clear{#929292/*#00A0C0*/}
 | Blit = X Y Src => G.blit{X,Y Src}
@@ -42,6 +44,7 @@ view.render =
     | BY = TY + Y*TileH/2
     | $world.drawPilar{$view_origin+[D-YY+N D-N-1] BX BY Blit $cell_index}
   | !Y + 1
+| !$frame + 1
 | G
 
 view.worldToView P =
@@ -69,12 +72,6 @@ view.mice_rect =
 | V = max AY BY
 | [X Y U-X V-Y]
 
-view.pick_cursor =
-| $cursor <= skin_cursor /*if $act.0 then \ch_red
-                         else if $anchor then \cross
-                         //else if $input_select_single{$mice_xy}.size then \glass
-                         else*/ \point
-
 view.move NewXY =
 | $cell_index
 | $view_origin.init{NewXY}
@@ -83,36 +80,39 @@ view.move NewXY =
 
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
+view.update =
+| when $mice_left: case $brush
+  [obj Type] | say Type
+  [unit Type] | say Type
+  [tile Type] | $mice_left <= 0
+              | $world.push{$cell_xy $main.tiles.Type.id}
+| when $mice_right: case $brush
+  [obj Type] | say Type
+  [unit Type] | say Type
+  [tile Type] | $mice_right <= 0
+              | $world.pop{$cell_xy}
+| $world.update
+| $cell_z <= $world.height{@$cell_xy}
+| when $paused: leave 1
+| 1
+
 view.input In = case In
   [mice_move _ XY]
     | !XY+[0 32]
     | $mice_xy.init{XY}
     | $cell_xy.init{$viewToWorld{$mice_xy}}
+    | $cell_z <= $world.height{@$cell_xy}
     | $cell_index <= $world.xy_to_index{$cell_xy}
-    | $pick_cursor 
-  /*[mice left 1 XY]
-    | when $act.0: leave 0
-    | $anchor <= XY
-    | $pick_cursor 
+  [mice left 1 XY]
+    | $mice_left <= 1
+    | $mice_left_xy.init{XY}
   [mice left 0 XY]
-    | $mice_xy.init{XY}
-    | C = $mice_to_cell{$mice_xy}
-    | if $act.0
-      then | [Actor What Type] = $act
-           | $anchor <= $mice_xy
-           | Target = $input_select^($No [U@_]=>U)^~{No C}
-           | when Target.is_unit
-             | $target_blink.init{[Target $world.cycle+12 $world.cycle+24]}
-           | Actor.order{What Type Target}
-           | $act.init{[0 0 0]}
-      else | $selection <= $input_select
-    | $anchor <= 0
-    | $pick_cursor 
+    | $mice_left <= 0
   [mice right 1 XY]
-    | if $act.0
-      then | $act.init{[0 0 0]}
-           | $pick_cursor
-      else*/
+    | $mice_right <= 1
+    | $mice_right_xy.init{XY}
+  [mice right 0 XY]
+    | $mice_right <= 0
   [key up    1] | $move{$view_origin-[1 1]}
   [key down  1] | $move{$view_origin+[1 1]}
   [key left  1] | $move{$view_origin-[1 -1]}
@@ -122,8 +122,5 @@ view.input In = case In
 view.pause = $paused <= 1
 view.unpause = $paused <= 0
 
-view.update =
-| when $paused: leave 1
-| 1
 
 export view
