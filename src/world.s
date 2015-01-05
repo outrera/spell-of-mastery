@@ -13,7 +13,7 @@ world.get X Y Z = $cells.get{[X+1 Y+1 Z]}
 
 world.set X Y Z V = $cells.set{[X+1 Y+1 Z] V}
 
-world.p2i X,Y =
+world.xy_to_index X,Y =
 | S = $size
 | (Y%S)*S + X%S
 
@@ -41,7 +41,7 @@ world.getCornerTrns P Z R = `[]`
 world.getPilar X Y = $cells.getPilar{X+1 Y+1}
 
 world.updPilarGfxes P =
-| I = $p2i{P}
+| I = $xy_to_index{P}
 | S = $seed.I
 | X,Y = P
 | Cs = $getPilar{X Y}
@@ -65,9 +65,10 @@ world.updPilarGfxes P =
 | $gfxes.I <= Gs.flip
 
 world.drawPilar P BX BY Blit CursorI =
-| when BX < 0 or BX >> $size: leave 0
-| when BY < 0 or BY >> $size: leave 0
-| I = $p2i{P}
+| X,Y = P
+| when X < 0 or X >> $size: leave 0
+| when Y < 0 or Y >> $size: leave 0
+| I = $xy_to_index{P}
 | Gs = $gfxes.I
 | Cursor = same I CursorI
 | Z = 0

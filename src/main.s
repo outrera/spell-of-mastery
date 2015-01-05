@@ -8,7 +8,13 @@ set_skin "[Main.data]ui"
 
 View = view Main 800 600
 
-gui View cursor/skin_cursor{point}
+View.init
+
+TileList = litems lines/31 Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}
+
+gui TileList cursor/skin_cursor{point}
+
+//gui View cursor/skin_cursor{point}
 
 
 //T = octree 128

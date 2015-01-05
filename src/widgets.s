@@ -368,4 +368,4 @@ icon_hp.draw G P =
 
 
 export set_skin skin_cursor skin font txt button droplist slider folder_widget
-       minimap img icon icon_hp
+       litems minimap img icon icon_hp
