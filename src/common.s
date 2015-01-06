@@ -14,6 +14,8 @@ type main{Data} world data/Data sounds/"[Data]sounds"
 | $load_tiles
 | for [Type Tile] $tiles: $tid_map.(Tile.id) <= Tile
 
+type otype name
+
 main.load_types What Dir = 
 
 export main

@@ -25,17 +25,18 @@ tile.slope = case $neib_elev
 
 TrnsCache = t
 
-tile.render P Z D U Seed = if $renderer >< none then DummyGfx else
-| DE = D.empty
-| DR = D.role
-| UH = U.heavy
-| UR = U.role
-| UPad = UR >< pad
+tile.render P Z Below Above Seed =
+| when $renderer >< none: leave DummyGfx
+| BE = Below.empty
+| BR = Below.role
+| AH = Above.heavy
+| AR = Above.role
+| APad = AR >< pad
 | World = $main.world
-| Gs = if DR <> $role then $ds
-       else if UR <> $role and not UPad then $us
+| Gs = if BR <> $role then $ds
+       else if BR <> $role and not APad then $us
        else $ms
-| G = if $lineup and (UH or UPad or UR >< $role)
+| G = if $lineup and (AH or APad or AR >< $role)
         then | $neib_elevs.init{[1 1 1 1]}
              | Gs.$neib_elevs
       else | Elev = if $tiling >< side
@@ -84,8 +85,9 @@ main.load_tiles =
   | [Ds Ms Us] = case V.gfxes
                       T<1^got | [T T T]
                       Else | V.stack{}{Tiles.?.gfxes}
+  | Lineup = V.no_lineup^~{0}^not
   | $tiles.K <= tile Me K V.role^~{K} V.id V.elev^~{1.0}
-                     V.trn^~{0} V.empty V.tiling V.no_lineup^~{0}^not V.renderer
+                     V.trn^~{0} V.empty^~{0} V.tiling Lineup V.renderer
                      Ds Ms Us Trns Plain
 
 export tile

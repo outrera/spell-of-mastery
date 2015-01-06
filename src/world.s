@@ -60,23 +60,22 @@ world.updPilarGfxes P =
 | less 0 << X and X < $size: leave 0
 | less 0 << Y and Y < $size: leave 0
 | I = $xy_to_index{P}
-| S = $seed.I
+| Seed = $seed.I
 | Cs = $getPilar{X Y}
 | Gs = []
 | Z = 0
-| B = $tid_map.0 // Base
-| for [N V] Cs
-  | less V
-    | B <= $tid_map.0
-    | !Z + N
-    | push N Gs
+| Below = $tid_map.0
+| for [Count TileId] Cs
+  | less TileId
+    | Below <= $tid_map.0
+    | !Z + Count
+    | push Count Gs
     | _goto for_break
-  | C = $tid_map.V
-  | times I N
-    | A = if I+1 < N then B else $tid_map.($get{X Y Z+1}.0)
-      // B=Below, A=Above, S=Seed
-    | push C.render{P Z B A S} Gs
-    | B <= C
+  | C = $tid_map.TileId
+  | times I Count
+    | Above = if I+1 < Count then Below else $tid_map.($get{X Y Z+1}.0)
+    | push C.render{P Z Below Above Seed} Gs
+    | Below <= C
     | !Z + 1 
 | _label for_break
 | $gfxes.I <= Gs.flip
