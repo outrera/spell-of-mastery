@@ -8,7 +8,7 @@ type view.widget{M W H}
   main/M g w/W h/H frame paused cursor keys/(t)
   view_origin/[0 0] blit_origin/[360 -170]
   mice_left mice_right mice_right_xy/[0 0] mice_left_xy/[0 0]
-  mice_xy/[0 0] cell_xy/[0 0] cell_z cell_index
+  mice_xy/[0 0] mice_z cell_xy/[0 0] cell_index
   brush/[0 0]
 | $g <= gfx W H
 
@@ -16,9 +16,7 @@ view.init =
 | $view_origin.init{-[$world.size $world.size]/2}
 | $move{$view_origin} //normalize view
 
-view.set_brush NewBrush =
-| say NewBrush
-| $brush.init{NewBrush}
+view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.world = $main.world
 
@@ -81,18 +79,16 @@ view.move NewXY =
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
 view.update =
-| when $mice_left: case $brush
+| Z = $world.height{@$cell_xy}
+| when $mice_left and Z << $mice_z: case $brush
   [obj Type] | say Type
   [unit Type] | say Type
-  [tile Type] | $mice_left <= 0
-              | $world.push{$cell_xy $main.tiles.Type.id}
-| when $mice_right: case $brush
+  [tile Type] | $world.push{$cell_xy $main.tiles.Type.id}
+| when $mice_right and Z >> $mice_z: case $brush
   [obj Type] | say Type
   [unit Type] | say Type
-  [tile Type] | $mice_right <= 0
-              | $world.pop{$cell_xy}
+  [tile Type] | $world.pop{$cell_xy}
 | $world.update
-| $cell_z <= $world.height{@$cell_xy}
 | when $paused: leave 1
 | 1
 
@@ -101,16 +97,17 @@ view.input In = case In
     | !XY+[0 32]
     | $mice_xy.init{XY}
     | $cell_xy.init{$viewToWorld{$mice_xy}}
-    | $cell_z <= $world.height{@$cell_xy}
     | $cell_index <= $world.xy_to_index{$cell_xy}
   [mice left 1 XY]
     | $mice_left <= 1
     | $mice_left_xy.init{XY}
+    | $mice_z <= $world.height{@$cell_xy}
   [mice left 0 XY]
     | $mice_left <= 0
   [mice right 1 XY]
     | $mice_right <= 1
     | $mice_right_xy.init{XY}
+    | $mice_z <= $world.height{@$cell_xy}
   [mice right 0 XY]
     | $mice_right <= 0
   [key up    1] | $move{$view_origin-[1 1]}

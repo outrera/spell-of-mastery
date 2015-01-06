@@ -32,6 +32,7 @@ tile.render P Z D U Seed = if $renderer >< none then DummyGfx else
 | Gs = if DR <> $role then $ds
        else if UR <> $role and not UPad then $us
        else $ms
+
 | G = if $lineup and (UH or UPad or UR >< $role)
         then | $neib_elevs.init{[1 1 1 1]}
              | Gs.$neib_elevs
@@ -60,7 +61,7 @@ main.load_tiles =
 | cutTile N = G.cut{N%20*64 N/20*64 64 64}
 | for [Type CornersElevation @Rest] cfg."[$data]/til/map.txt"
   | [Is As] = Rest.div{is.['/'@_]}.xs{0,1}{?^~{[]}}
-  | CE = CornersElevation.digits.pad{4 0}
+  | CE = CornersElevation.digits.pad{-4 0}
   | less Is.size: bad "one of [Type] tiles misses gfxes"
   | Tile = Tiles->Type
   | Gs = case Is [stack @Is] | Tile.stack <= Is

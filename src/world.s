@@ -12,6 +12,9 @@ type world{Main Size}
 | $seed <= SS{_=>SS.rand}
 | for P points{0 0 Size+2 Size+2}: $cells.set{[@P 0] Filler}
 | $push{1,1 Filler}
+| $push{1,2 Filler}
+| $push{2,1 Filler}
+| $push{2,2 Filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 
 world.get X Y Z = $cells.get{[X+1 Y+1 Z]}
