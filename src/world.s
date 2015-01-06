@@ -6,7 +6,7 @@ type world{Main Size}
    main/Main size/Size cells/octree{MaxSize} gfxes seed tid_map/Main.tid_map
    cycle filler
 | $main.world <= Me
-| $filler <= $main.tiles.base.id
+| $filler <= $main.tiles.plain.id
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
@@ -29,10 +29,6 @@ world.xy_to_index X,Y =
 
 world.getElev X,Y Z = $tid_map.($get{X Y Z}.0).elev
 
-world.getTrn X,Y Z =
-| C = $tid_map.($get{X Y Z}.0)
-| C.trn and C.role
-
 world.getCornerElev P Z = `[]`
   [$getElev{P+[-1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[-1 0] Z}].min
   [$getElev{P+[ 1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[ 1 0] Z}].min
@@ -43,11 +39,15 @@ world.getSideElev P Z = `[]`
   $getElev{P+[0 -1] Z} $getElev{P+[ 1 0] Z}
   $getElev{P+[0  1] Z} $getElev{P+[-1 0] Z}
 
-world.getCornerTrns P Z R = `[]`
-  [$getTrn{P+[-1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[-1 0] Z}].all{R}
-  [$getTrn{P+[ 1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[ 1 0] Z}].all{R}
-  [$getTrn{P+[ 1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[ 1 0] Z}].all{R}
-  [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{R}
+world.getTrn X,Y Z =
+| Tile = $tid_map.($get{X Y Z}.0)
+| if Tile.trn then Tile.role else 0
+
+world.getCornerTrns P Z Role = `[]`
+ [$getTrn{P+[-1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
+ [$getTrn{P+[ 1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[ 1 0] Z}].all{is{&Role+0}}
+ [$getTrn{P+[ 1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[ 1 0] Z}].all{is{&Role+0}}
+ [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
 
 world.getPilar X Y =
 | less 0 << X and X < $size: leave [$filler X,Y,0 $size]

@@ -3,21 +3,21 @@
 empty 1111 id/0 empty/1 elev/0.0 renderer/none 0
 pad 1111 id/1 empty/1 renderer/none 0
 
-base 1111 id/100 trn/1 16 17 16 17 16 17 19
-base 1000 0
-base 1100 1
-base 1001 2
-base 0100 3
-base 0001 4 
-base 0110 5
-base 0011 6
-base 0010 7
-base 0111 8
-base 1011 9
-base 1101 10
-base 1110 11
-base 1010 12
-base 0101 13
+plain 1111 id/100 trn/1 16 17 16 17 16 17 19
+plain 1000 0
+plain 1100 1
+plain 1001 2
+plain 0100 3
+plain 0001 4 
+plain 0110 5
+plain 0011 6
+plain 0010 7
+plain 0111 8
+plain 1011 9
+plain 1101 10
+plain 1110 11
+plain 1010 12
+plain 0101 13
 
 rock 1111 id/103 trn/1 36 37
 rock 1000 20

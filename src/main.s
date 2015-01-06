@@ -1,5 +1,7 @@
 use common tile macros world util heap octree gui widgets view
 
+// to implement moving units, have second octree holding them
+
 Main = main: main_root
 World = world Main 16
 
@@ -10,7 +12,7 @@ View = view Main 600 600-6
 TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}
 
 TileList = litems lines/33 TileNames f/(N => View.set_brush{[tile N]})
-TileList.pick{TileNames.locate{base}}
+TileList.pick{TileNames.locate{plain}}
 
 Panel = TileList
 
@@ -19,7 +21,6 @@ GUI = lay h 0: list Panel View
 View.init
 
 gui GUI cursor/skin_cursor{point}
-
 
 //T = octree 128
 //T.set{3,3,3 123}
