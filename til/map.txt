@@ -19,7 +19,7 @@ plain 1110 11
 plain 1010 12
 plain 0101 13
 
-rock 1111 id/103 trn/1 36 37
+rock 1111 id/103 36 37
 rock 1000 20
 rock 1100 21
 rock 1001 22
@@ -67,7 +67,7 @@ grass 0110 85
 grass 0011 86
 grass 0010 87
 
-stairs 1111 id/107 trn/1 role/wall 116 117
+stairs 1111 id/107 role/wall 116 117
 stairs 1000 100
 stairs 1100 101
 stairs 1001 102

@@ -7,10 +7,12 @@ transparentize Base Alpha =
 
 DummyGfx = gfx 1 1
 
-genTransition M F T = //Mask From To
+genTransition Mask From To =
 | Empty = 255
-| as R T.copy
-  | for [X Y] points{0 0 64 32}: less M.get{X Y} >< Empty: R.set{X Y F.get{X Y}}
+| as R To.copy
+  | for [X Y] points{0 0 64 32}
+    | less Mask.get{X Y} >< Empty
+      | R.set{X Y From.get{X Y}}
 
 type tile{Main Type Role Id Elev Trn Empty Tiling Lineup Renderer Ds Ms Us Trns Plain}
   main/Main type/Type role/Role id/Id elev/Elev trn/Trn empty/Empty tiling/Tiling
@@ -33,11 +35,12 @@ tile.render P Z D U Seed = if $renderer >< none then DummyGfx else
 | Gs = if DR <> $role then $ds
        else if UR <> $role and not UPad then $us
        else $ms
-
 | G = if $lineup and (UH or UPad or UR >< $role)
         then | $neib_elevs.init{[1 1 1 1]}
              | Gs.$neib_elevs
-      else | Elev = if $tiling >< side then World.getSideElev{P Z} else World.getCornerElev{P Z}
+      else | Elev = if $tiling >< side
+                    then World.getSideElev{P Z}
+                    else World.getCornerElev{P Z}
            | $neib_elevs.init{Elev{E => if E < $elev then 0 else 1}}
            | R = Gs.$neib_elevs
            | less got R
@@ -75,7 +78,7 @@ main.load_tiles =
     [Arg Value] | Tile.Arg <= Value
   | when Gs.size: Tile->gfxes.CE <= Gs
 | Trns = Tiles.trns.gfxes
-| Plain = Tiles.plain.gfxes.[1 1 1 1].0
+| Plain = Tiles.dirt.gfxes.[1 1 1 1].0
 | $tiles <= t size/1024
 | for [K V] Tiles
   | [Ds Ms Us] = case V.gfxes
@@ -86,4 +89,3 @@ main.load_tiles =
                      Ds Ms Us Trns Plain
 
 export tile
-

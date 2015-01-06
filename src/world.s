@@ -6,7 +6,7 @@ type world{Main Size}
    main/Main size/Size cells/octree{MaxSize} gfxes seed tid_map/Main.tid_map
    cycle filler
 | $main.world <= Me
-| $filler <= $main.tiles.plain.id
+| $filler <= $main.tiles.dirt.id
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
