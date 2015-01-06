@@ -14,20 +14,19 @@ type world{Main Size}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 
 world.get X Y Z =
-| less 0 << X and X < $size: leave [$filler X,Y,Z 1]
-| less 0 << Y and Y < $size: leave [$filler X,Y,Z 1]
 | $cells.get{[X Y Z]}
 
 world.set X Y Z V =
-| less 0 << X and X < $size: leave 0
-| less 0 << Y and Y < $size: leave 0
 | $cells.set{[X Y Z] V}
 
 world.xy_to_index X,Y =
 | S = $size
 | (Y%S)*S + X%S
 
-world.getElev X,Y Z = $tid_map.($get{X Y Z}.0).elev
+world.getElev X,Y Z =
+| less 0 << X and X < $size: leave 1.0
+| less 0 << Y and Y < $size: leave 1.0
+| $tid_map.($get{X Y Z}.0).elev
 
 world.getCornerElev P Z = `[]`
   [$getElev{P+[-1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[-1 0] Z}].min
@@ -40,6 +39,8 @@ world.getSideElev P Z = `[]`
   $getElev{P+[0  1] Z} $getElev{P+[-1 0] Z}
 
 world.getTrn X,Y Z =
+| less 0 << X and X < $size: leave 0
+| less 0 << Y and Y < $size: leave 0
 | Tile = $tid_map.($get{X Y Z}.0)
 | if Tile.trn then Tile.role else 0
 
