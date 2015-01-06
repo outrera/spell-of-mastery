@@ -4,22 +4,24 @@ MaxSize = 256
 
 type world{Main Size}
    main/Main size/Size cells/octree{MaxSize} gfxes seed tid_map/Main.tid_map
-   cycle
+   cycle filler
 | $main.world <= Me
-| Filler = $main.tiles.base.id
+| $filler <= $main.tiles.base.id
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
-| for P points{0 0 Size+2 Size+2}: $cells.set{[@P 0] Filler}
-| $push{1,1 Filler}
-| $push{1,2 Filler}
-| $push{2,1 Filler}
-| $push{2,2 Filler}
+| for P points{0 0 Size Size}: $cells.set{[@P 0] $filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 
-world.get X Y Z = $cells.get{[X+1 Y+1 Z]}
+world.get X Y Z =
+| less 0 << X and X < $size: leave [$filler X,Y,Z 1]
+| less 0 << Y and Y < $size: leave [$filler X,Y,Z 1]
+| $cells.get{[X Y Z]}
 
-world.set X Y Z V = $cells.set{[X+1 Y+1 Z] V}
+world.set X Y Z V =
+| less 0 << X and X < $size: leave 0
+| less 0 << Y and Y < $size: leave 0
+| $cells.set{[X Y Z] V}
 
 world.xy_to_index X,Y =
 | S = $size
@@ -47,12 +49,17 @@ world.getCornerTrns P Z R = `[]`
   [$getTrn{P+[ 1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[ 1 0] Z}].all{R}
   [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{R}
 
-world.getPilar X Y = $cells.getPilar{X+1 Y+1}
+world.getPilar X Y =
+| less 0 << X and X < $size: leave [$filler X,Y,0 $size]
+| less 0 << Y and Y < $size: leave [$filler X,Y,0 $size]
+| $cells.getPilar{X Y}
 
 world.updPilarGfxes P =
+| X,Y = P
+| less 0 << X and X < $size: leave 0
+| less 0 << Y and Y < $size: leave 0
 | I = $xy_to_index{P}
 | S = $seed.I
-| X,Y = P
 | Cs = $getPilar{X Y}
 | Gs = []
 | Z = 0
