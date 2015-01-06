@@ -1,6 +1,6 @@
 // Legend: Type CornersElevation @Args @Variations
 // Note: corners elevation order is clockwise
-empty 1111 id/0 empty/1 elev/0 renderer/none 0
+empty 1111 id/0 empty/1 elev/0.0 renderer/none 0
 pad 1111 id/1 empty/1 renderer/none 0
 
 base 1111 id/100 trn/1 16 17 16 17 16 17 19

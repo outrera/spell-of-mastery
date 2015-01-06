@@ -79,7 +79,7 @@ main.load_tiles =
   | [Ds Ms Us] = case V.gfxes
                       T<1^got | [T T T]
                       Else | V.stack{}{Tiles.?.gfxes}
-  | $tiles.K <= tile Me K V.role^~{K} V.id V.elev^~{1}
+  | $tiles.K <= tile Me K V.role^~{K} V.id V.elev^~{1.0}
                      V.trn V.empty V.tiling V.no_lineup^~{0}^not V.renderer
                      Ds Ms Us Trns Base
 
