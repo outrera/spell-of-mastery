@@ -34,7 +34,7 @@ tile.render P Z Below Above Seed =
 | APad = AR >< pad
 | World = $main.world
 | Gs = if BR <> $role then $ds
-       else if BR <> $role and not APad then $us
+       else if AR <> $role and not APad then $us
        else $ms
 | G = if $lineup and (AH or APad or AR >< $role)
         then | $neib_elevs.init{[1 1 1 1]}

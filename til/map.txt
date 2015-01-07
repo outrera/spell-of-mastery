@@ -106,7 +106,7 @@ wall 1100 143
 column0 1111 id/116 aux/1 144
 column1 1111 id/117 aux/1 145
 column2 1111 id/118 aux/1 146
-column 1111 id/119 role/wall stack column0 column1 column2
+column 1111 id/119 role/column elev/0.5 stack column0 column1 column2
 
 cloud 1111 id/120 empty/1 alpha/127 176
 
