@@ -145,11 +145,15 @@ litem.draw G P =
 litem.input In = case In
   [mice left 1 P] | $state <= case $state normal(\picked) picked(\normal) X(X)
 
-type droplist.widget{Xs w/140} w/W h/1 y ih xs/[] drop rs picked over above_all p
+type droplist.widget{Xs f/(V=>) w/160}
+     f/F w/W h/1 y ih xs/[] drop rs picked over above_all p
 | less Xs.size: Xs <= [' ']
 | $xs <= Xs{(litem ? w/$w)}
+| $f $text
 droplist.text = $xs.$picked.text
-droplist.`!text` T = $xs.$picked.text <= T
+droplist.`!text` T =
+| $xs.$picked.text <= T
+| $f $text
 droplist.render =
 | $rs <= map X $xs X.render
 | case $rs [R@_]: $ih <= R.h
@@ -186,6 +190,7 @@ droplist.input In = case In
   [mice left 0 P] | $drop <= 0
                   | $xs.$p.state <= \normal
                   | $picked <= $p
+                  | $f $text
 
 type litems.~{Xs w/160 lines/5 f/(V=>)} f/F ih/No lines/Lines xs/Xs box picked o/No
 | $box <= layV: dup $lines: litem '' w/W
@@ -211,14 +216,15 @@ litems.`!data` Ys =
 | $o <= No
 | $offset <= 0
 litems.pick NP =
+| less $xs.size: leave 0
 | NP <= @clip 0 $xs.size-1 NP
 | when NP <> $picked
   | K = $picked - $o
   | when K >> 0 and K < $lines:
     | $box.items.K.state <= \normal
   | $picked <= NP
-  | $f $xs.NP
   | $box.items.(NP-$o).state <= \picked
+| $f $xs.NP
 litems.input In = case In
   [mice left 1 P] | have $ih: $box.items.0.render.h
                   | $pick{P.1/$ih+$o}

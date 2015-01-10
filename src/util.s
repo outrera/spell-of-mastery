@@ -9,4 +9,13 @@ list.overlaps [BX BY BW BH] =
 Dirs = 8{(?.float-2.0)*PI/4.0}{[?.cos ?.sin].round.int}
 dirN V = Dirs.locate{V.sign}
 
-export points Dirs dirN
+load_params Params File =
+| less File.exists: bad "cant open [File]"
+| for Key,Value File.get.utf8.parse{src File}.tail{}{?1.0,?2.0}
+  | case Value [`,` A B]
+    | Value <= Value^| @r [`,` A B] => [@A^r B]
+                     | X => [X]
+  | Params.Key <= Value
+
+
+export points Dirs dirN load_params

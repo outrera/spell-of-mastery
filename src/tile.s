@@ -64,11 +64,11 @@ load_tiles_txt File =
 | less File.exists: bad "cant open [File]"
 | File.get.utf8.lines{}{?parse.1}.skip{is.[]}
 
-main.init_tiles =
+main.load_tiles =
 | Tiles = t
 | $aux_tiles <= t
 | Frames = No
-| Es = load_tiles_txt."[$data]/tiles/01.txt"
+| Es = "[$data]/tiles/".paths{}{load_tiles_txt.?}.join
 | for E Es: case E
   [use Sprite] | Frames <= $sprites.Sprite.frames
   [Type CornersElevation @Rest]
