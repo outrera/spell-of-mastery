@@ -1,7 +1,11 @@
 use heap octree_m
 
 /*
-Octree Neighbor Discovery algorithm:
+Octree Neighbor Discovery Algorithm (ONDA).
+
+ONDA is used to get cubes adjacent to the specified cube, inside of an octree.
+
+Algorithm steps:
  1. on a given cube's side (square): push random sub-square onto stack
  2. pop top square, then add corresponding to it cube to Neighbors list and for each segment of each side of this square, push all corresponding neigbor square onto stack, if they are part of original cube's side
  3. if stack isnt empty, goto 2.

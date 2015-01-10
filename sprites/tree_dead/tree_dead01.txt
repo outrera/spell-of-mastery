@@ -1,0 +1,2 @@
+editor_class: tree_dead
+height: 4

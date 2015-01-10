@@ -1,23 +1,30 @@
-use util octree
+use util octree unit stack
 
 MaxSize = 256
+MaxUnits = 4096
+
 
 type world{Main Size}
-   main/Main size/Size cells/octree{MaxSize} gfxes seed tid_map/Main.tid_map
+   main/Main size/Size
+   cells/octree{MaxSize}
+   unit_cells/octree{MaxSize}
+   units
+   free_units/stack{MaxUnits}
+   gfxes seed tid_map/Main.tid_map
    cycle filler
 | $main.world <= Me
-| $filler <= $main.tiles.dirt.id
+| $units <= MaxUnits{(unit ? Me)}
+| $filler <= $main.tiles.plain.id
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
 | for P points{0 0 Size Size}: $cells.set{[@P 0] $filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
+| for U $units: $free_units.push{U}
 
-world.get X Y Z =
-| $cells.get{[X Y Z]}
+world.get X Y Z = $cells.get{[X Y Z]}
 
-world.set X Y Z V =
-| $cells.set{[X Y Z] V}
+world.set X Y Z V = $cells.set{[X Y Z] V}
 
 world.xy_to_index X,Y =
 | S = $size

@@ -1,4 +1,0 @@
-editor: tree_large
-height: 5
-ani_still:q (0 0 183 179)
-ani_dead:q (183 0 183 179)

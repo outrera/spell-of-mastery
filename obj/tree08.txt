@@ -1,2 +1,0 @@
-editor: tree_large
-height: 5

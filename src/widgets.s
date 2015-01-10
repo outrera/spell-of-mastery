@@ -6,6 +6,10 @@ SkinCache = No
 FontCache = No
 FontTints = No
 
+cfg File =
+| less File.exists: bad "cant open [File]"
+| File.get.utf8.lines{}{?parse.1}.skip{is.[]}
+
 set_skin Path =
 | Skins.Skin <= [SkinCache FontCache FontTints]
 | Skin <= Path
@@ -24,7 +28,7 @@ skin_cursor F =
 | F = "cursor/[F]"
 | have SkinCache.F: leave
   | Gfx = skin F
-  | Gfx.hotspot <= "[Skin]/[F].txt".get.utf8.parse
+  | Gfx.hotspot <= "[Skin]/[F].txt".get.utf8.parse.1
   | Gfx
 
 type font{new_font Gs W H} glyphs/Gs widths/W height/H
@@ -32,7 +36,7 @@ font.as_text = "#font{}"
 font N = have FontCache.N:
 | Path = "[Skin]/font/[N]"
 | G = gfx "[Path].png"
-| [W H] = "[Path].txt".get.utf8.parse
+| [W H] = "[Path].txt".get.utf8.parse.1
 | Glyphs = G.frames{W H}
 | Ws = Glyphs{[X Y W H].margins=>X+W}
 | Ws.0 <= W/2

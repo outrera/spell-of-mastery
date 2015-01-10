@@ -15,7 +15,7 @@ genTransition Mask From To =
       | R.set{X Y From.get{X Y}}
 
 type tile{Main Type Role Id Elev Trn Empty Tiling Lineup Renderer Ds Ms Us Trns Plain}
-  main/Main type/Type role/Role id/Id elev/Elev trn/Trn empty/Empty tiling/Tiling
+  id/Id main/Main type/Type role/Role elev/Elev trn/Trn empty/Empty tiling/Tiling
   neib_elevs/[0 0 0 0] lineup/Lineup renderer/Renderer
   ds/Ds ms/Ms us/Us trns/Trns plain/Plain
 
@@ -60,19 +60,21 @@ tile.render P Z Below Above Seed =
 
 tile.heavy = not $empty
 
-main.load_tiles =
-| G = gfx "[$data]/til/gfx.png"
+load_tiles_txt File =
+| less File.exists: bad "cant open [File]"
+| File.get.utf8.lines{}{?parse.1}.skip{is.[]}
+
+main.init_tiles =
 | Tiles = t
 | $aux_tiles <= t
-| cutTile N = G.cut{N%20*64 N/20*64 64 64}
-| for [Type CornersElevation @Rest] cfg."[$data]/til/map.txt"
+| for [Type CornersElevation @Rest] load_tiles_txt."[$data]/tiles/01.txt"
   | [Is As] = Rest.div{is.['/'@_]}.xs{0,1}{?^~{[]}}
   | CE = CornersElevation.digits.pad{-4 0}
   | less Is.size: bad "one of [Type] tiles misses gfxes"
   | Tile = Tiles->Type
   | Gs = case Is [stack @Is] | Tile.stack <= Is
                              | []
-              Else | Is{&cutTile}
+              Else | Is{$sprites.tiles_01.frames.?}
   | for X As{?tail}: case X
     [alpha Alpha] | Gs <= Gs{(transparentize ? Alpha)}
     [aux Value] | $aux_tiles.Type <= Value

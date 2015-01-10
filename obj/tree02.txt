@@ -1,2 +1,0 @@
-editor: tree
-height: 3

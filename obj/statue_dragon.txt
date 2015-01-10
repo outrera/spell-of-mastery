@@ -1,3 +1,0 @@
-editor: deco
-height: 3
-disp:(0 0)

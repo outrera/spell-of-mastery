@@ -1,3 +1,0 @@
-editor: tree
-height: 3
-disp:(~8 8)

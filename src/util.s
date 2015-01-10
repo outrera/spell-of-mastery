@@ -1,9 +1,5 @@
 use macros
 
-cfg File =
-| less File.exists: bad "cant open [File]"
-| File.get.utf8.lines{}{?parse}.skip{is.[]}
-
 points X Y W H = dup I W*H [X+I%W Y+I/W]
 
 list.overlaps [BX BY BW BH] =
@@ -13,4 +9,4 @@ list.overlaps [BX BY BW BH] =
 Dirs = 8{(?.float-2.0)*PI/4.0}{[?.cos ?.sin].round.int}
 dirN V = Dirs.locate{V.sign}
 
-export points cfg Dirs dirN
+export points Dirs dirN
