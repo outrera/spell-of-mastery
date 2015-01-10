@@ -67,14 +67,18 @@ load_tiles_txt File =
 main.init_tiles =
 | Tiles = t
 | $aux_tiles <= t
-| for [Type CornersElevation @Rest] load_tiles_txt."[$data]/tiles/01.txt"
+| Frames = No
+| Es = load_tiles_txt."[$data]/tiles/01.txt"
+| for E Es: case E
+  [use Sprite] | Frames <= $sprites.Sprite.frames
+  [Type CornersElevation @Rest]
   | [Is As] = Rest.div{is.['/'@_]}.xs{0,1}{?^~{[]}}
   | CE = CornersElevation.digits.pad{-4 0}
   | less Is.size: bad "one of [Type] tiles misses gfxes"
   | Tile = Tiles->Type
   | Gs = case Is [stack @Is] | Tile.stack <= Is
                              | []
-              Else | Is{$sprites.tiles_01.frames.?}
+              Else | Is{Frames.?}
   | for X As{?tail}: case X
     [alpha Alpha] | Gs <= Gs{(transparentize ? Alpha)}
     [aux Value] | $aux_tiles.Type <= Value

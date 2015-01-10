@@ -1,3 +1,5 @@
+use tiles_01 // select sprite, holding tileset graphics
+
 // Legend: Type CornersElevation @Args @Variations
 // Note: corners elevation order is clockwise
 empty 1111 id/0 empty/1 aux/1 elev/0.0 renderer/none 0

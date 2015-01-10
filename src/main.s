@@ -15,13 +15,13 @@ ObjNames = Main.obj_types{}{?0}
 ObjList = litems lines/32 ObjNames f/(N => View.set_brush{[obj N]})
 
 Tabs = tabs tile: t tile(TileList) obj(ObjList)
-TabsHeader = lay h 0: list
+TabsHeader = layH: list
   button{'Tile' w_size/medium h_size/small (=> Tabs.pick{tile})}
   button{'Obj' w_size/medium h_size/small (=> Tabs.pick{obj})}
 
-Panel = lay v 1: list TabsHeader Tabs
+Panel = layV [TabsHeader Tabs]
 
-GUI = lay h 0: list Panel View
+GUI = layH [Panel View]
 
 View.init
 
