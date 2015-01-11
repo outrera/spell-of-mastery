@@ -22,9 +22,26 @@ type world{Main Size}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 | for U $units: $free_units.push{U}
 
+world.alloc_unit ClassName =
+| Class = $main.classes.ClassName
+| U = $free_units.pop
+| U.init{Class}
+| U
+
+world.free_unit U =
+| $free_units.push{U}
+
 world.get X Y Z = $cells.get{[X Y Z]}
 
 world.set X Y Z V = $cells.set{[X Y Z] V}
+
+world.get_units XYZ =
+| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{?next}
+| 0
+
+world.place_unit U = $unit_cells.set{U.xyz U.id}
+
+world.remove_unit U = $unit_cells.set{U.xyz 0}
 
 world.xy_to_index X,Y =
 | S = $size
@@ -95,13 +112,14 @@ world.drawPilar P BX BY Blit CursorI =
 | Gs = $gfxes.I
 | Cursor = same I CursorI
 | Z = 0
-| Os = []
+//| Os = []
 //| case P X,Y: Os <= Objs.X.Y
 | for G Gs: case G
   1.is_int | !Z+G
   Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h+32-Z*32 R
        | Blit BX BY-G.h+32-Z*32 G
        //| when Z+1 < Os.size: for O Os.(Z+1): O.render{Blit BX BY-Z*32}
+       | for U $get_units{X,Y,Z+1}: U.render{Blit BX BY-32*Z}
        | when Cursor | R = $main.rect_front; Blit BX BY-R.h+32-Z*32 R
        | !Z+1
 

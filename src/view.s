@@ -79,15 +79,18 @@ view.move NewXY =
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
 view.update =
-| Z = $world.height{@$cell_xy}
+| X,Y = $cell_xy
+| Z = $world.height{X Y}
 | when $mice_left and Z << $mice_z: case $brush
-  [obj Type] | say Type
-  [unit Type] | say Type
-  [tile Type] | $world.push{$cell_xy $main.tiles.Type.id}
+  [obj Type] | less $world.get_units{X,Y,Z}
+               | U = $world.alloc_unit{Type}
+               | U.move{X,Y,Z}
+  [unit Type] | say [add $brush]
+  [tile Type] | $world.push{X,Y $main.tiles.Type.id}
 | when $mice_right and Z >> $mice_z: case $brush
-  [obj Type] | say Type
-  [unit Type] | say Type
-  [tile Type] | $world.pop{$cell_xy}
+  [obj Type] | say [del $brush]
+  [unit Type] | say [del $brush]
+  [tile Type] | $world.pop{X,Y}
 | $world.update
 | when $paused: leave 1
 | 1

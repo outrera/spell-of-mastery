@@ -1,7 +1,9 @@
 use gfx common util
 
-type class{Bank Name type/static empty/0 sprite/'images_dummy'}
-  bank/Bank name/Name type/Type empty/Empty sprite/Sprite
+type class{Bank ClassName static/0 empty/0 sprite/images_dummy}
+  bank/Bank class_name/ClassName static/Static empty/Empty sprite/Sprite
+
+class.height = $sprite.height
 
 main.load_classes =
 | Folder = "[$data]/classes/"

@@ -7,23 +7,27 @@ set_skin "[Main.data]ui"
 
 View = view Main 600 600-5
 
-TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
-TileList = litems lines/32 TileNames f/(N => View.set_brush{[tile N]})
-TileList.pick{TileNames.locate{plain}}
-
-
-//View.set_brush{[obj N]}
-
-
 BankName =
+TileBrush = 
+ObjBrush = 
 
-ClassList = litems lines/31 [] f/(N => say "[BankName]_[N]")
+
+TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
+TileList = litems lines/32 TileNames f/
+| N => | TileBrush <= [tile N]
+       | View.set_brush{TileBrush}
+
+
+ClassList = litems lines/31 [] f/
+| N => | ObjBrush <= [obj "[BankName]_[N]"]
+       | View.set_brush{ObjBrush}
+
 BankNames = Main.classes{}{?1}{?bank}.uniq.sort
 
 
 BankList = droplist BankNames
   f/| N => | BankName <= N
-           | Xs = Main.classes{}{?1}.keep{?bank >< BankName}{?name}.sort
+           | Xs = Main.classes{}{?1}.keep{?bank >< BankName}{?class_name}.sort
            | ClassList.data <= Xs
            | ClassList.pick{0}
 
@@ -31,9 +35,16 @@ BankList = droplist BankNames
 ObjList = layV [BankList ClassList]
 
 Tabs = tabs tile: t tile(TileList) obj(ObjList)
+
+pickTab Tab Brush =
+| Tabs.pick{Tab}
+| View.set_brush{Brush}
+
 TabsHeader = layH: list
-  button{'Terrain' w_size/medium h_size/small (=> Tabs.pick{tile})}
-  button{'Object' w_size/medium h_size/small (=> Tabs.pick{obj})}
+  (button 'Terrain' w_size/medium h_size/small: => pickTab tile TileBrush)
+  (button 'Object' w_size/medium h_size/small: => pickTab obj ObjBrush)
+
+TileList.pick{TileNames.locate{plain}}
 
 Panel = layV [TabsHeader Tabs]
 

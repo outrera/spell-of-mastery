@@ -1,8 +1,11 @@
 use gfx common util
 
-type sprite{Bank Name height/1 empty/0 displacement/0 frames/0}
+type sprite{Bank Name height/1 empty/0 displacement/[0 0] frames/0
+            faces/1 anims/[`|` [still 0]]}
   bank/Bank name/Name height/Height empty/Empty
-  frames/Frames displacement/Displacement
+  frames/Frames displacement/(Displacement+[32 0])
+  anims/Anims.tail{}{[?0 ?tail]}.table
+  faces/Faces
 
 init_frames S G =
 | S.frames <= case S.frames

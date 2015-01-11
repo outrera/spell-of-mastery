@@ -4,7 +4,9 @@ stack.push X =
 | $xs.$used <= X
 | !$used+1
 
-stack.pop X = as X $xs.$used: !$used-1
+stack.pop =
+| !$used-1
+| $xs.$used
 
 stack.size = $xs.size
 
