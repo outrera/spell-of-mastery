@@ -17,7 +17,13 @@ main.load_classes =
     | ParamsFile = "[BankFolder][Name].txt"
     | when ParamsFile.exists: load_params Params ParamsFile
     | R = class BankName Name @Params.list.join
-    | R.sprite <= $sprites.(R.sprite)
+    | S = $sprites.(R.sprite)
+    | less got S: bad "missing sprite `[R.sprite]`"
+    | R.sprite <= S
     | "[BankName]_[Name]",R
+| for S $sprites{}{?1}.keep{?auto_class}
+  | C = class S.bank S.name @S.auto_class
+  | C.sprite <= S
+  | $classes."[S.bank]_[S.name]" <= C
 
 export class

@@ -1,0 +1,3 @@
+frames: ((0 0 44 81))
+anims: | still 0
+displacement: 8,8

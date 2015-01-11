@@ -5,7 +5,7 @@ World = world Main 16
 
 set_skin "[Main.data]ui"
 
-View = view Main 600 600-5
+View = view Main 640 600
 
 BankName =
 TileBrush = 
@@ -13,12 +13,12 @@ ObjBrush =
 
 
 TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
-TileList = litems lines/32 TileNames f/
+TileList = litems lines/33 TileNames f/
 | N => | TileBrush <= [tile N]
        | View.set_brush{TileBrush}
 
 
-ClassList = litems lines/31 [] f/
+ClassList = litems lines/32 [] f/
 | N => | ObjBrush <= [obj "[BankName]_[N]"]
        | View.set_brush{ObjBrush}
 
@@ -48,7 +48,8 @@ TileList.pick{TileNames.locate{plain}}
 
 Panel = layV [TabsHeader Tabs]
 
-GUI = layH [Panel View]
+//GUI = layH.[Panel View]
+GUI = dlg w/800 h/600: list [0 0 layH.[Panel View]]
 
 View.init
 
