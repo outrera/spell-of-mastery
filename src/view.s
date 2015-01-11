@@ -85,11 +85,9 @@ view.update =
   [obj Type] | less $world.get_units{X,Y,Z}
                | U = $world.alloc_unit{Type}
                | U.move{X,Y,Z}
-  [unit Type] | say [add $brush]
   [tile Type] | $world.push{X,Y $main.tiles.Type.id}
 | when $mice_right and Z >> $mice_z: case $brush
-  [obj Type] | say [del $brush]
-  [unit Type] | say [del $brush]
+  [obj Type] | for U $world.get_units{X,Y,Z}: U.free
   [tile Type] | $world.pop{X,Y}
 | $world.update
 | when $paused: leave 1

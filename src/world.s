@@ -29,6 +29,7 @@ world.alloc_unit ClassName =
 | U
 
 world.free_unit U =
+| U.remove
 | $free_units.push{U}
 
 world.get X Y Z = $cells.get{[X Y Z]}
@@ -41,7 +42,7 @@ world.get_units XYZ =
 
 world.place_unit U = $unit_cells.set{U.xyz U.id}
 
-world.remove_unit U = $unit_cells.set{U.xyz 0}
+world.remove_unit U = when U.xyz.2 <> -1: $unit_cells.set{U.xyz 0}
 
 world.xy_to_index X,Y =
 | S = $size
