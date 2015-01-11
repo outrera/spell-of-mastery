@@ -1,13 +1,13 @@
 use gfx common util
 
-type sprite{Bank Name height/1 displacement/[0 0]
+type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/1 anims/[`|` [still 0]]
             auto_class/0}
   bank/Bank
   name/Name
   height/Height
   frames/Frames
-  displacement/(Displacement+[32 0])
+  xy/(Xy+[32 0])
   anims/Anims.tail{}{[?0 ?tail]}.table
   faces/Faces
   auto_class/Auto_class
@@ -15,8 +15,12 @@ type sprite{Bank Name height/1 displacement/[0 0]
 init_frames S G =
 | S.frames <= case S.frames
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
-  [@Fs] | Fs{(@cut @? G)}
+  [@Fs] | map [X Y W H @Disp] Fs
+          | R = @cut X Y W H G
+          | R.hotspot <= Disp^($_ []=> [0 0])
+          | R
   Else | [G]
+| for F S.frames: !F.hotspot + S.xy
 
 main.load_sprites =
 | Folder = "[$data]/sprites/"

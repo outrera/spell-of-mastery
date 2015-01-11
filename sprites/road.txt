@@ -1,3 +1,2 @@
 height: 1
-displacement: 0,0
 auto_class: empty,1
