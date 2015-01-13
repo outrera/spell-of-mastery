@@ -1,6 +1,6 @@
 use util
 
-type unit{Id World}
+type unit.$class{Id World}
   id/Id // numeric id for octree
   world/World
   class
@@ -12,8 +12,6 @@ type unit{Id World}
   anim_step // frame index inside of current animation
   frame
   facing // direction this unit faces
-
-heir unit $class
 
 unit.init Class =
 | $class <= Class
