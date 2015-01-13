@@ -146,7 +146,7 @@ litem.input In = case In
   [mice left 1 P] | $state <= case $state normal(\picked) picked(\normal) X(X)
 
 type droplist.widget{Xs f/(V=>) w/160}
-     f/F w/W h/1 y ih xs/[] drop rs picked over above_all p
+     f/F w/W h/1 ih xs/[] drop rs picked over above_all p
 | less Xs.size: Xs <= [' ']
 | $xs <= Xs{(litem ? w/$w)}
 | $f $text
@@ -157,12 +157,8 @@ droplist.`!text` T =
 droplist.render =
 | $rs <= map X $xs X.render
 | case $rs [R@_]: $ih <= R.h
-| when $drop
-  | $y <= -$ih*$picked
-  | $h <= $ih*$rs.size
-| less $drop
-  | $y <= 0
-  | $h <= $ih
+| when $drop: $h <= $ih*$rs.size
+| less $drop: $h <= $ih
 | Me
 droplist.draw G P =
 | when $drop
@@ -181,7 +177,7 @@ droplist.input In = case In
                   | $xs.$p.state <= case S 1(\picked) 0(\normal)
   [mice_move _ P] | when $drop
                     | $xs.$p.state <= \normal
-                    | $p <= ((P.1+$picked*$ih)/$ih).clip{0 $xs.size-1}
+                    | $p <= (P.1/$ih).clip{0 $xs.size-1}
                     | $xs.$p.state <= \picked
   [mice left 1 P] | $drop <= 1
                   | $p <= $picked

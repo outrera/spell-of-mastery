@@ -32,7 +32,7 @@ BankList = droplist BankNames
            | ClassList.pick{0}
 
 
-ObjList = layV [BankList ClassList]
+ObjList = dlg w/160 h/600: list [0 0 BankList] [0 16 ClassList]
 
 Tabs = tabs tile: t tile(TileList) obj(ObjList)
 
