@@ -8,45 +8,29 @@ set_skin "[Main.data]ui"
 View = view Main 640 600
 
 BankName =
-TileBrush = 
-ObjBrush = 
 
+ItemList = litems lines/32 [] f/
+| N => | Brush = if BankName >< terrain
+                 then [tile N]
+                 else [obj "[BankName]_[N]"]
+       | View.set_brush{Brush}
 
 TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
-TileList = litems lines/33 TileNames f/
-| N => | TileBrush <= [tile N]
-       | View.set_brush{TileBrush}
-
-
-ClassList = litems lines/32 [] f/
-| N => | ObjBrush <= [obj "[BankName]_[N]"]
-       | View.set_brush{ObjBrush}
-
 BankNames = Main.classes{}{?1}{?bank}.uniq.sort
-
+Banks = @table: map N BankNames
+        | N,Main.classes{}{?1}.keep{?bank >< N}{?class_name}.sort
+BankNames <= [terrain unit @BankNames.skip{unit}]
 
 BankList = droplist BankNames
   f/| N => | BankName <= N
-           | Xs = Main.classes{}{?1}.keep{?bank >< BankName}{?class_name}.sort
-           | ClassList.data <= Xs
-           | ClassList.pick{0}
+           | if BankName >< terrain
+             then | ItemList.data <= TileNames
+                  | ItemList.pick{TileNames.locate{plain}}
+             else | ItemList.data <= Banks.BankName
+                  | ItemList.pick{0}
 
+Panel = dlg w/160 h/600: list [0 0 BankList] [0 16 ItemList]
 
-ObjList = dlg w/160 h/600: list [0 0 BankList] [0 16 ClassList]
-
-Tabs = tabs tile: t tile(TileList) obj(ObjList)
-
-pickTab Tab Brush =
-| Tabs.pick{Tab}
-| View.set_brush{Brush}
-
-TabsHeader = layH: list
-  (button 'Terrain' w_size/medium h_size/small: => pickTab tile TileBrush)
-  (button 'Object' w_size/medium h_size/small: => pickTab obj ObjBrush)
-
-TileList.pick{TileNames.locate{plain}}
-
-Panel = layV [TabsHeader Tabs]
 
 //GUI = layH.[Panel View]
 GUI = dlg w/800 h/600: list [0 0 layH.[Panel View]]
