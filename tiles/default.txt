@@ -96,8 +96,8 @@ house_roof 0000 120
 house 1111 id/111 trn/1 stack house_base house_wall house_roof
 
 house_door 1111 id/112 role/house 135
-house_window_l0 1111 id/113 role/house 139
-house_window_l1 1111 id/114 role/house 138
+house_window0 1111 id/113 role/house 139
+house_window1 1111 id/114 role/house 138
 
 wall 1111 id/115 no_lineup/1 tiling/side 116 117
 wall 0110 140
