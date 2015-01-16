@@ -17,13 +17,13 @@ Banks = @table: map N BankNames
 BankNames <= [terrain unit @BankNames.skip{unit}]
 
 
-ItemList = litems w/120 lines/34 [] f: N =>
+ItemList = litems w/120 lines/40 [] f: N =>
 | Brush = if BankName >< terrain
           then [tile N]
           else [obj "[BankName]_[N]"]
 | View.set_brush{Brush}
 
-BankList = litems w/80 lines/34 BankNames f: N =>
+BankList = litems w/80 lines/40 BankNames f: N =>
 | BankName <= N
 | if BankName >< terrain
   then | ItemList.data <= TileNames
