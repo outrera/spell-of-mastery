@@ -4,23 +4,32 @@ Skin = No
 Skins = t
 SkinCache = No
 FontCache = No
-FontTints = No
 
 cfg File =
 | less File.exists: bad "cant open [File]"
 | File.get.utf8.lines{}{?parse.1}.skip{is.[]}
 
 set_skin Path =
-| Skins.Skin <= [SkinCache FontCache FontTints]
+| Skins.Skin <= [SkinCache FontCache]
 | Skin <= Path
 | when got!it Skins.Skin:
   | SkinCache <= it.0
   | FontCache <= it.1
-  | FontTints <= it.2
   | leave 0
 | SkinCache <= t
 | FontCache <= t
-| FontTints <= "[Skin]/font/tints.txt"^cfg{}.map{[?0 ?.tail.pad{256 #FF000000}^new_cmap]}.table
+
+Tints = t red     #A40000
+          blue    #0094FC
+          green   #2CB494
+          violet  #9848B0
+          orange  #F88C14
+          black   #28283C
+          white   #FCF8F0
+          yellow  #F4E020
+          magenta #9848B0
+          cyan    #F88C8C
+          gray    #C0C0C0
 
 skin F = have SkinCache.F: gfx "[Skin]/[F].png"
 
@@ -31,21 +40,23 @@ skin_cursor F =
   | Gfx.hotspot <= "[Skin]/[F].txt".get.utf8.parse.1
   | Gfx
 
-type font{@new_font Gs W H} glyphs/Gs widths/W height/H
+type font{@new_font Gs W H} glyphs/Gs widths/W height/H cmap
+| $cmap <= new_cmap [#0 #FFFFFF].pad{256 #FF000000}
 font.as_text = "#font{}"
 font N = have FontCache.N:
 | Path = "[Skin]/font/[N]"
 | G = gfx "[Path].png"
-| [W H] = "[Path].txt".get.utf8.parse.1
-| Glyphs = G.frames{W H}
-| Ws = Glyphs{[X Y W H].margins=>X+W}
+| [W H EX] = "[Path].txt".get.utf8.parse.1
+| Glyphs = G.frames{W H}{F<[X Y W H].margins=>F.cut{X 0 W F.h}}
+| Ws = Glyphs{[X Y W H].margins=>X+W-EX}
 | Ws.0 <= W/2
 | new_font Glyphs Ws H
 font.width Line = | Ws = $widths; Line{C.code => Ws.(C-' '.code)+1}.sum
 font.draw G X Y Tint Text =
 | Ls = Text.lines
-| Palette = FontTints.Tint
-| when no Palette: bad "undefined font tint `[Tint]`; check tints.txt"
+| Color = if Tint.is_text then Tints.Tint else Tint
+| when no Color: bad "unknown tint name - `[Tint]`"
+| _ffi_set uint32_t $cmap 1 Color
 | Ws = $widths
 | Gs = $glyphs
 | H = $height
@@ -56,7 +67,7 @@ font.draw G X Y Tint Text =
   | for C L
     | I = C.code-CodePoint
     | W = Ws.I
-    | G.blit{[CX CY] Gs.I map(Palette)}
+    | G.blit{[CX CY] Gs.I map/$cmap}
     | W+1+!CX
   | !CY + H
 
@@ -359,7 +370,7 @@ icon.input In = case In
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
-type icon_hp.widget unit w/52 h/7 font/font{tiny}
+type icon_hp.widget unit w/52 h/7 font/font{small}
 icon_hp.draw G P =
 | less $unit: leave 0
 | G.rect{#000000 1 P.0 P.1 $w $h}
