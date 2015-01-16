@@ -82,9 +82,13 @@ view.update =
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | when $mice_left and Z << $mice_z: case $brush
-  [obj Type] | less $world.get_units{X,Y,Z}
-               | U = $world.alloc_unit{Type}
-               | U.move{X,Y,Z}
+  [obj Bank,Type]
+    | less $world.get_units{X,Y,Z}
+      | ClassName = if $keys.lctrl
+                    then "[Bank]_[$main.classes_banks.Bank.rand]"
+                    else "[Bank]_[Type]"
+      | U = $world.alloc_unit{ClassName}
+      | U.move{X,Y,Z}
   [tile Type] | $world.push{X,Y $main.tiles.Type.id}
 | when $mice_right and Z >> $mice_z: case $brush
   [obj Type] | for U $world.get_units{X,Y,Z}: U.free

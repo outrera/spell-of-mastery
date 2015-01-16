@@ -11,16 +11,13 @@ BankName =
 
 
 TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
-BankNames = Main.classes{}{?1}{?bank}.uniq.sort
-Banks = @table: map N BankNames
-        | N,Main.classes{}{?1}.keep{?bank >< N}{?class_name}.sort
-BankNames <= [terrain unit @BankNames.skip{unit}]
 
+BankNames = [terrain unit @Main.bank_names.skip{unit}]
 
 ItemList = litems w/120 lines/40 [] f: N =>
 | Brush = if BankName >< terrain
           then [tile N]
-          else [obj "[BankName]_[N]"]
+          else [obj BankName,N]
 | View.set_brush{Brush}
 
 BankList = litems w/80 lines/40 BankNames f: N =>
@@ -28,7 +25,7 @@ BankList = litems w/80 lines/40 BankNames f: N =>
 | if BankName >< terrain
   then | ItemList.data <= TileNames
        | ItemList.pick{TileNames.locate{plain}}
-  else | ItemList.data <= Banks.BankName
+  else | ItemList.data <= Main.classes_banks.BankName
        | ItemList.pick{0}
 
 
