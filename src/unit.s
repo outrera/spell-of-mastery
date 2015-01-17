@@ -7,6 +7,7 @@ type unit.$class{Id World}
   xyz/[0 0 -1] // world coordinates
   sub_xyz/[0 0 0] // fine X,Y,Z for movement animation between cells
   next // next unit inside of this world cell
+  column_next // next unit inside of this world column
   owner // player controlling this unit
   anim // current animation
   anim_step // frame index inside of current animation
@@ -22,6 +23,7 @@ unit.init Class =
 | $flipX <= 0
 | $facing <= 0
 | $next <= 0
+| $column_next <= 0
 | $animate{still}
 
 unit.animate Anim =
@@ -40,7 +42,7 @@ unit.move XYZ =
 | $xyz.init{XYZ}
 | $sub_xyz.init{[0 0 0]}
 | $world.place_unit{Me}
-| [UX UY UZ] = $xyz
+| [UX UY UZ] = XYZ
 | when UZ > 0: $slope <= $world.slope_at{UX,UY,UZ-1}
 
 

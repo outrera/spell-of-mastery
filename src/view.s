@@ -97,7 +97,7 @@ view.update =
 | Z = $world.height{X Y}
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
-    | less $world.get_units{X,Y,Z}
+    | less $world.units_at{X,Y,Z}.size
       | ClassName = if $keys.r >< 1
                     then "[Bank]_[$main.classes_banks.Bank.rand]"
                     else "[Bank]_[Type]"
@@ -107,7 +107,7 @@ view.update =
       | U.move{X,Y,Z}
   [tile Type] | $world.push{X,Y $main.tiles.Type.id}
 | when $mice_right and Z >> $mice_z: case $brush
-  [obj Type] | for U $world.get_units{X,Y,Z}: U.free
+  [obj Type] | for U $world.units_at{X,Y,Z}: U.free
   [tile Type] | $world.pop{X,Y}
 | $world.update
 | when $paused: leave 1

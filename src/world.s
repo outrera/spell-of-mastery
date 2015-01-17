@@ -24,7 +24,7 @@ type world{Main Size}
 | $seed <= SS{_=>SS.rand}
 | for P points{0 0 Size Size}: $cells.set{[@P 0] $filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
-| for U $units: $free_units.push{U}
+| for U $units: when U.id <> 0: $free_units.push{U}
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
@@ -42,13 +42,34 @@ world.set X Y Z V = $cells.set{[X Y Z] V}
 
 world.slope_at XYZ = $slope_map.get{XYZ}.0
 
-world.get_units XYZ =
-| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{?next}
+world.unit_id_at XYZ = $unit_cells.get{XYZ}.0
+
+world.unit_at XYZ =
+| when!it $unit_cells.get{XYZ}.0: leave $units.it
 | 0
 
-world.place_unit U = $unit_cells.set{U.xyz U.id}
+world.units_at XYZ =
+| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{?next}
+| []
 
-world.remove_unit U = when U.xyz.2 <> -1: $unit_cells.set{U.xyz 0}
+world.place_unit U =
+| XYZ = U.xyz
+| ColumnXYZ = XYZ.0,XYZ.1,0
+| U.next <= $unit_at{XYZ}
+| U.column_next <= $unit_at{ColumnXYZ}
+| $unit_cells.set{XYZ U.id}
+| $unit_cells.set{ColumnXYZ U.id}
+
+world.remove_unit U =
+| XYZ = U.xyz
+| when XYZ.2 >< -1: leave 0
+| Next = $units_at{XYZ}.skip{?id >< U.id}^cons{(?.next <= ??)}
+| Id = if Next then Next.id else 0
+| $unit_cells.set{XYZ Id}
+| ColumnXYZ = [XYZ.0 XYZ.1 0]
+| Next = $units_at{ColumnXYZ}.skip{?id >< U.id}^cons{(?.next <= ??)}
+| Id = if Next then Next.id else 0
+| $unit_cells.set{ColumnXYZ Id}
 
 world.xy_to_index X,Y =
 | S = $size
@@ -119,16 +140,18 @@ world.drawPilar P BX BY Blit CursorI =
 | Gs = $gfxes.I
 | Cursor = same I CursorI
 | Z = 0
-//| Os = []
-//| case P X,Y: Os <= Objs.X.Y
+| UnitZ = 0
 | for G Gs: case G
   1.is_int | !Z+G
   Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h+32-Z*32 R 0
        | Blit BX BY-G.h+32-Z*32 G 0
-       //| when Z+1 < Os.size: for O Os.(Z+1): O.render{Blit BX BY-Z*32}
-       | for U $get_units{X,Y,Z+1}: U.render{Blit BX BY-32*Z}
+       | UnitZ <= Z+1
+       | for U $units_at{X,Y,UnitZ}: U.render{Blit BX BY-32*Z}
        | when Cursor | R = $main.rect_front; Blit BX BY-R.h+32-Z*32 R 0
        | !Z+1
+| for U $units_at{X,Y,0}
+  | Z = U.xyz.2
+  | when Z > UnitZ: U.render{Blit BX BY-32*Z+32}
 
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
