@@ -3,6 +3,7 @@ use util
 type unit.$class{Id World}
   id/Id // numeric id for octree
   world/World
+  serial
   class
   xyz/[0 0 -1] // world coordinates
   sub_xyz/[0 0 0] // fine X,Y,Z for movement animation between cells
@@ -24,6 +25,8 @@ unit.init Class =
 | $facing <= 0
 | $next <= 0
 | $column_next <= 0
+| $serial <= $world.unit_serial
+| !$world.unit_serial - 1
 | $animate{still}
 
 unit.animate Anim =

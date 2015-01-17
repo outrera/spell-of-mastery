@@ -97,11 +97,15 @@ view.update =
 | Z = $world.height{X Y}
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
+    | ClassName = if $keys.r >< 1
+                  then "[Bank]_[$main.classes_banks.Bank.rand]"
+                  else "[Bank]_[Type]"
+    | Class = $main.classes.ClassName
     | Us = $world.units_at{X,Y,Z}
-    | less Us.size
-      | ClassName = if $keys.r >< 1
-                    then "[Bank]_[$main.classes_banks.Bank.rand]"
-                    else "[Bank]_[Type]"
+    | Place = if Class.unit
+              then not Us.any{?unit}
+              else not Us.any{?class^address >< Class^address}
+    | when Place
       | U = $world.alloc_unit{ClassName}
       | when $keys.t >< 1: U.flipX <= 1.rand
       | when $keys.m >< 1: U.flipX <= 1

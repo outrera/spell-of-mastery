@@ -1,11 +1,14 @@
 use gfx common util
 
-type class{Bank ClassName static/0 empty/0 sprite/images_dummy}
+type class{Bank ClassName static/0 empty/0 sprite/images_dummy
+           unit/0 draw_order/10}
   bank/Bank
   class_name/ClassName
   static/Static
   empty/Empty
   sprite/Sprite
+  unit/Unit
+  draw_order/(Draw_order</20)
 
 class.height = $sprite.height
 

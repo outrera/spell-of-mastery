@@ -5,9 +5,13 @@ MaxUnits = 4096
 
 
 type world{Main Size}
-   main/Main size/Size
+   main/Main
+   size/Size // world width/height
+   w/Size
+   h/Size
    cells/octree{MaxSize}
    unit_cells/octree{MaxSize}
+   unit_serial/(1</20-1) // used to generate serial numbers for units
    slope_map/octree{MaxSize}
    units
    free_units/stack{MaxUnits}
@@ -54,24 +58,37 @@ world.units_at XYZ =
 | when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{?next}
 | []
 
+
+list.sortBy F = $sort{?^F < ??^F}
+
+cons_next F Xs = Xs.sortBy{F}.flip^cons{(?.next <= ??)}
+
+cons_column_next F Xs = Xs.sortBy{F}.flip^cons{(?.column_next <= ??)}
+
 world.place_unit U =
 | XYZ = U.xyz
+| Us = U,@$units_at{XYZ}
+| Consed = Us^cons_next{?draw_order++?serial}
+| Id = if Consed then Consed.id else 0
+| $unit_cells.set{XYZ Id}
 | ColumnXYZ = XYZ.0,XYZ.1,0
-| U.next <= $unit_at{XYZ}
-| U.column_next <= $unit_at{ColumnXYZ}
-| $unit_cells.set{XYZ U.id}
+| Us = U,@$units_at{ColumnXYZ}.skip{?id >< U.id}
+| Consed = Us^cons_column_next{?xyz.2}
+| Id = if Consed then Consed.id else 0
 | $unit_cells.set{ColumnXYZ U.id}
 
 world.remove_unit U =
 | XYZ = U.xyz
 | when XYZ.2 >< -1: leave 0
-| Next = $units_at{XYZ}.skip{?id >< U.id}^cons{(?.next <= ??)}
-| Id = if Next then Next.id else 0
+| Us = $units_at{XYZ}.skip{?id >< U.id}
+| Consed = Us^cons_next{?draw_order++?serial}
+| Id = if Consed then Consed.id else 0
 | $unit_cells.set{XYZ Id}
 | ColumnXYZ = [XYZ.0 XYZ.1 0]
-| Next = $units_at{ColumnXYZ}.skip{?id >< U.id}^cons{(?.next <= ??)}
-| Id = if Next then Next.id else 0
-| $unit_cells.set{ColumnXYZ Id}
+| Us = $units_at{ColumnXYZ}.skip{?id >< U.id}
+| Consed = Us^cons_column_next{?xyz.2}
+| Id = if Consed then Consed.id else 0
+| $unit_cells.set{ColumnXYZ U.id}
 
 world.xy_to_index X,Y =
 | S = $size
@@ -157,6 +174,7 @@ world.drawPilar P BX BY Blit CursorI =
     | U.render{Blit BX BY-32*Z+32}
     | S = $shadows.(2-min{Z-UnitZ-1 2})
     | Blit BX-S.w/2+32 BY-S.h+32-UnitZ*32 S 0
+
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
