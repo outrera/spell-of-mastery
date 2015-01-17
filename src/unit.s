@@ -19,7 +19,9 @@ unit.main = $world.main
 
 unit.init Class =
 | $class <= Class
+| $flipX <= 0
 | $facing <= 0
+| $next <= 0
 | $animate{still}
 
 unit.animate Anim =

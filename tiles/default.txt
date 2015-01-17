@@ -5,7 +5,7 @@ use tiles_default // select sprite, holding tileset graphics
 empty 1111 id/0 empty/1 aux/1 elev/0.0 renderer/none 0
 pad 1111 id/1 empty/1 renderer/none 0
 
-plain 1111 id/100 trn/1 16 17 16 17 16 17 19
+plain 1111 id/1000 trn/1 16 17 16 17 16 17 19
 plain 1000 0
 plain 1100 1
 plain 1001 2
