@@ -2,10 +2,11 @@ use tiles_default // select sprite, holding tileset graphics
 
 // Legend: Type CornersElevation @Args @Variations
 // Note: corners elevation order is clockwise
-empty 1111 id/0 empty/1 aux/1 elev/0.0 renderer/none 0
-pad 1111 id/1 empty/1 renderer/none 0
+void 1111 id/0 empty/1 aux/1 elev/0.0 renderer/none 0
+empty 1111 id/1 empty/1 elev/0.0 renderer/none 0
+pad 1111 id/2 empty/1 renderer/none 0
 
-plain 1111 id/1000 trn/1 16 17 16 17 16 17 19
+plain 1111 id/102 trn/1 16 17 16 17 16 17 19
 plain 1000 0
 plain 1100 1
 plain 1001 2
@@ -31,7 +32,7 @@ rock 0110 25
 rock 0011 26
 rock 0010 27
 
-water 1111 id/2 empty/1 elev/0.5 alpha/127 56 57 59
+water 1111 id/101 empty/1 elev/0.5 alpha/127 56 57 59
 water 1000 alpha/127 40
 water 1100 alpha/127 41
 water 1001 alpha/127 42

@@ -97,7 +97,8 @@ view.update =
 | Z = $world.height{X Y}
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
-    | less $world.units_at{X,Y,Z}.size
+    | Us = $world.units_at{X,Y,Z}
+    | less Us.size
       | ClassName = if $keys.r >< 1
                     then "[Bank]_[$main.classes_banks.Bank.rand]"
                     else "[Bank]_[Type]"

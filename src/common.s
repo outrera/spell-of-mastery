@@ -25,7 +25,6 @@ type main{Data}
 | $rect_back <= $img{"rect_back"}
 | $rect_front <= $img{"rect_front"}
 //| $acts <= $load_types{act "[$data]/act/"}
-//| $obj_types <= $load_types{act "[$data]/obj/"}
 | for [Type Tile] $tiles: $tid_map.(Tile.id) <= Tile
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort
 | $classes_banks <= @table: map N $bank_names
