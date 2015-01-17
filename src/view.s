@@ -5,10 +5,24 @@ TileW = 64
 TileH = 32
 
 type view.widget{M W H}
-  main/M g w/W h/H frame paused cursor keys/(t)
-  view_origin/[0 0] blit_origin/[360 -170]
-  mice_left mice_right mice_right_xy/[0 0] mice_left_xy/[0 0]
-  mice_xy/[0 0] mice_z cell_xy/[0 0] cell_index
+  main/M
+  g
+  w/W
+  h/H
+  frame
+  paused
+  cursor
+  keys/(t)
+  view_origin/[0 0]
+  blit_origin/[360 -170]
+  mice_left
+  mice_right
+  mice_right_xy/[0 0]
+  mice_left_xy/[0 0]
+  mice_xy/[0 0]
+  mice_z
+  cell_xy/[0 0]
+  cell_index
   brush/[0 0]
 | $g <= gfx W H
 
@@ -24,7 +38,7 @@ view.render =
 | $update
 | G = $g
 | G.clear{#929292/*#00A0C0*/}
-| Blit = X Y Src => G.blit{X,Y Src}
+| Blit = X Y Src FX => G.blit{X,Y Src flipX(FX)}
 | D = 32
 | [TX TY] = $blit_origin
 | Y = 0
@@ -84,10 +98,12 @@ view.update =
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
     | less $world.get_units{X,Y,Z}
-      | ClassName = if $keys.lctrl >< 1
+      | ClassName = if $keys.r >< 1
                     then "[Bank]_[$main.classes_banks.Bank.rand]"
                     else "[Bank]_[Type]"
       | U = $world.alloc_unit{ClassName}
+      | when $keys.t >< 1: U.flipX <= 1.rand
+      | when $keys.m >< 1: U.flipX <= 1
       | U.move{X,Y,Z}
   [tile Type] | $world.push{X,Y $main.tiles.Type.id}
 | when $mice_right and Z >> $mice_z: case $brush

@@ -13,6 +13,7 @@ type unit.$class{Id World}
   frame
   facing // direction this unit faces
   slope // unit is standing on a sloped terrain
+  flipX
 
 unit.main = $world.main
 
@@ -45,7 +46,7 @@ unit.render Blit X Y =
 | G = $frame
 | DX,DY = G.hotspot
 | DY <= DY + $slope*16
-| Blit X+DX-G.w/2 Y+DY-16-G.h G
+| Blit X+DX-G.w/2 Y+DY-16-G.h G $flipX
 
 
 

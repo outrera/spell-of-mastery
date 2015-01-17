@@ -1,2 +1,2 @@
-frames: ((0 0 44 81 8 8))
+frames: ((0 0 30 78 0 4))
 anims: | still 0

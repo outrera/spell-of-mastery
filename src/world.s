@@ -123,11 +123,11 @@ world.drawPilar P BX BY Blit CursorI =
 //| case P X,Y: Os <= Objs.X.Y
 | for G Gs: case G
   1.is_int | !Z+G
-  Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h+32-Z*32 R
-       | Blit BX BY-G.h+32-Z*32 G
+  Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h+32-Z*32 R 0
+       | Blit BX BY-G.h+32-Z*32 G 0
        //| when Z+1 < Os.size: for O Os.(Z+1): O.render{Blit BX BY-Z*32}
        | for U $get_units{X,Y,Z+1}: U.render{Blit BX BY-32*Z}
-       | when Cursor | R = $main.rect_front; Blit BX BY-R.h+32-Z*32 R
+       | when Cursor | R = $main.rect_front; Blit BX BY-R.h+32-Z*32 R 0
        | !Z+1
 
 world.updElev P =
