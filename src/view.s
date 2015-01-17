@@ -102,8 +102,8 @@ view.update =
                   else "[Bank]_[Type]"
     | Class = $main.classes.ClassName
     | Us = $world.units_at{X,Y,Z}
-    | Place = if Class.unit
-              then not Us.any{?unit}
+    | Place = if Class.unit then not Us.any{?unit}
+              else if $keys.r >< 1 then Us.end
               else not Us.any{?class^address >< Class^address}
     | when Place
       | U = $world.alloc_unit{ClassName}

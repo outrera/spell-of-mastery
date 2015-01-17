@@ -55,15 +55,16 @@ world.unit_at XYZ =
 | 0
 
 world.units_at XYZ =
-| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{?next}
+| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{next}
 | []
 
+world.column_units_at XYZ =
+| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{column_next}
+| []
 
-list.sortBy F = $sort{?^F < ??^F}
+cons_next F Xs = Xs.sortBy{F}.flip^cons{next}
 
-cons_next F Xs = Xs.sortBy{F}.flip^cons{(?.next <= ??)}
-
-cons_column_next F Xs = Xs.sortBy{F}.flip^cons{(?.column_next <= ??)}
+cons_column_next F Xs = Xs.sortBy{F}.flip^cons{column_next}
 
 world.place_unit U =
 | XYZ = U.xyz
@@ -72,7 +73,7 @@ world.place_unit U =
 | Id = if Consed then Consed.id else 0
 | $unit_cells.set{XYZ Id}
 | ColumnXYZ = XYZ.0,XYZ.1,0
-| Us = U,@$units_at{ColumnXYZ}.skip{?id >< U.id}
+| Us = U,@$column_units_at{ColumnXYZ}.skip{?id >< U.id}
 | Consed = Us^cons_column_next{?xyz.2}
 | Id = if Consed then Consed.id else 0
 | $unit_cells.set{ColumnXYZ U.id}
@@ -85,7 +86,7 @@ world.remove_unit U =
 | Id = if Consed then Consed.id else 0
 | $unit_cells.set{XYZ Id}
 | ColumnXYZ = [XYZ.0 XYZ.1 0]
-| Us = $units_at{ColumnXYZ}.skip{?id >< U.id}
+| Us = $column_units_at{ColumnXYZ}.skip{?id >< U.id}
 | Consed = Us^cons_column_next{?xyz.2}
 | Id = if Consed then Consed.id else 0
 | $unit_cells.set{ColumnXYZ U.id}
