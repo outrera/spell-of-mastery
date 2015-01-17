@@ -1,2 +1,2 @@
 anims: | still 0
-xy: 0,44
+xy: -16,8

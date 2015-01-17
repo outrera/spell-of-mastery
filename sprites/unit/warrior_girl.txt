@@ -1,0 +1,2 @@
+frames: ((40 0 35 58 0 4))
+anims: | still 0

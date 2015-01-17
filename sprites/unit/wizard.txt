@@ -1,2 +1,2 @@
-frames: ((0 0 30 78 0 4))
+frames: ((240 0 30 78 0 4))
 anims: | still 0

@@ -7,7 +7,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   name/Name
   height/Height
   frames/Frames
-  xy/(Xy+[32 0])
+  xy/(Xy+[0 0])
   anims/Anims.tail{}{[?0 ?tail]}.table
   faces/Faces
   auto_class/Auto_class

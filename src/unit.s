@@ -50,7 +50,8 @@ unit.render Blit X Y =
 | G = $frame
 | DX,DY = G.hotspot
 | DY <= DY + $slope*16
-| Blit X+DX-G.w/2 Y+DY-16-G.h G $flipX
+| OX = if $flipX then -DX else DX
+| Blit X+32-G.w/2+OX Y+DY-16-G.h G $flipX
 
 
 
