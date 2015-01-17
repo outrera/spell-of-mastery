@@ -16,6 +16,7 @@ type world{Main Size}
    tid_map/Main.tid_map
    cycle
    filler
+   shadows
 | $main.world <= Me
 | $units <= MaxUnits{(unit ? Me)}
 | $filler <= $main.tiles.plain.id
@@ -25,6 +26,7 @@ type world{Main Size}
 | for P points{0 0 Size Size}: $cells.set{[@P 0] $filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 | for U $units: when U.id <> 0: $free_units.push{U}
+| $shadows <= $main.sprites.unit_shadows.frames
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
@@ -151,8 +153,10 @@ world.drawPilar P BX BY Blit CursorI =
        | !Z+1
 | for U $units_at{X,Y,0}
   | Z = U.xyz.2
-  | when Z > UnitZ: U.render{Blit BX BY-32*Z+32}
-
+  | when Z > UnitZ
+    | U.render{Blit BX BY-32*Z+32}
+    | S = $shadows.(2-min{Z-UnitZ-1 2})
+    | Blit BX-S.w/2+32 BY-S.h+32-UnitZ*32 S 0
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
