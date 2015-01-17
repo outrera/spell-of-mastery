@@ -8,10 +8,14 @@ type world{Main Size}
    main/Main size/Size
    cells/octree{MaxSize}
    unit_cells/octree{MaxSize}
+   slope_map/octree{MaxSize}
    units
    free_units/stack{MaxUnits}
-   gfxes seed tid_map/Main.tid_map
-   cycle filler
+   gfxes
+   seed
+   tid_map/Main.tid_map
+   cycle
+   filler
 | $main.world <= Me
 | $units <= MaxUnits{(unit ? Me)}
 | $filler <= $main.tiles.plain.id
@@ -35,6 +39,8 @@ world.free_unit U =
 world.get X Y Z = $cells.get{[X Y Z]}
 
 world.set X Y Z V = $cells.set{[X Y Z] V}
+
+world.slope_at XYZ = $slope_map.get{XYZ}.0
 
 world.get_units XYZ =
 | when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{?next}
@@ -103,7 +109,7 @@ world.updPilarGfxes P =
     | Below <= C
     | !Z + 1 
 | _label for_break
-| $gfxes.I <= Gs.flip
+| $gfxes.I <= Gs.flip //FIXME: use `init` method instead
 
 world.drawPilar P BX BY Blit CursorI =
 | X,Y = P

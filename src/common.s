@@ -4,8 +4,6 @@ type main{Data}
      world
      data/Data
      sounds/"[Data]sounds"
-     view_w/448
-     view_h/448
      cursor
      rect_back
      rect_front

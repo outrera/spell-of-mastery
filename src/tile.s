@@ -14,14 +14,23 @@ genTransition Mask From To =
     | less Mask.get{X Y} >< Empty
       | R.set{X Y From.get{X Y}}
 
-type tile{Main Type Role Id Elev Trn Empty Tiling Lineup Renderer Ds Ms Us Trns Plain}
-  id/Id main/Main type/Type role/Role elev/Elev trn/Trn empty/Empty tiling/Tiling
-  neib_elevs/[0 0 0 0] lineup/Lineup renderer/Renderer
-  ds/Ds ms/Ms us/Us trns/Trns plain/Plain
-
-tile.slope = case $neib_elev
-  []+[1 1 1 1]+[0 0 0 0] | 0
-  _ | 16
+type tile{Main Type Role Id Elev Trn Empty Tiling Lineup Renderer
+          Ds Ms Us Trns Plain}
+     id/Id
+     main/Main
+     type/Type
+     role/Role
+     elev/Elev
+     trn/Trn
+     empty/Empty
+     tiling/Tiling
+     lineup/Lineup
+     renderer/Renderer
+     ds/Ds
+     ms/Ms
+     us/Us
+     trns/Trns
+     plain/Plain
 
 TrnsCache = t
 
@@ -33,23 +42,25 @@ tile.render P Z Below Above Seed =
 | AR = Above.role
 | APad = AR >< pad
 | World = $main.world
+| NeibElevs = [0 0 0 0]
 | Gs = if BR <> $role then $ds
        else if AR <> $role and not APad then $us
        else $ms
 | G = if $lineup and (AH or APad or AR >< $role)
-        then | $neib_elevs.init{[1 1 1 1]}
-             | Gs.$neib_elevs
+        then | NeibElevs.init{[1 1 1 1]}
+             | Gs.NeibElevs
       else | Elev = if $tiling >< side
                     then World.getSideElev{P Z}
                     else World.getCornerElev{P Z}
-           | $neib_elevs.init{Elev{E => if E < $elev then 0 else 1}}
-           | R = Gs.$neib_elevs
+           | NeibElevs.init{Elev{E => if E < $elev then 0 else 1}}
+           | R = Gs.NeibElevs
            | less got R
-             | $neib_elevs.init{[1 1 1 1]}
-             | R <= Gs.$neib_elevs
+             | NeibElevs.init{[1 1 1 1]}
+             | R <= Gs.NeibElevs
            | R
+| World.slope_map.set{@P,Z NeibElevs^|$1 [0 0 0 0]+[1 1 1 1] => 0}
 | G = G.(Seed%G.size)
-| when not $trn or $neib_elevs <> [1 1 1 1]: leave G
+| when not $trn or NeibElevs <> [1 1 1 1]: leave G
 | Cs = World.getCornerTrns{P Z $role}
 | when Cs.all{1}: leave G
 | Index = [Cs G^address $plain^address]

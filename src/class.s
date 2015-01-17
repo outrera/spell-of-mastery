@@ -1,7 +1,11 @@
 use gfx common util
 
 type class{Bank ClassName static/0 empty/0 sprite/images_dummy}
-  bank/Bank class_name/ClassName static/Static empty/Empty sprite/Sprite
+  bank/Bank
+  class_name/ClassName
+  static/Static
+  empty/Empty
+  sprite/Sprite
 
 class.height = $sprite.height
 

@@ -84,7 +84,7 @@ view.update =
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
     | less $world.get_units{X,Y,Z}
-      | ClassName = if $keys.lctrl
+      | ClassName = if $keys.lctrl >< 1
                     then "[Bank]_[$main.classes_banks.Bank.rand]"
                     else "[Bank]_[Type]"
       | U = $world.alloc_unit{ClassName}

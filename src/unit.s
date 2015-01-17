@@ -12,6 +12,9 @@ type unit.$class{Id World}
   anim_step // frame index inside of current animation
   frame
   facing // direction this unit faces
+  slope // unit is standing on a sloped terrain
+
+unit.main = $world.main
 
 unit.init Class =
 | $class <= Class
@@ -34,10 +37,16 @@ unit.move XYZ =
 | $xyz.init{XYZ}
 | $sub_xyz.init{[0 0 0]}
 | $world.place_unit{Me}
+| [UX UY UZ] = $xyz
+| when UZ > 0: $slope <= $world.slope_at{UX,UY,UZ-1}
+
 
 unit.render Blit X Y =
 | G = $frame
 | DX,DY = G.hotspot
+| DY <= DY + $slope*16
 | Blit X+DX-G.w/2 Y+DY-16-G.h G
+
+
 
 export unit
