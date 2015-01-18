@@ -77,7 +77,7 @@ main.load_tiles =
 | $aux_tiles <= t
 | Frames = No
 | Es = [1111 1000 1100 1001 0100 0001 0110 0011
-        0010 0111 1011 1101 1110 1010 0101]
+        0010 0111 1011 1101 1110 1010 0101 0000]
 | for K,Tile $params: case K "tile_[Type]"
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
