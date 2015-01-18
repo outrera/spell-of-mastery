@@ -1,2 +1,3 @@
+author: usr_share
 frames: 9*8
 xy: 1,0

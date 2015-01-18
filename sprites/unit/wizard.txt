@@ -1,2 +1,3 @@
+author: `Nikita Sadkov`
 frames: ((240 0 30 78 0 4))
 anims: | still 0

@@ -1,3 +1,4 @@
+author: Yar
 height: 1
 auto_class: empty,1
 xy: 0,8

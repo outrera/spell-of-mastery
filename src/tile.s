@@ -71,37 +71,29 @@ tile.render P Z Below Above Seed =
 
 tile.heavy = not $empty
 
-load_tiles_txt File =
-| less File.exists: bad "cant open [File]"
-| File.get.utf8.lines{}{?parse.1}.skip{is.[]}
 
 main.load_tiles =
 | Tiles = t
 | $aux_tiles <= t
 | Frames = No
-| Es = "[$data]/tiles/".paths{}{load_tiles_txt.?}.join
-| for E Es: case E
-  [use Sprite] | Frames <= $sprites.Sprite.frames
-  [Type CornersElevation @Rest]
-  | [Is As] = Rest.div{is.['/'@_]}.xs{0,1}{?^~{[]}}
-  | CE = CornersElevation.digits.pad{-4 0}
-  | less Is.size: bad "one of [Type] tiles misses gfxes"
-  | Tile = Tiles->Type
-  | Gs = case Is [stack @Is] | Tile.stack <= Is
-                             | []
-              Else | Is{Frames.?}
-  | for X As{?tail}: case X
-    [alpha Alpha] | Gs <= Gs{(transparentize ? Alpha)}
-    [aux Value] | $aux_tiles.Type <= Value
-    [Arg Value] | Tile.Arg <= Value
-  | when Gs.size: Tile->gfxes.CE <= Gs
+| Es = [1111 1000 1100 1001 0100 0001 0110 0011
+        0010 0111 1011 1101 1110 1010 0101]
+| for K,Tile $params: case K "tile_[Type]"
+  | Tiles.Type <= Tile
+  | when got Tile.aux: $aux_tiles.Type <= Tile.aux
+  | Frames = $sprites.(Tile.sprite).frames
+  | for CornersElevation Es: when got!it Tile.CornersElevation:
+    | Is = if it.is_list then it else [it]
+    | CE = CornersElevation.digits.pad{-4 0}
+    | Gs = Is{Frames.?}
+    | when got!a Tile.alpha: Gs <= Gs{(transparentize ? a)}
+    | when Gs.size: Tile->gfxes.CE <= Gs
 | Trns = Tiles.trns.gfxes
 | Plain = Tiles.dirt.gfxes.[1 1 1 1].0
 | $tiles <= t size/1024
-| for [K V] Tiles
-  | [Ds Ms Us] = case V.gfxes
-                      T<1^got | [T T T]
-                      Else | V.stack{}{Tiles.?.gfxes}
+| for K,V Tiles
+  | [Ds Ms Us] = if got V.stack then V.stack{}{Tiles.?.gfxes}
+                 else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
   | $tiles.K <= tile Me K V.role^~{K} V.id V.elev^~{1.0}
                      V.trn^~{0} V.empty^~{0} V.tiling Lineup V.renderer
