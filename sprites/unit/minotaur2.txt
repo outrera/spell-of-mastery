@@ -1,3 +1,0 @@
-author: `Mistikfantasy (Manveru)`
-anims: | still 0
-xy: -16,8

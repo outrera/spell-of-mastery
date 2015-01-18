@@ -1,0 +1,3 @@
+author: `Nikita Sadkov`
+anims: | still 0
+xy: 4,4
