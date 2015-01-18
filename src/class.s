@@ -1,4 +1,4 @@
-use gfx common util
+use gfx common util params
 
 type class{Bank ClassName static/0 empty/0 sprite/images_dummy
            unit/0 draw_order/10}

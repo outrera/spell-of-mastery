@@ -1,4 +1,4 @@
-use gfx common util
+use gfx common util params
 
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/1 anims/[`|` [still 0]]

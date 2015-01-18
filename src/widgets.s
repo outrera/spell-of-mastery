@@ -1,23 +1,7 @@
 use util gui
 
 Skin = No
-Skins = t
-SkinCache = No
-FontCache = No
-
-cfg File =
-| less File.exists: bad "cant open [File]"
-| File.get.utf8.lines{}{?parse.1}.skip{is.[]}
-
-set_skin Path =
-| Skins.Skin <= [SkinCache FontCache]
-| Skin <= Path
-| when got!it Skins.Skin:
-  | SkinCache <= it.0
-  | FontCache <= it.1
-  | leave 0
-| SkinCache <= t
-| FontCache <= t
+Fonts = t
 
 Tints = t red     #A40000
           blue    #0094FC
@@ -31,23 +15,18 @@ Tints = t red     #A40000
           cyan    #F88C8C
           gray    #C0C0C0
 
-skin F = have SkinCache.F: gfx "[Skin]/[F].png"
+set_skin NewSkin =
+| Skin <= NewSkin
 
-skin_cursor F =
-| F = "cursor/[F]"
-| have SkinCache.F: leave
-  | Gfx = skin F
-  | Gfx.hotspot <= "[Skin]/[F].txt".get.utf8.parse.1
-  | Gfx
+skin F = Skin.img{"ui_[F]"}
 
 type font{@new_font Gs W H} glyphs/Gs widths/W height/H cmap
 | $cmap <= new_cmap [#0 #FFFFFF].pad{256 #FF000000}
 font.as_text = "#font{}"
-font N = have FontCache.N:
-| Path = "[Skin]/font/[N]"
-| G = gfx "[Path].png"
-| [W H EX] = "[Path].txt".get.utf8.parse.1
-| Glyphs = G.frames{W H}{F<[X Y W H].margins=>F.cut{X 0 W F.h}}
+font N = have Fonts.N:
+| S = Skin.spr{"font_[N]"}
+| [W H EX] = S.frames.0^|F => [F.w F.h F.hotspot.0]
+| Glyphs = S.frames{}{F<[X Y W H].margins=>F.cut{X 0 W F.h}}
 | Ws = Glyphs{[X Y W H].margins=>X+W-EX}
 | Ws.0 <= W/2
 | new_font Glyphs Ws H
@@ -88,7 +67,7 @@ txt.`!value` Text =
 
 type bar.widget{V} value_/V.clip{0 100} bg/No
 bar.render =
-| have $bg: skin."bar/bg"
+| have $bg: skin."bar-bg"
 | Me
 bar.value = $value_
 bar.set_value New = $value_ <= New.clip{0 100}
@@ -106,7 +85,7 @@ button.reskin =
 | HSize = $h_size
 | Text = $value
 | Cache.Skin <= @table: map N [normal over pressed disabled]: list N
-  | File = "button/[HSize]-[WSize]-[case N over normal _ N]"
+  | File = "button-[HSize]-[WSize]-[case N over normal _ N]"
   | G = File^skin.copy
   | P = case N pressed 2 _ 0
   | Tint = case N pressed+over | \white
@@ -136,7 +115,7 @@ type litem.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init
 litem.render =
 | less $init
-  | $h <= "litem/normal"^skin.h
+  | $h <= "litem-normal"^skin.h
   | $font <= font small
   | $fw <= $font.width{$text_}
   | $fh <= $font.height
@@ -147,7 +126,7 @@ litem.`!text` Text =
 | $init <= 0
 | $text_ <= Text
 litem.draw G P =
-| BG = "litem/[$state]"^skin
+| BG = "litem-[$state]"^skin
 | G.blit{P BG rect/[0 0 $w BG.h]}
 | Tint = case $state picked(\white) disabled(\gray) _(\yellow)
 | X = 2
@@ -179,7 +158,7 @@ droplist.draw G P =
     | !Y + R.h
 | less $drop
   | G.blit{P $rs.$picked}
-  | A = skin "arrow/down-normal"
+  | A = skin "arrow-down-normal"
   | G.blit{P+[$w-A.w 0] A}
 | $rs <= 0
 | No
@@ -253,7 +232,7 @@ slider_.`!value` V =
 | $pos <= (V*$size.float).clip{0.0 $size.float}
 | when $value <> OV: $f $value
 slider_.render =
-| S = skin "slider/[$dir]-normal"
+| S = skin "slider-[$dir]-normal"
 | $w <= S.w
 | $h <= S.h
 | if $dir >< v then $h <= $size else $w <= $size
@@ -261,8 +240,8 @@ slider_.render =
 slider_.inc = !$value + $delta
 slider_.dec = !$value - $delta
 slider_.draw G P =
-| BG = skin "slider/[$dir]-normal"
-| K = skin "slider/knob"
+| BG = skin "slider-[$dir]-normal"
+| K = skin "slider-knob"
 | I = 0
 | when $dir >< v
   | while I < $size
@@ -286,7 +265,7 @@ slider_.input In = case In
   [mice left 0 P] | when $state >< pressed: $state <= \normal
 
 type arrow.widget{D Fn state/normal} direction/D on_click/Fn state/State
-arrow.render = skin "arrow/[$direction]-[$state]"
+arrow.render = skin "arrow-[$direction]-[$state]"
 arrow.input In = case In
   [mice left 1 P] | when $state >< normal
                     | $state <= \pressed
@@ -342,7 +321,7 @@ minimap.input In = case In
   [mice left 0 XY] | $pressed <= 0
 
 type img.widget{Path} path/Path
-img.render = skin $path
+img.render = Skin.img{"image_[$path]"}
 
 type icon_popup.widget info enabled resources text/txt{''}
 | $info <= layV: map X [$text]: tabs 0: t 1(X) 0(spacer 0 0)
@@ -351,7 +330,7 @@ icon_popup.render =
 | $info.render
 
 type icon.widget{data/0 click/(Icon=>)}
-   w/50 h/42 pressed over fg tint g/skin{'icon/frame'}.copy
+   w/50 h/42 pressed over fg tint g/skin{'icon-frame'}.copy
    data/Data on_click/Click popup/icon_popup{} last_fg last_tint
 icon.draw G P =
 | less $tint: leave 0
@@ -384,5 +363,5 @@ icon_hp.draw G P =
 | $font.draw{G P.0+($w-FW)/2+1 P.1 white HP}
 
 
-export set_skin skin_cursor skin font txt button droplist slider folder_widget
+export set_skin font txt button droplist slider folder_widget
        litems minimap img icon icon_hp

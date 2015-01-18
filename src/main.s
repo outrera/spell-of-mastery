@@ -3,7 +3,7 @@ use common sprite class tile macros world util heap octree gui widgets view
 Main = main: main_root
 World = world Main 16
 
-set_skin "[Main.data]ui"
+set_skin Main//"[Main.data]ui"
 
 View = view Main 600 600
 
@@ -39,7 +39,7 @@ GUI = dlg w/800 h/600: list [0 0 layH.[Panel View]]
 
 View.init
 
-gui GUI cursor/skin_cursor{point}
+gui GUI cursor/Main.img{mice_point}
 
 //T = octree 128
 //T.set{3,3,3 123}
