@@ -95,8 +95,7 @@ main.load_tiles =
   | [Ds Ms Us] = if got V.stack then V.stack{}{Tiles.?.gfxes}
                  else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
-  | $tiles.K <= tile Me K V.role^~{K} V.id V.elev^~{1.0}
-                     V.trn^~{0} V.empty^~{0} V.tiling Lineup V.renderer
-                     Ds Ms Us Trns Plain
+  | $tiles.K <= tile Me K V.role^~{K} V.id V.elev V.trn V.empty V.tiling
+                     Lineup V.renderer Ds Ms Us Trns Plain
 
 export tile

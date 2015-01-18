@@ -1,5 +1,5 @@
 id: 1
 empty: 1
-elev: 0.0
+elev: 0
 renderer: none 
 1111: 0

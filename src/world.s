@@ -95,8 +95,8 @@ world.xy_to_index X,Y =
 | (Y%S)*S + X%S
 
 world.getElev X,Y Z =
-| less 0 << X and X < $size: leave 1.0
-| less 0 << Y and Y < $size: leave 1.0
+| less 0 << X and X < $size: leave 100
+| less 0 << Y and Y < $size: leave 100
 | $tid_map.($get{X Y Z}.0).elev
 
 world.getCornerElev P Z = `[]`
