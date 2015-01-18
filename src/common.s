@@ -3,12 +3,12 @@ use gfx util
 type main{Data}
      world
      data/Data
-     sounds/"[Data]sounds"
      tile_cursor
      rect_back
      rect_front
      cache/(t)
      cycle
+     params
      sprites
      classes // object classes
      classes_banks
@@ -18,6 +18,7 @@ type main{Data}
      editor_types
      tid_map/dup{1024 0}
      aux_tiles
+| $load_params
 | $load_sprites
 | $load_classes
 | $load_tiles

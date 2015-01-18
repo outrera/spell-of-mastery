@@ -1,0 +1,22 @@
+load_params Params File =
+| less File.exists: bad "cant open [File]"
+| Xs = File.get.utf8.parse{src File}.tail^|$_ [[]] => []
+| for Key,Value Xs{?1.0,?2.0}
+  | case Value [`,` A B]
+    | Value <= Value^| @r [`,` A B] => [@A^r B]
+                     | X => [X]
+  | Params.Key <= Value
+
+main.load_params =
+| Folder = "[$data]params/"
+| $params <= @table: @join: map BankName Folder.folders
+  | RootParams = t
+  | ParamsFile = "[Folder][BankName].txt"
+  | when ParamsFile.exists: load_params RootParams ParamsFile
+  | BankFolder = "[Folder][BankName]/"
+  | map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
+    | Params = RootParams.deep_copy
+    | load_params Params "[BankFolder][Name].txt"
+    | "[BankName]_[Name]",Params
+
+export load_params

@@ -1,9 +1,10 @@
 use common sprite class tile macros world util heap octree gui widgets view
+    param
 
 Main = main: main_root
 World = world Main 16
 
-set_skin Main//"[Main.data]ui"
+set_skin Main
 
 View = view Main 600 600
 

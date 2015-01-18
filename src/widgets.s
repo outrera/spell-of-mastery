@@ -2,21 +2,11 @@ use util gui
 
 Skin = No
 Fonts = t
-
-Tints = t red     #A40000
-          blue    #0094FC
-          green   #2CB494
-          violet  #9848B0
-          orange  #F88C14
-          black   #28283C
-          white   #FCF8F0
-          yellow  #F4E020
-          magenta #9848B0
-          cyan    #F88C8C
-          gray    #C0C0C0
+Tints = No
 
 set_skin NewSkin =
 | Skin <= NewSkin
+| Tints <= Skin.params.main_tints
 
 skin F = Skin.img{"ui_[F]"}
 
