@@ -88,7 +88,7 @@ world.remove_unit U =
 | Us = $column_units_at{ColumnXYZ}.skip{?id >< U.id}
 | Consed = Us^cons_column_next{?xyz.2}
 | Id = if Consed then Consed.id else 0
-| $unit_cells.set{ColumnXYZ U.id}
+| $unit_cells.set{ColumnXYZ Id}
 
 world.xy_to_index X,Y =
 | S = $size
