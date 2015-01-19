@@ -3,7 +3,7 @@ use util octree unit stack
 MaxSize = 256
 MaxUnits = 4096
 
-UnitHeight = 32 // in pixels
+HeightUnit = 32 // in pixels
 
 type world{Main Size}
    main/Main
@@ -158,6 +158,7 @@ world.updElev P =
 | $updPilarGfxes{P}
 
 world.drawPilar P BX BY Blit CursorI =
+| !BY + HeightUnit
 | X,Y = P
 | when X < 0 or X >> $size: leave 0
 | when Y < 0 or Y >> $size: leave 0
@@ -168,18 +169,19 @@ world.drawPilar P BX BY Blit CursorI =
 | UnitZ = 0
 | for G Gs: case G
   1.is_int | !Z+G
-  Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h+32-Z*32 R 0
-       | Blit BX BY-G.h+32-Z*32 G 0
+  Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h-Z*HeightUnit R 0
+       | Blit BX BY-G.h-Z*HeightUnit G 0
        | UnitZ <= Z+1
-       | for U $units_at{X,Y,UnitZ}: U.render{Blit BX BY-32*Z}
-       | when Cursor | R = $main.rect_front; Blit BX BY-R.h+32-Z*32 R 0
-       | !Z+1
+       | for U $units_at{X,Y,UnitZ}: U.render{Blit BX BY-HeightUnit*UnitZ}
+       | when Cursor | R = $main.rect_front; Blit BX BY-R.h-Z*HeightUnit R 0
+       | Z <= UnitZ
 | for U $units_at{X,Y,0}
   | Z = U.xyz.2
   | when Z > UnitZ
-    | U.render{Blit BX BY-32*Z+32}
-    | S = $shadows.(2-min{Z-UnitZ-1 2})
-    | Blit BX-S.w/2+32 BY-S.h+32-UnitZ*32 S 0
+    | !Z+1
+    | U.render{Blit BX BY-HeightUnit*Z+HeightUnit}
+    | S = $shadows.(2-min{Z-UnitZ-2 2})
+    | Blit BX-S.w/2+32 BY-S.h-UnitZ*HeightUnit S 0
 
 world.height X Y = MaxSize - $getPilar{X Y}.last.0
 
