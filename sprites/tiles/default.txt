@@ -1,3 +1,1 @@
 author: Yar,`Seth Galbraith`,`SketchyLogic`,`Nikita Sadkov`
-height: 1
-frames: 64*64

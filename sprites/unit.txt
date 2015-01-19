@@ -1,2 +1,2 @@
-height: 2
+height: 8
 anims: | still 0

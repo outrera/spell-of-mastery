@@ -97,7 +97,7 @@ world.xy_to_index X,Y =
 world.getElev X,Y Z =
 | less 0 << X and X < $size: leave 100
 | less 0 << Y and Y < $size: leave 100
-| $tid_map.($get{X Y Z}.0).elev
+| $tid_map.($get{X Y Z}.0).height
 
 world.getCornerElev P Z = `[]`
   [$getElev{P+[-1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[-1 0] Z}].min
@@ -151,6 +151,10 @@ world.updPilarGfxes P =
 | _label for_break
 | $gfxes.I <= Gs.flip //FIXME: use `init` method instead
 
+world.updElev P =
+| for D Dirs: $updPilarGfxes{P+D}
+| $updPilarGfxes{P}
+
 world.drawPilar P BX BY Blit CursorI =
 | X,Y = P
 | when X < 0 or X >> $size: leave 0
@@ -174,10 +178,6 @@ world.drawPilar P BX BY Blit CursorI =
     | U.render{Blit BX BY-32*Z+32}
     | S = $shadows.(2-min{Z-UnitZ-1 2})
     | Blit BX-S.w/2+32 BY-S.h+32-UnitZ*32 S 0
-
-world.updElev P =
-| for D Dirs: $updPilarGfxes{P+D}
-| $updPilarGfxes{P}
 
 world.height X Y = MaxSize - $getPilar{X Y}.last.0
 

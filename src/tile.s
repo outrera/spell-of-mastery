@@ -14,13 +14,13 @@ genTransition Mask From To =
     | less Mask.get{X Y} >< Empty
       | R.set{X Y From.get{X Y}}
 
-type tile{Main Type Role Id Elev Trn Empty Tiling Lineup Renderer
+type tile{Main Type Role Id Height Trn Empty Tiling Lineup Renderer
           Ds Ms Us Trns Plain}
      id/Id
      main/Main
      type/Type
      role/Role
-     elev/Elev
+     height/Height
      trn/Trn
      empty/Empty
      tiling/Tiling
@@ -52,13 +52,15 @@ tile.render P Z Below Above Seed =
       else | Elev = if $tiling >< side
                     then World.getSideElev{P Z}
                     else World.getCornerElev{P Z}
-           | NeibElevs.init{Elev{E => if E < $elev then 0 else 1}}
+           | NeibElevs.init{Elev{E => if E < $height then 0 else 1}}
            | R = Gs.NeibElevs
            | less got R
              | NeibElevs.init{[1 1 1 1]}
              | R <= Gs.NeibElevs
            | R
-| World.slope_map.set{@P,Z NeibElevs^|$1 [0 0 0 0]+[1 1 1 1] => 0}
+| Slope = if $tiling >< side then 0
+          else NeibElevs^|$1 [0 0 0 0]+[1 1 1 1] => 0
+| World.slope_map.set{@P,Z Slope}
 | G = G.(Seed%G.size)
 | when not $trn or NeibElevs <> [1 1 1 1]: leave G
 | Cs = World.getCornerTrns{P Z $role}
@@ -95,7 +97,7 @@ main.load_tiles =
   | [Ds Ms Us] = if got V.stack then V.stack{}{Tiles.?.gfxes}
                  else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
-  | $tiles.K <= tile Me K V.role^~{K} V.id V.elev V.trn V.empty V.tiling
+  | $tiles.K <= tile Me K V.role^~{K} V.id V.height V.trn V.empty V.tiling
                      Lineup V.renderer Ds Ms Us Trns Plain
 
 export tile

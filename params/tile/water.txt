@@ -1,6 +1,6 @@
 id: 101
 empty:1
-elev: 50
+height: 1
 alpha: 127
 1111: 56,57,59
 1000: 40

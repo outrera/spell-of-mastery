@@ -1,4 +1,4 @@
 sprite: tiles_default
 empty: 0
 trn: 0
-elev: 100
+height: 4 // height in world units (8 pixels/unit by default)
