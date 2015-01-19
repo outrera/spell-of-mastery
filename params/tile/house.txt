@@ -1,3 +1,2 @@
-id: 111
 trn: 1
 stack: house_base,house_wall,house_roof

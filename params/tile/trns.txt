@@ -1,5 +1,4 @@
 // 240-259: transition tiles
-id: 123
 aux: 1
 1111: 236
 0000: 237

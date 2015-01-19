@@ -1,4 +1,3 @@
-id: 0
 empty: 1
 aux: 1
 height: 0

@@ -1,4 +1,3 @@
-id: 115
 no_lineup: 1
 tiling: side
 1111: 116,117

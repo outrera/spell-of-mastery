@@ -292,7 +292,8 @@ folder_widget Root F =
 | S = slider size/124 v f/(N => FL.offset <= @int N*FL.data.size.float)
 | layH [FL S]
 
-type minimap.widget{Main CenterAt} main/Main w/128 h/128 pressed center/CenterAt
+type minimap.widget{Main CenterAt}
+     main/Main w/128 h/128 pressed center/CenterAt
 minimap.draw G P =
 | MM = $main.world.minimap
 | [X Y] = $main.world.player.view/32

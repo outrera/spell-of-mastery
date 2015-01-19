@@ -1,3 +1,2 @@
-id: 119
 role: column
 stack: column0,column1,column2

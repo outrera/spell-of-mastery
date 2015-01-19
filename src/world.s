@@ -3,6 +3,8 @@ use util octree unit stack
 MaxSize = 256
 MaxUnits = 4096
 
+UnitHeight = 32 // in pixels
+
 type world{Main Size}
    main/Main
    size/Size // world width/height

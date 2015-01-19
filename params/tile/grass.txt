@@ -1,4 +1,3 @@
-id: 106
 height: 2
 empty: 1
 1111: 96
