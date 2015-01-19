@@ -42,27 +42,25 @@ tile.render P Z Below Above Seed =
 | AR = Above.role
 | APad = AR >< pad
 | World = $main.world
-| NeibElevs = [0 0 0 0]
+| NeibElevs = #@0000
 | Gs = if BR <> $role then $ds
        else if AR <> $role and not APad then $us
        else $ms
 | G = if $lineup and (AH or APad or AR >< $role)
-        then | NeibElevs.init{[1 1 1 1]}
+        then | NeibElevs <= #@1111
              | Gs.NeibElevs
       else | Elev = if $tiling >< side
                     then World.getSideElev{P Z}
                     else World.getCornerElev{P Z}
-           | NeibElevs.init{Elev{E => if E < $height then 0 else 1}}
+           | NeibElevs <= Elev{E => if E < $height then 0 else 1}.digits{2}
            | R = Gs.NeibElevs
            | less got R
-             | NeibElevs.init{[1 1 1 1]}
+             | NeibElevs <= #@1111
              | R <= Gs.NeibElevs
            | R
-| Slope = if $tiling >< side then 0
-          else NeibElevs^|$1 [0 0 0 0]+[1 1 1 1] => 0
-| World.slope_map.set{@P,Z Slope}
+| World.slope_map.set{@P,Z if $tiling >< side then 1111 else NeibElevs}
 | G = G.(Seed%G.size)
-| when not $trn or NeibElevs <> [1 1 1 1]: leave G
+| when not $trn or NeibElevs <> #@1111: leave G
 | Cs = World.getCornerTrns{P Z $role}
 | when Cs.all{1}: leave G
 | Index = [Cs G^address $plain^address]
@@ -84,14 +82,15 @@ main.load_tiles =
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
   | Frames = $sprites.(Tile.sprite).frames
+  | Tile.gfxes <= dup 16 No
   | for CornersElevation Es: when got!it Tile.CornersElevation:
+    | E = CornersElevation.digits.digits{2}
     | Is = if it.is_list then it else [it]
-    | CE = CornersElevation.digits.pad{-4 0}
     | Gs = Is{Frames.?}
     | when got!a Tile.alpha: Gs <= Gs{(transparentize ? a)}
-    | when Gs.size: Tile->gfxes.CE <= Gs
+    | when Gs.size: Tile.gfxes.E <= Gs
 | Trns = Tiles.trns.gfxes
-| Plain = Tiles.dirt.gfxes.[1 1 1 1].0
+| Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
 | IdIterator = 0
 | for K,V Tiles

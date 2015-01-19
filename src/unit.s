@@ -46,7 +46,7 @@ unit.move XYZ =
 | $sub_xyz.init{[0 0 0]}
 | $world.place_unit{Me}
 | [UX UY UZ] = XYZ
-| when UZ > 0: $slope <= $world.slope_at{UX,UY,UZ-1}
+| when UZ > 0: $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@0000+#@1111 => 0
 
 
 unit.render Blit X Y =
