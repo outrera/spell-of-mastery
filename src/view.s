@@ -110,7 +110,7 @@ view.update =
       | when $keys.t >< 1: U.flipX <= 1.rand
       | when $keys.m >< 1: U.flipX <= 1
       | U.move{X,Y,Z}
-  [tile Type] | $world.push{X,Y $main.tiles.Type.id}
+  [tile Type] | $world.push{X,Y $main.tiles.Type}
 | when $mice_right and Z >> $mice_z: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
   [tile Type] | $world.pop{X,Y}

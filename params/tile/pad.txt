@@ -1,3 +1,0 @@
-// used to pad tiles with height > 1
-renderer: none 
-1111: 0

@@ -1,4 +1,3 @@
 // fills space for neighbor tiles
 empty: 1
-renderer: none 
 1111: 0

@@ -30,11 +30,11 @@ type world{Main Size}
 | $free_units <= stack MaxUnits
 | $main.world <= Me
 | $units <= MaxUnits{(unit ? Me)}
-| $filler <= $main.tiles.plain.id
+| $filler <= $main.tiles.plain
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
-| for P points{0 0 Size Size}: $cells.set{[@P 0] $filler}
+| for P points{0 0 Size Size}: $push_{P $filler}
 | for P points{0 0 Size Size}: $updPilarGfxes{P}
 | for U $units: when U.id <> 0: $free_units.push{U}
 | $shadows <= $main.sprites.unit_shadows.frames
@@ -49,7 +49,10 @@ world.free_unit U =
 | U.remove
 | $free_units.push{U}
 
-world.get X Y Z = $cells.get{[X Y Z]}.0
+world.get X Y Z =
+| Id = $cells.get{[X Y Z]}.0
+| if Id < 0 then $cells.get{[X Y Z-Id]}.0
+  else Id
 
 world.set X Y Z V = $cells.set{[X Y Z] V}
 
@@ -145,17 +148,21 @@ world.updPilarGfxes P =
 | Z = 0
 | Below = $tid_map.0
 | for [Count TileId] Cs
-  | when TileId < 2 // one of special no-drawable tiles
-    | when TileId <> 1: Below <= $tid_map.0 // when non pad-tile
+  | less TileId //end?
+    | Below <= $tid_map.0
     | !Z + Count
     | push Count Gs
     | _goto for_break
-  | C = $tid_map.TileId
-  | times I Count
-    | Above = if I+1 < Count then Below else $tid_map.($get{X Y Z+1})
-    | push C.render{P Z Below Above Seed} Gs
-    | Below <= C
-    | !Z + 1 
+  | C = $tid_map.|if TileId < 0 then $get{X Y Z-TileId} else TileId
+  | if TileId < 0 or C.empty
+    then | push Count Gs
+         | Below <= C
+         | !Z + Count
+    else times I Count
+         | Above = if I+1 < Count then Below else $tid_map.($get{X Y Z+1})
+         | push C.render{P Z Below Above Seed} Gs
+         | Below <= C
+         | !Z + 1
 | _label for_break
 | $gfxes.I <= Gs.flip //FIXME: use `init` method instead
 
@@ -193,10 +200,19 @@ world.drawPilar P BX BY Blit CursorI =
 
 world.height X Y = MaxSize - $getPilar{X Y}.last.0
 
-world.push X,Y C =
-| $set{X Y $height{X Y} C}
-| $updElev{X,Y}
+world.push_ X,Y Tile =
+| Z = $height{X Y}
+| H = Tile.height-1
+| times I H: $set{X Y Z+I I-H} // push padding
+| $set{X Y Z+H Tile.id}
 
+
+// push Tile on top of pilar at X,Y
+world.push XY Tile =
+| $push_{XY Tile}
+| $updElev{XY}
+
+// pop top tile of pilar at X,Y
 world.pop X,Y =
 | H = $height{X Y}
 | less H: leave 0

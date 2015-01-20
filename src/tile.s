@@ -14,7 +14,7 @@ genTransition Mask From To =
     | less Mask.get{X Y} >< Empty
       | R.set{X Y From.get{X Y}}
 
-type tile{Main Type Role Id Height Trn Empty Tiling Lineup Renderer
+type tile{Main Type Role Id Height Trn Empty Tiling Lineup
           Ds Ms Us Trns Plain}
      id/Id
      main/Main
@@ -25,7 +25,6 @@ type tile{Main Type Role Id Height Trn Empty Tiling Lineup Renderer
      empty/Empty
      tiling/Tiling
      lineup/Lineup
-     renderer/Renderer
      ds/Ds
      ms/Ms
      us/Us
@@ -35,20 +34,19 @@ type tile{Main Type Role Id Height Trn Empty Tiling Lineup Renderer
 TrnsCache = t
 
 tile.render P Z Below Above Seed =
-| when $renderer >< none: leave DummyGfx
 | BE = Below.empty
 | BR = Below.role
 | AH = Above.heavy
 | AR = Above.role
-| APad = AR >< pad
+| AFiller = AR >< filler
 | World = $main.world
 | NeibElevs = #@0000
 | Gs = if BR <> $role then $ds
-       else if AR <> $role and not APad then $us
+       else if AR <> $role and not AFiller then $us
        else $ms
-| G = if $lineup and (AH or APad or AR >< $role)
-        then | NeibElevs <= #@1111
-             | Gs.NeibElevs
+| G = if $lineup and (AH or AFiller or AR >< $role)
+      then | NeibElevs <= #@1111
+           | Gs.NeibElevs
       else | Elev = if $tiling >< side
                     then World.getSideElev{P Z}
                     else World.getCornerElev{P Z}
@@ -69,7 +67,8 @@ tile.render P Z Below Above Seed =
   | TrnsCache.Index <= R
   | leave R
 
-tile.heavy = not $empty
+// returns 1 if this tile compresses the shape of tile below of it
+tile.heavy = not $empty and $id <> 1
 
 
 main.load_tiles =
@@ -92,16 +91,15 @@ main.load_tiles =
 | Trns = Tiles.trns.gfxes
 | Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
-| IdIterator = 1
+| IdIterator = 0
 | for K,V Tiles
   | [Ds Ms Us] = if got V.stack then V.stack{}{Tiles.?.gfxes}
                  else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
   | Id = if K >< void then 0
-         else if K >< pad then 1
          else | !IdIterator + 1
               | IdIterator
   | $tiles.K <= tile Me K V.role^~{K} Id V.height V.trn V.empty V.tiling
-                     Lineup V.renderer Ds Ms Us Trns Plain
+                     Lineup Ds Ms Us Trns Plain
 
 export tile
