@@ -216,7 +216,9 @@ world.push XY Tile =
 world.pop X,Y =
 | H = $height{X Y}
 | less H: leave 0
-| $set{X Y H-1 0}
+| Z = H-1
+| T = $tid_map.($get{X Y Z})
+| times I T.height: $set{X Y Z-I 0}
 | $updElev{X,Y}
 
 world.update =
