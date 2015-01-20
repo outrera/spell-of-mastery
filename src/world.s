@@ -1,27 +1,33 @@
 use util octree unit stack
 
-MaxSize = 256
-MaxUnits = 4096
-
-HeightUnit = 32 // in pixels
+MaxSize = No
+MaxUnits = No
+ZUnit = No
 
 type world{Main Size}
    main/Main
    size/Size // world width/height
    w/Size
    h/Size
-   cells/octree{MaxSize}
-   unit_cells/octree{MaxSize}
-   unit_serial/(1</20-1) // used to generate serial numbers for units
-   slope_map/octree{MaxSize}
+   cells
+   unit_cells
+   unit_serial/((1</20)-1) // used to generate serial numbers for units
+   slope_map
    units
-   free_units/stack{MaxUnits}
+   free_units
    gfxes
    seed
    tid_map/Main.tid_map
    cycle
    filler
    shadows
+| MaxSize <= $main.params.world.max_size
+| MaxUnits <= $main.params.world.max_units
+| ZUnit <= $main.params.world.z_unit
+| $cells <= octree MaxSize
+| $unit_cells <= octree MaxSize
+| $slope_map <= octree MaxSize
+| $free_units <= stack MaxUnits
 | $main.world <= Me
 | $units <= MaxUnits{(unit ? Me)}
 | $filler <= $main.tiles.plain.id
@@ -43,7 +49,7 @@ world.free_unit U =
 | U.remove
 | $free_units.push{U}
 
-world.get X Y Z = $cells.get{[X Y Z]}
+world.get X Y Z = $cells.get{[X Y Z]}.0
 
 world.set X Y Z V = $cells.set{[X Y Z] V}
 
@@ -99,7 +105,7 @@ world.xy_to_index X,Y =
 world.getElev X,Y Z =
 | less 0 << X and X < $size: leave 100
 | less 0 << Y and Y < $size: leave 100
-| $tid_map.($get{X Y Z}.0).height
+| $tid_map.($get{X Y Z}).height
 
 world.getCornerElev P Z = `[]`
   [$getElev{P+[-1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[-1 0] Z}].min
@@ -114,7 +120,7 @@ world.getSideElev P Z = `[]`
 world.getTrn X,Y Z =
 | less 0 << X and X < $size: leave 0
 | less 0 << Y and Y < $size: leave 0
-| Tile = $tid_map.($get{X Y Z}.0)
+| Tile = $tid_map.($get{X Y Z})
 | if Tile.trn then Tile.role else 0
 
 world.getCornerTrns P Z Role = `[]`
@@ -139,14 +145,14 @@ world.updPilarGfxes P =
 | Z = 0
 | Below = $tid_map.0
 | for [Count TileId] Cs
-  | less TileId
-    | Below <= $tid_map.0
+  | when TileId < 2 // one of special no-drawable tiles
+    | when TileId <> 1: Below <= $tid_map.0 // when non pad-tile
     | !Z + Count
     | push Count Gs
     | _goto for_break
   | C = $tid_map.TileId
   | times I Count
-    | Above = if I+1 < Count then Below else $tid_map.($get{X Y Z+1}.0)
+    | Above = if I+1 < Count then Below else $tid_map.($get{X Y Z+1})
     | push C.render{P Z Below Above Seed} Gs
     | Below <= C
     | !Z + 1 
@@ -158,7 +164,7 @@ world.updElev P =
 | $updPilarGfxes{P}
 
 world.drawPilar P BX BY Blit CursorI =
-| !BY + HeightUnit
+| !BY + 32
 | X,Y = P
 | when X < 0 or X >> $size: leave 0
 | when Y < 0 or Y >> $size: leave 0
@@ -169,19 +175,21 @@ world.drawPilar P BX BY Blit CursorI =
 | UnitZ = 0
 | for G Gs: case G
   1.is_int | !Z+G
-  Else | when Cursor | R = $main.rect_back; Blit BX BY-R.h-Z*HeightUnit R 0
-       | Blit BX BY-G.h-Z*HeightUnit G 0
-       | UnitZ <= Z+1
-       | for U $units_at{X,Y,UnitZ}: U.render{Blit BX BY-HeightUnit*UnitZ}
-       | when Cursor | R = $main.rect_front; Blit BX BY-R.h-Z*HeightUnit R 0
+  Else | T = $tid_map.($get{X Y Z})
+       | ZZ = Z*ZUnit
+       | when Cursor | R = $main.rect_back; Blit BX BY-R.h-ZZ R 0
+       | Blit BX BY-G.h-ZZ G 0
+       | UnitZ <= Z + T.height
+       | for U $units_at{X,Y,UnitZ}: U.render{Blit BX BY-ZUnit*UnitZ}
+       | when Cursor | R = $main.rect_front; Blit BX BY-R.h-ZZ R 0
        | Z <= UnitZ
 | for U $units_at{X,Y,0}
   | Z = U.xyz.2
   | when Z > UnitZ
     | !Z+1
-    | U.render{Blit BX BY-HeightUnit*Z+HeightUnit}
+    | U.render{Blit BX BY-ZUnit*Z+ZUnit}
     | S = $shadows.(2-min{Z-UnitZ-2 2})
-    | Blit BX-S.w/2+32 BY-S.h-UnitZ*HeightUnit S 0
+    | Blit BX-S.w/2+32 BY-S.h-UnitZ*ZUnit S 0
 
 world.height X Y = MaxSize - $getPilar{X Y}.last.0
 

@@ -6,7 +6,7 @@ Tints = No
 
 set_skin NewSkin =
 | Skin <= NewSkin
-| Tints <= Skin.params.main_tints
+| Tints <= Skin.params.main.tints
 
 skin F = Skin.img{"ui_[F]"}
 

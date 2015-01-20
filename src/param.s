@@ -9,14 +9,15 @@ load_params Params File =
 
 main.load_params =
 | Folder = "[$data]params/"
-| $params <= @table: @join: map BankName Folder.folders
+| $params <= @table: map BankName Folder.folders
   | RootParams = t
   | ParamsFile = "[Folder][BankName].txt"
   | when ParamsFile.exists: load_params RootParams ParamsFile
   | BankFolder = "[Folder][BankName]/"
-  | map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
+  | Bank = @table: map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
     | Params = RootParams.deep_copy
     | load_params Params "[BankFolder][Name].txt"
-    | "[BankName]_[Name]",Params
+    | Name,Params
+  | BankName,Bank
 
 export load_params

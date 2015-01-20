@@ -78,7 +78,7 @@ main.load_tiles =
 | Frames = No
 | Es = [1111 1000 1100 1001 0100 0001 0110 0011
         0010 0111 1011 1101 1110 1010 0101 0000]
-| for K,Tile $params: case K "tile_[Type]"
+| for Type,Tile $params.tile
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
   | Frames = $sprites.(Tile.sprite).frames
@@ -92,12 +92,13 @@ main.load_tiles =
 | Trns = Tiles.trns.gfxes
 | Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
-| IdIterator = 0
+| IdIterator = 1
 | for K,V Tiles
   | [Ds Ms Us] = if got V.stack then V.stack{}{Tiles.?.gfxes}
                  else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
   | Id = if K >< void then 0
+         else if K >< pad then 1
          else | !IdIterator + 1
               | IdIterator
   | $tiles.K <= tile Me K V.role^~{K} Id V.height V.trn V.empty V.tiling
