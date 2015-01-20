@@ -6,7 +6,7 @@ TileH = 32
 
 type view.widget{M W H}
   main/M
-  g
+  fb // frame buffer
   w/W
   h/H
   frame
@@ -24,7 +24,7 @@ type view.widget{M W H}
   cell_xy/[0 0]
   cell_index
   brush/[0 0]
-| $g <= gfx W H
+| $fb <= gfx W H
 
 view.init =
 | $view_origin.init{-[$world.size $world.size]/2}
@@ -36,9 +36,8 @@ view.world = $main.world
 
 view.render =
 | $update
-| G = $g
-| G.clear{#929292/*#00A0C0*/}
-| Blit = X Y Src FX => G.blit{X,Y Src flipX(FX)}
+| FB = $fb
+| FB.clear{#929292/*#00A0C0*/}
 | D = 32
 | [TX TY] = $blit_origin
 | Y = 0
@@ -47,17 +46,17 @@ view.render =
   | times N Y+1
     | BX = TX - Y*TileH + N*TileW
     | BY = TY + Y*TileH/2
-    | $world.drawPilar{$view_origin+[N Y-N] BX BY Blit $cell_index}
+    | $world.drawPilar{$view_origin+[N Y-N] BX BY FB $cell_index}
   | !Y + 1
 | while YY > 0
   | !YY - 1
   | times N YY
     | BX = TX - (YY-1)*TileH + N*TileW
     | BY = TY + Y*TileH/2
-    | $world.drawPilar{$view_origin+[D-YY+N D-N-1] BX BY Blit $cell_index}
+    | $world.drawPilar{$view_origin+[D-YY+N D-N-1] BX BY FB $cell_index}
   | !Y + 1
 | !$frame + 1
-| G
+| FB
 
 view.worldToView P =
 | [X Y] = P - $view_origin

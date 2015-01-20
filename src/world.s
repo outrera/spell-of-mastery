@@ -170,7 +170,7 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
-world.drawPilar P BX BY Blit CursorI =
+world.drawPilar P BX BY FB CursorI =
 | !BY + 32
 | X,Y = P
 | when X < 0 or X >> $size: leave 0
@@ -184,19 +184,19 @@ world.drawPilar P BX BY Blit CursorI =
   1.is_int | !Z+G
   Else | T = $tid_map.($get{X Y Z})
        | ZZ = Z*ZUnit
-       | when Cursor | R = $main.rect_back; Blit BX BY-R.h-ZZ R 0
-       | Blit BX BY-G.h-ZZ G 0
+       | when Cursor | R = $main.rect_back; FB.blit{[BX BY-R.h-ZZ] R}
+       | FB.blit{[BX BY-G.h-ZZ] G}
        | UnitZ <= Z + T.height
-       | for U $units_at{X,Y,UnitZ}: U.render{Blit BX BY-ZUnit*UnitZ}
-       | when Cursor | R = $main.rect_front; Blit BX BY-R.h-ZZ R 0
+       | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
+       | when Cursor | R = $main.rect_front; FB.blit{[BX BY-R.h-ZZ] R}
        | Z <= UnitZ
 | for U $units_at{X,Y,0}
   | Z = U.xyz.2
   | when Z > UnitZ
     | !Z+1
-    | U.render{Blit BX BY-ZUnit*Z+ZUnit}
+    | U.render{FB BX BY-ZUnit*Z+ZUnit}
     | S = $shadows.(2-min{Z-UnitZ-2 2})
-    | Blit BX-S.w/2+32 BY-S.h-UnitZ*ZUnit S 0
+    | FB.blit{[BX-S.w/2+32 BY-S.h-UnitZ*ZUnit] S}
 
 world.height X Y = MaxSize - $getPilar{X Y}.last.0
 

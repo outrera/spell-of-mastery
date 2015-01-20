@@ -49,12 +49,12 @@ unit.move XYZ =
 | when UZ > 0: $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@0000+#@1111 => 0
 
 
-unit.render Blit X Y =
+unit.render FB X Y =
 | G = $frame
 | DX,DY = G.hotspot
 | DY <= DY + $slope*16
 | OX = if $flipX then -DX else DX
-| Blit X+32-G.w/2+OX Y+DY-16-G.h G $flipX
+| FB.blit{[X+32-G.w/2+OX Y+DY-16-G.h] G flipX/$flipX}
 
 
 
