@@ -155,7 +155,7 @@ world.updPilarGfxes P =
     | _goto for_break
   | C = $tid_map.|if TileId < 0 then $get{X Y Z-TileId} else TileId
   | if TileId < 0 or C.empty
-    then | push Count Gs
+    then | when C.empty: push Count Gs
          | Below <= C
          | !Z + Count
     else times I Count
