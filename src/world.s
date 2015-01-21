@@ -151,7 +151,6 @@ world.updPilarGfxes P =
   | less TileId //end?
     | Below <= $tid_map.0
     | !Z + Count
-    | push Count Gs
     | _goto for_break
   | C = $tid_map.|if TileId < 0 then $get{X Y Z-TileId} else TileId
   | if TileId < 0 or C.empty
@@ -170,7 +169,29 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
+XUnit = 64
+YUnit = 32
+
+draw_cursor V Front FB X Y H =
+| !H*ZUnit
+| !Y - H
+| !Y - 2
+| !Y+YUnit/2
+| A = [X Y]
+| B = [X+XUnit/2 if Front then Y+YUnit/2 else Y-YUnit/2]
+| C = [X+XUnit Y]
+| FB.line{V A B}
+| FB.line{V B C}
+| FB.line{V A+[0 H] B+[0 H]}
+| FB.line{V B+[0 H] C+[0 H]}
+| FB.line{V A A+[0 H]}
+| FB.line{V B B+[0 H]}
+| FB.line{V C C+[0 H]}
+
+
 world.drawPilar P BX BY FB CursorI =
+//| draw_cursor #FF0000 0 FB 0 50 2
+//| draw_cursor #00FF00 1 FB 0 50 2
 | !BY + 32
 | X,Y = P
 | when X < 0 or X >> $size: leave 0
@@ -181,14 +202,18 @@ world.drawPilar P BX BY FB CursorI =
 | Z = 0
 | UnitZ = 0
 | for G Gs: case G
-  1.is_int | !Z+G
+  1.is_int | when Cursor
+             | draw_cursor #FF0000 0 FB BX BY-YUnit-Z*ZUnit G
+             | draw_cursor #00FF00 1 FB BX BY-YUnit-Z*ZUnit G
+           | !Z+G
   Else | T = $tid_map.($get{X Y Z})
+       | TH = T.height
        | ZZ = Z*ZUnit
-       | when Cursor | R = $main.rect_back; FB.blit{[BX BY-R.h-ZZ] R}
+       | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH
        | FB.blit{[BX BY-G.h-ZZ] G}
-       | UnitZ <= Z + T.height
+       | UnitZ <= Z + TH
        | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
-       | when Cursor | R = $main.rect_front; FB.blit{[BX BY-R.h-ZZ] R}
+       | when Cursor | draw_cursor #00FF00 1 FB BX BY-YUnit-ZZ TH
        | Z <= UnitZ
 | for U $units_at{X,Y,0}
   | Z = U.xyz.2
