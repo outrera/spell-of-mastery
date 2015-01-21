@@ -14,22 +14,23 @@ genTransition Mask From To =
     | less Mask.get{X Y} >< Empty
       | R.set{X Y From.get{X Y}}
 
-type tile{Main Type Role Id Height Trn Empty Tiling Lineup
-          Ds Ms Us Trns Plain}
+type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
+          height/1 trn/0 empty/0 invisible/0 tiling/corner}
      id/Id
      main/Main
      type/Type
      role/Role
-     height/Height
-     trn/Trn
-     empty/Empty
-     tiling/Tiling
      lineup/Lineup
      ds/Ds
      ms/Ms
      us/Us
      trns/Trns
      plain/Plain
+     height/Height
+     trn/Trn
+     empty/Empty
+     invisible/Invisible
+     tiling/Tiling
 
 TrnsCache = t
 
@@ -99,7 +100,7 @@ main.load_tiles =
   | Id = if K >< void then 0
          else | !IdIterator + 1
               | IdIterator
-  | $tiles.K <= tile Me K V.role^~{K} Id V.height V.trn V.empty V.tiling
-                     Lineup Ds Ms Us Trns Plain
+  | $tiles.K <= tile Me K V.role^~{K} Id Lineup Ds Ms Us Trns Plain
+                     @V.list.join
 
 export tile
