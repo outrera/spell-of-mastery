@@ -1,0 +1,19 @@
+`Nikita Sadkov`:
+  | http: `https://github.com/saniv/symta`
+
+surt:
+  | Name = `Carl Olsson`
+  | http: `http://opengameart.org/users/surt`
+
+Redshrike:
+  | Name: `Stephen Challener`
+  | http: `http://opengameart.org/users/redshrike`
+
+Blarumyrran:
+  | http: `http://opengameart.org/users/Blarumyrran`
+
+Manveru:
+  | http: `http://opengameart.org/users/manveru`
+
+LordNeo:
+  | http: `http://opengameart.org/users/LordNeo`
