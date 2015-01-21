@@ -68,7 +68,7 @@ tile.render P Z Below Above Seed =
   | leave R
 
 // returns 1 if this tile compresses the shape of tile below of it
-tile.heavy = not $empty and $id <> 1
+tile.heavy = not $empty
 
 
 main.load_tiles =
