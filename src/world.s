@@ -58,6 +58,8 @@ world.set X Y Z V = $cells.set{[X Y Z] V}
 
 world.slope_at XYZ = $slope_map.get{XYZ}.0
 
+world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
+
 world.unit_id_at XYZ = $unit_cells.get{XYZ}.0
 
 world.unit_at XYZ =
@@ -199,6 +201,7 @@ world.drawPilar P BX BY FB CursorI =
 | Cursor = same I CursorI
 | Z = 0
 | UnitZ = 0
+//| TileShadow = $main.sprites.system_tile_shadow.frames.0
 | for G Gs: case G
   1.is_int | when Cursor
              | draw_cursor #FF0000 0 FB BX BY-YUnit-Z*ZUnit G
@@ -210,6 +213,8 @@ world.drawPilar P BX BY FB CursorI =
        | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH
        | HS = G.hotspot
        | FB.blit{[BX+HS.0 BY-G.h-ZZ+HS.1] G}
+       //| when T.shadow and $slope_at{X+1,Y,Z+TH*2-1} >< #@1111:
+       //  | FB.blit{[BX+HS.0 BY-G.h-ZZ+HS.1] TileShadow}
        | UnitZ <= Z + TH
        | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
        | when Cursor | draw_cursor #00FF00 1 FB BX BY-YUnit-ZZ TH
@@ -241,6 +246,7 @@ world.pop X,Y =
 | H = $height{X Y}
 | less H: leave 0
 | Z = H-1
+| $set_slope_at{X,Y,Z #@0000}
 | T = $tid_map.($get{X Y Z})
 | times I T.height: $set{X Y Z-I 0}
 | $updElev{X,Y}

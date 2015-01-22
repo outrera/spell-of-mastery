@@ -15,7 +15,7 @@ genTransition Mask From To =
       | R.set{X Y From.get{X Y}}
 
 type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
-          height/1 trn/0 empty/0 invisible/0 tiling/corner}
+          height/1 trn/0 empty/0 invisible/0 tiling/corner shadow/0}
      id/Id
      main/Main
      type/Type
@@ -31,6 +31,7 @@ type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
      empty/Empty
      invisible/Invisible
      tiling/Tiling
+     shadow/Shadow
 
 TrnsCache = t
 
@@ -57,7 +58,7 @@ tile.render P Z Below Above Seed =
              | NeibElevs <= #@1111
              | R <= Gs.NeibElevs
            | R
-| World.slope_map.set{@P,Z if $tiling >< side then #@1111 else NeibElevs}
+| World.set_slope_at{@P,Z if $tiling >< side then #@1111 else NeibElevs}
 | G = G.(Seed%G.size)
 | when not $trn or NeibElevs <> #@1111: leave G
 | Cs = World.getCornerTrns{P Z $role}.digits{2}
