@@ -44,10 +44,10 @@ generate_base_tile Fill XUnit YUnit ZUnit =
   | G.triangle{Color A B C}
   | G.triangle{Color A B D}
   | G.triangle{Color B C D}
-| draw_iso_line 0 [0 YUnit/2] -16 2 0 G
-| draw_iso_line 0 [XUnit-2 YUnit/2] -16 -2 0 G
-| draw_iso_line 0 [0 YUnit/2] 16 2 0 G
-| draw_iso_line 0 [XUnit-2 YUnit/2] 16 -2 0 G
+| draw_iso_line 0 [0 YUnit/2] -YUnit/2 2 0 G
+| draw_iso_line 0 [XUnit-2 YUnit/2] -YUnit/2 -2 0 G
+| draw_iso_line 0 [0 YUnit/2] YUnit/2 2 0 G
+| draw_iso_line 0 [XUnit-2 YUnit/2] YUnit/2 -2 0 G
 | G
 
 main.load_sprites =
