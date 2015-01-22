@@ -30,7 +30,7 @@ type world{Main Size}
 | $free_units <= stack MaxUnits
 | $main.world <= Me
 | $units <= MaxUnits{(unit ? Me)}
-| $filler <= $main.tiles.plain
+| $filler <= $main.tiles.base_
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
@@ -190,8 +190,6 @@ draw_cursor V Front FB X Y H =
 
 
 world.drawPilar P BX BY FB CursorI =
-//| draw_cursor #FF0000 0 FB 0 50 2
-//| draw_cursor #00FF00 1 FB 0 50 2
 | !BY + 32
 | X,Y = P
 | when X < 0 or X >> $size: leave 0
@@ -210,7 +208,8 @@ world.drawPilar P BX BY FB CursorI =
        | TH = T.height
        | ZZ = Z*ZUnit
        | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH
-       | FB.blit{[BX BY-G.h-ZZ] G}
+       | HS = G.hotspot
+       | FB.blit{[BX+HS.0 BY-G.h-ZZ+HS.1] G}
        | UnitZ <= Z + TH
        | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
        | when Cursor | draw_cursor #00FF00 1 FB BX BY-YUnit-ZZ TH

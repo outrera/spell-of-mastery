@@ -22,6 +22,34 @@ init_frames S G =
   Else | [G]
 | for F S.frames: !F.hotspot + S.xy
 
+
+draw_iso_line Color X,Y Size Step Axis G =
+| ICount = Size.abs
+| JCount = Step.abs
+| S = Size.sign
+| if Axis >< 0
+  then times I ICount: times J JCount: G.set{X+I*Step+J Y+I*S Color}
+  else times I ICount: times J JCount: G.set{X+I*S Y+I*Step+J Color}
+
+generate_base_tile Fill XUnit YUnit ZUnit =
+| Color = #00a0a0
+| A = [XUnit/2  0]
+| B = [0        YUnit/2]
+| C = [XUnit/2  YUnit]
+| D = [XUnit    YUnit/2]
+| G = gfx XUnit YUnit+2
+| G.clear{#FF000000}
+| G.hotspot <= 0,-ZUnit
+| when Fill
+  | G.triangle{Color A B C}
+  | G.triangle{Color A B D}
+  | G.triangle{Color B C D}
+| draw_iso_line 0 [0 YUnit/2] -16 2 0 G
+| draw_iso_line 0 [XUnit-2 YUnit/2] -16 -2 0 G
+| draw_iso_line 0 [0 YUnit/2] 16 2 0 G
+| draw_iso_line 0 [XUnit-2 YUnit/2] 16 -2 0 G
+| G
+
 main.load_sprites =
 | Folder = "[$data]/sprites/"
 | $sprites <= @table: @join: map BankName Folder.folders
@@ -35,7 +63,8 @@ main.load_sprites =
     | when ParamsFile.exists: load_params Params ParamsFile
     | S = sprite BankName Name @Params.list.join
     | init_frames S gfx."[BankFolder][Name].png"
-    //| when Name >< wizard: bad Params.anims
     | "[BankName]_[Name]",S
+| Base = generate_base_tile $params.editor.opaque_base 64 32 8
+| $sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
 
 export sprite

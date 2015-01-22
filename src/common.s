@@ -16,7 +16,7 @@ type main{Data}
      tid_map/dup{1024 0}
      aux_tiles
 | $load_params
-| $params.world <= $params.main.world
+| for K,V $params.main: $params.K <= V
 | $load_sprites
 | $load_classes
 | $load_tiles
