@@ -57,11 +57,11 @@ tile.render P Z Below Above Seed =
              | NeibElevs <= #@1111
              | R <= Gs.NeibElevs
            | R
-| World.slope_map.set{@P,Z if $tiling >< side then 1111 else NeibElevs}
+| World.slope_map.set{@P,Z if $tiling >< side then #@1111 else NeibElevs}
 | G = G.(Seed%G.size)
 | when not $trn or NeibElevs <> #@1111: leave G
-| Cs = World.getCornerTrns{P Z $role}
-| when Cs.all{1}: leave G
+| Cs = World.getCornerTrns{P Z $role}.digits{2}
+| when Cs >< #@1111: leave G
 | Index = [Cs G^address $plain^address]
 | as R TrnsCache.Index: less got R
   | R <= genTransition $trns.Cs.0 G $plain
