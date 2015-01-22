@@ -1,6 +1,6 @@
 use gfx common util param
 
-type class{Bank ClassName static/0 empty/0 sprite/images_dummy
+type class{Bank ClassName static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10}
   bank/Bank
   class_name/ClassName
