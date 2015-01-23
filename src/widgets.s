@@ -66,17 +66,18 @@ bar.draw G P =
 | G.rect{#347004 1 P+[3 3] [152*$value_/100 14]}
 
 type button.widget{Text Fn state/normal w_size/large h_size/medium}
-  value/Text on_click/Fn state/State over w_size/W_size h_size/H_size skin/No cache/(t)
+  value/Text on_click/Fn state/State over w_size/W_size h_size/H_size
+  cache/No
 button.reskin =
-| Cache = $cache
-| $skin <= Skin
-| when got Cache.Skin: leave 0
+| when got $cache: leave 0
+| $cache <= t
 | WSize = $w_size
 | HSize = $h_size
 | Text = $value
-| Cache.Skin <= @table: map N [normal over pressed disabled]: list N
-  | File = "button-[HSize]-[WSize]-[case N over normal _ N]"
-  | G = File^skin.copy
+| $cache <= @table: map N [normal over pressed disabled]: list N
+  | BG = skin "button-[HSize]-[WSize]-[case N over normal _ N]"
+  | G = gfx BG.w BG.h // get truecolor copy of it
+  | G.blit{0,0 BG}
   | P = case N pressed 2 _ 0
   | Tint = case N pressed+over | \white
                   disabled | \gray
@@ -89,10 +90,10 @@ button.reskin =
   | F.draw{G X Y Tint Text}
   | G
 button.render =
-| when $skin <> Skin: $reskin
+| $reskin
 | State = $state
 | when State >< normal and $over: State <= \over
-| $cache.Skin.State
+| $cache.State
 button.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | case $state normal: Me.state <= \pressed

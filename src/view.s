@@ -113,8 +113,7 @@ view.update =
 | when $mice_right and Z >> $mice_z: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
   [tile Type] | when Z > 1: $world.pop{X,Y}
-| $world.update
-| when $paused: leave 1
+| less $paused: $world.update
 | 1
 
 view.input In = case In

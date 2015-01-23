@@ -1,8 +1,10 @@
-use common sprite class tile macros world util heap octree gui widgets view
+use common sprite class tile macros world game util heap octree gui widgets view
     param
 
 Main = main: main_root
 World = world Main 16
+Game = game Main World
+
 
 set_skin Main
 
@@ -40,11 +42,34 @@ GUI = dlg w/800 h/600: list [0 0 layH.[Panel View]]
 
 View.init
 
-gui GUI cursor/Main.img{mice_point}
 
-//T = octree 128
-//T.set{3,3,3 123}
-//say T.get{3,3,3}
-//say T.neibs{3,3,3}
+GameMenu = No
+
+GameMenu <=
+| Save = button 'Save (F11)' w_size/small state/disabled (=>)
+| Load = button 'Load (F12)' w_size/small state/disabled (=>)
+| Show = dlg: mtx
+  |   0   0 | spacer 640 480
+  | 270 100 | Main.img{ui_panel1}
+  | 346 110 | txt size/medium 'Game Menu'
+  | 285 140 | layV s/8: list
+              layH{s/12 [Save Load]}
+              button{'Options (F5)' state/disabled (=>)}
+              button{'Help (F1)' state/disabled (=>)}
+              button{'Scenario Objectives' state/disabled (=>)}
+              (button 'End Scenario': =>
+                | View.pause
+                | GameMenu.pick{hide}
+                //| Tabs.pick{main}
+                )
+              spacer{1 20}
+              (button 'Return to Game (Esc)': =>
+                 | View.unpause
+                 | GameMenu.pick{hide})
+| Hide = spacer 0 0
+| tabs show: t show(Show) hide(Hide)
+
+
+gui GameMenu cursor/Main.img{mice_point}
 
 say 'Succeed!'

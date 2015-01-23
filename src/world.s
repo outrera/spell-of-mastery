@@ -4,9 +4,8 @@ MaxSize = No
 MaxUnits = No
 ZUnit = No
 
-type world{Main Size}
-   main/Main
-   size/Size // world width/height
+type world{main size}
+   game
    w/Size
    h/Size
    cells
@@ -18,7 +17,6 @@ type world{Main Size}
    gfxes
    seed
    tid_map/Main.tid_map
-   cycle
    filler
    shadows
 | MaxSize <= $main.params.world.max_size
@@ -251,7 +249,8 @@ world.pop X,Y =
 | times I T.height: $set{X Y Z-I 0}
 | $updElev{X,Y}
 
-world.update =
-| !$cycle + 1
+world.update = when $game: $game.update
+
+
 
 export world
