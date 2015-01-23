@@ -5,16 +5,70 @@ Main = main: main_root
 World = world Main 16
 Game = game Main World
 
+ScreenW = 800
+ScreenH = 600
 
 set_skin Main
 
 View = view Main 600 600
 
+Tabs = No
+GameMenu = No
+EditorMenu = No
+Ingame = No
+ScenarioMenu = No
+MainMenu = No
+Editor = No
+
+/*
+GameMenu <=
+| Save = button 'Save' w_size/small state/disabled (=>)
+| Load = button 'Load' w_size/small state/disabled (=>)
+| Show = dlg: mtx
+  |   0   0 | spacer ScreenW ScreenH
+  | 270 100 | Main.img{ui_panel1}
+  | 346 110 | txt size/medium 'Game Menu'
+  | 285 140 | layV s/8: list
+              layH{s/12 [Save Load]}
+              button{'Options' state/disabled (=>)}
+              button{'Objectives' state/disabled (=>)}
+              (button 'Abandon Game': =>
+                | View.pause
+                | GameMenu.pick{hide}
+                | Tabs.pick{main_menu})
+              spacer{1 20}
+              (button 'Return to Game': =>
+                 | View.unpause
+                 | GameMenu.pick{hide})
+| Hide = spacer 0 0
+| tabs hide: t show(Show) hide(Hide)*/
+
+
+EditorMenu <=
+| Save = button 'Save' w_size/small state/disabled (=>)
+| Load = button 'Load' w_size/small state/disabled (=>)
+| Show = dlg: mtx
+  |   0   0 | spacer ScreenW ScreenH
+  | 270 100 | Main.img{ui_panel1}
+  | 346 110 | txt size/medium 'Editor Menu'
+  | 285 140 | layV s/8: list
+              layH{s/12 [Save Load]}
+              button{'Options' state/disabled (=>)}
+              spacer{1 20}
+              (button 'Leave Editor': =>
+                | View.pause
+                | EditorMenu.pick{hide}
+                | Tabs.pick{main_menu})
+              spacer{1 60}
+              (button 'Return to Editor': =>
+                 | View.unpause
+                 | EditorMenu.pick{hide})
+| Hide = spacer 0 0
+| tabs hide: t show(Show) hide(Hide)
+
+
 BankName =
-
-
 TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
-
 BankNames = [terrain unit @Main.bank_names.skip{unit}]
 
 ItemList = litems w/120 lines/40 [] f: N =>
@@ -31,45 +85,48 @@ BankList = litems w/80 lines/40 BankNames f: N =>
   else | ItemList.data <= Main.classes_banks.BankName
        | ItemList.pick{0}
 
-
 BankList.pick{0}
+
 
 Panel = layH: list BankList ItemList
 
+X = ScreenW - 110
 
-//GUI = layH.[Panel View]
-GUI = dlg w/800 h/600: list [0 0 layH.[Panel View]]
+Editor <= dlg w/ScreenW h/ScreenH: mtx
+  |  0  0 | spacer ScreenW ScreenH
+  |  0  0 | layH Panel,View
+  |  X  2 | button 'Menu' w_size/small h_size/medium: =>
+            | View.pause
+            | EditorMenu.pick{show}
+  |  0  0 | EditorMenu
+
 
 View.init
 
 
-GameMenu = No
+MenuBG = Main.img{ui_menu_bg}
 
-GameMenu <=
-| Save = button 'Save (F11)' w_size/small state/disabled (=>)
-| Load = button 'Load (F12)' w_size/small state/disabled (=>)
-| Show = dlg: mtx
-  |   0   0 | spacer 640 480
-  | 270 100 | Main.img{ui_panel1}
-  | 346 110 | txt size/medium 'Game Menu'
-  | 285 140 | layV s/8: list
-              layH{s/12 [Save Load]}
-              button{'Options (F5)' state/disabled (=>)}
-              button{'Help (F1)' state/disabled (=>)}
-              button{'Scenario Objectives' state/disabled (=>)}
-              (button 'End Scenario': =>
-                | View.pause
-                | GameMenu.pick{hide}
-                //| Tabs.pick{main}
-                )
-              spacer{1 20}
-              (button 'Return to Game (Esc)': =>
-                 | View.unpause
-                 | GameMenu.pick{hide})
-| Hide = spacer 0 0
-| tabs show: t show(Show) hide(Hide)
+X = ScreenW/2 - 112
+
+MainMenu <= dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
+  | X 240 | layV s/8: list
+            button{'Campaign'       state/disabled (=>)}
+            button{'Scenario'       state/disabled (=>Tabs.pick{scenario})}
+            button{'Multi Player'   state/disabled (=>)}
+            button{'Load Game'      state/disabled (=>)}
+            button{'Map Editor'     (=>Tabs.pick{editor})}
+            button{'Exit Program'   (=>get_gui{}.exit)}
 
 
-gui GameMenu cursor/Main.img{mice_point}
+Tabs <= tabs main_menu: t
+          main_menu(MainMenu)
+          editor(Editor)
+          scenario(ScenarioMenu)
+          ingame(Ingame)
+
+gui Tabs cursor/Main.img{mice_point}
+
 
 say 'Succeed!'
