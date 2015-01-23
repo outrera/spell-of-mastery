@@ -1,4 +1,5 @@
 no_lineup: 1
+role: wall
 tiling: side
 1111: 116,117
 0110: 140

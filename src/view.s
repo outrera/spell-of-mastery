@@ -112,7 +112,7 @@ view.update =
   [tile Type] | $world.push{X,Y $main.tiles.Type}
 | when $mice_right and Z >> $mice_z: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
-  [tile Type] | $world.pop{X,Y}
+  [tile Type] | when Z > 1: $world.pop{X,Y}
 | $world.update
 | when $paused: leave 1
 | 1
