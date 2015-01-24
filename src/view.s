@@ -41,33 +41,31 @@ view.set_brush NewBrush = $brush.init{NewBrush}
 view.world = $main.world
 
 view.render =
+| StartTime = clock
 | $update
 | FB = $fb
 | FB.clear{#929292/*#00A0C0*/}
 | TX,TY = $blit_origin
 | VX,VY = $view_origin
+| TileH2 = TileH/2
+| BX = TX
+| BY = TY
 | Y = 0
-| YY = 32
-| StartTime = clock
-| while Y < YY
-  | BX = TX - Y*TileH
-  | BY = TY + Y*TileH/2
+| while Y < 32
   | VY = VY+Y
-  | times N Y+1
-    | BX = BX + N*TileW
-    | $world.drawPilar{VX+N VY-N BX BY FB $cell_index}
+  | times N Y+1: $world.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
+  | !BX - TileH
+  | !BY + TileH2
   | !Y + 1
-| VX = VX+YY
-| VY = VY+YY-1
-| while YY > 0
-  | !YY - 1
-  | BX = TX - (YY-1)*TileH
-  | BY = TY + Y*TileH/2
-  | VX = VX-YY
-  | times N YY
-    | BX = BX + N*TileW
-    | $world.drawPilar{VX+N VY-N BX BY FB $cell_index}
-  | !Y + 1
+| VX = VX+Y
+| VY = VY+Y-1
+| BX = BX + TileW
+| while Y > 0
+  | !Y - 1
+  | VX = VX-Y
+  | times N Y: $world.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
+  | !BX + TileH
+  | !BY + TileH2
 | when $frame%24 >< 0
   | T = StartTime
   | $fps <= @int 24.0/(T - $fpsT)
