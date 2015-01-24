@@ -7,7 +7,9 @@ ONDA is used to get cubes adjacent to the specified cube, inside of an octree.
 
 Algorithm steps:
  1. on a given cube's side (square): push random sub-square onto stack
- 2. pop top square, then add corresponding to it cube to Neighbors list and for each segment of each side of this square, push all corresponding neigbor square onto stack, if they are part of original cube's side
+ 2. pop top square, then add corresponding to it cube to Neighbors list and for
+    each segment of each side of this square, push all corresponding neigbor
+    square onto stack, if they are part of original cube's side
  3. if stack isnt empty, goto 2.
  4. return Neighbors list
 
@@ -43,10 +45,27 @@ ot_set L P V T =
        | T.I <= ot_merge R
        | T
 
+Origin = 0,0,0
+
 // gets cube at P in the form of [Value OriginXYZ EdgeLength]
-octree.get P = ot_get 0,0,0 $size P $root
+octree.get P = ot_get Origin $size P $root
 
 octree.set P V = $root <= ot_merge: ot_set $size P V $root
+
+// optimized accesor
+octree.at P =
+| O = Origin
+| L = $size
+| T = $root
+| till T.is_int
+  | !L / 2
+  | PD = P / L
+  | I = ot_p2i PD
+  | PM = P % L
+  | !O + PD*L
+  | P <= PM
+  | T <= T.I
+| T
 
 genOctNeibFn x_neibs 0 X
 genOctNeibFn y_neibs 1 Y
@@ -63,6 +82,7 @@ octree.neibs P =
 | Up    = $z_neibs{[X Y L L] [X   Y   Z+L]}
 | [@West @East @North @South @Down @Up]
 
+// get column of voxels at X,Y in the form of [@_[Count Id]@_]
 octree.getPilar X Y =
 | Size = $size
 | Xs = []

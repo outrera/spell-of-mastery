@@ -48,28 +48,28 @@ world.free_unit U =
 | $free_units.push{U}
 
 world.get X Y Z =
-| Id = $cells.get{[X Y Z]}.0
-| if Id < 0 then $cells.get{[X Y Z-Id]}.0
+| Id = $cells.at{[X Y Z]}
+| if Id < 0 then $cells.at{[X Y Z-Id]}
   else Id
 
 world.set X Y Z V = $cells.set{[X Y Z] V}
 
-world.slope_at XYZ = $slope_map.get{XYZ}.0
+world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
 
-world.unit_id_at XYZ = $unit_cells.get{XYZ}.0
+world.unit_id_at XYZ = $unit_cells.at{XYZ}
 
 world.unit_at XYZ =
-| when!it $unit_cells.get{XYZ}.0: leave $units.it
+| when!it $unit_cells.at{XYZ}: leave $units.it
 | 0
 
 world.units_at XYZ =
-| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{next}
+| when!it $unit_cells.at{XYZ}: leave $units.it^uncons{next}
 | []
 
 world.column_units_at XYZ =
-| when!it $unit_cells.get{XYZ}.0: leave $units.it^uncons{column_next}
+| when!it $unit_cells.at{XYZ}: leave $units.it^uncons{column_next}
 | []
 
 cons_next F Xs = Xs.sortBy{F}.flip^cons{next}
@@ -216,12 +216,12 @@ world.drawPilar X Y BX BY FB CursorI =
        | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
        | when Cursor | draw_cursor #00FF00 1 FB BX BY-YUnit-ZZ TH
        | Z <= UnitZ
-| for U $units_at{X,Y,0}
+| for U $column_units_at{X,Y,0}
   | Z = U.xyz.2
   | when Z > UnitZ
     | !Z+1
     | U.render{FB BX BY-ZUnit*Z+ZUnit}
-    | S = $shadows.(2-min{Z-UnitZ-2 2})
+    | S = $shadows.(2-min{(Z-UnitZ)/2-2 2})
     | FB.blit{[BX-S.w/2+32 BY-S.h-UnitZ*ZUnit] S}
 
 world.height X Y = MaxSize - $getPilar{X Y}.last.0
