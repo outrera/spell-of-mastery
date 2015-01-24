@@ -43,6 +43,7 @@ view.world = $main.world
 view.render =
 | StartTime = clock
 | $update
+| Wr = $world
 | FB = $fb
 | FB.clear{#929292/*#00A0C0*/}
 | TX,TY = $blit_origin
@@ -53,17 +54,17 @@ view.render =
 | Y = 0
 | while Y < 32
   | VY = VY+Y
-  | times N Y+1: $world.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
+  | !Y + 1
+  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
   | !BX - TileH
   | !BY + TileH2
-  | !Y + 1
 | VX = VX+Y
 | VY = VY+Y-1
 | BX = BX + TileW
 | while Y > 0
   | !Y - 1
   | VX = VX-Y
-  | times N Y: $world.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
+  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
   | !BX + TileH
   | !BY + TileH2
 | when $frame%24 >< 0
@@ -149,7 +150,7 @@ view.input In = case In
     | !XY+[0 32]
     | $mice_xy.init{XY}
     | $cell_xy.init{$viewToWorld{$mice_xy}}
-    | $cell_index <= $world.xy_to_index{$cell_xy}
+    | $cell_index <= $world.xy_to_index{@$cell_xy}
   [mice left 1 XY]
     | $mice_left <= 1
     | $mice_left_xy.init{XY}

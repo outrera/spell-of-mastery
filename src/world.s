@@ -101,7 +101,7 @@ world.remove_unit U =
 | Id = if Consed then Consed.id else 0
 | $unit_cells.set{ColumnXYZ Id}
 
-world.xy_to_index X,Y =
+world.xy_to_index X Y =
 | S = $size
 | (Y%S)*S + X%S
 
@@ -141,7 +141,7 @@ world.updPilarGfxes P =
 | X,Y = P
 | less 0 << X and X < $size: leave 0
 | less 0 << Y and Y < $size: leave 0
-| I = $xy_to_index{P}
+| I = $xy_to_index{X Y}
 | Seed = $seed.I
 | Cs = $getPilar{X Y}
 | Gs = []
@@ -193,7 +193,7 @@ world.drawPilar X Y BX BY FB CursorI =
 | !BY + 32
 | when X < 0 or X >> $size: leave 0
 | when Y < 0 or Y >> $size: leave 0
-| I = $xy_to_index{X,Y}
+| I = $xy_to_index{X Y}
 | Gs = $gfxes.I
 | Cursor = same I CursorI
 | Z = 0
