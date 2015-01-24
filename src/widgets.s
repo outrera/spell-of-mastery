@@ -15,8 +15,9 @@ type font{@new_font Gs W H} glyphs/Gs widths/W height/H cmap
 font.as_text = "#font{}"
 font N = have Fonts.N:
 | S = Skin.spr{"font_[N]"}
-| [W H EX] = S.frames.0^|F => [F.w F.h F.hotspot.0]
-| Glyphs = S.frames{}{F<[X Y W H].margins=>F.cut{X 0 W F.h}}
+| [W H EX] = S.frames.0^|F => [F.w F.h F.xy.0]
+| Glyphs = S.frames{}{F<[X Y W H].margins=>| F.xy <= 0,0
+                                           | F.cut{X 0 W F.h}}
 | Ws = Glyphs{[X Y W H].margins=>X+W-EX}
 | Ws.0 <= W/2
 | new_font Glyphs Ws H

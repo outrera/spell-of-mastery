@@ -17,10 +17,10 @@ init_frames S G =
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
   [@Fs] | map [X Y W H @Disp] Fs
           | R = @cut X Y W H G
-          | R.hotspot <= Disp^($_ []=> [0 0])
+          | R.xy <= Disp^($_ []=> [0 0])
           | R
   Else | [G]
-| for F S.frames: !F.hotspot + S.xy
+| for F S.frames: !F.xy + S.xy
 
 
 draw_iso_line Color X,Y Size Step Axis G =
@@ -39,7 +39,7 @@ generate_base_tile Fill XUnit YUnit ZUnit =
 | D = [XUnit    YUnit/2]
 | G = gfx XUnit YUnit+2
 | G.clear{#FF000000}
-| G.hotspot <= 0,-ZUnit
+| G.xy <= 0,-ZUnit
 | when Fill
   | G.triangle{Color A B C}
   | G.triangle{Color A B D}

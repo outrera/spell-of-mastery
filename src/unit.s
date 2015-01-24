@@ -51,10 +51,7 @@ unit.move XYZ =
 
 unit.render FB X Y =
 | G = $frame
-| DX,DY = G.hotspot
-| DY <= DY + $slope*16
-| OX = if $flipX then -DX else DX
-| FB.blit{[X+32-G.w/2+OX Y+DY-16-G.h] G flipX/$flipX}
+| FB.blit{[X+32-G.w/2 Y-16-G.h+$slope*16] G flipX/$flipX}
 
 
 
