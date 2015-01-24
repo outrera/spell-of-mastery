@@ -4,6 +4,8 @@ use gui util widgets
 TileW = 64
 TileH = 32
 
+ViewDim = 32 // render 32x32 world chunk
+
 type view.widget{M W H}
   main/M
   fb // frame buffer
@@ -14,7 +16,7 @@ type view.widget{M W H}
   cursor
   keys/(t)
   view_origin/[0 0]
-  blit_origin/[360 -170]
+  blit_origin/[W/2 -170]
   mice_left
   mice_right
   mice_right_xy/[0 0]
@@ -33,26 +35,23 @@ type view.widget{M W H}
 
 view.init =
 | $fpsT <= clock
-| $view_origin.init{-[$world.size $world.size]/2}
+| $view_origin.init{-[$h/32 $h/32]}
 | $move{$view_origin} //normalize view
 
 view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.world = $main.world
 
-view.render =
-| StartTime = clock
-| $update
+view.render_iso = 
 | Wr = $world
 | FB = $fb
-| FB.clear{#929292/*#00A0C0*/}
 | TX,TY = $blit_origin
 | VX,VY = $view_origin
 | TileH2 = TileH/2
 | BX = TX
 | BY = TY
 | Y = 0
-| while Y < 32
+| while Y < ViewDim
   | VY = VY+Y
   | !Y + 1
   | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
@@ -67,6 +66,12 @@ view.render =
   | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
   | !BX + TileH
   | !BY + TileH2
+
+view.render =
+| StartTime = clock
+| $update
+| $fb.clear{#929292/*#00A0C0*/}
+| $render_iso
 | when $frame%24 >< 0
   | T = StartTime
   | $fps <= @int 24.0/(T - $fpsT)
@@ -74,13 +79,13 @@ view.render =
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | $infoText.value <= "xyz=[X],[Y],[Z]; fps=[$fps]"
-| $infoText.draw{FB 4,4}
+| $infoText.draw{$fb 4,4}
 | $infoText.value <= ''
 | !$frame + 1
 | FinishTime = clock
 | SleepTime = 1.0/$speed - (FinishTime-StartTime)
 //| when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
-| FB
+| $fb
 
 view.worldToView P =
 | [X Y] = P - $view_origin
