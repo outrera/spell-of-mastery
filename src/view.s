@@ -24,6 +24,7 @@ type view.widget{M W H}
   cell_xy/[0 0]
   cell_index
   brush/[0 0]
+  mode/editor
 | $fb <= gfx W H
 
 view.init =
@@ -91,9 +92,7 @@ view.move NewXY =
 
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
-view.update =
-| X,Y = $cell_xy
-| Z = $world.height{X Y}
+view.update_editor X Y Z = 
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
     | ClassName = if $keys.r >< 1
@@ -113,7 +112,14 @@ view.update =
 | when $mice_right and Z >> $mice_z: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
   [tile Type] | when Z > 1: $world.pop{X,Y}
+
+view.update_game X Y Z = 
 | less $paused: $world.update
+
+view.update =
+| X,Y = $cell_xy
+| Z = $world.height{X Y}
+| if $mode >< editor then $update_editor{X Y Z} else $update_game{X Y Z}
 | 1
 
 view.input In = case In

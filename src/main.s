@@ -116,7 +116,8 @@ MainMenu <= dlg: mtx
             button{'Scenario'       state/disabled (=>Tabs.pick{scenario})}
             button{'Multi Player'   state/disabled (=>)}
             button{'Load Game'      state/disabled (=>)}
-            button{'Map Editor'     (=>Tabs.pick{editor})}
+            button{'Map Editor'     (=> | View.mode <= \editor
+                                        | Tabs.pick{editor})}
             button{'Exit Program'   (=>get_gui{}.exit)}
 
 
