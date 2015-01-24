@@ -200,12 +200,12 @@ world.drawPilar P BX BY FB CursorI =
 | Z = 0
 | UnitZ = 0
 //| TileShadow = $main.sprites.system_tile_shadow.frames.0
-| for G Gs: case G
-  1.is_int | when Cursor
-             | draw_cursor #FF0000 0 FB BX BY-YUnit-Z*ZUnit G
-             | draw_cursor #00FF00 1 FB BX BY-YUnit-Z*ZUnit G
-           | !Z+G
-  Else | T = $tid_map.($get{X Y Z})
+| for G Gs: if G.is_int
+  then | when Cursor
+         | draw_cursor #FF0000 0 FB BX BY-YUnit-Z*ZUnit G
+         | draw_cursor #00FF00 1 FB BX BY-YUnit-Z*ZUnit G
+       | !Z+G
+  else | T = $tid_map.($get{X Y Z})
        | TH = T.height
        | ZZ = Z*ZUnit
        | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH

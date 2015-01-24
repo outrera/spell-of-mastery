@@ -118,7 +118,8 @@ litem.`!text` Text =
 | $text_ <= Text
 litem.draw G P =
 | BG = "litem-[$state]"^skin
-| G.blit{P BG rect/[0 0 $w BG.h]}
+| G.blit{P BG rect/[0 0 $w-10 BG.h]}
+| G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
 | Tint = case $state picked(\white) disabled(\gray) _(\yellow)
 | X = 2
 | Y = BG.h/2-$fh/2

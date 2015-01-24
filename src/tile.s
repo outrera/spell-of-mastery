@@ -93,14 +93,13 @@ main.load_tiles =
 | Trns = Tiles.trns.gfxes
 | Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
-| IdIterator = 0
 | for K,V Tiles
   | [Ds Ms Us] = if got V.stack then V.stack{}{Tiles.?.gfxes}
                  else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
   | Id = if K >< void then 0
-         else | !IdIterator + 1
-              | IdIterator
+         else | !$last_tid + 1
+              | $last_tid
   | $tiles.K <= tile Me K V.role^~{K} Id Lineup Ds Ms Us Trns Plain
                      @V.list.join
 

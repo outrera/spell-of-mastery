@@ -25,9 +25,14 @@ type view.widget{M W H}
   cell_index
   brush/[0 0]
   mode/editor
+  infoText/txt{'info'}
+  fps/1
+  fpsT/0.0
+  speed/25.0 // frames per second
 | $fb <= gfx W H
 
 view.init =
+| $fpsT <= clock
 | $view_origin.init{-[$world.size $world.size]/2}
 | $move{$view_origin} //normalize view
 
@@ -43,6 +48,7 @@ view.render =
 | [TX TY] = $blit_origin
 | Y = 0
 | YY = D
+| StartTime = clock
 | while Y < D
   | times N Y+1
     | BX = TX - Y*TileH + N*TileW
@@ -56,7 +62,19 @@ view.render =
     | BY = TY + Y*TileH/2
     | $world.drawPilar{$view_origin+[D-YY+N D-N-1] BX BY FB $cell_index}
   | !Y + 1
+| when $frame%24 >< 0
+  | T = StartTime
+  | $fps <= @int 24.0/(T - $fpsT)
+  | $fpsT <= T
+| X,Y = $cell_xy
+| Z = $world.height{X Y}
+| $infoText.value <= "xyz=[X],[Y],[Z]; fps=[$fps]"
+| $infoText.draw{FB 4,4}
+| $infoText.value <= ''
 | !$frame + 1
+| FinishTime = clock
+| SleepTime = 1.0/$speed - (FinishTime-StartTime)
+//| when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
 | FB
 
 view.worldToView P =

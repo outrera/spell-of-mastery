@@ -13,13 +13,15 @@ type main{Data}
      tiles 
      acts
      editor_types
-     tid_map/dup{1024 0}
+     last_tid
+     tid_map
      aux_tiles
 | $load_params
 | for K,V $params.main: $params.K <= V
 | $load_sprites
 | $load_classes
 | $load_tiles
+| $tid_map <= dup $last_tid+1 0
 | for [Type Tile] $tiles: $tid_map.(Tile.id) <= Tile
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort
 | $classes_banks <= @table: map N $bank_names
