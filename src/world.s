@@ -209,7 +209,7 @@ world.drawPilar X Y BX BY FB CursorI =
        | ZZ = Z*ZUnit
        | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH
        | HS = G.hotspot
-       | FB.blit{[BX+HS.0 BY-G.h-ZZ+HS.1] G}
+       | FB.blitRaw{BX+HS.0 BY-G.h-ZZ+HS.1 G}
        //| when T.shadow and $slope_at{X+1,Y,Z+TH*2-1} >< #@1111:
        //  | FB.blit{[BX+HS.0 BY-G.h-ZZ+HS.1] TileShadow}
        | UnitZ <= Z + TH
