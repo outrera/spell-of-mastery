@@ -44,23 +44,29 @@ view.render =
 | $update
 | FB = $fb
 | FB.clear{#929292/*#00A0C0*/}
-| D = 32
-| [TX TY] = $blit_origin
+| TX,TY = $blit_origin
+| VX,VY = $view_origin
 | Y = 0
-| YY = D
+| YY = 32
 | StartTime = clock
-| while Y < D
+| while Y < YY
+  | BX = TX - Y*TileH
+  | BY = TY + Y*TileH/2
+  | VY = VY+Y
   | times N Y+1
-    | BX = TX - Y*TileH + N*TileW
-    | BY = TY + Y*TileH/2
-    | $world.drawPilar{$view_origin+[N Y-N] BX BY FB $cell_index}
+    | BX = BX + N*TileW
+    | $world.drawPilar{VX+N VY-N BX BY FB $cell_index}
   | !Y + 1
+| VX = VX+YY
+| VY = VY+YY-1
 | while YY > 0
   | !YY - 1
+  | BX = TX - (YY-1)*TileH
+  | BY = TY + Y*TileH/2
+  | VX = VX-YY
   | times N YY
-    | BX = TX - (YY-1)*TileH + N*TileW
-    | BY = TY + Y*TileH/2
-    | $world.drawPilar{$view_origin+[D-YY+N D-N-1] BX BY FB $cell_index}
+    | BX = BX + N*TileW
+    | $world.drawPilar{VX+N VY-N BX BY FB $cell_index}
   | !Y + 1
 | when $frame%24 >< 0
   | T = StartTime

@@ -189,12 +189,11 @@ draw_cursor V Front FB X Y H =
 | FB.line{V C C+[0 H]}
 
 
-world.drawPilar P BX BY FB CursorI =
+world.drawPilar X Y BX BY FB CursorI =
 | !BY + 32
-| X,Y = P
 | when X < 0 or X >> $size: leave 0
 | when Y < 0 or Y >> $size: leave 0
-| I = $xy_to_index{P}
+| I = $xy_to_index{X,Y}
 | Gs = $gfxes.I
 | Cursor = same I CursorI
 | Z = 0
