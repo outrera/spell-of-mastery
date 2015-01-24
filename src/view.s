@@ -30,7 +30,8 @@ type view.widget{M W H}
   infoText/txt{'info'}
   fps/1
   fpsT/0.0
-  speed/25.0 // frames per second
+  fpsGoal/24 // goal frames per second
+  fpsD/30.0
 | $fb <= gfx W H
 
 view.init =
@@ -67,24 +68,34 @@ view.render_iso =
   | !BX + TileH
   | !BY + TileH2
 
-view.render =
-| StartTime = clock
-| $update
+view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
 | $render_iso
-| when $frame%24 >< 0
-  | T = StartTime
-  | $fps <= @int 24.0/(T - $fpsT)
-  | $fpsT <= T
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | $infoText.value <= "xyz=[X],[Y],[Z]; fps=[$fps]"
 | $infoText.draw{$fb 4,4}
 | $infoText.value <= ''
+
+// calculates current framerate and adjusts sleeping accordingly
+view.calc_fps StartTime FinishTime =
+| when $frame%24 >< 0
+  | T = StartTime
+  | $fps <= @int 24.0/(T - $fpsT)
+  | when $fps < $fpsGoal and $fpsD.int < $fpsGoal*2: $fpsD+1.0
+  | when $fps > $fpsGoal and $fpsD.int > $fpsGoal/2: $fpsD-1.0
+  | $fpsT <= T
 | !$frame + 1
-| FinishTime = clock
-| SleepTime = 1.0/$speed - (FinishTime-StartTime)
-//| when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
+| SleepTime = 1.0/$fpsD - (FinishTime-StartTime)
+| when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
+
+view.render =
+| GUI = get_gui
+| StartTime = GUI.ticks
+| $update
+| $render_frame
+| FinishTime = GUI.ticks
+| $calc_fps{StartTime FinishTime}
 | $fb
 
 view.worldToView P =
