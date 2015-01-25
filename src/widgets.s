@@ -295,9 +295,38 @@ folder_widget Root F =
 | S = slider size/124 v f/(N => FL.offset <= @int N*FL.data.size.float)
 | layH [FL S]
 
+type txt_input.widget{Text w/140 state/normal}
+  text_/Text w/W h state/State font fw fh init
+  shift
+txt_input.render =
+| less $init
+  | $h <= "litem-normal"^skin.h
+  | $font <= font small
+  | $fw <= $font.width{$text_}
+  | $fh <= $font.height
+  | $init <= 1
+| Me
+txt_input.value = $text_
+txt_input.`!value` Text =
+| $init <= 0
+| $text_ <= Text
+txt_input.draw G P =
+| BG = "litem-[$state]"^skin
+| G.blit{P BG rect/[0 0 $w-10 BG.h]}
+| G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
+| Tint = case $state picked(\white) disabled(\gray) _(\yellow)
+| X = 2
+| Y = BG.h/2-$fh/2
+| $font.draw{G P.0+X P.1+Y Tint $text_}
+txt_input.wants_focus = 1
+txt_input.input In = case In
+  [focus State P] | $state <= if State then \picked else \normal
+  [key backspace 1] | when $value.size: $value <= $value.lead
+  [key K<1.size 1] | $value <= "[$value][K]"
+
 type img.widget{Path} path/Path
 img.render = Skin.img{"image_[$path]"}
 
 
-export set_skin skin font txt button litem droplist slider folder_widget
-       litems img
+export set_skin skin font txt button litem droplist slider folder_widget 
+       litems txt_input img

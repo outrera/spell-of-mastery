@@ -74,7 +74,7 @@ view.render_frame =
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | $infoText.value <= "xyz=[X],[Y],[Z]; fps=[$fps]"
-| $infoText.draw{$fb 4,4}
+| $infoText.draw{$fb 4,($h-10)}
 | $infoText.value <= ''
 
 // calculates current framerate and adjusts sleeping accordingly

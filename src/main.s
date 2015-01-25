@@ -10,21 +10,24 @@ ScreenH = 600
 
 set_skin Main
 
-View = view Main 600 600
+View = view Main ScreenW-200 ScreenH
 
 Tabs = No
 GameMenu = No
-EditorMenu = No
+PropertiesMenu = No
 Ingame = No
 ScenarioMenu = No
 MainMenu = No
-Editor = No
+MessageBox = No
+
+
+concealable Widget = tabs hide: t show(Widget) hide(spacer 0 0)
 
 /*
 GameMenu <=
 | Save = button 'Save' w_size/small state/disabled (=>)
 | Load = button 'Load' w_size/small state/disabled (=>)
-| Show = dlg: mtx
+| concealable: dlg: mtx
   |   0   0 | spacer ScreenW ScreenH
   | 270 100 | Main.img{ui_panel1}
   | 346 110 | txt size/medium 'Game Menu'
@@ -40,32 +43,40 @@ GameMenu <=
               (button 'Return to Game': =>
                  | View.unpause
                  | GameMenu.pick{hide})
-| Hide = spacer 0 0
-| tabs hide: t show(Show) hide(Hide)*/
+*/
 
 
-EditorMenu <=
-| Save = button 'Save' w_size/small state/disabled (=>)
-| Load = button 'Load' w_size/small state/disabled (=>)
-| Show = dlg: mtx
+MessageBoxTitle = txt size/medium '' 
+MessageBoxText = txt size/medium ''
+MessageBoxOk = concealable: button 'Ok' w_size/small: => MessageBox.pick{hide}
+MessageBox <= concealable: dlg: mtx
   |   0   0 | spacer ScreenW ScreenH
-  | 270 100 | Main.img{ui_panel1}
-  | 346 110 | txt size/medium 'Editor Menu'
-  | 285 140 | layV s/8: list
-              layH{s/12 [Save Load]}
-              button{'Options' state/disabled (=>)}
-              spacer{1 20}
-              (button 'Leave Editor': =>
-                | View.pause
-                | EditorMenu.pick{hide}
-                | Tabs.pick{main_menu})
-              spacer{1 60}
-              (button 'Return to Editor': =>
-                 | View.unpause
-                 | EditorMenu.pick{hide})
-| Hide = spacer 0 0
-| tabs hide: t show(Show) hide(Hide)
+  | 270 100 | Main.img{ui_panel2}
+  | 400 110 | MessageBoxTitle
+  | 285 140 | MessageBoxText
+  | 360 320 | MessageBoxOk
 
+show_message Title Text =
+| MessageBoxTitle.value <= Title
+| MessageBoxText.value <= Text
+| MessageBoxOk.pick{show}
+| MessageBox.pick{show}
+
+
+WorldNameInput = txt_input{''}
+
+PropFields = ['World Name:',WorldNameInput
+             ]
+
+PropertiesMenu <= concealable: dlg: mtx
+  |   0   0 | spacer ScreenW ScreenH
+  | 270 100 | Main.img{ui_panel5}
+  | 400 110 | txt size/medium 'Properties'
+  | 285 140 | layV PropFields{?0^txt}
+  | 370 136 | layV PropFields{?1}
+  | 285 405 | button 'Done' w_size/small: =>
+              | View.unpause
+              | PropertiesMenu.pick{hide}
 
 BankName =
 TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
@@ -90,50 +101,29 @@ BankList.pick{0}
 
 Panel = layH: list BankList ItemList
 
-X = ScreenW - 110
 
-Editor <= dlg w/ScreenW h/ScreenH: mtx
+PropsButton = button 'Properties' w_size/small h_size/medium: =>
+             | View.pause
+             | PropertiesMenu.pick{show}
+SaveButton = button 'Save' w_size/small: => show_message 'Hello' 'Hello, World!'
+LoadButton = button 'Load' w_size/small state/disabled: =>
+QuitButton = button 'Quit' w_size/small h_size/medium: =>
+             | View.pause
+             | Tabs.pick{main_menu}
+
+TopButtons = layH s/8
+  SaveButton,LoadButton,PropsButton,spacer{120 1},QuitButton
+
+Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0  0 | spacer ScreenW ScreenH
   |  0  0 | layH Panel,View
-  |  X  2 | button 'Menu' w_size/small h_size/medium: =>
-            | View.pause
-            | EditorMenu.pick{show}
-  |  0  0 | EditorMenu
+  |202  2 | TopButtons
+  |  0  0 | PropertiesMenu
+  |  0  0 | MessageBox
 
 
 View.init
 
-
-
-type txt_input.widget{Text w/140 state/normal}
-  text_/Text w/W h state/State font fw fh init
-  shift
-txt_input.render =
-| less $init
-  | $h <= "litem-normal"^skin.h
-  | $font <= font small
-  | $fw <= $font.width{$text_}
-  | $fh <= $font.height
-  | $init <= 1
-| Me
-txt_input.text = $text_
-txt_input.`!text` Text =
-| $init <= 0
-| $text_ <= Text
-txt_input.draw G P =
-| BG = "litem-[$state]"^skin
-| G.blit{P BG rect/[0 0 $w-10 BG.h]}
-| G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
-| Tint = case $state picked(\white) disabled(\gray) _(\yellow)
-| X = 2
-| Y = BG.h/2-$fh/2
-| $font.draw{G P.0+X P.1+Y Tint $text_}
-txt_input.wants_focus = 1
-
-txt_input.input In = case In
-  [focus State P] | $state <= if State then \picked else \normal
-  [key backspace 1] | when $text.size: $text <= $text.lead
-  [key K<1.size 1] | $text <= "[$text][K]"
 
 
 MenuBG = Main.img{ui_menu_bg}
@@ -146,17 +136,14 @@ MainMenu <= dlg: mtx
             button{'Scenario'       state/disabled (=>Tabs.pick{scenario})}
             button{'Multi Player'   state/disabled (=>)}
             button{'Load Game'      state/disabled (=>)}
-            button{'Map Editor'     (=> | View.mode <= \editor
-                                        | Tabs.pick{editor})}
+            button{'World Editor'   (=> | View.mode <= \editor
+                                        | Tabs.pick{ingame})}
             button{'Exit Program'   (=>get_gui{}.exit)}
-            txt_input{'Hello, World!'}
-            txt_input{'Other Field'}
 
 Tabs <= tabs main_menu: t
           main_menu(MainMenu)
-          editor(Editor)
-          scenario(ScenarioMenu)
           ingame(Ingame)
+          scenario(ScenarioMenu)
 
 gui Tabs cursor/Main.img{mice_point}
 
