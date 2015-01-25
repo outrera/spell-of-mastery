@@ -38,6 +38,6 @@ main.spr Name =
 | less got S: bad "missing sprite `[Name]`"
 | S
 
-run_ui: main: main_root
+@run: main: main_root
 
 say 'Succeed!'

@@ -48,12 +48,13 @@ GameMenu <=
                  | GameMenu.pick{hide})
 */
 
-run_ui Main =
-| ScreenW <= Main.params.ui.width
-| ScreenH <= Main.params.ui.height
-| set_skin Main
-| init_message_box Main
-| View = view Main ScreenW-200 ScreenH
+
+main.run =
+| ScreenW <= $params.ui.width
+| ScreenH <= $params.ui.height
+| set_skin Me
+| init_message_box Me
+| View = view Me ScreenW-200 ScreenH
 | Tabs = No
 | GameMenu = No
 | PropertiesMenu = No
@@ -65,7 +66,7 @@ run_ui Main =
                ]
 | PropertiesMenu <= concealable: dlg: mtx
   |   0   0 | spacer ScreenW ScreenH
-  | 270 100 | Main.img{ui_panel5}
+  | 270 100 | $img{ui_panel5}
   | 400 110 | txt size/medium 'Properties'
   | 285 140 | layV PropFields{?0^txt}
   | 370 136 | layV PropFields{?1}
@@ -74,8 +75,8 @@ run_ui Main =
               | PropertiesMenu.pick{hide}
 
 | BankName =
-| TileNames = Main.tiles{}{?0}.skip{Main.aux_tiles.?^got}.sort
-| BankNames = [terrain unit @Main.bank_names.skip{unit}]
+| TileNames = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
+| BankNames = [terrain unit @$bank_names.skip{unit}]
 | ItemList = litems w/120 lines/40 [] f: N =>
   | Brush = if BankName >< terrain
             then [tile N]
@@ -86,7 +87,7 @@ run_ui Main =
   | if BankName >< terrain
     then | ItemList.data <= TileNames
          | ItemList.pick{TileNames.locate{plain}}
-    else | ItemList.data <= Main.classes_banks.BankName
+    else | ItemList.data <= $classes_banks.BankName
          | ItemList.pick{0}
 | Panel = layH: list BankList ItemList
 | PropsButton = button 'Properties' w_size/small h_size/medium: =>
@@ -108,7 +109,7 @@ run_ui Main =
   |  0  0 | PropertiesMenu
   |  0  0 | MessageBox
 | View.init
-| MenuBG = Main.img{ui_menu_bg}
+| MenuBG = $img{ui_menu_bg}
 | X = ScreenW/2 - 112
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
@@ -127,6 +128,4 @@ run_ui Main =
           ingame(Ingame)
           scenario(ScenarioMenu)
 | BankList.pick{0}
-| gui Tabs cursor/Main.img{mice_point}
-
-export run_ui
+| gui Tabs cursor/$img{mice_point}
