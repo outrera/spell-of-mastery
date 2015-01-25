@@ -32,7 +32,11 @@ type view.widget{M W H}
   fpsT/0.0
   fpsGoal/24 // goal frames per second
   fpsD/30.0
+  param
 | $fb <= gfx W H
+| $fpsGoal <= $main.params.ui.fps
+| $fpsD <= $fpsGoal.float+8.0
+| $param <= $main.params.ui
 
 view.init =
 | $fpsT <= clock
@@ -73,7 +77,10 @@ view.render_frame =
 | $render_iso
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
-| $infoText.value <= "xyz=[X],[Y],[Z]; fps=[$fps]"
+| InfoText = []
+| when $param.show_xyz: push "xyz=[X],[Y],[Z]" InfoText
+| when $param.show_fps: push "fps=[$fps]" InfoText
+| $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.draw{$fb 4,($h-10)}
 | $infoText.value <= ''
 
@@ -82,8 +89,8 @@ view.calc_fps StartTime FinishTime =
 | when $frame%24 >< 0
   | T = StartTime
   | $fps <= @int 24.0/(T - $fpsT)
-  | when $fps < $fpsGoal and $fpsD.int < $fpsGoal*2: $fpsD+1.0
-  | when $fps > $fpsGoal and $fpsD.int > $fpsGoal/2: $fpsD-1.0
+  | when $fps < $fpsGoal and $fpsD < $fpsGoal.float*2.0: !$fpsD+1.0
+  | when $fps > $fpsGoal and $fpsD > $fpsGoal.float/2.0: !$fpsD-1.0
   | $fpsT <= T
 | !$frame + 1
 | SleepTime = 1.0/$fpsD - (FinishTime-StartTime)
@@ -179,10 +186,10 @@ view.input In = case In
     | $mice_z <= $world.height{@$cell_xy}
   [mice right 0 XY]
     | $mice_right <= 0
-  [key up    1] | $move{$view_origin-[1 1]}
-  [key down  1] | $move{$view_origin+[1 1]}
-  [key left  1] | $move{$view_origin-[1 -1]}
-  [key right 1] | $move{$view_origin+[1 -1]}
+  [key up    1] | $move{$view_origin-[1 1]*2*$param.scroll_speed}
+  [key down  1] | $move{$view_origin+[1 1]*2*$param.scroll_speed}
+  [key left  1] | $move{$view_origin-[1 -1]*$param.scroll_speed}
+  [key right 1] | $move{$view_origin+[1 -1]*$param.scroll_speed}
   [key Name  S] | $keys.Name <= S
 
 view.pause = $paused <= 1

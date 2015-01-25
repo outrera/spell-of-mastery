@@ -1,7 +1,7 @@
 use gui widgets view
 
-ScreenW = 800
-ScreenH = 600
+ScreenW = No
+ScreenH = No
 
 MessageBox = No
 MessageBoxTitle = No
@@ -49,6 +49,8 @@ GameMenu <=
 */
 
 run_ui Main =
+| ScreenW <= Main.params.ui.width
+| ScreenH <= Main.params.ui.height
 | set_skin Main
 | init_message_box Main
 | View = view Main ScreenW-200 ScreenH
