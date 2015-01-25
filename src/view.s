@@ -188,5 +188,6 @@ view.input In = case In
 view.pause = $paused <= 1
 view.unpause = $paused <= 0
 
+view.wants_focus = 1
 
 export view

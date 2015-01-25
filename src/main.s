@@ -104,10 +104,40 @@ Editor <= dlg w/ScreenW h/ScreenH: mtx
 View.init
 
 
+
+type txt_input.widget{Text w/140 state/normal}
+  text_/Text w/W h state/State font fw fh init
+  shift
+txt_input.render =
+| less $init
+  | $h <= "litem-normal"^skin.h
+  | $font <= font small
+  | $fw <= $font.width{$text_}
+  | $fh <= $font.height
+  | $init <= 1
+| Me
+txt_input.text = $text_
+txt_input.`!text` Text =
+| $init <= 0
+| $text_ <= Text
+txt_input.draw G P =
+| BG = "litem-[$state]"^skin
+| G.blit{P BG rect/[0 0 $w-10 BG.h]}
+| G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
+| Tint = case $state picked(\white) disabled(\gray) _(\yellow)
+| X = 2
+| Y = BG.h/2-$fh/2
+| $font.draw{G P.0+X P.1+Y Tint $text_}
+txt_input.wants_focus = 1
+
+txt_input.input In = case In
+  [focus State P] | $state <= if State then \picked else \normal
+  [key backspace 1] | when $text.size: $text <= $text.lead
+  [key K<1.size 1] | $text <= "[$text][K]"
+
+
 MenuBG = Main.img{ui_menu_bg}
-
 X = ScreenW/2 - 112
-
 MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
@@ -119,7 +149,8 @@ MainMenu <= dlg: mtx
             button{'Map Editor'     (=> | View.mode <= \editor
                                         | Tabs.pick{editor})}
             button{'Exit Program'   (=>get_gui{}.exit)}
-
+            txt_input{'Hello, World!'}
+            txt_input{'Other Field'}
 
 Tabs <= tabs main_menu: t
           main_menu(MainMenu)
