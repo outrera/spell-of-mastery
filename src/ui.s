@@ -48,6 +48,14 @@ GameMenu <=
                  | GameMenu.pick{hide})
 */
 
+//ot_dump T = say T.root
+
+main.save Path =
+| Content = list
+  version | 0.1
+  tidmap | $tid_map{}{?id,?type}
+  cells | $world.cells.root
+| Path.set{Content.as_text}
 
 main.run =
 | ScreenW <= $params.ui.width
@@ -94,8 +102,9 @@ main.run =
                | View.pause
                | PropertiesMenu.pick{show}
 | SaveButton = button 'Save' w_size/small: =>
-               | show_message 'Hello' 'Hello, World!'
-| LoadButton = button 'Load' w_size/small state/disabled: =>
+               | $save{"[$data]/work/worlds/test.txt"}
+               //| show_message 'Hello' 'Hello, World!'
+| LoadButton = button 'Load' w_size/small: =>
 | PlayButton = button 'Play' w_size/small state/disabled: =>
 | QuitButton = button 'Quit' w_size/small h_size/medium: =>
                | View.pause

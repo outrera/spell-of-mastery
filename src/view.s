@@ -117,7 +117,7 @@ view.worldToView P =
 | [RX RY] + $blit_origin
 
 view.viewToWorld P =
-| [X Y] = P - $blit_origin
+| [X Y] = P - $blit_origin - [0 $main.params.world.z_unit*4]
 | !X - 32
 | WH = TileW*TileH
 | RX = (Y*TileW + X*TileH)/WH
