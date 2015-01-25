@@ -52,7 +52,7 @@ octree.get P = ot_get Origin $size P $root
 
 octree.set P V = $root <= ot_merge: ot_set $size P V $root
 
-// optimized accesor
+// optimized accessor
 octree.at P =
 | O = Origin
 | L = $size

@@ -45,9 +45,11 @@ unit.move XYZ =
 | $xyz.init{XYZ}
 | $sub_xyz.init{[0 0 0]}
 | $world.place_unit{Me}
-| [UX UY UZ] = XYZ
-| when UZ > 0: $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@1111 => 0
+| $environment_updated
 
+unit.environment_updated =
+| [UX UY UZ] = $xyz
+| $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@1111 => 0
 
 unit.render FB X Y =
 | G = $frame

@@ -68,8 +68,8 @@ world.units_at XYZ =
 | when!it $unit_cells.at{XYZ}: leave $units.it^uncons{next}
 | []
 
-world.column_units_at XYZ =
-| when!it $unit_cells.at{XYZ}: leave $units.it^uncons{column_next}
+world.column_units_at X Y =
+| when!it $unit_cells.at{X,Y,0}: leave $units.it^uncons{column_next}
 | []
 
 cons_next F Xs = Xs.sortBy{F}.flip^cons{next}
@@ -82,11 +82,10 @@ world.place_unit U =
 | Consed = Us^cons_next{?draw_order++?serial}
 | Id = if Consed then Consed.id else 0
 | $unit_cells.set{XYZ Id}
-| ColumnXYZ = XYZ.0,XYZ.1,0
-| Us = U,@$column_units_at{ColumnXYZ}.skip{?id >< U.id}
+| Us = U,@$column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
 | Consed = Us^cons_column_next{?xyz.2}
 | Id = if Consed then Consed.id else 0
-| $unit_cells.set{ColumnXYZ U.id}
+| $unit_cells.set{XYZ.0,XYZ.1,0 U.id}
 
 world.remove_unit U =
 | XYZ = U.xyz
@@ -95,11 +94,10 @@ world.remove_unit U =
 | Consed = Us^cons_next{?draw_order++?serial}
 | Id = if Consed then Consed.id else 0
 | $unit_cells.set{XYZ Id}
-| ColumnXYZ = [XYZ.0 XYZ.1 0]
-| Us = $column_units_at{ColumnXYZ}.skip{?id >< U.id}
+| Us = $column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
 | Consed = Us^cons_column_next{?xyz.2}
 | Id = if Consed then Consed.id else 0
-| $unit_cells.set{ColumnXYZ Id}
+| $unit_cells.set{XYZ.0,XYZ.1,0 Id}
 
 world.xy_to_index X Y =
 | S = $size
@@ -164,6 +162,7 @@ world.updPilarGfxes P =
          | !Z + 1
 | _label for_break
 | $gfxes.I <= Gs.flip //FIXME: use `init` method instead
+| for U $column_units_at{X Y}: U.environment_updated
 
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
@@ -215,7 +214,7 @@ world.drawPilar X Y BX BY FB CursorI =
        | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
        | when Cursor | draw_cursor #00FF00 1 FB BX BY-YUnit-ZZ TH
        | Z <= UnitZ
-| for U $column_units_at{X,Y,0}
+| for U $column_units_at{X Y}
   | Z = U.xyz.2
   | when Z > UnitZ
     | !Z+1
