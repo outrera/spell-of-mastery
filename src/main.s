@@ -26,6 +26,7 @@ type main{Data}
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort
 | $classes_banks <= @table: map N $bank_names
   | N,$classes{}{?1}.keep{?bank >< N}{?class_name}.sort
+| game Me: world Me 16
 
 main.img Name =
 | S = $sprites."[Name]"
@@ -37,11 +38,6 @@ main.spr Name =
 | less got S: bad "missing sprite `[Name]`"
 | S
 
-
-Main = main: main_root
-World = world Main 16
-Game = game Main World
-
-run_ui Main
+run_ui: main: main_root
 
 say 'Succeed!'
