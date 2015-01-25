@@ -3,4 +3,5 @@ height: 600
 fps: 24
 show_xyz: 1
 show_fps: 0
+game_speed: 1.0 // updates per frame
 scroll_speed: 2

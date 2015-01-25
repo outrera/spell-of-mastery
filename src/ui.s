@@ -95,11 +95,12 @@ run_ui Main =
 | SaveButton = button 'Save' w_size/small: =>
                | show_message 'Hello' 'Hello, World!'
 | LoadButton = button 'Load' w_size/small state/disabled: =>
+| PlayButton = button 'Play' w_size/small state/disabled: =>
 | QuitButton = button 'Quit' w_size/small h_size/medium: =>
                | View.pause
                | Tabs.pick{main_menu}
 | TopButtons = layH s/8
-    SaveButton,LoadButton,PropsButton,spacer{120 1},QuitButton
+    PropsButton,PlayButton,SaveButton,LoadButton,spacer{20 1},QuitButton
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0  0 | spacer ScreenW ScreenH
   |  0  0 | layH Panel,View

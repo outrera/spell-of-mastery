@@ -24,6 +24,7 @@ type view.widget{M W H}
   mice_xy/[0 0]
   mice_z
   cell_xy/[0 0]
+  cell_z
   cell_index
   brush/[0 0]
   mode/editor
@@ -50,8 +51,12 @@ view.world = $main.world
 view.render_iso = 
 | Wr = $world
 | FB = $fb
-| TX,TY = $blit_origin
-| VX,VY = $view_origin
+| WorldParams = $main.params.world
+| ZUnit = WorldParams.z_unit
+| YDiv = WorldParams.y_unit/ZUnit
+| Z = if $mice_left or $mice_right then $mice_z else $cell_z
+| TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit
+| VX,VY = $view_origin-[Z Z]/YDiv
 | TileH2 = TileH/2
 | BX = TX
 | BY = TY
@@ -173,17 +178,20 @@ view.input In = case In
     | !XY+[0 32]
     | $mice_xy.init{XY}
     | $cell_xy.init{$viewToWorld{$mice_xy}}
+    | $cell_z <= $world.height{@$cell_xy}
     | $cell_index <= $world.xy_to_index{@$cell_xy}
   [mice left 1 XY]
     | $mice_left <= 1
     | $mice_left_xy.init{XY}
     | $mice_z <= $world.height{@$cell_xy}
+    | $cell_z <= $mice_z
   [mice left 0 XY]
     | $mice_left <= 0
   [mice right 1 XY]
     | $mice_right <= 1
     | $mice_right_xy.init{XY}
     | $mice_z <= $world.height{@$cell_xy}
+    | $cell_z <= $mice_z
   [mice right 0 XY]
     | $mice_right <= 0
   [key up    1] | $move{$view_origin-[1 1]*2*$param.scroll_speed}
