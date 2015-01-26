@@ -40,6 +40,8 @@ unit.remove =
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
 
+unit.removed = $xyz.2 >< -1
+
 unit.move XYZ =
 | $remove
 | $xyz.init{XYZ}

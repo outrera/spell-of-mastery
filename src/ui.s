@@ -53,9 +53,26 @@ GameMenu <=
 main.save Path =
 | Content = list
   version | 0.1
-  tidmap | $tid_map{}{?id,?type}
+  w | $world.w
+  h | $world.h
+  tids | $tid_map{}{?type}
   cells | $world.cells.root
 | Path.set{Content.as_text}
+
+remap_tids LookupTable Xs =
+| for I Xs.size
+  | X = Xs.I
+  | if X.is_int
+    then when X >> 0: Xs.I <= LookupTable.X
+    else remap_tids LookupTable X
+| Xs
+
+main.load Path =
+| File = Path.get.utf8.parse{src Path}.1.0.group{2}.table
+| TypeTids = $tid_map{}{?type,?id}.table
+| LookupTable = File.tids{}{TypeTids.?}
+| Cells = remap_tids LookupTable File.cells
+| $world.load{File.w File.h Cells []}
 
 main.run =
 | ScreenW <= $params.ui.width
@@ -105,6 +122,7 @@ main.run =
                | $save{"[$data]/work/worlds/test.txt"}
                //| show_message 'Hello' 'Hello, World!'
 | LoadButton = button 'Load' w_size/small: =>
+               | $load{"[$data]/work/worlds/test.txt"}
 | PlayButton = button 'Play' w_size/small state/disabled: =>
 | QuitButton = button 'Quit' w_size/small h_size/medium: =>
                | View.pause

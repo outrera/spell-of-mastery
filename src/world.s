@@ -32,10 +32,20 @@ type world{main size}
 | SS = Size*Size
 | $gfxes <= SS{_=>[]}
 | $seed <= SS{_=>SS.rand}
-| for P points{0 0 Size Size}: $push_{P $filler}
-| for P points{0 0 Size Size}: $updPilarGfxes{P}
+| for P points{0 0 $w $h}: $push_{P $filler}
+| for P points{0 0 $w $h}: $updPilarGfxes{P}
 | for U $units: when U.id <> 0: $free_units.push{U}
 | $shadows <= $main.sprites.unit_shadows.frames
+
+world.clear =
+| for U $units: less U.removed: U.free
+
+world.load W H Cells Units =
+| $clear
+| $w <= W
+| $h <= H
+| $cells.root <= Cells
+| for P points{0 0 $w $h}: $updPilarGfxes{P}
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
