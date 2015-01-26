@@ -9,13 +9,15 @@ type unit.$class{Id World}
   sub_xyz/[0 0 0] // fine X,Y,Z for movement animation between cells
   next // next unit inside of this world cell
   column_next // next unit inside of this world column
-  owner // player controlling this unit
-  anim // current animation
+  anim // animation id
   anim_step // frame index inside of current animation
+  anim_seq // current animation sequence
   frame
   facing // direction this unit faces
   slope // unit is standing on a sloped terrain
   flipX
+  owner // player controlling this unit
+
 
 unit.main = $world.main
 
@@ -30,9 +32,11 @@ unit.init Class =
 | $animate{still}
 
 unit.animate Anim =
-| $anim <= $sprite.anims.Anim
+| $anim <= Anim
+| $anim_seq <= $sprite.anims.$anim
 | $anim_step <= 0
-| $frame <= $sprite.frames.$anim_step
+| AnimFrame = $anim_seq.$anim_step
+| $frame <= $sprite.frames.AnimFrame
 
 unit.free = $world.free_unit{Me}
 

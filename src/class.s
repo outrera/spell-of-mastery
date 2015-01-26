@@ -4,6 +4,7 @@ type class{Bank ClassName static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10}
   bank/Bank
   class_name/ClassName
+  type/"[Bank]_[ClassName]"
   static/Static
   empty/Empty
   sprite/Sprite

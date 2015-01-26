@@ -48,32 +48,6 @@ GameMenu <=
                  | GameMenu.pick{hide})
 */
 
-//ot_dump T = say T.root
-
-main.save Path =
-| Content = list
-  version | 0.1
-  w | $world.w
-  h | $world.h
-  tids | $tid_map{}{?type}
-  cells | $world.cells.root
-| Path.set{Content.as_text}
-
-remap_tids LookupTable Xs =
-| for I Xs.size
-  | X = Xs.I
-  | if X.is_int
-    then when X >> 0: Xs.I <= LookupTable.X
-    else remap_tids LookupTable X
-| Xs
-
-main.load Path =
-| File = Path.get.utf8.parse{src Path}.0.0.group{2}.table
-| TypeTids = $tid_map{}{?type,?id}.table
-| LookupTable = File.tids{}{TypeTids.?}
-| Cells = remap_tids LookupTable File.cells
-| $world.load{File.w File.h Cells []}
-
 main.run =
 | ScreenW <= $params.ui.width
 | ScreenH <= $params.ui.height

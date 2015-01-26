@@ -8,8 +8,8 @@ type world{main size}
    game
    w/Size
    h/Size
-   cells
-   unit_cells
+   tilemap
+   unit_map
    unit_serial/((1</20)-1) // used to generate serial numbers for units
    slope_map
    units
@@ -19,14 +19,14 @@ type world{main size}
    tid_map/Main.tid_map
    filler
    shadows
+| $main.world <= Me
 | MaxSize <= $main.params.world.max_size
 | MaxUnits <= $main.params.world.max_units
 | ZUnit <= $main.params.world.z_unit
-| $cells <= octree MaxSize
-| $unit_cells <= octree MaxSize
+| $tilemap <= octree MaxSize
+| $unit_map <= octree MaxSize
 | $slope_map <= octree MaxSize
 | $free_units <= stack MaxUnits
-| $main.world <= Me
 | $units <= MaxUnits{(unit ? Me)}
 | $filler <= $main.tiles.base_
 | SS = Size*Size
@@ -40,16 +40,30 @@ type world{main size}
 world.clear =
 | for U $units: less U.removed: U.free
 
-world.load W H Cells Units =
+world.load W H UnitSerial Cycle Turn Tilemap Units =
 | $clear
 | $w <= W
 | $h <= H
-| $cells.root <= Cells
+| $unit_serial <= UnitSerial
+| $tilemap.root <= Tilemap
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
+| $game.cycle <= Cycle
+| $game.turn <= Turn
+| for X Units
+  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner] = X
+  | U = $alloc_unit{Type}
+  | U.serial <= Serial
+  | U.move{XYZ}
+  | U.sub_xyz.init{SXYZ}
+  | U.animate{Anim}
+  | U.anim_step <= AnimStep
+  | U.facing <= Facing
+  | U.owner <= Owner
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
 | U = $free_units.pop
+| till U.removed: U <= $free_units.pop
 | U.init{Class}
 | U
 
@@ -58,28 +72,28 @@ world.free_unit U =
 | $free_units.push{U}
 
 world.get X Y Z =
-| Id = $cells.at{[X Y Z]}
-| if Id < 0 then $cells.at{[X Y Z-Id]}
+| Id = $tilemap.at{[X Y Z]}
+| if Id < 0 then $tilemap.at{[X Y Z-Id]}
   else Id
 
-world.set X Y Z V = $cells.set{[X Y Z] V}
+world.set X Y Z V = $tilemap.set{[X Y Z] V}
 
 world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
 
-world.unit_id_at XYZ = $unit_cells.at{XYZ}
+world.unit_id_at XYZ = $unit_map.at{XYZ}
 
 world.unit_at XYZ =
-| when!it $unit_cells.at{XYZ}: leave $units.it
+| when!it $unit_map.at{XYZ}: leave $units.it
 | 0
 
 world.units_at XYZ =
-| when!it $unit_cells.at{XYZ}: leave $units.it^uncons{next}
+| when!it $unit_map.at{XYZ}: leave $units.it^uncons{next}
 | []
 
 world.column_units_at X Y =
-| when!it $unit_cells.at{X,Y,0}: leave $units.it^uncons{column_next}
+| when!it $unit_map.at{X,Y,0}: leave $units.it^uncons{column_next}
 | []
 
 cons_next F Xs = Xs.sortBy{F}.flip^cons{next}
@@ -91,11 +105,11 @@ world.place_unit U =
 | Us = U,@$units_at{XYZ}
 | Consed = Us^cons_next{?draw_order++?serial}
 | Id = if Consed then Consed.id else 0
-| $unit_cells.set{XYZ Id}
+| $unit_map.set{XYZ Id}
 | Us = U,@$column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
 | Consed = Us^cons_column_next{?xyz.2}
 | Id = if Consed then Consed.id else 0
-| $unit_cells.set{XYZ.0,XYZ.1,0 U.id}
+| $unit_map.set{XYZ.0,XYZ.1,0 U.id}
 
 world.remove_unit U =
 | XYZ = U.xyz
@@ -103,11 +117,11 @@ world.remove_unit U =
 | Us = $units_at{XYZ}.skip{?id >< U.id}
 | Consed = Us^cons_next{?draw_order++?serial}
 | Id = if Consed then Consed.id else 0
-| $unit_cells.set{XYZ Id}
+| $unit_map.set{XYZ Id}
 | Us = $column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
 | Consed = Us^cons_column_next{?xyz.2}
 | Id = if Consed then Consed.id else 0
-| $unit_cells.set{XYZ.0,XYZ.1,0 Id}
+| $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
 world.xy_to_index X Y =
 | S = $size
@@ -143,7 +157,7 @@ world.getCornerTrns P Z Role = `[]`
 world.getPilar X Y =
 | less 0 << X and X < $size: leave [$filler X,Y,0 $size]
 | less 0 << Y and Y < $size: leave [$filler X,Y,0 $size]
-| $cells.getPilar{X Y}
+| $tilemap.getPilar{X Y}
 
 world.updPilarGfxes P =
 | X,Y = P
