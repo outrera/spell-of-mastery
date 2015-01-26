@@ -8,6 +8,7 @@ type world{main size}
    game
    w/Size
    h/Size
+   name/default
    tilemap
    unit_map
    unit_serial/((1</20)-1) // used to generate serial numbers for units
@@ -30,8 +31,8 @@ type world{main size}
 | $units <= MaxUnits{(unit ? Me)}
 | $filler <= $main.tiles.base_
 | SS = Size*Size
-| $gfxes <= SS{_=>[]}
-| $seed <= SS{_=>SS.rand}
+| $gfxes <= ($w){_=>($h){_=>[]}}
+| $seed <= ($w){_=>($h){_=>SS.rand}}
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
 | for U $units: when U.id <> 0: $free_units.push{U}
@@ -123,10 +124,6 @@ world.remove_unit U =
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
-world.xy_to_index X Y =
-| S = $size
-| (Y%S)*S + X%S
-
 world.getElev X,Y Z =
 | less 0 << X and X < $size: leave 100
 | less 0 << Y and Y < $size: leave 100
@@ -163,8 +160,7 @@ world.updPilarGfxes P =
 | X,Y = P
 | less 0 << X and X < $size: leave 0
 | less 0 << Y and Y < $size: leave 0
-| I = $xy_to_index{X Y}
-| Seed = $seed.I
+| Seed = $seed.X.Y
 | Cs = $getPilar{X Y}
 | Gs = []
 | Z = 0
@@ -185,7 +181,7 @@ world.updPilarGfxes P =
          | Below <= C
          | !Z + 1
 | _label for_break
-| $gfxes.I <= Gs.flip //FIXME: use `init` method instead
+| $gfxes.X.Y <= Gs.flip //FIXME: use `init` method instead
 | for U $column_units_at{X Y}: U.environment_updated
 
 world.updElev P =
@@ -212,13 +208,12 @@ draw_cursor V Front FB X Y H =
 | FB.line{V C C+[0 H]}
 
 
-world.drawPilar X Y BX BY FB CursorI =
-| !BY + 32
+world.drawPilar X Y BX BY FB CursorXY =
 | when X < 0 or X >> $size: leave 0
 | when Y < 0 or Y >> $size: leave 0
-| I = $xy_to_index{X Y}
-| Gs = $gfxes.I
-| Cursor = same I CursorI
+| !BY + 32
+| Gs = $gfxes.X.Y
+| Cursor = same X CursorXY.0 and Y >< CursorXY.1
 | Z = 0
 | UnitZ = 0
 //| TileShadow = $main.sprites.system_tile_shadow.frames.0

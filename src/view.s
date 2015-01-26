@@ -25,7 +25,6 @@ type view.widget{M W H}
   mice_z
   cell_xy/[0 0]
   cell_z
-  cell_index
   brush/[0 0]
   mode/editor
   infoText/txt{'info'}
@@ -64,7 +63,7 @@ view.render_iso =
 | while Y < ViewDim
   | VY = VY+Y
   | !Y + 1
-  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
+  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy}
   | !BX - TileH
   | !BY + TileH2
 | VX = VX+Y
@@ -73,7 +72,7 @@ view.render_iso =
 | while Y > 0
   | !Y - 1
   | VX = VX-Y
-  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_index}
+  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy}
   | !BX + TileH
   | !BY + TileH2
 
@@ -136,7 +135,6 @@ view.mice_rect =
 | [X Y U-X V-Y]
 
 view.move NewXY =
-| $cell_index
 | $view_origin.init{NewXY}
 //| [X Y] = NewXY
 //| $view_origin.init{[X.clip{0 $world.size-1} Y.clip{0 $world.size-1}]}
@@ -179,7 +177,6 @@ view.input In = case In
     | $mice_xy.init{XY}
     | $cell_xy.init{$viewToWorld{$mice_xy}}
     | $cell_z <= $world.height{@$cell_xy}
-    | $cell_index <= $world.xy_to_index{@$cell_xy}
   [mice left 1 XY]
     | $mice_left <= 1
     | $mice_left_xy.init{XY}
