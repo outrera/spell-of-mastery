@@ -68,7 +68,7 @@ remap_tids LookupTable Xs =
 | Xs
 
 main.load Path =
-| File = Path.get.utf8.parse{src Path}.1.0.group{2}.table
+| File = Path.get.utf8.parse{src Path}.0.0.group{2}.table
 | TypeTids = $tid_map{}{?type,?id}.table
 | LookupTable = File.tids{}{TypeTids.?}
 | Cells = remap_tids LookupTable File.cells
