@@ -208,12 +208,15 @@ draw_cursor V Front FB X Y H =
 | FB.line{V C C+[0 H]}
 
 
-world.drawPilar X Y BX BY FB CursorXY =
+world.drawPilar X Y BX BY FB CursorXY CursorZ =
 | when X < 0 or X >> $size: leave 0
 | when Y < 0 or Y >> $size: leave 0
 | !BY + 32
 | Gs = $gfxes.X.Y
-| Cursor = same X CursorXY.0 and Y >< CursorXY.1
+| CurX = CursorXY.0
+| CurY = CursorXY.1
+| CurH = (CurX+CurY)/2
+| Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
 //| TileShadow = $main.sprites.system_tile_shadow.frames.0
@@ -226,7 +229,9 @@ world.drawPilar X Y BX BY FB CursorXY =
        | TH = T.height
        | ZZ = Z*ZUnit
        | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH
-       | FB.blitRaw{BX BY-G.h-ZZ G}
+       | XY2 = (X+Y)/2
+       | when CurH >> XY2 or Z << CursorZ or XY2-CurH-Z/4 >> 2:
+         | FB.blitRaw{BX BY-G.h-ZZ G}
        //| when T.shadow and $slope_at{X+1,Y,Z+TH*2-1} >< #@1111:
        //  | FB.blit{[BX BY-G.h-ZZ] TileShadow}
        | UnitZ <= Z + TH

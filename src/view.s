@@ -63,7 +63,7 @@ view.render_iso =
 | while Y < ViewDim
   | VY = VY+Y
   | !Y + 1
-  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy}
+  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy $cell_z}
   | !BX - TileH
   | !BY + TileH2
 | VX = VX+Y
@@ -72,7 +72,7 @@ view.render_iso =
 | while Y > 0
   | !Y - 1
   | VX = VX-Y
-  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy}
+  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy $cell_z}
   | !BX + TileH
   | !BY + TileH2
 
