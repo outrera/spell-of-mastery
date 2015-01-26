@@ -2,7 +2,11 @@ use util octree unit stack
 
 MaxSize = No
 MaxUnits = No
+
+XUnit = 64
+YUnit = 32
 ZUnit = No
+YZUnit = No
 
 type world{main size}
    game
@@ -20,10 +24,15 @@ type world{main size}
    tid_map/Main.tid_map
    filler
    shadows
+   zUnit
 | $main.world <= Me
-| MaxSize <= $main.params.world.max_size
-| MaxUnits <= $main.params.world.max_units
-| ZUnit <= $main.params.world.z_unit
+| WParam = $main.params.world
+| MaxSize <= WParam.max_size
+| MaxUnits <= WParam.max_units
+| XUnit <= WParam.x_unit
+| YUnit <= WParam.y_unit
+| ZUnit <= WParam.z_unit
+| YZUnit <= YUnit/ZUnit
 | $tilemap <= octree MaxSize
 | $unit_map <= octree MaxSize
 | $slope_map <= octree MaxSize
@@ -188,9 +197,6 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
-XUnit = 64
-YUnit = 32
-
 draw_cursor V Front FB X Y H =
 | !H*ZUnit
 | !Y - H
@@ -216,6 +222,7 @@ world.drawPilar X Y BX BY FB CursorXY CursorZ =
 | CurX = CursorXY.0
 | CurY = CursorXY.1
 | CurH = (CurX+CurY)/2
+| CurHH = CurH+2
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
@@ -230,7 +237,7 @@ world.drawPilar X Y BX BY FB CursorXY CursorZ =
        | ZZ = Z*ZUnit
        | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH
        | XY2 = (X+Y)/2
-       | when CurH >> XY2 or Z << CursorZ or XY2-CurH-Z/4 >> 2:
+       | when CurH >> XY2 or Z << CursorZ or XY2-CurHH-Z/YZUnit >> 0:
          | FB.blitRaw{BX BY-G.h-ZZ G}
        //| when T.shadow and $slope_at{X+1,Y,Z+TH*2-1} >< #@1111:
        //  | FB.blit{[BX BY-G.h-ZZ] TileShadow}
