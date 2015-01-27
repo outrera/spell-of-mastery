@@ -83,6 +83,9 @@ view.render_frame =
 | Z = $world.height{X Y}
 | InfoText = []
 | when $param.show_xyz: push "xyz=[X],[Y],[Z]" InfoText
+| when $param.show_frame: push "frame=[$frame]" InfoText
+| when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
+| when $param.show_turn: push "turn=[$world.turn]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.draw{$fb 4,($h-10)}
@@ -163,7 +166,7 @@ view.update_editor X Y Z =
   [tile Type] | when Z > 1: $world.pop{X,Y}
 
 view.update_game X Y Z = 
-| less $paused: $world.update
+| less $paused: $main.update
 
 view.update =
 | X,Y = $cell_xy

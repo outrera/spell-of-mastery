@@ -27,8 +27,8 @@ unit.init Class =
 | $facing <= 0
 | $next <= 0
 | $column_next <= 0
-| $serial <= $world.unit_serial
-| !$world.unit_serial - 1
+| $serial <= $world.serial
+| !$world.serial - 1
 | $animate{still}
 
 unit.animate Anim =

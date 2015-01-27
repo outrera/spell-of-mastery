@@ -1,10 +1,9 @@
-use param sprite class tile world game ui save
+use param sprite class tile world update ui save
 
 type main{Data}
      world
      data/Data
      cache/(t)
-     cycle
      params
      sprites
      classes // object classes
@@ -26,7 +25,7 @@ type main{Data}
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort
 | $classes_banks <= @table: map N $bank_names
   | N,$classes{}{?1}.keep{?bank >< N}{?class_name}.sort
-| game Me: world Me 16
+| world Me 16
 
 main.img Name =
 | S = $sprites."[Name]"

@@ -9,13 +9,11 @@ ZUnit = No
 YZUnit = No
 
 type world{main size}
-   game
    w/Size
    h/Size
    name/default
    tilemap
    unit_map
-   unit_serial/((1</20)-1) // used to generate serial numbers for units
    slope_map
    units
    free_units
@@ -24,7 +22,9 @@ type world{main size}
    tid_map/Main.tid_map
    filler
    shadows
-   zUnit
+   cycle // counts calls to world.update
+   serial/((1</20)-1) // used to generate serial numbers for units
+   turn // turn in terms of game logic
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -47,28 +47,9 @@ type world{main size}
 | for U $units: when U.id <> 0: $free_units.push{U}
 | $shadows <= $main.sprites.unit_shadows.frames
 
+
 world.clear =
 | for U $units: less U.removed: U.free
-
-world.load W H UnitSerial Cycle Turn Tilemap Units =
-| $clear
-| $w <= W
-| $h <= H
-| $unit_serial <= UnitSerial
-| $tilemap.root <= Tilemap
-| for P points{0 0 $w $h}: $updPilarGfxes{P}
-| $game.cycle <= Cycle
-| $game.turn <= Turn
-| for X Units
-  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner] = X
-  | U = $alloc_unit{Type}
-  | U.serial <= Serial
-  | U.move{XYZ}
-  | U.sub_xyz.init{SXYZ}
-  | U.animate{Anim}
-  | U.anim_step <= AnimStep
-  | U.facing <= Facing
-  | U.owner <= Owner
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
@@ -276,9 +257,6 @@ world.pop X,Y =
 | T = $tid_map.($get{X Y Z})
 | times I T.height: $set{X Y Z-I 0}
 | $updElev{X,Y}
-
-world.update = when $game: $game.update
-
 
 
 export world
