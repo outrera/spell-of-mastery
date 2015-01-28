@@ -20,6 +20,8 @@ type unit.$class{Id World}
   picked // cons of next unit in the selection
 
 
+unit.as_text = "#unit{[$type] [$id]}"
+
 unit.main = $world.main
 
 unit.init Class =

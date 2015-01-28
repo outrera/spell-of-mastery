@@ -74,11 +74,11 @@ main.run =
 | PropFields = ['World Name:',WorldNameInput
                ]
 | WorldProperties <= hidden: dlg: mtx
-  | 170 100 | $img{ui_panel5}
-  | 300 110 | txt size/medium 'Properties'
-  | 185 140 | layV PropFields{?0^txt}
-  | 270 136 | layV PropFields{?1}
-  | 185 405 | button 'Done' w_size/small: =>
+  |   0   0 | $img{ui_panel5}
+  | 130  10 | txt size/medium 'Properties'
+  |  15  40 | layV PropFields{?0^txt}
+  | 100  36 | layV PropFields{?1}
+  |  15 305 | button 'Done' w_size/small: =>
               | unpause
               | WorldProperties.show <= 0
 | BankName =
@@ -98,10 +98,19 @@ main.run =
          | ItemList.pick{0}
 | BrushPanel = hidden: layH: list BankList ItemList
 | BrushPanel.show <= 1
-| UnitPanel = hidden: panel_bg PanelW ScreenH
+| UnitPanelTitle = txt ''
+| UnitPanelContents = hidden: dlg: mtx
+  | 2 2 | UnitPanelTitle
+| UnitPanel = hidden: dlg: mtx
+  | 0 0 | panel_bg PanelW ScreenH
+  | 0 0 | UnitPanelContents
 | Panel = dlg w/ScreenW h/ScreenH: mtx
   | 0 0 | UnitPanel
   | 0 0 | BrushPanel
+| View.on_unit_pick <= Unit =>
+  | UnitPanelContents.show <= Unit <> 0
+  | when Unit
+    | UnitPanelTitle.value <= Unit.class_name.title
 | EditorModeIconClick = Icon =>
   | $mode_icon.picked <= 0
   | Icon.picked <= 1
@@ -133,7 +142,7 @@ main.run =
   |  0   0| layH View,Panel
   |  2   2| layH s/8 Icons
   |  0   0| PauseSpacer
-  |  0   0| WorldProperties
+  |170 100| WorldProperties
   |  0   0| MessageBox
 | View.init
 | MenuBG = $img{ui_menu_bg}

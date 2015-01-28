@@ -35,6 +35,7 @@ type view.widget{M W H}
   fpsGoal/24 // goal frames per second
   fpsD/30.0
   param
+  on_unit_pick/(Picked=>)
 | $fb <= gfx W H
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
@@ -149,11 +150,13 @@ view.center_at XY = $move{XY*32-[$w $h]/2}
 view.update_editor X Y Z = 
 | when $editor_mode >< pick
   | when $mice_left
+    | for U $world.picked^uncons{picked}: U.picked <= 0
+    | $world.picked <= 0
     | Us = $world.units_at{X,Y,Z}
     | when Us.size
       | !$pick_count+1
-      | for U $world.picked^uncons{picked}: U.picked <= 0
       | $world.picked <= [$world.nil Us.($pick_count%Us.size)]^cons{picked}
+    | $on_unit_pick{}{$world.picked}
   | $mice_left <= 0
   | leave 0
 | when $mice_left and Z << $mice_z: case $brush

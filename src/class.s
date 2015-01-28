@@ -1,10 +1,8 @@
 use gfx util param
 
-type class{Bank ClassName static/0 empty/0 sprite/system_dummy
+type class{bank class_name static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0}
-  bank/Bank
-  class_name/ClassName
-  type/"[Bank]_[ClassName]"
+  type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
   sprite/Sprite
