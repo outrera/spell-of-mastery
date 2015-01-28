@@ -98,15 +98,19 @@ main.run =
          | ItemList.pick{0}
 | BrushPanel = hidden: layH: list BankList ItemList
 | BrushPanel.show <= 1
-| UnitPanelTitle = txt ''
-| UnitPanelContents = hidden: dlg: mtx
+| ArrowClick = Icon =>
+| Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
+| UnitPanelTitle = txt size/medium ''
+| UnitPanelContents = hidden: dlg w/PanelW h/ScreenH: mtx
   | 2 2 | UnitPanelTitle
+  |24 ScreenH-150 | layV s/2: map Xs Arrows.xs{7,0,1,6,8,2,5,4,3}.group{3}
+                    | layH s/2 Xs
 | UnitPanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
   | 0 0 | UnitPanelContents
 | Panel = dlg w/ScreenW h/ScreenH: mtx
-  | 0 0 | UnitPanel
   | 0 0 | BrushPanel
+  | 0 0 | UnitPanel
 | View.on_unit_pick <= Unit =>
   | UnitPanelContents.show <= Unit <> 0
   | when Unit
