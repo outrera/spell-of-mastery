@@ -27,6 +27,8 @@ type world{main size}
    turn // turn in terms of game logic
    picked
    nil // null unit with id >< 0
+   owners // unit owners
+   active // active units
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -38,15 +40,14 @@ type world{main size}
 | $tilemap <= octree MaxSize
 | $unit_map <= octree MaxSize
 | $slope_map <= octree MaxSize
-| $free_units <= stack MaxUnits
 | $units <= MaxUnits{(unit ? Me)}
+| $free_units <= stack $units.flip
 | $filler <= $main.tiles.base_
 | SS = Size*Size
 | $gfxes <= ($w){_=>($h){_=>[]}}
 | $seed <= ($w){_=>($h){_=>SS.rand}}
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
-| for U $units.flip: $free_units.push{U}
 | $nil <= $alloc_unit{unit_nil}
 | $shadows <= $main.sprites.unit_shadows.frames
 

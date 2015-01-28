@@ -1,7 +1,7 @@
 use gfx util param
 
 type class{bank class_name static/0 empty/0 sprite/system_dummy
-           unit/0 draw_order/10 aux/0 shadow/0}
+           unit/0 draw_order/10 aux/0 shadow/0 moves/0 speed/1}
   type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
@@ -10,6 +10,9 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   draw_order/(Draw_order</20)
   aux/Aux
   shadow/Shadow // unit casts shadow in air
+  moves/Moves // moves per turn
+  speed/Speed // how many cycles it takes to move between cells
+  
 
 class.height = $sprite.height
 

@@ -115,10 +115,11 @@ main.run =
   | UnitPanelContents.show <= Unit <> 0
   | when Unit
     | UnitPanelTitle.value <= Unit.class_name.title
+| ModeIcon = No
 | EditorModeIconClick = Icon =>
-  | $mode_icon.picked <= 0
+  | ModeIcon.picked <= 0
   | Icon.picked <= 1
-  | $mode_icon <= Icon
+  | ModeIcon <= Icon
   | View.editor_mode <= Icon.data
   | IsBrush = View.editor_mode >< brush
   | BrushPanel.show <= IsBrush
@@ -139,7 +140,7 @@ main.run =
   | Tabs.pick{main_menu}
 | Icons = PickIcon,BrushIcon,spacer{8 0},WorldIcon,spacer{8 0},PlayIcon,
           spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
-| $mode_icon <= BrushIcon
+| ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH

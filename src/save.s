@@ -30,6 +30,7 @@ world.load Saved =
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
 | $cycle <= Saved.cycle
 | $turn <= Saved.turn
+| IdMap = t
 | for X Saved.units
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner] = X
   | U = $alloc_unit{Type}
@@ -40,6 +41,7 @@ world.load Saved =
   | U.anim_step <= AnimStep
   | U.facing <= Facing
   | U.owner <= Owner
+  | IdMap.Id <= U
 
 main.load Path =
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table

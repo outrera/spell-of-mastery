@@ -1,4 +1,6 @@
 unit: 1
 draw_order: 5
 moves: 1
-pickable: 1
+speed: 24
+selectable: 1
+sight: 1

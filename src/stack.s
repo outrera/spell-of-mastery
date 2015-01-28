@@ -1,4 +1,7 @@
-type stack{Size} xs/dup{Size} used
+type stack{Init} xs used
+| if Init.is_int then $xs <= dup{Init}
+  else | $xs <= dup{Init.size}
+       | for X Init: $push{X}
 
 stack.push X =
 | $xs.$used <= X
@@ -7,6 +10,11 @@ stack.push X =
 stack.pop =
 | !$used-1
 | $xs.$used
+
+stack.alloc @Xs =
+| Item = $pop
+| Item.init{@Xs}
+| Item
 
 stack.size = $xs.size
 

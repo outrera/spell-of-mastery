@@ -1,12 +1,14 @@
 use util
 
+type action{what xyz/[0 0 0]} xyz/Xyz cycles_left
+
 type unit.$class{Id World}
   id/Id // numeric id for octree
   world/World
   serial
   class
   xyz/[0 0 -1] // world coordinates
-  sub_xyz/[0 0 0] // fine X,Y,Z for movement animation between cells
+  sub_xyz/[0 0 0] // fine X,Y,Z
   next // next unit inside of this world cell
   column_next // next unit inside of this world column
   anim // animation id
@@ -17,8 +19,14 @@ type unit.$class{Id World}
   slope // unit is standing on a sloped terrain
   flipX
   owner // player controlling this unit
-  picked // cons of next unit in the selection
-
+  picked // cons of the next unit in the selection
+  active // cons used to hold this unit inside the world active units list
+  order_what // pending order
+  order_xyz/[0 0 0]
+  action
+  action_target/[0 0 0]
+  action_cycles // cycles left till action is complete
+  action_from/[0 0 0]
 
 unit.as_text = "#unit{[$type] [$id]}"
 
@@ -33,6 +41,7 @@ unit.init Class =
 | $serial <= $world.serial
 | !$world.serial - 1
 | $animate{still}
+| $active <= No
 
 unit.animate Anim =
 | $anim <= Anim
@@ -68,6 +77,12 @@ unit.render FB X Y =
 | when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
 | FB.blit{XX,YY G flipX/$flipX}
 
+unit.order What XYZ =
+| $order_what <= What
+| $order_xyz.init{XYZ}
+| less got $active
+  | $active <= $world.active
+  | $world.active <= Me
 
 
 export unit

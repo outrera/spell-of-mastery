@@ -147,18 +147,22 @@ view.move NewXY =
 
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
-view.update_editor X Y Z = 
-| when $editor_mode >< pick
-  | when $mice_left
-    | for U $world.picked^uncons{picked}: U.picked <= 0
-    | $world.picked <= 0
-    | Us = $world.units_at{X,Y,Z}
-    | when Us.size
-      | !$pick_count+1
-      | $world.picked <= [$world.nil Us.($pick_count%Us.size)]^cons{picked}
-    | $on_unit_pick{}{$world.picked}
+view.update_editor_pick X Y Z = 
+| when $mice_left
+  | for U $world.picked^uncons{picked}: U.picked <= 0
+  | $world.picked <= 0
+  | Us = $world.units_at{X,Y,Z}
+  | when Us.size
+    | !$pick_count+1
+    | $world.picked <= [$world.nil Us.($pick_count%Us.size)]^cons{picked}
+  | $on_unit_pick{}{$world.picked}
   | $mice_left <= 0
-  | leave 0
+| when $mice_right
+  | when $world.picked: $world.picked.order{move X,Y,Z}
+  | $mice_right <= 0
+| $main.update
+
+view.update_editor_brush X Y Z = 
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
     | ClassName = if $keys.r >< 1
@@ -186,7 +190,11 @@ view.update =
 | when $paused: leave 0
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
-| if $mode >< editor then $update_editor{X Y Z} else $update_game{X Y Z}
+| if $mode >< editor
+  then if $editor_mode >< pick
+       then $update_editor_pick{X Y Z}
+       else $update_editor_brush{X Y Z}
+  else $update_game{X Y Z}
 | 1
 
 view.input In =
