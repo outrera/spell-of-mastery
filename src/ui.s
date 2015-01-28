@@ -1,4 +1,4 @@
-use gui widgets view
+use gui widgets view icon
 
 ScreenW = No
 ScreenH = No
@@ -86,27 +86,36 @@ main.run =
   | if BankName >< terrain
     then | ItemList.data <= TileNames
          | ItemList.pick{TileNames.locate{plain}}
-    else | ItemList.data <= $classes_banks.BankName
+    else | ItemList.data <= $classes_banks.BankName.skip{?aux}
          | ItemList.pick{0}
 | Panel = layH: list BankList ItemList
-| PropsButton = button 'Properties' w_size/small h_size/medium: =>
-               | View.pause
-               | PropertiesMenu.pick{show}
-| SaveButton = button 'Save' w_size/small: =>
-               | $save{"[$data]/work/worlds/test.txt"}
-               //| show_message 'Hello' 'Hello, World!'
-| LoadButton = button 'Load' w_size/small: =>
-               | $load{"[$data]/work/worlds/test.txt"}
-| PlayButton = button 'Play' w_size/small state/disabled: =>
-| QuitButton = button 'Quit' w_size/small h_size/medium: =>
-               | View.pause
-               | Tabs.pick{main_menu}
-| TopButtons = layH s/8
-    PropsButton,PlayButton,SaveButton,LoadButton,spacer{20 1},QuitButton
+| EditorModeIconClick = Icon =>
+  | $mode_icon.picked <= 0
+  | Icon.picked <= 1
+  | $mode_icon <= Icon
+  | View.editor_mode <= Icon.data
+| PickIcon = icon data/pick $img{icon_pick} click/EditorModeIconClick
+| BrushIcon = icon data/brush $img{icon_brush} click/EditorModeIconClick
+| WorldIcon = icon data/pick $img{icon_world} click: Icon =>
+  | View.pause
+  | PropertiesMenu.pick{show}
+| PlayIcon = icon data/pick $img{icon_play} click: Icon =>
+| SaveIcon = icon data/pick $img{icon_save} click: Icon =>
+  | $save{"[$data]/work/worlds/test.txt"}
+  //| show_message 'Saved' 'Your map is saved!'
+| LoadIcon = icon data/pick $img{icon_load} click: Icon =>
+  | $load{"[$data]/work/worlds/test.txt"}
+| ExitIcon = icon data/pick $img{icon_exit} click: Icon =>
+  | View.pause
+  | Tabs.pick{main_menu}
+| Icons = PickIcon,BrushIcon,spacer{8 0},WorldIcon,spacer{8 0},PlayIcon,
+          spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
+| $mode_icon <= BrushIcon
+| BrushIcon.picked <= 1
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0  0 | spacer ScreenW ScreenH
-  |  0  0 | layH Panel,View
-  |202  2 | TopButtons
+  |  0  0 | layH View,Panel
+  |  2  2 | layH s/8 Icons
   |  0  0 | PropertiesMenu
   |  0  0 | MessageBox
 | View.init
@@ -122,6 +131,7 @@ main.run =
             button{'Load Game'      state/disabled (=>)}
             button{'World Editor'   (=> | View.mode <= \editor
                                         | Tabs.pick{ingame})}
+            spacer{0 8}
             button{'Exit Program'   (=>get_gui{}.exit)}
 
 | Tabs <= tabs main_menu: t

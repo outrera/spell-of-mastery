@@ -1,6 +1,6 @@
 use widgets
 
-
+/*
 type minimap.widget{Main CenterAt}
      main/Main w/128 h/128 pressed center/CenterAt
 minimap.draw G P =
@@ -19,33 +19,38 @@ minimap.input In = case In
   [mice_move _ XY] | when $pressed: $center_at{XY}
   [mice left 1 XY] | $pressed <= 1; $center_at{XY}
   [mice left 0 XY] | $pressed <= 0
+*/
 
+
+/*
 type icon_popup.widget info enabled resources text/txt{''}
 | $info <= layV: map X [$text]: tabs 0: t 1(X) 0(spacer 0 0)
 icon_popup.render =
 | for X $info.items: X.pick{$enabled}
-| $info.render
+| $info.render*/
 
-type icon.widget{data/0 click/(Icon=>)}
+
+type icon.widget{fg data/0 click/(Icon=>)}
    w/50
    h/42
    pressed
    over
-   fg
+   picked
    tint
    g/skin{'icon-frame'}.copy
    data/Data
    on_click/Click
-   popup/icon_popup{}
+   //popup/icon_popup{}
    last_fg
    last_tint
 icon.draw G P =
-| less $tint: leave 0
 | when $fg^address <> $last_fg^address or $tint^address <> $last_tint^address:
-  | $g.blit{[2 2] $fg map/$tint}
-| when $pressed: !P + [1 1]
-| G.blit{P $g}
-| when $over: G.rect{#A0A0A0 0 P.0-2 P.1-2 54 46}
+  | when $fg: if $tint
+    then $g.blit{[2 2] $fg map/$tint}
+    else $g.blit{[2 2] $fg}
+| XY = if $pressed then P + [1 1] else P
+| G.blit{XY $g}
+| when $picked: G.rect{#0000FF 0 P.0-1 P.1-1 $w+2 $h+2}
 | $last_fg <= $fg
 | $last_tint <= $tint
 icon.input In = case In
@@ -70,4 +75,4 @@ icon_hp.draw G P =
 | $font.draw{G P.0+($w-FW)/2+1 P.1 white HP}
 */
 
-export minimap icon
+export /*minimap*/ icon

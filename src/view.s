@@ -27,6 +27,8 @@ type view.widget{M W H}
   cell_z
   brush/[0 0]
   mode/editor
+  editor_mode/brush
+  pick_count // used to pick different units from the same cell
   infoText/txt{'info'}
   fps/1
   fpsT/0.0
@@ -145,6 +147,15 @@ view.move NewXY =
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
 view.update_editor X Y Z = 
+| when $editor_mode >< pick
+  | when $mice_left
+    | Us = $world.units_at{X,Y,Z}
+    | when Us.size
+      | !$pick_count+1
+      | for U $world.picked^uncons{picked}: U.picked <= 0
+      | $world.picked <= [$world.nil Us.($pick_count%Us.size)]^cons{picked}
+  | $mice_left <= 0
+  | leave 0
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
     | ClassName = if $keys.r >< 1

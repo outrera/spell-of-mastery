@@ -1,3 +1,4 @@
 unit: 1
 draw_order: 5
 moves: 1
+pickable: 1

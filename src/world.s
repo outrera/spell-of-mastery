@@ -25,6 +25,8 @@ type world{main size}
    cycle // counts calls to world.update
    serial/((1</20)-1) // used to generate serial numbers for units
    turn // turn in terms of game logic
+   picked
+   nil // null unit with id >< 0
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -44,7 +46,8 @@ type world{main size}
 | $seed <= ($w){_=>($h){_=>SS.rand}}
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
-| for U $units: when U.id <> 0: $free_units.push{U}
+| for U $units.flip: $free_units.push{U}
+| $nil <= $alloc_unit{unit_nil}
 | $shadows <= $main.sprites.unit_shadows.frames
 
 
@@ -178,7 +181,7 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
-draw_cursor V Front FB X Y H =
+draw_pick V Front FB X Y H =
 | !H*ZUnit
 | !Y - H
 | !Y - 2
@@ -210,13 +213,13 @@ world.drawPilar X Y BX BY FB CursorXY CursorZ =
 //| TileShadow = $main.sprites.system_tile_shadow.frames.0
 | for G Gs: if G.is_int
   then | when Cursor
-         | draw_cursor #FF0000 0 FB BX BY-YUnit-Z*ZUnit G
-         | draw_cursor #00FF00 1 FB BX BY-YUnit-Z*ZUnit G
+         | draw_pick #FF0000 0 FB BX BY-YUnit-Z*ZUnit G
+         | draw_pick #00FF00 1 FB BX BY-YUnit-Z*ZUnit G
        | !Z+G
   else | T = $tid_map.($get{X Y Z})
        | TH = T.height
        | ZZ = Z*ZUnit
-       | when Cursor | draw_cursor #FF0000 0 FB BX BY-YUnit-ZZ TH
+       | when Cursor | draw_pick #FF0000 0 FB BX BY-YUnit-ZZ TH
        | XY2 = (X+Y)/2
        | when CurH >> XY2 or Z << CursorZ or XY2-CurHH-Z/YZUnit >> 0:
          | FB.blitRaw{BX BY-G.h-ZZ G}
@@ -224,7 +227,7 @@ world.drawPilar X Y BX BY FB CursorXY CursorZ =
        //  | FB.blit{[BX BY-G.h-ZZ] TileShadow}
        | UnitZ <= Z + TH
        | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
-       | when Cursor | draw_cursor #00FF00 1 FB BX BY-YUnit-ZZ TH
+       | when Cursor | draw_pick #00FF00 1 FB BX BY-YUnit-ZZ TH
        | Z <= UnitZ
 | for U $column_units_at{X Y}
   | Z = U.xyz.2

@@ -17,6 +17,7 @@ type unit.$class{Id World}
   slope // unit is standing on a sloped terrain
   flipX
   owner // player controlling this unit
+  picked // cons of next unit in the selection
 
 
 unit.main = $world.main
@@ -42,6 +43,7 @@ unit.free = $world.free_unit{Me}
 
 unit.remove =
 | $world.remove_unit{Me}
+| when $picked: $picked <= $pick^uncons{picked}.skip{?id >< $id}^cons{picked}
 | $xyz.2 <= -1
 
 unit.removed = $xyz.2 >< -1
@@ -59,7 +61,10 @@ unit.environment_updated =
 
 unit.render FB X Y =
 | G = $frame
-| FB.blit{[X+32-G.w/2 Y-16-G.h+$slope*16] G flipX/$flipX}
+| XX = X+32-G.w/2 
+| YY = Y-16-G.h+$slope*16
+| when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
+| FB.blit{XX,YY G flipX/$flipX}
 
 
 

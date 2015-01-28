@@ -15,6 +15,7 @@ type main{Data}
      last_tid
      tid_map
      aux_tiles
+     mode_icon
 | $load_params
 | for K,V $params.main: $params.K <= V
 | $load_sprites

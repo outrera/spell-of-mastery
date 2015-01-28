@@ -1,7 +1,7 @@
 use gfx util param
 
 type class{Bank ClassName static/0 empty/0 sprite/system_dummy
-           unit/0 draw_order/10}
+           unit/0 draw_order/10 aux/0}
   bank/Bank
   class_name/ClassName
   type/"[Bank]_[ClassName]"
@@ -10,6 +10,7 @@ type class{Bank ClassName static/0 empty/0 sprite/system_dummy
   sprite/Sprite
   unit/Unit
   draw_order/(Draw_order</20)
+  aux/Aux
 
 class.height = $sprite.height
 
