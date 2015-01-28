@@ -94,18 +94,18 @@ main.run =
   | Icon.picked <= 1
   | $mode_icon <= Icon
   | View.editor_mode <= Icon.data
-| PickIcon = icon data/pick $img{icon_pick} click/EditorModeIconClick
-| BrushIcon = icon data/brush $img{icon_brush} click/EditorModeIconClick
-| WorldIcon = icon data/pick $img{icon_world} click: Icon =>
+| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
+| BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
+| WorldIcon = icon data/pick $img{icons_world} click: Icon =>
   | View.pause
   | PropertiesMenu.pick{show}
-| PlayIcon = icon data/pick $img{icon_play} click: Icon =>
-| SaveIcon = icon data/pick $img{icon_save} click: Icon =>
+| PlayIcon = icon data/pick $img{icons_play} click: Icon =>
+| SaveIcon = icon data/pick $img{icons_save} click: Icon =>
   | $save{"[$data]/work/worlds/test.txt"}
   //| show_message 'Saved' 'Your map is saved!'
-| LoadIcon = icon data/pick $img{icon_load} click: Icon =>
+| LoadIcon = icon data/pick $img{icons_load} click: Icon =>
   | $load{"[$data]/work/worlds/test.txt"}
-| ExitIcon = icon data/pick $img{icon_exit} click: Icon =>
+| ExitIcon = icon data/pick $img{icons_exit} click: Icon =>
   | View.pause
   | Tabs.pick{main_menu}
 | Icons = PickIcon,BrushIcon,spacer{8 0},WorldIcon,spacer{8 0},PlayIcon,
