@@ -86,7 +86,7 @@ main.run =
   | if BankName >< terrain
     then | ItemList.data <= TileNames
          | ItemList.pick{TileNames.locate{plain}}
-    else | ItemList.data <= $classes_banks.BankName.skip{?aux}
+    else | ItemList.data <= $classes_banks.BankName
          | ItemList.pick{0}
 | Panel = layH: list BankList ItemList
 | EditorModeIconClick = Icon =>
