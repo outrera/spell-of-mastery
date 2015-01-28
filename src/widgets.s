@@ -327,7 +327,5 @@ txt_input.input In = case In
 type img.widget{Path} path/Path
 img.render = Skin.img{"image_[$path]"}
 
-concealable Widget = tabs hide: t show(Widget) hide(spacer 0 0)
-
 export set_skin skin font txt button litem droplist slider folder_widget 
-       litems txt_input img concealable
+       litems txt_input img

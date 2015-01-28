@@ -177,15 +177,17 @@ view.update_editor X Y Z =
   [tile Type] | when Z > 1: $world.pop{X,Y}
 
 view.update_game X Y Z = 
-| less $paused: $main.update
+| $main.update
 
 view.update =
+| when $paused: leave 0
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | if $mode >< editor then $update_editor{X Y Z} else $update_game{X Y Z}
 | 1
 
-view.input In = case In
+view.input In =
+| case In
   [mice_move _ XY]
     | !XY+[0 32]
     | $mice_xy.init{XY}
