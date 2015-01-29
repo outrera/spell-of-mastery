@@ -10,6 +10,8 @@ act_class.finish A =
 
 type act_still.act_class name/still anim/still
 
+act_still.start A = A.cycles <= 4
+
 type act_move.act_class name/move anim/move
 
 act_move.valid A = 
@@ -18,11 +20,16 @@ act_move.valid A =
 | when (A.xyz-U.xyz).all{?abs<<1} and not U.can_move_to{A.xyz}: leave 0
 | 1
 
-act_move.update A = 
+act_move.start A =
+| A.unit.from_xyz.init{A.unit.xyz}
+| A.unit.move{A.xyz}
 
-act_move.finish A = A.unit.from_xyz.init{0,0,0}
+act_move.update A =
 
-ActionClasses = t
+act_move.finish A =
+| A.unit.from_xyz.init{0,0,0}
+
+ActionClasses = t still(act_still) move(act_move)
 
 type action{unit}
    class
@@ -33,11 +40,10 @@ type action{unit}
    data // data used by class
 
 action.init ClassName XYZ =
-| $unit.activate
 | $xyz.init{XYZ}
 | $priority <= 50
-| $class <= case ClassName still(act_still) move(act_move)
-            Else | bad "bad action class `[ClassName]`"
+| $class <= ActionClasses.ClassName
+| less got $class: bad "unknown action class [ClassName]"
 | $class.init{Me}
 | Me
 
@@ -46,11 +52,9 @@ action.valid = $class and $class.valid{Me}
 action.start = $class.start{Me}
 
 action.update =
-| less $cycles: 
-  | leave $class.finish{Me}
-  | leave 0
 | $class.update{Me}
 | !$cycles - 1
 
+action.finish = $class.finish{Me}
 
 export action

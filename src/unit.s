@@ -40,10 +40,14 @@ unit.init Class =
 | $serial <= $world.serial
 | !$world.serial - 1
 | $animate{still}
-| $active <= No
-| $ordered.class <= 0
-| $next_action.class <= 0
-| $action.cycles <= 0
+| $active <= 0
+| when $starts
+  | $active <= $world.active
+  | $world.active <= Me
+  | $ordered.class <= 0
+  | $next_action.class <= 0
+  | $action.init{still 0,0,0}
+  | $action.cycles <= 0
 
 unit.animate Anim =
 | $anim <= Anim
@@ -56,7 +60,6 @@ unit.free = $world.free_unit{Me}
 
 unit.remove =
 | $world.remove_unit{Me}
-| when $picked: $picked <= $pick^uncons{picked}.skip{?id >< $id}^cons{picked}
 | $xyz.2 <= -1
 
 unit.removed = $xyz.2 >< -1
@@ -78,11 +81,6 @@ unit.render FB X Y =
 | YY = Y-16-G.h+$slope*16
 | when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
 | FB.blit{XX,YY G flipX/$flipX}
-
-unit.activate =
-| less got $active
-  | $active <= $world.active
-  | $world.active <= Me
 
 unit.order = $ordered
 
