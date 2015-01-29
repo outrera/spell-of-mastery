@@ -1,6 +1,7 @@
 unit: 1
 draw_order: 5
 moves: 1
-speed: 24 //actually it is 1/speed
+speed: 24
 selectable: 1
 sight: 1
+active: still

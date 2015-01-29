@@ -29,6 +29,7 @@ type world{main size}
    nil // null unit with id >< 0
    owners // unit owners
    active // active units
+   vars/t{} // variables
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size

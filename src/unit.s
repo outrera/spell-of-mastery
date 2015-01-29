@@ -1,4 +1,4 @@
-use util
+use util action
 
 type unit.$class{Id World}
   id/Id // numeric id for octree
@@ -19,12 +19,13 @@ type unit.$class{Id World}
   owner // player controlling this unit
   picked // cons of the next unit in the selection
   active // cons used to hold this unit inside the world active units list
-  order_what // pending order
-  order_xyz/[0 0 0]
-  action
-  action_target/[0 0 0]
-  action_cycles // cycles left till action is complete
+  action // currently executing action
+  next_action // action to be taken after the current one
+  ordered // what owner of this unit has ordered
   from_xyz/[0 0 0]
+| $action <= action Me
+| $next_action <= action Me
+| $ordered <= action Me
 
 unit.as_text = "#unit{[$type] [$id]}"
 
@@ -40,6 +41,9 @@ unit.init Class =
 | !$world.serial - 1
 | $animate{still}
 | $active <= No
+| $ordered.class <= 0
+| $next_action.class <= 0
+| $action.cycles <= 0
 
 unit.animate Anim =
 | $anim <= Anim
@@ -75,12 +79,11 @@ unit.render FB X Y =
 | when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
 | FB.blit{XX,YY G flipX/$flipX}
 
-unit.order Action =
-| Action.unit <= Me
-| $ordered <= Action
+unit.activate =
 | less got $active
   | $active <= $world.active
   | $world.active <= Me
 
+unit.order = $ordered
 
 export unit

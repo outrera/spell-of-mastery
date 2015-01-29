@@ -1,15 +1,16 @@
+// unit controlling related stuff
+
 type act_class
 
-act_class.forced = 0
-act_class.valid = 1
-act_class.update =
+act_class.init A =
+act_class.valid A = 1
+act_class.start A = A.cycles <= A.unit.speed
+act_class.update A =
+act_class.finish A =
 
+type act_still.act_class name/still anim/still
 
-type act_still.act_class
-   name/still anim/still
-
-type act_move.act_class
-   name/move anim/move
+type act_move.act_class name/move anim/move
 
 act_move.valid A = 
 | U = A.unit
@@ -19,35 +20,37 @@ act_move.valid A =
 
 act_move.update A = 
 
+act_move.finish A = A.unit.from_xyz.init{0,0,0}
+
 ActionClasses = t
 
-type action.$class
+type action{unit}
    class
-   unit // unit doing this action
-   xyz // target x,y,z
-   cycles // cycles remaining till the action would be done
+   xyz/[0 0 0] // target x,y,z
+   cycles // cooldown cycles remaining till the action safe-to-change state
    from // source cell of this action
-   data
+   priority // used to check if action can be preempted
+   data // data used by class
 
 action.init ClassName XYZ =
+| $unit.activate
 | $xyz.init{XYZ}
+| $priority <= 50
 | $class <= case ClassName still(act_still) move(act_move)
             Else | bad "bad action class `[ClassName]`"
+| $class.init{Me}
 | Me
 
-action.valid = $class.valid{Me}
+action.valid = $class and $class.valid{Me}
+
+action.start = $class.start{Me}
 
 action.update =
+| less $cycles: 
+  | leave $class.finish{Me}
+  | leave 0
 | $class.update{Me}
-| !$action_cycles - 1
-| less $action.cycles
-  //| when $unit.ordered and not $forced
-  | $unit.action <= 0
-  | $unit.from_xyz.init{0,0,0}
-  | leave $unit.update
-
-action.run =
-| $cycles <= $unit.speed
+| !$cycles - 1
 
 
 export action
