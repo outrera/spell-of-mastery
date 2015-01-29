@@ -1,4 +1,4 @@
-use gui util widgets
+use gui util widgets action
 
 
 TileW = 64
@@ -158,7 +158,7 @@ view.update_editor_pick X Y Z =
   | $on_unit_pick{}{$world.picked}
   | $mice_left <= 0
 | when $mice_right
-  | when $world.picked: $world.picked.order{move X,Y,Z}
+  | when $world.picked: $world.picked.order{action{}.init{move X,Y,Z}}
   | $mice_right <= 0
 | $main.update
 

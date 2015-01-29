@@ -6,5 +6,5 @@ show_fps: 0
 show_turn: 0
 show_cycle: 0
 show_frame: 0
-game_speed: 1.0 // updates per frame
+game_speed: 1.0 // game cycles (updates) per frame
 scroll_speed: 2

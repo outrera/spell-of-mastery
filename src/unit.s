@@ -1,7 +1,5 @@
 use util
 
-type action{what xyz/[0 0 0]} xyz/Xyz cycles_left
-
 type unit.$class{Id World}
   id/Id // numeric id for octree
   world/World
@@ -26,7 +24,7 @@ type unit.$class{Id World}
   action
   action_target/[0 0 0]
   action_cycles // cycles left till action is complete
-  action_from/[0 0 0]
+  from_xyz/[0 0 0]
 
 unit.as_text = "#unit{[$type] [$id]}"
 
@@ -77,9 +75,9 @@ unit.render FB X Y =
 | when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
 | FB.blit{XX,YY G flipX/$flipX}
 
-unit.order What XYZ =
-| $order_what <= What
-| $order_xyz.init{XYZ}
+unit.order Action =
+| Action.unit <= Me
+| $ordered <= Action
 | less got $active
   | $active <= $world.active
   | $world.active <= Me
