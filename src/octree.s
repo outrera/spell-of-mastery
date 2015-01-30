@@ -21,6 +21,8 @@ rects_overlap [AX AY AW AH] [BX BY BW BH] =
 
 type octree{Size} size/Size root
 
+octree.clear Value = $root <= Value
+
 ot_phash X,Y,Z = Z*#10000+Y*#100+X //point's hash
 ot_p2i X,Y,Z = Z*4 + Y*2 + X
 ot_merge$_ [X<1.is_int @1.all{(same ? X)}] = X
@@ -92,6 +94,5 @@ octree.getPilar X Y =
   | Xs <= [L,S @Xs]
   | !Z + L
 | on Xs.flip | @r$_ [@H A,V B,&V @T] => [@H @[A+B,V @T]^r]
-
 
 export octree

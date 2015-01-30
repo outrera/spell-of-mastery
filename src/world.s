@@ -55,6 +55,7 @@ type world{main size}
 
 world.clear =
 | for U $units: less U.removed: U.free
+| $tilemap.clear{0}
 | $active <= 0
 
 world.alloc_unit ClassName =
