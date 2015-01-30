@@ -30,6 +30,8 @@ type world{main size}
    owners // unit owners
    active // active units
    vars/t{} // variables
+   xunit
+   yunit
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -38,6 +40,8 @@ type world{main size}
 | YUnit <= WParam.y_unit
 | ZUnit <= WParam.z_unit
 | YZUnit <= YUnit/ZUnit
+| $xunit <= XUnit
+| $yunit <= YUnit
 | $tilemap <= octree MaxSize
 | $unit_map <= octree MaxSize
 | $slope_map <= octree MaxSize

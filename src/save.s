@@ -4,7 +4,7 @@ world.save =
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
     tids | $tid_map{}{?type}
     units | map U $units.skip{?removed}
-            | list U.id U.serial U.type U.xyz U.sub_xyz
+            | list U.id U.serial U.type U.xyz U.xy
                    U.anim U.anim_step U.facing
                    U.owner
     tilemap | $tilemap.root
@@ -36,7 +36,7 @@ world.load Saved =
   | U = $alloc_unit{Type}
   | U.serial <= Serial
   | U.move{XYZ}
-  | U.sub_xyz.init{SXYZ}
+  | U.xy.init{SXYZ}
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.facing <= Facing

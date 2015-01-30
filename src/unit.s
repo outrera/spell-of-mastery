@@ -6,7 +6,7 @@ type unit.$class{Id World}
   serial
   class
   xyz/[0 0 -1] // world coordinates
-  sub_xyz/[0 0 0] // fine X,Y,Z
+  xy/[0 0] // fine X,Y
   next // next unit inside of this world cell
   column_next // next unit inside of this world column
   anim // animation id
@@ -22,7 +22,6 @@ type unit.$class{Id World}
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
-  from_xyz/[0 0 0]
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -68,7 +67,7 @@ unit.removed = $xyz.2 >< -1
 unit.move XYZ =
 | $remove
 | $xyz.init{XYZ}
-| $sub_xyz.init{[0 0 0]}
+| $xy.init{0,0}
 | $world.place_unit{Me}
 | $environment_updated
 
@@ -81,8 +80,8 @@ unit.environment_updated =
 
 unit.render FB X Y =
 | G = $frame
-| XX = X+32-G.w/2 
-| YY = Y-16-G.h+$slope*16
+| XX = X+32-G.w/2 + $xy.0
+| YY = Y-16-G.h+$slope*16 + $xy.1
 | when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
 | FB.blit{XX,YY G flipX/$flipX}
 

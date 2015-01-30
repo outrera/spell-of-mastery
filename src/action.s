@@ -20,14 +20,25 @@ act_move.valid A =
 | U.can_move_to{A.xyz}
 
 act_move.start A =
-| A.unit.from_xyz.init{A.unit.xyz}
+| A.cycles <= A.unit.speed
+| A.from_xy.init{A.unit.xy}
 | A.unit.move{A.xyz}
 
+Dirs = [[0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]]
+
 act_move.update A =
+| U = A.unit
+| X,Y,Z = A.from-U.xyz
+| XUnit = U.world.xunit
+| YUnit = U.world.yunit
+| when not (X and Y)
+  | !XUnit/2
+  | !YUnit/2
+| X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
+| A.unit.xy.init{A.from_xy + [X*XUnit Y*YUnit]*A.cycles/U.speed}
 
 act_move.finish A =
-| A.unit.from_xyz.init{0,0,0}
-
+| A.unit.xy.init{A.from_xy}
 
 type act_attack.act_class name/move anim/attack
 
@@ -44,13 +55,15 @@ type action{unit}
    class_name
    target // when action targets a unit
    xyz/[0 0 0] // target x,y,z
+   from/[0 0 0] // from x,y,z
+   from_xy/[0 0]
    cycles // cooldown cycles remaining till the action safe-to-change state
-   from // source cell of this action
    priority // used to check if action can be preempted
    data // data used by class
 
 action.init ClassName XYZ =
 | $xyz.init{XYZ}
+| $from.init{$unit.xyz}
 | $priority <= 50
 | $class <= ActionClasses.ClassName
 | $class_name <= ClassName
