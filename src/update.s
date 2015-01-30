@@ -5,16 +5,13 @@ main.update =
 | $world.update
 
 world.update =
-| $picked <= $picked^uncons{picked}.skip{?removed}^cons{picked}
 | $active <= $active^uncons{active}.keep{?update}^cons{active}
 | !$cycle + 1
 
-unit.can_move_to XYZ = 1
-
 unit.update =
 | when $removed: leave 0
-| when $ordered.valid
-  | when $ordered.priority >> $next_action.priority
+| when $ordered.class
+  | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
   | $ordered.class <= 0
 | till $action.cycles // action is done?

@@ -166,10 +166,11 @@ main.run =
             spacer{0 8}
             button{'Exit Program'   (=>get_gui{}.exit)}
 
-| Tabs <= tabs main_menu: t
+| Tabs <= tabs ingame: t
           main_menu(MainMenu)
           ingame(Ingame)
           scenario(ScenarioMenu)
 | BankList.pick{0}
-| pause
+| View.mode <= \editor
+//| pause
 | gui Tabs cursor/$img{ui_cursor_point}

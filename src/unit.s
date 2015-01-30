@@ -41,6 +41,7 @@ unit.init Class =
 | !$world.serial - 1
 | $animate{still}
 | $active <= 0
+| $picked <= 0
 | when $starts
   | $active <= $world.active
   | $world.active <= Me
@@ -70,6 +71,9 @@ unit.move XYZ =
 | $sub_xyz.init{[0 0 0]}
 | $world.place_unit{Me}
 | $environment_updated
+
+unit.can_move_to XYZ =
+| $world.at{XYZ}.empty and $world.units_at{XYZ}.all{?empty}
 
 unit.environment_updated =
 | [UX UY UZ] = $xyz

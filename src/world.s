@@ -55,6 +55,7 @@ type world{main size}
 
 world.clear =
 | for U $units: less U.removed: U.free
+| $active <= 0
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
@@ -73,6 +74,10 @@ world.get X Y Z =
   else Id
 
 world.set X Y Z V = $tilemap.set{[X Y Z] V}
+
+world.at XYZ =
+| X,Y,Z = XYZ
+| $tid_map.| if X < 0 or Y < 0 then $tid_map.0 else $get{X Y Z}
 
 world.slope_at XYZ = $slope_map.at{XYZ}
 

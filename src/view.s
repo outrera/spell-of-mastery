@@ -154,7 +154,7 @@ view.update_editor_pick X Y Z =
   | Us = $world.units_at{X,Y,Z}
   | when Us.size
     | !$pick_count+1
-    | $world.picked <= [$world.nil Us.($pick_count%Us.size)]^cons{picked}
+    | $world.picked <= [Us.($pick_count%Us.size)]^cons{picked}
   | $on_unit_pick{}{$world.picked}
   | $mice_left <= 0
 | when $mice_right
@@ -188,6 +188,8 @@ view.update_game X Y Z =
 
 view.update =
 | when $paused: leave 0
+| SanitizedPicked = $world.picked^uncons{picked}.skip{?removed}
+| $world.picked <= [$world.nil @SanitizedPicked]^cons{picked}
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | if $mode >< editor

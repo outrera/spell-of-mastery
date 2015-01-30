@@ -16,9 +16,8 @@ type act_move.act_class name/move anim/move
 
 act_move.valid A = 
 | U = A.unit
-| when U.xyz >< A.xyz: leave 0
-| when (A.xyz-U.xyz).all{?abs<<1} and not U.can_move_to{A.xyz}: leave 0
-| 1
+| less (A.xyz-U.xyz).all{?abs<<1}: leave 0
+| U.can_move_to{A.xyz}
 
 act_move.start A =
 | A.unit.from_xyz.init{A.unit.xyz}
@@ -33,6 +32,7 @@ ActionClasses = t still(act_still) move(act_move)
 
 type action{unit}
    class
+   class_name
    xyz/[0 0 0] // target x,y,z
    cycles // cooldown cycles remaining till the action safe-to-change state
    from // source cell of this action
@@ -43,6 +43,7 @@ action.init ClassName XYZ =
 | $xyz.init{XYZ}
 | $priority <= 50
 | $class <= ActionClasses.ClassName
+| $class_name <= ClassName
 | less got $class: bad "unknown action class [ClassName]"
 | $class.init{Me}
 | Me
