@@ -1,4 +1,4 @@
-use param sprite class tile world update ui save
+use param sprite class tile world update ui save generate
 
 type main{Data}
      world

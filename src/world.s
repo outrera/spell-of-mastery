@@ -107,17 +107,6 @@ world.set X Y Z Tile =
 | $dirty_set{X Y Z Tile}
 | $updElev{X,Y}
 
-world.generate W H =
-| $clear
-| $w <= W
-| $h <= H
-| Wall = $main.tiles.wall
-| Z = 1
-| for Y H: for X W: $dirty_set{X Y Z Wall}
-| !Z + 4
-| for Y H: for X W: $dirty_set{X Y Z Wall}
-| for P points{0 0 $w $h}: $updPilarGfxes{P}
-
 world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
