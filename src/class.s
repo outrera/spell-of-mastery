@@ -6,7 +6,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
-  sprite/Sprite
+  default_sprite/Sprite
   unit/Unit
   draw_order/(Draw_order</20)
   aux/Aux
@@ -16,7 +16,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   starts/Starts // non-zero if unit starts active
   
 
-class.height = $sprite.height
+class.height = $default_sprite.height
 
 main.load_classes =
 | Folder = "[$data]/classes/"
@@ -30,13 +30,13 @@ main.load_classes =
     | ParamsFile = "[BankFolder][Name].txt"
     | when ParamsFile.exists: load_params Params ParamsFile
     | R = class BankName Name @Params.list.join
-    | S = $sprites.(R.sprite)
-    | less got S: bad "missing sprite `[R.sprite]`"
-    | R.sprite <= S
+    | S = $sprites.(R.default_sprite)
+    | less got S: bad "missing sprite `[R.default_sprite]`"
+    | R.default_sprite <= S
     | "[BankName]_[Name]",R
 | for S $sprites{}{?1}.keep{?auto_class}
   | C = class S.bank S.name @S.auto_class
-  | C.sprite <= S
+  | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
 
 export class

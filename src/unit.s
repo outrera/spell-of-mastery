@@ -22,6 +22,7 @@ type unit.$class{Id World}
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
+  sprite
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -32,6 +33,7 @@ unit.main = $world.main
 
 unit.init Class =
 | $class <= Class
+| $sprite <= $default_sprite
 | $flipX <= 0
 | $facing <= 0
 | $next <= 0
@@ -52,6 +54,7 @@ unit.init Class =
 unit.animate Anim =
 | $anim <= Anim
 | $anim_seq <= $sprite.anims.$anim
+| less got $anim_seq: $anim_seq <= $sprite.anims.still
 | $anim_step <= 0
 | AnimFrame = $anim_seq.$anim_step
 | $frame <= $sprite.frames.AnimFrame
@@ -80,6 +83,7 @@ unit.environment_updated =
 
 unit.render FB X Y =
 | G = $frame
+| when G.w >< 1: leave 0 // avoid drawing dummies
 | XX = X+32-G.w/2 + $xy.0
 | YY = Y-16-G.h+$slope*16 + $xy.1
 | when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
