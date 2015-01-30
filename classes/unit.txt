@@ -5,3 +5,4 @@ speed: 24
 selectable: 1
 sight: 1
 starts: still
+invincible: 0

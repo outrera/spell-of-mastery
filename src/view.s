@@ -158,7 +158,17 @@ view.update_editor_pick X Y Z =
   | $on_unit_pick{}{$world.picked}
   | $mice_left <= 0
 | when $mice_right
-  | when $world.picked: $world.picked.order.init{move X,Y,Z}
+  | when $world.picked
+    | Unit = $world.picked
+    | Act = \move
+    | XYZ = X,Y,Z
+    | Target = 0
+    | when XYZ <> Unit.xyz
+      | Us = $world.units_at{XYZ}.skip{?empty}
+      | when Us.size
+        | Act <= \attack
+        | Target <= Us.0
+    | Unit.order.init{Act XYZ}.target <= Target
   | $mice_right <= 0
 | $main.update
 

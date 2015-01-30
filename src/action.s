@@ -28,11 +28,21 @@ act_move.update A =
 act_move.finish A =
 | A.unit.from_xyz.init{0,0,0}
 
-ActionClasses = t still(act_still) move(act_move)
+
+type act_attack.act_class name/move anim/attack
+
+act_attack.valid A = not: A.target.is_list or A.target.removed or A.target.empty
+
+act_attack.start A =
+| A.target.free
+
+
+ActionClasses = t still(act_still) move(act_move) attack(act_attack)
 
 type action{unit}
    class
    class_name
+   target // when action targets a unit
    xyz/[0 0 0] // target x,y,z
    cycles // cooldown cycles remaining till the action safe-to-change state
    from // source cell of this action
@@ -44,6 +54,7 @@ action.init ClassName XYZ =
 | $priority <= 50
 | $class <= ActionClasses.ClassName
 | $class_name <= ClassName
+| $cycles <= 0
 | less got $class: bad "unknown action class [ClassName]"
 | $class.init{Me}
 | Me
