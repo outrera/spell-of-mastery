@@ -73,11 +73,50 @@ world.get X Y Z =
 | if Id < 0 then $tilemap.at{[X Y Z-Id]}
   else Id
 
-world.set X Y Z V = $tilemap.set{[X Y Z] V}
-
 world.at XYZ =
 | X,Y,Z = XYZ
 | $tid_map.| if X < 0 or Y < 0 then $tid_map.0 else $get{X Y Z}
+
+world.set_ X Y Z V = $tilemap.set{[X Y Z] V}
+
+// FIXME: remove overlapping tiles above setted tile
+world.dirty_set X Y Z Tile =
+| H = $height{X Y}
+| when H < Z
+  | EmptyId = $main.tiles.empty.id
+  | while H < Z
+    | $set_{X,Y,H EmptyId}
+    | !H+1
+| when Z < H
+  | ZZ = Z
+  | BelowId = $tilemap.at{X,Y,ZZ}
+  | when BelowId < 0
+    | !ZZ-BelowId
+    | BelowId <= $tilemap.at{X,Y,ZZ}
+  | Below = $tid_map.BelowId
+  | ZZZ = ZZ - Below.height+1
+  | EmptyId = $main.tiles.empty.id
+  | while ZZZ < ZZ
+    | $set_{X Y ZZZ EmptyId}
+    | !ZZZ+1
+| H = Tile.height-1
+| times I H: $set_{X Y Z+I I-H} // push padding
+| $set_{X Y Z+H Tile.id}
+
+world.set X Y Z Tile =
+| $dirty_set{X Y Z Tile}
+| $updElev{X,Y}
+
+world.generate W H =
+| $clear
+| $w <= W
+| $h <= H
+| Wall = $main.tiles.wall
+| Z = 1
+| for Y H: for X W: $dirty_set{X Y Z Wall}
+| !Z + 4
+| for Y H: for X W: $dirty_set{X Y Z Wall}
+| for P points{0 0 $w $h}: $updPilarGfxes{P}
 
 world.slope_at XYZ = $slope_map.at{XYZ}
 
@@ -249,8 +288,8 @@ world.height X Y = MaxSize - $getPilar{X Y}.last.0
 world.push_ X,Y Tile =
 | Z = $height{X Y}
 | H = Tile.height-1
-| times I H: $set{X Y Z+I I-H} // push padding
-| $set{X Y Z+H Tile.id}
+| times I H: $set_{X Y Z+I I-H} // push padding
+| $set_{X Y Z+H Tile.id}
 
 
 // push Tile on top of pilar at X,Y
@@ -258,15 +297,17 @@ world.push XY Tile =
 | $push_{XY Tile}
 | $updElev{XY}
 
-// pop top tile of pilar at X,Y
-world.pop X,Y =
+world.pop_ X,Y =
 | H = $height{X Y}
 | less H: leave 0
 | Z = H-1
 | $set_slope_at{X,Y,Z #@0000}
 | T = $tid_map.($get{X Y Z})
-| times I T.height: $set{X Y Z-I 0}
-| $updElev{X,Y}
+| times I T.height: $set_{X Y Z-I 0}
 
+// pop top tile of pilar at X,Y
+world.pop XY =
+| $pop_{XY}
+| $updElev{XY}
 
 export world

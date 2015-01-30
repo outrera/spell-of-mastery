@@ -130,6 +130,7 @@ main.run =
   | pause
   | WorldProperties.show <= 1
 | PlayIcon = icon data/pick $img{icons_play} click: Icon =>
+  | $world.generate{$world.w $world.h}
 | SaveIcon = icon data/pick $img{icons_save} click: Icon =>
   | $save{"[$data]/work/worlds/test.txt"}
   //| show_message 'Saved' 'Your map is saved!'
