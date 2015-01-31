@@ -9,7 +9,7 @@ world.update =
 | !$cycle + 1
 
 unit.update =
-| when $removed: leave 0
+| when $removed or $deactivated: leave 0
 | when $ordered.class
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action

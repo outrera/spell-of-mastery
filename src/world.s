@@ -70,8 +70,6 @@ world.alloc_unit ClassName =
 | U
 
 world.free_unit U =
-| when U.active
-  | $active <= $active^uncons{active}.skip{?id >< U.id}^cons{active}
 | U.remove
 | $free_units.push{U}
 

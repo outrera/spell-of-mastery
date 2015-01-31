@@ -19,6 +19,7 @@ type unit.$class{Id World}
   owner // player controlling this unit
   picked // cons of the next unit in the selection
   active // cons used to hold this unit inside the world active units list
+  deactivated
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
@@ -41,10 +42,11 @@ unit.init Class =
 | $serial <= $world.serial
 | !$world.serial - 1
 | $animate{still}
-| $active <= 0
 | $picked <= 0
+| $deactivated <= 1
 | when $starts
-  | $active <= $world.active
+  | less $active: $active <= $world.active
+  | $deactivated <= 0
   | $world.active <= Me
   | $ordered.class <= 0
   | $next_action.class <= 0
