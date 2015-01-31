@@ -4,8 +4,6 @@ use gui util widgets
 TileW = 64
 TileH = 32
 
-ViewDim = 32 // render 32x32 world chunk
-
 type view.widget{M W H}
   main/M
   fb // frame buffer
@@ -36,6 +34,7 @@ type view.widget{M W H}
   fpsD/30.0
   param
   on_unit_pick/(Picked=>)
+  view_size/32  // render 32x32 world chunk
 | $fb <= gfx W H
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
@@ -52,6 +51,8 @@ view.world = $main.world
 
 view.render_iso = 
 | Wr = $world
+| TileW = Wr.xunit
+| TileH = Wr.yunit
 | FB = $fb
 | WorldParams = $main.params.world
 | ZUnit = WorldParams.z_unit
@@ -63,7 +64,7 @@ view.render_iso =
 | BX = TX
 | BY = TY
 | Y = 0
-| while Y < ViewDim
+| while Y < $view_size
   | VY = VY+Y
   | !Y + 1
   | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy $cell_z}
@@ -78,6 +79,7 @@ view.render_iso =
   | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy $cell_z}
   | !BX + TileH
   | !BY + TileH2
+
 
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
