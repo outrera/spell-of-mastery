@@ -38,15 +38,18 @@ view.render_iso =
     | Gs = Gfxes.X.Y
     | BX = (XX*TileW - YY*TileW)/2
     | BY = (XX*TileH + YY*TileH)/2
-    | Heap.push{VX+VY*WW [X Y BX BY Gs.0]}
+    | Heap.push{(X+Y)*WW*WH+X [X Y BX BY Gs.0]}
 | F = font small
+| Order = 0
 | while!it Heap.pop:
   | [X Y BX BY G] = it.value
   //| say [X Y BX BY]
   | BX = TX + BX
   | BY = TY + BY-G.h
   | FB.blitRaw{BX BY G}
-  | F.draw{FB BX+18 BY+4 blue "[X],[Y]"}
+  //| F.draw{FB BX+18 BY+4 blue "[X],[Y]"}
+  | F.draw{FB BX+18 BY+4 red "[Order]"}
+  | !Order+1
 
 type main{Data}
      world
