@@ -49,6 +49,7 @@ view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.world = $main.world
 
+/*
 view.render_iso = 
 | Wr = $world
 | TileW = Wr.xunit
@@ -79,7 +80,7 @@ view.render_iso =
   | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy $cell_z}
   | !BX + TileH
   | !BY + TileH2
-
+*/
 
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
@@ -120,7 +121,7 @@ view.render =
 view.worldToView P =
 | [X Y] = P - $view_origin
 | RX = (X*TileW - Y*TileW)/2
-| RY = (X*TileH - Y*TileH)/2
+| RY = (X*TileH + Y*TileH)/2
 | [RX RY] + $blit_origin
 
 view.viewToWorld P =
