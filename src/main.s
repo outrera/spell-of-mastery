@@ -1,15 +1,18 @@
 use util heap widgets param sprite class tile world update ui save generate
 
+XUnit = No
+YUnit = No
+ZUnit = No
 YDiv = No
 
-world.draw_pick V Front FB X Y H =
-| !H*$zunit
+draw_pick V Front FB X Y H =
+| !H*ZUnit
 | !Y - H
 | !Y - 2
-| !Y+$yunit/2
+| !Y+YUnit/2
 | A = [X Y]
-| B = [X+$xunit/2 if Front then y+$yunit/2 else Y-$yunit/2]
-| C = [X+$xunit Y]
+| B = [X+XUnit/2 if Front then y+YUnit/2 else Y-YUnit/2]
+| C = [X+XUnit Y]
 | FB.line{V A B}
 | FB.line{V B C}
 | FB.line{V A+[0 H] B+[0 H]}
@@ -18,11 +21,9 @@ world.draw_pick V Front FB X Y H =
 | FB.line{V B B+[0 H]}
 | FB.line{V C C+[0 H]}
 
-world.render_pilar X Y BX BY FB CursorXY CursorZ =
-| when X < 0 or X >> $size: leave 0
-| when Y < 0 or Y >> $size: leave 0
-| !BY + 32
-| Gs = $gfxes.X.Y
+render_pilar Wr X Y BX BY FB CursorXY CursorZ =
+| BY = BY + 32
+| Gs = Wr.gfxes.X.Y
 | CurX = CursorXY.0
 | CurY = CursorXY.1
 | CurH = (CurX+CurY)/2
@@ -30,39 +31,42 @@ world.render_pilar X Y BX BY FB CursorXY CursorZ =
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
-//| TileShadow = $main.sprites.system_tile_shadow.frames.0
+//| TileShadow = Wr.main.sprites.system_tile_shadow.frames.0
 | for G Gs: if G.is_int
   then | when Cursor
-         | $draw_pick{#FF0000 0 FB BX BY-$yunit-Z*$zunit G}
-         | $draw_pick{#00FF00 1 FB BX BY-$yunit-Z*$zunit G}
+         | draw_pick{#FF0000 0 FB BX BY-YUnit-Z*ZUnit G}
+         | draw_pick{#00FF00 1 FB BX BY-YUnit-Z*ZUnit G}
        | !Z+G
-  else | T = $tid_map.($get{X Y Z})
+  else | T = Wr.tid_map.(Wr.get{X Y Z})
        | TH = T.height
-       | ZZ = Z*$zunit
-       | when Cursor | $draw_pick{#FF0000 0 FB BX BY-$yunit-ZZ TH}
+       | ZZ = Z*ZUnit
+       | when Cursor | draw_pick{#FF0000 0 FB BX BY-YUnit-ZZ TH}
        | XY2 = (X+Y)/2
        | when CurH >> XY2 or Z << CursorZ or XY2-CurHH-Z/YDiv >> 0:
          | FB.blitRaw{BX BY-G.h-ZZ G}
-       //| when T.shadow and $slope_at{X+1,Y,Z+TH*2-1} >< #@1111:
+       //| when T.shadow and Wr.slope_at{X+1,Y,Z+TH*2-1} >< #@1111:
        //  | FB.blit{[BX BY-G.h-ZZ] TileShadow}
        | UnitZ <= Z + TH
-       | for U $units_at{X,Y,UnitZ}: U.render{FB BX BY-$zunit*UnitZ}
-       | when Cursor | $draw_pick{#00FF00 1 FB BX BY-$yunit-ZZ TH}
+       //| for U Wr.units_at{X,Y,UnitZ}: U.render{FB BX BY-ZUnit*UnitZ}
+       | when Cursor | draw_pick{#00FF00 1 FB BX BY-YUnit-ZZ TH}
        | Z <= UnitZ
-| for U $column_units_at{X Y}
+| for U Wr.column_units_at{X Y}
   | Z = U.xyz.2
   | when Z > UnitZ
     | !Z+1
-    | U.render{FB BX BY-$zunit*Z+$zunit}
-    | S = $shadows.(2-min{(Z-UnitZ)/2-2 2})
-    | FB.blit{[BX-S.w/2+32 BY-S.h-UnitZ*$zunit] S}
+    | U.render{FB BX BY-ZUnit*Z+ZUnit}
+    | S = Wr.shadows.(2-min{(Z-UnitZ)/2-2 2})
+    | FB.blit{[BX-S.w/2+32 BY-S.h-UnitZ*ZUnit] S}
 
 
 view.render_iso = 
 | Wr = $world
-| XUnit = Wr.xunit
-| YUnit = Wr.yunit
-| ZUnit = Wr.zunit
+| XUnit <= Wr.xunit
+| YUnit <= Wr.yunit
+| ZUnit <= Wr.zunit
+| XUnit = XUnit
+| YUnit = YUnit
+| ZUnit = ZUnit
 | YDiv <= YUnit/ZUnit
 | FB = $fb
 | Z = if $mice_left or $mice_right then $mice_z else $cell_z
@@ -84,17 +88,16 @@ view.render_iso =
       | Gs = Gfxes.X.Y
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
-      | Heap.push{(X+Y)*WW*WH+X [X Y BX BY Gs.0]}
+      | Key = (X+Y)*WW*WH+X
+      | Heap.push{Key [BX BY Gs.0]}
 | F = font small
 | Order = 0
 | while!it Heap.pop:
-  | [X Y BX BY G] = it.value
-  //| say [X Y BX BY]
+  | [BX BY G] = it.value
   | BX = TX + BX
   | BY = TY + BY-G.h
   | FB.blitRaw{BX BY G}
-  //| F.draw{FB BX+18 BY+4 blue "[X],[Y]"}
-  | F.draw{FB BX+18 BY+4 red "[Order]"}
+  //| F.draw{FB BX+18 BY+4 red "[Order]"}
   | !Order+1
 
 
@@ -194,4 +197,4 @@ main.spr Name =
 
 @run: main: main_root
 
-say 'Succeed!'
+say 'Goodbye!'
