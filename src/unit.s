@@ -18,8 +18,7 @@ type unit.$class{Id World}
   flipX
   owner // player controlling this unit
   picked // cons of the next unit in the selection
-  active // cons used to hold this unit inside the world active units list
-  deactivated
+  active // true if this unit resides in the list of active units
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
@@ -43,11 +42,10 @@ unit.init Class =
 | !$world.serial - 1
 | $animate{still}
 | $picked <= 0
-| $deactivated <= 1
 | when $starts
-  | less $active: $active <= $world.active
-  | $deactivated <= 0
-  | $world.active <= Me
+  | less $active
+    | $world.active.push{Me}
+    | $active <= 1
   | $ordered.class <= 0
   | $next_action.class <= 0
   | $action.init{still 0,0,0}
@@ -62,6 +60,7 @@ unit.animate Anim =
 | $frame <= $sprite.frames.AnimFrame
 
 unit.free = $world.free_unit{Me}
+
 
 unit.remove =
 | $world.remove_unit{Me}
@@ -91,7 +90,7 @@ unit.render Heap X Y =
 | Flags = $flipX
 | when $picked: !Flags ++ #2
 | UX,UY,UZ = $xyz
-| Key = ((UX+UY+1)</20) + ((UZ-1)</10) + X
+| Key = (UZ</20) + ((UX+UY+1)</10) + X
 | Heap.push{Key [G XX YY Flags]}
 
 unit.order = $ordered

@@ -19,9 +19,6 @@ act_move.valid A =
 | less (A.xyz-U.xyz).all{?abs<<1}: leave 0
 | U.can_move_to{A.xyz}
 
-// dirs requiring dummy to avoid overlapping unit with tiles
-OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
-
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
 act_move.start A =
@@ -29,44 +26,30 @@ act_move.start A =
 | A.cycles <= U.speed
 | FromXYZ = U.xyz.copy
 | X,Y,Z = A.xyz - FromXYZ
-| WithDummy = got OverlapDirs.locate{X,Y}
 | From = U.world.alloc_unit{unit_nil}
 | A.from <= From
 | From.xy.init{U.xy}
 | U.move{A.xyz}
 | From.move{FromXYZ}
-| if WithDummy
-  then | swap U.sprite From.sprite
-       | U.animate{still}
-       | From.animate{move}
-       | From.picked <= U.picked
-  else | U.animate{move}
-       | From.animate{still}
+| U.animate{move}
+| From.animate{still}
 
 act_move.update A =
 | U = A.unit
 | From = A.from
-| WithDummy = From.anim >< move
-| X,Y,Z = if WithDummy then U.xyz-From.xyz else From.xyz-U.xyz
+| X,Y,Z = From.xyz-U.xyz
 | XUnit = U.world.xunit
 | YUnit = U.world.yunit
 | when not (X and Y)
   | !XUnit/2
   | !YUnit/2
 | X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
-| if WithDummy
-  then | M = A.start_cycles-A.cycles
-       | NewXY = A.unit.xy + [X*XUnit Y*YUnit]*M/A.start_cycles
-       | From.xy.init{NewXY}
-  else U.xy.init{From.xy + [X*XUnit Y*YUnit]*A.cycles/A.start_cycles}
+| U.xy.init{From.xy + [X*XUnit Y*YUnit]*A.cycles/A.start_cycles}
 
 act_move.finish A =
 | U = A.unit
 | From = A.from
-| if From.anim >< move
-  then | swap U.sprite From.sprite
-       | swap U.picked From.picked
-  else U.xy.init{From.xy}
+| U.xy.init{From.xy}
 | U.animate{still}
 | From.free
 

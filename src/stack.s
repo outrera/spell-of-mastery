@@ -18,6 +18,8 @@ stack.alloc @Xs =
 
 stack.size = $xs.size
 
+stack.clear = $used <= 0
+
 stack.`.` Index = $xs.($used - Index)
 
 export stack

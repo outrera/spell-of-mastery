@@ -5,11 +5,18 @@ main.update =
 | $world.update
 
 world.update =
-| $active <= $active^uncons{active}.keep{?update}^cons{active}
+| NextActive = []
+| while $active.used
+  | U = $active.pop
+  | U.update
+  | when U.active: push U NextActive
+| for U NextActive: $active.push{U}
 | !$cycle + 1
 
 unit.update =
-| when $removed or $deactivated: leave 0
+| when $removed
+  | $active <= 0
+  | leave 0
 | when $ordered.class
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action

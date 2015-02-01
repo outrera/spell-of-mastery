@@ -2,6 +2,7 @@ use util octree unit stack heap
 
 MaxSize = No
 MaxUnits = No
+MaxActiveUnits = 4096
 
 type world{main size}
    w/Size
@@ -40,6 +41,7 @@ type world{main size}
 | $slope_map <= octree MaxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
+| $active <= stack MaxActiveUnits
 | $filler <= $main.tiles.base_
 | SS = Size*Size
 | $gfxes <= ($w){_=>($h){_=>[]}}
@@ -49,11 +51,10 @@ type world{main size}
 | $nil <= $alloc_unit{unit_nil}
 | $shadows <= $main.sprites.unit_shadows.frames
 
-
 world.clear =
 | for U $units: less U.removed: U.free
 | $tilemap.clear{0}
-| $active <= 0
+| $active.clear
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
@@ -207,7 +208,7 @@ world.updPilarGfxes P =
          | Below <= C
          | !Z + 1
 | _label for_break
-| $gfxes.X.Y <= Gs.flip //FIXME: use `init` method instead
+| $gfxes.Y.X <= Gs.flip //FIXME: use `init` method instead
 | for U $column_units_at{X Y}: U.environment_updated
 
 world.updElev P =

@@ -73,7 +73,7 @@ draw_cursor V Front FB X Y H =
 | FB.line{V C C+[0 H]}
 
 render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
-| Gs = Wr.gfxes.X.Y
+| Gs = Wr.gfxes.Y.X
 | CurX = CursorXY.0
 | CurY = CursorXY.1
 | CurH = (CurX+CurY)/2
@@ -83,7 +83,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
-| Key = ((X+Y)</20) + X
+| Key = ((X+Y)</10) + X
 | for G Gs: if G.is_int
   then | when Cursor
          | BY = BY-YUnit-Z*ZUnit
@@ -94,7 +94,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
   else | T = Wr.tid_map.(Wr.get{X Y Z})
        | TH = T.height
        | ZZ = Z*ZUnit
-       | Key = Key + (Z</10)
+       | Key = Key + (Z</20)
        | when Cursor | Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
        | UnitZ <= Z + TH
        | when AboveCursor or Z << CursorZ or CurHH-Z/YDiv >> 0:
@@ -109,7 +109,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
     | !Z+1
     | U.render{Heap BX BY-ZUnit*Z-ZUnit}
     | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2})
-    | Key = Key + (UnitZ</10) + 1
+    | Key = Key + (UnitZ</20) + 1
     | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
 
 view.render_iso = 
@@ -123,7 +123,6 @@ view.render_iso =
 | TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
 | Heap = heap
-| Gfxes = Wr.gfxes
 | WW = Wr.w
 | WH = Wr.h
 | VS = $view_size
@@ -134,7 +133,6 @@ view.render_iso =
   | when 0<<Y and Y<WH: times XX VS:
     | X = XX + VX
     | when 0<<X and X<WW: // FIXME: moved this out of the loop
-      | Gs = Gfxes.X.Y
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
       | render_pilar Wr X Y BX BY Heap $cell_xy $cell_z
