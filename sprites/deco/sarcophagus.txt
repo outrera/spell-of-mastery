@@ -1,2 +1,3 @@
+author: Reemax, `Nikita Sadkov`
 height: 12
-xy: 16,16
+xy: 16,14
