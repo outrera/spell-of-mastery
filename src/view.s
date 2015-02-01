@@ -83,7 +83,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
-| Key = ((X+Y)</10) + X
+| Key = ((X+Y)</20) + X
 | for G Gs: if G.is_int
   then | when Cursor
          | BY = BY-YUnit-Z*ZUnit
@@ -94,7 +94,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
   else | T = Wr.tid_map.(Wr.get{X Y Z})
        | TH = T.height
        | ZZ = Z*ZUnit
-       | Key = Key + (Z</20)
+       | Key = Key + (Z</10)
        | when Cursor | Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
        | UnitZ <= Z + TH
        | when AboveCursor or Z << CursorZ or CurHH-Z/YDiv >> 0:
@@ -109,7 +109,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
     | !Z+1
     | U.render{Heap BX BY-ZUnit*Z-ZUnit}
     | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2})
-    | Key = Key + (UnitZ</20) + 1
+    | Key = Key + (UnitZ</10) + 1
     | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
 
 view.render_iso = 

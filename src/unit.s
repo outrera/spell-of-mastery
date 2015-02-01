@@ -90,7 +90,7 @@ unit.render Heap X Y =
 | Flags = $flipX
 | when $picked: !Flags ++ #2
 | UX,UY,UZ = $xyz
-| Key = (UZ</20) + ((UX+UY+1)</10) + X
+| Key = ((UX+UY)</20) + (UZ</10) + X
 | Heap.push{Key [G XX YY Flags]}
 
 unit.order = $ordered
