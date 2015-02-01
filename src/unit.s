@@ -39,7 +39,7 @@ unit.init Class =
 | $next <= 0
 | $column_next <= 0
 | $serial <= $world.serial
-| !$world.serial - 1
+| !$world.serial + 1
 | $animate{still}
 | $picked <= 0
 | when $starts
@@ -90,7 +90,7 @@ unit.render Heap X Y =
 | Flags = $flipX
 | when $picked: !Flags ++ #2
 | UX,UY,UZ = $xyz
-| Key = ((UX+UY)</20) + ((UZ*2-1)</10)
+| Key = ((UX+UY)</40) + ((UZ*2-1)</30) + ((UX+$draw_order)</21) + $serial
 | Heap.push{Key [G XX YY Flags]}
 
 unit.order = $ordered

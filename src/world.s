@@ -19,7 +19,7 @@ type world{main size}
    filler
    shadows
    cycle // counts calls to world.update
-   serial/((1</20)-1) // used to generate serial numbers for units
+   serial
    turn // turn in terms of game logic
    picked
    nil // null unit with id >< 0
@@ -124,18 +124,14 @@ world.column_units_at X Y =
 | when!it $unit_map.at{X,Y,0}: leave $units.it^uncons{column_next}
 | []
 
-cons_next F Xs = Xs.sortBy{F}.flip^cons{next}
-
-cons_column_next F Xs = Xs.sortBy{F}.flip^cons{column_next}
-
 world.place_unit U =
 | XYZ = U.xyz
 | Us = U,@$units_at{XYZ}
-| Consed = Us^cons_next{?draw_order++?serial}
+| Consed = Us^cons{next}
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ Id}
 | Us = U,@$column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
-| Consed = Us^cons_column_next{?xyz.2}
+| Consed = Us^cons{column_next}
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 U.id}
 
@@ -143,11 +139,11 @@ world.remove_unit U =
 | XYZ = U.xyz
 | when XYZ.2 >< -1: leave
 | Us = $units_at{XYZ}.skip{?id >< U.id}
-| Consed = Us^cons_next{?draw_order++?serial}
+| Consed = Us^cons{next}
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ Id}
 | Us = $column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
-| Consed = Us^cons_column_next{?xyz.2}
+| Consed = Us^cons{column_next}
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 

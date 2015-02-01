@@ -8,7 +8,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   empty/Empty
   default_sprite/Sprite
   unit/Unit
-  draw_order/(Draw_order</20)
+  draw_order/Draw_order
   aux/Aux
   shadow/Shadow // unit casts shadow in air
   moves/Moves // moves per turn
