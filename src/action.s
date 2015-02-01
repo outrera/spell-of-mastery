@@ -10,7 +10,7 @@ act_class.finish A =
 
 type act_still.act_class name/still anim/still
 
-act_still.start A = A.cycles <= 4
+act_still.start A =  when A.cycles >< -1: A.cycles <= 4
 
 type act_move.act_class name/move anim/move
 
@@ -24,9 +24,9 @@ OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
 
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
-act_move.start A =
+
+move_start A =
 | U = A.unit
-| A.cycles <= U.speed
 | FromXYZ = U.xyz.copy
 | X,Y,Z = A.xyz - FromXYZ
 | WithDummy = got OverlapDirs.locate{X,Y}
@@ -43,7 +43,7 @@ act_move.start A =
   else | U.animate{move}
        | From.animate{still}
 
-act_move.update A =
+move_update A =
 | U = A.unit
 | From = A.from
 | WithDummy = From.anim >< move
@@ -60,7 +60,7 @@ act_move.update A =
        | From.xy.init{NewXY}
   else U.xy.init{From.xy + [X*XUnit Y*YUnit]*A.cycles/A.start_cycles}
 
-act_move.finish A =
+move_finish A =
 | U = A.unit
 | From = A.from
 | if From.anim >< move
@@ -70,13 +70,41 @@ act_move.finish A =
 | U.animate{still}
 | From.free
 
+act_move.start A =
+| when A.cycles >< -1: A.cycles <=  A.unit.speed
+| move_start A
+
+act_move.update A = move_update A
+
+act_move.finish A = move_finish A
+
 type act_attack.act_class name/move anim/attack
 
 act_attack.valid A = not: A.target.is_list or A.target.removed or A.target.empty
 
-act_attack.start A =
-| A.target.free
+act_attack.init A =
+| A.data <= 0
 
+act_attack.start A =
+| U = A.unit
+| A.cycles <= max 1 U.speed/2
+| move_start A
+
+act_attack.update A =
+| move_update A
+| when A.cycles >< 1 and not A.data:
+  | FromXYZ = A.from.xyz.copy
+  | move_finish A
+  | A.target.free
+  | A.target <= 0
+  | U = A.unit
+  | A.xyz.init{FromXYZ}
+  | A.cycles <= max 1 U.speed*2/3
+  | move_start A
+  | A.data <= 1
+
+act_attack.finish A =
+| move_finish A
 
 ActionClasses = t still(act_still) move(act_move) attack(act_attack)
 
@@ -97,7 +125,7 @@ action.init ClassName XYZ =
 | $priority <= 50
 | $class <= ActionClasses.ClassName
 | $class_name <= ClassName
-| $cycles <= 0
+| $cycles <= -1
 | less got $class: bad "unknown action class [ClassName]"
 | $class.init{Me}
 | Me
