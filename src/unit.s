@@ -83,13 +83,18 @@ unit.environment_updated =
 | [UX UY UZ] = $xyz
 | $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@1111 => 0
 
-unit.render FB X Y =
+unit.render Heap X Y =
 | G = $frame
 | when G.w >< 1: leave 0 // avoid drawing dummies
 | XX = X+32-G.w/2 + $xy.0
 | YY = Y-16-G.h+$slope*16 + $xy.1
-| when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
-| FB.blit{XX,YY G flipX/$flipX}
+| Flags = $flipX
+| when $picked: !Flags ++ #2
+//| when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
+//| FB.blit{XX,YY G flipX/$flipX}
+| UX,UY,UZ = $xyz
+| Key = ((UX+UY)</20) + (UZ</10) + X
+| Heap.push{Key [G XX YY Flags]}
 
 unit.order = $ordered
 
