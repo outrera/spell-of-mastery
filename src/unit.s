@@ -90,10 +90,8 @@ unit.render Heap X Y =
 | YY = Y-16-G.h+$slope*16 + $xy.1
 | Flags = $flipX
 | when $picked: !Flags ++ #2
-//| when $picked: FB.rect{#00FF00 0 XX YY G.w G.h}
-//| FB.blit{XX,YY G flipX/$flipX}
 | UX,UY,UZ = $xyz
-| Key = ((UX+UY)</20) + (UZ</10) + X
+| Key = ((UX+UY+1)</20) + ((UZ-1)</10) + X
 | Heap.push{Key [G XX YY Flags]}
 
 unit.order = $ordered

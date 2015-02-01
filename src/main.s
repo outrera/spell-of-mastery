@@ -100,11 +100,14 @@ view.render_iso =
   | [G BX BY F] = it.value
   | BX = TX + BX
   | BY = TY + BY
-  | if F // check flags
-    then if F ^^ #1 then FB.blit{BX,BY G flipX/1}
-         else if F ^^ #4000 then draw_cursor{#FF0000 0 FB BX BY F/>16}
-         else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
-         else bad "blitter flags [F]"
+  | if F then // check flags
+     | when F ^^ #2
+       | FB.rect{#00FF00 0 BX BY G.w G.h}
+       | !F -- #2
+     | if F ^^ #1 then FB.blit{BX,BY G flipX/1}
+       else if F ^^ #4000 then draw_cursor{#FF0000 0 FB BX BY F/>16}
+       else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
+       else FB.blitRaw{BX BY G}
     else FB.blitRaw{BX BY G}
   //| Font.draw{FB BX+18 BY+4 red "[Order]"}
   //| !Order+1
