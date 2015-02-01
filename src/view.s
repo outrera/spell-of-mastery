@@ -275,7 +275,7 @@ view.update_game X Y Z =
 | $main.update
 
 view.update =
-| when $paused: leave 0
+| when $paused: leave
 | SanitizedPicked = $world.picked^uncons{picked}.skip{?removed}
 | $world.picked <= [$world.nil @SanitizedPicked]^cons{picked}
 | X,Y = $cell_xy

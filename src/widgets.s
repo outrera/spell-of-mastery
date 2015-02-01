@@ -50,7 +50,7 @@ txt.as_text = "#txt{[$value]}"
 txt.value = $value_
 txt.`!value` Text =
 | Text <= "[Text]"
-| when $value_ >< Text: leave 0
+| when $value_ >< Text: leave
 | $value_ <= Text
 | F = $font
 | $w <= $value_.lines{}{L => F.width{L}}.max
@@ -70,7 +70,7 @@ type button.widget{Text Fn state/normal w_size/large h_size/medium}
   value/Text on_click/Fn state/State over w_size/W_size h_size/H_size
   cache/No
 button.reskin =
-| when got $cache: leave 0
+| when got $cache: leave
 | $cache <= t
 | WSize = $w_size
 | HSize = $h_size
@@ -176,7 +176,7 @@ type litems.$box{Xs w/160 lines/5 f/(V=>)} f/F ih/No lines/Lines xs/Xs box picke
 | $offset <= 0
 litems.offset = $o
 litems.`!offset` NO =
-| when NO >< $o: leave 0
+| when NO >< $o: leave
 | $o <= max 0: @clip 0 $xs.size-1 NO
 | times K $lines
   | I = $o + K
@@ -194,7 +194,7 @@ litems.`!data` Ys =
 | $o <= No
 | $offset <= 0
 litems.pick NP =
-| less $xs.size: leave 0
+| less $xs.size: leave
 | NP <= @clip 0 $xs.size-1 NP
 | when NP <> $picked
   | K = $picked - $o

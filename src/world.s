@@ -141,7 +141,7 @@ world.place_unit U =
 
 world.remove_unit U =
 | XYZ = U.xyz
-| when XYZ.2 >< -1: leave 0
+| when XYZ.2 >< -1: leave
 | Us = $units_at{XYZ}.skip{?id >< U.id}
 | Consed = Us^cons_next{?draw_order++?serial}
 | Id = if Consed then Consed.id else 0
@@ -231,7 +231,7 @@ world.push XY Tile =
 
 world.pop_ X,Y =
 | H = $height{X Y}
-| less H: leave 0
+| less H: leave
 | Z = H-1
 | $set_slope_at{X,Y,Z #@0000}
 | T = $tid_map.($get{X Y Z})

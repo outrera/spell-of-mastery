@@ -16,7 +16,7 @@ world.update =
 unit.update =
 | when $removed
   | $active <= 0
-  | leave 0
+  | leave
 | when $ordered.class
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action

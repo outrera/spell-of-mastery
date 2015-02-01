@@ -84,7 +84,7 @@ unit.environment_updated =
 
 unit.render Heap X Y =
 | G = $frame
-| when G.w >< 1: leave 0 // avoid drawing dummies
+| when G.w >< 1: leave// avoid drawing dummies
 | XX = X+32-G.w/2 + $xy.0
 | YY = Y-16-G.h+$slope*16 + $xy.1
 | Flags = $flipX
