@@ -1,8 +1,10 @@
-use gui util widgets
+use gui util widgets heap 
 
 
-TileW = 64
-TileH = 32
+XUnit = No
+YUnit = No
+ZUnit = No
+YDiv = No
 
 type view.widget{M W H}
   main/M
@@ -39,6 +41,11 @@ type view.widget{M W H}
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
 | $param <= $main.params.ui
+| Wr = $world
+| XUnit <= Wr.xunit
+| YUnit <= Wr.yunit
+| ZUnit <= Wr.zunit
+| YDiv <= YUnit/ZUnit
 
 view.init =
 | $fpsT <= clock
@@ -49,38 +56,108 @@ view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.world = $main.world
 
-/*
+draw_cursor V Front FB X Y H =
+| !H*ZUnit
+| !Y - H
+| !Y - 2
+| !Y+YUnit/2
+| A = [X Y]
+| B = [X+XUnit/2 if Front then Y+YUnit/2 else Y-YUnit/2]
+| C = [X+XUnit Y]
+| FB.line{V A B}
+| FB.line{V B C}
+| FB.line{V A+[0 H] B+[0 H]}
+| FB.line{V B+[0 H] C+[0 H]}
+| FB.line{V A A+[0 H]}
+| FB.line{V B B+[0 H]}
+| FB.line{V C C+[0 H]}
+
+render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
+| Gs = Wr.gfxes.X.Y
+| CurX = CursorXY.0
+| CurY = CursorXY.1
+| CurH = (CurX+CurY)/2
+| XY2 = (X+Y)/2
+| AboveCursor = CurH >> XY2
+| CurHH = XY2-CurH-2
+| Cursor = same X CurX and Y >< CurY
+| Z = 0
+| UnitZ = 0
+| Key = ((X+Y)</20) + X
+| for G Gs: if G.is_int
+  then | when Cursor
+         | BY = BY-YUnit-Z*ZUnit
+         | Key = Key + (Z</10)
+         | Heap.push{Key [G BX BY #4000+(G</16)]}
+         | Heap.push{Key+1 [G BX BY #8000+(G</16)]}
+       | !Z+G
+  else | T = Wr.tid_map.(Wr.get{X Y Z})
+       | TH = T.height
+       | ZZ = Z*ZUnit
+       | Key = Key + (Z</10)
+       | when Cursor | Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
+       | UnitZ <= Z + TH
+       | when AboveCursor or Z << CursorZ or CurHH-Z/YDiv >> 0:
+         | Heap.push{Key [G BX BY-G.h-ZZ 0]}
+         | for U Wr.units_at{X,Y,UnitZ}: U.render{Heap BX BY-ZUnit*UnitZ}
+       | when Cursor | Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
+       | Z <= UnitZ
+| for U Wr.column_units_at{X Y}
+  | Z = U.xyz.2
+  // FIXME: should we always display flying units? even underground?
+  | when Z > UnitZ
+    | !Z+1
+    | U.render{Heap BX BY-ZUnit*Z-ZUnit}
+    | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2})
+    | Key = Key + (UnitZ</10) + 1
+    | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
+
 view.render_iso = 
 | Wr = $world
-| TileW = Wr.xunit
-| TileH = Wr.yunit
+| XUnit = XUnit
+| YUnit = YUnit
+| ZUnit = ZUnit
 | FB = $fb
-| WorldParams = $main.params.world
-| ZUnit = WorldParams.z_unit
-| YDiv = WorldParams.y_unit/ZUnit
 | Z = if $mice_left or $mice_right then $mice_z else $cell_z
-| TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit
+| BlitOrigin = [$w/2 170]
+| TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
-| TileH2 = TileH/2
-| BX = TX
-| BY = TY
-| Y = 0
-| while Y < $view_size
-  | VY = VY+Y
-  | !Y + 1
-  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy $cell_z}
-  | !BX - TileH
-  | !BY + TileH2
-| VX = VX+Y
-| VY = VY+Y-1
-| BX = BX + TileW
-| while Y > 0
-  | !Y - 1
-  | VX = VX-Y
-  | times N Y: Wr.drawPilar{VX+N VY-N BX+N*TileW BY FB $cell_xy $cell_z}
-  | !BX + TileH
-  | !BY + TileH2
-*/
+| Heap = heap
+| Gfxes = Wr.gfxes
+| WW = Wr.w
+| WH = Wr.h
+| VS = $view_size
+| XUnit2 = XUnit/2
+| YUnit2 = YUnit/2
+| times YY VS
+  | Y = YY + VY
+  | when 0<<Y and Y<WH: times XX VS:
+    | X = XX + VX
+    | when 0<<X and X<WW: // FIXME: moved this out of the loop
+      | Gs = Gfxes.X.Y
+      | BX = XX*XUnit2 - YY*XUnit2
+      | BY = XX*YUnit2 + YY*YUnit2
+      | render_pilar Wr X Y BX BY Heap $cell_xy $cell_z
+      //| Key = (X+Y)*WW*WH+X
+      //| Heap.push{Key [Gs.0 BX BY 0]}
+//| Font = font small
+//| Order = 0
+| while!it Heap.pop:
+  | [G BX BY F] = it.value
+  | BX = TX + BX
+  | BY = TY + BY
+  | if F then // check flags
+     | when F ^^ #2
+       | FB.rect{#00FF00 0 BX BY G.w G.h}
+       | !F -- #2
+     | if F ^^ #1 then FB.blit{BX,BY G flipX/1}
+       else if F ^^ #4000 then draw_cursor{#FF0000 0 FB BX BY F/>16}
+       else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
+       else FB.blitRaw{BX BY G}
+    else FB.blitRaw{BX BY G}
+  //| Font.draw{FB BX+18 BY+4 red "[Order]"}
+  //| !Order+1
+
 
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
@@ -120,16 +197,16 @@ view.render =
 
 view.worldToView P =
 | [X Y] = P - $view_origin
-| RX = (X*TileW - Y*TileW)/2
-| RY = (X*TileH + Y*TileH)/2
+| RX = (X*XUnit - Y*XUnit)/2
+| RY = (X*YUnit + Y*YUnit)/2
 | [RX RY] + $blit_origin
 
 view.viewToWorld P =
 | [X Y] = P - $blit_origin - [0 $main.params.world.z_unit*4]
 | !X - 32
-| WH = TileW*TileH
-| RX = (Y*TileW + X*TileH)/WH
-| RY = (Y*TileW - X*TileH)/WH
+| WH = XUnit*YUnit
+| RX = (Y*XUnit + X*YUnit)/WH
+| RY = (Y*XUnit - X*YUnit)/WH
 | [RX RY] = [RX RY] + $view_origin
 | S = $world.size
 | [RX.clip{0 S-1} RY.clip{0 S-1}]
