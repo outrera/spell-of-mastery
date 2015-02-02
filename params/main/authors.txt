@@ -20,4 +20,7 @@ LordNeo:
 
 Reemax:
   | Name: `Tuomo Untinen`
-  | http: `http://opengameart.org/users/reemax`
+  | http: `opengameart.org/users/reemax`
+
+MrBeast:
+  | http: `opengameart.org/users/mrbeast`
