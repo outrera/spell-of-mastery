@@ -1,4 +1,0 @@
-frames: ((0 0 40 52 12 16) (40 0 40 52 -12 16))
-anims: | still 0
-auto_class: empty,1
-height: 4
