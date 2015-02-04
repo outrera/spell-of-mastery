@@ -148,9 +148,9 @@ world.remove_unit U =
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
 world.getElev X,Y Z =
-| less 0 << X and X < $size: leave 100
-| less 0 << Y and Y < $size: leave 100
-| $tid_map.($get{X Y Z}).height
+| less 0 << X and X < $size: leave 1
+| less 0 << Y and Y < $size: leave 1
+| $tid_map.($get{X Y Z}).filler
 
 world.getCornerElev P Z = `[]`
   [$getElev{P+[-1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[-1 0] Z}].min

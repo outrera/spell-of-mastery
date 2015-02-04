@@ -1,2 +1,2 @@
-height: 4
 frames: 64*64
+height: 8
