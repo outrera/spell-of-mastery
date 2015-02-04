@@ -97,7 +97,8 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
        | Key = Key + ((Z*2)</30)
        | when Cursor | Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
        | UnitZ <= Z + TH
-       | when AboveCursor or Z << CursorZ or CurHH-Z/YDiv >> 0:
+       | TZ = UnitZ - 4
+       | when AboveCursor or TZ << CursorZ or CurHH-TZ/YDiv >> 0:
          | Heap.push{Key [G BX BY-G.h-ZZ 0]}
          | for U Wr.units_at{X,Y,UnitZ}: U.render{Heap BX BY-ZUnit*UnitZ}
        | when Cursor | Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
