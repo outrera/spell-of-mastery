@@ -74,7 +74,7 @@ world.get X Y Z =
 
 world.at XYZ =
 | X,Y,Z = XYZ
-| $tid_map.| if X < 0 or Y < 0 then $tid_map.0 else $get{X Y Z}
+| $tid_map.| if X < 0 or Y < 0 then 0 else $get{X Y Z}
 
 world.set_ X Y Z V = $tilemap.set{[X Y Z] V}
 
@@ -147,20 +147,35 @@ world.remove_unit U =
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
-world.getElev X,Y Z =
+world.filled X,Y Z =
 | less 0 << X and X < $size: leave 1
 | less 0 << Y and Y < $size: leave 1
 | $tid_map.($get{X Y Z}).filler
 
-world.getCornerElev P Z = `[]`
-  [$getElev{P+[-1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[-1 0] Z}].min
-  [$getElev{P+[ 1 -1] Z} $getElev{P+[0 -1] Z} $getElev{P+[ 1 0] Z}].min
-  [$getElev{P+[ 1  1] Z} $getElev{P+[0  1] Z} $getElev{P+[ 1 0] Z}].min
-  [$getElev{P+[-1  1] Z} $getElev{P+[0  1] Z} $getElev{P+[-1 0] Z}].min
+world.getCorners P Z = `[]`
+  [$filled{P+[-1 -1] Z} $filled{P+[0 -1] Z} $filled{P+[-1 0] Z}].all{1}
+  [$filled{P+[ 1 -1] Z} $filled{P+[0 -1] Z} $filled{P+[ 1 0] Z}].all{1}
+  [$filled{P+[ 1  1] Z} $filled{P+[0  1] Z} $filled{P+[ 1 0] Z}].all{1}
+  [$filled{P+[-1  1] Z} $filled{P+[0  1] Z} $filled{P+[-1 0] Z}].all{1}
 
-world.getSideElev P Z = `[]`
-  $getElev{P+[0 -1] Z} $getElev{P+[ 1 0] Z}
-  $getElev{P+[0  1] Z} $getElev{P+[-1 0] Z}
+world.getSides P Z = `[]`
+  $filled{P+[0 -1] Z} $filled{P+[ 1 0] Z}
+  $filled{P+[0  1] Z} $filled{P+[-1 0] Z}
+
+world.role X,Y Z =
+| less 0 << X and X < $size: leave 0
+| less 0 << Y and Y < $size: leave 0
+| $tid_map.($get{X Y Z}).role
+
+world.getCornersSame P Z Role = `[]`
+  [$role{P+[-1 -1] Z} $role{P+[0 -1] Z} $role{P+[-1 0] Z}].all{Role}
+  [$role{P+[ 1 -1] Z} $role{P+[0 -1] Z} $role{P+[ 1 0] Z}].all{Role}
+  [$role{P+[ 1  1] Z} $role{P+[0  1] Z} $role{P+[ 1 0] Z}].all{Role}
+  [$role{P+[-1  1] Z} $role{P+[0  1] Z} $role{P+[-1 0] Z}].all{Role}
+
+world.getSidesSame P Z Role = `[]`
+  $role{P+[0 -1] Z}><Role $role{P+[ 1 0] Z}><Role
+  $role{P+[0  1] Z}><Role $role{P+[-1 0] Z}><Role
 
 world.getTrn X,Y Z =
 | less 0 << X and X < $size: leave 0
@@ -168,7 +183,7 @@ world.getTrn X,Y Z =
 | Tile = $tid_map.($get{X Y Z})
 | if Tile.trn then Tile.role else 0
 
-world.getCornerTrns P Z Role = `[]`
+world.getCornersTrns P Z Role = `[]`
  [$getTrn{P+[-1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
  [$getTrn{P+[ 1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[ 1 0] Z}].all{is{&Role+0}}
  [$getTrn{P+[ 1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[ 1 0] Z}].all{is{&Role+0}}

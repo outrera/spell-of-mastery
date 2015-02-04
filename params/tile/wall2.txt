@@ -1,5 +1,6 @@
 no_lineup: 1
 tiling: side
+match: same
 1111: 296
 0000: 298
 1001: 280

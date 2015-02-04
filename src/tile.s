@@ -15,7 +15,8 @@ genTransition Mask From To =
       | R.set{X Y From.get{X Y}}
 
 type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
-          height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0}
+          height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
+          match/same}
      id/Id
      main/Main
      type/Type
@@ -29,10 +30,11 @@ type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
      height/Height
      trn/Trn
      empty/Empty
+     filler/Filler
      invisible/Invisible
      tiling/Tiling
-     filler/Filler
      shadow/Shadow
+     match/Match
 
 TrnsCache = t
 
@@ -50,9 +52,13 @@ tile.render P Z Below Above Seed =
 | G = if $lineup and (AH or AFiller or AR >< $role)
       then | NeibElevs <= #@1111
            | Gs.NeibElevs
-      else | Elev = if $tiling >< side
-                    then World.getSideElev{P Z}
-                    else World.getCornerElev{P Z}
+      else | Elev = if $match >< same
+                    then if $tiling >< side
+                         then World.getSidesSame{P Z $role}
+                         else World.getCornersSame{P Z $role}
+                    else if $tiling >< side
+                         then World.getSides{P Z}
+                         else World.getCorners{P Z}
            | NeibElevs <= Elev.digits{2}
            | R = Gs.NeibElevs
            | less got R
@@ -62,7 +68,7 @@ tile.render P Z Below Above Seed =
 | World.set_slope_at{@P,Z if $tiling >< side then #@1111 else NeibElevs}
 | G = G.(Seed%G.size)
 | when not $trn or NeibElevs <> #@1111: leave G
-| Cs = World.getCornerTrns{P Z $role}.digits{2}
+| Cs = World.getCornersTrns{P Z $role}.digits{2}
 | when Cs >< #@1111: leave G
 | Index = [Cs G^address $plain^address]
 | as R TrnsCache.Index: less got R

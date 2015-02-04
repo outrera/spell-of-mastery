@@ -1,7 +1,0 @@
-sprite: tiles_house
-height: 8
-no_lineup: 1
-empty: 1
-
-0000: 15
-1111: 15

@@ -164,6 +164,7 @@ view.render_frame =
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | InfoText = []
+| when $param.show_tile: push "tile=[$world.at{X,Y,Z-1}.type]" InfoText
 | when $param.show_xyz: push "xyz=[X],[Y],[Z]" InfoText
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
