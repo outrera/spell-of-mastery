@@ -27,48 +27,29 @@ Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
 move_start A =
 | U = A.unit
-| FromXYZ = U.xyz.copy
-| X,Y,Z = A.xyz - FromXYZ
-| WithDummy = got OverlapDirs.locate{X,Y}
-| From = U.world.alloc_unit{unit_nil}
-| A.from <= From
-| From.xy.init{U.xy}
+| X,Y,Z = A.xyz - U.xyz
+| U.movement_render_hack <= got OverlapDirs.locate{X,Y}
+| A.fromXY.init{U.xy}
+| A.fromXYZ.init{U.xyz}
 | U.move{A.xyz}
-| From.move{FromXYZ}
-| if WithDummy
-  then | swap U.sprite From.sprite
-       | U.animate{still}
-       | From.animate{move}
-       | From.picked <= U.picked
-  else | U.animate{move}
-       | From.animate{still}
+| U.animate{move}
 
 move_update A =
 | U = A.unit
-| From = A.from
-| WithDummy = From.anim >< move
-| X,Y,Z = if WithDummy then U.xyz-From.xyz else From.xyz-U.xyz
+| X,Y,Z = A.fromXYZ-U.xyz
 | XUnit = U.world.xunit
 | YUnit = U.world.yunit
 | when not (X and Y)
   | !XUnit/2
   | !YUnit/2
 | X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
-| if WithDummy
-  then | M = A.start_cycles-A.cycles
-       | NewXY = A.unit.xy + [X*XUnit Y*YUnit]*M/A.start_cycles
-       | From.xy.init{NewXY}
-  else U.xy.init{From.xy + [X*XUnit Y*YUnit]*A.cycles/A.start_cycles}
+| U.xy.init{A.fromXY + [X*XUnit Y*YUnit]*A.cycles/A.start_cycles}
 
 move_finish A =
 | U = A.unit
-| From = A.from
-| if From.anim >< move
-  then | swap U.sprite From.sprite
-       | swap U.picked From.picked
-  else U.xy.init{From.xy}
+| U.xy.init{A.fromXY}
 | U.animate{still}
-| From.free
+| U.movement_render_hack <= 0
 
 act_move.start A =
 | when A.cycles >< -1: A.cycles <=  A.unit.speed
@@ -93,13 +74,11 @@ act_attack.start A =
 act_attack.update A =
 | move_update A
 | when A.cycles >< 1 and not A.data:
-  | FromXYZ = A.from.xyz.copy
   | move_finish A
   | A.target.free
   | A.target <= 0
-  | U = A.unit
-  | A.xyz.init{FromXYZ}
-  | A.cycles <= max 1 U.speed*2/3
+  | A.xyz.init{A.fromXYZ}
+  | A.cycles <= max 1 A.unit.speed*2/3
   | move_start A
   | A.data <= 1
 
@@ -116,12 +95,12 @@ type action{unit}
    cycles // cooldown cycles remaining till the action safe-to-change state
    start_cycles
    priority // used to check if action can be preempted
-   from // simulacrum related to previous position (aka came_from operator)
+   fromXYZ/[0 0 0]
+   fromXY/[0 0]
    data // data used by class
 
 action.init ClassName XYZ =
 | $xyz.init{XYZ}
-| $from <= 0
 | $priority <= 50
 | $class <= ActionClasses.ClassName
 | $class_name <= ClassName

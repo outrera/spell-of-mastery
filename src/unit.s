@@ -23,6 +23,7 @@ type unit.$class{Id World}
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
   sprite
+  movement_render_hack
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -90,6 +91,9 @@ unit.render Heap X Y =
 | Flags = $flipX
 | when $picked: !Flags ++ #2
 | UX,UY,UZ = $xyz
+| when $movement_render_hack
+  | !UX+1
+  | !UY+1
 | Key = ((UX+UY)</40) + ((UZ*2-1)</30) + ((UX+$draw_order)</21) + $serial
 | Heap.push{Key [G XX YY Flags]}
 
