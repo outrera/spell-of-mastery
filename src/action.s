@@ -52,6 +52,9 @@ move_finish A =
 | U.movement_render_hack <= 0
 
 act_move.start A =
+| less (A.unit.xyz - A.xyz).all{?.abs<<1}
+  | A.cycles <= 0
+  | leave
 | when A.cycles >< -1: A.cycles <=  A.unit.speed
 | move_start A
 
@@ -67,6 +70,9 @@ act_attack.init A =
 | A.data <= 0
 
 act_attack.start A =
+| less (A.unit.xyz - A.target.xyz).all{?.abs<<1}
+  | A.cycles <= 0
+  | leave
 | U = A.unit
 | A.cycles <= max 1 U.speed/2
 | move_start A
