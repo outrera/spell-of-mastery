@@ -1,2 +1,2 @@
-author: Redshrike,`Nikita Sadkov`
+author: `Nikita Sadkov`
 xy: 8,0
