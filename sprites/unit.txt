@@ -1,3 +1,12 @@
 height: 8
 anims: | still 0
 shadow: 1
+moves: 1 // number of moves it can do per turn
+jumps: 1
+flyer: 0 // can it fly
+ranger: 0
+hp: 1 // number of hits, before this unit is dead
+walks_stairs: 1
+cooldown: 1 // number of turns, before this unit can move again after attack
+cost: 4 // number of move points it takes to summon this unit
+level: 1 // how much to move this unit

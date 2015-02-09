@@ -1,0 +1,3 @@
+author: 'Nethack Team'
+auto_class: empty,1
+xy: 0,14
