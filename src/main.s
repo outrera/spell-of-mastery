@@ -25,7 +25,7 @@ type main{Data}
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort
 | $classes_banks <= @table: map N $bank_names
   | N,$classes{}{?1}.keep{(?bank >< N and not ?aux)}{?class_name}.sort
-| world Me 16
+| world Me 8
 
 main.img Name =
 | S = $sprites."[Name]"
