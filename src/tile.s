@@ -16,7 +16,7 @@ genTransition Mask From To =
 
 type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
-          match/same}
+          match/same stairs/0}
      id/Id
      main/Main
      type/Type
@@ -35,6 +35,7 @@ type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
      tiling/Tiling
      shadow/Shadow
      match/Match
+     stairs/Stairs
 
 TrnsCache = t
 

@@ -14,16 +14,28 @@ act_still.start A =  when A.cycles >< -1: A.cycles <= 4
 
 type act_move.act_class name/move anim/move
 
-act_move.valid A = 
+unit.can_move Src Dst =
+| less $world.at{Dst}.empty and $world.units_at{Dst}.all{?empty}: leave 0
+| [SX SY SZ] = Src
+| [DX DY DZ] = Dst
+| less (DX - SX).abs + (DY - SY).abs >< 1: leave 0
+| Height = (DZ-SZ).abs
+| BelowDst = DX,DY,DZ-1
+| BelowTile = $world.at{BelowDst}
+| less $slopewalker
+  | less $world.slope_at{BelowDst}><#@1111 or BelowTile.stairs: leave 0
+| when Height << $jumps: leave 1
+| Height << 4 and (BelowTile.stairs or $world.at{SX,SY,SZ-1}.stairs)
+
+
+act_move.valid A =
 | U = A.unit
-| less (A.xyz-U.xyz).all{?abs<<1}: leave 0
-| U.can_move_to{A.xyz}
+| U.can_move{U.xyz A.xyz}
 
 // dirs requiring dummy to avoid overlapping unit with tiles
 OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
 
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
-
 
 move_start A =
 | U = A.unit
@@ -52,9 +64,6 @@ move_finish A =
 | U.movement_render_hack <= 0
 
 act_move.start A =
-| less (A.unit.xyz - A.xyz).all{?.abs<<1}
-  | A.cycles <= 0
-  | leave
 | when A.cycles >< -1: A.cycles <=  A.unit.speed
 | move_start A
 
@@ -64,15 +73,18 @@ act_move.finish A = move_finish A
 
 type act_attack.act_class name/move anim/attack
 
-act_attack.valid A = not: A.target.is_list or A.target.removed or A.target.empty
+unit.can_reach Src Dst =
+| (Dst - Src).all{?.abs<<1}
+
+act_attack.valid A =
+| T = A.target
+| when T.is_list or T.removed or T.empty: leave 0
+| A.unit.can_reach{A.unit.xyz T.xyz}
 
 act_attack.init A =
 | A.data <= 0
 
 act_attack.start A =
-| less (A.unit.xyz - A.target.xyz).all{?.abs<<1}
-  | A.cycles <= 0
-  | leave
 | U = A.unit
 | A.cycles <= max 1 U.speed/2
 | move_start A

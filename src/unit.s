@@ -76,9 +76,6 @@ unit.move XYZ =
 | $world.place_unit{Me}
 | $environment_updated
 
-unit.can_move_to XYZ =
-| $world.at{XYZ}.empty and $world.units_at{XYZ}.all{?empty}
-
 unit.environment_updated =
 | [UX UY UZ] = $xyz
 | $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@1111 => 0
