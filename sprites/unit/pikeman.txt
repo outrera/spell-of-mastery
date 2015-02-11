@@ -1,2 +1,0 @@
-author: Redshrike
-xy: 8,8

@@ -14,8 +14,9 @@ act_still.start A =  when A.cycles >< -1: A.cycles <= 4
 
 type act_move.act_class name/move anim/move
 
-unit.can_move Src Dst =
-| less $world.at{Dst}.empty and $world.units_at{Dst}.all{?empty}: leave 0
+unit.can_move Src Dst CheckEmpty =
+| less $world.at{Dst}.empty: leave 0
+| when CheckEmpty: less $world.units_at{Dst}.all{?empty}: leave 0
 | [SX SY SZ] = Src
 | [DX DY DZ] = Dst
 | less (DX - SX).abs + (DY - SY).abs >< 1: leave 0
@@ -27,10 +28,9 @@ unit.can_move Src Dst =
 | when Height << $jumps: leave 1
 | Height << 4 and (BelowTile.stairs or $world.at{SX,SY,SZ-1}.stairs)
 
-
 act_move.valid A =
 | U = A.unit
-| U.can_move{U.xyz A.xyz}
+| U.can_move{U.xyz A.xyz 1}
 
 // dirs requiring dummy to avoid overlapping unit with tiles
 OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
@@ -73,13 +73,12 @@ act_move.finish A = move_finish A
 
 type act_attack.act_class name/move anim/attack
 
-unit.can_reach Src Dst =
-| (Dst - Src).all{?.abs<<1}
-
 act_attack.valid A =
 | T = A.target
 | when T.is_list or T.removed or T.empty: leave 0
-| A.unit.can_reach{A.unit.xyz T.xyz}
+| U = A.unit
+//| when U.skirmisher: leave (T.xyz - U.xyz).all{?.abs<<1}
+| U.can_move{U.xyz T.xyz 0}
 
 act_attack.init A =
 | A.data <= 0
@@ -92,9 +91,10 @@ act_attack.start A =
 act_attack.update A =
 | move_update A
 | when A.cycles >< 1 and not A.data:
-  | move_finish A
   | A.target.free
   | A.target <= 0
+  | less A.unit.ranger: leave
+  | move_finish A
   | A.xyz.init{A.fromXYZ}
   | A.cycles <= max 1 A.unit.speed*2/3
   | move_start A

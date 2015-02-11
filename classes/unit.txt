@@ -1,9 +1,18 @@
 unit: 1
 draw_order: 50
-moves: 1
-hits: 1
-speed: 24
+health: 1 // hit points - number of hits, before this unit is dead
+moves: 1 // number of moves this unit can do per turn
+move_style: basis // directions this unit can move to
+jumps: 3 // maximum height unit can jump to
+slopewalker: 1 // determines if unit can walk sloped tiles
+flyer: 0 // can it fly
+attack_style: basis // directions this unit can attact to
+ranger: 0 // does it move into the cell of defeated unit
+cooldown: 1 // number of turns, before this unit can move again after attack
+cost: 4 // number of move points it takes to summon unit
+level: 1 // number of move points it takes to move unit
+speed: 24 // cycles requred to move unit between cells
 selectable: 1
 sight: 1
-starts: still
+starts: still // initial animation
 invincible: 0

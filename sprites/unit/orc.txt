@@ -1,3 +1,0 @@
-author: LordNeo
-anims: | still 0
-auto_class: empty,0
