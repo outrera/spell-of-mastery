@@ -1,0 +1,1 @@
+sprite: unit_wraith

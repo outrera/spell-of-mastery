@@ -1,0 +1,2 @@
+author: `Wesnoth Team`
+xy: 0,4
