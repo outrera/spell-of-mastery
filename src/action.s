@@ -82,7 +82,7 @@ type act_attack.act_class name/move anim/attack
 
 act_attack.valid A =
 | T = A.target
-| when T.is_list or T.removed or T.empty: leave 0
+| when T.is_list or T.removed or T.empty or not T.health: leave 0
 | U = A.unit
 //| when U.skirmisher: leave (T.xyz - U.xyz).all{?.abs<<1}
 | U.can_move{U.xyz T.xyz 0}

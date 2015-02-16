@@ -2,7 +2,7 @@ use gfx util param
 
 type class{bank class_name static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/0 speed/1
-           starts/0 jumps/1 slopewalker/0 ranger/0}
+           starts/0 jumps/1 slopewalker/0 ranger/0 health/0}
   type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
@@ -17,6 +17,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   jumps/Jumps
   ranger/Ranger
   slopewalker/Slopewalker
+  health/Health
 
 class.height = $default_sprite.height
 
