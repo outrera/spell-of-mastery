@@ -22,11 +22,18 @@ unit.can_move Src Dst CheckEmpty =
 | less (DX - SX).abs + (DY - SY).abs >< 1: leave 0
 | Height = (DZ-SZ).abs
 | BelowDst = DX,DY,DZ-1
-| BelowTile = $world.at{BelowDst}
-| less $slopewalker
-  | less $world.slope_at{BelowDst}><#@1111 or BelowTile.stairs: leave 0
+| BelowDstTile = $world.at{BelowDst}
+| SlopedDst = $world.slope_at{BelowDst}<>#@1111
+| when SlopedDst
+  | if BelowDstTile.stairs or $slopewalker
+    then leave Height << (max 4 $jumps)
+    else leave 0
 | when Height << $jumps: leave 1
-| Height << 4 and (BelowTile.stairs or $world.at{SX,SY,SZ-1}.stairs)
+| BelowSrc = SX,SY,SZ-1
+| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
+| BelowSrcTile = $world.at{BelowSrc}
+| less SlopedSrc: leave Height << $jumps
+| (BelowSrcTile.stairs or $slopewalker) and Height << (max 4 $jumps)
 
 act_move.valid A =
 | U = A.unit

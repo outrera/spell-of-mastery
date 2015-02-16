@@ -1,0 +1,2 @@
+sprite: unit_dreadwood
+//size: 2 //should take 2 cells
