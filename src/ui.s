@@ -98,39 +98,46 @@ main.run =
          | ItemList.pick{0}
 | BrushPanel = hidden: layH: list BankList ItemList
 | BrushPanel.show <= 1
+| EndTurn = icon $img{"icons_hourglass"} click/(Icon =>)
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
-| UnitPanelTitle = txt size/medium ''
-| UnitPanelContents = hidden: dlg w/PanelW h/ScreenH: mtx
-  | 2 2 | UnitPanelTitle
+| PickedUnitTitle = txt size/medium ''
+| EditorPanelContents = hidden: dlg w/PanelW h/(ScreenH-128): mtx
+  | 2 2 | PickedUnitTitle
   |24 ScreenH-150 | layV s/2: map Xs Arrows.xs{7,0,1,6,8,2,5,4,3}.group{3}
                     | layH s/2 Xs
-| UnitPanel = hidden: dlg: mtx
+| EditorPanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
-  | 0 0 | UnitPanelContents
+  | 0 0 | EditorPanelContents
+| GamePanelContents = hidden: dlg w/PanelW h/(ScreenH-128): mtx
+  | 2 2 | PickedUnitTitle
+| GamePanel = hidden: dlg: mtx
+  | 0 0 | panel_bg PanelW ScreenH
+  | 0 0 | GamePanelContents
 | Panel = dlg w/ScreenW h/ScreenH: mtx
   | 0 0 | BrushPanel
-  | 0 0 | UnitPanel
+  | 0 0 | EditorPanel
+  | 0 0 | GamePanel
 | View.on_unit_pick <= Unit =>
-  | UnitPanelContents.show <= Unit <> 0
+  | EditorPanelContents.show <= Unit <> 0
   | when Unit
-    | UnitPanelTitle.value <= Unit.class_name.title
+    | PickedUnitTitle.value <= Unit.class_name.title
 | ModeIcon = No
 | EditorModeIconClick = Icon =>
   | ModeIcon.picked <= 0
   | Icon.picked <= 1
   | ModeIcon <= Icon
-  | View.editor_mode <= Icon.data
-  | IsBrush = View.editor_mode >< brush
-  | BrushPanel.show <= IsBrush
-  | UnitPanel.show <= not IsBrush
+  | Mode = Icon.data
+  | View.mode <= Mode
+  | BrushPanel.show <= Mode >< brush
+  | EditorPanel.show <= Mode >< pick
+  | GamePanel.show <= Mode >< play
 | PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
+| PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
 | WorldIcon = icon data/pick $img{icons_world} click: Icon =>
   | pause
   | WorldProperties.show <= 1
-| PlayIcon = icon data/pick $img{icons_play} click: Icon =>
-  | $world.generate{$world.w $world.h}
 | SaveIcon = icon data/pick $img{icons_save} click: Icon =>
   | $save{"[$data]/work/worlds/test.txt"}
   //| show_message 'Saved' 'Your map is saved!'
@@ -139,7 +146,7 @@ main.run =
 | ExitIcon = icon data/pick $img{icons_exit} click: Icon =>
   | pause
   | Tabs.pick{main_menu}
-| Icons = PickIcon,BrushIcon,spacer{8 0},WorldIcon,spacer{8 0},PlayIcon,
+| Icons = PickIcon,BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
           spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
@@ -161,7 +168,7 @@ main.run =
             button{'Scenario'       state/disabled (=>Tabs.pick{scenario})}
             button{'Multi Player'   state/disabled (=>)}
             button{'Load Game'      state/disabled (=>)}
-            button{'World Editor'   (=> | View.mode <= \editor
+            button{'World Editor'   (=> | View.mode <= \brush
                                         | unpause
                                         | Tabs.pick{ingame})}
             spacer{0 8}
@@ -172,6 +179,6 @@ main.run =
           ingame(Ingame)
           scenario(ScenarioMenu)
 | BankList.pick{0}
-| View.mode <= \editor
+| View.mode <= \brush
 //| pause
 | gui Tabs cursor/$img{ui_cursor_point}

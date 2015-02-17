@@ -26,8 +26,7 @@ type view.widget{M W H}
   cell_xy/[0 0]
   cell_z
   brush/[0 0]
-  mode/editor
-  editor_mode/brush
+  mode/brush
   pick_count // used to pick different units from the same cell
   infoText/txt{'info'}
   fps/1
@@ -282,11 +281,11 @@ view.update =
 | $world.picked <= [$world.nil @SanitizedPicked]^cons{picked}
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
-| if $mode >< editor
-  then if $editor_mode >< pick
-       then $update_editor_pick{X Y Z}
-       else $update_editor_brush{X Y Z}
-  else $update_game{X Y Z}
+| case $mode
+    play | $update_game{X Y Z}
+    brush | $update_editor_brush{X Y Z}
+    pick | $update_editor_pick{X Y Z}
+    Else | bad "bad view mode ([$mode])"
 | 1
 
 view.input In =
