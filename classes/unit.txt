@@ -4,7 +4,7 @@ health: 1 // hit points - number of hits, before this unit is dead
 moves_orthogonal: 1 // number of moves this unit can do per turn orthogonally
 moves_diagonal: 0 // number of moves this unit can do per turn diagonally
 jumps: 3 // maximum height unit can jump to
-slopewalker: 0 // determines if unit can walk sloped tiles
+mountaineer: 0 // determines if unit can walk sloped tiles
 flyer: 0 // can it fly
 attack_orthogonal: 1 // orthogonal attack range
 moves_diagonal: 0 // diagonal attack range
