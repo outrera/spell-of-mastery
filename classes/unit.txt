@@ -18,3 +18,4 @@ selectable: 1
 sight: 1
 starts: still // initial animation
 invincible: 0
+wizard: 0

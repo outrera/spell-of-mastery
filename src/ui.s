@@ -98,7 +98,6 @@ main.run =
          | ItemList.pick{0}
 | BrushPanel = hidden: layH: list BankList ItemList
 | BrushPanel.show <= 1
-| EndTurn = icon $img{"icons_hourglass"} click/(Icon =>)
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
@@ -109,16 +108,19 @@ main.run =
 | EditorPanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
   | 0 0 | EditorPanelContents
-| GamePanelContents = hidden: dlg w/PanelW h/(ScreenH-128): mtx
+| EndTurn = icon $img{"icons_hourglass"} click/(Icon =>)
+| GamePanelUnitMenu = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
 | GamePanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
-  | 0 0 | GamePanelContents
+  | 0 0 | GamePanelUnitMenu
+  | 24 ScreenH-64 | EndTurn
 | Panel = dlg w/ScreenW h/ScreenH: mtx
   | 0 0 | BrushPanel
   | 0 0 | EditorPanel
   | 0 0 | GamePanel
 | View.on_unit_pick <= Unit =>
+  | GamePanelUnitMenu.show <= Unit <> 0
   | EditorPanelContents.show <= Unit <> 0
   | when Unit
     | PickedUnitTitle.value <= Unit.class_name.title

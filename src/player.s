@@ -1,0 +1,1 @@
+type player name nodes_count

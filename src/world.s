@@ -13,6 +13,8 @@ type world{main size}
    slope_map
    units
    free_units
+   players
+   player // this player
    gfxes
    seed
    tid_map/Main.tid_map

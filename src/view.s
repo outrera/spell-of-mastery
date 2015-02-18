@@ -226,32 +226,24 @@ view.move NewXY =
 
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
-view.update_editor_pick X Y Z = 
+view.select_unit X Y Z = 
+| for U $world.picked^uncons{picked}: U.picked <= 0
+| $world.picked <= 0
+| Us = $world.units_at{X,Y,Z}
+| when Us.size
+  | !$pick_count+1
+  | $world.picked <= [Us.($pick_count%Us.size)]^cons{picked}
+| $on_unit_pick{}{$world.picked}
+
+view.update_pick X Y Z = 
 | when $mice_left
-  | for U $world.picked^uncons{picked}: U.picked <= 0
-  | $world.picked <= 0
-  | Us = $world.units_at{X,Y,Z}
-  | when Us.size
-    | !$pick_count+1
-    | $world.picked <= [Us.($pick_count%Us.size)]^cons{picked}
-  | $on_unit_pick{}{$world.picked}
+  | $select_unit{X Y Z}
   | $mice_left <= 0
 | when $mice_right
-  | when $world.picked
-    | Unit = $world.picked
-    | Act = \move
-    | XYZ = X,Y,Z
-    | Target = 0
-    | when XYZ <> Unit.xyz
-      | Us = $world.units_at{XYZ}.skip{?empty}
-      | when Us.size
-        | Act <= \attack
-        | Target <= Us.0
-    | Unit.order.init{Act XYZ}.target <= Target
   | $mice_right <= 0
 | $main.update
 
-view.update_editor_brush X Y Z = 
+view.update_brush X Y Z = 
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
     | ClassName = if $keys.r >< 1
@@ -272,7 +264,23 @@ view.update_editor_brush X Y Z =
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
   [tile Type] | when Z > 1: $world.pop{X,Y}
 
-view.update_game X Y Z = 
+view.update_play X Y Z = 
+| when $mice_left
+  | $select_unit{X Y Z}
+  | $mice_left <= 0
+| when $mice_right
+  | when $world.picked
+    | Unit = $world.picked
+    | Act = \move
+    | XYZ = X,Y,Z
+    | Target = 0
+    | when XYZ <> Unit.xyz
+      | Us = $world.units_at{XYZ}.skip{?empty}
+      | when Us.size
+        | Act <= \attack
+        | Target <= Us.0
+    | Unit.order.init{Act XYZ}.target <= Target
+  | $mice_right <= 0
 | $main.update
 
 view.update =
@@ -282,9 +290,9 @@ view.update =
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | case $mode
-    play | $update_game{X Y Z}
-    brush | $update_editor_brush{X Y Z}
-    pick | $update_editor_pick{X Y Z}
+    play | $update_play{X Y Z}
+    brush | $update_brush{X Y Z}
+    pick | $update_pick{X Y Z}
     Else | bad "bad view mode ([$mode])"
 | 1
 
