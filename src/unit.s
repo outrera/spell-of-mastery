@@ -15,7 +15,6 @@ type unit.$class{Id World}
   frame
   facing // direction this unit faces
   slope // unit is standing on a sloped terrain
-  flipX
   owner // player controlling this unit
   picked // cons of the next unit in the selection
   active // true if this unit resides in the list of active units
@@ -35,7 +34,6 @@ unit.main = $world.main
 unit.init Class =
 | $class <= Class
 | $sprite <= $default_sprite
-| $flipX <= 0
 | $facing <= 0
 | $next <= 0
 | $column_next <= 0
@@ -85,7 +83,8 @@ unit.render Heap X Y =
 | when G.w >< 1: leave// avoid drawing dummies
 | XX = X+32-G.w/2 + $xy.0
 | YY = Y-16-G.h+$slope*16 + $xy.1
-| Flags = $flipX
+| FlipX = $facing > 1 
+| Flags = FlipX
 | when $picked: !Flags ++ #2
 | UX,UY,UZ = $xyz
 | when $movement_render_hack
