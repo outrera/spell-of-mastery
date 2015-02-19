@@ -168,6 +168,8 @@ view.render_frame =
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
 | when $param.show_turn: push "turn=[$world.turn]" InfoText
+| push "power=[$world.player.power]" InfoText
+| push "moves=[$world.player.moves]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.draw{$fb 4,($h-10)}
@@ -264,6 +266,16 @@ view.update_brush X Y Z =
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
   [tile Type] | when Z > 1: $world.pop{X,Y}
 
+unit.guess_order_at XYZ =
+| Act = \move
+| Target = 0
+| when XYZ <> $xyz
+  | Us = $world.units_at{XYZ}.skip{?empty}
+  | when Us.size
+    | Act <= \attack
+    | Target <= Us.0
+| $order.init{Act XYZ}.target <= Target
+
 view.update_play X Y Z =
 | Player = $world.player
 | less Player.human
@@ -274,17 +286,7 @@ view.update_play X Y Z =
   | $select_unit{X Y Z}
   | $mice_left <= 0
 | when $mice_right
-  | when $world.picked
-    | Unit = $world.picked
-    | Act = \move
-    | XYZ = X,Y,Z
-    | Target = 0
-    | when XYZ <> Unit.xyz
-      | Us = $world.units_at{XYZ}.skip{?empty}
-      | when Us.size
-        | Act <= \attack
-        | Target <= Us.0
-    | Unit.order.init{Act XYZ}.target <= Target
+  | when $world.picked: $world.picked.guess_order_at{X,Y,Z}
   | $mice_right <= 0
 | $main.update
 

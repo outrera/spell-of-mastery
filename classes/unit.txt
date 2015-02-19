@@ -4,12 +4,9 @@ health: 1 // hit points - number of hits, before this unit is dead
 moves_orthogonal: 1 // number of moves this unit can do per turn orthogonally
 moves_diagonal: 0 // number of moves this unit can do per turn diagonally
 jumps: 3 // maximum height unit can jump to
-mountaineer: 0 // determines if unit can walk sloped tiles
-flyer: 0 // can it fly
 attack_orthogonal: 1 // orthogonal attack range
 moves_diagonal: 0 // diagonal attack range
 damage: 0
-ranger: 0 // does it move into the cell of defeated unit
 cooldown: 1 // number of turns, before this unit can move again after attack
 cost: 4 // number of move points it takes to summon unit
 level: 1 // number of move points it takes to move unit
@@ -17,5 +14,8 @@ speed: 24 // cycles requred to move unit between cells
 selectable: 1
 sight: 1
 starts: still // initial animation
+flyer: 0 // can it fly
+ranger: 0 // does it move into the cell of defeated unit
+mountaineer: 0 // determines if unit can walk sloped tiles
 invincible: 0
 wizard: 0
