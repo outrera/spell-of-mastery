@@ -1,8 +1,19 @@
 // game world update routines
 
-
 main.update =
 | $world.update
+
+world.init_game =
+| $player <= $players.($players.size-1)
+| $turn <= 0
+| $end_turn
+
+world.end_turn =
+| NextPlayer = $player.id+1
+| less NextPlayer < $players.size
+  | NextPlayer <= 0
+  | !$turn + 1
+| $player <= $players.NextPlayer
 
 world.update =
 | NextActive = []

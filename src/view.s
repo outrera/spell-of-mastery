@@ -264,7 +264,12 @@ view.update_brush X Y Z =
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
   [tile Type] | when Z > 1: $world.pop{X,Y}
 
-view.update_play X Y Z = 
+view.update_play X Y Z =
+| Player = $world.player
+| less Player.human
+  | less Player.ai.update: $world.end_turn
+  | $main.update
+  | leave
 | when $mice_left
   | $select_unit{X Y Z}
   | $mice_left <= 0
@@ -291,8 +296,10 @@ view.update =
 | Z = $world.height{X Y}
 | case $mode
     play | $update_play{X Y Z}
+         | $main.update
     brush | $update_brush{X Y Z}
     pick | $update_pick{X Y Z}
+         | $main.update //ensure deleted units get updated
     Else | bad "bad view mode ([$mode])"
 | 1
 

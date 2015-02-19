@@ -108,7 +108,7 @@ main.run =
 | EditorPanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
   | 0 0 | EditorPanelContents
-| EndTurn = icon $img{"icons_hourglass"} click/(Icon =>)
+| EndTurn = icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
 | GamePanelUnitMenu = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
 | GamePanel = hidden: dlg: mtx
@@ -134,6 +134,7 @@ main.run =
   | BrushPanel.show <= Mode >< brush
   | EditorPanel.show <= Mode >< pick
   | GamePanel.show <= Mode >< play
+  | when Mode >< play: $world.init_game
 | PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
 | PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick

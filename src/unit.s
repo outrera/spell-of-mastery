@@ -3,6 +3,7 @@ use util action
 type unit.$class{Id World}
   id/Id // numeric id for octree
   world/World
+  name
   serial
   class
   xyz/[0 0 -1] // world coordinates

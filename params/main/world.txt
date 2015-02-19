@@ -1,4 +1,5 @@
 max_size: 256 // max world size (should be a power of 2)
+max_players: 8
 max_units: 4096 // maximum number of objects in world
 x_unit: 64
 y_unit: 32

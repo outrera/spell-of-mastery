@@ -1,4 +1,4 @@
-use util octree unit stack heap
+use util octree unit stack heap player
 
 MaxSize = No
 MaxUnits = No
@@ -14,7 +14,8 @@ type world{main size}
    units
    free_units
    players
-   player // this player
+   player // currently moving player
+   this_player // player beside this computer
    gfxes
    seed
    tid_map/Main.tid_map
@@ -35,6 +36,13 @@ type world{main size}
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
 | MaxUnits <= WParam.max_units
+| $players <= map Id WParam.max_players
+  | P = player Id Me
+  | P.name <= "Player[Id]"
+  | when Id >< 1: P.human <= 1
+  | P
+| $player <= $players.0
+| $this_player <= $players.1
 | $xunit <= WParam.x_unit
 | $yunit <= WParam.y_unit
 | $zunit <= WParam.z_unit
