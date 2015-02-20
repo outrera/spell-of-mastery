@@ -1,11 +1,9 @@
 unit: 1
 draw_order: 50
 health: 1 // hit points - number of hits, before this unit is dead
-moves_orthogonal: 1 // number of moves this unit can do per turn orthogonally
+moves: 1 // number of moves this unit can do per turn orthogonally
 moves_diagonal: 0 // number of moves this unit can do per turn diagonally
 jumps: 3 // maximum height unit can jump to
-attack_orthogonal: 1 // orthogonal attack range
-moves_diagonal: 0 // diagonal attack range
 damage: 0
 cooldown: 1 // number of turns, before this unit can move again after attack
 cost: 4 // number of move points it takes to summon unit

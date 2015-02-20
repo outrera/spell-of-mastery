@@ -23,6 +23,7 @@ type unit.$class{Id World}
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
   sprite
+  moved
   movement_render_hack
 | $action <= action Me
 | $next_action <= action Me

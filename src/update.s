@@ -17,7 +17,7 @@ world.end_turn =
 | $player <= P
 | P.power <= 1
 | for U $units.keep{U => not U.removed and U.owner and U.owner.id >< P.id}
-  | for V $units_at{U.xyz}
+  | when U.level: for V $units_at{U.xyz}
     | when V.type >< special_flux
       | !P.power+1
 | $player.moves <= $player.power
@@ -42,8 +42,11 @@ unit.update =
   | $ordered.class <= 0
 | till $action.cycles // action is done?
   | $action.finish
-  | if $next_action.valid and $level << $world.player.moves
-    then !$world.player.moves - $level
+  | if     $next_action.valid
+       and $level << $world.player.moves
+       and $moved <> $world.turn
+    then | !$world.player.moves - $level
+         | $moved <= $world.turn
     else $next_action.init{still $xyz}
   | swap $action $next_action
   | $next_action.class <= 0

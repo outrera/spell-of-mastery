@@ -4,10 +4,11 @@ world.save =
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
     tids | $tid_map{}{?type}
     players | map P $players [P.id P.name P.human P.color P.power P.moves]
+    player | $player.id
     units | map U $units.skip{?removed}
             | list U.id U.serial U.type U.xyz U.xy
                    U.anim U.anim_step U.facing
-                   U.owner.id
+                   U.owner.id U.moved
     tilemap | $tilemap.root
 
 main.save Path = Path.set{[version(0.1) @$world.save].as_text}
@@ -40,8 +41,9 @@ world.load Saved =
   | P.color <= Color
   | P.power <= Power
   | P.moves <= Moves
+| $player <= $players.(Saved.player)
 | for X Saved.units
-  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner] = X
+  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved] = X
   | U = $alloc_unit{Type}
   | U.serial <= Serial
   | U.move{XYZ}
@@ -50,6 +52,7 @@ world.load Saved =
   | U.anim_step <= AnimStep
   | U.facing <= Facing
   | U.owner <= $players.Owner
+  | U.moved <= Moved
   | IdMap.Id <= U
 
 main.load Path =

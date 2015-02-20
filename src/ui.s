@@ -104,9 +104,11 @@ main.run =
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
 | PickedUnitOwner = txt size/medium 'unknown'
+| PickedUnitLevel = txt size/medium 'unknown'
 | EditorPanelContents = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
-  | 4 16| layH txt{size/medium 'Owner: '},PickedUnitOwner
+  | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
+              ,layH{txt{size/medium 'Level: '},PickedUnitLevel}
   |24 ScreenH-150 | layV s/2: map Xs Arrows.xs{7,0,1,6,8,2,5,4,3}.group{3}
                     | layH s/2 Xs
 | EditorPanel = hidden: dlg: mtx
@@ -115,7 +117,8 @@ main.run =
 | EndTurn = icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
 | GamePanelUnitMenu = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
-  | 4 16| layH txt{size/medium 'Owner: '},PickedUnitOwner
+  | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
+              ,layH{txt{size/medium 'Level: '},PickedUnitLevel}
 | GamePanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
   | 0 0 | GamePanelUnitMenu
@@ -132,6 +135,7 @@ main.run =
   | when Unit
     | PickedUnitTitle.value <= Unit.class_name.title
     | PickedUnitOwner.value <= Unit.owner.name
+    | PickedUnitLevel.value <= Unit.level.as_text
 | ModeIcon = No
 | EditorModeIconClick = Icon =>
   | ModeIcon.picked <= 0
