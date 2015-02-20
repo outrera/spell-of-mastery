@@ -4,6 +4,8 @@ MaxSize = No
 MaxUnits = No
 MaxActiveUnits = 4096
 
+PlayerColors = [white red blue cyan violet orange black yellow magenta]
+
 type world{main size}
    w/Size
    h/Size
@@ -38,8 +40,9 @@ type world{main size}
 | MaxUnits <= WParam.max_units
 | $players <= map Id WParam.max_players
   | P = player Id Me
-  | P.name <= "Player[Id]"
+  | P.name <= if Id >< 0 then "Independent" else "Player[Id]"
   | when Id >< 1: P.human <= 1
+  | P.color <= PlayerColors.Id
   | P
 | $player <= $players.0
 | $this_player <= $players.1
@@ -70,6 +73,7 @@ world.alloc_unit ClassName =
 | U = $free_units.pop
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
+| U.owner <= $player
 | U
 
 world.free_unit U =

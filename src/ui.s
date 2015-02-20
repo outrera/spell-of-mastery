@@ -81,6 +81,8 @@ main.run =
   |  15 305 | button 'Done' w_size/small: =>
               | unpause
               | WorldProperties.show <= 0
+| PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
+  | when got!it $world.players.find{?name >< Name}: $world.player <= it
 | BankName =
 | TileNames = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
 | BankNames = [terrain unit @$bank_names.skip{unit}]
@@ -101,8 +103,10 @@ main.run =
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
+| PickedUnitOwner = txt size/medium 'unknown'
 | EditorPanelContents = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
+  | 4 16| layH txt{size/medium 'Owner: '},PickedUnitOwner
   |24 ScreenH-150 | layV s/2: map Xs Arrows.xs{7,0,1,6,8,2,5,4,3}.group{3}
                     | layH s/2 Xs
 | EditorPanel = hidden: dlg: mtx
@@ -111,6 +115,7 @@ main.run =
 | EndTurn = icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
 | GamePanelUnitMenu = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
+  | 4 16| layH txt{size/medium 'Owner: '},PickedUnitOwner
 | GamePanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
   | 0 0 | GamePanelUnitMenu
@@ -124,6 +129,7 @@ main.run =
   | EditorPanelContents.show <= Unit <> 0
   | when Unit
     | PickedUnitTitle.value <= Unit.class_name.title
+    | PickedUnitOwner.value <= Unit.owner.name
 | ModeIcon = No
 | EditorModeIconClick = Icon =>
   | ModeIcon.picked <= 0
@@ -150,7 +156,8 @@ main.run =
   | pause
   | Tabs.pick{main_menu}
 | Icons = PickIcon,BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
-          spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
+          spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon,
+          spacer{8 0},PlayerWidget
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
@@ -176,7 +183,6 @@ main.run =
                                         | Tabs.pick{ingame})}
             spacer{0 8}
             button{'Exit Program'   (=>get_gui{}.exit)}
-
 | Tabs <= tabs ingame: t
           main_menu(MainMenu)
           ingame(Ingame)

@@ -3,10 +3,11 @@ use util
 world.save =
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
     tids | $tid_map{}{?type}
+    players | map P $players [P.id P.name P.human P.color P.power P.moves]
     units | map U $units.skip{?removed}
             | list U.id U.serial U.type U.xyz U.xy
                    U.anim U.anim_step U.facing
-                   U.owner
+                   U.owner.id
     tilemap | $tilemap.root
 
 main.save Path = Path.set{[version(0.1) @$world.save].as_text}
@@ -31,6 +32,14 @@ world.load Saved =
 | $cycle <= Saved.cycle
 | $turn <= Saved.turn
 | IdMap = t
+| for X Saved.players
+  | [Id Name Human Color Power Moves] = X
+  | P = $players.Id
+  | P.name <= Name
+  | P.human <= Human
+  | P.color <= Color
+  | P.power <= Power
+  | P.moves <= Moves
 | for X Saved.units
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner] = X
   | U = $alloc_unit{Type}
@@ -40,7 +49,7 @@ world.load Saved =
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.facing <= Facing
-  | U.owner <= Owner
+  | U.owner <= $players.Owner
   | IdMap.Id <= U
 
 main.load Path =
