@@ -18,7 +18,7 @@ world.end_turn =
 | P.power <= 1
 | for U $units.keep{U => not U.removed and U.owner and U.owner.id >< P.id}
   | when U.level: for V $units_at{U.xyz}
-    | when V.type >< special_flux
+    | when V.type >< special_node
       | !P.power+1
 | $player.moves <= $player.power
 | $on_player_change $player
