@@ -124,6 +124,8 @@ main.run =
   | 0 0 | BrushPanel
   | 0 0 | EditorPanel
   | 0 0 | GamePanel
+| $world.on_player_change <= Player =>
+  | PlayerWidget.picked <= Player.id
 | View.on_unit_pick <= Unit =>
   | GamePanelUnitMenu.show <= Unit <> 0
   | EditorPanelContents.show <= Unit <> 0

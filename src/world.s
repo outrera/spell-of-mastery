@@ -34,6 +34,7 @@ type world{main size}
    xunit
    yunit
    zunit
+   on_player_change
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size

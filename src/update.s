@@ -21,6 +21,7 @@ world.end_turn =
     | when V.type >< special_flux
       | !P.power+1
 | $player.moves <= $player.power
+| $on_player_change $player
 
 world.update =
 | NextActive = []

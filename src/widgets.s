@@ -170,6 +170,10 @@ droplist.input In = case In
                   | $xs.$p.state <= \normal
                   | $picked <= $p
                   | $f $text
+droplist.pick Name =
+| for I,X $xs.i: when X.text >< Name
+  | $picked <= I
+  | leave
 
 type litems.$box{Xs w/160 lines/5 f/(V=>)} f/F ih/No lines/Lines xs/Xs box picked o/No
 | $box <= layV: dup $lines: litem '' w/W
