@@ -1,0 +1,3 @@
+author: 'Nikita Sadkov'
+auto_class: empty,1
+xy: 0,10

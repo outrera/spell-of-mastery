@@ -3,7 +3,7 @@ type ai{player} world
 
 ai.update = 0
 
-type player{id world} name ai human color power moves
+type player{id world} name ai human color power moves spells
 | $ai <= ai Me
 
 // player 0 shouldnt be used
