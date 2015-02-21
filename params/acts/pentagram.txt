@@ -1,0 +1,4 @@
+order: summon
+effect: special_pentagram
+at: self
+icon: spell_pentagram

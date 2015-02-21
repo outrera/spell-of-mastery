@@ -258,8 +258,8 @@ view.update_brush X Y Z =
               else not Us.any{?class^address >< Class^address}
     | when Place
       | U = $world.alloc_unit{ClassName}
-      | when $keys.t >< 1: U.facing <= 3.rand
       | U.facing <= if $keys.m >< 1 then 2 else 1
+      | when $keys.t >< 1: U.facing <= 3.rand
       | U.move{X,Y,Z}
   [tile Type] | $world.push{X,Y $main.tiles.Type}
 | when $mice_right and Z >> $mice_z: case $brush

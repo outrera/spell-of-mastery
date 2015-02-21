@@ -54,6 +54,7 @@ panel_bg.draw G P =
 | G.rect{#AAAAAA 1 P.0 P.1 $w $h}
 | G.line{#000000 P P+[0 $h]}
 
+// FIXME: refactor following into UI type
 main.run =
 | ScreenW <= $params.ui.width
 | ScreenH <= $params.ui.height
@@ -100,6 +101,24 @@ main.run =
          | ItemList.pick{0}
 | BrushPanel = hidden: layH: list BankList ItemList
 | BrushPanel.show <= 1
+| PickedUnit = 0
+| ActIcon = 0
+| ActClick = Icon =>
+  | when ActIcon: ActIcon.picked <= 0
+  | Icon.picked <= 1
+  | ActIcon <= Icon
+  | Act = $params.acts.(Icon.data)
+  | when PickedUnit
+    | Target = 0
+    | case Act.at self
+      | Order = PickedUnit.order.init{Act.order PickedUnit.xyz}
+      | Order.target <= PickedUnit
+      | Order.cost <= Act.level
+      | Order.what <= Act
+| ActIcons = map K,V $params.acts
+  | G = $img{"icons_[V.icon]"}
+  | icon data/K G click/ActClick
+| ActIconsLay = layH ActIcons
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
@@ -132,6 +151,7 @@ main.run =
 | View.on_unit_pick <= Unit =>
   | GamePanelUnitMenu.show <= Unit <> 0
   | EditorPanelContents.show <= Unit <> 0
+  | PickedUnit <= Unit
   | when Unit
     | PickedUnitTitle.value <= Unit.class_name.title
     | PickedUnitOwner.value <= Unit.owner.name
@@ -170,6 +190,7 @@ main.run =
   |  0   0| spacer ScreenW ScreenH
   |  0   0| layH View,Panel
   |  2   2| layH s/8 Icons
+  |  8   ScreenH-64| ActIconsLay
   |  0   0| PauseSpacer
   |170 100| WorldProperties
   |  0   0| MessageBox

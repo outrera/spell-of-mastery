@@ -110,7 +110,24 @@ act_attack.update A =
 act_attack.finish A =
 | move_finish A
 
+type act_summon.act_class name/summon anim/action
+
+act_summon.start A =
+| U = A.unit
+| E = A.what.effect
+| when E >< special_pentagram
+  | OID = U.owner.id
+  | Us = U.world.units
+  | for S Us.keep{U => not U.removed and U.owner.id >< OID}
+    | when S.type >< special_pentagram
+      | S.move{A.xyz}
+      | leave
+| S = U.world.alloc_unit{E}
+| S.move{A.xyz}
+
+
 ActionClasses = t still(act_still) move(act_move) attack(act_attack)
+                  summon(act_summon)
 
 type action{unit}
    class
@@ -123,6 +140,8 @@ type action{unit}
    fromXYZ/[0 0 0]
    fromXY/[0 0]
    data // data used by class
+   cost
+   what
 
 action.init ClassName XYZ =
 | $xyz.init{XYZ}
@@ -130,6 +149,8 @@ action.init ClassName XYZ =
 | $class <= ActionClasses.ClassName
 | $class_name <= ClassName
 | $cycles <= -1
+| $cost <= $unit.level
+| $what <= 0
 | less got $class: bad "unknown action class [ClassName]"
 | $class.init{Me}
 | Me

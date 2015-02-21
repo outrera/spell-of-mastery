@@ -16,7 +16,7 @@ world.end_turn =
 | P = $players.NextPlayer
 | $player <= P
 | P.power <= 1
-| for U $units.keep{U => not U.removed and U.owner and U.owner.id >< P.id}
+| for U $units.keep{U => not U.removed and U.owner.id >< P.id}
   | when U.level: for V $units_at{U.xyz}
     | when V.type >< special_node
       | !P.power+1
@@ -40,12 +40,12 @@ unit.update =
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
   | $ordered.class <= 0
-| till $action.cycles // action is done?
+| till $action.cycles > 0 // action is done?
   | $action.finish
   | if     $next_action.valid
        and $level << $world.player.moves
        and $moved <> $world.turn
-    then | !$world.player.moves - $level
+    then | !$world.player.moves - $next_action.cost
          | $moved <= $world.turn
     else $next_action.init{still $xyz}
   | swap $action $next_action
