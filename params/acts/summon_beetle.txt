@@ -1,0 +1,4 @@
+act: summon
+effect: unit_beetle
+target: pentagram
+icon: spell_beetle

@@ -1,4 +1,3 @@
-order: summon
-effect: special_pentagram
-at: self
+act: pentagram
+target: self
 icon: spell_pentagram

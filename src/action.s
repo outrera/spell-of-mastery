@@ -110,24 +110,22 @@ act_attack.update A =
 act_attack.finish A =
 | move_finish A
 
+type act_pentagram.act_class name/pentagram anim/action
+
+act_pentagram.start A =
+| U = A.unit
+| Pentagram = U.owner.pentagram
+| when not Pentagram: Pentagram <= U.world.alloc_unit{special_pentagram}
+| Pentagram.move{A.xyz}
+
 type act_summon.act_class name/summon anim/action
 
-act_summon.start A =
-| U = A.unit
-| E = A.what.effect
-| when E >< special_pentagram
-  | OID = U.owner.id
-  | Us = U.world.units
-  | for S Us.keep{U => not U.removed and U.owner.id >< OID}
-    | when S.type >< special_pentagram
-      | S.move{A.xyz}
-      | leave
-| S = U.world.alloc_unit{E}
-| S.move{A.xyz}
+act_summon.valid A = A.target and not A.target.removed
 
+act_summon.start A = A.unit.world.alloc_unit{A.effect}.move{A.target.xyz}
 
 ActionClasses = t still(act_still) move(act_move) attack(act_attack)
-                  summon(act_summon)
+                  pentagram(act_pentagram) summon(act_summon)
 
 type action{unit}
    class
@@ -141,17 +139,22 @@ type action{unit}
    fromXY/[0 0]
    data // data used by class
    cost
-   what
+   effect
 
-action.init ClassName XYZ =
-| $xyz.init{XYZ}
+action.init act/still at/self target/0 level/-1 effect/0 =
+| when Target >< self: Target <= $unit
+| when Target >< pentagram: Target <= $unit.owner.pentagram
+| when Target: At <= Target.xyz
+| when Level >< -1: Level <= $unit.level
+| $xyz.init{At}
+| $target <= Target
 | $priority <= 50
-| $class <= ActionClasses.ClassName
-| $class_name <= ClassName
+| $class <= ActionClasses.Act
+| $class_name <= Act
 | $cycles <= -1
-| $cost <= $unit.level
-| $what <= 0
-| less got $class: bad "unknown action class [ClassName]"
+| $cost <= Level
+| $effect <= Effect
+| less got $class: bad "unknown action class [Act]"
 | $class.init{Me}
 | Me
 

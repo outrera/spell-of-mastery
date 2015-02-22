@@ -274,7 +274,7 @@ unit.guess_order_at XYZ =
   | when Us.size
     | Act <= \attack
     | Target <= Us.0
-| $order.init{Act XYZ}.target <= Target
+| $order.init{act/Act target/Target at/XYZ}
 
 view.update_play X Y Z =
 | Player = $world.player

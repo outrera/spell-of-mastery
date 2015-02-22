@@ -109,12 +109,9 @@ main.run =
   | ActIcon <= Icon
   | Act = $params.acts.(Icon.data)
   | when PickedUnit
-    | Target = 0
-    | case Act.at self
-      | Order = PickedUnit.order.init{Act.order PickedUnit.xyz}
-      | Order.target <= PickedUnit
-      | Order.cost <= Act.level
-      | Order.what <= Act
+    | Target = Act.target
+    | when Target >< self or Target >< pentagram:
+      | Order = PickedUnit.order.init{@Act.list.join}
 | ActIcons = map K,V $params.acts
   | G = $img{"icons_[V.icon]"}
   | icon data/K G click/ActClick
