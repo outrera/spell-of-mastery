@@ -2,7 +2,7 @@ use gfx util param
 
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/1 anims/[`|` [still 0]]
-            auto_class/0}
+            class/0}
   bank/Bank
   name/Name
   height/Height
@@ -10,7 +10,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   xy/Xy
   anims/Anims.tail{}{[?0 ?tail]}.table
   faces/Faces
-  auto_class/Auto_class
+  class/Class
 
 init_frames S G =
 | S.frames <= case S.frames

@@ -24,23 +24,16 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
 class.height = $default_sprite.height
 
 main.load_classes =
-| Folder = "[$data]/classes/"
-| $classes <= @table: @join: map BankName Folder.folders
-  | RootParams = t
-  | ParamsFile = "[Folder][BankName].txt"
-  | when ParamsFile.exists: load_params RootParams ParamsFile
-  | BankFolder = "[Folder][BankName]/"
-  | map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
-    | Params = RootParams.deep_copy
-    | ParamsFile = "[BankFolder][Name].txt"
-    | when ParamsFile.exists: load_params Params ParamsFile
+| BankNames = case $params.world.class_banks [@Xs](Xs) X[X]
+| $classes <= @table: @join: map BankName BankNames
+  | map Name,Params $params.BankName
     | R = class BankName Name @Params.list.join
     | S = $sprites.(R.default_sprite)
     | less got S: bad "missing sprite `[R.default_sprite]`"
     | R.default_sprite <= S
     | "[BankName]_[Name]",R
-| for S $sprites{}{?1}.keep{?auto_class}
-  | C = class S.bank S.name @S.auto_class
+| for S $sprites{}{?1}.keep{?class}
+  | C = class S.bank S.name @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
 

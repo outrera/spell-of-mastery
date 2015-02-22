@@ -115,7 +115,7 @@ main.run =
 | ActIcons = map K,V $params.acts
   | G = $img{"icons_[V.icon]"}
   | icon data/K G click/ActClick
-| ActIconsLay = layH ActIcons
+| ActIconsLay = hidden: layH ActIcons
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
@@ -163,6 +163,7 @@ main.run =
   | BrushPanel.show <= Mode >< brush
   | EditorPanel.show <= Mode >< pick
   | GamePanel.show <= Mode >< play
+  | ActIconsLay.show <= Mode >< play
   | when Mode >< play: $world.init_game
 | PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick

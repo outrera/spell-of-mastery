@@ -1,2 +1,2 @@
 height: 0
-auto_class: empty,1
+class: empty,1

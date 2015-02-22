@@ -1,4 +1,4 @@
 author: Yar
 height: 4
-auto_class: empty,1,draw_order,60
+class: empty,1,draw_order,60
 xy: 0,8
