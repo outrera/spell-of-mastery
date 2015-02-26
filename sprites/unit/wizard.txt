@@ -1,3 +1,4 @@
-author: `Nikita Sadkov`
+author: `Natalia Bugrova`
+frames: folder
 anims: | still 0
 xy: 0,4

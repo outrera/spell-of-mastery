@@ -22,6 +22,15 @@ init_frames S G =
   Else | [G]
 | for F S.frames: !F.xy + S.xy
 
+init_frames_from_folder S Folder =
+| Anims = t
+| S.frames <= map I,FName Folder.urls.keep{is.[@_ png]}{?1}.i
+  | "[Dir]-[Anim]-[Index]+[X]+[Y]" = FName
+  | G = gfx."[Folder][FName].png"
+  | G.xy <= [X.int Y.int] + S.xy
+  | Anims->Anim.Index <= I
+  | G
+| S.anims <= Anims.list{}{[?0 ?1.list.sort{?0 < ?1}{?1}]}.table
 
 draw_iso_line Color X,Y Size Step Axis G =
 | ICount = Size.abs
@@ -57,12 +66,14 @@ main.load_sprites =
   | ParamsFile = "[Folder][BankName].txt"
   | when ParamsFile.exists: load_params RootParams ParamsFile
   | BankFolder = "[Folder][BankName]/"
-  | map Name BankFolder.urls.keep{is.[@_ png]}{?1}
+  | map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
     | Params = RootParams.deep_copy
     | ParamsFile = "[BankFolder][Name].txt"
     | when ParamsFile.exists: load_params Params ParamsFile
     | S = sprite BankName Name @Params.list.join
-    | init_frames S gfx."[BankFolder][Name].png"
+    | if S.frames >< folder
+      then init_frames_from_folder S "[BankFolder][Name]/"
+      else init_frames S gfx."[BankFolder][Name].png"
     | "[BankName]_[Name]",S
 | Base = generate_base_tile $params.editor.opaque_base 64 32 8
 | $sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
