@@ -112,6 +112,10 @@ act_attack.finish A =
 
 type act_pentagram.act_class name/pentagram anim/action
 
+act_pentagram.valid A =
+| T = A.unit
+| T.world.units_at{T.xyz}.all{?.empty >< 0}
+
 act_pentagram.start A =
 | U = A.unit
 | Pentagram = U.owner.pentagram
@@ -120,7 +124,10 @@ act_pentagram.start A =
 
 type act_summon.act_class name/summon anim/action
 
-act_summon.valid A = A.target and not A.target.removed
+act_summon.valid A =
+| T = A.target
+| less A.target and not A.target.removed: leave 0
+| T.world.units_at{T.xyz}.all{?empty}
 
 act_summon.start A = A.unit.world.alloc_unit{A.effect}.move{A.target.xyz}
 
