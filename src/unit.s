@@ -64,6 +64,7 @@ unit.pick_facing F =
 | less Frame.is_list
   | $frame <= Frame
   | leave
+| $mirror <= 0
 | Angle = $facing
 | till Frame.Angle
   | $mirror <= AngleReplacements.Angle.1

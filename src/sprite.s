@@ -27,12 +27,17 @@ init_frames_from_folder S Folder =
 | Frames = t
 | Anims = t
 | for I,FName Folder.urls.keep{is.[@_ png]}{?1}.i
-  | "[Angle]-[Anim]-[Index]-[Wait]+[X]+[Y]" = FName
+  | "[Angle]-[AnimName]-[Index]-[Wait]+[X]+[Y]" = FName
   | G = gfx."[Folder][FName].png"
   | G.xy <= [X.int Y.int] + S.xy
-  | Anims->Anim.Index <= [I Wait.int]
-  | Frame = have Frames.I [0 0 0 0 0 0 0 0]
-  | Frame.(Angle.int) <= G
+  | Anim = Anims->AnimName
+  | have Anim.Index [[0 0 0 0 0 0 0 0] Wait.int]
+  | Anim.Index.0.(Angle.int) <= G
+| I = 0
+| for K,Anim Anims: for Index,Step Anim
+  | Frames.I <= Step.0
+  | Step.0 <= I
+  | !I+1
 | S.frames <= Frames.list.sort{?0 < ??0}{?1}
 | S.anims <= Anims.list{}{[?0 ?1.list.sort{?0 < ??0}{?1}]}.table
 
