@@ -1,3 +1,4 @@
 height: 8
 anims: | idle (0 24)
 shadow: 1
+faces: 8

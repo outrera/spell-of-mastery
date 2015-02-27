@@ -50,7 +50,7 @@ world.load Saved =
   | U.xy.init{SXYZ}
   | U.animate{Anim}
   | U.anim_step <= AnimStep
-  | U.facing <= Facing
+  | U.pick_facing{Facing}
   | U.owner <= $players.Owner
   | U.moved <= Moved
   | IdMap.Id <= U

@@ -39,8 +39,7 @@ unit.update =
 | !$anim_wait - 1
 | less $anim_wait > 0
   | $anim_step <= ($anim_step+1)%$anim_seq.size
-  | AnimFrame = $anim_seq.$anim_step.0
-  | $frame <= $sprite.frames.AnimFrame
+  | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
 | when $removed
   | $active <= 0

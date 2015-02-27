@@ -16,6 +16,7 @@ type unit.$class{Id World}
   anim_wait
   frame
   facing // direction this unit faces
+  mirror
   slope // unit is standing on a sloped terrain
   owner // player controlling this unit
   picked // cons of the next unit in the selection
@@ -37,7 +38,7 @@ unit.main = $world.main
 unit.init Class =
 | $class <= Class
 | $sprite <= $default_sprite
-| $facing <= 0
+| $facing <= 3
 | $next <= 0
 | $column_next <= 0
 | $serial <= $world.serial
@@ -53,13 +54,28 @@ unit.init Class =
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
 
+//FIXME: move these into sprite loading code
+AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]
+
+unit.pick_facing F =
+| $facing <= F
+| FrameIndex = $anim_seq.$anim_step.0
+| Frame = $sprite.frames.FrameIndex
+| less Frame.is_list
+  | $frame <= Frame
+  | leave
+| Angle = $facing
+| till Frame.Angle
+  | $mirror <= AngleReplacements.Angle.1
+  | Angle <= AngleReplacements.Angle.0
+| $frame <= Frame.Angle
+
 unit.animate Anim =
 | $anim <= Anim
 | $anim_seq <= $sprite.anims.$anim
 | less got $anim_seq: $anim_seq <= $sprite.anims.idle
 | $anim_step <= 0
-| AnimFrame = $anim_seq.$anim_step.0
-| $frame <= $sprite.frames.AnimFrame
+| $pick_facing{$facing}
 | $anim_wait <= $anim_seq.$anim_step.1
 
 unit.free = $world.free_unit{Me}
@@ -87,7 +103,7 @@ unit.render Heap X Y =
 | when G.w >< 1: leave// avoid drawing dummies
 | XX = X+32-G.w/2 + $xy.0
 | YY = Y-16-G.h+$slope*16 + $xy.1
-| FlipX = $facing > 1 
+| FlipX = $mirror
 | Flags = FlipX
 | when $picked: !Flags ++ #2
 | UX,UY,UZ = $xyz

@@ -51,6 +51,7 @@ move_start A =
 | A.fromXY.init{U.xy}
 | A.fromXYZ.init{U.xyz}
 | U.move{A.xyz}
+| U.facing <= Dirs.locate{X,Y}
 | U.animate{move}
 
 move_update A =

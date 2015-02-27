@@ -1,7 +1,7 @@
 use gfx util param
 
 type sprite{Bank Name height/1 xy/[0 0]
-            frames/0 faces/1 anims/[`|` [idle [0 24]]]
+            frames/0 faces/0 anims/[`|` [idle [0 24]]]
             class/0}
   bank/Bank
   name/Name
@@ -13,23 +13,27 @@ type sprite{Bank Name height/1 xy/[0 0]
   class/Class
 
 init_frames S G =
-| S.frames <= case S.frames
+| Frames = case S.frames
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
   [@Fs] | map [X Y W H @Disp] Fs
           | R = @cut X Y W H G
           | R.xy <= Disp^($_ []=> [0 0])
           | R
   Else | [G]
-| for F S.frames: !F.xy + S.xy
+| for F Frames: !F.xy + S.xy
+| S.frames <= if S.faces then map F Frames [0 0 0 F 0 0 0 F] else Frames
 
 init_frames_from_folder S Folder =
+| Frames = t
 | Anims = t
-| S.frames <= map I,FName Folder.urls.keep{is.[@_ png]}{?1}.i
-  | "[Dir]-[Anim]-[Index]-[Wait]+[X]+[Y]" = FName
+| for I,FName Folder.urls.keep{is.[@_ png]}{?1}.i
+  | "[Angle]-[Anim]-[Index]-[Wait]+[X]+[Y]" = FName
   | G = gfx."[Folder][FName].png"
   | G.xy <= [X.int Y.int] + S.xy
   | Anims->Anim.Index <= [I Wait.int]
-  | G
+  | Frame = have Frames.I [0 0 0 0 0 0 0 0]
+  | Frame.(Angle.int) <= G
+| S.frames <= Frames.list.sort{?0 < ??0}{?1}
 | S.anims <= Anims.list{}{[?0 ?1.list.sort{?0 < ??0}{?1}]}.table
 
 draw_iso_line Color X,Y Size Step Axis G =
