@@ -8,9 +8,9 @@ act_class.start A = A.cycles <= A.unit.speed
 act_class.update A =
 act_class.finish A =
 
-type act_still.act_class name/still anim/still
+type act_idle.act_class name/idle anim/idle
 
-act_still.start A =  when A.cycles >< -1: A.cycles <= 4
+act_idle.start A =  when A.cycles >< -1: A.cycles <= 4
 
 type act_move.act_class name/move anim/move
 
@@ -67,7 +67,7 @@ move_update A =
 move_finish A =
 | U = A.unit
 | U.xy.init{A.fromXY}
-| U.animate{still}
+| U.animate{idle}
 | U.movement_render_hack <= 0
 
 act_move.start A =
@@ -131,7 +131,7 @@ act_summon.valid A =
 
 act_summon.start A = A.unit.world.alloc_unit{A.effect}.move{A.target.xyz}
 
-ActionClasses = t still(act_still) move(act_move) attack(act_attack)
+ActionClasses = t idle(act_idle) move(act_move) attack(act_attack)
                   pentagram(act_pentagram) summon(act_summon)
 
 type action{unit}
@@ -148,7 +148,7 @@ type action{unit}
    cost
    effect
 
-action.init act/still at/self target/0 level/-1 effect/0 =
+action.init act/idle at/self target/0 level/-1 effect/0 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz

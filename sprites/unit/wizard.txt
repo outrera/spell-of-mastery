@@ -1,4 +1,3 @@
-author: `Natalia Bugrova`
+author: `Natalya Bugrova`
 frames: folder
-anims: | still 0
-xy: 0,4
+xy: 5,44

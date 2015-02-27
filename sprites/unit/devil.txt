@@ -1,3 +1,2 @@
 author: Blarumyrran,`Nikita Sadkov`
-anims: | still 0
 xy: 16,4

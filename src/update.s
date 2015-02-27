@@ -36,6 +36,12 @@ world.update =
 | !$cycle + 1
 
 unit.update =
+| !$anim_wait - 1
+| less $anim_wait > 0
+  | $anim_step <= ($anim_step+1)%$anim_seq.size
+  | AnimFrame = $anim_seq.$anim_step.0
+  | $frame <= $sprite.frames.AnimFrame
+  | $anim_wait <= $anim_seq.$anim_step.1
 | when $removed
   | $active <= 0
   | leave
@@ -50,7 +56,7 @@ unit.update =
        and $moved <> $world.turn
     then | !$world.player.moves - $next_action.cost
          | $moved <= $world.turn
-    else $next_action.init{still $xyz}
+    else $next_action.init{idle $xyz}
   | swap $action $next_action
   | $next_action.class <= 0
   | $next_action.priority <= 0

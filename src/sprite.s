@@ -1,7 +1,7 @@
 use gfx util param
 
 type sprite{Bank Name height/1 xy/[0 0]
-            frames/0 faces/1 anims/[`|` [still 0]]
+            frames/0 faces/1 anims/[`|` [idle [0 24]]]
             class/0}
   bank/Bank
   name/Name
@@ -25,12 +25,12 @@ init_frames S G =
 init_frames_from_folder S Folder =
 | Anims = t
 | S.frames <= map I,FName Folder.urls.keep{is.[@_ png]}{?1}.i
-  | "[Dir]-[Anim]-[Index]+[X]+[Y]" = FName
+  | "[Dir]-[Anim]-[Index]-[Wait]+[X]+[Y]" = FName
   | G = gfx."[Folder][FName].png"
   | G.xy <= [X.int Y.int] + S.xy
-  | Anims->Anim.Index <= I
+  | Anims->Anim.Index <= [I Wait.int]
   | G
-| S.anims <= Anims.list{}{[?0 ?1.list.sort{?0 < ?1}{?1}]}.table
+| S.anims <= Anims.list{}{[?0 ?1.list.sort{?0 < ??0}{?1}]}.table
 
 draw_iso_line Color X,Y Size Step Axis G =
 | ICount = Size.abs

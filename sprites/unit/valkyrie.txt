@@ -1,2 +1,2 @@
-anims: | still 0
+anims: | idle 0
 xy: -4,8

@@ -13,6 +13,7 @@ type unit.$class{Id World}
   anim // animation id
   anim_step // frame index inside of current animation
   anim_seq // current animation sequence
+  anim_wait
   frame
   facing // direction this unit faces
   slope // unit is standing on a sloped terrain
@@ -41,7 +42,7 @@ unit.init Class =
 | $column_next <= 0
 | $serial <= $world.serial
 | !$world.serial + 1
-| $animate{still}
+| $animate{idle}
 | $picked <= 0
 | when $starts
   | less $active
@@ -49,16 +50,17 @@ unit.init Class =
     | $active <= 1
   | $ordered.class <= 0
   | $next_action.class <= 0
-  | $action.init{still 0,0,0}
+  | $action.init{idle 0,0,0}
   | $action.cycles <= 0
 
 unit.animate Anim =
 | $anim <= Anim
 | $anim_seq <= $sprite.anims.$anim
-| less got $anim_seq: $anim_seq <= $sprite.anims.still
+| less got $anim_seq: $anim_seq <= $sprite.anims.idle
 | $anim_step <= 0
-| AnimFrame = $anim_seq.$anim_step
+| AnimFrame = $anim_seq.$anim_step.0
 | $frame <= $sprite.frames.AnimFrame
+| $anim_wait <= $anim_seq.$anim_step.1
 
 unit.free = $world.free_unit{Me}
 
