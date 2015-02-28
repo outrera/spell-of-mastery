@@ -116,12 +116,14 @@ act_pentagram.valid A =
 | T = A.unit
 | T.world.units_at{T.xyz}.all{?.empty >< 0}
 
-act_pentagram.start A =
+act_pentagram.start A = A.unit.animate{attack}
+
+act_pentagram.finish A =
 | U = A.unit
-| U.animate{attack}
 | Pentagram = U.owner.pentagram
 | when not Pentagram: Pentagram <= U.world.alloc_unit{special_pentagram}
 | Pentagram.move{A.xyz}
+
 
 type act_summon.act_class name/summon anim/action
 
@@ -130,8 +132,9 @@ act_summon.valid A =
 | less A.target and not A.target.removed: leave 0
 | T.world.units_at{T.xyz}.all{?empty}
 
-act_summon.start A =
-| A.unit.animate{attack}
+act_summon.start A = A.unit.animate{attack}
+
+act_summon.finish A =
 | A.unit.world.alloc_unit{A.effect}.move{A.target.xyz}
 
 ActionClasses = t idle(act_idle) move(act_move) attack(act_attack)
