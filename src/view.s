@@ -156,21 +156,7 @@ view.render_iso =
   //| Font.draw{FB BX+18 BY+4 red "[Order]"}
   //| !Order+1
 
-
-Moves = [0 0 0 0]
-
 view.render_frame =
-| for M Moves: when M: M.free
-| Moves.init{[0 0 0 0]}
-| Picked = $world.picked
-| less $mode >< play and Picked and Picked.moves
-       and Picked.moved<>$world.turn:
-  | Picked <= 0
-| when Picked and Picked.picked:
-  | Moves.init{(dup 4 $world.alloc_unit{special_move})}
-  | Dirs4 = list [0 -1] [1 0] [0 1] [-1 0]
-  | X,Y,Z = Picked.xyz
-  | for M Moves: M.move{[@([X Y]+Dirs4^pop) Z]}
 | $fb.clear{#929292/*#00A0C0*/}
 | $render_iso
 | X,Y = $cell_xy
@@ -280,14 +266,14 @@ view.update_brush X Y Z =
   [tile Type] | when Z > 1: $world.pop{X,Y}
 
 unit.guess_order_at XYZ =
-| Act = \move
-| Target = 0
-| when XYZ <> $xyz
-  | Us = $world.units_at{XYZ}.skip{?empty}
-  | when Us.size
-    | Act <= \attack
-    | Target <= Us.0
-| $order.init{act/Act target/Target at/XYZ}
+| Us = $world.units_at{XYZ}
+| Mark = Us.find{?type.take{5} >< mark_}
+| when got Mark: case Mark.type
+  mark_move
+   | $order.init{act/move at/XYZ}
+  mark_attack
+   | Target = Us.skip{?empty}.0
+   | $order.init{act/attack target/Target at/XYZ}
 
 view.update_play X Y Z =
 | Player = $world.player
@@ -303,10 +289,37 @@ view.update_play X Y Z =
   | $mice_right <= 0
 | $main.update
 
-view.update =
-| when $paused: leave
+
+Marks = dup 100 0
+
+view.update_picked = 
 | SanitizedPicked = $world.picked^uncons{picked}.skip{?removed}
 | $world.picked <= [$world.nil @SanitizedPicked]^cons{picked}
+| for I Marks.size:
+  | M = Marks.I
+  | when M:
+    | M.free
+    | Marks.I <= 0
+| Picked = $world.picked
+| less $mode >< play and Picked and Picked.moves
+       and Picked.moved<>$world.turn and $world.player.moves > 0:
+  | Picked <= 0
+| when Picked and Picked.picked:
+  | I = 0
+  | for D [[0 -1 0] [1 0 0] [0 1 0] [-1 0 0]]
+    | Blocked = 0
+    | for N Picked.moves
+      | Src = Picked.xyz + D*N
+      | Dst = Src + D
+      | less Picked.can_move{Src Dst 1}: Blocked <= 1
+      | less Blocked
+        | Marks.I <= $world.alloc_unit{mark_move}
+        | Marks.I.move{Dst}
+      | !I + 1
+
+view.update =
+| when $paused: leave
+| $update_picked
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | case $mode

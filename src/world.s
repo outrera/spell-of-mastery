@@ -71,6 +71,7 @@ world.clear =
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
+| less got Class: bad "Missing class `[ClassName]`"
 | U = $free_units.pop
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
