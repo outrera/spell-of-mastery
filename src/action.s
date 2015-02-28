@@ -68,7 +68,6 @@ move_update A =
 move_finish A =
 | U = A.unit
 | U.xy.init{A.fromXY}
-| U.animate{idle}
 | U.movement_render_hack <= 0
 
 act_move.start A =
@@ -119,6 +118,7 @@ act_pentagram.valid A =
 
 act_pentagram.start A =
 | U = A.unit
+| U.animate{attack}
 | Pentagram = U.owner.pentagram
 | when not Pentagram: Pentagram <= U.world.alloc_unit{special_pentagram}
 | Pentagram.move{A.xyz}
@@ -130,7 +130,9 @@ act_summon.valid A =
 | less A.target and not A.target.removed: leave 0
 | T.world.units_at{T.xyz}.all{?empty}
 
-act_summon.start A = A.unit.world.alloc_unit{A.effect}.move{A.target.xyz}
+act_summon.start A =
+| A.unit.animate{attack}
+| A.unit.world.alloc_unit{A.effect}.move{A.target.xyz}
 
 ActionClasses = t idle(act_idle) move(act_move) attack(act_attack)
                   pentagram(act_pentagram) summon(act_summon)

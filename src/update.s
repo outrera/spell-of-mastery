@@ -36,20 +36,24 @@ world.update =
 | !$cycle + 1
 
 unit.update =
+| when $removed
+  | $active <= 0
+  | leave
 | !$anim_wait - 1
 | less $anim_wait > 0
   | $anim_step <= ($anim_step+1)%$anim_seq.size
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
-| when $removed
-  | $active <= 0
-  | leave
 | when $ordered.class
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
   | $ordered.class <= 0
 | till $action.cycles > 0 // action is done?
+  | when $anim<>idle and $anim<>move and
+         ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
+    | leave 1
   | $action.finish
+  | less $anim >< idle: $animate{idle}
   | if     $next_action.valid
        and $level << $world.player.moves
        and $moved <> $world.turn

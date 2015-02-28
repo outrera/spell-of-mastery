@@ -121,6 +121,7 @@ main.run =
 | PickedUnitTitle = txt size/medium ''
 | PickedUnitOwner = txt size/medium 'unknown'
 | PickedUnitLevel = txt size/medium 'unknown'
+| PickedUnitMoved = txt size/medium 'unknown'
 | EditorPanelContents = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
   | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
@@ -135,6 +136,7 @@ main.run =
   | 2 2 | PickedUnitTitle
   | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
               ,layH{txt{size/medium 'Level: '},PickedUnitLevel}
+              ,layH{txt{size/medium 'Moved: '},PickedUnitMoved}
 | GamePanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
   | 0 0 | GamePanelUnitMenu
@@ -153,6 +155,7 @@ main.run =
     | PickedUnitTitle.value <= Unit.class_name.title
     | PickedUnitOwner.value <= Unit.owner.name
     | PickedUnitLevel.value <= Unit.level.as_text
+    | PickedUnitMoved.value <= Unit.moved.as_text
 | ModeIcon = No
 | EditorModeIconClick = Icon =>
   | ModeIcon.picked <= 0
