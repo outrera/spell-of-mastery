@@ -157,7 +157,20 @@ view.render_iso =
   //| !Order+1
 
 
+Moves = [0 0 0 0]
+
 view.render_frame =
+| for M Moves: when M: M.free
+| Moves.init{[0 0 0 0]}
+| Picked = $world.picked
+| less $mode >< play and Picked and Picked.moves
+       and Picked.moved<>$world.turn:
+  | Picked <= 0
+| when Picked and Picked.picked:
+  | Moves.init{(dup 4 $world.alloc_unit{special_move})}
+  | Dirs4 = list [0 -1] [1 0] [0 1] [-1 0]
+  | X,Y,Z = Picked.xyz
+  | for M Moves: M.move{[@([X Y]+Dirs4^pop) Z]}
 | $fb.clear{#929292/*#00A0C0*/}
 | $render_iso
 | X,Y = $cell_xy

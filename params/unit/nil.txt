@@ -1,3 +1,4 @@
 sprite: system_dummy
 aux: 1
 starts: 0
+moves: 0

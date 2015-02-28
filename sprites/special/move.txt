@@ -1,0 +1,4 @@
+author: `Nikita Sadkov`
+xy: 0,16
+height: 4
+class: empty,1
