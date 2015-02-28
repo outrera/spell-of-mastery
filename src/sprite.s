@@ -2,7 +2,7 @@ use gfx util param
 
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
-            class/0}
+            class/0 margins/0}
   bank/Bank
   name/Name
   height/Height
@@ -11,6 +11,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   anims/Anims.tail{}{[?0 ?tail]}.table
   faces/Faces
   class/Class
+  margins/Margins
 
 init_frames S G =
 | Frames = case S.frames
@@ -76,6 +77,8 @@ main.load_sprites =
     | if S.frames >< folder
       then init_frames_from_folder S "[BankFolder][Name]/"
       else init_frames S gfx."[BankFolder][Name].png"
+    //| have S.margins
+    //  | S.margins <= S.frames.(S.anims.idle.0.0).margins
     | "[BankName]_[Name]",S
 | Base = generate_base_tile $params.editor.opaque_base 64 32 8
 | $sprites.tiles_base_ <= sprite tiles base_ frames/[Base]

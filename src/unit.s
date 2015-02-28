@@ -106,12 +106,16 @@ unit.render Heap X Y =
 | YY = Y-16-G.h+$slope*16 + $xy.1
 | FlipX = $mirror
 | Flags = FlipX
-| when $picked: !Flags ++ #2
 | UX,UY,UZ = $xyz
 | when $movement_render_hack
   | !UX+1
   | !UY+1
 | Key = ((UX+UY)</40) + ((UZ*2-1)</30) + ((UX+$draw_order)</21) + $serial
+| when $picked
+  //| !Flags ++ #2
+  | H = $sprite.height
+  | Heap.push{Key-1 [H X Y-32 #4000+(H</16)]}
+  | Heap.push{Key+1 [H X Y-32 #8000+(H</16)]}
 | Heap.push{Key [G XX YY Flags]}
 
 unit.order = $ordered
