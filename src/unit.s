@@ -13,20 +13,21 @@ type unit.$class{Id World}
   anim // animation id
   anim_step // frame index inside of current animation
   anim_seq // current animation sequence
-  anim_wait
+  anim_wait // cycles till the next animation frame
   frame
   facing // direction this unit faces
-  mirror
-  slope // unit is standing on a sloped terrain
   owner // player controlling this unit
-  picked // cons of the next unit in the selection
-  active // true if this unit resides in the list of active units
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
   sprite
-  moved
+  moved // last turn, this unit moved
+  mirror // true, if drawing code should mirror the sprite
+  picked // cons of the next unit in the selection
+  active // true if this unit resides in the list of active units
+  slope // unit is standing on a sloped terrain
   movement_render_hack
+  path // next unit in path
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -35,6 +36,7 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
 
+//FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
 | $sprite <= $default_sprite
@@ -45,6 +47,7 @@ unit.init Class =
 | !$world.serial + 1
 | $animate{idle}
 | $picked <= 0
+| $path <= 0
 | when $starts
   | less $active
     | $world.active.push{Me}

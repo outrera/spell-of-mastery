@@ -35,6 +35,7 @@ type world{main size}
    yunit
    zunit
    on_player_change
+   marks
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -56,18 +57,22 @@ type world{main size}
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $active <= stack MaxActiveUnits
+| $marks <= dup 100 0
 | $filler <= $main.tiles.base_
 | SS = Size*Size
 | $gfxes <= ($w){_=>($h){_=>[]}}
 | $seed <= ($w){_=>($h){_=>SS.rand}}
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
-| $nil <= $alloc_unit{unit_nil}
 | $shadows <= $main.sprites.unit_shadows.frames
+| $clear
 
 world.clear =
 | for U $units: less U.removed: U.free
+| for I $marks.size: $marks.I <= 0
 | $tilemap.clear{0}
+| $picked <= 0
+| $nil <= $alloc_unit{unit_nil}
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName

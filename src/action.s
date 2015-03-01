@@ -153,8 +153,9 @@ type action{unit}
    data // data used by class
    cost
    effect
+   path
 
-action.init act/idle at/self target/0 level/-1 effect/0 =
+action.init act/idle at/self target/0 level/-1 effect/0 path/0 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
@@ -167,6 +168,7 @@ action.init act/idle at/self target/0 level/-1 effect/0 =
 | $cycles <= -1
 | $cost <= Level
 | $effect <= Effect
+| $path <= Path
 | less got $class: bad "unknown action class [Act]"
 | $class.init{Me}
 | Me
@@ -181,6 +183,8 @@ action.update =
 | $class.update{Me}
 | !$cycles - 1
 
-action.finish = $class.finish{Me}
+action.finish =
+| $class.finish{Me}
+| when $path: $path^uncons{path}{?free}
 
 export action

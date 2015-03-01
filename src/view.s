@@ -268,12 +268,17 @@ view.update_brush X Y Z =
 unit.guess_order_at XYZ =
 | Us = $world.units_at{XYZ}
 | Mark = Us.find{?type.take{5} >< mark_}
-| when got Mark: case Mark.type
+| less got Mark: leave
+| Path = cons path: map M Mark^uncons{path}.lead
+  | Node = $world.alloc_unit{mark_node}
+  | Node.move{M.xyz}
+  | Node
+| case Mark.type
   mark_move
-   | $order.init{act/move at/XYZ}
+   | $order.init{act/move at/XYZ path/Path}
   mark_attack
    | Target = Us.skip{?empty}.0
-   | $order.init{act/attack target/Target at/XYZ}
+   | $order.init{act/attack target/Target at/XYZ path/Path}
 
 view.update_play X Y Z =
 | Player = $world.player
@@ -293,33 +298,33 @@ unit.mark_moves =
 | Marks = []
 | I = 0
 | for D [[0 -1 0] [1 0 0] [0 1 0] [-1 0 0]]
+  | Src = $xyz
   | Blocked = 0
   | for N $moves
-    | Src = $xyz + D*N
     | Dst = Src + D
     | less $can_move{Src Dst 1}: Blocked <= 1
     | less Blocked
       | Mark = $world.alloc_unit{mark_move}
       | Mark.move{Dst}
+      | when N: Mark.path <= Marks.head
       | push Mark Marks
     | !I + 1
+    | Src <= Dst
 | Marks.flip
-
-Marks = dup 100 0
 
 world.update_picked = 
 | SanitizedPicked = $picked^uncons{picked}.skip{?removed}
 | $picked <= [$nil @SanitizedPicked]^cons{picked}
-| for I Marks.size:
-  | M = Marks.I
+| for I $marks.size:
+  | M = $marks.I
   | when M:
     | M.free
-    | Marks.I <= 0
+    | $marks.I <= 0
 | Picked = $picked
 | less Picked and Picked.moves and Picked.moved<>$turn and $player.moves > 0:
   | Picked <= 0
-| when Picked and Picked.picked:
-  | for I,M Picked.mark_moves.i: Marks.I <= M
+| when Picked and Picked.picked and Picked.action.class_name >< idle:
+  | for I,M Picked.mark_moves.i: $marks.I <= M
 
 view.update =
 | when $paused: leave

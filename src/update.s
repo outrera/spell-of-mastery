@@ -45,7 +45,8 @@ unit.update =
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
 | when $ordered.class
-  | when $ordered.valid and $ordered.priority >> $next_action.priority:
+  | when ($ordered.path or $ordered.valid)
+         and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
   | $ordered.class <= 0
 | till $action.cycles > 0 // action is done?
@@ -53,16 +54,27 @@ unit.update =
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave 1
   | $action.finish
+  | Path = $next_action.path
+  | when Path
+    | swap $ordered $next_action
+    | $ordered.path <= Path.path
+    | $next_action.init{act/move at/Path.xyz}
+    | Path.free
   | less $anim >< idle: $animate{idle}
   | if     $next_action.valid
        and $level << $world.player.moves
        and $moved <> $world.turn
-    then | !$world.player.moves - $next_action.cost
+    then | less Path: !$world.player.moves - $next_action.cost
          | $moved <= $world.turn
-    else $next_action.init{idle $xyz}
+    else $next_action.init{act/idle at/$xyz}
   | swap $action $next_action
   | $next_action.class <= 0
   | $next_action.priority <= 0
+  | when Path
+    | swap $ordered $next_action
+    | $ordered.class <= 0
+    | $moved <= $world.turn-1
+    | $next_action.priority <= 1000
   | $action.start
 | $action.update
 | 1
