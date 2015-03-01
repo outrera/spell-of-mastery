@@ -1,4 +1,4 @@
-author: `Nikita Sadkov`, `Sergey Abramov`
+author: `Nikita Sadkov`, `Sergey Abramov (InQvisions Company)`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
 xy: 0,4

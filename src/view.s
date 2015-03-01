@@ -289,6 +289,21 @@ view.update_play X Y Z =
   | $mice_right <= 0
 | $main.update
 
+unit.mark_moves =
+| Marks = []
+| I = 0
+| for D [[0 -1 0] [1 0 0] [0 1 0] [-1 0 0]]
+  | Blocked = 0
+  | for N $moves
+    | Src = $xyz + D*N
+    | Dst = Src + D
+    | less $can_move{Src Dst 1}: Blocked <= 1
+    | less Blocked
+      | Mark = $world.alloc_unit{mark_move}
+      | Mark.move{Dst}
+      | push Mark Marks
+    | !I + 1
+| Marks.flip
 
 Marks = dup 100 0
 
@@ -305,17 +320,7 @@ view.update_picked =
        and Picked.moved<>$world.turn and $world.player.moves > 0:
   | Picked <= 0
 | when Picked and Picked.picked:
-  | I = 0
-  | for D [[0 -1 0] [1 0 0] [0 1 0] [-1 0 0]]
-    | Blocked = 0
-    | for N Picked.moves
-      | Src = Picked.xyz + D*N
-      | Dst = Src + D
-      | less Picked.can_move{Src Dst 1}: Blocked <= 1
-      | less Blocked
-        | Marks.I <= $world.alloc_unit{mark_move}
-        | Marks.I.move{Dst}
-      | !I + 1
+  | for I,M Picked.mark_moves.i: Marks.I <= M
 
 view.update =
 | when $paused: leave

@@ -1,3 +1,4 @@
-author: pixelmind, `Wesnoth Team`, `Nikita Sadkov`, `Ievgen Khomenko`
-license: GPL2
+author: `Ievgen Khomenko`
+copyright: `Nikita Sadkov`
+license: `CC3-BY-SA`
 xy: 0,0
