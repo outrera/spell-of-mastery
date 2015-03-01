@@ -307,24 +307,23 @@ unit.mark_moves =
 
 Marks = dup 100 0
 
-view.update_picked = 
-| SanitizedPicked = $world.picked^uncons{picked}.skip{?removed}
-| $world.picked <= [$world.nil @SanitizedPicked]^cons{picked}
+world.update_picked = 
+| SanitizedPicked = $picked^uncons{picked}.skip{?removed}
+| $picked <= [$nil @SanitizedPicked]^cons{picked}
 | for I Marks.size:
   | M = Marks.I
   | when M:
     | M.free
     | Marks.I <= 0
-| Picked = $world.picked
-| less $mode >< play and Picked and Picked.moves
-       and Picked.moved<>$world.turn and $world.player.moves > 0:
+| Picked = $picked
+| less Picked and Picked.moves and Picked.moved<>$turn and $player.moves > 0:
   | Picked <= 0
 | when Picked and Picked.picked:
   | for I,M Picked.mark_moves.i: Marks.I <= M
 
 view.update =
 | when $paused: leave
-| $update_picked
+| $world.update_picked
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | case $mode
