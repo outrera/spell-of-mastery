@@ -62,10 +62,10 @@ type world{main size}
 | SS = Size*Size
 | $gfxes <= ($w){_=>($h){_=>[]}}
 | $seed <= ($w){_=>($h){_=>SS.rand}}
+| $clear
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
 | $shadows <= $main.sprites.unit_shadows.frames
-| $clear
 
 world.clear =
 | for U $units: less U.removed: U.free

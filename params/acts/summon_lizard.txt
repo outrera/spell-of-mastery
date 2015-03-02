@@ -1,0 +1,4 @@
+act: summon
+effect: unit_lizard
+target: pentagram
+icon: spell_lizard

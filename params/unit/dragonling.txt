@@ -1,3 +1,0 @@
-sprite: unit_dragonling
-slopewalker: 1
-moves: 2

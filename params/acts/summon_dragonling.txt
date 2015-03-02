@@ -1,4 +1,0 @@
-act: summon
-effect: unit_dragonling
-target: pentagram
-icon: spell_dragonling
