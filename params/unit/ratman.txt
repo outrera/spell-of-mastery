@@ -1,0 +1,2 @@
+sprite: unit_ratman
+moves: 1

@@ -230,7 +230,7 @@ view.center_at XY = $move{XY*32-[$w $h]/2}
 view.select_unit X Y Z = 
 | for U $world.picked^uncons{picked}: U.picked <= 0
 | $world.picked <= 0
-| Us = $world.units_at{X,Y,Z}
+| Us = $world.units_at{X,Y,Z}.skip{?aux}
 | when Us.size
   | !$pick_count+1
   | $world.picked <= [Us.($pick_count%Us.size)]^cons{picked}
@@ -279,6 +279,9 @@ unit.guess_order_at XYZ =
   mark_attack
    | Target = Us.skip{?empty}.0
    | $order.init{act/attack target/Target at/XYZ path/Path}
+  mark_swap
+   | Target = Us.skip{?empty}.0
+   | $order.init{act/swap target/Target at/XYZ path/Path}
 
 view.update_play X Y Z =
 | Player = $world.player
@@ -306,7 +309,11 @@ unit.mark_moves =
     | Mark = 0
     | less Blocked: less $can_move{Src Dst 1}
       | when got!it $world.block_at{Dst}:
-        | when $can_move{Src Dst 0}: Mark <= $world.alloc_unit{mark_attack}
+        | when $can_move{Src Dst 0}
+          | if  $owner.id >< it.owner.id
+            then | when $owner.moves >> max{$level it.level}
+                   | Mark <= $world.alloc_unit{mark_swap}
+            else Mark <= $world.alloc_unit{mark_attack}
       | Blocked <= 1
     | less Blocked: Mark <= $world.alloc_unit{mark_move}
     | when Mark

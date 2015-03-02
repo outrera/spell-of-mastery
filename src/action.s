@@ -8,11 +8,11 @@ act_class.start A = A.cycles <= A.unit.speed
 act_class.update A =
 act_class.finish A =
 
-type act_idle.act_class name/idle anim/idle
+type act_idle.act_class class_name/idle anim/idle
 
 act_idle.start A =  when A.cycles >< -1: A.cycles <= 4
 
-type act_move.act_class name/move anim/move
+type act_move.act_class class_name/move anim/move
 
 unit.can_move Src Dst CheckEmpty =
 | less $world.at{Dst}.empty: leave 0
@@ -78,7 +78,7 @@ act_move.update A = move_update A
 
 act_move.finish A = move_finish A
 
-type act_attack.act_class name/move anim/attack
+type act_attack.act_class class_name/move anim/attack
 
 act_attack.valid A =
 | T = A.target
@@ -110,7 +110,7 @@ act_attack.update A =
 act_attack.finish A =
 | move_finish A
 
-type act_pentagram.act_class name/pentagram anim/action
+type act_pentagram.act_class class_name/pentagram anim/action
 
 act_pentagram.valid A =
 | T = A.unit
@@ -125,7 +125,7 @@ act_pentagram.finish A =
 | Pentagram.move{A.xyz}
 
 
-type act_summon.act_class name/summon anim/action
+type act_summon.act_class class_name/summon anim/action
 
 act_summon.valid A =
 | T = A.target
@@ -137,12 +137,34 @@ act_summon.start A = A.unit.animate{attack}
 act_summon.finish A =
 | A.unit.world.alloc_unit{A.effect}.move{A.target.xyz}
 
+
+type act_swap.act_class class_name/summon anim/action
+
+act_swap.valid A =
+| T = A.target
+| less A.target and not A.target.removed: leave 0
+| A.unit.owner.id >< T.owner.id
+
+act_swap.start A =
+| U = A.unit
+| A.cycles <= max 1 U.speed
+| move_start A
+| !A.target.owner.moves + A.target.level
+| A.target.order.init{act/move at/A.fromXYZ}
+
+
+act_swap.update A =
+| move_update A
+
+act_swap.finish A =
+| move_finish A
+
 ActionClasses = t idle(act_idle) move(act_move) attack(act_attack)
+                  swap(act_swap)
                   pentagram(act_pentagram) summon(act_summon)
 
 type action{unit}
    class
-   class_name
    target // when action targets a unit
    xyz/[0 0 0] // target x,y,z
    cycles // cooldown cycles remaining till the action safe-to-change state
@@ -164,14 +186,15 @@ action.init act/idle at/self target/0 level/-1 effect/0 path/0 =
 | $target <= Target
 | $priority <= 50
 | $class <= ActionClasses.Act
-| $class_name <= Act
 | $cycles <= -1
-| $cost <= Level
+| $cost <= if Act >< swap then max $unit.level $target.level else Level
 | $effect <= Effect
 | $path <= Path
 | less got $class: bad "unknown action class [Act]"
 | $class.init{Me}
 | Me
+
+action.class_name = $class.class_name
 
 action.valid = $class and $class.valid{Me}
 
