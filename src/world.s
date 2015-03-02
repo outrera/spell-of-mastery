@@ -144,6 +144,10 @@ world.column_units_at X Y =
 | when!it $unit_map.at{X,Y,0}: leave $units.it^uncons{column_next}
 | []
 
+world.block_at XYZ =
+| Block = $units_at{XYZ}.skip{?empty}
+| if Block.size then Block.head else No
+
 world.place_unit U =
 | XYZ = U.xyz
 | Us = U,@$units_at{XYZ}

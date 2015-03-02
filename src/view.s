@@ -302,9 +302,14 @@ unit.mark_moves =
   | Blocked = 0
   | for N $moves
     | Dst = Src + D
-    | less $can_move{Src Dst 1}: Blocked <= 1
-    | less Blocked
-      | Mark = $world.alloc_unit{mark_move}
+    | when Dst.0 < 0 or Dst.1 < 0: Blocked <= 1
+    | Mark = 0
+    | less Blocked: less $can_move{Src Dst 1}
+      | when got!it $world.block_at{Dst}:
+        | when $can_move{Src Dst 0}: Mark <= $world.alloc_unit{mark_attack}
+      | Blocked <= 1
+    | less Blocked: Mark <= $world.alloc_unit{mark_move}
+    | when Mark
       | Mark.move{Dst}
       | when N: Mark.path <= Marks.head
       | push Mark Marks
