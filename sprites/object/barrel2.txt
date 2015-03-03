@@ -1,3 +1,0 @@
-author: Hyptosis
-height: 4
-xy: 0,8
