@@ -269,7 +269,7 @@ unit.guess_order_at XYZ =
 | Us = $world.units_at{XYZ}
 | Mark = Us.find{?type.take{5} >< mark_}
 | less got Mark: leave
-| Path = cons path: map M Mark^uncons{path}.lead
+| Path = cons path: map M Mark^uncons{path}.lead.flip
   | Node = $world.alloc_unit{mark_node}
   | Node.move{M.xyz}
   | Node
@@ -300,17 +300,20 @@ view.update_play X Y Z =
 unit.mark_moves =
 | Marks = []
 | I = 0
-| for D [[0 -1 0] [1 0 0] [0 1 0] [-1 0 0]]
+| Moves = $moves
+//| [S N E W] = [Moves Moves{[?0 -?1]} Moves{[?1 ?0]} Moves{[-?1 ?0]}]
+| [S N E W] = [Moves Moves{[-?0 -?1]} Moves{[?1 -?0]} Moves{[-?1 ?0]}]
+| for Path [S N E W]
   | Src = $xyz
   | Blocked = 0
-  | for N $moves
-    | Dst = Src + D
+  | for XY Path{[?0 ?1 0]}
+    | Dst = $xyz + XY
     | when Dst.0 < 0 or Dst.1 < 0: Blocked <= 1
     | Mark = 0
     | less Blocked: less $can_move{Src Dst 1}
       | when got!it $world.block_at{Dst}:
         | when $can_move{Src Dst 0}
-          | if  $owner.id >< it.owner.id
+          | if  $owner.id >< it.owner.id and it.moves.size
             then | when $owner.moves >> max{$level it.level}
                    | Mark <= $world.alloc_unit{mark_swap}
             else Mark <= $world.alloc_unit{mark_attack}
@@ -318,7 +321,7 @@ unit.mark_moves =
     | less Blocked: Mark <= $world.alloc_unit{mark_move}
     | when Mark
       | Mark.move{Dst}
-      | when N: Mark.path <= Marks.head
+      | when Src <> $xyz: Mark.path <= Marks.head
       | push Mark Marks
     | !I + 1
     | Src <= Dst

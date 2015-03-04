@@ -20,6 +20,16 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   mountaineer/Mountaineer
   health/Health
   level/Level
+| less $moves
+  | $moves <= []
+  | leave Me
+| Ys = $moves.tail
+| Path = []
+| for Y,Xs Ys.i: for X,N Xs.i: when N <> _: push [N X,Y] Path
+| Path <= Path.sort{?0 < ??0}{?1}
+| XY = [0 1]-Path.head
+| $moves <= Path{? + XY}
+
 
 class.height = $default_sprite.height
 

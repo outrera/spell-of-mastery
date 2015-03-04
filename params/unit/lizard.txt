@@ -1,3 +1,6 @@
 sprite: unit_lizard
 slopewalker: 1
-moves: 2
+moves:
+  | _ 0 _
+  | _ 1 2
+  | _ _ _
