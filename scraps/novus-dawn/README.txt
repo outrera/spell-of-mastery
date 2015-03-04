@@ -6,4 +6,4 @@ If used, prodvide link to http://opengameart.org/users/nikitasadkov and mention 
 
 For contacting me or sending donations use snv985@gmail.com
 
-Your donations will be used to finish the and produce more free to use assets.
+Your donations will be used to finish "The Spell of Mastery" game and produce more free to use assets.
