@@ -194,7 +194,7 @@ action.init act/idle at/self target/0 level/-1 effect/0 path/0 =
 | $class.init{Me}
 | Me
 
-action.class_name = $class.class_name
+action.class_name = $class and $class.class_name
 
 action.valid = $class and $class.valid{Me}
 

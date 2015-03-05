@@ -1,0 +1,2 @@
+author: `Nikita Sadkov`
+frames: 10*10

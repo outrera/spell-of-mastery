@@ -1,4 +1,4 @@
-use util action
+use util action macros
 
 type unit.$class{Id World}
   id/Id // numeric id for octree
@@ -115,10 +115,16 @@ unit.render Heap X Y =
   | !UY+1
 | Key = ((UX+UY)</40) + ((UZ*2-1)</30) + ((UX+$draw_order)</21) + $serial
 | when $picked
-  //| !Flags ++ #2
+  | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
+  | Mark = $main.img{ui_picked_mark}
+  | PH = $sprite.pick_height
+  | less PH: PH <= $height*8+16
+  | PH <= PH + Mark.h + Wave
+  | Heap.push{Key+1 [Mark X+$xy.0+32-Mark.w/2 Y+$xy.1-PH Flags]}
+/*  //| !Flags ++ #2
   | H = $sprite.height
   | Heap.push{Key-1 [H X Y-32 #4000+(H</16)]}
-  | Heap.push{Key+1 [H X Y-32 #8000+(H</16)]}
+  | Heap.push{Key+1 [H X Y-32 #8000+(H</16)]}*/
 | Heap.push{Key [G XX YY Flags]}
 
 unit.order = $ordered
