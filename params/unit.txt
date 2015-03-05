@@ -4,9 +4,9 @@ draw_order: 50
 health: 1 // hit points - number of hits, before this unit is dead
 //moves: 1 // number of moves this unit can do per turn orthogonally
 moves:
-  | _ 0 _
-  | _ _ _
-  | _ _ _
+  | 0 1 0
+  | 1 0 1
+  | 0 1 0
 moves_diagonal: 0 // number of moves this unit can do per turn diagonally
 jumps: 3 // maximum height unit can jump to
 damage: 0

@@ -297,35 +297,40 @@ view.update_play X Y Z =
   | $mice_right <= 0
 | $main.update
 
+Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
+
 unit.mark_moves =
 | Marks = []
 | I = 0
-| Moves = $moves
-//| [S N E W] = [Moves Moves{[?0 -?1]} Moves{[?1 ?0]} Moves{[-?1 ?0]}]
-| [S N E W] = [Moves Moves{[-?0 -?1]} Moves{[?1 -?0]} Moves{[-?1 ?0]}]
-| for Path [S N E W]
-  | Src = $xyz
-  | Blocked = 0
-  | for XY Path{[?0 ?1 0]}
-    | Dst = $xyz + XY
-    | when Dst.0 < 0 or Dst.1 < 0: Blocked <= 1
-    | Mark = 0
-    | less Blocked: less $can_move{Src Dst 1}
-      | when got!it $world.block_at{Dst}:
-        | when $can_move{Src Dst 0}
-          | if  $owner.id >< it.owner.id and it.moves.size
-            then | when $owner.moves >> max{$level it.level}
-                   | Mark <= $world.alloc_unit{mark_swap}
-            else Mark <= $world.alloc_unit{mark_attack}
-      | Blocked <= 1
-    | less Blocked: Mark <= $world.alloc_unit{mark_move}
-    | when Mark
-      | Mark.move{Dst}
-      | when Src <> $xyz: Mark.path <= Marks.head
-      | push Mark Marks
-    | !I + 1
-    | Src <= Dst
-| Marks.flip
+| Ms = $moves.deep_copy
+| O = Ms.size/2
+| advance Prev XY =
+  | Ns = Dirs2d{?+XY}.keep{Ms.?0.?1}
+  | for X,Y Ns: Ms.X.Y <= 0
+  | Ns{[Prev XY ?]}
+| Stack = advance 0 [O O]
+| till Stack.end
+  | [Prev SX,SY DX,DY] = pop Stack
+  | Src = $xyz + [SX-O SY-O 0]
+  | Dst = $xyz + [DX-O DY-O 0]
+  | Mark = 0
+  | Blocked = Dst.0 < 0 or Dst.1 < 0
+  | less Blocked: less $can_move{Src Dst 1}:
+    | when got!it $world.block_at{Dst}:
+      | when $can_move{Src Dst 0}
+        | if  $owner.id >< it.owner.id and it.moves.size
+          then | when $owner.moves >> max{$level it.level}
+                 | Mark <= $world.alloc_unit{mark_swap}
+          else Mark <= $world.alloc_unit{mark_attack}
+    | Blocked <= 1
+  | less Blocked
+    | Mark <= $world.alloc_unit{mark_move}
+    | for N (advance Mark [DX DY]): push N Stack
+  | when Mark
+    | Mark.move{Dst}
+    | Mark.path <= Prev
+    | push Mark Marks
+| Marks.list
 
 world.update_picked = 
 | SanitizedPicked = $picked^uncons{picked}.skip{?removed}

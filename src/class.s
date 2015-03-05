@@ -23,13 +23,10 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
 | less $moves
   | $moves <= []
   | leave Me
-| Ys = $moves.tail
-| Path = []
-| for Y,Xs Ys.i: for X,N Xs.i: when N <> _: push [N X,Y] Path
-| Path <= Path.sort{?0 < ??0}{?1}
-| XY = [0 1]-Path.head
-| $moves <= Path{? + XY}
-
+| Ms = $moves.tail
+| Pad = dup Ms.size 0
+| Ms <= [Pad @Ms Pad]{[0 @? 0]}
+| $moves <= Ms
 
 class.height = $default_sprite.height
 
