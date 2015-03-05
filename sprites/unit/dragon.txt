@@ -1,4 +1,4 @@
 author: `Ievgen Khomenko`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
-xy: 0,0
+xy: -8,0
