@@ -5,7 +5,7 @@ world.save =
     tids | $tid_map{}{?type}
     players | map P $players [P.id P.name P.human P.color P.power P.moves]
     player | $player.id
-    units | map U $units.skip{?removed}
+    units | map U $units.skip{(?removed or ?bank >< mark)}
             | list U.id U.serial U.type U.xyz U.xy
                    U.anim U.anim_step U.facing
                    U.owner.id U.moved

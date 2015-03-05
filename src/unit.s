@@ -41,6 +41,7 @@ unit.init Class =
 | $class <= Class
 | $sprite <= $default_sprite
 | $facing <= 3
+| $mirror <= 0
 | $next <= 0
 | $column_next <= 0
 | $serial <= $world.serial
