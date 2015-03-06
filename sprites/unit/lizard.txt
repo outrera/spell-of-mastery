@@ -1,5 +1,5 @@
 author: `Matthew Griebner`
 copyright: `Nikita Sadkov`
-license: GPL
+license: `CC3-BY-SA`
 height: 4
 xy: -2,12

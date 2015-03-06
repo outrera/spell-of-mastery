@@ -315,17 +315,22 @@ unit.mark_moves =
   | Dst = $xyz + [DX-O DY-O 0]
   | Mark = 0
   | Blocked = Dst.0 < 0 or Dst.1 < 0
-  | less Blocked: less $can_move{Src Dst 1}:
-    | when got!it $world.block_at{Dst}:
-      | when $can_move{Src Dst 0}
-        | if  $owner.id >< it.owner.id
-          then | when $owner.moves >> max{$level it.level}
-                      and it.moves.size
-                      and it.can_move{Dst Src 0}:
-                 | Mark <= $world.alloc_unit{mark_swap}
-          else when it.hits < it.health:
-               | Mark <= $world.alloc_unit{mark_attack}
-    | Blocked <= 1
+  | less Blocked
+    | BelowDst = Dst - [0 0 $world.at{Dst-[0 0 1]}.height]
+    | AboveDst = Dst + [0 0 $world.at{Dst}.height]
+    | NewDst = [Dst BelowDst AboveDst].find{D=>$can_move{Src D 0}}
+    | when got NewDst: Dst <= NewDst
+    | less $can_move{Src Dst 1}:
+      | when got!it $world.block_at{Dst}:
+        | when $can_move{Src Dst 0}
+          | if  $owner.id >< it.owner.id
+            then | when $owner.moves >> max{$level it.level}
+                        and it.moves.size
+                        and it.can_move{Dst Src 0}:
+                   | Mark <= $world.alloc_unit{mark_swap}
+            else when it.hits < it.health:
+                 | Mark <= $world.alloc_unit{mark_attack}
+      | Blocked <= 1
   | less Blocked
     | Mark <= $world.alloc_unit{mark_move}
     | for N (advance Mark [DX DY]): push N Stack

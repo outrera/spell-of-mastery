@@ -1,2 +1,4 @@
 author: `Thomas Frose`
+copyright: `Nikita Sadkov`
+license: `CC3-BY-SA`
 xy: 8,6
