@@ -318,10 +318,13 @@ unit.mark_moves =
   | less Blocked: less $can_move{Src Dst 1}:
     | when got!it $world.block_at{Dst}:
       | when $can_move{Src Dst 0}
-        | if  $owner.id >< it.owner.id and it.moves.size
+        | if  $owner.id >< it.owner.id
           then | when $owner.moves >> max{$level it.level}
+                      and it.moves.size
+                      and it.can_move{Dst Src 0}:
                  | Mark <= $world.alloc_unit{mark_swap}
-          else Mark <= $world.alloc_unit{mark_attack}
+          else when it.hits < it.health:
+               | Mark <= $world.alloc_unit{mark_attack}
     | Blocked <= 1
   | less Blocked
     | Mark <= $world.alloc_unit{mark_move}

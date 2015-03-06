@@ -28,6 +28,7 @@ type unit.$class{Id World}
   slope // unit is standing on a sloped terrain
   movement_render_hack
   path // next unit in path
+  hits
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -49,6 +50,7 @@ unit.init Class =
 | $animate{idle}
 | $picked <= 0
 | $path <= 0
+| $hits <= 0
 | when $starts
   | less $active
     | $world.active.push{Me}
