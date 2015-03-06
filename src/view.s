@@ -316,10 +316,12 @@ unit.mark_moves =
   | Mark = 0
   | Blocked = Dst.0 < 0 or Dst.1 < 0
   | less Blocked
-    | BelowDst = Dst - [0 0 $world.at{Dst-[0 0 1]}.height]
-    | AboveDst = Dst + [0 0 $world.at{Dst}.height]
-    | NewDst = [Dst BelowDst AboveDst].find{D=>$can_move{Src D 0}}
-    | when got NewDst: Dst <= NewDst
+    | !Dst.2 - 1
+    | while $world.at{Dst}.empty: !Dst.2 - 1
+    | !Dst.2 + 1
+    | less $can_move{Src Dst 0}
+      | AboveDst = Dst + [0 0 $world.at{Dst}.height]
+      | when $can_move{Src AboveDst 0}: Dst <= AboveDst
     | less $can_move{Src Dst 1}:
       | when got!it $world.block_at{Dst}:
         | when $can_move{Src Dst 0}
