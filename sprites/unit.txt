@@ -3,3 +3,4 @@ anims: | idle (0 24)
 shadow: 1
 faces: 8
 pick_height: 0
+speed: 24 // cycles requred to move unit between cells

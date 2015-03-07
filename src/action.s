@@ -4,7 +4,7 @@ type act_class
 
 act_class.init A =
 act_class.valid A = 1
-act_class.start A = A.cycles <= A.unit.speed
+act_class.start A = A.cycles <= A.unit.sprite.speed
 act_class.update A =
 act_class.finish A =
 
@@ -72,7 +72,7 @@ move_finish A =
 | U.movement_render_hack <= 0
 
 act_move.start A =
-| when A.cycles >< -1: A.cycles <=  A.unit.speed
+| when A.cycles >< -1: A.cycles <=  A.unit.sprite.speed
 | move_start A
 
 act_move.update A = move_update A
@@ -110,11 +110,11 @@ act_attack.update A =
     | less A.unit.ranger: leave
     | move_finish A
     | A.xyz.init{A.fromXYZ}
-    | A.cycles <= max 1 A.unit.speed*2/3
+    | A.cycles <= max 1 A.unit.sprite.speed*2/3
     | move_start A
     | A.data <= 2
   | when A.data >< 0:
-    | A.cycles <= max 1 A.unit.speed/2
+    | A.cycles <= max 1 A.unit.sprite.speed/2
     | move_start A
     | A.data <= 1
 
@@ -163,7 +163,7 @@ act_swap.valid A =
 
 act_swap.start A =
 | U = A.unit
-| A.cycles <= max 1 U.speed
+| A.cycles <= max 1 U.sprite.speed
 | move_start A
 | !A.target.owner.moves + A.target.level
 | A.target.order.init{act/move at/A.fromXYZ}

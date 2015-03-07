@@ -1,7 +1,7 @@
 use gfx util param
 
 type class{bank class_name static/0 empty/0 sprite/system_dummy
-           unit/0 draw_order/10 aux/0 shadow/0 moves/0 speed/1
+           unit/0 draw_order/10 aux/0 shadow/0 moves/0
            starts/0 jumps/1 mountaineer/0 ranger/0 health/0
            level/0}
   type/"[Bank]_[Class_name]"
@@ -13,7 +13,6 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   aux/Aux
   shadow/Shadow // unit casts shadow in air
   moves/Moves // moves per turn
-  speed/Speed // how many cycles it takes to move between cells
   starts/Starts // non-zero if unit starts active
   jumps/Jumps
   ranger/Ranger
