@@ -1,3 +1,3 @@
 author: Reemax, `Nikita Sadkov`
-height: 12
+height: 4
 xy: 16,14
