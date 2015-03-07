@@ -208,8 +208,7 @@ view.viewToWorld P =
 | RX = (Y*XUnit + X*YUnit)/WH
 | RY = (Y*XUnit - X*YUnit)/WH
 | [RX RY] = [RX RY] + $view_origin
-| S = $world.size
-| [RX.clip{0 S-1} RY.clip{0 S-1}]
+| [RX.clip{0 $world.w-1} RY.clip{0 $world.h-1}]
 
 view.mice_rect =
 | [AX AY] = if $anchor then $anchor else $mice_xy
@@ -223,7 +222,7 @@ view.mice_rect =
 view.move NewXY =
 | $view_origin.init{NewXY}
 //| [X Y] = NewXY
-//| $view_origin.init{[X.clip{0 $world.size-1} Y.clip{0 $world.size-1}]}
+//| $view_origin.init{[X.clip{0 $world.w-1} Y.clip{0 $world.h-1}]}
 
 view.center_at XY = $move{XY*32-[$w $h]/2}
 

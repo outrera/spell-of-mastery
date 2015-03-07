@@ -6,9 +6,7 @@ MaxActiveUnits = 4096
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
-type world{main size}
-   w/Size
-   h/Size
+type world{main w h}
    name/default
    tilemap
    unit_map
@@ -36,6 +34,8 @@ type world{main size}
    zunit
    on_player_change
    marks
+| !$w+1
+| !$h+1
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -59,13 +59,18 @@ type world{main size}
 | $active <= stack MaxActiveUnits
 | $marks <= dup 100 0
 | $filler <= $main.tiles.base_
-| SS = Size*Size
-| $gfxes <= ($w){_=>($h){_=>[]}}
-| $seed <= ($w){_=>($h){_=>SS.rand}}
+| SS = $w*$h
+| $gfxes <= ($h){_=>($w){_=>[]}}
+| $seed <= ($h){_=>($w){_=>SS.rand}}
 | $clear
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
+// add movement blocking wall
+| for P points{0 $h-1 $w 1}: times I 10: $push_{P $filler}
+| for P points{$w-1 0 1 $h-1}: times I 10: $push_{P $filler}
 | $shadows <= $main.sprites.unit_shadows.frames
+| !$w-1
+| !$h-1
 
 world.clear =
 | for U $units: less U.removed: U.free
@@ -172,8 +177,8 @@ world.remove_unit U =
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
 world.filled X,Y Z =
-| less 0 << X and X < $size: leave 1
-| less 0 << Y and Y < $size: leave 1
+| less 0 << X and X < $w: leave 1
+| less 0 << Y and Y < $h: leave 1
 | $tid_map.($get{X Y Z}).filler
 
 world.getCorners P Z = `[]`
@@ -187,8 +192,8 @@ world.getSides P Z = `[]`
   $filled{P+[0  1] Z} $filled{P+[-1 0] Z}
 
 world.role X,Y Z =
-| less 0 << X and X < $size: leave 0
-| less 0 << Y and Y < $size: leave 0
+| less 0 << X and X < $w: leave 0
+| less 0 << Y and Y < $h: leave 0
 | $tid_map.($get{X Y Z}).role
 
 world.getCornersSame P Z Role = `[]`
@@ -202,8 +207,8 @@ world.getSidesSame P Z Role = `[]`
   $role{P+[0  1] Z}><Role $role{P+[-1 0] Z}><Role
 
 world.getTrn X,Y Z =
-| less 0 << X and X < $size: leave 0
-| less 0 << Y and Y < $size: leave 0
+| less 0 << X and X < $w: leave 0
+| less 0 << Y and Y < $h: leave 0
 | Tile = $tid_map.($get{X Y Z})
 | if Tile.trn then Tile.role else 0
 
@@ -214,15 +219,15 @@ world.getCornersTrns P Z Role = `[]`
  [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
 
 world.getPilar X Y =
-| less 0 << X and X < $size: leave [$filler X,Y,0 $size]
-| less 0 << Y and Y < $size: leave [$filler X,Y,0 $size]
+| less 0 << X and X < $w: leave [$filler X,Y,0 MaxSize-1]
+| less 0 << Y and Y < $h: leave [$filler X,Y,0 MaxSize-1]
 | $tilemap.getPilar{X Y}
 
 world.updPilarGfxes P =
 | X,Y = P
-| less 0 << X and X < $size: leave 0
-| less 0 << Y and Y < $size: leave 0
-| Seed = $seed.X.Y
+| less 0 << X and X < $w: leave 0
+| less 0 << Y and Y < $h: leave 0
+| Seed = $seed.Y.X
 | Cs = $getPilar{X Y}
 | Gs = []
 | Z = 0
