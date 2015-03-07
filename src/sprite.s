@@ -14,6 +14,10 @@ type sprite{Bank Name height/1 xy/[0 0]
   margins/Margins
   pick_height/Pick_height
 
+sprite.anim_speed AnimName =
+| Anim = $anims.AnimName
+| if got Anim then Anim{?1}.sum else 0
+
 init_frames S G =
 | Frames = case S.frames
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}

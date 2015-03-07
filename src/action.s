@@ -53,6 +53,7 @@ move_start A =
 | U.move{A.xyz}
 | U.facing <= Dirs.locate{X,Y}
 | U.animate{move}
+| A.start_cycles <= A.cycles
 
 move_update A =
 | U = A.unit
@@ -90,22 +91,32 @@ act_attack.valid A =
 act_attack.init A =
 | A.data <= 0
 
+unit.face XY =
+| $facing <= Dirs.locate{(XY-$xyz.take{2}){?sign}}
+
 act_attack.start A =
 | U = A.unit
-| A.cycles <= max 1 U.speed/2
-| move_start A
+| U.face{A.target.xyz.take{2}}
+| A.cycles <= max 1 U.sprite.anim_speed{attack}
+| U.animate{attack}
 
 act_attack.update A =
-| move_update A
-| when A.cycles >< 1 and not A.data:
-  | A.target.free
-  | A.target <= 0
-  | less A.unit.ranger: leave
-  | move_finish A
-  | A.xyz.init{A.fromXYZ}
-  | A.cycles <= max 1 A.unit.speed*2/3
-  | move_start A
-  | A.data <= 1
+| when A.data > 0: move_update A
+| when A.cycles >< 1 and A.data < 2:
+  | when A.data >< 1:
+    | A.target.free
+    | A.target <= 0
+    | leave
+    | less A.unit.ranger: leave
+    | move_finish A
+    | A.xyz.init{A.fromXYZ}
+    | A.cycles <= max 1 A.unit.speed*2/3
+    | move_start A
+    | A.data <= 2
+  | when A.data >< 0:
+    | A.cycles <= max 1 A.unit.speed/2
+    | move_start A
+    | A.data <= 1
 
 act_attack.finish A =
 | move_finish A
@@ -205,7 +216,6 @@ action.valid = $class and $class.valid{Me}
 
 action.start =
 | $class.start{Me}
-| $start_cycles <= $cycles
 
 action.update =
 | $class.update{Me}
