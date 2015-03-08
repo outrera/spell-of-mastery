@@ -259,10 +259,18 @@ view.update_brush X Y Z =
       | U.pick_facing{if $keys.m >< 1 then 5 else 3}
       | when $keys.t >< 1: U.facing <= 3.rand
       | U.move{X,Y,Z}
-  [tile Type] | $world.push{X,Y $main.tiles.Type}
+  [tile Type]
+    | Tile = $main.tiles.Type
+    | less Tile.empty
+      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+    | $world.push{X,Y $main.tiles.Type}
 | when $mice_right and Z >> $mice_z: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}: U.free
-  [tile Type] | when Z > 1: $world.pop{X,Y}
+  [tile Type]
+  | when Z > 1:
+    | Tile = $world.at{X,Y,Z-1}
+    | when Z > 1: $world.pop{X,Y}
+    | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
 
 unit.guess_order_at XYZ =
 | Us = $world.units_at{XYZ}
