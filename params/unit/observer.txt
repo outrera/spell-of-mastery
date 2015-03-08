@@ -1,2 +1,2 @@
 sprite: unit_observer
-slopewalker: 1
+mountaineer: 1
