@@ -155,7 +155,11 @@ main.run =
   | PickedUnit <= Unit
   | for Icon ActIcons: Icon.show <= 0
   | when Unit
-    | for Act Unit.acts: Act.gui_icon.show <= 1
+    | for Act Unit.acts
+      | Active = 1
+      | when Act.act >< summon and not Unit.owner.pentagram:
+        | Active <= 0
+      | Act.gui_icon.show <= Active
     | PickedUnitTitle.value <= Unit.class_name.title
     | PickedUnitOwner.value <= Unit.owner.name
     | PickedUnitLevel.value <= Unit.level.as_text

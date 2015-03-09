@@ -233,7 +233,6 @@ view.select_unit X Y Z =
 | when Us.size
   | !$pick_count+1
   | $world.picked <= [Us.($pick_count%Us.size)]^cons{picked}
-| $on_unit_pick{}{$world.picked}
 
 view.update_pick X Y Z = 
 | when $mice_left
@@ -302,6 +301,7 @@ view.update_play X Y Z =
 | when $mice_right
   | when $world.picked: $world.picked.guess_order_at{X,Y,Z}
   | $mice_right <= 0
+| $on_unit_pick{}{$world.picked}
 | $main.update
 
 Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
