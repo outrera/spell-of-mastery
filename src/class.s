@@ -3,7 +3,7 @@ use gfx util param
 type class{bank class_name static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/0
            starts/0 jumps/1 mountaineer/0 ranger/0 health/0
-           level/0}
+           level/0 acts/[]}
   type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
@@ -19,6 +19,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   mountaineer/Mountaineer
   health/Health
   level/Level
+  acts/Acts
 | less $moves
   | $moves <= []
   | leave Me
@@ -42,5 +43,6 @@ main.load_classes =
   | C = class S.bank S.name @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
+| for K,V $classes: V.acts <= V.acts{}{$params.acts.?}
 
 export class

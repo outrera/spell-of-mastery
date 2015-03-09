@@ -114,8 +114,10 @@ main.run =
       | Order = PickedUnit.order.init{@Act.list.join}
 | ActIcons = map K,V $params.acts
   | G = $img{"icons_[V.icon]"}
-  | icon data/K G click/ActClick
-| ActIconsLay = hidden: layH ActIcons
+  | Icon = hidden: icon data/K G click/ActClick
+  | V.gui_icon <= Icon
+  | Icon
+| ActIconsLay = hidden: layH s/4 ActIcons
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
@@ -151,7 +153,9 @@ main.run =
   | GamePanelUnitMenu.show <= Unit <> 0
   | EditorPanelContents.show <= Unit <> 0
   | PickedUnit <= Unit
+  | for Icon ActIcons: Icon.show <= 0
   | when Unit
+    | for Act Unit.acts: Act.gui_icon.show <= 1
     | PickedUnitTitle.value <= Unit.class_name.title
     | PickedUnitOwner.value <= Unit.owner.name
     | PickedUnitLevel.value <= Unit.level.as_text
