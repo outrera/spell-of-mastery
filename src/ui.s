@@ -160,6 +160,7 @@ main.run =
       | when Act.act >< summon and not Unit.owner.pentagram:
         | Active <= 0
       | Act.gui_icon.show <= Active
+      | Act.gui_icon.widget.research <= 1
     | PickedUnitTitle.value <= Unit.class_name.title
     | PickedUnitOwner.value <= Unit.owner.name
     | PickedUnitLevel.value <= Unit.level.as_text

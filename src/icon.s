@@ -1,4 +1,4 @@
-use widgets
+use widgets gfx
 
 /*
 type minimap.widget{Main CenterAt}
@@ -29,6 +29,7 @@ icon_popup.render =
 | for X $info.items: X.pick{$enabled}
 | $info.render*/
 
+DisabledIconOverlay = 0
 
 type icon.widget{fg data/0 click/(Icon=>)}
    w/50
@@ -37,6 +38,8 @@ type icon.widget{fg data/0 click/(Icon=>)}
    over
    picked
    tint
+   disabled
+   research
    g/skin{'icon-frame'}.copy
    data/Data
    on_click/Click
@@ -51,9 +54,14 @@ icon.draw G P =
 | XY = if $pressed then P + [1 1] else P
 | G.blit{XY $g}
 | when $picked: G.rect{#0000FF 0 P.0-1 P.1-1 $w+2 $h+2}
+| when $disabled:
+  | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
+  |  G.blit{XY+[2 2] DisabledIconOverlay}
 | $last_fg <= $fg
 | $last_tint <= $tint
-icon.input In = case In
+icon.input In =
+| when $disabled: leave
+| case In
   [mice over S P] | $over <= S
   [mice left 1 P] | less $pressed: $pressed <= 1
   [mice left 0 P] | when $pressed:
