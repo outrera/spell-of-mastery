@@ -78,6 +78,7 @@ world.clear =
 | $tilemap.clear{0}
 | $picked <= 0
 | $nil <= $alloc_unit{unit_nil}
+| for Type,Act $main.params.acts: for Player $players: Player.research.Type <= 0
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName

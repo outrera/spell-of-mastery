@@ -108,7 +108,9 @@ main.run =
   | Icon.picked <= 1
   | ActIcon <= Icon
   | Act = $params.acts.(Icon.data)
-  | when PickedUnit
+  | when got Icon.number:
+    | PickedUnit.owner.researching <= Act.type
+  | when no Icon.number:
     | Target = Act.target
     | when Target >< self or Target >< pentagram:
       | Order = PickedUnit.order.init{@Act.list.join}
@@ -159,8 +161,14 @@ main.run =
     | Active = 1
     | when Act.act >< summon and not Unit.owner.pentagram:
       | Active <= 0
+    | IconIcon = Act.gui_icon.widget
+    | Player = Unit.owner
+    | ResearchSpent = Player.research.(Act.type)
+    | ResearchRemain = Act.research - ResearchSpent
+    | IconIcon.number <= if ResearchRemain > 0 then ResearchRemain else No
+    | IconIcon.research <= Unit.owner.researching >< Act.type
+                           and ResearchRemain > 0
     | Act.gui_icon.show <= Active
-    | Act.gui_icon.widget.research <= 1
   | PickedUnitTitle.value <= Unit.class_name.title
   | PickedUnitOwner.value <= Unit.owner.name
   | PickedUnitLevel.value <= Unit.level.as_text

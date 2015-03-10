@@ -19,5 +19,6 @@ main.load_params =
     | load_params Params "[BankFolder][Name].txt"
     | Name,Params
   | BankName,Bank
+| for ActType,Act $params.acts: Act.type <= ActType
 
 export load_params

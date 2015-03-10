@@ -41,6 +41,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    tint
    disabled
    research
+   number/No
    g/skin{'icon-frame'}.copy
    data/Data
    on_click/Click
@@ -61,6 +62,9 @@ icon.draw G P =
 | when $research:
   | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
   |  G.blit{XY+[28 20] ResearchIconOverlay}
+| when got $number
+  | Font = font small
+  | Font.draw{G @(XY+[2 2]) white "[$number]"}
 | $last_fg <= $fg
 | $last_tint <= $tint
 icon.input In =

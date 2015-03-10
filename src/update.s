@@ -9,6 +9,9 @@ world.init_game =
 | $end_turn // hack to begin turns from 1
 
 world.end_turn =
+| Researchng = $player.researching
+| when Researchng and $player.moves > 0:
+  | !$player.research.Researchng + $player.moves
 | NextPlayer = $player.id+1
 | less NextPlayer < $players.size
   | NextPlayer <= 0
