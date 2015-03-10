@@ -150,21 +150,21 @@ main.run =
 | $world.on_player_change <= Player =>
   | PlayerWidget.picked <= Player.id
 | View.on_unit_pick <= Unit =>
-  | GamePanelUnitMenu.show <= Unit <> 0
-  | EditorPanelContents.show <= Unit <> 0
   | PickedUnit <= Unit
+  | NonNil = Unit.type <> unit_nil
+  | GamePanelUnitMenu.show <= NonNil
+  | EditorPanelContents.show <= NonNil
   | for Icon ActIcons: Icon.show <= 0
-  | when Unit
-    | for Act Unit.acts
-      | Active = 1
-      | when Act.act >< summon and not Unit.owner.pentagram:
-        | Active <= 0
-      | Act.gui_icon.show <= Active
-      | Act.gui_icon.widget.research <= 1
-    | PickedUnitTitle.value <= Unit.class_name.title
-    | PickedUnitOwner.value <= Unit.owner.name
-    | PickedUnitLevel.value <= Unit.level.as_text
-    | PickedUnitMoved.value <= Unit.moved.as_text
+  | for Act Unit.acts
+    | Active = 1
+    | when Act.act >< summon and not Unit.owner.pentagram:
+      | Active <= 0
+    | Act.gui_icon.show <= Active
+    | Act.gui_icon.widget.research <= 1
+  | PickedUnitTitle.value <= Unit.class_name.title
+  | PickedUnitOwner.value <= Unit.owner.name
+  | PickedUnitLevel.value <= Unit.level.as_text
+  | PickedUnitMoved.value <= Unit.moved.as_text
 | ModeIcon = No
 | EditorModeIconClick = Icon =>
   | ModeIcon.picked <= 0

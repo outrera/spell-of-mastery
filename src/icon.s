@@ -30,6 +30,7 @@ icon_popup.render =
 | $info.render*/
 
 DisabledIconOverlay = 0
+ResearchIconOverlay = 0
 
 type icon.widget{fg data/0 click/(Icon=>)}
    w/50
@@ -57,6 +58,9 @@ icon.draw G P =
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
   |  G.blit{XY+[2 2] DisabledIconOverlay}
+| when $research:
+  | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
+  |  G.blit{XY+[28 20] ResearchIconOverlay}
 | $last_fg <= $fg
 | $last_tint <= $tint
 icon.input In =
