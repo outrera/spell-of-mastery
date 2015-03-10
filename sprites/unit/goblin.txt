@@ -1,0 +1,3 @@
+author: surt
+license: `CC-BY`
+xy: 0,8
