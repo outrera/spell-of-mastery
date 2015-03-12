@@ -201,13 +201,14 @@ main.run =
   | Tabs.pick{main_menu}
 | Icons = PickIcon,BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
           spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon,
-          spacer{8 0},PlayerWidget
+          spacer{8 0}
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
   |  0   0| layH View,Panel
-  |  2   2| layH s/8 Icons
+  |  2   2| layV s/8 Icons
+  |ScreenW-350 0| PlayerWidget
   |  8   ScreenH-64| ActIconsLay
   |  0   0| PauseSpacer
   |170 100| WorldProperties

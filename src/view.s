@@ -156,19 +156,25 @@ view.render_iso =
   //| Font.draw{FB BX+18 BY+4 red "[Order]"}
   //| !Order+1
 
+Indicators = 0
+
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
 | $render_iso
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
 | InfoText = []
+| less Indicators: Indicators <= $main.img{ui_indicators}
+| IP = [($w-Indicators.w)/2 0]
+| $fb.blit{IP Indicators}
+| Font = font medium
+| Font.draw{$fb @(IP+[28 1]) white "[$world.player.power]"}
+| Font.draw{$fb @(IP+[86 1]) white "[$world.player.moves]"}
+| Font.draw{$fb @(IP+[140 1]) white "[$world.turn]"}
 | when $param.show_tile: push "tile=[$world.at{X,Y,Z-1}.type]" InfoText
 | when $param.show_xyz: push "xyz=[X],[Y],[Z]" InfoText
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
-| when $param.show_turn: push "turn=[$world.turn]" InfoText
-| push "power=[$world.player.power]" InfoText
-| push "moves=[$world.player.moves]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.draw{$fb 4,($h-10)}
