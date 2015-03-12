@@ -61,7 +61,9 @@ main.run =
 | set_skin Me
 | init_message_box Me
 | PanelW = 200
-| View = view Me ScreenW-PanelW ScreenH
+| MainPanelBG = $img{ui_panel_main}
+| UnitPanelBG = $img{ui_panel_unit}
+| View = view Me ScreenW ScreenH-UnitPanelBG.h
 | Tabs = No
 | GameMenu = No
 | WorldProperties = No
@@ -99,8 +101,10 @@ main.run =
          | ItemList.pick{TileNames.locate{plain}}
     else | ItemList.data <= $classes_banks.BankName
          | ItemList.pick{0}
-| BrushPanel = hidden: layH: list BankList ItemList
-| BrushPanel.show <= 1
+| BrushPanel = layH: list BankList ItemList
+| EditorTabs = tabs brush: t
+               brush(BrushPanel)
+               play(spacer 0 0)
 | PickedUnit = 0
 | ActIcon = 0
 | ActClick = Icon =>
@@ -119,24 +123,15 @@ main.run =
   | Icon = hidden: icon data/K G click/ActClick
   | V.gui_icon <= Icon
   | Icon
-| ActIconsLay = hidden: layH s/4 ActIcons
+| ActIconsLay = layH s/4 ActIcons
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
 | PickedUnitOwner = txt size/medium 'unknown'
 | PickedUnitLevel = txt size/medium 'unknown'
 | PickedUnitMoved = txt size/medium 'unknown'
-| EditorPanelContents = hidden: dlg w/PanelW h/(ScreenH-128): mtx
-  | 2 2 | PickedUnitTitle
-  | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
-              ,layH{txt{size/medium 'Level: '},PickedUnitLevel}
-  |24 ScreenH-150 | layV s/2: map Xs Arrows.xs{7,0,1,6,8,2,5,4,3}.group{3}
-                    | layH s/2 Xs
-| EditorPanel = hidden: dlg: mtx
-  | 0 0 | panel_bg PanelW ScreenH
-  | 0 0 | EditorPanelContents
 | EndTurn = icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
-| GamePanelUnitMenu = hidden: dlg w/PanelW h/(ScreenH-128): mtx
+/*| GamePanelUnitMenu = hidden: dlg w/PanelW h/(ScreenH-128): mtx
   | 2 2 | PickedUnitTitle
   | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
               ,layH{txt{size/medium 'Level: '},PickedUnitLevel}
@@ -144,18 +139,20 @@ main.run =
 | GamePanel = hidden: dlg: mtx
   | 0 0 | panel_bg PanelW ScreenH
   | 0 0 | GamePanelUnitMenu
-  | 24 ScreenH-64 | EndTurn
-| Panel = dlg w/ScreenW h/ScreenH: mtx
-  | 0 0 | BrushPanel
-  | 0 0 | EditorPanel
-  | 0 0 | GamePanel
+  | 24 ScreenH-64 | EndTurn*/
+| MainPanel = hidden: dlg: mtx
+  | 0 0 | MainPanelBG
+| MainPanel.show <= 1
+| UnitPanel = hidden: dlg: mtx
+  | 0 0 | UnitPanelBG
+  | 8 10| ActIconsLay
 | $world.on_player_change <= Player =>
   | PlayerWidget.picked <= Player.id
 | View.on_unit_pick <= Unit =>
   | PickedUnit <= Unit
   | NonNil = Unit.type <> unit_nil
-  | GamePanelUnitMenu.show <= NonNil
-  | EditorPanelContents.show <= NonNil
+  | UnitPanel.show <= NonNil
+  | MainPanel.show <= not NonNil
   | for Icon ActIcons: Icon.show <= 0
   | for Act Unit.acts
     | Active = 1
@@ -180,12 +177,8 @@ main.run =
   | ModeIcon <= Icon
   | Mode = Icon.data
   | View.mode <= Mode
-  | BrushPanel.show <= Mode >< brush
-  | EditorPanel.show <= Mode >< pick
-  | GamePanel.show <= Mode >< play
-  | ActIconsLay.show <= Mode >< play
+  | EditorTabs.pick{Mode}
   | when Mode >< play: $world.init_game
-| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
 | PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
 | WorldIcon = icon data/pick $img{icons_world} click: Icon =>
@@ -199,17 +192,19 @@ main.run =
 | ExitIcon = icon data/pick $img{icons_exit} click: Icon =>
   | pause
   | Tabs.pick{main_menu}
-| Icons = PickIcon,BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
-          spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon,
-          spacer{8 0}
+| Icons = BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
+          spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
-  |  0   0| layH View,Panel
+  |  0 View.h| MainPanel
+  |  0 View.h| UnitPanel
+  |  0   0| View
+  | ScreenW-54 0 | EndTurn
+  | ScreenW-PanelW 0 | EditorTabs
   |  2   2| layV s/8 Icons
-  |ScreenW-350 0| PlayerWidget
-  |  8   ScreenH-64| ActIconsLay
+  |64 0| PlayerWidget
   |  0   0| PauseSpacer
   |170 100| WorldProperties
   |  0   0| MessageBox
