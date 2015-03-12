@@ -158,13 +158,10 @@ view.render_iso =
 
 Indicators = 0
 
-view.render_frame =
-| $fb.clear{#929292/*#00A0C0*/}
-| $render_iso
+view.draw_indicators =
+| less Indicators: Indicators <= $main.img{ui_indicators}
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
-| InfoText = []
-| less Indicators: Indicators <= $main.img{ui_indicators}
 | IP = [($w-Indicators.w)/2 0]
 | $fb.blit{IP Indicators}
 | Font = font medium
@@ -174,6 +171,12 @@ view.render_frame =
 | Font = font small
 | Font.draw{$fb @(IP+[200 1]) white "[X],[Y],[Z]"}
 | Font.draw{$fb @(IP+[200 9]) white "[$world.at{X,Y,Z-1}.type]"}
+
+view.render_frame =
+| $fb.clear{#929292/*#00A0C0*/}
+| $render_iso
+| when $mode >< play: $draw_indicators
+| InfoText = []
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
