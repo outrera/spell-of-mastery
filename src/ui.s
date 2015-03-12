@@ -101,7 +101,8 @@ main.run =
          | ItemList.pick{0}
 | BrushUI = dlg: mtx
   | 0 0 | View
-  | 0 0 | layH: BankList,ItemList,PlayerWidget
+  | 0 0 | layH: BankList,ItemList
+  | PanelW 0 | PlayerWidget
 | PickedUnit = 0
 | ActIcon = 0
 | ActClick = Icon =>
