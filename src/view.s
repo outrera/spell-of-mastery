@@ -171,8 +171,9 @@ view.render_frame =
 | Font.draw{$fb @(IP+[28 1]) white "[$world.player.power]"}
 | Font.draw{$fb @(IP+[86 1]) white "[$world.player.moves]"}
 | Font.draw{$fb @(IP+[140 1]) white "[$world.turn]"}
-| when $param.show_tile: push "tile=[$world.at{X,Y,Z-1}.type]" InfoText
-| when $param.show_xyz: push "xyz=[X],[Y],[Z]" InfoText
+| Font = font small
+| Font.draw{$fb @(IP+[200 1]) white "[X],[Y],[Z]"}
+| Font.draw{$fb @(IP+[200 9]) white "[$world.at{X,Y,Z-1}.type]"}
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
