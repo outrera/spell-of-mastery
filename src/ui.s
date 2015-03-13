@@ -51,7 +51,7 @@ GameMenu <=
 
 type unit_panel.widget{main}
      w/0 h/0 unit bg icon_bg laurels moved
-     power_icon health_icon attack_icon defence_icon 
+     power_icon health_icon attack_icon defence_icon
 | $bg <= $main.img{ui_panel_unit}
 | $icon_bg <= $main.img{unit_icon_bg}
 | $laurels <= $main.img{ui_laurels}
@@ -84,9 +84,9 @@ unit_panel.draw G P =
 | X = P.0+4
 | Y = P.1+$laurels.h+16
 | times I $unit.health: G.blit{[X+I*8 Y] $health_icon}
-| times I $unit.health: G.blit{[X+I*8 Y+16] $power_icon}
-| times I $unit.health: G.blit{[X+I*8 Y+32] $attack_icon}
-| times I $unit.health: G.blit{[X+I*8 Y+48] $defence_icon}
+| times I $unit.level: G.blit{[X+I*8 Y+16] $power_icon}
+| times I $unit.attack: G.blit{[X+I*8 Y+32] $attack_icon}
+| times I $unit.defence: G.blit{[X+I*8 Y+48] $defence_icon}
 
 
 // FIXME: refactor following into UI type

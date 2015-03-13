@@ -4,7 +4,7 @@ draw_order: 50
 level: 1 // number of move points it takes to move unit
 cost: 4 // number of move points it takes to summon unit
 health: 1 // hit points - number of hits, before this unit is dead
-damage: 0
+attack: 0
 defence: 0 // amount of damage this unit can absorb
 sight: 1
 jumps: 3 // maximum height unit can jump to
@@ -19,4 +19,4 @@ flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
 mountaineer: 0 // determines if unit can walk sloped tiles
 invincible: 0
-wizard: 0
+leader: 0

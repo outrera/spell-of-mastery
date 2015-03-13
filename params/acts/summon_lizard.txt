@@ -2,4 +2,4 @@ act: summon
 effect: unit_lizard
 target: pentagram
 icon: spell_lizard
-research: 1
+research: 4

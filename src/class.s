@@ -20,7 +20,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   ranger/Ranger
   leader/Leader
   health/Health
-  attack/Health
+  attack/Attack
   defence/Defence
   level/Level
   acts/Acts

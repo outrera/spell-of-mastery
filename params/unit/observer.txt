@@ -1,2 +1,8 @@
 sprite: unit_observer
 mountaineer: 1
+moves:
+  | 0 0 1 0 0
+  | 0 0 1 0 0
+  | 1 1 0 1 1
+  | 0 0 1 0 0
+  | 0 0 1 0 0
