@@ -1,4 +1,2 @@
 author: 'Nethack Team'
 license: `CC3-BY-SA`
-xy: 0,-16
-height: 0

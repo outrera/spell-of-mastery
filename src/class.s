@@ -2,8 +2,9 @@ use gfx util param
 
 type class{bank class_name static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/0
-           starts/0 jumps/1 mountaineer/0 ranger/0 health/0
-           level/0 acts/[]}
+           starts/0 jumps/1 mountaineer/0 ranger/0 leader/Leader
+           health/0 attack/0 defence/0 level/0
+           acts/[]}
   type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
@@ -15,9 +16,12 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   moves/Moves // moves per turn
   starts/Starts // non-zero if unit starts active
   jumps/Jumps
-  ranger/Ranger
   mountaineer/Mountaineer
+  ranger/Ranger
+  leader/Leader
   health/Health
+  attack/Health
+  defence/Defence
   level/Level
   acts/Acts
 | less $moves

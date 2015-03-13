@@ -1,3 +1,0 @@
-author: `Ails`
-xy: 0,0
-height: 0

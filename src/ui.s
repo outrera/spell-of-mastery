@@ -49,37 +49,44 @@ GameMenu <=
 */
 
 
-
-/*
-  | PickedUnitTitle.value <= Unit.class_name.title
-  | PickedUnitOwner.value <= Unit.owner.name
-  | PickedUnitLevel.value <= Unit.level.as_text
-  | PickedUnitMoved.value <= Unit.moved.as_text
-*/
-
-type unit_panel.widget{main} w/0 h/0 unit bg icon_bg laurels moved
+type unit_panel.widget{main}
+     w/0 h/0 unit bg icon_bg laurels moved
+     power_icon health_icon attack_icon defence_icon 
 | $bg <= $main.img{ui_panel_unit}
-| $icon_bg <= $main.img{ui_unit_icon_bg}
+| $icon_bg <= $main.img{unit_icon_bg}
 | $laurels <= $main.img{ui_laurels}
 | $moved <= $main.img{ui_unit_moved}
+| $power_icon <= $main.img{stats_power}
+| $health_icon <= $main.img{stats_health}
+| $attack_icon <= $main.img{stats_attack}
+| $defence_icon <= $main.img{stats_defence}
 
 unit_panel.set_unit Unit =
 | $unit <= Unit
 | if $unit
-  then | $w <= $bg.w
-       | $h <= $bg.h
+  then | $w <= $laurels.w
+       | $h <= $laurels.h
   else | $w <= 0
        | $h <= 0
 
 unit_panel.draw G P =
 | less $unit: leave
-| G.blit{P $bg}
-| G.blit{P+[12 4] $icon_bg}
+| ClassName = $unit.class_name
+| IconXY = P+[12 4]
+| Icon = $unit.main.sprites."unit_icon_[ClassName]"
+//| G.blit{IconXY $icon_bg}
+| when got Icon: G.blit{IconXY Icon.frames.0}
 | G.blit{P+[8 8] $laurels}
 | when $unit.moved >< $unit.world.turn: G.blit{P+[34 54] $moved}
 | Font = font medium
-| Font.draw{G @(P+[85 10]) white "[$unit.class_name.title]"}
+| Font.draw{G @(P+[85 10]) white "[ClassName.title]"}
 | Font.draw{G @(P+[85 48]) white "[$unit.owner.name]"}
+| X = P.0+4
+| Y = P.1+$laurels.h+16
+| times I $unit.health: G.blit{[X+I*8 Y] $health_icon}
+| times I $unit.health: G.blit{[X+I*8 Y+16] $power_icon}
+| times I $unit.health: G.blit{[X+I*8 Y+32] $attack_icon}
+| times I $unit.health: G.blit{[X+I*8 Y+48] $defence_icon}
 
 
 // FIXME: refactor following into UI type
