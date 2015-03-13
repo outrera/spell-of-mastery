@@ -49,10 +49,38 @@ GameMenu <=
 */
 
 
-type panel_bg.widget{w h}
-panel_bg.draw G P =
-| G.rect{#AAAAAA 1 P.0 P.1 $w $h}
-| G.line{#000000 P P+[0 $h]}
+
+/*
+  | PickedUnitTitle.value <= Unit.class_name.title
+  | PickedUnitOwner.value <= Unit.owner.name
+  | PickedUnitLevel.value <= Unit.level.as_text
+  | PickedUnitMoved.value <= Unit.moved.as_text
+*/
+
+type unit_panel.widget{main} w/0 h/0 unit bg icon_bg laurels moved
+| $bg <= $main.img{ui_panel_unit}
+| $icon_bg <= $main.img{ui_unit_icon_bg}
+| $laurels <= $main.img{ui_laurels}
+| $moved <= $main.img{ui_unit_moved}
+
+unit_panel.set_unit Unit =
+| $unit <= Unit
+| if $unit
+  then | $w <= $bg.w
+       | $h <= $bg.h
+  else | $w <= 0
+       | $h <= 0
+
+unit_panel.draw G P =
+| less $unit: leave
+| G.blit{P $bg}
+| G.blit{P+[12 4] $icon_bg}
+| G.blit{P+[8 8] $laurels}
+| when $unit.moved >< $unit.world.turn: G.blit{P+[34 54] $moved}
+| Font = font medium
+| Font.draw{G @(P+[85 10]) white "[$unit.class_name.title]"}
+| Font.draw{G @(P+[85 48]) white "[$unit.owner.name]"}
+
 
 // FIXME: refactor following into UI type
 main.run =
@@ -132,8 +160,11 @@ main.run =
   | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
               ,layH{txt{size/medium 'Level: '},PickedUnitLevel}
               ,layH{txt{size/medium 'Moved: '},PickedUnitMoved}*/
-| UnitPanel = dlg: mtx
-  | 0 0 | $img{ui_panel_unit}
+/*| UnitPanel = dlg: mtx
+  | 0  0| $img{ui_panel_unit}
+  |85 10| PickedUnitTitle
+  |85 48| PickedUnitOwner*/
+| UnitPanel = unit_panel Me
 | GameUnitUI = hidden: dlg: mtx
   |  0   0| UnitPanel
 //  |  4 ScreenH-56| layH s/4 ActIcons
@@ -165,10 +196,7 @@ main.run =
     | IconIcon.research <= Unit.owner.researching >< Act.type
                            and ResearchRemain > 0
     | Act.gui_icon.show <= Active
-  | PickedUnitTitle.value <= Unit.class_name.title
-  | PickedUnitOwner.value <= Unit.owner.name
-  | PickedUnitLevel.value <= Unit.level.as_text
-  | PickedUnitMoved.value <= Unit.moved.as_text
+  | UnitPanel.set_unit{Unit}
 | ModeIcon = No
 | EditorModeIconClick = Icon =>
   | ModeIcon.picked <= 0
