@@ -1,2 +1,5 @@
-author: Redshrike
+author: `Nikita Sadkov`
+copyright: `Nikita Sadkov`
 xy: 0,8
+frames: folder
+anims: | idle (idle0 60)
