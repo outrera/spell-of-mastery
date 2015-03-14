@@ -344,8 +344,7 @@ unit.mark_moves =
       | when got!it $world.block_at{Dst}:
         | when $can_move{Src Dst 0}
           | if  $owner.id >< it.owner.id
-            then | when $owner.moves >> max{$level it.level}
-                        and it.moves.size
+            then | when and it.moves.size
                         and it.can_move{Dst Src 0}:
                    | Mark <= $world.alloc_unit{mark_swap}
             else when it.hits < it.health:

@@ -1,1 +1,9 @@
 sprite: unit_baphomet
+health: 3
+level: 4
+moves:
+  | 0 1 1 1 0
+  | 1 0 1 0 1
+  | 1 1 0 1 1
+  | 1 0 1 0 1
+  | 0 1 1 1 0

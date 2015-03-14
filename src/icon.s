@@ -49,8 +49,9 @@ type icon.widget{fg data/0 click/(Icon=>)}
    last_fg
    last_tint
 icon.draw G P =
+| less $fg: leave
 | when $fg^address <> $last_fg^address or $tint^address <> $last_tint^address:
-  | when $fg: if $tint
+  | if $tint
     then $g.blit{[2 2] $fg map/$tint}
     else $g.blit{[2 2] $fg}
 | XY = if $pressed then P + [1 1] else P

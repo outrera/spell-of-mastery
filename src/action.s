@@ -159,13 +159,13 @@ type act_swap.act_class class_name/summon anim/action
 act_swap.valid A =
 | T = A.target
 | less A.target and not A.target.removed: leave 0
-| A.unit.owner.id >< T.owner.id
+| A.unit.owner.id >< T.owner.id and A.unit.owner.moves > 0
 
 act_swap.start A =
 | U = A.unit
 | A.cycles <= max 1 U.sprite.speed
 | move_start A
-| !A.target.owner.moves + A.target.level
+| !A.target.owner.moves + (A.unit.level+A.target.level)
 | A.target.order.init{act/move at/A.fromXYZ}
 
 
@@ -174,6 +174,7 @@ act_swap.update A =
 
 act_swap.finish A =
 | move_finish A
+| !A.target.owner.moves - (max A.unit.level A.target.level)
 
 ActionClasses = t idle(act_idle) move(act_move) attack(act_attack)
                   swap(act_swap)

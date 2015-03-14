@@ -89,6 +89,8 @@ unit_panel.draw G P =
 | times I $unit.defence: G.blit{[X+I*8 Y+48] $defence_icon}
 
 
+MaxActIcons = 14
+
 // FIXME: refactor following into UI type
 main.run =
 | ScreenW <= $params.ui.width
@@ -151,30 +153,17 @@ main.run =
     | Target = Act.target
     | when Target >< self or Target >< pentagram:
       | Order = PickedUnit.order.init{@Act.list.join}
-| ActIcons = map K,V $params.acts
-  | G = $img{"icons_[V.icon]"}
-  | Icon = hidden: icon data/K G click/ActClick
-  | V.gui_icon <= Icon
-  | Icon
+| ActIcons = map I MaxActIcons: hidden: icon 0 click/ActClick
+| for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt size/medium ''
 | PickedUnitOwner = txt size/medium 'unknown'
 | PickedUnitLevel = txt size/medium 'unknown'
 | PickedUnitMoved = txt size/medium 'unknown'
-/*| GamePanelUnitMenu = hidden: dlg w/PanelW h/(ScreenH-128): mtx
-  | 2 2 | PickedUnitTitle
-  | 4 16| layV layH{txt{size/medium 'Owner: '},PickedUnitOwner}
-              ,layH{txt{size/medium 'Level: '},PickedUnitLevel}
-              ,layH{txt{size/medium 'Moved: '},PickedUnitMoved}*/
-/*| UnitPanel = dlg: mtx
-  | 0  0| $img{ui_panel_unit}
-  |85 10| PickedUnitTitle
-  |85 48| PickedUnitOwner*/
 | UnitPanel = unit_panel Me
 | GameUnitUI = hidden: dlg: mtx
   |  0   0| UnitPanel
-//  |  4 ScreenH-56| layH s/4 ActIcons
 | EndTurnIcon = icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
 | GameUI = dlg: mtx
   |  0   0| View
@@ -191,18 +180,20 @@ main.run =
   | NonNil = Unit.type <> unit_nil
   | GameUnitUI.show <= NonNil
   | for Icon ActIcons: Icon.show <= 0
-  | for Act Unit.acts
+  | for I,Act Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
     | Active = 1
     | when Act.act >< summon and not Unit.owner.pentagram:
       | Active <= 0
-    | IconIcon = Act.gui_icon.widget
+    | Icon = ActIcons.I.widget
     | Player = Unit.owner
     | ResearchSpent = Player.research.(Act.type)
     | ResearchRemain = Act.research - ResearchSpent
-    | IconIcon.number <= if ResearchRemain > 0 then ResearchRemain else No
-    | IconIcon.research <= Unit.owner.researching >< Act.type
-                           and ResearchRemain > 0
-    | Act.gui_icon.show <= Active
+    | Icon.data <= Act.type
+    | Icon.fg <= Act.icon_gfx
+    | Icon.number <= if ResearchRemain > 0 then ResearchRemain else No
+    | Icon.research <= Unit.owner.researching >< Act.type
+                       and ResearchRemain > 0
+    | ActIcons.I.show <= Active
   | UnitPanel.set_unit{Unit}
 | ModeIcon = No
 | EditorModeIconClick = Icon =>

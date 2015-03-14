@@ -26,10 +26,11 @@ world.end_turn =
   | when U.level: for V $units_at{U.xyz}
     | when V.type >< special_node
       | !P.power+1
-| P.moves <= $player.power
+| P.moves <= min $player.power P.moves+$player.power
 | $on_player_change P
 
 world.update =
+| when $player.moves << 0: $end_turn
 | NextActive = []
 | while $active.used
   | U = $active.pop
@@ -65,7 +66,7 @@ unit.update =
     | Path.free
   | less $anim >< idle: $animate{idle}
   | if     $next_action.valid
-       and $level << $owner.moves
+       and $owner.moves > 0
        and $moved <> $world.turn
     then | less Path: !$owner.moves - $next_action.cost
          | $moved <= $world.turn
