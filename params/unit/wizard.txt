@@ -1,4 +1,4 @@
 sprite: unit_wizard
-acts: pentagram, summon_oculus, summon_beetle, summon_lizard
 health: 3
 leader: 1
+acts: (pentagram)

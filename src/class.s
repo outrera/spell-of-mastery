@@ -24,9 +24,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   defence/Defence
   level/Level
   acts/Acts
-| less $moves
-  | $moves <= []
-  | leave Me
+| less $moves: leave Me
 | Ms = $moves.tail
 | Pad = dup Ms.size 0
 | Ms <= [Pad @Ms Pad]{[0 @? 0]}

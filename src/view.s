@@ -318,6 +318,7 @@ view.update_play X Y Z =
 Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
 
 unit.mark_moves =
+| less $moves: leave []
 | Marks = []
 | I = 0
 | Ms = $moves.deep_copy

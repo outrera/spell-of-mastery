@@ -5,4 +5,4 @@ x_unit: 64
 y_unit: 32
 z_unit: 8 // height of world cell in pixels
 tile_banks: tile
-class_banks: unit
+class_banks: unit,special

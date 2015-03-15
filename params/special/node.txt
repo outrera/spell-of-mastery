@@ -1,0 +1,2 @@
+sprite: special_node
+empty: 1

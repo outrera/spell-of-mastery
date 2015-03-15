@@ -29,6 +29,7 @@ icon_popup.render =
 | for X $info.items: X.pick{$enabled}
 | $info.render*/
 
+IconFrame = 0
 DisabledIconOverlay = 0
 ResearchIconOverlay = 0
 
@@ -42,20 +43,17 @@ type icon.widget{fg data/0 click/(Icon=>)}
    disabled
    research
    number/No
-   g/skin{'icon-frame'}.copy
    data/Data
    on_click/Click
    //popup/icon_popup{}
-   last_fg
-   last_tint
 icon.draw G P =
 | less $fg: leave
-| when $fg^address <> $last_fg^address or $tint^address <> $last_tint^address:
-  | if $tint
-    then $g.blit{[2 2] $fg map/$tint}
-    else $g.blit{[2 2] $fg}
+| less IconFrame: IconFrame <= skin{'icon_frame'}
 | XY = if $pressed then P + [1 1] else P
-| G.blit{XY $g}
+| G.blit{XY IconFrame}
+| if $tint
+  then G.blit{XY+[2 2] $fg map/$tint}
+  else G.blit{XY+[2 2] $fg}
 | when $picked: G.rect{#0000FF 0 P.0-1 P.1-1 $w+2 $h+2}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
@@ -66,8 +64,6 @@ icon.draw G P =
 | when got $number
   | Font = font small
   | Font.draw{G @(XY+[2 2]) white "[$number]"}
-| $last_fg <= $fg
-| $last_tint <= $tint
 icon.input In =
 | when $disabled: leave
 | case In

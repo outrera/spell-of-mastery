@@ -1,0 +1,3 @@
+sprite: special_pentagram
+empty: 1
+acts: summon_oculus, summon_beetle, summon_lizard

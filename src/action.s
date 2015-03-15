@@ -146,7 +146,10 @@ act_summon.valid A =
 | less A.target and not A.target.removed: leave 0
 | T.world.units_at{T.xyz}.all{?empty}
 
-act_summon.start A = A.unit.animate{attack}
+act_summon.start A =
+| A.unit.animate{attack}
+| Leader = A.unit.owner.leader
+| when Leader: A.unit.owner.leader.animate{attack}
 
 act_summon.finish A =
 | S = A.unit.world.alloc_unit{A.effect}
@@ -168,13 +171,14 @@ act_swap.start A =
 | !A.target.owner.moves + (A.unit.level+A.target.level)
 | A.target.order.init{act/move at/A.fromXYZ}
 
-
 act_swap.update A =
 | move_update A
 
 act_swap.finish A =
 | move_finish A
 | !A.target.owner.moves - (max A.unit.level A.target.level)
+
+
 
 ActionClasses = t idle(act_idle) move(act_move) attack(act_attack)
                   swap(act_swap)

@@ -23,6 +23,7 @@ world.end_turn =
 | PID = P.id
 | for U $units.keep{U => not U.removed and U.owner.id >< PID}
   | when U.type >< special_pentagram: P.pentagram <= U
+  | when U.leader: P.leader <= U
   | when U.level: for V $units_at{U.xyz}
     | when V.type >< special_node
       | !P.power+1
