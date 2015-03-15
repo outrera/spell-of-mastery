@@ -1,5 +1,0 @@
-act: summon
-effect: unit_observer
-target: pentagram
-icon: spell_observer
-research: 0

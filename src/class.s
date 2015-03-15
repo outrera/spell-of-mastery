@@ -47,6 +47,9 @@ main.load_classes =
   | C = class S.bank S.name @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
-| for K,V $classes: V.acts <= V.acts{}{$params.acts.?}
+| for K,V $classes: V.acts <= map ActName V.acts
+  | Act = $params.acts.ActName
+  | less got Act: bad "[K] references undefined act [ActName]"
+  | Act
 
 export class

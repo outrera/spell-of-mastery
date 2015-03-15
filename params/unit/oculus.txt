@@ -1,4 +1,4 @@
-sprite: unit_observer
+sprite: unit_oculus
 mountaineer: 1
 moves:
   | 0 0 1 0 0
