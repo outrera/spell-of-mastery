@@ -235,13 +235,17 @@ view.move NewXY =
 
 view.center_at XY = $move{XY*32-[$w $h]/2}
 
+world.update_pick Units =
+| for U $picked^uncons{picked}: U.picked <= 0
+| $picked <= Units^cons{picked}
+
 view.select_unit X Y Z = 
-| for U $world.picked^uncons{picked}: U.picked <= 0
-| $world.picked <= 0
+| Picked = []
 | Us = $world.units_at{X,Y,Z}.skip{?aux}
 | when Us.size
   | !$pick_count+1
-  | $world.picked <= [Us.($pick_count%Us.size)]^cons{picked}
+  | Picked <= [Us.($pick_count%Us.size)]
+| $world.update_pick{Picked}
 
 view.update_pick X Y Z = 
 | when $mice_left

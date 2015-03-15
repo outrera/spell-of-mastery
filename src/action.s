@@ -91,12 +91,12 @@ act_attack.valid A =
 act_attack.init A =
 | A.data <= 0
 
-unit.face XY =
-| $facing <= Dirs.locate{(XY-$xyz.take{2}){?sign}}
+unit.face XYZ =
+| $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
 act_attack.start A =
 | U = A.unit
-| U.face{A.target.xyz.take{2}}
+| U.face{A.target.xyz}
 | A.cycles <= max 1 U.sprite.anim_speed{attack}
 | U.animate{attack}
 
@@ -149,12 +149,15 @@ act_summon.valid A =
 act_summon.start A =
 | A.unit.animate{attack}
 | Leader = A.unit.owner.leader
-| when Leader: A.unit.owner.leader.animate{attack}
+| when Leader
+  | Leader.animate{attack}
+  | Leader.face{A.unit.xyz}
 
 act_summon.finish A =
 | S = A.unit.world.alloc_unit{A.effect}
 | S.owner <= A.unit.owner
 | S.move{A.target.xyz}
+| S.world.update_pick{[S]}
 
 
 type act_swap.act_class class_name/summon anim/action
