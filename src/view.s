@@ -108,7 +108,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
   | when Z > UnitZ
     | !Z+1
     | U.render{Heap BX BY-ZUnit*Z-ZUnit}
-    | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2})
+    | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
     | Key = Key + (UnitZ</30) + 1
     | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
 
