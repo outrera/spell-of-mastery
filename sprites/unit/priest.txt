@@ -1,2 +1,9 @@
-author: Blarumyrran
+author: Blarumyrran, `Sergey Abramov (InQvisions Company)`
+license: `CC3-BY-SA`
 xy: 0,4
+frames: folder
+anims: | idle (idle0 6) (idle1 6) (idle2 6) (idle3 6) (idle4 12)
+              (idle3 12) (idle2 10) (idle1 8) (idle0 6)
+       | move (move1 6) (move2 6) (move3 6) (move4 6)
+       | attack (attack1 6) (attack2 6) (attack3 6) (attack4 15)
+                (attack3 6) (attack2 6) (attack1 6) 
