@@ -163,7 +163,7 @@ world.place_unit U =
 | Us = U,@$column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
 | Consed = Us^cons{column_next}
 | Id = if Consed then Consed.id else 0
-| $unit_map.set{XYZ.0,XYZ.1,0 U.id}
+| $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
 world.remove_unit U =
 | XYZ = U.xyz

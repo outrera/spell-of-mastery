@@ -99,15 +99,14 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
        | TZ = UnitZ - 4
        | when AboveCursor or TZ << CursorZ or CurHH-TZ/YDiv >> 0:
          | Heap.push{Key [G BX BY-G.h-ZZ 0]}
-         | for U Wr.units_at{X,Y,UnitZ}: U.render{Heap BX BY-ZUnit*UnitZ}
        | when Cursor | Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
        | Z <= UnitZ
 | for U Wr.column_units_at{X Y}
   | Z = U.xyz.2
-  // FIXME: should we always display flying units? even underground?
-  | when Z > UnitZ
-    | !Z+1
-    | U.render{Heap BX BY-ZUnit*Z-ZUnit}
+  | DrawShadow = Z > UnitZ
+  // FIXME: omit units stadning above the current cave
+  | U.render{Heap BX BY-ZUnit*Z}
+  | when DrawShadow
     | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
     | Key = Key + (UnitZ</30) + 1
     | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
