@@ -177,6 +177,10 @@ world.remove_unit U =
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
+world.effect X,Y,Z What =
+| E = $alloc_unit{What}
+| E.move{X,Y,Z}
+
 world.filled X,Y Z =
 | less 0 << X and X < $w: leave 1
 | less 0 << Y and Y < $h: leave 1

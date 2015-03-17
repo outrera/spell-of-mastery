@@ -8,12 +8,15 @@ type sprite{Bank Name height/1 xy/[0 0]
   height/Height
   frames/Frames
   xy/Xy
-  anims/Anims.tail{}{[?0 ?tail]}.table
+  anims
   faces/Faces
   class/Class
   margins/Margins
   pick_height/Pick_height
   speed/Speed // how many cycles it takes to move between cells
+| $anims <= @table: map [Name@Frames] Anims.tail
+  | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}
+  | [Name Frames]
 
 sprite.anim_speed AnimName =
 | Anim = $anims.AnimName
