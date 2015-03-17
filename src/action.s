@@ -147,11 +147,13 @@ act_summon.valid A =
 | T.world.units_at{T.xyz}.all{?empty}
 
 act_summon.start A =
-| A.unit.animate{attack}
-| Leader = A.unit.owner.leader
+| U = A.unit
+| U.animate{attack}
+| Leader = U.owner.leader
 | when Leader
   | Leader.animate{attack}
-  | Leader.face{A.unit.xyz}
+  | Leader.face{U.xyz}
+| U.world.effect{A.target.xyz teleport}
 
 act_summon.finish A =
 | S = A.unit.world.alloc_unit{A.effect}
@@ -160,7 +162,17 @@ act_summon.finish A =
 | S.world.update_pick{[S]}
 
 
-type act_swap.act_class class_name/summon anim/action
+type act_die.act_class class_name/die anim/action
+
+act_die.valid A = 1
+
+act_die.start A = A.unit.animate{death}
+
+act_die.finish A =
+| U = A.unit
+| U.free
+
+type act_swap.act_class class_name/swap anim/action
 
 act_swap.valid A =
 | T = A.target
@@ -183,7 +195,7 @@ act_swap.finish A =
 
 
 
-ActionClasses = t idle(act_idle) move(act_move) attack(act_attack)
+ActionClasses = t idle(act_idle) move(act_move) attack(act_attack) die(act_die)
                   swap(act_swap)
                   pentagram(act_pentagram) summon(act_summon)
 

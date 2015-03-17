@@ -178,8 +178,9 @@ world.remove_unit U =
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
 world.effect X,Y,Z What =
-| E = $alloc_unit{What}
+| E = $alloc_unit{"effect_[What]"}
 | E.move{X,Y,Z}
+| E.order.init{act/die level/0}
 
 world.filled X,Y Z =
 | less 0 << X and X < $w: leave 1
