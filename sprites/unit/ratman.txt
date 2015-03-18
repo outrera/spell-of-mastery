@@ -1,5 +1,8 @@
-author: `Matthew Griebner`
+author: `Matthew Griebner`, `Natasha Guseva`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
 height: 4
-xy: 8,8
+xy: 8,28
+frames: folder
+anims: | idle (idle0 60)
+       | move (move1 6) (move2 6) (move3 6) (move4 6)

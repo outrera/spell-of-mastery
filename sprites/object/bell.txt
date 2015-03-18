@@ -1,4 +1,4 @@
-author: `Atyom Belov`
+author: `Artem Belov`
 copyright: `Nikita Sadkov`
 height: 4
 xy: 0,8
