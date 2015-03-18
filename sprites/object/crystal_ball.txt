@@ -1,0 +1,4 @@
+author: `Akimasa Shimobayashi`
+copyright: `Akimasa Shimobayashi`
+license: `CC3-BY-SA`
+http: `http://www.shimobayashi.name/`
