@@ -1,0 +1,9 @@
+author: `Daniel Cook`
+copyright: `Daniel Cook`
+license: `CC3-BY`
+xy: 0,2
+frames: folder
+anims: | idle (idle01 6) (idle02 6) (idle03 6) (idle04 6)
+              (idle05 6) (idle06 6) (idle07 6) (idle08 6)
+              (idle09 6) (idle10 6) (idle11 6) (idle13 6)
+              (idle14 6) (idle15 6) (idle16 6) (idle17 6)
