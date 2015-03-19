@@ -120,6 +120,8 @@ main.run =
               | WorldProperties.show <= 0
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
+| $world.on_player_change <= Player =>
+  | PlayerWidget.picked <= Player.id
 | BankName =
 | TileNames = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
 | BankNames = [terrain unit @$bank_names.skip{unit}]
@@ -172,8 +174,6 @@ main.run =
 | ViewUI = tabs brush: t
            brush(BrushUI)
            play(GameUI)
-| $world.on_player_change <= Player =>
-  | PlayerWidget.picked <= Player.id
 | View.on_unit_pick <= Unit =>
   | PickedUnit <= Unit
   | NonNil = Unit.type <> unit_nil

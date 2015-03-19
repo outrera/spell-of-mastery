@@ -69,6 +69,7 @@ unit.pick_facing F =
 | Frame = $sprite.frames.FrameIndex
 | less Frame.is_list
   | $frame <= Frame
+  | when $facing <> 3: $mirror <= 1
   | leave
 | $mirror <= 0
 | Angle = $facing
