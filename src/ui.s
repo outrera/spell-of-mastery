@@ -50,9 +50,8 @@ GameMenu <=
 
 
 type unit_panel.widget{main}
-     w/0 h/0 unit bg icon_bg laurels moved
+     w/0 h/0 unit icon_bg laurels moved
      power_icon health_icon attack_icon defence_icon
-| $bg <= $main.img{ui_panel_unit}
 | $icon_bg <= $main.img{unit_icon_bg}
 | $laurels <= $main.img{ui_laurels}
 | $moved <= $main.img{ui_unit_moved}
