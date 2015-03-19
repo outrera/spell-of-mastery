@@ -1,1 +1,5 @@
 sprite: unit_orc
+level: 2
+health: 2
+damage: 2
+defense: 0

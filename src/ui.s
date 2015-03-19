@@ -51,14 +51,14 @@ GameMenu <=
 
 type unit_panel.widget{main}
      w/0 h/0 unit icon_bg laurels moved
-     power_icon health_icon attack_icon defence_icon
+     power_icon health_icon attack_icon defense_icon
 | $icon_bg <= $main.img{unit_icon_bg}
 | $laurels <= $main.img{ui_laurels}
 | $moved <= $main.img{ui_unit_moved}
 | $power_icon <= $main.img{stats_power}
 | $health_icon <= $main.img{stats_health}
 | $attack_icon <= $main.img{stats_attack}
-| $defence_icon <= $main.img{stats_defence}
+| $defense_icon <= $main.img{stats_defense}
 
 unit_panel.set_unit Unit =
 | $unit <= Unit
@@ -85,7 +85,7 @@ unit_panel.draw G P =
 | times I $unit.health: G.blit{[X+I*8 Y] $health_icon}
 | times I $unit.level: G.blit{[X+I*8 Y+16] $power_icon}
 | times I $unit.attack: G.blit{[X+I*8 Y+32] $attack_icon}
-| times I $unit.defence: G.blit{[X+I*8 Y+48] $defence_icon}
+| times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
 
 
 MaxActIcons = 14

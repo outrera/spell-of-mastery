@@ -3,7 +3,7 @@ use gfx util param
 type class{bank class_name static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/[]
            starts/0 jumps/1 mountaineer/0 ranger/0 leader/Leader
-           health/0 attack/0 defence/0 level/0
+           health/0 attack/0 defense/0 level/0
            acts/[]}
   type/"[Bank]_[Class_name]"
   static/Static
@@ -21,9 +21,10 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   leader/Leader
   health/Health
   attack/Attack
-  defence/Defence
+  defense/Defense
   level/Level
   acts/Acts
+| less $moves.is_list: bad "wrong `moves` field for [$type]"
 | less $moves.size: leave Me
 | Ms = $moves.tail
 | Pad = dup Ms.size 0

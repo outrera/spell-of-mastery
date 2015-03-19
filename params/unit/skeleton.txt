@@ -1,1 +1,5 @@
 sprite: unit_skeleton
+level: 2
+health: 1
+damage: 2
+defense: 1
