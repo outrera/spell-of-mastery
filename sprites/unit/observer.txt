@@ -1,2 +1,2 @@
 author: `Nikita Sadkov`
-xy: -8,-8
+xy: 0,0
