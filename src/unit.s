@@ -28,7 +28,7 @@ type unit.$class{Id World}
   slope // unit is standing on a sloped terrain
   movement_render_hack
   path // next unit in path
-  hits
+  hits // how damages is this unit
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me

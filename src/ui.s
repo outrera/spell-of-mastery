@@ -82,7 +82,8 @@ unit_panel.draw G P =
 | Font.draw{G @(P+[85 48]) white "[$unit.owner.name]"}
 | X = P.0+4
 | Y = P.1+$laurels.h+16
-| times I $unit.health: G.blit{[X+I*8 Y] $health_icon}
+| Health = max 0 $unit.health-$unit.hits
+| times I Health: G.blit{[X+I*8 Y] $health_icon}
 | times I $unit.level: G.blit{[X+I*8 Y+16] $power_icon}
 | times I $unit.attack: G.blit{[X+I*8 Y+32] $attack_icon}
 | times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}

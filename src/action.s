@@ -114,6 +114,13 @@ act_attack.update A =
     | move_start A
     | A.data <= 2
   | when A.data >< 0:
+    | Damage = max 0 A.unit.attack-A.target.defense
+    | !A.target.hits + Damage
+    | when A.target.hits < A.target.health:
+      | A.data <= 2
+      | A.cycles <= 0
+      | A.unit.animate{idle}
+      | leave
     | A.cycles <= max 1 A.unit.sprite.speed/2
     | move_start A
     | A.data <= 1
