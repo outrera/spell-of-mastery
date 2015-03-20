@@ -351,7 +351,7 @@ unit.mark_moves =
             then | when and it.moves.size
                         and it.can_move{Dst Src 0}:
                    | Mark <= $world.alloc_unit{mark_swap}
-            else when it.hits < it.health:
+            else when it.hits < it.health and it.defense < $attack:
                  | Mark <= $world.alloc_unit{mark_attack}
       | Blocked <= 1
   | less Blocked
