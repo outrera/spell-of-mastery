@@ -1,4 +1,4 @@
-use param sprite class tile world update ui save generate
+use param sprite class tile sound world update ui save generate
 
 type main{Data}
      world
@@ -15,11 +15,13 @@ type main{Data}
      last_tid
      tid_map
      aux_tiles
+     sound
 | $load_params
 | for K,V $params.main: $params.K <= V
 | $load_sprites
 | $load_classes
 | $load_tiles
+| $load_sounds
 | $tid_map <= dup $last_tid+1 0
 | for [Type Tile] $tiles: $tid_map.(Tile.id) <= Tile
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort

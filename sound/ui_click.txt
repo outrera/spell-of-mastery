@@ -1,0 +1,2 @@
+author: `Wyrmsun Team`
+license: `GPL2`

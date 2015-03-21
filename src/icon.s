@@ -33,6 +33,7 @@ IconFrame = 0
 DisabledIconOverlay = 0
 ResearchIconOverlay = 0
 
+
 type icon.widget{fg data/0 click/(Icon=>)}
    w/50
    h/42

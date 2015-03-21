@@ -1,0 +1,4 @@
+author: `Kevin MacLeod`
+copyright: `Kevin MacLeod`
+license: `CC3-BY-SA`
+http: `incompetech.com`

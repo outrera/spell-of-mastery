@@ -144,7 +144,9 @@ main.run =
   | PanelW 0 | PlayerWidget
 | PickedUnit = 0
 | ActIcon = 0
+//| sound_play: sound_load "[$data]/music/thaxted.ogg" music/1
 | ActClick = Icon =>
+  | sound_play $sound.ui_click
   | when ActIcon: ActIcon.picked <= 0
   | Icon.picked <= 1
   | ActIcon <= Icon
