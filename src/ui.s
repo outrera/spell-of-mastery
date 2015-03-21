@@ -146,7 +146,7 @@ main.run =
 | ActIcon = 0
 //| sound_play: sound_load "[$data]/music/thaxted.ogg" music/1
 | ActClick = Icon =>
-  | sound_play $sound.ui_click
+  | $sound{ui_click}
   | when ActIcon: ActIcon.picked <= 0
   | Icon.picked <= 1
   | ActIcon <= Icon

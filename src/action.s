@@ -134,7 +134,9 @@ act_pentagram.valid A =
 | T = A.unit
 | T.world.units_at{T.xyz}.all{?.empty >< 0}
 
-act_pentagram.start A = A.unit.animate{attack}
+act_pentagram.start A =
+| A.unit.animate{attack}
+| A.unit.main.sound{pentagram}
 
 act_pentagram.finish A =
 | U = A.unit
@@ -156,6 +158,7 @@ act_summon.valid A =
 act_summon.start A =
 | U = A.unit
 | U.animate{attack}
+| U.main.sound{summon}
 | Leader = U.owner.leader
 | when Leader
   | Leader.animate{attack}
