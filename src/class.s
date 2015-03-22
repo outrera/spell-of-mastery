@@ -1,10 +1,10 @@
 use gfx util param
 
-type class{bank class_name static/0 empty/0 sprite/system_dummy
+type class{bank class_name Main static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/[]
            starts/0 jumps/1 mountaineer/0 ranger/0 leader/Leader
            health/0 attack/0 defense/0 level/0
-           acts/[]}
+           acts/[] sounds/[]}
   type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
@@ -24,6 +24,7 @@ type class{bank class_name static/0 empty/0 sprite/system_dummy
   defense/Defense
   level/Level
   acts/Acts
+  sounds/Sounds.group{2}.table
 | less $moves.is_list: bad "wrong `moves` field for [$type]"
 | less $moves.size: leave Me
 | Ms = $moves.tail
@@ -37,13 +38,13 @@ main.load_classes =
 | BankNames = case $params.world.class_banks [@Xs](Xs) X[X]
 | $classes <= @table: @join: map BankName BankNames
   | map Name,Params $params.BankName
-    | R = class BankName Name @Params.list.join
+    | R = class BankName Name Me @Params.list.join
     | S = $sprites.(R.default_sprite)
     | less got S: bad "missing sprite `[R.default_sprite]`"
     | R.default_sprite <= S
     | "[BankName]_[Name]",R
 | for S $sprites{}{?1}.keep{?class}
-  | C = class S.bank S.name @S.class
+  | C = class S.bank S.name Me @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
 | for K,V $classes: V.acts <= map ActName V.acts

@@ -19,9 +19,9 @@ type main{Data}
 | $load_params
 | for K,V $params.main: $params.K <= V
 | $load_sprites
+| $load_sounds
 | $load_classes
 | $load_tiles
-| $load_sounds
 | $tid_map <= dup $last_tid+1 0
 | for [Type Tile] $tiles: $tid_map.(Tile.id) <= Tile
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort

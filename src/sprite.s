@@ -38,8 +38,14 @@ init_frames_from_folder S Folder =
 | Anims = t
 | for I,FName Folder.urls.keep{is.[@_ png]}{?1}.i
   | "[Angle]-[FrameName]" = FName
+  | X = 0
+  | Y = 0
+  | case FrameName "[N]+[XX]+[YY]"
+    | X <= XX.int
+    | Y <= YY.int
+    | FrameName <= N
   | G = gfx."[Folder][FName].png"
-  | G.xy <= S.xy //+ [X.int Y.int]
+  | G.xy <= S.xy + [X Y]
   | have Frames.FrameName [0 0 0 0 0 0 0 0]
   | Frames.FrameName.(Angle.int) <= G
 | S.frames <= Frames

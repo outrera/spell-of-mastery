@@ -99,6 +99,8 @@ act_attack.start A =
 | U.face{A.target.xyz}
 | A.cycles <= max 1 U.sprite.anim_speed{attack}
 | U.animate{attack}
+| when got!it U.sounds.attack:
+  | U.main.sound{it.rand}
 
 act_attack.update A =
 | when A.data > 0: move_update A
