@@ -1,1 +1,5 @@
 sprite: unit_beetle
+level: 1
+health: 2
+attack: 0
+defense: 1

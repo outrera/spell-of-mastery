@@ -1,4 +1,8 @@
 sprite: unit_lizard
+level: 2
+health: 2
+attack: 1
+defense: 0
 mountaineer: 1
 moves:
   | 0 0 1 0 0

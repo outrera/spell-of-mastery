@@ -1,0 +1,5 @@
+act: summon
+effect: unit_ratman
+target: pentagram
+icon: spell_ratman
+research: 2

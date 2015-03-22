@@ -1,1 +1,1 @@
-author: `Nikita Sadkov`
+author: `Artem Belov`
