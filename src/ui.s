@@ -68,6 +68,22 @@ unit_panel.set_unit Unit =
   else | $w <= 0
        | $h <= 0
 
+
+MaxActIcons = 24
+ActIcons = []
+ActIcon = 0
+
+type info_line.widget{main} info_text/txt{""}
+
+info_line.render =
+| $info_text.value <= ""
+| case ActIcons.keep{(?.show and ?.over)} [Icon@_]
+  | Act = $main.params.acts.(Icon.data)
+  | Info = Act.type.replace{_ ' '}
+  | when got Icon.number: Info <= "research [Info] ([Icon.number] points left)"
+  | $info_text.value <= Info.upcase
+| $info_text.render
+
 unit_panel.draw G P =
 | less $unit: leave
 | ClassName = $unit.class_name
@@ -89,8 +105,6 @@ unit_panel.draw G P =
 | times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
 
 
-MaxActIcons = 24
-
 // FIXME: refactor following into UI type
 main.run =
 | ScreenW <= $params.ui.width
@@ -108,6 +122,7 @@ main.run =
 | PauseSpacer = hidden: spacer ScreenW ScreenH
 | pause = | PauseSpacer.show <= 1; View.pause
 | unpause = | PauseSpacer.show <= 0; View.unpause
+| InfoText = info_line Me
 | WorldNameInput = txt_input{''}
 | PropFields = ['World Name:',WorldNameInput
                ]
@@ -143,7 +158,6 @@ main.run =
   | 0 0 | layH: BankList,ItemList
   | PanelW 0 | PlayerWidget
 | PickedUnit = 0
-| ActIcon = 0
 //| sound_play: sound_load "[$data]/music/thaxted.ogg" music/1
 | ActClick = Icon =>
   | $sound{ui_click}
@@ -157,7 +171,7 @@ main.run =
     | Target = Act.target
     | when Target >< self or Target >< pentagram:
       | Order = PickedUnit.order.init{@Act.list.join}
-| ActIcons = map I MaxActIcons: hidden: icon 0 click/ActClick
+| ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
@@ -172,8 +186,9 @@ main.run =
 | GameUI = dlg: mtx
   |  0   0| View
   |  0   0| GameUnitUI
-  |  4 ScreenH-90| layV s/4 [layH{s/4 ActIcons.take{ActIcons.size/2}}
-                             layH{s/4 ActIcons.drop{ActIcons.size/2}}]
+  |  4 ScreenH-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
+  |  4 ScreenH-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
+  |  4 ScreenH-10 | InfoText
   | ScreenW-54 ScreenH-64 | EndTurnIcon
 | ViewUI = tabs brush: t
            brush(BrushUI)
