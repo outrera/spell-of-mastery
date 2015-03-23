@@ -1,4 +1,8 @@
 sprite: unit_griffin
+level: 2
+health: 2
+attack: 2
+defense: 0
 mountaineer: 1
 moves:
   | 0 1 1 1 0
