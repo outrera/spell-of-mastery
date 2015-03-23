@@ -1,0 +1,3 @@
+author: `Wesnoth Team`, `Bad Moon Rising`, `Nikita Sadkov`
+height: 8
+xy: -10,5
