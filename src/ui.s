@@ -89,7 +89,7 @@ unit_panel.draw G P =
 | times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
 
 
-MaxActIcons = 14
+MaxActIcons = 24
 
 // FIXME: refactor following into UI type
 main.run =
@@ -172,7 +172,8 @@ main.run =
 | GameUI = dlg: mtx
   |  0   0| View
   |  0   0| GameUnitUI
-  |  4 ScreenH-56| layH s/4 ActIcons
+  |  4 ScreenH-90| layV s/4 [layH{s/4 ActIcons.take{ActIcons.size/2}}
+                             layH{s/4 ActIcons.drop{ActIcons.size/2}}]
   | ScreenW-54 ScreenH-64 | EndTurnIcon
 | ViewUI = tabs brush: t
            brush(BrushUI)

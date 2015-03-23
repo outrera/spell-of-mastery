@@ -1,0 +1,5 @@
+act: summon
+effect: unit_griffin
+target: pentagram
+icon: wizard
+research: 8

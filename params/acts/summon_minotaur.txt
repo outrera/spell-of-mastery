@@ -1,0 +1,5 @@
+act: summon
+effect: unit_minotaur
+target: pentagram
+icon: wizard
+research: 8

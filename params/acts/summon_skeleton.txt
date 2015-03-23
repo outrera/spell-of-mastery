@@ -1,0 +1,5 @@
+act: summon
+effect: unit_skeleton
+target: pentagram
+icon: wizard
+research: 4

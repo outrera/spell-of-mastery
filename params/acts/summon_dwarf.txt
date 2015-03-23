@@ -1,0 +1,5 @@
+act: summon
+effect: unit_dwarf
+target: pentagram
+icon: wizard
+research: 4

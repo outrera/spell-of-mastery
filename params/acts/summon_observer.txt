@@ -1,0 +1,5 @@
+act: summon
+effect: unit_observer
+target: pentagram
+icon: wizard
+research: 16
