@@ -1,4 +1,5 @@
 author: `Natalya Bugrova`
+copyright: `Nikita Sadkov`
 xy: 12,80
 frames: folder
 anims: | idle (idle0 60) (idle1 6) (idle2 6) (idle3 6) (idle4 40) 
