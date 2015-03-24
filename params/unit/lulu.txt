@@ -1,0 +1,4 @@
+sprite: unit_lulu
+health: 3
+leader: 1
+acts: (pentagram)
