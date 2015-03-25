@@ -29,16 +29,6 @@ type main{Data}
   | N,$classes{}{?1}.keep{(?bank >< N and not ?aux)}{?class_name}.sort
 | world Me 8 8
 
-main.img Name =
-| S = $sprites."[Name]"
-| less got S: bad "missing image `[Name]`"
-| S.frames.0
-
-main.spr Name =
-| S = $sprites."[Name]"
-| less got S: bad "missing sprite `[Name]`"
-| S
-
 @run: main: main_root
 
 say 'Goodbye!'

@@ -2,7 +2,7 @@ use gfx util param
 
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
-            class/0 margins/0 pick_height/0 speed/24}
+            class/0 margins/0 pick_height/0 speed/24 font/Font}
   bank/Bank
   name/Name
   height/Height
@@ -14,6 +14,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   margins/Margins
   pick_height/Pick_height
   speed/Speed // how many cycles it takes to move between cells
+  font/Font
 | $anims <= @table: map [Name@Frames] Anims.tail
   | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}
   | [Name Frames]
@@ -37,17 +38,21 @@ init_frames_from_folder S Folder =
 | Frames = t
 | Anims = t
 | for I,FName Folder.urls.keep{is.[@_ png]}{?1}.i
-  | "[Angle]-[FrameName]" = FName
+  | Name = FName
+  | Angle = 0
+  | case Name "[A]-[N]"
+    | Angle <= A.int
+    | Name <= N
   | X = 0
   | Y = 0
-  | case FrameName "[N]+[XX]+[YY]"
+  | case Name "[N]+[XX]+[YY]"
     | X <= XX.int
     | Y <= YY.int
-    | FrameName <= N
+    | Name <= N
   | G = gfx."[Folder][FName].png"
   | G.xy <= S.xy + [X Y]
-  | have Frames.FrameName [0 0 0 0 0 0 0 0]
-  | Frames.FrameName.(Angle.int) <= G
+  | have Frames.Name [0 0 0 0 0 0 0 0]
+  | Frames.Name.Angle <= G
 | S.frames <= Frames
 
 draw_iso_line Color X,Y Size Step Axis G =
@@ -97,5 +102,16 @@ main.load_sprites =
     | "[BankName]_[Name]",S
 | Base = generate_base_tile $params.editor.opaque_base 64 32 8
 | $sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
+
+
+main.img Name =
+| S = $sprites."[Name]"
+| less got S: bad "missing image `[Name]`"
+| S.frames.0
+
+main.spr Name =
+| S = $sprites."[Name]"
+| less got S: bad "missing sprite `[Name]`"
+| S
 
 export sprite

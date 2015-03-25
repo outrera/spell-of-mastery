@@ -1,0 +1,3 @@
+author: `Wyrmsun Team`
+font: medium
+frames: folder

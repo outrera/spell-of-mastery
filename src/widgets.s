@@ -1,20 +1,20 @@
 use gui
 
-Skin = No
+Main = No
 Fonts = t
 Tints = No
 
-set_skin NewSkin =
-| Skin <= NewSkin
-| Tints <= Skin.params.tints
+set_main NewMain =
+| Main <= NewMain
+| Tints <= Main.params.tints
 
-skin F = Skin.img{"ui_[F]"}
+skin F = Main.img{"ui_[F]"}
 
 type font{@new_font Gs W H} glyphs/Gs widths/W height/H cmap
 | $cmap <= new_cmap [#0 #FFFFFF].pad{256 #FF000000}
 font.as_text = "#font{}"
 font N = have Fonts.N:
-| S = Skin.spr{"font_[N]"}
+| S = Main.spr{"font_[N]"}
 | [W H EX] = S.frames.0^|F => [F.w F.h F.xy.0]
 | Glyphs = S.frames{}{F<[X Y W H].margins=>| F.xy <= 0,0
                                            | F.cut{X 0 W F.h}}
@@ -66,24 +66,23 @@ bar.draw G P =
 | G.blit{P $bg}
 | G.rect{#347004 1 P+[3 3] [152*$value_/100 14]}
 
-type button.widget{Text Fn state/normal w_size/large h_size/medium}
-  value/Text on_click/Fn state/State over w_size/W_size h_size/H_size
-  cache/No
+
+type button.widget{Text Fn state/normal skin/medium_large}
+  value/Text on_click/Fn state/State skin/Skin over cache/No
 button.reskin =
 | when got $cache: leave
 | $cache <= t
-| WSize = $w_size
-| HSize = $h_size
 | Text = $value
+| Sprite = Main.spr{"ui_button_[$skin]"}
 | $cache <= @table: map N [normal over pressed disabled]: list N
-  | BG = skin "button-[HSize]-[WSize]-[case N over normal _ N]"
+  | BG = Sprite.frames.(case N over normal _ N).0
   | G = gfx BG.w BG.h // get truecolor copy of it
   | G.blit{0,0 BG}
   | P = case N pressed 2 _ 0
   | Tint = case N pressed+over | \white
                   disabled | \gray
                   _ | \yellow
-  | F = font HSize
+  | F = font Sprite.font
   | FW = F.width{Text}
   | FH = F.height
   | X = G.w/2-FW/2+P
@@ -329,7 +328,7 @@ txt_input.input In = case In
   [key K<1.size 1] | $value <= "[$value][K]"
 
 type img.widget{Path} path/Path
-img.render = Skin.img{"image_[$path]"}
+img.render = Main.img{"image_[$path]"}
 
-export set_skin skin font txt button litem droplist slider folder_widget 
+export set_main skin font txt button litem droplist slider folder_widget 
        litems txt_input img

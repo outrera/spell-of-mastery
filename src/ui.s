@@ -109,7 +109,7 @@ unit_panel.draw G P =
 main.run =
 | ScreenW <= $params.ui.width
 | ScreenH <= $params.ui.height
-| set_skin Me
+| set_main Me
 | init_message_box Me
 | PanelW = 200
 | View = view Me ScreenW ScreenH
@@ -131,7 +131,7 @@ main.run =
   | 130  10 | txt size/medium 'Properties'
   |  15  40 | layV PropFields{?0^txt}
   | 100  36 | layV PropFields{?1}
-  |  15 305 | button 'Done' w_size/small: =>
+  |  15 305 | button 'Done' skin/medium_small: =>
               | unpause
               | WorldProperties.show <= 0
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
