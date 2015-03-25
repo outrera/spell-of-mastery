@@ -1,2 +1,5 @@
-author: `Nikita Sadkov`
+author: `Matthew Griebner`, `Alexandr Sidorov`
+copyright: `Nikita Sadkov`
 xy: 0,0
+frames: folder
+anims: | idle (idle0 60)
