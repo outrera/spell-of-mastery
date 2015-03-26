@@ -1,3 +1,4 @@
 author: `Wyrmsun Team`
 font: small
+tint: yellow,white,gray
 frames: folder

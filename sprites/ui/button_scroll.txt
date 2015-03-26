@@ -1,0 +1,4 @@
+author: `N.C.Wyeth`, `Nikita Sadkov`
+font: scroll
+tint: black,white,gray
+frames: folder

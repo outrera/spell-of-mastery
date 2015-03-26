@@ -68,32 +68,32 @@ bar.draw G P =
 
 
 type button.widget{Text Fn state/normal skin/medium_large}
-  value/Text on_click/Fn state/State skin/Skin over cache/No
-button.reskin =
-| when got $cache: leave
-| $cache <= t
-| Text = $value
-| Sprite = Main.spr{"ui_button_[$skin]"}
-| $cache <= @table: map N [normal over pressed disabled]: list N
-  | BG = Sprite.frames.(case N over normal _ N).0
-  | G = gfx BG.w BG.h // get truecolor copy of it
-  | G.blit{0,0 BG}
-  | P = case N pressed 2 _ 0
-  | Tint = case N pressed+over | \white
-                  disabled | \gray
-                  _ | \yellow
-  | F = font Sprite.font
-  | FW = F.width{Text}
-  | FH = F.height
-  | X = G.w/2-FW/2+P
-  | Y = G.h/2-FH/2+P
-  | F.draw{G X Y Tint Text}
-  | G
-button.render =
-| $reskin
+  value/Text on_click/Fn state/State sprite over w h
+| $sprite <= Main.spr{"ui_button_[Skin]"} 
+| $w <= $sprite.frames.normal.0.w
+| $h <= $sprite.frames.normal.0.h
+button.render = Me
+button.draw  G P =
 | State = $state
 | when State >< normal and $over: State <= \over
-| $cache.State
+| Sprite = $sprite
+| BG = Sprite.frames.(case State over normal Else State).0
+| G.blit{P BG}
+| SpriteFont = Sprite.font
+| when SpriteFont <> `none`
+  | Shift = case State pressed 2 _ 0
+  | Tint = case State
+                pressed+over | Sprite.tint.1
+                disabled | Sprite.tint.2
+                Else | Sprite.tint.0
+  | F = font SpriteFont
+  | FW = F.width{$value}
+  | FH = F.height
+  | X = P.0 + BG.w/2-FW/2+Shift
+  | Y = P.1 + BG.h/2-FH/2+Shift
+  | F.draw{G X Y Tint $value}
+
+
 button.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | case $state normal: Me.state <= \pressed

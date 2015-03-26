@@ -248,20 +248,27 @@ main.run =
   |  0   0| MessageBox
 | View.init
 | MenuBG = $img{ui_menu_bg}
-| X = ScreenW/2 - 112
+| X = ScreenW/2 - 162
+| MMButtons = layV s/8: list
+    button{'Campaign'       state/disabled (=>)}
+    button{'Scenario'       state/disabled (=>Tabs.pick{scenario})}
+    button{'Multi Player'   state/disabled (=>)}
+    button{'Load Game'      state/disabled (=>)}
+    button{'World Editor'   (=> | View.mode <= \brush
+                                | unpause
+                                | Tabs.pick{ingame})}
+    spacer{0 8}
+    button{'Exit Program'   (=>get_gui{}.exit)}
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
-  | X 240 | layV s/8: list
-            button{'Campaign'       state/disabled (=>)}
-            button{'Scenario'       state/disabled (=>Tabs.pick{scenario})}
-            button{'Multi Player'   state/disabled (=>)}
-            button{'Load Game'      state/disabled (=>)}
-            button{'World Editor'   (=> | View.mode <= \brush
-                                        | unpause
-                                        | Tabs.pick{ingame})}
-            spacer{0 8}
-            button{'Exit Program'   (=>get_gui{}.exit)}
+//  | X 240 | MMButtons
+  | X 220 | button{'   NEW GAME' skin/scroll (=>)}
+  | X 290 | button{'   LOAD GAME' skin/scroll (=>)}
+  | X 360 | button{'   WORLD EDITOR' skin/scroll (=> | View.mode <= \brush
+                                                     | unpause
+                                                     | Tabs.pick{ingame})}
+  | X 500 | button{'   EXIT' skin/scroll (=>get_gui{}.exit)}
 | Tabs <= tabs ingame: t
           main_menu(MainMenu)
           ingame(Ingame)
