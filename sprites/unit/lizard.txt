@@ -1,5 +1,7 @@
-author: `Matthew Griebner`
+author: `Matthew Griebner`, `Alexandr Sidorov`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
 height: 4
-xy: -2,12
+xy: -2,28
+frames: folder
+anims: | idle (idle0 24)
