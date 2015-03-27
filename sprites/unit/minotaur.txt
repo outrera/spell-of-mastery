@@ -1,2 +1,6 @@
-author: `Nikita Sadkov`
-xy: 4,4
+author: `Leha (kharagh@bk.ru)`
+copyright: `Nikita Sadkov`
+height: 4
+xy: 4,26
+frames: folder
+anims: | idle (idle0 9)
