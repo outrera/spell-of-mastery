@@ -1,4 +1,3 @@
 author: `N.C.Wyeth`, `Nikita Sadkov`
-font: scroll
-tint: black,white,gray
+font: runic,runic,runic
 frames: folder

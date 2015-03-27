@@ -94,8 +94,8 @@ unit_panel.draw G P =
 | G.blit{P+[8 8] $laurels}
 | when $unit.moved >< $unit.world.turn: G.blit{P+[34 54] $moved}
 | Font = font medium
-| Font.draw{G @(P+[85 10]) white "[ClassName.title]"}
-| Font.draw{G @(P+[85 48]) white "[$unit.owner.name]"}
+| Font.draw{G P+[85 10] "[ClassName.title]"}
+| Font.draw{G P+[85 48] "[$unit.owner.name]"}
 | X = P.0+4
 | Y = P.1+$laurels.h+16
 | Health = max 0 $unit.health-$unit.hits

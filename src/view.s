@@ -152,7 +152,7 @@ view.render_iso =
        else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
        else FB.blitRaw{BX BY G}
     else FB.blitRaw{BX BY G}
-  //| Font.draw{FB BX+18 BY+4 red "[Order]"}
+  //| Font.draw{FB [BX+18 BY+4] "[Order]"}
   //| !Order+1
 
 Indicators = 0
@@ -164,11 +164,11 @@ view.draw_indicators =
 | IP = [($w-Indicators.w)/2 0]
 | $fb.blit{IP Indicators}
 | Font = font medium
-| Font.draw{$fb @(IP+[28 1]) white "[$world.player.moves]/[$world.player.power]"}
-| Font.draw{$fb @(IP+[118 1]) white "[$world.turn]"}
+| Font.draw{$fb IP+[28 1] "[$world.player.moves]/[$world.player.power]"}
+| Font.draw{$fb IP+[118 1] "[$world.turn]"}
 | Font = font small
-| Font.draw{$fb @(IP+[176 1]) white "[X],[Y],[Z]"}
-| Font.draw{$fb @(IP+[176 9]) white "[$world.at{X,Y,Z-1}.type]"}
+| Font.draw{$fb IP+[176 1] "[X],[Y],[Z]"}
+| Font.draw{$fb IP+[176 9] "[$world.at{X,Y,Z-1}.type]"}
 
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}

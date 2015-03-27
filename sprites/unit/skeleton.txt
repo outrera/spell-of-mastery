@@ -1,4 +1,4 @@
-author: `Nikita Sadkov`, `Alexander Zabylov (d_shurga@mail.ru)`, `Sergey Abramov (InQvisions Company)`
+author: `Nikita Sadkov`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`, `Sergey Abramov (InQvisions Company)`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
 xy: 0,32

@@ -33,7 +33,6 @@ IconFrame = 0
 DisabledIconOverlay = 0
 ResearchIconOverlay = 0
 
-
 type icon.widget{fg data/0 click/(Icon=>)}
    w/50
    h/42
@@ -64,7 +63,7 @@ icon.draw G P =
   |  G.blit{XY+[28 20] ResearchIconOverlay}
 | when got $number
   | Font = font small
-  | Font.draw{G @(XY+[2 2]) white "[$number]"}
+  | Font.draw{G XY+[2 2] "[$number]"}
 icon.input In =
 | when $disabled: leave
 | case In
@@ -73,20 +72,5 @@ icon.input In =
   [mice left 0 P] | when $pressed:
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
-
-/*
-type icon_hp.widget unit w/52 h/7 font/font{small}
-icon_hp.draw G P =
-| less $unit: leave 0
-| G.rect{#000000 1 P.0 P.1 $w $h}
-| N = $unit.hp_percent
-| C = if N < 50 then #F00000
-      else if N < 75 then #F0F000
-      else #00A000
-| G.rect{C 1 P.0 P.1 N*$w/100 $h}
-| HP = "[$unit.hp-$unit.hits]/[$unit.hp]"
-| FW = $font.width{HP}
-| $font.draw{G P.0+($w-FW)/2+1 P.1 white HP}
-*/
 
 export /*minimap*/ icon

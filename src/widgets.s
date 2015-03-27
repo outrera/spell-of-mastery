@@ -22,11 +22,9 @@ font N = have Fonts.N:
 | Ws.0 <= W/2
 | new_font Glyphs Ws H
 font.width Line = | Ws = $widths; Line{C.code => Ws.(C-' '.code)+1}.sum
-font.draw G X Y Tint Text =
+font.draw G P Text =
+| X,Y = P
 | Ls = Text.lines
-| Color = if Tint.is_text then Tints.Tint else Tint
-| when no Color: bad "unknown tint name - `[Tint]`"
-| _ffi_set uint32_t $cmap 1 Color
 | Ws = $widths
 | Gs = $glyphs
 | H = $height
@@ -37,15 +35,14 @@ font.draw G X Y Tint Text =
   | for C L
     | I = C.code-CodePoint
     | W = Ws.I
-    | G.blit{[CX CY] Gs.I map/$cmap}
+    | G.blit{[CX CY] Gs.I}
     | W+1+!CX
   | !CY + H
 
-type txt.widget{Value size/small tint/white}
-     w h value_ size/Size tint/Tint font
+type txt.widget{Value size/small} w h value_ size/Size font
 | $font <= font $size
 | $value <= Value
-txt.draw G P = $font.draw{G P.0 P.1 $tint $value_}
+txt.draw G P = $font.draw{G P $value_}
 txt.as_text = "#txt{[$value]}"
 txt.value = $value_
 txt.`!value` Text =
@@ -82,16 +79,16 @@ button.draw  G P =
 | SpriteFont = Sprite.font
 | when SpriteFont <> `none`
   | Shift = case State pressed 2 _ 0
-  | Tint = case State
-                pressed+over | Sprite.tint.1
-                disabled | Sprite.tint.2
-                Else | Sprite.tint.0
-  | F = font SpriteFont
+  | Font = case State
+                pressed+over | SpriteFont.1
+                disabled | SpriteFont.2
+                Else | SpriteFont.0
+  | F = font Font
   | FW = F.width{$value}
   | FH = F.height
-  | X = P.0 + BG.w/2-FW/2+Shift
-  | Y = P.1 + BG.h/2-FH/2+Shift
-  | F.draw{G X Y Tint $value}
+  | X = BG.w/2-FW/2+Shift
+  | Y = BG.h/2-FH/2+Shift
+  | F.draw{G P+[X Y] $value}
 
 
 button.input In = case In
@@ -105,12 +102,12 @@ button.as_text = "#button{[$value]}"
 type litem.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init
 litem.render =
-| less $init
-  | $h <= "litem-normal"^skin.h
-  | $font <= font small
+| when $init <> $state
+  | $h <= "litem-[$state]"^skin.h
+  | $font <= font: if $state >< normal then 'small' else "small_[$state]"
   | $fw <= $font.width{$text_}
   | $fh <= $font.height
-  | $init <= 1
+  | $init <= $state
 | Me
 litem.text = $text_
 litem.`!text` Text =
@@ -120,10 +117,9 @@ litem.draw G P =
 | BG = "litem-[$state]"^skin
 | G.blit{P BG rect/[0 0 $w-10 BG.h]}
 | G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
-| Tint = case $state picked(\white) disabled(\gray) _(\yellow)
 | X = 2
 | Y = BG.h/2-$fh/2
-| $font.draw{G P.0+X P.1+Y Tint $text_}
+| $font.draw{G P+[X Y] $text_}
 litem.input In = case In
   [mice left 1 P] | $state <= case $state normal(\picked) picked(\normal) X(X)
 
@@ -302,12 +298,12 @@ type txt_input.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init
   shift
 txt_input.render =
-| less $init
-  | $h <= "litem-normal"^skin.h
-  | $font <= font small
+| when $init <> $state
+  | $h <= "litem-[$state]"^skin.h
+  | $font <= font: if $state >< normal then 'small' else "small_[$state]"
   | $fw <= $font.width{$text_}
   | $fh <= $font.height
-  | $init <= 1
+  | $init <= $state
 | Me
 txt_input.value = $text_
 txt_input.`!value` Text =
@@ -317,10 +313,9 @@ txt_input.draw G P =
 | BG = "litem-[$state]"^skin
 | G.blit{P BG rect/[0 0 $w-10 BG.h]}
 | G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
-| Tint = case $state picked(\white) disabled(\gray) _(\yellow)
 | X = 2
 | Y = BG.h/2-$fh/2
-| $font.draw{G P.0+X P.1+Y Tint $text_}
+| $font.draw{G P+[X Y] $text_}
 txt_input.wants_focus = 1
 txt_input.input In = case In
   [focus State P] | $state <= if State then \picked else \normal
