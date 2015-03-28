@@ -10,8 +10,7 @@ set_main NewMain =
 
 skin F = Main.img{"ui_[F]"}
 
-type font{@new_font Gs W H} glyphs/Gs widths/W height/H cmap
-| $cmap <= new_cmap [#0 #FFFFFF].pad{256 #FF000000}
+type font{@new_font Gs W H} glyphs/Gs widths/W height/H
 font.as_text = "#font{}"
 font N = have Fonts.N:
 | S = Main.spr{"font_[N]"}
