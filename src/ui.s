@@ -263,12 +263,12 @@ main.run =
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
 //  | X 240 | MMButtons
-  | X 220 | button{'   NEW GAME' skin/scroll (=>)}
-  | X 290 | button{'   LOAD GAME' skin/scroll (=>)}
-  | X 360 | button{'   WORLD EDITOR' skin/scroll (=> | View.mode <= \brush
-                                                     | unpause
-                                                     | Tabs.pick{ingame})}
-  | X 500 | button{'   EXIT' skin/scroll (=>get_gui{}.exit)}
+  | X 220 | button{'NEW GAME' skin/scroll (=>)}
+  | X 290 | button{'LOAD GAME' skin/scroll (=>)}
+  | X 360 | button{'WORLD EDITOR' skin/scroll (=> | View.mode <= \brush
+                                                  | unpause
+                                                  | Tabs.pick{ingame})}
+  | X 500 | button{'EXIT' skin/scroll (=>get_gui{}.exit)}
 | Tabs <= tabs ingame: t
           main_menu(MainMenu)
           ingame(Ingame)

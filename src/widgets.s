@@ -75,19 +75,16 @@ button.draw  G P =
 | Sprite = $sprite
 | BG = Sprite.frames.(case State over normal Else State).0
 | G.blit{P BG}
-| SpriteFont = Sprite.font
-| when SpriteFont <> `none`
-  | Shift = case State pressed 2 _ 0
-  | Font = case State
-                pressed+over | SpriteFont.1
-                disabled | SpriteFont.2
-                Else | SpriteFont.0
-  | F = font Font
+| SF = Sprite.font
+| when SF <> `none`
+  | Shift = case State pressed [SF.5 SF.6] _ [0 0]
+  | FontName = SF.| case State pressed+over(3) disabled(4) _(2)
+  | F = font FontName
   | FW = F.width{$value}
   | FH = F.height
-  | X = BG.w/2-FW/2+Shift
-  | Y = BG.h/2-FH/2+Shift
-  | F.draw{G P+[X Y] $value}
+  | X = BG.w/2-FW/2 + SF.0
+  | Y = BG.h/2-FH/2 + SF.1
+  | F.draw{G P+[X Y]+Shift $value}
 
 
 button.input In = case In
@@ -145,7 +142,7 @@ droplist.draw G P =
     | !Y + R.h
 | less $drop
   | G.blit{P $rs.$picked}
-  | A = skin "arrow-down-normal"
+  | A = Main.spr{"ui_arrow"}.frames.down_normal.0
   | G.blit{P+[$w-A.w 0] A}
 | $rs <= 0
 | No
@@ -255,8 +252,10 @@ slider_.input In = case In
                     | $input{mice_move P P}
   [mice left 0 P] | when $state >< pressed: $state <= \normal
 
-type arrow.widget{D Fn state/normal} direction/D on_click/Fn state/State
-arrow.render = skin "arrow-[$direction]-[$state]"
+type arrow.widget{D Fn state/normal skin/arrow}
+  direction/D on_click/Fn state/State skin/Skin
+| $sprite <= Main.spr{"ui_[Skin]"}
+arrow.render = $sprite.frames."[$direction]_[$state]".0
 arrow.input In = case In
   [mice left 1 P] | when $state >< normal
                     | $state <= \pressed
@@ -295,7 +294,6 @@ folder_widget Root F =
 
 type txt_input.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init
-  shift
 txt_input.render =
 | when $init <> $state
   | $h <= "litem-[$state]"^skin.h

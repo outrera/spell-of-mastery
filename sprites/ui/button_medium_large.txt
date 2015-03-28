@@ -1,3 +1,3 @@
 author: `Wyrmsun Team`
-font: medium, medium_picked, medium_disabled
+font: 0,0, medium, medium_picked, medium_disabled, 2,2
 frames: folder
