@@ -80,7 +80,7 @@ info_line.render =
 | case ActIcons.keep{(?.show and ?.over)} [Icon@_]
   | Act = $main.params.acts.(Icon.data)
   | Info = Act.type.replace{_ ' '}
-  | when got Icon.number: Info <= "research [Info] ([Icon.number] points left)"
+  | when got Icon.number: Info <= "research [Info] ([Icon.number] moves)"
   | $info_text.value <= Info.upcase
 | $info_text.render
 

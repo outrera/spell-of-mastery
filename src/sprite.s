@@ -2,7 +2,8 @@ use gfx util param
 
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
-            class/0 margins/0 pick_height/0 speed/24 font/Font}
+            class/0 margins/0 pick_height/0 speed/24
+            font/Font icon/0}
   bank/Bank
   name/Name
   height/Height
@@ -15,6 +16,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   pick_height/Pick_height
   speed/Speed // how many cycles it takes to move between cells
   font/Font
+  icon/Icon
 | $anims <= @table: map [Name@Frames] Anims.tail
   | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}
   | [Name Frames]

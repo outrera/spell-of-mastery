@@ -39,7 +39,6 @@ type icon.widget{fg data/0 click/(Icon=>)}
    pressed
    over
    picked
-   tint
    disabled
    research
    number/No
@@ -51,9 +50,7 @@ icon.draw G P =
 | less IconFrame: IconFrame <= skin{'icon_frame'}
 | XY = if $pressed then P + [1 1] else P
 | G.blit{XY IconFrame}
-| if $tint
-  then G.blit{XY+[2 2] $fg map/$tint}
-  else G.blit{XY+[2 2] $fg}
+| G.blit{XY+[2 2] $fg}
 | when $picked: G.rect{#0000FF 0 P.0-1 P.1-1 $w+2 $h+2}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
