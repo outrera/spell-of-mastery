@@ -3,3 +3,4 @@ effect: unit_vampire
 target: pentagram
 icon: wizard
 research: 8
+cost: 8

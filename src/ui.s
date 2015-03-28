@@ -81,6 +81,9 @@ info_line.render =
   | Act = $main.params.acts.(Icon.data)
   | Info = Act.type.replace{_ ' '}
   | when got Icon.number: Info <= "research [Info] ([Icon.number] moves)"
+  | less got Icon.number:
+    | Cost = if got Act.cost then Act.cost else 0
+    | Info <= "[Info] ([Act.cost] moves)"
   | $info_text.value <= Info.upcase
 | $info_text.render
 

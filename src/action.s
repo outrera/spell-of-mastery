@@ -225,17 +225,17 @@ type action{unit}
    effect
    path
 
-action.init act/idle at/self target/0 level/-1 effect/0 path/0 =
+action.init act/idle at/self target/0 cost/-1 effect/0 path/0 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
-| when Level >< -1: Level <= $unit.level
+| when Cost >< -1: Cost <= $unit.level
 | $xyz.init{At}
 | $target <= Target
 | $priority <= 50
 | $class <= ActionClasses.Act
 | $cycles <= -1
-| $cost <= if Act >< swap then max $unit.level $target.level else Level
+| $cost <= if Act >< swap then max $unit.level $target.level else Cost
 | $effect <= Effect
 | $path <= Path
 | less got $class: bad "unknown action class [Act]"

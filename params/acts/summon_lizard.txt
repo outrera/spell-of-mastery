@@ -3,3 +3,4 @@ effect: unit_lizard
 target: pentagram
 icon: spell_lizard
 research: 4
+cost: 4

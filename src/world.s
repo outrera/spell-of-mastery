@@ -6,7 +6,9 @@ MaxActiveUnits = 4096
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
-type world{main w h}
+type world{main W H}
+   w
+   h
    name/default
    tilemap
    unit_map
@@ -34,8 +36,6 @@ type world{main w h}
    zunit
    on_player_change
    marks
-| !$w+1
-| !$h+1
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -57,18 +57,27 @@ type world{main w h}
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $active <= stack MaxActiveUnits
+| $shadows <= $main.sprites.unit_shadows.frames
 | $marks <= dup 100 0
 | $filler <= $main.tiles.base_
-| SS = $w*$h
-| $gfxes <= ($h){_=>($w){_=>[]}}
-| $seed <= ($h){_=>($w){_=>SS.rand}}
+| SS = MaxSize*MaxSize
+| $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
+| $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
+| $create{W H}
+| !$w-1
+| !$h-1
+
+world.create W H =
+| $w <= W
+| $h <= H
+| !$w+1
+| !$h+1
 | $clear
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
 // add movement blocking wall
 | for P points{0 $h-1 $w 1}: times I 10: $push_{P $filler}
 | for P points{$w-1 0 1 $h-1}: times I 10: $push_{P $filler}
-| $shadows <= $main.sprites.unit_shadows.frames
 | !$w-1
 | !$h-1
 

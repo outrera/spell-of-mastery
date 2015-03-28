@@ -3,3 +3,5 @@ effect: unit_orc
 target: pentagram
 icon: wizard
 research: 4
+cost: 4
+cost: 4
