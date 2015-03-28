@@ -165,10 +165,10 @@ view.draw_indicators =
 | $fb.blit{IP Indicators}
 | Font = font medium
 | Font.draw{$fb IP+[28 1] "[$world.player.moves]/[$world.player.power]"}
-| Font.draw{$fb IP+[118 1] "[$world.turn]"}
+| Font.draw{$fb IP+[118 1] "[$world.turn]:[$world.player.id]"}
 | Font = font small
-| Font.draw{$fb IP+[176 1] "[X],[Y],[Z]"}
-| Font.draw{$fb IP+[176 9] "[$world.at{X,Y,Z-1}.type]"}
+| Font.draw{$fb IP+[216 1] "[X],[Y],[Z]"}
+| Font.draw{$fb IP+[216 9] "[$world.at{X,Y,Z-1}.type]"}
 
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
