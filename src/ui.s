@@ -242,7 +242,7 @@ main.run =
 | UnitPanel = unit_panel Me
 | GameUnitUI = hidden: dlg: mtx
   |  0   0| UnitPanel
-| EndTurnIcon = icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
+| EndTurnIcon = hidden: icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
 | GameUI = dlg: mtx
   |  0   0| View
   |  0   0| GameUnitUI
@@ -303,10 +303,16 @@ main.run =
     spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
+| GearsIcon = hidden: button 'GEARS' skin/gears: =>
+  | pause
+  | Tabs.pick{main_menu}
+| HourglassIcon = hidden: button 'HOURGLASS' skin/hourglass: => $world.end_turn
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
   |  0   0| ViewUI
   |  ScreenW-54 4| EditorIcons
+  |  ScreenW-111 0| GearsIcon
+  |  ScreenW-73 110| HourglassIcon
   |  0   0| PauseSpacer
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
@@ -319,6 +325,9 @@ main.run =
   |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
   | X 220 | button 'NEW GAME' skin/scroll: =>
             | EditorIcons.show <= 0
+            | EndTurnIcon.show <= 0
+            | GearsIcon.show <= 1
+            | HourglassIcon.show <= 1
             | $load{"[MapsFolder]demo.txt"}
             | View.mode <= \play
             | ViewUI.pick{play}
@@ -328,6 +337,9 @@ main.run =
   | X 290 | button 'LOAD GAME' skin/scroll: =>
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | EditorIcons.show <= 1
+            | EndTurnIcon.show <= 1
+            | GearsIcon.show <= 0
+            | HourglassIcon.show <= 0
             | View.mode <= \brush
             | unpause
             | Tabs.pick{ingame}
