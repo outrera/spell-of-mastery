@@ -108,7 +108,8 @@ unit_panel.draw G P =
 | times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
 
 
-type world_props.$base{world callback} filename name description width height base
+type world_props.$base{world callback}
+     filename name description width height base
 | $filename <= txt_input{''}
 | $name <= txt_input{''}
 | $description <= txt_input{w/240 ''}
@@ -135,6 +136,23 @@ world_props.update =
 | $width.value <= "[W.w]"
 | $height.value <= "[W.h]"
 
+type load_world_dlg.$base{world folder cancelCB loadCB}
+  filename base picked
+| LoadButton = button 'Load' skin/medium_small: => ($loadCB){$picked}
+| LoadButton.state <= 'disabled'
+| $base <= dlg: mtx
+  |   0   0 | $world.main.img{ui_panel5}
+  | 130  10 | txt size/medium 'Load World'
+  |  15  40 | folder_widget $folder: File =>
+              | $picked <= File
+              | LoadButton.state <= if File.exists and File.urls.size >< 0
+                then 'normal'
+                else 'disabled'
+  |  15 305 | LoadButton
+  | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
+
+
+MapsFolder = 'work/worlds/'
 
 // FIXME: refactor following into UI type
 main.run =
@@ -142,6 +160,7 @@ main.run =
 | ScreenH <= $params.ui.height
 | set_main Me
 | init_message_box Me
+| MapsFolder = "[$data][MapsFolder]"
 | PanelW = 200
 | View = view Me ScreenW ScreenH
 | Tabs = No
@@ -166,6 +185,15 @@ main.run =
   | $world.description <= P.description.value
   | unpause
   | WorldProperties.show <= 0
+| LoadWorldDlg = No
+| hideLoadWorldDlg = 
+  | LoadWorldDlg.show <= 0
+  | unpause
+| LoadWorldDlgW = load_world_dlg $world MapsFolder &hideLoadWorldDlg: X =>
+  | $load{X}
+  | hideLoadWorldDlg
+| LoadWorldDlgW.folder <= MapsFolder
+| LoadWorldDlg <= hidden: LoadWorldDlgW
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
 | $world.on_player_change <= Player =>
@@ -261,48 +289,50 @@ main.run =
   | WorldProperties.show <= 1
   | WorldProperties.update
 | SaveIcon = icon data/pick $img{icons_save} click: Icon =>
-  | $save{"[$data]/work/worlds/[$world.filename].txt"}
+  | $save{"[MapsFolder][$world.filename].txt"}
   //| show_message 'Saved' 'Your map is saved!'
 | LoadIcon = icon data/pick $img{icons_load} click: Icon =>
-  | $load{"[$data]/work/worlds/[$world.filename].txt"}
+  | pause
+  | LoadWorldDlg.show <= 1 
+  //| $load{"[MapsFolder][$world.filename].txt"}
 | ExitIcon = icon data/pick $img{icons_exit} click: Icon =>
   | pause
   | Tabs.pick{main_menu}
-| Icons = BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
-          spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
+| EditorIcons = hidden: layV s/8
+    BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
+    spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
   |  0   0| ViewUI
-  |  ScreenW-54 4| layV s/8 Icons
+  |  ScreenW-54 4| EditorIcons
   |  0   0| PauseSpacer
   |170 100| WorldProperties
+  |170 100| LoadWorldDlg
   |  0   0| MessageBox
 | View.init
 | MenuBG = $img{ui_menu_bg}
 | X = ScreenW/2 - 162
-| MMButtons = layV s/8: list
-    button{'Campaign'       state/disabled (=>)}
-    button{'Scenario'       state/disabled (=>Tabs.pick{scenario})}
-    button{'Multi Player'   state/disabled (=>)}
-    button{'Load Game'      state/disabled (=>)}
-    button{'World Editor'   (=> | View.mode <= \brush
-                                | unpause
-                                | Tabs.pick{ingame})}
-    spacer{0 8}
-    button{'Exit Program'   (=>get_gui{}.exit)}
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
-//  | X 240 | MMButtons
-  | X 220 | button{'NEW GAME' skin/scroll (=>)}
-  | X 290 | button{'LOAD GAME' skin/scroll (=>)}
-  | X 360 | button{'WORLD EDITOR' skin/scroll (=> | View.mode <= \brush
-                                                  | unpause
-                                                  | Tabs.pick{ingame})}
-  | X 500 | button{'EXIT' skin/scroll (=>get_gui{}.exit)}
-| Tabs <= tabs ingame: t
+  | X 220 | button 'NEW GAME' skin/scroll: =>
+            | EditorIcons.show <= 0
+            | $load{"[MapsFolder]demo.txt"}
+            | View.mode <= \play
+            | ViewUI.pick{play}
+            | $world.init_game
+            | unpause
+            | Tabs.pick{ingame}
+  | X 290 | button 'LOAD GAME' skin/scroll: =>
+  | X 360 | button 'WORLD EDITOR' skin/scroll: =>
+            | EditorIcons.show <= 1
+            | View.mode <= \brush
+            | unpause
+            | Tabs.pick{ingame}
+  | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
+| Tabs <= tabs main_menu: t
           main_menu(MainMenu)
           ingame(Ingame)
           scenario(ScenarioMenu)

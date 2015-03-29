@@ -203,13 +203,6 @@ litems.input In = case In
                   | $pick{P.1/$ih+$o}
 litems.itemAt Point XY WH = [Me XY WH] //override lay's method
 
-folder_nomalized Path = 
-| Xs = Path.items
-| Folders = Xs.keep{is."[_]/"}
-| Files = Xs.skip{is."[_]/"}
-| Parent = if Path >< '/' or Path.last >< ':' then [] else ['../']
-| [@Parent @Folders @Files]
-
 type slider_.widget{D f/(N=>) size/124 value/0.0 state/normal delta/No}
      dir/D f/F size/Size pos/0.0 state/State skin/No w/1 h/1 delta/Delta
 | have $delta (10.0/$size.float)
@@ -249,11 +242,11 @@ slider_.input In = case In
                       | $f $value
   [mice left 1 P] | when $state >< normal
                     | $state <= \pressed
-                    | $input{mice_move P P}
+                    | $input{mice_move,P,P}
   [mice left 0 P] | when $state >< pressed: $state <= \normal
 
 type arrow.widget{D Fn state/normal skin/arrow}
-  direction/D on_click/Fn state/State skin/Skin
+  direction/D on_click/Fn state/State sprite
 | $sprite <= Main.spr{"ui_[Skin]"}
 arrow.render = $sprite.frames."[$direction]_[$state]".0
 arrow.input In = case In
@@ -273,24 +266,6 @@ slider D @Rest =
 | if D >< v
   then layV [(arrow up (=>S.dec)) S (arrow down (=>S.inc))]
   else layH [(arrow left (=>!S.dec)) S (arrow right (=>S.inc))]
-
-type folder_litems.$litems{Root f/(V=>)} root/Root f/F litems
-| when $root.last <> '/': $root <= "[$root]/"
-| $litems <= litems lines/9 f/(N => F "[$root][N]") $root^folder_nomalized
-folder_litems.input In = case In
-  [mice double_left 1 P] | R = if $litems.value >< '../'
-                               then "[$root.lead.url.0]"
-                               else "[$root][$litems.value]"
-                         | when R.folder
-                           | $root <= R
-                           | $litems.data <= $root^folder_nomalized
-  Else | $litems.input{In}
-folder_litems.itemAt Point XY WH = [Me XY WH]
-
-folder_widget Root F =
-| FL = folder_litems Root f/F
-| S = slider size/124 v f/(N => FL.offset <= @int N*FL.data.size.float)
-| layH [FL S]
 
 type txt_input.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init
@@ -321,6 +296,34 @@ txt_input.input In = case In
 
 type img.widget{Path} path/Path
 img.render = Main.img{"image_[$path]"}
+
+
+folder_nomalized Path = 
+| Xs = Path.items
+| Folders = Xs.keep{is."[_]/"}
+| Files = Xs.skip{is."[_]/"}
+| Parent = if Path >< '/' or Path.last >< ':' then [] else ['../']
+| [@Parent @Folders @Files]
+
+type folder_litems.$litems{Root w/300 lines/10 f/(V=>)} root/Root f/F litems
+| when $root.last <> '/': $root <= "[$root]/"
+| $litems <= litems lines/Lines w/W f/(N => F "[$root][N]")
+                    $root^folder_nomalized
+folder_litems.input In = case In
+  [mice double_left 1 P] | R = if $litems.value >< '../'
+                               then "[$root.lead.url.0]"
+                               else "[$root][$litems.value]"
+                         | when R.folder
+                           | $root <= R
+                           | $litems.data <= $root^folder_nomalized
+  Else | $litems.input{In}
+folder_litems.itemAt Point XY WH = [Me XY WH]
+
+folder_widget Root F =
+| FL = folder_litems Root f/F
+| S = slider size/124 v f/(N => FL.offset <= @int N*FL.data.size.float)
+| layH [FL S]
+
 
 export set_main skin font txt button litem droplist slider folder_widget 
        litems txt_input img
