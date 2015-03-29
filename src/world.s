@@ -64,8 +64,6 @@ type world{main W H}
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $create{W H}
-| !$w-1
-| !$h-1
 
 world.create W H =
 | $w <= W
