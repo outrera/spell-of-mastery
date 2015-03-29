@@ -379,6 +379,10 @@ world.update_picked =
 
 view.update =
 | when $paused: leave
+| case $keys.up 1: $move{$view_origin-[1 1]}
+| case $keys.down 1: $move{$view_origin+[1 1]}
+| case $keys.left 1: $move{$view_origin-[1 -1]}
+| case $keys.right 1: $move{$view_origin+[1 -1]}
 | $world.update_picked
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
@@ -412,10 +416,6 @@ view.input In =
     | $cell_z <= $mice_z
   [mice right 0 XY]
     | $mice_right <= 0
-  [key up    1] | $move{$view_origin-[1 1]*2*$param.scroll_speed}
-  [key down  1] | $move{$view_origin+[1 1]*2*$param.scroll_speed}
-  [key left  1] | $move{$view_origin-[1 -1]*$param.scroll_speed}
-  [key right 1] | $move{$view_origin+[1 -1]*$param.scroll_speed}
   [key Name  S] | $keys.Name <= S
 
 view.pause = $paused <= 1
