@@ -108,6 +108,34 @@ unit_panel.draw G P =
 | times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
 
 
+type world_props.$base{world callback} filename name description width height base
+| $filename <= txt_input{''}
+| $name <= txt_input{''}
+| $description <= txt_input{w/240 ''}
+| $width <= txt_input{''}
+| $height <= txt_input{''}
+| PropFields = ['File Name:',$filename
+                'World Name:',$name 
+                'Description:',$description
+                'Width:',$width
+                'Height:',$height
+               ]
+| $base <= dlg: mtx
+  |   0   0 | $world.main.img{ui_panel5}
+  | 130  10 | txt size/medium 'Properties'
+  |  15  40 | layV s/8 PropFields{?0^txt}
+  | 100  36 | layV PropFields{?1}
+  |  15 305 | button 'Done' skin/medium_small: => ($callback){Me}
+
+world_props.update =
+| W = $world
+| $filename.value <= W.filename
+| $name.value <= W.name
+| $description.value <= W.description
+| $width.value <= "[W.w]"
+| $height.value <= "[W.h]"
+
+
 // FIXME: refactor following into UI type
 main.run =
 | ScreenW <= $params.ui.width
@@ -118,7 +146,6 @@ main.run =
 | View = view Me ScreenW ScreenH
 | Tabs = No
 | GameMenu = No
-| WorldProperties = No
 | Ingame = No
 | ScenarioMenu = No
 | MainMenu = No
@@ -126,17 +153,19 @@ main.run =
 | pause = | PauseSpacer.show <= 1; View.pause
 | unpause = | PauseSpacer.show <= 0; View.unpause
 | InfoText = info_line Me
-| WorldNameInput = txt_input{''}
-| PropFields = ['World Name:',WorldNameInput
-               ]
-| WorldProperties <= hidden: dlg: mtx
-  |   0   0 | $img{ui_panel5}
-  | 130  10 | txt size/medium 'Properties'
-  |  15  40 | layV PropFields{?0^txt}
-  | 100  36 | layV PropFields{?1}
-  |  15 305 | button 'Done' skin/medium_small: =>
-              | unpause
-              | WorldProperties.show <= 0
+| WorldProperties = No
+| parse_int_normalized Default Text =
+  | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
+| WorldProperties <= hidden: world_props $world: P =>
+  | W = parse_int_normalized{$world.w P.width.value}.clip{4 240}
+  | H = parse_int_normalized{$world.h P.height.value}.clip{4 240}
+  | when W <> $world.w or H <> $world.h:
+    | $world.create{W H}
+  | $world.filename <= P.filename.value
+  | $world.name <= P.name.value
+  | $world.description <= P.description.value
+  | unpause
+  | WorldProperties.show <= 0
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
 | $world.on_player_change <= Player =>
@@ -230,6 +259,7 @@ main.run =
 | WorldIcon = icon data/pick $img{icons_world} click: Icon =>
   | pause
   | WorldProperties.show <= 1
+  | WorldProperties.update
 | SaveIcon = icon data/pick $img{icons_save} click: Icon =>
   | $save{"[$data]/work/worlds/test.txt"}
   //| show_message 'Saved' 'Your map is saved!'
