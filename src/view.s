@@ -173,7 +173,7 @@ view.draw_indicators =
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
 | $render_iso
-| when $mode >< play: $draw_indicators
+| /*when $mode >< play:*/ $draw_indicators
 | InfoText = []
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
