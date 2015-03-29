@@ -9,8 +9,8 @@ PlayerColors = [white red blue cyan violet orange black yellow magenta]
 type world{main W H}
    w
    h
-   filename/`default.txt`
-   name/default
+   filename/`default`
+   name/`default map`
    description/`describe the map here`
    tilemap
    unit_map

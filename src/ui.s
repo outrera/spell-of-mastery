@@ -261,10 +261,10 @@ main.run =
   | WorldProperties.show <= 1
   | WorldProperties.update
 | SaveIcon = icon data/pick $img{icons_save} click: Icon =>
-  | $save{"[$data]/work/worlds/test.txt"}
+  | $save{"[$data]/work/worlds/[$world.filename].txt"}
   //| show_message 'Saved' 'Your map is saved!'
 | LoadIcon = icon data/pick $img{icons_load} click: Icon =>
-  | $load{"[$data]/work/worlds/test.txt"}
+  | $load{"[$data]/work/worlds/[$world.filename].txt"}
 | ExitIcon = icon data/pick $img{icons_exit} click: Icon =>
   | pause
   | Tabs.pick{main_menu}
