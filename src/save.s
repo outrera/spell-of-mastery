@@ -2,6 +2,9 @@ use util
 
 world.save =
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
+    filename | $filename
+    name | $name
+    description | $description
     tids | $tid_map{}{?type}
     players | map P $players [P.id P.name P.human P.color P.power P.moves]
     player | $player.id
@@ -25,6 +28,9 @@ world.load Saved =
 | $clear
 | $w <= Saved.w
 | $h <= Saved.h
+| $filename <= Saved.filename
+| $name <= Saved.name
+| $description <= Saved.description
 | $serial <= Saved.serial
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}
