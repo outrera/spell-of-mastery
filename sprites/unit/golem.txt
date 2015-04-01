@@ -1,4 +1,7 @@
 author: `Thomas Frose`, `Alexander Luchkin`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
-xy: 8,2
+xy: 0,38
+frames: folder
+anims: | idle (idle0 60)
+       | attack (attack1 6) (attack2 12) (attack3 12) (attack4 6)

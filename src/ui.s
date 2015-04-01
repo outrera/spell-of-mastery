@@ -328,7 +328,7 @@ main.run =
             | EndTurnIcon.show <= 0
             | GearsIcon.show <= 1
             | HourglassIcon.show <= 1
-            | $load{"[MapsFolder]demo.txt"}
+            | $load{"[MapsFolder]default.txt"}
             | View.mode <= \play
             | ViewUI.pick{play}
             | $world.init_game
