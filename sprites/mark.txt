@@ -1,2 +1,2 @@
 height: 0
-class: empty,1,draw_order,600000,aux,1
+class: empty,1,draw_order,#FFFFFFFF,aux,1

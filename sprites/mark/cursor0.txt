@@ -1,0 +1,3 @@
+author: `Nikita Sadkov`
+class: empty,1,draw_order,0,aux,1
+xy: 0,32

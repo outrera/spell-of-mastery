@@ -23,8 +23,9 @@ type view.widget{M W H}
   mice_left_xy/[0 0]
   mice_xy/[0 0]
   mice_z
-  cell_xy/[0 0]
-  cell_z
+  cell/[2 2 2]
+  cell_xy/[2 2]
+  cell_z/2
   brush/[0 0]
   mode/brush
   pick_count // used to pick different units from the same cell
@@ -113,6 +114,11 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
 
 view.render_iso = 
 | Wr = $world
+| for U Wr.column_units_at{@$cell.take{2}}: when U.type >< mark_cursor0: U.free
+| for U Wr.column_units_at{@$cell.take{2}}: when U.type >< mark_cursor1: U.free
+| $cell.init{[@$cell_xy $cell_z]}
+| $world.alloc_unit{mark_cursor0}.move{$cell}
+| $world.alloc_unit{mark_cursor1}.move{$cell}
 | XUnit = XUnit
 | YUnit = YUnit
 | ZUnit = ZUnit
@@ -285,21 +291,21 @@ view.update_brush X Y Z =
 
 unit.guess_order_at XYZ =
 | Us = $world.units_at{XYZ}
-| Mark = Us.find{?type.take{5} >< mark_}
-| less got Mark: leave
-| Path = cons path: map M Mark^uncons{path}.lead.flip
-  | Node = $world.alloc_unit{mark_node}
-  | Node.move{M.xyz}
-  | Node
-| case Mark.type
-  mark_move
-   | $order.init{act/move at/XYZ path/Path}
-  mark_attack
-   | Target = Us.skip{?empty}.0
-   | $order.init{act/attack target/Target at/XYZ path/Path}
-  mark_swap
-   | Target = Us.skip{?empty}.0
-   | $order.init{act/swap target/Target at/XYZ path/Path}
+| Marks = Us.keep{?type.take{5} >< mark_}
+| for Mark Marks:
+  | Path = cons path: map M Mark^uncons{path}.lead.flip
+    | Node = $world.alloc_unit{mark_node}
+    | Node.move{M.xyz}
+    | Node
+  | case Mark.type
+    mark_move
+      | $order.init{act/move at/XYZ path/Path}
+    mark_attack
+      | Target = Us.skip{?empty}.0
+      | $order.init{act/attack target/Target at/XYZ path/Path}
+    mark_swap
+      | Target = Us.skip{?empty}.0
+      | $order.init{act/swap target/Target at/XYZ path/Path}
 
 view.update_play X Y Z =
 | Player = $world.player
