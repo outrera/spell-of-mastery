@@ -320,35 +320,33 @@ main.run =
 | View.init
 | MenuBG = $img{ui_menu_bg}
 | X = ScreenW/2 - 162
+| begin_ingame Editor = 
+  | EditorIcons.show <= Editor
+  | EndTurnIcon.show <= Editor
+  | GearsIcon.show <= not Editor
+  | HourglassIcon.show <= not Editor
+  | View.mode <= [play brush].Editor
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
   | X 220 | button 'NEW GAME' skin/scroll: =>
-            | EditorIcons.show <= 0
-            | EndTurnIcon.show <= 0
-            | GearsIcon.show <= 1
-            | HourglassIcon.show <= 1
+            | begin_ingame 0
             | $load{"[MapsFolder]default.txt"}
-            | View.mode <= \play
             | ViewUI.pick{play}
             | $world.init_game
             | unpause
             | Tabs.pick{ingame}
   | X 290 | button 'LOAD GAME' skin/scroll: =>
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
-            | EditorIcons.show <= 1
-            | EndTurnIcon.show <= 1
-            | GearsIcon.show <= 0
-            | HourglassIcon.show <= 0
-            | View.mode <= \brush
+            | begin_ingame 1
             | unpause
             | Tabs.pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
-| Tabs <= tabs main_menu: t
+| Tabs <= tabs ingame: t
           main_menu(MainMenu)
           ingame(Ingame)
           scenario(ScenarioMenu)
 | BankList.pick{0}
-| View.mode <= \brush
+| begin_ingame 1
 //| pause
 | gui Tabs cursor/$img{ui_cursor_point}
