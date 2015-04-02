@@ -1,7 +1,7 @@
 author: `Nikita Sadkov`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`, `Sergey Abramov (InQvisions Company)`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
-xy: 0,32
+xy: 0,48
 frames: folder
 anims: | idle (idle0 24)
        | move (move1 6) (move2 6) (move3 6) (move4 6)

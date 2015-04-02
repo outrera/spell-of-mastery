@@ -1,7 +1,7 @@
 author: `Camilo Collao (Bo)`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
-xy: 8,52
+xy: 8,40
 frames: folder
 anims: | idle (idle0 24)
        | move (move1 6) (move2 6) (move3 6) (move4 6)
