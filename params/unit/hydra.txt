@@ -1,0 +1,10 @@
+sprite: unit_hydra
+level: 3
+health: 5
+attack: 2
+defense: 0
+mountaineer: 0
+moves:
+  | 0 1 0
+  | 1 0 1
+  | 0 1 0
