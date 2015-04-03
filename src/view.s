@@ -23,7 +23,6 @@ type view.widget{M W H}
   mice_left_xy/[0 0]
   mice_xy/[0 0]
   mice_z
-  cell/[2 2 2]
   cell_xy/[2 2]
   cell_z/2
   brush/[0 0]
@@ -114,11 +113,6 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
 
 view.render_iso = 
 | Wr = $world
-| for U Wr.column_units_at{@$cell.take{2}}: when U.type >< mark_cursor0: U.free
-| for U Wr.column_units_at{@$cell.take{2}}: when U.type >< mark_cursor1: U.free
-| $cell.init{[@$cell_xy $cell_z]}
-| $world.alloc_unit{mark_cursor0}.move{$cell}
-| $world.alloc_unit{mark_cursor1}.move{$cell}
 | XUnit = XUnit
 | YUnit = YUnit
 | ZUnit = ZUnit
@@ -282,7 +276,8 @@ view.update_brush X Y Z =
       | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
     | $world.push{X,Y $main.tiles.Type}
 | when $mice_right and Z >> $mice_z: case $brush
-  [obj Type] | for U $world.units_at{X,Y,Z}: U.free
+  [obj Type] | for U $world.units_at{X,Y,Z}.skip{?type.take{5} >< mark_}:
+               | U.free
   [tile Type]
   | when Z > 1:
     | Tile = $world.at{X,Y,Z-1}
@@ -383,15 +378,48 @@ world.update_picked =
 | when Picked and Picked.picked and Picked.action.class_name >< idle:
   | for I,M Picked.mark_moves.i: $marks.I <= M
 
+
+Form = dup 100 0
+
+world.update_cursor CXYZ Brush Mirror =
+| for U $column_units_at{@$cell.take{2}}:
+  case U.type mark_cursor0+mark_cursor1: U.free
+| for I Form.size: when Form.I:
+  | Form.I.free
+  | Form.I <= 0
+| $cell.init{CXYZ}
+| $alloc_unit{mark_cursor0}.move{$cell}
+| $alloc_unit{mark_cursor1}.move{$cell}
+| case Brush
+  [obj Bank,Type]
+    | ClassName = "[Bank]_[Type]"
+    | Class = $main.classes.ClassName
+    | I = 0
+    | for Y,Hs Class.form.i: for X,H Hs.i: when H:
+      | XYZ = $cell+ if Mirror then [-Y X 0] else [X -Y 0]
+      | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_at{XYZ}
+      | Place = if not Us then 0
+                else if Class.unit then not Us.any{?unit}
+                else not Us.any{?class^address >< Class^address}
+      | when Place
+        | U = $alloc_unit{mark_cube}
+        | U.move{XYZ}
+        | Form.I <= U
+        | !I+1
+
+
 view.update =
 | when $paused: leave
 | case $keys.up 1: $move{$view_origin-[1 1]}
 | case $keys.down 1: $move{$view_origin+[1 1]}
 | case $keys.left 1: $move{$view_origin-[1 -1]}
 | case $keys.right 1: $move{$view_origin+[1 -1]}
-| $world.update_picked
 | X,Y = $cell_xy
 | Z = $world.height{X Y}
+| $world.update_picked
+| Brush = if $mode >< brush then $brush else 0
+| Mirror = $keys.m >< 1
+| $world.update_cursor{[X Y $cell_z] Brush Mirror}
 | case $mode
     play | $update_play{X Y Z}
          | $main.update

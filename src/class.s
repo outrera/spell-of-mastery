@@ -34,6 +34,8 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
 
 class.height = $default_sprite.height
 
+class.form = $default_sprite.form
+
 main.load_classes =
 | BankNames = case $params.world.class_banks [@Xs](Xs) X[X]
 | $classes <= @table: @join: map BankName BankNames

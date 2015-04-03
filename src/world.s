@@ -38,6 +38,7 @@ type world{main W H}
    zunit
    on_player_change
    marks
+   cell/[2 2 2]
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size

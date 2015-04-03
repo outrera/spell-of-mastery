@@ -88,7 +88,6 @@ unit.animate Anim =
 
 unit.free = $world.free_unit{Me}
 
-
 unit.remove =
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
