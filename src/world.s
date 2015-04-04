@@ -64,6 +64,7 @@ type world{main W H}
 | SS = MaxSize*MaxSize
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
+| $nil <= $alloc_unit{unit_nil}
 | $create{W H}
 
 world.create W H =
@@ -84,7 +85,6 @@ world.clear =
 | for U $units: less U.removed: U.free
 | $tilemap.clear{0}
 | $picked <= 0
-| $nil <= $alloc_unit{unit_nil}
 | $marks <= $nil
 | for Type,Act $main.params.acts: for Player $players: Player.research.Type <= 0
 
