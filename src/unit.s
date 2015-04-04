@@ -8,8 +8,6 @@ type unit.$class{Id World}
   class
   xyz/[0 0 -1] // world coordinates
   xy/[0 0] // fine X,Y
-  next // next unit inside of this world cell
-  column_next // next unit inside of this world column
   anim // animation id
   anim_step // frame index inside of current animation
   anim_seq // current animation sequence
@@ -44,8 +42,6 @@ unit.init Class =
 | $sprite <= $default_sprite
 | $facing <= 3
 | $mirror <= 0
-| $next <= 0
-| $column_next <= 0
 | $serial <= $world.serial
 | !$world.serial + 1
 | $animate{idle}

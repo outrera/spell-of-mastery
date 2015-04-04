@@ -102,14 +102,16 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
        | when Cursor | Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
        | Z <= UnitZ
 | for U Wr.column_units_at{X Y}
-  | Z = U.xyz.2
-  | DrawShadow = Z > UnitZ
-  // FIXME: omit units stadning above the current cave
-  | U.render{Heap BX BY-ZUnit*Z}
-  | when DrawShadow
-    | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
-    | Key = Key + (UnitZ</30) + 1
-    | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
+  | XYZ = U.xyz
+  | when XYZ.0 >< X and XYZ.1 >< Y:
+    | Z = U.xyz.2
+    | DrawShadow = Z > UnitZ
+    // FIXME: omit units stadning above the current cave
+    | U.render{Heap BX BY-ZUnit*Z}
+    | when DrawShadow
+      | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
+      | Key = Key + (UnitZ</30) + 1
+      | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
 
 view.render_iso = 
 | Wr = $world
@@ -266,7 +268,8 @@ view.update_brush X Y Z =
     | for XX,YY,ZZ Class.form: when Place:
       | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
       | Us = $world.units_at{XYZ}
-      | Place <= if Class.unit then not Us.any{?unit}
+      | Place <= if XYZ.any{?<0} then 0
+                 else if Class.unit then not Us.any{?unit}
                  else if $keys.r >< 1 then Us.end
                  else not Us.any{?class^address >< Class^address}
     | when Place

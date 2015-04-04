@@ -6,6 +6,18 @@ MaxActiveUnits = 4096
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
+type proxy.$unit_{id}
+  unit_ 
+  next // next unit inside of this world cell
+  column_next // next unit inside of this world column
+
+proxy.as_text = "#proxy{[$id] [$type] [$unit_id]}"
+
+proxy.init Unit =
+| $unit_ <= Unit
+| $next <= 0
+| $column_next <= 0
+
 type world{main W H}
    w
    h
@@ -17,6 +29,8 @@ type world{main W H}
    slope_map
    units
    free_units
+   proxies
+   free_proxies
    players
    player // currently moving player
    this_player // player beside this computer
@@ -58,6 +72,8 @@ type world{main W H}
 | $slope_map <= octree MaxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
+| $proxies <= MaxUnits{(proxy ?)}
+| $free_proxies <= stack $proxies.flip
 | $active <= stack MaxActiveUnits
 | $shadows <= $main.sprites.unit_shadows.frames
 | $filler <= $main.tiles.base_
@@ -145,46 +161,66 @@ world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
 
-world.unit_id_at XYZ = $unit_map.at{XYZ}
-
-world.unit_at XYZ =
-| when!it $unit_map.at{XYZ}: leave $units.it
-| 0
-
-world.units_at XYZ =
-| when!it $unit_map.at{XYZ}: leave $units.it^uncons{next}
+world.proxies_at XYZ =
+| when!it $unit_map.at{XYZ}: leave $proxies.it^uncons{next}
 | []
 
-world.column_units_at X Y =
-| when!it $unit_map.at{X,Y,0}: leave $units.it^uncons{column_next}
+world.column_proxies_at X Y =
+| when!it $unit_map.at{X,Y,0}: leave $proxies.it^uncons{column_next}
 | []
+
+world.units_at XYZ = $proxies_at{XYZ}{?unit_}
+
+world.column_units_at X Y = $column_proxies_at{X Y}{?unit_}
 
 world.block_at XYZ =
 | Block = $units_at{XYZ}.skip{?empty}
 | if Block.size then Block.head else No
 
-world.place_unit U =
+world.place_unitS UU =
+| U = $free_proxies.pop
+| U.init{UU}
 | XYZ = U.xyz
-| Us = U,@$units_at{XYZ}
+| Us = U,@$proxies_at{XYZ}
 | Consed = Us^cons{next}
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ Id}
-| Us = U,@$column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
+| Us = U,@$column_proxies_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
+| Consed = Us^cons{column_next}
+| Id = if Consed then Consed.id else 0
+| $unit_map.set{XYZ.0,XYZ.1,0 Id}
+
+world.place_unit U =
+| XYZ = U.xyz.copy
+| Mirror = U.facing >< 5
+| for XX,YY,ZZ U.form:
+  | U.xyz.init{XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]}
+  | $place_unitS{U}
+| U.xyz.init{XYZ}
+
+world.remove_unitS U =
+| XYZ = U.xyz
+| Us = []
+| for P $proxies_at{XYZ}: if P.unit_.id >< U.id 
+  then $free_proxies.push{P} 
+  else push P Us
+| Consed = Us^cons{next}
+| Id = if Consed then Consed.id else 0
+| $unit_map.set{XYZ Id}
+| Us = $column_proxies_at{XYZ.0 XYZ.1}.skip{?.unit_.id >< U.id}
 | Consed = Us^cons{column_next}
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
 world.remove_unit U =
-| XYZ = U.xyz
+| XYZ = U.xyz.copy
 | when XYZ.2 >< -1: leave
-| Us = $units_at{XYZ}.skip{?id >< U.id}
-| Consed = Us^cons{next}
-| Id = if Consed then Consed.id else 0
-| $unit_map.set{XYZ Id}
-| Us = $column_units_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
-| Consed = Us^cons{column_next}
-| Id = if Consed then Consed.id else 0
-| $unit_map.set{XYZ.0,XYZ.1,0 Id}
+| Mirror = U.facing >< 5
+| for XX,YY,ZZ U.form:
+  | U.xyz.init{XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]}
+  | $remove_unitS{U}
+| U.xyz.init{XYZ}
+
 
 world.effect X,Y,Z What =
 | E = $alloc_unit{"effect_[What]"}
