@@ -257,17 +257,21 @@ view.update_pick X Y Z =
 view.update_brush X Y Z = 
 | when $mice_left and Z << $mice_z: case $brush
   [obj Bank,Type]
+    | Mirror = $keys.m >< 1
     | ClassName = if $keys.r >< 1
                   then "[Bank]_[$main.classes_banks.Bank.rand]"
                   else "[Bank]_[Type]"
     | Class = $main.classes.ClassName
-    | Us = $world.units_at{X,Y,Z}
-    | Place = if Class.unit then not Us.any{?unit}
-              else if $keys.r >< 1 then Us.end
-              else not Us.any{?class^address >< Class^address}
+    | Place = 1
+    | for XX,YY,ZZ Class.form: when Place:
+      | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
+      | Us = $world.units_at{XYZ}
+      | Place <= if Class.unit then not Us.any{?unit}
+                 else if $keys.r >< 1 then Us.end
+                 else not Us.any{?class^address >< Class^address}
     | when Place
       | U = $world.alloc_unit{ClassName}
-      | U.pick_facing{if $keys.m >< 1 then 5 else 3}
+      | U.pick_facing{if Mirror then 5 else 3}
       | when $keys.t >< 1: U.facing <= 3.rand
       | U.move{X,Y,Z}
   [tile Type]
@@ -382,8 +386,8 @@ world.update_cursor CXYZ Brush Mirror =
   [obj Bank,Type]
     | ClassName = "[Bank]_[Type]"
     | Class = $main.classes.ClassName
-    | for Y,Hs Class.form.i: for X,H Hs.i: when H:
-      | XYZ = CXYZ + if Mirror then [-Y X 0] else [X -Y 0]
+    | for X,Y,Z Class.form:
+      | XYZ = CXYZ + if Mirror then [-Y X Z] else [X -Y Z]
       | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_at{XYZ}
       | Place = if not Us then 0
                 else if Class.unit then not Us.any{?unit}

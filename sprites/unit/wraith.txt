@@ -1,2 +1,3 @@
-author: `Wesnoth Team`
-xy: 0,4
+author: `Leha (kharagh@bk.ru)`
+copyright: `Nikita Sadkov`
+xy: 0,16
