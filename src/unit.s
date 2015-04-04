@@ -24,6 +24,7 @@ type unit.$class{Id World}
   moved // last turn, this unit moved
   mirror // true, if drawing code should mirror the sprite
   picked // cons of the next unit in the selection
+  mark // next mark in the map marks chain
   active // true if this unit resides in the list of active units
   slope // unit is standing on a sloped terrain
   movement_render_hack
@@ -49,6 +50,7 @@ unit.init Class =
 | !$world.serial + 1
 | $animate{idle}
 | $picked <= 0
+| $mark <= 0
 | $path <= 0
 | $hits <= 0
 | when $starts
@@ -100,6 +102,7 @@ unit.move XYZ =
 | $xy.init{0,0}
 | $world.place_unit{Me}
 | $environment_updated
+| Me
 
 unit.environment_updated =
 | [UX UY UZ] = $xyz

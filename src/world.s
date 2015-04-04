@@ -38,7 +38,6 @@ type world{main W H}
    zunit
    on_player_change
    marks
-   cell/[2 2 2]
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -61,7 +60,6 @@ type world{main W H}
 | $free_units <= stack $units.flip
 | $active <= stack MaxActiveUnits
 | $shadows <= $main.sprites.unit_shadows.frames
-| $marks <= dup 100 0
 | $filler <= $main.tiles.base_
 | SS = MaxSize*MaxSize
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
@@ -84,10 +82,10 @@ world.create W H =
 
 world.clear =
 | for U $units: less U.removed: U.free
-| for I $marks.size: $marks.I <= 0
 | $tilemap.clear{0}
 | $picked <= 0
 | $nil <= $alloc_unit{unit_nil}
+| $marks <= $nil
 | for Type,Act $main.params.acts: for Player $players: Player.research.Type <= 0
 
 world.alloc_unit ClassName =
@@ -100,8 +98,9 @@ world.alloc_unit ClassName =
 | U
 
 world.free_unit U =
-| U.remove
-| $free_units.push{U}
+| when U.id
+  | U.remove
+  | $free_units.push{U}
 
 world.get X Y Z =
 | Id = $tilemap.at{[X Y Z]}

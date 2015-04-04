@@ -276,8 +276,7 @@ view.update_brush X Y Z =
       | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
     | $world.push{X,Y $main.tiles.Type}
 | when $mice_right and Z >> $mice_z: case $brush
-  [obj Type] | for U $world.units_at{X,Y,Z}.skip{?type.take{5} >< mark_}:
-               | U.free
+  [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
   [tile Type]
   | when Z > 1:
     | Tile = $world.at{X,Y,Z-1}
@@ -286,7 +285,7 @@ view.update_brush X Y Z =
 
 unit.guess_order_at XYZ =
 | Us = $world.units_at{XYZ}
-| Marks = Us.keep{?type.take{5} >< mark_}
+| Marks = Us.keep{?mark}
 | for Mark Marks:
   | Path = cons path: map M Mark^uncons{path}.lead.flip
     | Node = $world.alloc_unit{mark_node}
@@ -367,46 +366,30 @@ unit.mark_moves =
 world.update_picked = 
 | SanitizedPicked = $picked^uncons{picked}.skip{?removed}
 | $picked <= [$nil @SanitizedPicked]^cons{picked}
-| for I $marks.size:
-  | M = $marks.I
-  | when M:
-    | M.free
-    | $marks.I <= 0
+| for M $marks^uncons{mark}: M.free
+| $marks <= $nil
 | Picked = $picked
 | less Picked and Picked.moves and Picked.moved<>$turn and $player.moves > 0:
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.class_name >< idle:
-  | for I,M Picked.mark_moves.i: $marks.I <= M
-
-
-Form = dup 100 0
+  | $marks <= [$nil @Picked.mark_moves]^cons{mark}
 
 world.update_cursor CXYZ Brush Mirror =
-| for U $column_units_at{@$cell.take{2}}:
-  case U.type mark_cursor0+mark_cursor1: U.free
-| for I Form.size: when Form.I:
-  | Form.I.free
-  | Form.I <= 0
-| $cell.init{CXYZ}
-| $alloc_unit{mark_cursor0}.move{$cell}
-| $alloc_unit{mark_cursor1}.move{$cell}
+| Marks = $marks^uncons{mark}.flip
+| push $alloc_unit{mark_cursor0}.move{CXYZ} Marks
+| push $alloc_unit{mark_cursor1}.move{CXYZ} Marks
 | case Brush
   [obj Bank,Type]
     | ClassName = "[Bank]_[Type]"
     | Class = $main.classes.ClassName
-    | I = 0
     | for Y,Hs Class.form.i: for X,H Hs.i: when H:
-      | XYZ = $cell+ if Mirror then [-Y X 0] else [X -Y 0]
+      | XYZ = CXYZ + if Mirror then [-Y X 0] else [X -Y 0]
       | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_at{XYZ}
       | Place = if not Us then 0
                 else if Class.unit then not Us.any{?unit}
                 else not Us.any{?class^address >< Class^address}
-      | when Place
-        | U = $alloc_unit{mark_cube}
-        | U.move{XYZ}
-        | Form.I <= U
-        | !I+1
-
+      | when Place: push $alloc_unit{mark_cube}.move{XYZ} Marks
+| $marks <= Marks.flip^cons{mark}
 
 view.update =
 | when $paused: leave
