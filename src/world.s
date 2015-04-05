@@ -51,7 +51,9 @@ type world{main W H}
    yunit
    zunit
    on_player_change
+   on_update
    marks
+   params
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -102,6 +104,7 @@ world.clear =
 | $tilemap.clear{0}
 | $picked <= 0
 | $marks <= $nil
+| $params <= t
 | for Type,Act $main.params.acts: for Player $players: Player.research.Type <= 0
 
 world.alloc_unit ClassName =

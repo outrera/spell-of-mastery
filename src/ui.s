@@ -9,9 +9,9 @@ MessageBoxText = No
 MessageBoxOk = No
 
 init_message_box Main =
-| MessageBoxTitle <= txt size/medium '' 
-| MessageBoxText <= txt size/medium ''
-| MessageBoxOk <= hidden: button 'Ok' w_size/small: =>
+| MessageBoxTitle <= txt medium '' 
+| MessageBoxText <= txt medium ''
+| MessageBoxOk <= hidden: button 'Ok' skin/medium_small: =>
   | MessageBox.show <= 0
 | MessageBox <= hidden: dlg: mtx
   |   0   0 | spacer ScreenW ScreenH
@@ -28,12 +28,12 @@ show_message Title Text =
 
 /*
 GameMenu <=
-| Save = button 'Save' w_size/small state/disabled (=>)
-| Load = button 'Load' w_size/small state/disabled (=>)
+| Save = button 'Save' skin/medium_small state/disabled (=>)
+| Load = button 'Load' skin/medium_small state/disabled (=>)
 | hidden: dlg: mtx
   |   0   0 | spacer ScreenW ScreenH
   | 270 100 | Main.img{ui_panel1}
-  | 346 110 | txt size/medium 'Game Menu'
+  | 346 110 | txt medium 'Game Menu'
   | 285 140 | layV s/8: list
               layH{s/12 [Save Load]}
               button{'Options' state/disabled (=>)}
@@ -73,7 +73,7 @@ MaxActIcons = 24
 ActIcons = []
 ActIcon = 0
 
-type info_line.widget{main} info_text/txt{""}
+type info_line.widget{main} info_text/txt{small ''}
 
 info_line.render =
 | $info_text.value <= ""
@@ -123,8 +123,8 @@ type world_props.$base{world callback}
                ]
 | $base <= dlg: mtx
   |   0   0 | $world.main.img{ui_panel5}
-  | 130  10 | txt size/medium 'Properties'
-  |  15  40 | layV s/8 PropFields{?0^txt}
+  | 130  10 | txt medium 'Properties'
+  |  15  40 | layV s/8 PropFields{(txt medium ?0)}
   | 100  36 | layV PropFields{?1}
   |  15 305 | button 'Done' skin/medium_small: => ($callback){Me}
 
@@ -142,7 +142,7 @@ type load_world_dlg.$base{world folder cancelCB loadCB}
 | LoadButton.state <= 'disabled'
 | $base <= dlg: mtx
   |   0   0 | $world.main.img{ui_panel5}
-  | 130  10 | txt size/medium 'Load World'
+  | 130  10 | txt medium 'Load World'
   |  15  40 | folder_widget $folder: File =>
               | $picked <= File
               | LoadButton.state <= if File.exists and File.urls.size >< 0
@@ -198,6 +198,10 @@ main.run =
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
 | $world.on_player_change <= Player =>
   | PlayerWidget.picked <= Player.id
+| $world.on_update <= =>
+  | when got $world.params.spell_of_mastery
+    | pause
+    | Tabs.pick{victory}
 | BankName =
 | TileNames = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
 | BankNames = [terrain unit @$bank_names.skip{unit}]
@@ -235,10 +239,10 @@ main.run =
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | ArrowClick = Icon =>
 | Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
-| PickedUnitTitle = txt size/medium ''
-| PickedUnitOwner = txt size/medium 'unknown'
-| PickedUnitLevel = txt size/medium 'unknown'
-| PickedUnitMoved = txt size/medium 'unknown'
+| PickedUnitTitle = txt medium ''
+| PickedUnitOwner = txt medium 'unknown'
+| PickedUnitLevel = txt medium 'unknown'
+| PickedUnitMoved = txt medium 'unknown'
 | UnitPanel = unit_panel Me
 | GameUnitUI = hidden: dlg: mtx
   |  0   0| UnitPanel
@@ -318,17 +322,18 @@ main.run =
   |170 100| LoadWorldDlg
   |  0   0| MessageBox
 | View.init
-| MenuBG = $img{ui_menu_bg}
-| X = ScreenW/2 - 162
 | begin_ingame Editor = 
   | EditorIcons.show <= Editor
   | EndTurnIcon.show <= Editor
   | GearsIcon.show <= not Editor
   | HourglassIcon.show <= not Editor
   | View.mode <= [play brush].Editor
+| MenuBG = $img{ui_menu_bg}
+| X = ScreenW/2 - 162
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
+  |  16 ScreenH-16 | txt small
+                        'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
   | X 220 | button 'NEW GAME' skin/scroll: =>
             | begin_ingame 0
             | $load{"[MapsFolder]default.txt"}
@@ -342,9 +347,19 @@ main.run =
             | unpause
             | Tabs.pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
+| VictoryBG = $img{ui_victory_bg}
+| Victory = dlg: mtx
+  |   0   0 | VictoryBG
+  | 100 100 | txt medium: =>
+              | Player = $world.players.($world.params.spell_of_mastery)
+              | "[Player.name] has won!"
+  | ScreenW-360 ScreenH-100
+        | button 'EXIT TO MENU' skin/scroll: =>
+          | Tabs.pick{main_menu}
 | Tabs <= tabs ingame: t
           main_menu(MainMenu)
           ingame(Ingame)
+          victory(Victory)
           scenario(ScenarioMenu)
 | BankList.pick{0}
 | begin_ingame 1

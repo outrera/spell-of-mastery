@@ -1,0 +1,3 @@
+author: `Alekei`
+license: `CC3-BY-SA`
+http: `http://opengameart.org/content/background-night`

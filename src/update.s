@@ -39,6 +39,7 @@ world.update =
   | when U.active: push U NextActive
 | for U NextActive: $active.push{U}
 | !$cycle + 1
+| ($on_update){}
 
 unit.update =
 | when $removed

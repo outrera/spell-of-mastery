@@ -28,7 +28,7 @@ type view.widget{M W H}
   brush/[0 0]
   mode/brush
   pick_count // used to pick different units from the same cell
-  infoText/txt{'info'}
+  infoText/txt{small info}
   fps/1
   fpsT/0.0
   fpsGoal/24 // goal frames per second

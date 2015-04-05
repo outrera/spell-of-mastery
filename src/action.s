@@ -184,8 +184,8 @@ act_spell_of_mastery.start A =
 
 act_spell_of_mastery.finish A =
 | U = A.unit
-| say "[U.owner.name] has won the battle!"
-| halt
+| U.world.params.spell_of_mastery <= U.owner.id
+
 
 
 

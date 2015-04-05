@@ -23,7 +23,7 @@ minimap.input In = case In
 
 
 /*
-type icon_popup.widget info enabled resources text/txt{''}
+type icon_popup.widget info enabled resources text/txt{small ''}
 | $info <= layV: map X [$text]: tabs 0: t 1(X) 0(spacer 0 0)
 icon_popup.render =
 | for X $info.items: X.pick{$enabled}

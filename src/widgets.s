@@ -38,19 +38,18 @@ font.draw G P Text =
     | W+1+!CX
   | !CY + H
 
-type txt.widget{Value size/small} w h value_ size/Size font
-| $font <= font $size
-| $value <= Value
+type txt.widget{font_name value} w h v value_/'' font
+| $font <= font $font_name
+txt.render =
+| Text = "[if $value.is_fn then $value{}{} else $value]"
+| when $value_ <> Text
+  | $value_ <= Text
+  | F = $font
+  | $w <= $value_.lines{}{L => F.width{L}}.max
+  | $h <= F.height
+| Me
 txt.draw G P = $font.draw{G P $value_}
 txt.as_text = "#txt{[$value]}"
-txt.value = $value_
-txt.`!value` Text =
-| Text <= "[Text]"
-| when $value_ >< Text: leave
-| $value_ <= Text
-| F = $font
-| $w <= $value_.lines{}{L => F.width{L}}.max
-| $h <= F.height
 
 type bar.widget{V} value_/V.clip{0 100} bg/No
 bar.render =
