@@ -174,6 +174,21 @@ act_summon.finish A =
 | S.world.update_pick{[S]}
 
 
+type act_spell_of_mastery.act_class class_name/summon anim/action
+
+act_spell_of_mastery.start A =
+| U = A.unit
+| U.animate{attack}
+| U.main.sound{summon}
+| U.world.effect{U.xyz teleport}
+
+act_spell_of_mastery.finish A =
+| U = A.unit
+| say "[U.owner.name] has won the battle!"
+| halt
+
+
+
 type act_die.act_class class_name/die anim/action
 
 act_die.valid A = 1
@@ -209,7 +224,9 @@ act_swap.finish A =
 
 ActionClasses = t idle(act_idle) move(act_move) attack(act_attack) die(act_die)
                   swap(act_swap)
-                  pentagram(act_pentagram) summon(act_summon)
+                  pentagram(act_pentagram) 
+                  spell_of_mastery(act_spell_of_mastery)
+                  summon(act_summon)
 
 type action{unit}
    class

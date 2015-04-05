@@ -1,0 +1,3 @@
+act: spell_of_mastery
+target: self
+icon: spell_of_mastery
