@@ -286,7 +286,7 @@ main.run =
   | Mode = Icon.data
   | View.mode <= Mode
   | ViewUI.pick{Mode}
-  | when Mode >< play: $world.init_game
+  | when Mode >< play: $world.new_game
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
 | PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
 | WorldIcon = icon data/pick $img{icons_world} click: Icon =>
@@ -335,7 +335,7 @@ main.run =
   | begin_ingame 0
   | $load{Path}
   | ViewUI.pick{play}
-  | when NewGame: $world.init_game
+  | when NewGame: $world.new_game
   | unpause
   | Tabs.pick{ingame}
 | CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
