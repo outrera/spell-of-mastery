@@ -343,6 +343,7 @@ main.run =
             | Tabs.pick{ingame}
   | X 290 | button 'LOAD GAME' skin/scroll: =>
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
+            | $world.create{8 8}
             | begin_ingame 1
             | unpause
             | Tabs.pick{ingame}
