@@ -338,12 +338,24 @@ main.run =
   | when NewGame: $world.new_game
   | unpause
   | Tabs.pick{ingame}
+| save_slot Name = 
+  | $save{"[SavesFolder][Name].txt"}
+  | unpause
+  | Tabs.pick{ingame}
+  //| show_message 'Saved' 'Your game is saved!'
+| load_slot Name = 
+  | load 0 "[SavesFolder][Name].txt"
+  //| show_message 'Saved' 'Your game is loaded!'
+| new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
+| LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
   | X 220 | button 'NEW GAME' skin/scroll: => load 1 "[MapsFolder]default.txt"
-  | X 290 | button 'LOAD GAME' skin/scroll: => Tabs.pick{load_menu}
+  | X 290 | button 'LOAD GAME' skin/scroll: =>
+            | for N,B LoadButtons: B.show <= "[SavesFolder][N].txt".exists
+            | Tabs.pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $world.create{8 8}
             | begin_ingame 1
@@ -367,14 +379,6 @@ main.run =
   | ScreenW-360 ScreenH-100
         | button 'EXIT TO MENU' skin/scroll: =>
           | Tabs.pick{main_menu}
-| save_slot Name = 
-  | $save{"[SavesFolder][Name].txt"}
-  | unpause
-  | Tabs.pick{ingame}
-  //| show_message 'Saved' 'Your game is saved!'
-| load_slot Name = 
-  | load 0 "[SavesFolder][Name].txt"
-  //| show_message 'Saved' 'Your game is loaded!'
 | SaveMenu = dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
@@ -388,10 +392,10 @@ main.run =
 | LoadMenu = dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
-  | X 200 | button 'SLOT A' skin/scroll: => load_slot a
-  | X 270 | button 'SLOT B' skin/scroll: => load_slot b
-  | X 340 | button 'SLOT C' skin/scroll: => load_slot c 
-  | X 410 | button 'SLOT D' skin/scroll: => load_slot d
+  | X 200 | LoadButtons.a
+  | X 270 | LoadButtons.b
+  | X 340 | LoadButtons.c
+  | X 410 | LoadButtons.d
   | X 500 | button 'CANCEL' skin/scroll: =>
             | Tabs.pick{main_menu}
 | Tabs <= tabs ingame: t

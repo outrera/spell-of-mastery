@@ -48,7 +48,7 @@ type view.widget{M W H}
 
 view.init =
 | $fpsT <= clock
-| $view_origin.init{-[$h/32 $h/32]}
+| $view_origin.init{-[$h/32 $h/32]+[6 6]}
 | $move{$view_origin} //normalize view
 
 view.set_brush NewBrush = $brush.init{NewBrush}
