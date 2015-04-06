@@ -124,7 +124,7 @@ type world_props.$base{world callback}
 | $base <= dlg: mtx
   |   0   0 | $world.main.img{ui_panel5}
   | 130  10 | txt medium 'Properties'
-  |  15  40 | layV s/8 PropFields{(txt medium ?0)}
+  |  15  40 | layV s/8 PropFields{(txt small ?0)}
   | 100  36 | layV PropFields{?1}
   |  15 305 | button 'Done' skin/medium_small: => ($callback){Me}
 
