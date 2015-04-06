@@ -153,6 +153,7 @@ type load_world_dlg.$base{world folder cancelCB loadCB}
 
 
 MapsFolder = 'work/worlds/'
+SavesFolder = 'work/saves/'
 
 // FIXME: refactor following into UI type
 main.run =
@@ -161,10 +162,10 @@ main.run =
 | set_main Me
 | init_message_box Me
 | MapsFolder = "[$data][MapsFolder]"
+| SavesFolder = "[$data][SavesFolder]"
 | PanelW = 200
 | View = view Me ScreenW ScreenH
 | Tabs = No
-| GameMenu = No
 | Ingame = No
 | ScenarioMenu = No
 | MainMenu = No
@@ -330,28 +331,29 @@ main.run =
   | View.mode <= [play brush].Editor
 | MenuBG = $img{ui_menu_bg}
 | X = ScreenW/2 - 162
+| load NewGame Path =
+  | begin_ingame 0
+  | $load{Path}
+  | ViewUI.pick{play}
+  | when NewGame: $world.init_game
+  | unpause
+  | Tabs.pick{ingame}
 | CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
-  | X 220 | button 'NEW GAME' skin/scroll: =>
-            | begin_ingame 0
-            | $load{"[MapsFolder]default.txt"}
-            | ViewUI.pick{play}
-            | $world.init_game
-            | unpause
-            | Tabs.pick{ingame}
-  | X 290 | button 'LOAD GAME' skin/scroll: =>
+  | X 220 | button 'NEW GAME' skin/scroll: => load 1 "[MapsFolder]default.txt"
+  | X 290 | button 'LOAD GAME' skin/scroll: => Tabs.pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $world.create{8 8}
             | begin_ingame 1
             | unpause
             | Tabs.pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
-| GameMenu <= dlg: mtx
+| GameMenu = dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
-  | X 290 | button 'SAVE GAME' skin/scroll: =>
+  | X 290 | button 'SAVE GAME' skin/scroll: => Tabs.pick{save_menu}
   | X 360 | button 'RESUME GAME' skin/scroll: =>
             | unpause
             | Tabs.pick{ingame}
@@ -365,9 +367,38 @@ main.run =
   | ScreenW-360 ScreenH-100
         | button 'EXIT TO MENU' skin/scroll: =>
           | Tabs.pick{main_menu}
+| save_slot Name = 
+  | $save{"[SavesFolder][Name].txt"}
+  | unpause
+  | Tabs.pick{ingame}
+  //| show_message 'Saved' 'Your game is saved!'
+| load_slot Name = 
+  | load 0 "[SavesFolder][Name].txt"
+  //| show_message 'Saved' 'Your game is loaded!'
+| SaveMenu = dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 200 | button 'SLOT A' skin/scroll: => save_slot a
+  | X 270 | button 'SLOT B' skin/scroll: => save_slot b
+  | X 340 | button 'SLOT C' skin/scroll: => save_slot c
+  | X 410 | button 'SLOT D' skin/scroll: => save_slot d
+  | X 500 | button 'CANCEL' skin/scroll: =>
+            | unpause
+            | Tabs.pick{ingame}
+| LoadMenu = dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 200 | button 'SLOT A' skin/scroll: => load_slot a
+  | X 270 | button 'SLOT B' skin/scroll: => load_slot b
+  | X 340 | button 'SLOT C' skin/scroll: => load_slot c 
+  | X 410 | button 'SLOT D' skin/scroll: => load_slot d
+  | X 500 | button 'CANCEL' skin/scroll: =>
+            | Tabs.pick{main_menu}
 | Tabs <= tabs ingame: t
           main_menu(MainMenu)
           game_menu(GameMenu)
+          save_menu(SaveMenu)
+          load_menu(LoadMenu)
           ingame(Ingame)
           victory(Victory)
           scenario(ScenarioMenu)

@@ -3,7 +3,7 @@
 main.update =
 | $world.update
 
-world.init_game =
+world.new_game =
 | $player <= $players.($players.size-1)
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
