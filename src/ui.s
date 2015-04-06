@@ -309,7 +309,7 @@ main.run =
 | BrushIcon.picked <= 1
 | GearsIcon = hidden: button 'GEARS' skin/gears: =>
   | pause
-  | Tabs.pick{main_menu}
+  | Tabs.pick{game_menu}
 | HourglassIcon = hidden: button 'HOURGLASS' skin/hourglass: => $world.end_turn
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
@@ -330,10 +330,10 @@ main.run =
   | View.mode <= [play brush].Editor
 | MenuBG = $img{ui_menu_bg}
 | X = ScreenW/2 - 162
+| CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small
-                        'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
+  |  16 ScreenH-16 | txt small CopyrightLine
   | X 220 | button 'NEW GAME' skin/scroll: =>
             | begin_ingame 0
             | $load{"[MapsFolder]default.txt"}
@@ -348,6 +348,14 @@ main.run =
             | unpause
             | Tabs.pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
+| GameMenu <= dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 290 | button 'SAVE GAME' skin/scroll: =>
+  | X 360 | button 'RESUME GAME' skin/scroll: =>
+            | unpause
+            | Tabs.pick{ingame}
+  | X 500 | button 'EXIT TO MENU' skin/scroll: => Tabs.pick{main_menu}
 | VictoryBG = $img{ui_victory_bg}
 | Victory = dlg: mtx
   |   0   0 | VictoryBG
@@ -359,6 +367,7 @@ main.run =
           | Tabs.pick{main_menu}
 | Tabs <= tabs ingame: t
           main_menu(MainMenu)
+          game_menu(GameMenu)
           ingame(Ingame)
           victory(Victory)
           scenario(ScenarioMenu)
