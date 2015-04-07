@@ -2,7 +2,20 @@ type ai{player} world
 | $world <= $player.world
 
 ai.update =
-| $world.end_turn
+| PID = $player.id
+| Turn = $world.turn
+| Units = $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn)}
+| Moved = 0
+| for U Units: less Moved:
+  | Ms = U.mark_moves
+  | case Ms [M@_]
+    | $world.update_pick{[U]}
+    | U.guess_order_at{M.xyz}
+    | Moved <= 1
+  | for M Ms: M.free
+| less Moved
+  | $world.update_pick{[]}
+  | $world.end_turn
 
 ai.picked = $world.picked
 

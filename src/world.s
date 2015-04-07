@@ -50,6 +50,9 @@ type world{main W H}
    on_update
    marks
    params
+| $init{W H}
+
+world.init W H =
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
