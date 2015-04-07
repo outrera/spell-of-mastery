@@ -3,6 +3,10 @@ type ai{player} world
 
 ai.update = $world.end_turn
 
+ai.picked = $world.picked
+
+ai.clear =
+
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
 type player{id world} name ai human color power moves leader pentagram
@@ -13,6 +17,7 @@ type player{id world} name ai human color power moves leader pentagram
 | $clear
 
 player.clear =
+| $ai.clear
 | $picked <= 0
 
 // player 0 shouldnt be used
