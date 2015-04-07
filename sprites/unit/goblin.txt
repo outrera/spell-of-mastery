@@ -4,4 +4,4 @@ xy: 0,48
 frames: folder
 anims: | idle (idle0 24)
        | move (move1 6) (move2 6) (move3 6) (move4 6)
-       | attack (attack1 6) (attack2 6) (attack3 6) (attack4 6)
+       | attack (attack1 6) (attack2 6) (attack3 6) (attack4 12)

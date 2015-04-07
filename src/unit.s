@@ -58,7 +58,8 @@ unit.init Class =
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
 
-unit.idle = [$action $ordered $next_action].all{?.class_name^~{0 idle} >< idle}
+unit.idle = not $ordered.class and
+           [$action $next_action].all{?class_name^~{0 idle} >< idle}
 
 //FIXME: move these into sprite loading code
 AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]

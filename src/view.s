@@ -290,27 +290,9 @@ view.update_brush X Y Z =
     | when Z > 1: $world.pop{X,Y}
     | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
 
-unit.guess_order_at XYZ =
-| Us = $world.units_at{XYZ}
-| Marks = Us.keep{?mark}
-| for Mark Marks:
-  | Path = cons path: map M Mark^uncons{path}.lead.flip
-    | Node = $world.alloc_unit{mark_node}
-    | Node.move{M.xyz}
-    | Node
-  | case Mark.type
-    mark_move
-      | $order.init{act/move at/XYZ path/Path}
-    mark_attack
-      | Target = Us.skip{?empty}.0
-      | $order.init{act/attack target/Target at/XYZ path/Path}
-    mark_swap
-      | Target = Us.skip{?empty}.0
-      | $order.init{act/swap target/Target at/XYZ path/Path}
-
 view.update_play X Y Z =
 | Player = $world.player
-| if $world.picked and not $world.picked.idle then
+| if not $world.picked.idle then
   else if not Player.human then Player.ai.update
   else if Player.moves << 0 then $world.end_turn
   else
