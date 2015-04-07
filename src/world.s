@@ -92,7 +92,7 @@ world.clear =
 | for U $units: less U.removed: U.free
 | $tilemap.clear{0}
 | for P $players: P.clear
-| $player <= 
+| $player <= $players.0
 | $players.1.human <= 1
 | $marks <= $nil
 | $params <= t

@@ -310,6 +310,9 @@ unit.guess_order_at XYZ =
 
 view.update_play X Y Z =
 | Player = $world.player
+| when $world.picked and not $world.picked.idle:
+  | $main.update
+  | leave
 | less Player.human
   | Player.ai.update
   | $main.update
