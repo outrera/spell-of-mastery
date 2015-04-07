@@ -31,7 +31,6 @@ world.end_turn =
 | $on_player_change P
 
 world.update =
-| when $player.moves << 0: $end_turn
 | NextActive = []
 | while $active.used
   | U = $active.pop

@@ -310,22 +310,19 @@ unit.guess_order_at XYZ =
 
 view.update_play X Y Z =
 | Player = $world.player
-| when $world.picked and not $world.picked.idle:
-  | $main.update
-  | leave
-| less Player.human
-  | Player.ai.update
-  | $main.update
-  | leave
-| when $mice_left
-  | $select_unit{X Y Z}
-  | $mice_left <= 0
-| when $mice_right
-  | when $world.picked: $world.picked.guess_order_at{X,Y,Z}
-  | $mice_right <= 0
-| Picked = $world.picked
-| less Picked: Picked <= $world.nil
-| $on_unit_pick{}{Picked}
+| if $world.picked and not $world.picked.idle then
+  else if not Player.human then Player.ai.update
+  else if Player.moves << 0 then $world.end_turn
+  else
+  | when $mice_left
+    | $select_unit{X Y Z}
+    | $mice_left <= 0
+  | when $mice_right
+    | when $world.picked: $world.picked.guess_order_at{X,Y,Z}
+    | $mice_right <= 0
+  | Picked = $world.picked
+  | less Picked: Picked <= $world.nil
+  | $on_unit_pick{}{Picked}
 | $main.update
 
 Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
