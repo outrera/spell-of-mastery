@@ -1,7 +1,8 @@
 type ai{player} world
 | $world <= $player.world
 
-ai.update = $world.end_turn
+ai.update =
+| $world.end_turn
 
 ai.picked = $world.picked
 

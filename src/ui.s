@@ -202,6 +202,7 @@ main.run =
 | $world.on_update <= =>
   | when got $world.params.spell_of_mastery
     | pause
+    | sound_play: sound_load "[$data]/music/victory.ogg" music/1
     | Tabs.pick{victory}
 | BankName =
 | TileNames = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort

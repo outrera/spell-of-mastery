@@ -22,4 +22,6 @@ stack.clear = $used <= 0
 
 stack.`.` Index = $xs.($used - Index)
 
+stack.list = dup I $used: $xs.I
+
 export stack
