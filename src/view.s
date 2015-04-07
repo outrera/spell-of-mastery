@@ -311,7 +311,7 @@ unit.guess_order_at XYZ =
 view.update_play X Y Z =
 | Player = $world.player
 | less Player.human
-  | less Player.ai.update: $world.end_turn
+  | Player.ai.update
   | $main.update
   | leave
 | when $mice_left

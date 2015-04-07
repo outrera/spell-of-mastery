@@ -4,8 +4,6 @@ MaxSize = No
 MaxUnits = No
 MaxActiveUnits = 4096
 
-PlayerColors = [white red blue cyan violet orange black yellow magenta]
-
 type proxy.$unit_{id}
   unit_ 
   next // next unit inside of this world cell
@@ -33,7 +31,6 @@ type world{main W H}
    free_proxies
    players
    player // currently moving player
-   this_player // player beside this computer
    gfxes
    seed
    tid_map/Main.tid_map
@@ -42,7 +39,6 @@ type world{main W H}
    cycle // counts calls to world.update
    serial
    turn // turn in terms of game logic
-   picked
    nil // null unit with id >< 0
    owners // unit owners
    active // active units
@@ -58,14 +54,7 @@ type world{main W H}
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
 | MaxUnits <= WParam.max_units
-| $players <= map Id WParam.max_players
-  | P = player Id Me
-  | P.name <= if Id >< 0 then "Independent" else "Player[Id]"
-  | when Id >< 1: P.human <= 1
-  | P.color <= PlayerColors.Id
-  | P
-| $player <= $players.0
-| $this_player <= $players.1
+| $players <= map Id WParam.max_players: player Id Me
 | $xunit <= WParam.x_unit
 | $yunit <= WParam.y_unit
 | $zunit <= WParam.z_unit
@@ -102,7 +91,9 @@ world.create W H =
 world.clear =
 | for U $units: less U.removed: U.free
 | $tilemap.clear{0}
-| $picked <= 0
+| for P $players: P.clear
+| $player <= 
+| $players.1.human <= 1
 | $marks <= $nil
 | $params <= t
 | for Type,Act $main.params.acts: for Player $players: Player.research.Type <= 0
@@ -120,6 +111,9 @@ world.free_unit U =
 | when U.id
   | U.remove
   | $free_units.push{U}
+
+world.picked = $player.picked
+world.`!picked` U = $player.picked <= U
 
 world.get X Y Z =
 | Id = $tilemap.at{[X Y Z]}
