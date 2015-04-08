@@ -309,8 +309,9 @@ view.update_play X Y Z =
 
 Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
 
-unit.mark_moves =
+unit.mark_moves @As =
 | less $moves.size: leave []
+| XYZ = if As.size then As.0 else $xyz
 | Marks = []
 | I = 0
 | Ms = $moves.deep_copy
@@ -322,8 +323,8 @@ unit.mark_moves =
 | Stack = advance 0 [O O]
 | till Stack.end
   | [Prev SX,SY DX,DY] = pop Stack
-  | Src = $xyz + [SX-O SY-O 0]
-  | Dst = $xyz + [DX-O DY-O 0]
+  | Src = XYZ + [SX-O SY-O 0]
+  | Dst = XYZ + [DX-O DY-O 0]
   | Mark = 0
   | Blocked = Dst.0 < 0 or Dst.1 < 0
   | less Blocked

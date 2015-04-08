@@ -28,7 +28,7 @@ world.end_turn =
     | when V.type >< special_node
       | !P.power+1
 | P.moves <= min $player.power P.moves+$player.power
-| less $player.active.size
+| less $player.human or $player.active.size:
   | $end_turn
   | leave
 | $on_player_change P

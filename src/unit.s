@@ -95,6 +95,31 @@ unit.remove =
 
 unit.removed = $xyz.2 >< -1
 
+unit.order = $ordered
+
+unit.guess_order_at_mark Mark =
+| XYZ = Mark.xyz
+| Us = $world.units_at{XYZ}
+| Path = cons path: map M Mark^uncons{path}.lead.flip
+  | Node = $world.alloc_unit{mark_node}
+  | Node.move{M.xyz}
+  | Node
+| case Mark.type
+  mark_move
+    | $order.init{act/move at/XYZ path/Path}
+  mark_attack
+    | Target = Us.skip{?empty}.0
+    | $order.init{act/attack target/Target at/XYZ path/Path}
+  mark_swap
+    | Target = Us.skip{?empty}.0
+    | $order.init{act/swap target/Target at/XYZ path/Path}
+  Else | leave 0
+| 1
+
+unit.guess_order_at XYZ =
+| Marks = $world.units_at{XYZ}.keep{?mark}
+| for Mark Marks: when $guess_order_at_mark{Mark}: leave
+
 unit.move XYZ =
 | $remove
 | $xyz.init{XYZ}
@@ -131,7 +156,5 @@ unit.render Heap X Y =
   | Heap.push{Key-1 [H X Y-32 #4000+(H</16)]}
   | Heap.push{Key+1 [H X Y-32 #8000+(H</16)]}*/
 | Heap.push{Key [G XX YY Flags]}
-
-unit.order = $ordered
 
 export unit
