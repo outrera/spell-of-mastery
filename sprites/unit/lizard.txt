@@ -2,6 +2,8 @@ author: `Matthew Griebner`, `Alexandr Sidorov`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
 height: 4
-xy: -2,28
+xy: -2,58
 frames: folder
 anims: | idle (idle0 24)
+       | move (move1 6) (move2 6) (move3 6) (move4 6)
+       | attack (attack1 12) (attack2 12) (attack3 6) (attack4 6) (attack5 6)
