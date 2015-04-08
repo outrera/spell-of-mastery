@@ -16,7 +16,7 @@ type act_move.act_class class_name/move anim/move
 
 act_move.valid A =
 | U = A.unit
-| U.can_move{U.xyz A.xyz 1}
+| U.world.no_block_at{A.xyz} and U.can_move{U.xyz A.xyz}
 
 // dirs requiring dummy to avoid overlapping unit with tiles
 OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
@@ -65,7 +65,7 @@ act_attack.valid A =
 | when T.is_list or T.removed or T.empty or not T.health: leave 0
 | U = A.unit
 //| when U.skirmisher: leave (T.xyz - U.xyz).all{?.abs<<1}
-| U.can_move{U.xyz T.xyz 0}
+| U.can_move{U.xyz T.xyz}
 
 act_attack.init A =
 | A.data <= 0

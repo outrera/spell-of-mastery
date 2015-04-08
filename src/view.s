@@ -307,52 +307,6 @@ view.update_play X Y Z =
   | $on_unit_pick{}{Picked}
 | $main.update
 
-Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
-
-unit.mark_moves @As =
-| less $moves.size: leave []
-| XYZ = if As.size then As.0 else $xyz
-| Marks = []
-| I = 0
-| Ms = $moves.deep_copy
-| O = Ms.size/2
-| advance Prev XY =
-  | Ns = Dirs2d{?+XY}.keep{Ms.?0.?1}
-  | for X,Y Ns: Ms.X.Y <= 0
-  | Ns{[Prev XY ?]}
-| Stack = advance 0 [O O]
-| till Stack.end
-  | [Prev SX,SY DX,DY] = pop Stack
-  | Src = XYZ + [SX-O SY-O 0]
-  | Dst = XYZ + [DX-O DY-O 0]
-  | Mark = 0
-  | Blocked = Dst.0 < 0 or Dst.1 < 0
-  | less Blocked
-    | !Dst.2 - 1
-    | while $world.at{Dst}.empty: !Dst.2 - 1
-    | !Dst.2 + 1
-    | less $can_move{Src Dst 0}
-      | AboveDst = Dst + [0 0 $world.at{Dst}.height]
-      | when $can_move{Src AboveDst 0}: Dst <= AboveDst
-    | less $can_move{Src Dst 1}:
-      | when got!it $world.block_at{Dst}:
-        | when $can_move{Src Dst 0}
-          | if  $owner.id >< it.owner.id
-            then | when and it.moves.size
-                        and it.can_move{Dst Src 0}:
-                   | Mark <= $world.alloc_unit{mark_swap}
-            else when it.hits < it.health and it.defense < $attack:
-                 | Mark <= $world.alloc_unit{mark_attack}
-      | Blocked <= 1
-  | less Blocked
-    | Mark <= $world.alloc_unit{mark_move}
-    | for N (advance Mark [DX DY]): push N Stack
-  | when Mark
-    | Mark.move{Dst}
-    | Mark.path <= Prev
-    | push Mark Marks
-| Marks.list
-
 world.update_picked = 
 | SanitizedPicked = $picked^uncons{picked}.skip{?removed}
 | $picked <= [$nil @SanitizedPicked]^cons{picked}

@@ -9,44 +9,26 @@ Map = dup 32: dup 32: 0
 
 type mark{type xyz}
 
+
+unit.can_move Src Dst =
+| less $world.at{Dst}.empty: leave 0
+| [SX SY SZ] = Src
+| [DX DY DZ] = Dst
+| Height = DZ-SZ
+| HeightAbs = Height.abs
+| when HeightAbs << $jumps: leave 1
+| BelowDst = DX,DY,DZ-1
+| BelowDstTile = $world.at{BelowDst}
+| when BelowDstTile.stairs: leave HeightAbs << (max 4 $jumps)
+| BelowSrc = SX,SY,SZ-1
+| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
+| BelowSrcTile = $world.at{BelowSrc}
+| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
+| 0
+
 Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
 
-
-unit.can_move Src Dst CheckEmpty =
-| less $world.at{Dst}.empty: leave 0
-| when CheckEmpty: less $world.units_at{Dst}.all{?empty}: leave 0
-| [SX SY SZ] = Src
-| [DX DY DZ] = Dst
-| Height = DZ-SZ
-| HeightAbs = Height.abs
-| when HeightAbs << $jumps: leave 1
-| BelowDst = DX,DY,DZ-1
-| BelowDstTile = $world.at{BelowDst}
-| when BelowDstTile.stairs: leave HeightAbs << (max 4 $jumps)
-| BelowSrc = SX,SY,SZ-1
-| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
-| BelowSrcTile = $world.at{BelowSrc}
-| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
-| 0
-
-
-unit.can_move_fast Src Dst =
-| less $world.at{Dst}.empty: leave 0
-| [SX SY SZ] = Src
-| [DX DY DZ] = Dst
-| Height = DZ-SZ
-| HeightAbs = Height.abs
-| when HeightAbs << $jumps: leave 1
-| BelowDst = DX,DY,DZ-1
-| BelowDstTile = $world.at{BelowDst}
-| when BelowDstTile.stairs: leave HeightAbs << (max 4 $jumps)
-| BelowSrc = SX,SY,SZ-1
-| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
-| BelowSrcTile = $world.at{BelowSrc}
-| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
-| 0
-
-unit.mark_moves_fast @As =
+unit.moves_list @As =
 | less $moves.size: leave []
 | XYZ = if As.size then As.0 else $xyz
 | Marks = []
@@ -68,15 +50,15 @@ unit.mark_moves_fast @As =
     | !Dst.2 - 1
     | while $world.at{Dst}.empty: !Dst.2 - 1
     | !Dst.2 + 1
-    | less $can_move_fast{Src Dst}
+    | less $can_move{Src Dst}
       | AboveDst = Dst + [0 0 $world.at{Dst}.height]
-      | when $can_move_fast{Src AboveDst}: Dst <= AboveDst
-    | less $world.units_at{Dst}.all{?empty} and $can_move_fast{Src Dst}:
+      | when $can_move{Src AboveDst}: Dst <= AboveDst
+    | less $world.no_block_at{Dst} and $can_move{Src Dst}:
       | when got!it $world.block_at{Dst}:
-        | when $can_move_fast{Src Dst}
+        | when $can_move{Src Dst}
           | if  $owner.id >< it.owner.id
             then | when and it.moves.size
-                        and it.can_move_fast{Dst Src}:
+                        and it.can_move{Dst Src}:
                    | Mark <= mark swap Dst
             else when it.hits < it.health and it.defense < $attack:
                  | Mark <= mark attack Dst
@@ -87,6 +69,49 @@ unit.mark_moves_fast @As =
   | when Mark: push Mark Marks
 | Marks.list
 
+unit.mark_moves @As =
+| less $moves.size: leave []
+| XYZ = if As.size then As.0 else $xyz
+| Marks = []
+| I = 0
+| Ms = $moves.deep_copy
+| O = Ms.size/2
+| advance Prev XY =
+  | Ns = Dirs2d{?+XY}.keep{Ms.?0.?1}
+  | for X,Y Ns: Ms.X.Y <= 0
+  | Ns{[Prev XY ?]}
+| Stack = advance 0 [O O]
+| till Stack.end
+  | [Prev SX,SY DX,DY] = pop Stack
+  | Src = XYZ + [SX-O SY-O 0]
+  | Dst = XYZ + [DX-O DY-O 0]
+  | Mark = 0
+  | Blocked = Dst.0 < 0 or Dst.1 < 0
+  | less Blocked
+    | !Dst.2 - 1
+    | while $world.at{Dst}.empty: !Dst.2 - 1
+    | !Dst.2 + 1
+    | less $can_move{Src Dst}
+      | AboveDst = Dst + [0 0 $world.at{Dst}.height]
+      | when $can_move{Src AboveDst}: Dst <= AboveDst
+    | less $world.no_block_at{Dst} and $can_move{Src Dst}:
+      | when got!it $world.block_at{Dst}:
+        | when $can_move{Src Dst}
+          | if  $owner.id >< it.owner.id
+            then | when and it.moves.size
+                        and it.can_move{Dst Src}:
+                   | Mark <= $world.alloc_unit{mark_swap}
+            else when it.hits < it.health and it.defense < $attack:
+                 | Mark <= $world.alloc_unit{mark_attack}
+      | Blocked <= 1
+  | less Blocked
+    | Mark <= $world.alloc_unit{mark_move}
+    | for N (advance Mark [DX DY]): push N Stack
+  | when Mark
+    | Mark.move{Dst}
+    | Mark.path <= Prev
+    | push Mark Marks
+| Marks.list
 
 ai.update =
 | Turn = $world.turn
@@ -118,7 +143,7 @@ ai.update =
     | [Prev XYZ Cost] = Node
     | X,Y,Z = XYZ
     | NextCost = Cost+1
-    | for M U.mark_moves_fast{XYZ}:
+    | for M U.moves_list{XYZ}:
       | !Count+1
       | when M.type >< attack:
         | case $world.units_at{M.xyz}.skip{?empty} [T@_]:

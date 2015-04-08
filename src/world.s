@@ -161,6 +161,8 @@ world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
 
+world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
+
 world.proxies_at XYZ =
 | when!it $unit_map.at{XYZ}: leave $proxies.it^uncons{next}
 | []
