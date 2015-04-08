@@ -22,13 +22,16 @@ unit.guess_order_at XYZ =
 | Marks = $world.units_at{XYZ}.keep{?mark}
 | for Mark Marks: when $guess_order_at_mark{Mark}: leave
 
-ai.update =
-| PID = $player.id
+player.active =
+| PID = $id
 | Turn = $world.turn
-| Units = $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn)}
+| $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn)}
+
+ai.update =
+| Units = $player.active
 | Moved = $player.moves << 0
 | maked_order U Mark =
-  | $player.picked.moved <= Turn
+  | $player.picked.moved <= $world.turn
   | $world.update_pick{[U]}
   | U.guess_order_at_mark{Mark}
   | Moved <= 1
@@ -39,12 +42,12 @@ ai.update =
     | maked_order U A
   | for M Ms: M.free
   | when Moved: leave
-| less Moved: for U Units:
+/*| less Moved: for U Units:
   | Ms = U.mark_moves
   | case Ms [M@_]:
     | maked_order U M
   | for M Ms: M.free
-  | when Moved: leave
+  | when Moved: leave*/
 | $world.update_pick{[]}
 | $world.end_turn
 
