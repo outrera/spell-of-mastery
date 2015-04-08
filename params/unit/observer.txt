@@ -3,7 +3,7 @@ level=4
 health: 3
 attack: 3
 defense: 2
-mountaineer: 1
+jumps: 4
 moves:
   | 0 1 1 1 0
   | 1 0 1 0 1

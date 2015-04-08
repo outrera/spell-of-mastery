@@ -11,6 +11,23 @@ type mark{type xyz}
 
 Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
 
+
+unit.can_move Src Dst CheckEmpty =
+| less $world.at{Dst}.empty: leave 0
+| when CheckEmpty: less $world.units_at{Dst}.all{?empty}: leave 0
+| [SX SY SZ] = Src
+| [DX DY DZ] = Dst
+| Height = (DZ-SZ).abs
+| BelowDst = DX,DY,DZ-1
+| BelowDstTile = $world.at{BelowDst}
+| when BelowDstTile.stairs: leave Height << (max 4 $jumps)
+| when Height << $jumps: leave 1
+| BelowSrc = SX,SY,SZ-1
+| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
+| BelowSrcTile = $world.at{BelowSrc}
+| when BelowSrcTile.stairs: leave Height << (max 4 $jumps)
+| Height << $jumps
+
 unit.can_move_fast Src Dst =
 | less $world.at{Dst}.empty: leave 0
 | [SX SY SZ] = Src
@@ -18,17 +35,13 @@ unit.can_move_fast Src Dst =
 | Height = (DZ-SZ).abs
 | BelowDst = DX,DY,DZ-1
 | BelowDstTile = $world.at{BelowDst}
-| SlopedDst = $world.slope_at{BelowDst}<>#@1111
-| when SlopedDst
-  | if BelowDstTile.stairs or $mountaineer
-    then leave Height << (max 4 $jumps)
-    else leave 0
+| when BelowDstTile.stairs: leave Height << (max 4 $jumps)
 | when Height << $jumps: leave 1
 | BelowSrc = SX,SY,SZ-1
 | SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
 | BelowSrcTile = $world.at{BelowSrc}
-| less SlopedSrc: leave Height << $jumps
-| (BelowSrcTile.stairs or $mountaineer) and Height << (max 4 $jumps)
+| when BelowSrcTile.stairs: leave Height << (max 4 $jumps)
+| Height << $jumps
 
 unit.mark_moves_fast @As =
 | less $moves.size: leave []

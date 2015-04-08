@@ -3,7 +3,6 @@ level: 2
 health: 2
 attack: 2
 defense: 1
-mountaineer: 1
 moves:
   | 0 0 1 0 0
   | 0 0 1 0 0

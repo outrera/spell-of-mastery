@@ -17,7 +17,6 @@ cooldown: 1 // number of turns, before this unit can move again after attack
 selectable: 1
 flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
-mountaineer: 0 // determines if unit can walk sloped tiles
 invincible: 0
 leader: 0
 sounds: attack,(attack2)

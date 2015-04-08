@@ -120,26 +120,6 @@ unit.guess_order_at XYZ =
 | Marks = $world.units_at{XYZ}.keep{?mark}
 | for Mark Marks: when $guess_order_at_mark{Mark}: leave
 
-unit.can_move Src Dst CheckEmpty =
-| less $world.at{Dst}.empty: leave 0
-| when CheckEmpty: less $world.units_at{Dst}.all{?empty}: leave 0
-| [SX SY SZ] = Src
-| [DX DY DZ] = Dst
-| less (DX - SX).abs + (DY - SY).abs >< 1: leave 0
-| Height = (DZ-SZ).abs
-| BelowDst = DX,DY,DZ-1
-| BelowDstTile = $world.at{BelowDst}
-| SlopedDst = $world.slope_at{BelowDst}<>#@1111
-| when SlopedDst
-  | if BelowDstTile.stairs or $mountaineer
-    then leave Height << (max 4 $jumps)
-    else leave 0
-| when Height << $jumps: leave 1
-| BelowSrc = SX,SY,SZ-1
-| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
-| BelowSrcTile = $world.at{BelowSrc}
-| less SlopedSrc: leave Height << $jumps
-| (BelowSrcTile.stairs or $mountaineer) and Height << (max 4 $jumps)
 
 unit.move XYZ =
 | $remove
