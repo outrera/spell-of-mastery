@@ -14,27 +14,6 @@ act_idle.start A =  when A.cycles >< -1: A.cycles <= 4
 
 type act_move.act_class class_name/move anim/move
 
-unit.can_move Src Dst CheckEmpty =
-| less $world.at{Dst}.empty: leave 0
-| when CheckEmpty: less $world.units_at{Dst}.all{?empty}: leave 0
-| [SX SY SZ] = Src
-| [DX DY DZ] = Dst
-| less (DX - SX).abs + (DY - SY).abs >< 1: leave 0
-| Height = (DZ-SZ).abs
-| BelowDst = DX,DY,DZ-1
-| BelowDstTile = $world.at{BelowDst}
-| SlopedDst = $world.slope_at{BelowDst}<>#@1111
-| when SlopedDst
-  | if BelowDstTile.stairs or $mountaineer
-    then leave Height << (max 4 $jumps)
-    else leave 0
-| when Height << $jumps: leave 1
-| BelowSrc = SX,SY,SZ-1
-| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
-| BelowSrcTile = $world.at{BelowSrc}
-| less SlopedSrc: leave Height << $jumps
-| (BelowSrcTile.stairs or $mountaineer) and Height << (max 4 $jumps)
-
 act_move.valid A =
 | U = A.unit
 | U.can_move{U.xyz A.xyz 1}
@@ -90,9 +69,6 @@ act_attack.valid A =
 
 act_attack.init A =
 | A.data <= 0
-
-unit.face XYZ =
-| $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
 act_attack.start A =
 | U = A.unit
