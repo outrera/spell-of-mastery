@@ -14,6 +14,7 @@ Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
 
 unit.can_move Src Dst CheckEmpty =
 | less $world.at{Dst}.empty: leave 0
+| when CheckEmpty: less $world.units_at{Dst}.all{?empty}: leave 0
 | [SX SY SZ] = Src
 | [DX DY DZ] = Dst
 | Height = DZ-SZ
