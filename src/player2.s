@@ -34,16 +34,19 @@ unit.list_moves XYZ =
 | I = 0
 | Ms = $moves.deep_copy
 | O = Ms.size/2
-| Stack = []
+| StackSrc = []
+| StackDst = []
 | XY = O,O
 | for N [[O O-1] [O+1 O] [O O+1] [O-1 O]]:
   | X,Y = N
   | Ys = Ms.X
   | when Ys.Y
     | Ys.Y <= 0
-    | push [XY N] Stack
-| till Stack.end
-  | [SX,SY DX,DY] = pop Stack
+    | push XY StackSrc 
+    | push N StackDst
+| till StackDst.end
+  | SX,SY = pop StackSrc
+  | DX,DY = pop StackDst
   | Src = XYZ + [SX-O SY-O 0]
   | Dst = XYZ + [DX-O DY-O 0]
   | Move = 0
@@ -72,7 +75,8 @@ unit.list_moves XYZ =
       | Ys = Ms.X
       | when Ys.Y
         | Ys.Y <= 0
-        | push [XY N] Stack
+        | push XY StackSrc
+        | push N StackDst
   | when Move: push Move Moves
 | Moves.list
 
