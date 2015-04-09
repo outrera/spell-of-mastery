@@ -5,11 +5,6 @@ player.active =
 | Turn = $world.turn
 | $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn)}
 
-Map = dup 32: dup 32: 0
-
-type move{type src xyz}
-
-
 unit.can_move Src Dst =
 | less $world.at{Dst}.empty: leave 0
 | SZ = Src.2
@@ -31,6 +26,8 @@ unit.can_move Src Dst =
 | 0
 
 Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
+
+type move{type src xyz}
 
 unit.list_moves XYZ =
 | less $moves.size: leave []
@@ -71,6 +68,9 @@ unit.list_moves XYZ =
     | for N (advance [DX DY]): push N Stack
   | when Move: push Move Moves
 | Moves.list
+
+
+Map = dup 32: dup 32: 0
 
 ai.update =
 | Turn = $world.turn

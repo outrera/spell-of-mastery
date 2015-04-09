@@ -1,4 +1,4 @@
-use util octree unit stack heap player
+use util octree zmap unit stack heap player
 
 MaxSize = No
 MaxUnits = No
@@ -61,7 +61,7 @@ world.init W H =
 | $xunit <= WParam.x_unit
 | $yunit <= WParam.y_unit
 | $zunit <= WParam.z_unit
-| $tilemap <= octree MaxSize
+| $tilemap <= zmap MaxSize
 | $unit_map <= octree MaxSize
 | $slope_map <= octree MaxSize
 | $units <= MaxUnits{(unit ? Me)}
@@ -85,11 +85,14 @@ world.create W H =
 | $clear
 | for P points{0 0 $w $h}: $push_{P $filler}
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
-// add movement blocking wall
-| for P points{0 $h-1 $w 1}: times I 10: $push_{P $filler}
-| for P points{$w-1 0 1 $h-1}: times I 10: $push_{P $filler}
 | !$w-1
 | !$h-1
+| $create_borders
+
+// add movement blocking walls
+world.create_borders =
+| for P points{0 $h $w+1 1}: times I 63: $push_{P $filler}
+| for P points{$w 0 1 $h}: times I 63: $push_{P $filler}
 
 world.clear =
 | for U $units: less U.removed: U.free
@@ -308,7 +311,7 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
-world.height X Y = MaxSize - $getPilar{X Y}.last.0
+world.height X Y = $tilemap.height{X Y}
 
 world.push_ X,Y Tile =
 | Z = $height{X Y}

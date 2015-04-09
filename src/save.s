@@ -12,16 +12,15 @@ world.save =
             | list U.id U.serial U.type U.xyz U.xy
                    U.anim U.anim_step U.facing
                    U.owner.id U.moved
-    tilemap | $tilemap.root
+    tilemap | map X $w: map Y $h: $tilemap.getPilar{X Y}
 
 main.save Path = Path.set{[version(0.1) @$world.save].as_text}
 
 remap_tids LookupTable Xs =
-| for I Xs.size
-  | X = Xs.I
-  | if X.is_int
-    then when X >> 0: Xs.I <= LookupTable.X
-    else remap_tids LookupTable X
+| for Ys Xs: for Zs Ys: for I Zs.size
+  | Z = Zs.I
+  | Id = Z.1
+  | when Id >> 0: Z.1 <= LookupTable.Id
 | Xs
 
 world.load Saved =
@@ -34,7 +33,9 @@ world.load Saved =
 | $serial <= Saved.serial
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}
-| $tilemap.root <= remap_tids LookupTable Saved.tilemap
+| Tilemap = remap_tids LookupTable Saved.tilemap
+| for X $w: for Y $h: $tilemap.setPilar{X Y Tilemap.X.Y}
+| $create_borders
 | for P points{0 0 $w $h}: $updPilarGfxes{P}
 | $cycle <= Saved.cycle
 | $turn <= Saved.turn

@@ -95,4 +95,6 @@ octree.getPilar X Y =
   | !Z + L
 | on Xs.flip | @r$_ [@H A,V B,&V @T] => [@H @[A+B,V @T]^r]
 
+octree.height X Y = $size - $getPilar{X Y}.last.0
+
 export octree
