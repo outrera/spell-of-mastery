@@ -135,6 +135,83 @@ unit.environment_updated =
 unit.face XYZ =
 | $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
+
+unit.can_move Src Dst =
+| less $world.fast_at{Dst}.empty: leave 0
+| SZ = Src.2
+| DZ = Dst.2
+| Height = DZ-SZ
+| HeightAbs = Height.abs
+| when HeightAbs << $jumps: leave 1
+| DX = Dst.0
+| DY = Dst.1
+| BelowDst = DX,DY,DZ-1
+| BelowDstTile = $world.fast_at{BelowDst}
+| when BelowDstTile.stairs: leave HeightAbs << (max 4 $jumps)
+| SX = Src.0
+| SY = Src.1
+| BelowSrc = SX,SY,SZ-1
+| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
+| BelowSrcTile = $world.fast_at{BelowSrc}
+| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
+| 0
+
+
+type move{type src xyz}
+
+unit.list_moves XYZ =
+| less $moves.size: leave []
+| Moves = []
+| I = 0
+| Ms = $moves.deep_copy
+| O = Ms.size/2
+| StackSrc = []
+| StackDst = []
+| XY = O,O
+| for N [[O O-1] [O+1 O] [O O+1] [O-1 O]]:
+  | X,Y = N
+  | Ys = Ms.X
+  | when Ys.Y
+    | Ys.Y <= 0
+    | push XY StackSrc 
+    | push N StackDst
+| till StackDst.end
+  | SX,SY = pop StackSrc
+  | DX,DY = pop StackDst
+  | Src = XYZ + [SX-O SY-O 0]
+  | Dst = XYZ + [DX-O DY-O 0]
+  | Move = 0
+  | !Dst.2 - 1
+  | while $world.fast_at{Dst}.empty: !Dst.2 - 1
+  | !Dst.2 + 1
+  | less $can_move{Src Dst}
+    | AboveDst = Dst + [0 0 $world.fast_at{Dst}.height]
+    | when $can_move{Src AboveDst}: Dst <= AboveDst
+  | Blocked = 0
+  | less $world.no_block_at{Dst} and $can_move{Src Dst}:
+    | when got!it $world.block_at{Dst}:
+      | when $can_move{Src Dst}
+        | if $owner.id >< it.owner.id
+          then | when and it.moves.size
+                      and it.can_move{Dst Src}:
+                 | Move <= move swap Src Dst
+          else when it.hits < it.health and it.defense < $attack:
+               | Move <= move attack Src Dst
+    | Blocked <= 1
+  | less Blocked
+    | Move <= move move Src Dst
+    | XY = DX,DY
+    | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
+      | X,Y = N
+      | Ys = Ms.X
+      | when Ys.Y
+        | Ys.Y <= 0
+        | push XY StackSrc
+        | push N StackDst
+  | when Move: push Move Moves
+| Moves.list
+
+
 unit.mark_moves @As =
 | XYZ = if As.size then As.0 else $xyz
 | Moves = $list_moves{XYZ}

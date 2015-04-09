@@ -5,100 +5,40 @@ player.active =
 | Turn = $world.turn
 | $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn)}
 
-unit.can_move Src Dst =
-| less $world.fast_at{Dst}.empty: leave 0
-| SZ = Src.2
-| DZ = Dst.2
-| Height = DZ-SZ
-| HeightAbs = Height.abs
-| when HeightAbs << $jumps: leave 1
-| DX = Dst.0
-| DY = Dst.1
-| BelowDst = DX,DY,DZ-1
-| BelowDstTile = $world.fast_at{BelowDst}
-| when BelowDstTile.stairs: leave HeightAbs << (max 4 $jumps)
-| SX = Src.0
-| SY = Src.1
-| BelowSrc = SX,SY,SZ-1
-| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
-| BelowSrcTile = $world.fast_at{BelowSrc}
-| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
-| 0
-
-
-type move{type src xyz}
-
-unit.list_moves XYZ =
-| less $moves.size: leave []
-| Moves = []
-| I = 0
-| Ms = $moves.deep_copy
-| O = Ms.size/2
-| StackSrc = []
-| StackDst = []
-| XY = O,O
-| for N [[O O-1] [O+1 O] [O O+1] [O-1 O]]:
-  | X,Y = N
-  | Ys = Ms.X
-  | when Ys.Y
-    | Ys.Y <= 0
-    | push XY StackSrc 
-    | push N StackDst
-| till StackDst.end
-  | SX,SY = pop StackSrc
-  | DX,DY = pop StackDst
-  | Src = XYZ + [SX-O SY-O 0]
-  | Dst = XYZ + [DX-O DY-O 0]
-  | Move = 0
-  | !Dst.2 - 1
-  | while $world.fast_at{Dst}.empty: !Dst.2 - 1
-  | !Dst.2 + 1
-  | less $can_move{Src Dst}
-    | AboveDst = Dst + [0 0 $world.fast_at{Dst}.height]
-    | when $can_move{Src AboveDst}: Dst <= AboveDst
-  | Blocked = 0
-  | less $world.no_block_at{Dst} and $can_move{Src Dst}:
-    | when got!it $world.block_at{Dst}:
-      | when $can_move{Src Dst}
-        | if $owner.id >< it.owner.id
-          then | when and it.moves.size
-                      and it.can_move{Dst Src}:
-                 | Move <= move swap Src Dst
-          else when it.hits < it.health and it.defense < $attack:
-               | Move <= move attack Src Dst
-    | Blocked <= 1
-  | less Blocked
-    | Move <= move move Src Dst
-    | XY = DX,DY
-    | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
-      | X,Y = N
-      | Ys = Ms.X
-      | when Ys.Y
-        | Ys.Y <= 0
-        | push XY StackSrc
-        | push N StackDst
-  | when Move: push Move Moves
-| Moves.list
-
-
 Map = dup 32: dup 32: 0
 
 ai.update =
 | Turn = $world.turn
 | Units = $player.active
-| Moved = $player.moves << 0
+| when $player.moves << 0
+  | $world.update_pick{[]}
+  | $world.end_turn
+| Moved = 0
 | maked_order U Mark =
   | $player.picked.moved <= $world.turn
   | $world.update_pick{[U]}
   | U.guess_order_at_mark{Mark}
   | Moved <= 1
-| less Moved: for U Units: 
+| for U Units: 
   | Ms = U.mark_moves
   | As = Ms.keep{?type >< mark_attack}
-  | case As [A@_]:
-    | maked_order U A
+  | case As [A@_]: maked_order U A
   | for M Ms: M.free
   | when Moved: leave
+| Pentagram = $player.pentagram
+| Leader = $player.leader
+| less Pentagram: when Leader:
+  | case Leader.acts.keep{?act >< pentagram} [Act@_]
+    | Leader.order.init{@Act.list.join}
+    | leave
+| when Pentagram and Leader and Pentagram.xyz >< Leader.xyz:
+  | case Leader.acts.keep{?act >< pentagram} [Act@_]
+    | Ms = Leader.mark_moves
+    | As = Ms
+    | when As.size: maked_order Leader As.(Turn%As.size)
+    | for M Ms: M.free
+    | when Moved: leave
+    | leave
 | for U Units:
   | UID = U.id
   | X,Y,Z = U.xyz
