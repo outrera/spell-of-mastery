@@ -1,7 +1,7 @@
 use util action macros
 
 type unit.$class{Id World}
-  id/Id // numeric id for octree
+  id/Id
   world/World
   name
   serial

@@ -1,4 +1,4 @@
-use util octree zmap unit stack heap player
+use util zmap unit stack heap player
 
 MaxSize = No
 MaxUnits = No
@@ -62,8 +62,8 @@ world.init W H =
 | $yunit <= WParam.y_unit
 | $zunit <= WParam.z_unit
 | $tilemap <= zmap MaxSize
-| $unit_map <= octree MaxSize
-| $slope_map <= octree MaxSize
+| $unit_map <= zmap MaxSize
+| $slope_map <= zmap MaxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -169,8 +169,6 @@ world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
 
-world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
-
 world.proxies_at XYZ =
 | when!it $unit_map.at{XYZ}: leave $proxies.it^uncons{next}
 | []
@@ -180,6 +178,8 @@ world.column_proxies_at X Y =
 | []
 
 world.units_at XYZ = $proxies_at{XYZ}{?unit_}
+
+world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
 
 world.column_units_at X Y = $column_proxies_at{X Y}{?unit_}
 
