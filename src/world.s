@@ -130,6 +130,11 @@ world.at XYZ =
 | X,Y,Z = XYZ
 | $tid_map.| if X < 0 or Y < 0 then 0 else $get{X Y Z}
 
+world.fast_at XYZ =
+| Id = $tilemap.at{XYZ}
+| when Id < 0: Id <= $tilemap.at{[XYZ.0 XYZ.1 XYZ.2-Id]}
+| $tid_map.Id
+
 world.set_ X Y Z V = $tilemap.set{[X Y Z] V}
 
 // FIXME: remove overlapping tiles above setted tile

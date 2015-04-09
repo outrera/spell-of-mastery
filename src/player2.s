@@ -6,7 +6,7 @@ player.active =
 | $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn)}
 
 unit.can_move Src Dst =
-| less $world.at{Dst}.empty: leave 0
+| less $world.fast_at{Dst}.empty: leave 0
 | SZ = Src.2
 | DZ = Dst.2
 | Height = DZ-SZ
@@ -15,13 +15,13 @@ unit.can_move Src Dst =
 | DX = Dst.0
 | DY = Dst.1
 | BelowDst = DX,DY,DZ-1
-| BelowDstTile = $world.at{BelowDst}
+| BelowDstTile = $world.fast_at{BelowDst}
 | when BelowDstTile.stairs: leave HeightAbs << (max 4 $jumps)
 | SX = Src.0
 | SY = Src.1
 | BelowSrc = SX,SY,SZ-1
 | SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
-| BelowSrcTile = $world.at{BelowSrc}
+| BelowSrcTile = $world.fast_at{BelowSrc}
 | when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
 | 0
 
@@ -35,11 +35,14 @@ unit.list_moves XYZ =
 | I = 0
 | Ms = $moves.deep_copy
 | O = Ms.size/2
-| advance XY =
-  | Ns = Dirs2d{?+XY}.keep{Ms.?0.?1}
-  | for X,Y Ns: Ms.X.Y <= 0
-  | Ns{[XY ?]}
-| Stack = advance [O O]
+| Stack = []
+| XY = O,O
+| for N [[O O-1] [O+1 O] [O O+1] [O-1 O]]:
+  | X,Y = N
+  | Ys = Ms.X
+  | when Ys.Y
+    | Ys.Y <= 0
+    | push [XY N] Stack
 | till Stack.end
   | [SX,SY DX,DY] = pop Stack
   | Src = XYZ + [SX-O SY-O 0]
@@ -48,15 +51,15 @@ unit.list_moves XYZ =
   | Blocked = Dst.0 < 0 or Dst.1 < 0
   | less Blocked
     | !Dst.2 - 1
-    | while $world.at{Dst}.empty: !Dst.2 - 1
+    | while $world.fast_at{Dst}.empty: !Dst.2 - 1
     | !Dst.2 + 1
     | less $can_move{Src Dst}
-      | AboveDst = Dst + [0 0 $world.at{Dst}.height]
+      | AboveDst = Dst + [0 0 $world.fast_at{Dst}.height]
       | when $can_move{Src AboveDst}: Dst <= AboveDst
     | less $world.no_block_at{Dst} and $can_move{Src Dst}:
       | when got!it $world.block_at{Dst}:
         | when $can_move{Src Dst}
-          | if  $owner.id >< it.owner.id
+          | if $owner.id >< it.owner.id
             then | when and it.moves.size
                         and it.can_move{Dst Src}:
                    | Move <= move swap Src Dst
@@ -65,7 +68,14 @@ unit.list_moves XYZ =
       | Blocked <= 1
   | less Blocked
     | Move <= move move Src Dst
-    | for N (advance [DX DY]): push N Stack
+    | XY = DX,DY
+    | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
+      | X,Y = N
+      | Ys = Ms.X
+      | when Ys.Y
+        | Ys.Y <= 0
+        | push [XY N] Stack
+
   | when Move: push Move Moves
 | Moves.list
 
