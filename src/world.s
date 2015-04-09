@@ -83,16 +83,18 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
-| for P points{0 0 $w $h}: $push_{P $filler}
-| for P points{0 0 $w $h}: $updPilarGfxes{P}
+| for P points{1 1 $w $h}: $push_{P $filler}
+| for P points{1 1 $w $h}: $updPilarGfxes{P}
 | !$w-1
 | !$h-1
 | $create_borders
 
 // add movement blocking walls
 world.create_borders =
-| for P points{0 $h $w+1 1}: times I 63: $push_{P $filler}
-| for P points{$w 0 1 $h}: times I 63: $push_{P $filler}
+| for P points{0    0    $w+2 1   }: times I 15: $push_{P $filler}
+| for P points{0    0    1    $h+2}: times I 15: $push_{P $filler}
+| for P points{0    $h+1 $w+2 1   }: times I 15: $push_{P $filler}
+| for P points{$w+1 0    1    $h+2}: times I 15: $push_{P $filler}
 
 world.clear =
 | for U $units: less U.removed: U.free
@@ -238,8 +240,7 @@ world.effect X,Y,Z What =
 | E.order.init{act/die level/0}
 
 world.filled X,Y Z =
-| less 0 << X and X < $w: leave 1
-| less 0 << Y and Y < $h: leave 1
+| when X < 0 or Y < 0: leave 1
 | $tid_map.($get{X Y Z}).filler
 
 world.getCorners P Z = `[]`
@@ -253,8 +254,7 @@ world.getSides P Z = `[]`
   $filled{P+[0  1] Z} $filled{P+[-1 0] Z}
 
 world.role X,Y Z =
-| less 0 << X and X < $w: leave 0
-| less 0 << Y and Y < $h: leave 0
+| when X < 0 or Y < 0: leave 0
 | $tid_map.($get{X Y Z}).role
 
 world.getCornersSame P Z Role = `[]`
@@ -268,8 +268,7 @@ world.getSidesSame P Z Role = `[]`
   $role{P+[0  1] Z}><Role $role{P+[-1 0] Z}><Role
 
 world.getTrn X,Y Z =
-| less 0 << X and X < $w: leave 0
-| less 0 << Y and Y < $h: leave 0
+| when X < 0 or Y < 0: leave 0
 | Tile = $tid_map.($get{X Y Z})
 | if Tile.trn then Tile.role else 0
 
@@ -280,14 +279,12 @@ world.getCornersTrns P Z Role = `[]`
  [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
 
 world.getPilar X Y =
-| less 0 << X and X < $w: leave [$filler X,Y,0 MaxSize-1]
-| less 0 << Y and Y < $h: leave [$filler X,Y,0 MaxSize-1]
+| when X < 0 or Y < 0: leave [$filler X,Y,0 MaxSize-1]
 | $tilemap.getPilar{X Y}
 
 world.updPilarGfxes P =
 | X,Y = P
-| less 0 << X and X < $w: leave 0
-| less 0 << Y and Y < $h: leave 0
+| when X < 0 or Y < 0: leave 0
 | Seed = $seed.Y.X
 | Cs = $getPilar{X Y}
 | Gs = []

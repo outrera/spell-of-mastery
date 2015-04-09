@@ -131,9 +131,9 @@ view.render_iso =
 | YUnit2 = YUnit/2
 | times YY VS
   | Y = YY + VY
-  | when 0<<Y and Y<WH: times XX VS:
+  | when 0<Y and Y<<WH: times XX VS:
     | X = XX + VX
-    | when 0<<X and X<WW: // FIXME: moved this out of the loop
+    | when 0<X and X<<WW: // FIXME: moved this out of the loop
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
       | render_pilar Wr X Y BX BY Heap $cell_xy $cell_z
@@ -218,7 +218,7 @@ view.viewToWorld P =
 | RX = (Y*XUnit + X*YUnit)/WH
 | RY = (Y*XUnit - X*YUnit)/WH
 | [RX RY] = [RX RY] + $view_origin
-| [RX.clip{0 $world.w-1} RY.clip{0 $world.h-1}]
+| [RX.clip{1 $world.w} RY.clip{1 $world.h}]
 
 view.mice_rect =
 | [AX AY] = if $anchor then $anchor else $mice_xy

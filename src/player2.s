@@ -25,7 +25,6 @@ unit.can_move Src Dst =
 | when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
 | 0
 
-Dirs2d = [[0 -1] [1 0] [0 1] [-1 0]]
 
 type move{type src xyz}
 
@@ -48,24 +47,23 @@ unit.list_moves XYZ =
   | Src = XYZ + [SX-O SY-O 0]
   | Dst = XYZ + [DX-O DY-O 0]
   | Move = 0
-  | Blocked = Dst.0 < 0 or Dst.1 < 0
-  | less Blocked
-    | !Dst.2 - 1
-    | while $world.fast_at{Dst}.empty: !Dst.2 - 1
-    | !Dst.2 + 1
-    | less $can_move{Src Dst}
-      | AboveDst = Dst + [0 0 $world.fast_at{Dst}.height]
-      | when $can_move{Src AboveDst}: Dst <= AboveDst
-    | less $world.no_block_at{Dst} and $can_move{Src Dst}:
-      | when got!it $world.block_at{Dst}:
-        | when $can_move{Src Dst}
-          | if $owner.id >< it.owner.id
-            then | when and it.moves.size
-                        and it.can_move{Dst Src}:
-                   | Move <= move swap Src Dst
-            else when it.hits < it.health and it.defense < $attack:
-                 | Move <= move attack Src Dst
-      | Blocked <= 1
+  | !Dst.2 - 1
+  | while $world.fast_at{Dst}.empty: !Dst.2 - 1
+  | !Dst.2 + 1
+  | less $can_move{Src Dst}
+    | AboveDst = Dst + [0 0 $world.fast_at{Dst}.height]
+    | when $can_move{Src AboveDst}: Dst <= AboveDst
+  | Blocked = 0
+  | less $world.no_block_at{Dst} and $can_move{Src Dst}:
+    | when got!it $world.block_at{Dst}:
+      | when $can_move{Src Dst}
+        | if $owner.id >< it.owner.id
+          then | when and it.moves.size
+                      and it.can_move{Dst Src}:
+                 | Move <= move swap Src Dst
+          else when it.hits < it.health and it.defense < $attack:
+               | Move <= move attack Src Dst
+    | Blocked <= 1
   | less Blocked
     | Move <= move move Src Dst
     | XY = DX,DY
@@ -75,7 +73,6 @@ unit.list_moves XYZ =
       | when Ys.Y
         | Ys.Y <= 0
         | push [XY N] Stack
-
   | when Move: push Move Moves
 | Moves.list
 
