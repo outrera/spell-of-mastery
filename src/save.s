@@ -7,7 +7,8 @@ world.save =
     description | $description
     tids | $tid_map{}{?type}
     players | map P $players
-              | [P.id P.name P.human P.color P.power P.moves P.ai.params.list]
+              | [P.id P.name P.human P.color P.power P.moves
+                 P.params.list P.research.list.keep{?1}]
     player | $player.id
     units | map U $units.skip{(?removed or ?mark)}
             | list U.id U.serial U.type U.xyz U.xy
@@ -42,14 +43,15 @@ world.load Saved =
 | $turn <= Saved.turn
 | IdMap = t
 | for X Saved.players
-  | [Id Name Human Color Power Moves AiParams] = X
+  | [Id Name Human Color Power Moves Params Research] = X
   | P = $players.Id
   | P.name <= Name
   | P.human <= Human
   | P.color <= Color
   | P.power <= Power
   | P.moves <= Moves
-  | P.ai.params <= AiParams.table
+  | P.params <= Params.table
+  | for N,R Research: P.research.N <= R
 | $player <= $players.(Saved.player)
 | for X Saved.units
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved] = X
@@ -62,6 +64,8 @@ world.load Saved =
   | U.pick_facing{Facing}
   | U.owner <= $players.Owner
   | U.moved <= Moved
+  | when U.leader: U.owner.leader <= U
+  | when U.type >< special_pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
 
 main.load Path =

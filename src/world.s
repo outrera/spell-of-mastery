@@ -104,7 +104,6 @@ world.clear =
 | $players.1.human <= 1
 | $marks <= $nil
 | $params <= t
-| for Type,Act $main.params.acts: for Player $players: Player.research.Type <= 0
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName

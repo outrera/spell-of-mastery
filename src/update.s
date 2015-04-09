@@ -9,9 +9,9 @@ world.new_game =
 | $end_turn // hack to begin turns from 1
 
 world.end_turn =
-| Researchng = $player.researching
-| when Researchng and $player.moves > 0:
-  | !$player.research.Researchng + $player.moves
+| Researching = $player.researching
+| when Researching and $player.moves > 0:
+  | !$player.research.Researching + $player.moves
 | NextPlayer = $player.id+1
 | less NextPlayer < $players.size
   | NextPlayer <= 0
@@ -19,18 +19,20 @@ world.end_turn =
 | P = $players.NextPlayer
 | $player <= P
 | P.power <= 1
-| P.pentagram <= 0
 | PID = P.id
-| for U $units.keep{U => not U.removed and U.owner.id >< PID}
+| P.pentagram <= 0
+| P.leader <= 0
+| Units = $player.active
+| less $player.human or Units.size:
+  | $end_turn
+  | leave
+| for U Units
   | when U.type >< special_pentagram: P.pentagram <= U
   | when U.leader: P.leader <= U
   | when U.level: for V $units_at{U.xyz}
     | when V.type >< special_node
       | !P.power+1
 | P.moves <= min $player.power P.moves+$player.power
-| less $player.human or $player.active.size:
-  | $end_turn
-  | leave
 | $on_player_change P
 
 world.update =

@@ -293,8 +293,7 @@ view.update_brush X Y Z =
 view.update_play X Y Z =
 | Player = $world.player
 | if not $world.picked.idle then
-  else if not Player.human then
-  | Player.ai.update
+  else if not Player.human then Player.ai.update
   else if Player.moves << 0 then $world.end_turn
   else
   | when $mice_left

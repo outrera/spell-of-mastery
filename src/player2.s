@@ -3,9 +3,12 @@ use stack gui
 player.active =
 | PID = $id
 | Turn = $world.turn
-| $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn)}
+| $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn
+                           and not ?removed)}
 
 Map = dup 32: dup 32: 0
+
+unit.order_act Act = $order.init{@Act.list.join}
 
 ai.update =
 | Turn = $world.turn
@@ -31,15 +34,24 @@ ai.update =
 | Leader = $player.leader
 | less Pentagram: when Leader:
   | case Leader.acts.keep{?act >< pentagram} [Act@_]
-    | Leader.order.init{@Act.list.join}
+    | Leader.order_act{Act}
     | leave
-| when Pentagram:
+| when Pentagram: //FIXME: should be only every odd turn
   | Blocker = case $world.units_at{Pentagram.xyz}.skip{?empty} [U@_] U
-  | when Blocker and Blocker.owner.id >< $player.id:
+  | when Blocker
+    | when Blocker.owner.id <> $player.id:
+      | case Leader.acts.keep{?act >< pentagram} [Act@_]
+        | Leader.order_act{Act} // recreate pentagram near the leader
+        | leave
     | Ms = Blocker.list_moves{Blocker.xyz}
     | when Ms.size
-      | marked_order Blocker Ms.(Turn%Ms.size)
+      | marked_order Blocker Ms.(Turn%Ms.size) //move out of the way
       | leave
+  | Summons = if Blocker then [] else Pentagram.acts.keep{?act >< summon}
+  | when Summons.size
+    | S = Summons.find{?effect >< unit_ratman}
+    //| when got S
+    //  | 
 | for U Units:
   | UID = U.id
   | X,Y,Z = U.xyz
