@@ -106,7 +106,6 @@ ai.update =
   | Map.X.Y <= 0
   | Targets = []
   | Stack = [[0 U.xyz 0]]
-  | Count = 0
   | StartTime = get_gui{}.ticks{}
   | till Stack.end
     | Node = pop Stack
@@ -114,7 +113,6 @@ ai.update =
     | X,Y,Z = XYZ
     | NextCost = Cost+1
     | for M U.list_moves{XYZ}:
-      | !Count+1
       | when M.type >< attack:
         | case $world.units_at{M.xyz}.skip{?empty} [T@_]:
           | less Targets.any{?id >< T.id}: push T Targets
@@ -122,7 +120,7 @@ ai.update =
         | Map.X.Y <= NextCost
         | push [Node M.xyz NextCost] Stack
   | EndTime = get_gui{}.ticks{}
-  | say [Count EndTime-StartTime]
+//  | say EndTime-StartTime
   | when Targets.size
     | Target = Targets{[Map.(?xyz.0).(?xyz.1) ?]}.sort{?0 < ??0}.0.1
     | Path = []
