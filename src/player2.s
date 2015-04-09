@@ -13,32 +13,33 @@ ai.update =
 | when $player.moves << 0
   | $world.update_pick{[]}
   | $world.end_turn
-| Moved = 0
-| maked_order U Mark =
+  | leave
+| marked_order U Move =
+  | Ms = U.mark_moves
+  | Mark = Ms.find{?xyz><Move.xyz}
   | $player.picked.moved <= $world.turn
   | $world.update_pick{[U]}
   | U.guess_order_at_mark{Mark}
-  | Moved <= 1
-| for U Units: 
-  | Ms = U.mark_moves
-  | As = Ms.keep{?type >< mark_attack}
-  | case As [A@_]: maked_order U A
   | for M Ms: M.free
-  | when Moved: leave
+| for U Units:
+  | Ms = U.list_moves{U.xyz}
+  | As = Ms.keep{?type >< attack}
+  | case As [A@_]
+    | marked_order U A
+    | leave
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 | less Pentagram: when Leader:
   | case Leader.acts.keep{?act >< pentagram} [Act@_]
     | Leader.order.init{@Act.list.join}
     | leave
-| when Pentagram and Leader and Pentagram.xyz >< Leader.xyz:
-  | case Leader.acts.keep{?act >< pentagram} [Act@_]
-    | Ms = Leader.mark_moves
-    | As = Ms
-    | when As.size: maked_order Leader As.(Turn%As.size)
-    | for M Ms: M.free
-    | when Moved: leave
-    | leave
+| when Pentagram:
+  | Blocker = case $world.units_at{Pentagram.xyz}.skip{?empty} [U@_] U
+  | when Blocker and Blocker.owner.id >< $player.id:
+    | Ms = Blocker.list_moves{Blocker.xyz}
+    | when Ms.size
+      | marked_order Blocker Ms.(Turn%Ms.size)
+      | leave
 | for U Units:
   | UID = U.id
   | X,Y,Z = U.xyz
@@ -66,24 +67,20 @@ ai.update =
     | Path = []
     | XYZ = Target.xyz
     | while 1
-      | Ms = U.mark_moves{XYZ}
+      | Ms = U.list_moves{XYZ}
       | for M Ms: case M.xyz X,Y,Z: when Map.X.Y >< 1:
-        | for M Ms: M.free
-        | Ms = U.mark_moves
+        | Ms = U.list_moves{U.xyz}
         | XYZ = X,Y,Z
-        | case Ms.keep{?xyz >< XYZ} [M@_]: maked_order U M
-        | for M Ms: M.free
-        | less Moved:
-          | bad "ai.update got pathfinding error"
-        | leave
+        | case Ms.keep{?xyz >< XYZ} [M@_]
+          | marked_order U M
+          | leave
+        | bad "ai.update got pathfinding error"
       | XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1.copy
-      | for M Ms: M.free
-/*| less Moved: for U Units:
-  | Ms = U.mark_moves
+/*| for U Units:
+  | Ms = U.list_moves{U.xyz}
   | case Ms [M@_]:
-    | maked_order U M
-  | for M Ms: M.free
-  | when Moved: leave*/
+    | marked_order U M
+    | leave*/
 | $world.update_pick{[]}
 | $world.end_turn
 

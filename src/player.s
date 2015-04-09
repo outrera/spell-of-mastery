@@ -1,9 +1,10 @@
-type ai{player} world
+type ai{player} world params
 | $world <= $player.world
 
 ai.picked = $world.picked
 
 ai.clear =
+| $params <= t
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
