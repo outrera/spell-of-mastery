@@ -43,7 +43,8 @@ ai.pentagram =
       | $order_act{Leader Act} // recreate pentagram near the leader
       | leave 1
   | less EnemyBlocker
-    | when Blocker.moved: leave 0
+    | Turn = $world.turn
+    | when Blocker.moved><Turn: leave 0
     | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
     | A = if Blocker.attack then #200 else #100
     | harmCheck M = 
@@ -52,7 +53,6 @@ ai.pentagram =
       | (Harm^^#FF) and (Harm^^#FF00)<A
     | Ms = Ms.skip{&harmCheck} // avoid harm for battles near pentagram
     | when Ms.size
-      | Turn = $world.turn
       | $marked_order{Blocker Ms.(Turn%Ms.size)} //move out of the way
       | leave 1
 | Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
@@ -159,7 +159,7 @@ ai.update =
 | for U Units
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
-  | when Harm^^#FF: less (Harm^^#FF00) or U.leader:
+  | when Harm^^#FF: less (Harm^^#FF00) and not U.leader:
     | Moves = U.list_moves{U.xyz}.keep{?type><move}
     | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
     | for Move Moves
