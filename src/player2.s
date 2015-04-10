@@ -20,78 +20,95 @@ ai.end_turn =
 | $world.update_pick{[]}
 | $world.end_turn
 
+ai.order_act U Act =
+| $world.update_pick{[U]}
+| U.order_act{Act}
+
+ai.marked_order U Move =
+| Ms = U.mark_moves
+| Mark = Ms.find{?xyz><Move.xyz}
+| $player.picked.moved <= $world.turn
+| $world.update_pick{[U]}
+| U.guess_order_at_mark{Mark}
+| for M Ms: M.free
+
+ai.pentagram =
+| Leader = $player.leader
+| Pentagram = $player.pentagram
+| Blocker = $world.block_at{Pentagram.xyz}
+| when got Blocker:
+  | EnemyBlocker = Blocker.owner.id <> $player.id
+  | when EnemyBlocker
+    | when Leader: case Leader.acts.keep{?act >< pentagram} [Act@_]
+      | $order_act{Leader Act} // recreate pentagram near the leader
+      | leave 1
+  | less EnemyBlocker
+    | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
+    | Unsafe = if Blocker.attack then 11 else 1
+    | Ms = Ms.skip{HarmMap.(?.xyz.0).(?.xyz.1)><Unsafe}
+    | when Ms.size
+      | Turn = $world.turn
+      | $marked_order{Blocker Ms.(Turn%Ms.size)} //move out of the way
+      | leave 1
+| Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
+| when Summons.size
+  | S = Summons.find{?effect >< unit_ratman}
+  | when got S
+    | if $player.research_remain{S} > 0
+      then | $player.researching <= S.type
+           | $end_turn
+           | leave 1
+      else | $order_act{Pentagram S}
+           | leave 1
+| 0
+
 ai.update =
 | Turn = $world.turn
 | Player = $player
 | PID = $player.id
 | Units = $player.active
 | Pentagram = $player.pentagram
-| Leader = $player.leader
 | when $player.moves << 0
   | $end_turn
   | leave
-| marked_order U Move =
-  | Ms = U.mark_moves
-  | Mark = Ms.find{?xyz><Move.xyz}
-  | $player.picked.moved <= $world.turn
-  | $world.update_pick{[U]}
-  | U.guess_order_at_mark{Mark}
-  | for M Ms: M.free
-| order_act U Act =
-  | $world.update_pick{[U]}
-  | U.order_act{Act}
 | for U Units: // check if we can attack someone
   | Ms = U.list_moves{U.xyz}
   | As = Ms.keep{?type >< attack}
   | case As [A@_]
-    | marked_order U A
+    | $marked_order{U A}
     | leave
 | Es = $world.active.list.keep{(?attack and ?owner.id <> PID and not ?removed)}
 | Ts = Es{U=>U.list_moves{U.xyz}}.join
 | for Xs HarmMap: for I Xs.size: Xs.I <= 0
+| for U Units.keep{?attack}{U=>U.list_moves{U.xyz}}.join: 
+  | XYZ = U.xyz
+  | HarmMap.(XYZ.0).(XYZ.1) <= 10
 | for T Ts
   | XYZ = T.xyz
-  | HarmMap.(XYZ.0).(XYZ.1) <= 1
+  | X,Y,Z = XYZ
+  | Harm = HarmMap.X.Y + 1
+  | HarmMap.X.Y <= Harm
   | when T.type >< attack: //move unit out of threat zone
     | U = $world.block_at{T.xyz}
-    | when U.owner.id >< $player.id:
+    | when U.owner.id >< $player.id: when Harm<>11 or U.leader:
       | Moves = U.list_moves{U.xyz}.keep{?type><move}
       | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
       | for Move Moves
         | XYZ = Move.xyz
         | less Ts.any{?xyz><XYZ}
-          | marked_order U Move
+          | $marked_order{U Move}
           | leave
-| less Pentagram: when Leader:
-  | case Leader.acts.keep{?act >< pentagram} [Act@_]
-    | order_act Leader Act
-    | leave
-| when Pentagram: //FIXME: should be once every odd turn
-  | Blocker = $world.block_at{Pentagram.xyz}
-  | when got Blocker:
-    | EnemyBlocker = Blocker.owner.id <> $player.id
-    | when EnemyBlocker
-      | when Leader: case Leader.acts.keep{?act >< pentagram} [Act@_]
-        | order_act Leader Act // recreate pentagram near the leader
-        | leave
-    | less EnemyBlocker
-      | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
-      | Ms = Ms.skip{HarmMap.(?.xyz.0).(?.xyz.1)}
-      | when Ms.size
-        | marked_order Blocker Ms.(Turn%Ms.size) //move out of the way
-        | leave
-  | Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
-  | when Summons.size
-    | S = Summons.find{?effect >< unit_ratman}
-    | when got S
-      | if $player.research_remain{S} > 0
-        then | $player.researching <= S.type
-             | $end_turn
-             | leave
-        else | order_act Pentagram S
-             | leave
+| less Pentagram:
+  | Leader = $player.leader
+  | when Leader:
+    | case Leader.acts.keep{?act >< pentagram} [Act@_]
+      | $order_act{Leader Act}
+      | leave
+| when Pentagram and Turn%2><0: when $pentagram: leave
 | for Xs Map: for I Xs.size: Xs.I <= #FFFFFFFFFFFF
 | Attackers = Units.keep{?attack}
+| Div = Turn%Attackers.size
+| Attackers = [@Attackers.drop{Div} @Attackers.take{Div}]
 | for N,U Attackers.i.flip:
   | UID = U.id
   | X,Y,Z = U.xyz
@@ -123,18 +140,25 @@ ai.update =
       | Ms = U.list_moves{XYZ}
       | for M Ms: case M.xyz X,Y,Z: when (Map.X.Y^^#FFFFFF) >< 1:
         | Ms = U.list_moves{U.xyz}
-        | Ms = Ms.skip{HarmMap.(?.xyz.0).(?.xyz.1)}
+        | Ms = Ms.skip{HarmMap.(?.xyz.0).(?.xyz.1)><11}
         | XYZ = X,Y,Z
         | case Ms.keep{?xyz >< XYZ} [M@_]
-          | marked_order U M
+          | if M.type >< swap
+            then | AISwapXYZ = $params.aiSwapXYZ
+                 | if U.xyz <> AISwapXYZ
+                   then | $marked_order{U M}
+                        | AISwapXYZ.init{U.xyz}
+                   else | U.moved <= Turn // FIXME: hack
+            else $marked_order{U M}
           | leave
         | Loop <= 0
       | XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1.copy
 /*| for U Units:
   | Ms = U.list_moves{U.xyz}
   | case Ms [M@_]:
-    | marked_order U M
+    | $marked_order{U M}
     | leave*/
+| when Turn%2<>0: when Pentagram and $pentagram: leave
 | $end_turn
 
 
