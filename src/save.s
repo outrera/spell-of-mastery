@@ -50,7 +50,7 @@ world.load Saved =
   | P.color <= Color
   | P.power <= Power
   | P.moves <= Moves
-  | P.params <= Params.table
+  | for K,V Params: P.params.K <= V
   | for N,R Research: P.research.N <= R
 | $player <= $players.(Saved.player)
 | for X Saved.units

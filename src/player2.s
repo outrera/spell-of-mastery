@@ -43,9 +43,14 @@ ai.pentagram =
       | $order_act{Leader Act} // recreate pentagram near the leader
       | leave 1
   | less EnemyBlocker
+    | when Blocker.moved: leave 0
     | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
-    | Unsafe = if Blocker.attack then 11 else 1
-    | Ms = Ms.skip{HarmMap.(?.xyz.0).(?.xyz.1)><Unsafe}
+    | A = if Blocker.attack then #200 else #100
+    | harmCheck M = 
+      | X,Y,Z = M.xyz
+      | Harm = HarmMap.X.Y
+      | (Harm^^#FF) and (Harm^^#FF00)<A
+    | Ms = Ms.skip{&harmCheck} // avoid harm for battles near pentagram
     | when Ms.size
       | Turn = $world.turn
       | $marked_order{Blocker Ms.(Turn%Ms.size)} //move out of the way
@@ -62,51 +67,11 @@ ai.pentagram =
            | leave 1
 | 0
 
-ai.update =
+ai.attack Units =
 | Turn = $world.turn
-| Player = $player
-| PID = $player.id
-| Units = $player.active
-| Pentagram = $player.pentagram
-| when $player.moves << 0
-  | $end_turn
-  | leave
-| for U Units: // check if we can attack someone
-  | Ms = U.list_moves{U.xyz}
-  | As = Ms.keep{?type >< attack}
-  | case As [A@_]
-    | $marked_order{U A}
-    | leave
-| Es = $world.active.list.keep{(?attack and ?owner.id <> PID and not ?removed)}
-| Ts = Es{U=>U.list_moves{U.xyz}}.join
-| for Xs HarmMap: for I Xs.size: Xs.I <= 0
-| for U Units.keep{?attack}{U=>U.list_moves{U.xyz}}.join: 
-  | XYZ = U.xyz
-  | HarmMap.(XYZ.0).(XYZ.1) <= 10
-| for T Ts
-  | XYZ = T.xyz
-  | X,Y,Z = XYZ
-  | Harm = HarmMap.X.Y + 1
-  | HarmMap.X.Y <= Harm
-  | when T.type >< attack: //move unit out of threat zone
-    | U = $world.block_at{T.xyz}
-    | when U.owner.id >< $player.id: when Harm<>11 or U.leader:
-      | Moves = U.list_moves{U.xyz}.keep{?type><move}
-      | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
-      | for Move Moves
-        | XYZ = Move.xyz
-        | less Ts.any{?xyz><XYZ}
-          | $marked_order{U Move}
-          | leave
-| less Pentagram:
-  | Leader = $player.leader
-  | when Leader:
-    | case Leader.acts.keep{?act >< pentagram} [Act@_]
-      | $order_act{Leader Act}
-      | leave
-| when Pentagram and Turn%2><0: when $pentagram: leave
 | for Xs Map: for I Xs.size: Xs.I <= #FFFFFFFFFFFF
 | Attackers = Units.keep{?attack}
+| less Attackers.size: leave 0
 | Div = Turn%Attackers.size
 | Attackers = [@Attackers.drop{Div} @Attackers.take{Div}]
 | for N,U Attackers.i.flip:
@@ -130,29 +95,86 @@ ai.update =
         | Map.X.Y <= NextCost
         | push [Node M.xyz NextCost] Stack
   | EndTime = get_gui{}.ticks{}
-//  | say EndTime-StartTime
+  //| say EndTime-StartTime
   | when Targets.size
     | Target = Targets{[Map.(?xyz.0).(?xyz.1) ?]}.sort{?0 < ??0}.0.1
-    | Path = []
     | XYZ = Target.xyz
-    | Loop = 1
-    | while Loop
+    | Move = 0
+    | till Move
       | Ms = U.list_moves{XYZ}
-      | for M Ms: case M.xyz X,Y,Z: when (Map.X.Y^^#FFFFFF) >< 1:
-        | Ms = U.list_moves{U.xyz}
-        | Ms = Ms.skip{HarmMap.(?.xyz.0).(?.xyz.1)><11}
-        | XYZ = X,Y,Z
-        | case Ms.keep{?xyz >< XYZ} [M@_]
-          | if M.type >< swap
-            then | AISwapXYZ = $params.aiSwapXYZ
-                 | if U.xyz <> AISwapXYZ
-                   then | $marked_order{U M}
-                        | AISwapXYZ.init{U.xyz}
-                   else | U.moved <= Turn // FIXME: hack
-            else $marked_order{U M}
-          | leave
-        | Loop <= 0
-      | XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1.copy
+      | Moves = Ms.keep{(Map.(?xyz.0).(?xyz.1)^^#FFFFFF) >< 1}
+      | if Moves.size then Move <= Moves.0
+        else XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1
+    | Ms = U.list_moves{U.xyz}
+    | harmCheck M = 
+      | X,Y,Z = M.xyz
+      | Harm = HarmMap.X.Y
+      | (Harm^^#FF) and (Harm^^#FF00)<#200
+    | Ms = Ms.skip{&harmCheck}
+    | XYZ = Move.xyz
+    | M = Ms.find{?xyz >< XYZ}
+    | when got M:
+      | B = $world.block_at{M.xyz}
+      | if M.type >< swap
+        then | Ms = U.list_moves{U.xyz}
+             | Ms = Ms.keep{?type><move}.skip{&harmCheck}
+             | Ms = Ms{[(?xyz-Target.xyz){?abs}.sum ?]}.sort{?0 < ??0}{?1}
+             | when Ms.size
+               | $marked_order{U Ms.0}
+               | leave 1
+             //| leave 0
+        else | $marked_order{U M}
+             | leave 1
+| 0
+
+ai.update =
+| Turn = $world.turn
+| Player = $player
+| PID = $player.id
+| Units = $player.active
+| Pentagram = $player.pentagram
+| when $player.moves << 0
+  | $end_turn
+  | leave
+| for U Units: // check if we can attack someone
+  | Ms = U.list_moves{U.xyz}
+  | As = Ms.keep{?type >< attack}
+  | case As [A@_]
+    | $marked_order{U A}
+    | leave
+| for Xs HarmMap: for I Xs.size: Xs.I <= 0
+| for U Units.keep{?attack}{U=>U.list_moves{U.xyz}}.join: 
+  | XYZ = U.xyz
+  | !HarmMap.(XYZ.0).(XYZ.1) + #100
+| activeAttacker U =
+  | O = U.owner
+  | O.id <> PID and O.moves + O.power > 0
+    and U.attack and not U.removed
+| Es = $world.active.list.keep{&activeAttacker}
+| Ts = Es{U=>U.list_moves{U.xyz}}.join
+| for T Ts
+  | XYZ = T.xyz
+  | X,Y,Z = XYZ
+  | !HarmMap.X.Y + 1
+| for U Units
+  | X,Y,Z = U.xyz
+  | Harm = HarmMap.X.Y
+  | when Harm^^#FF: less (Harm^^#FF00) or U.leader:
+    | Moves = U.list_moves{U.xyz}.keep{?type><move}
+    | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
+    | for Move Moves
+      | XYZ = Move.xyz
+      | less Ts.any{?xyz><XYZ}
+        | $marked_order{U Move}
+        | leave
+| less Pentagram:
+  | Leader = $player.leader
+  | when Leader:
+    | case Leader.acts.keep{?act >< pentagram} [Act@_]
+      | $order_act{Leader Act}
+      | leave
+| when Pentagram and Turn%2><0: when $pentagram: leave
+| when $attack{Units}: leave
 /*| for U Units:
   | Ms = U.list_moves{U.xyz}
   | case Ms [M@_]:
