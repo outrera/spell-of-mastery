@@ -37,6 +37,9 @@ ai.update =
   | $world.update_pick{[U]}
   | U.guess_order_at_mark{Mark}
   | for M Ms: M.free
+| order_act U Act =
+  | $world.update_pick{[U]}
+  | U.order_act{Act}
 | for U Units: // check if we can attack someone
   | Ms = U.list_moves{U.xyz}
   | As = Ms.keep{?type >< attack}
@@ -61,7 +64,7 @@ ai.update =
           | leave
 | less Pentagram: when Leader:
   | case Leader.acts.keep{?act >< pentagram} [Act@_]
-    | Leader.order_act{Act}
+    | order_act Leader Act
     | leave
 | when Pentagram: //FIXME: should be once every odd turn
   | Blocker = $world.block_at{Pentagram.xyz}
@@ -69,7 +72,7 @@ ai.update =
     | EnemyBlocker = Blocker.owner.id <> $player.id
     | when EnemyBlocker
       | when Leader: case Leader.acts.keep{?act >< pentagram} [Act@_]
-        | Leader.order_act{Act} // recreate pentagram near the leader
+        | order_act Leader Act // recreate pentagram near the leader
         | leave
     | less EnemyBlocker
       | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
@@ -85,10 +88,11 @@ ai.update =
         then | $player.researching <= S.type
              | $end_turn
              | leave
-        else | Pentagram.order_act{S}
+        else | order_act Pentagram S
              | leave
 | for Xs Map: for I Xs.size: Xs.I <= #FFFFFFFFFFFF
-| for N,U Units.keep{?attack}.i.flip:
+| Attackers = Units.keep{?attack}
+| for N,U Attackers.i.flip:
   | UID = U.id
   | X,Y,Z = U.xyz
   | Targets = []
