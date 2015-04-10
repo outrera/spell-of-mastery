@@ -158,6 +158,7 @@ unit.can_move Src Dst =
 
 
 type move{type src xyz}
+move.as_text = "#move{[$type] [$src] [$xyz]}"
 
 unit.list_moves XYZ =
 | less $moves.size: leave []
