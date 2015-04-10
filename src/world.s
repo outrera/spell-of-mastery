@@ -236,7 +236,8 @@ world.remove_unit U =
 world.effect X,Y,Z What =
 | E = $alloc_unit{"effect_[What]"}
 | E.move{X,Y,Z}
-| E.order.init{act/die level/0}
+| A = E.order.init{act/die cost/0}
+| A.priority <= 1000
 
 world.filled X,Y Z =
 | when X < 0 or Y < 0: leave 1

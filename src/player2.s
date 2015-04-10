@@ -132,7 +132,7 @@ ai.update =
 | Turn = $world.turn
 | Player = $player
 | PID = $player.id
-| Units = $player.active
+| Units = $player.active.keep{?health}
 | Pentagram = $player.pentagram
 //| PenragramTurn = Turn%2><0
 | PenragramTurn = Turn<2 or 1.rand
@@ -147,8 +147,7 @@ ai.update =
 | for U Units.keep{?attack}{U=>U.list_moves{U.xyz}}.join: 
   | XYZ = U.xyz
   | !HarmMap.(XYZ.0).(XYZ.1) + #100
-| isEnemy U =
-  | U.owner.id <> PID and not U.removed
+| isEnemy U = U.owner.id <> PID and U.health and not U.removed
 | Es = $world.active.list.keep{&isEnemy}
 | Ts = Es{U=>U.list_moves{U.xyz}{[U ?]}}.join
 | for U,T Ts
@@ -159,6 +158,7 @@ ai.update =
   | if U.attack and Mobile
     then !HarmMap.X.Y + #1
     else !HarmMap.X.Y + #1000000
+| Ts <= Ts{?1}
 | for U Units
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y

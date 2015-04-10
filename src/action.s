@@ -218,6 +218,8 @@ type action{unit}
    effect
    path
 
+action.as_text = "#action{[$class_name] [$priority] [$target]}"
+
 action.init act/idle at/self target/0 cost/-1 effect/0 path/0 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram

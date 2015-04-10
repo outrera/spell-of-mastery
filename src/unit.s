@@ -49,6 +49,7 @@ unit.init Class =
 | $mark <= 0
 | $path <= 0
 | $hits <= 0
+| $moved <= 0
 | when $starts
   | less $active
     | $world.active.push{Me}

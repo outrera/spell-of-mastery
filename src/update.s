@@ -23,7 +23,7 @@ world.end_turn =
 | P.pentagram <= 0
 | P.leader <= 0
 | Units = $player.active
-| less $player.human or Units.size:
+| less Units.size /*or $player.human*/:
   | $end_turn
   | leave
 | for U Units
