@@ -45,7 +45,7 @@ ai.update =
     | leave
 | Es = $world.active.list.keep{(?attack and ?owner.id <> PID and not ?removed)}
 | Ts = Es{U=>U.list_moves{U.xyz}}.join
-| for Xs Map: for I Xs.size: Xs.I <= 0
+| for Xs HarmMap: for I Xs.size: Xs.I <= 0
 | for T Ts
   | XYZ = T.xyz
   | HarmMap.(XYZ.0).(XYZ.1) <= 1
