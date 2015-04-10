@@ -53,7 +53,7 @@ ai.pentagram =
       | (Harm^^#FF) and (Harm^^#FF00)<A
     | Ms = Ms.skip{&harmCheck} // avoid harm for battles near pentagram
     | when Ms.size
-      | $marked_order{Blocker Ms.(Turn%Ms.size)} //move out of the way
+      | $marked_order{Blocker Ms.rand} //move out of the way
       | leave 1
 | Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
 | when Summons.size
@@ -119,10 +119,11 @@ ai.attack Units =
         then | Ms = U.list_moves{U.xyz}
              | Ms = Ms.keep{?type><move}.skip{&harmCheck}
              | Ms = Ms{[(?xyz-Target.xyz){?abs}.sum ?]}.sort{?0 < ??0}{?1}
+             | Pentagram = $player.pentagram
+             | when Pentagram: Ms <= Ms.skip{?xyz >< Pentagram.xyz}
              | when Ms.size
                | $marked_order{U Ms.0}
                | leave 1
-             //| leave 0
         else | $marked_order{U M}
              | leave 1
 | 0
@@ -133,29 +134,31 @@ ai.update =
 | PID = $player.id
 | Units = $player.active
 | Pentagram = $player.pentagram
+//| PenragramTurn = Turn%2><0
+| PenragramTurn = Turn<2 or 1.rand
 | when $player.moves << 0
   | $end_turn
   | leave
-| for U Units: // check if we can attack someone
-  | Ms = U.list_moves{U.xyz}
-  | As = Ms.keep{?type >< attack}
-  | case As [A@_]
+| for U Units: // check if we can attack someone 
+  | case U.list_moves{U.xyz}.keep{?type >< attack} [A@_]
     | $marked_order{U A}
     | leave
 | for Xs HarmMap: for I Xs.size: Xs.I <= 0
 | for U Units.keep{?attack}{U=>U.list_moves{U.xyz}}.join: 
   | XYZ = U.xyz
   | !HarmMap.(XYZ.0).(XYZ.1) + #100
-| activeAttacker U =
-  | O = U.owner
-  | O.id <> PID and O.moves + O.power > 0
-    and U.attack and not U.removed
-| Es = $world.active.list.keep{&activeAttacker}
-| Ts = Es{U=>U.list_moves{U.xyz}}.join
-| for T Ts
+| isEnemy U =
+  | U.owner.id <> PID and not U.removed
+| Es = $world.active.list.keep{&isEnemy}
+| Ts = Es{U=>U.list_moves{U.xyz}{[U ?]}}.join
+| for U,T Ts
   | XYZ = T.xyz
   | X,Y,Z = XYZ
-  | !HarmMap.X.Y + 1
+  | O = U.owner
+  | Mobile = O.moves + O.power > 0
+  | if U.attack and Mobile
+    then !HarmMap.X.Y + #1
+    else !HarmMap.X.Y + #1000000
 | for U Units
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
@@ -165,7 +168,24 @@ ai.update =
     | for Move Moves
       | XYZ = Move.xyz
       | less Ts.any{?xyz><XYZ}
-        | $marked_order{U Move}
+        | $marked_order{U Move} //avoid harm
+        | leave
+| for U Units //see if we can threat some enemy unit
+  | X,Y,Z = U.xyz
+  | Harm = HarmMap.X.Y
+  | less Harm^^#FF
+    | Ms = U.list_moves{U.xyz}.keep{?type >< move}
+    | for M Ms // try provoking enemy attack, so we can counter-attack
+      | X,Y,Z = M.xyz
+      | Harm = HarmMap.X.Y
+      | when Harm^^#FF and (Harm^^#FF00) > #100:
+        | $marked_order{U M}
+        | leave
+    | for M Ms // otherwize try blocking enemy movements
+      | X,Y,Z = M.xyz
+      | Harm = HarmMap.X.Y
+      | when Harm^^#FF00000 and (not Harm^^#FF or (Harm^^#FF00) > #100):
+        | $marked_order{U M}
         | leave
 | less Pentagram:
   | Leader = $player.leader
@@ -173,14 +193,14 @@ ai.update =
     | case Leader.acts.keep{?act >< pentagram} [Act@_]
       | $order_act{Leader Act}
       | leave
-| when Pentagram and Turn%2><0: when $pentagram: leave
+| when Pentagram and PenragramTurn: when $pentagram: leave
 | when $attack{Units}: leave
 /*| for U Units:
   | Ms = U.list_moves{U.xyz}
   | case Ms [M@_]:
     | $marked_order{U M}
     | leave*/
-| when Turn%2<>0: when Pentagram and $pentagram: leave
+| less PenragramTurn: when Pentagram and $pentagram: leave
 | $end_turn
 
 
