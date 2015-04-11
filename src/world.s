@@ -50,6 +50,7 @@ type world{main W H}
    on_update
    marks
    params
+   waiting // true if wating for action to complete
 | $init{W H}
 
 world.init W H =

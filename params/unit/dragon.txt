@@ -10,7 +10,7 @@ moves:
   | 1 0 1 0 1
   | 0 1 1 1 0
 sounds: attack,(dragon)
-       ,impact,()
-       ,hit,()
-       ,die,()
-       ,walk,()
+//       ,impact,()
+//       ,hit,()
+//       ,die,()
+       ,move,(step)

@@ -3,3 +3,8 @@ level: 1
 health: 1
 attack: 1
 defense: 0
+sounds: attack,(attack2)
+       //,impact,()
+       ,hit,(rat_death)
+       ,die,(rat_death)
+       ,move,(step)

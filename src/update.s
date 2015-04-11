@@ -72,8 +72,8 @@ unit.update =
     | Path.free
   | less $anim >< idle: $animate{idle}
   | if     $next_action.valid
-       and ($owner.moves > 0 or not $next_action.cost)
-       and $moved <> $world.turn
+       and (   ($owner.moves > 0 and $moved <> $world.turn)
+            or not $next_action.cost)
     then | less Path: !$owner.moves - $next_action.cost
          | $moved <= $world.turn
     else $next_action.init{act/idle at/$xyz}
