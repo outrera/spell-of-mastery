@@ -110,6 +110,7 @@ act_attack.update A =
     | when got!it U.sounds.die: U.main.sound{it.rand}
     | DeathOrder = Target.order.init{act/die cost/0}
     | DeathOrder.priority <= 1000
+    | Target.action.cycles <= 1
     | U.world.waiting <= Target.id
     | U.animate{idle}
     | A.cycles <= 90000
@@ -123,16 +124,19 @@ type act_die.act_class class_name/die anim/action
 
 act_die.valid A = 1
 
-act_die.start A = A.unit.animate{death}
-
-act_die.update A =
-| less got A.unit.sprite.anims.death: A.cycles <= 0
-
-act_die.finish A =
-| U = A.unit
+free_unit U = 
 | when U.id >< U.world.waiting: U.world.waiting <= 0
 | U.free
 
+act_die.start A =
+| U = A.unit
+| U.animate{death}
+| less not U.hits or got U.sprite.anims.death:
+  | free_unit U
+  | A.cycles <= 1000
+
+act_die.finish A =
+| free_unit A.unit
 
 type act_swap.act_class class_name/swap anim/action
 
