@@ -200,7 +200,7 @@ main.run =
 | $world.on_player_change <= Player =>
   | PlayerWidget.picked <= Player.id
 | $world.on_update <= =>
-  | when got $world.params.spell_of_mastery
+  | when got $world.params.winner
     | pause
     | sound_play: sound_load "[$data]/music/victory.ogg" music/1
     | Tabs.pick{victory}
@@ -375,8 +375,9 @@ main.run =
 | Victory = dlg: mtx
   |   0   0 | VictoryBG
   | 100 100 | txt medium: =>
-              | Player = $world.players.($world.params.spell_of_mastery)
-              | "[Player.name] has won!"
+              | Player = $world.players.($world.params.winner)
+              | Type = $world.params.victory_type.replace{_ ' '}
+              | "[Player.name] has won by [Type]!"
   | ScreenW-360 ScreenH-100
         | button 'EXIT TO MENU' skin/scroll: =>
           | Tabs.pick{main_menu}

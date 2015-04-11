@@ -91,8 +91,14 @@ unit.animate Anim =
 unit.free =
 | when $leader and $hits >> $health:
   | O = $owner
-  | for U $world.active.list: when U.owner.id >< O.id and U.id <> $id:
-    | U.free
+  | Leaders = []
+  | for U $world.active.list:
+    | if U.owner.id >< O.id
+      then when U.id <> $id: U.free
+      else when U.leader: push U Leaders
+  | case Leaders [L]
+    | $world.params.winner <= L.owner.id
+    | $world.params.victory_type <= \conquest
 | $world.free_unit{Me}
 
 unit.remove =

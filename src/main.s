@@ -1,4 +1,4 @@
-use param sprite class tile sound world update ui save generate player2
+use param sprite class tile sound world update ui save generate ai
 
 type main{Data}
      world

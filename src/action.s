@@ -160,8 +160,8 @@ act_spell_of_mastery.start A =
 
 act_spell_of_mastery.finish A =
 | U = A.unit
-| U.world.params.spell_of_mastery <= U.owner.id
-
+| U.world.params.winner <= U.owner.id
+| U.world.params.victory_type <= \spell_of_mastery
 
 
 

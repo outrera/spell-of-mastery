@@ -33,8 +33,15 @@ ai.marked_order U Move =
 | for M Ms: M.free
 
 ai.pentagram =
-| Leader = $player.leader
 | Pentagram = $player.pentagram
+| Leader = $player.leader
+| Turn = $world.turn
+| when Leader.moved >< Turn: Leader <= 0
+| less Pentagram:
+  | when Leader:
+    | case Leader.acts.keep{?act >< pentagram} [Act@_]
+      | $order_act{Leader Act}
+      | leave 1
 | Blocker = $world.block_at{Pentagram.xyz}
 | when got Blocker:
   | EnemyBlocker = Blocker.owner.id <> $player.id
@@ -43,7 +50,6 @@ ai.pentagram =
       | $order_act{Leader Act} // recreate pentagram near the leader
       | leave 1
   | less EnemyBlocker
-    | Turn = $world.turn
     | when Blocker.moved><Turn: leave 0
     | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
     | A = if Blocker.attack then #200 else #100
@@ -63,7 +69,8 @@ ai.pentagram =
       then | $player.researching <= S.type
            | $end_turn
            | leave 1
-      else | $order_act{Pentagram S}
+      else | when Pentagram.moved >< Turn: leave 0
+           | $order_act{Pentagram S}
            | leave 1
 | 0
 
@@ -165,12 +172,11 @@ ai.update =
   | when Harm^^#FF: less (Harm^^#FF00) and not U.leader:
     | Moves = U.list_moves{U.xyz}.keep{?type><move}
     | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
-    | for Move Moves
-      | XYZ = Move.xyz
-      | less Ts.any{?xyz><XYZ}
-        | $marked_order{U Move} //avoid harm
-        | leave
-| for U Units //see if we can threat some enemy unit
+    | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
+    | when SafeMoves.size
+      | $marked_order{U SafeMoves.rand} //avoid harm
+      | leave
+| for U Units: when U.attack: //see if we can threat some enemy unit
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
   | less Harm^^#FF
@@ -181,25 +187,14 @@ ai.update =
       | when Harm^^#FF and (Harm^^#FF00) > #100:
         | $marked_order{U M}
         | leave
-    | for M Ms // otherwize try blocking enemy movements
+    | for M Ms // otherwise try blocking enemy movements
       | X,Y,Z = M.xyz
       | Harm = HarmMap.X.Y
       | when Harm^^#FF00000 and (not Harm^^#FF or (Harm^^#FF00) > #100):
         | $marked_order{U M}
         | leave
-| less Pentagram:
-  | Leader = $player.leader
-  | when Leader:
-    | case Leader.acts.keep{?act >< pentagram} [Act@_]
-      | $order_act{Leader Act}
-      | leave
-| when Pentagram and PenragramTurn: when $pentagram: leave
+| when not Pentagram or PenragramTurn: when $pentagram: leave
 | when $attack{Units}: leave
-/*| for U Units:
-  | Ms = U.list_moves{U.xyz}
-  | case Ms [M@_]:
-    | $marked_order{U M}
-    | leave*/
 | less PenragramTurn: when Pentagram and $pentagram: leave
 | $end_turn
 
