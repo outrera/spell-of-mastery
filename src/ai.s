@@ -36,8 +36,9 @@ ai.pentagram =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 | Turn = $world.turn
-| when Leader.moved >< Turn: Leader <= 0
+| when Leader and Leader.moved >< Turn: Leader <= 0
 | less Pentagram:
+  | less Leader: leave 0
   | when Leader:
     | case Leader.acts.keep{?act >< pentagram} [Act@_]
       | $order_act{Leader Act}

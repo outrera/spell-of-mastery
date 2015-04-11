@@ -111,7 +111,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
     | when DrawShadow
       | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
       | Key = Key + (UnitZ</30) + 1
-      | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit 0]}
+      | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10 0]}
 
 view.render_iso = 
 | Wr = $world

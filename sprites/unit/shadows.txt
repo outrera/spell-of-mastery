@@ -1,1 +1,4 @@
-frames: 32*32
+author: `Seth A. Robinson`
+copyright: `Seth A. Robinson`
+license: `CC3-BY-SA`
+frames: 37*15
