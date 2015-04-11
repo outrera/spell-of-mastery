@@ -18,7 +18,7 @@ world.end_turn =
   | !$turn + 1
 | P = $players.NextPlayer
 | $player <= P
-| P.power <= 1
+| P.power <= 2
 | PID = P.id
 | P.pentagram <= 0
 | P.leader <= 0

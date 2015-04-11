@@ -88,7 +88,12 @@ unit.animate Anim =
 | $pick_facing{$facing}
 | $anim_wait <= $anim_seq.$anim_step.1
 
-unit.free = $world.free_unit{Me}
+unit.free =
+| when $leader and $hits >> $health:
+  | O = $owner
+  | for U $world.active.list: when U.owner.id >< O.id and U.id <> $id:
+    | U.free
+| $world.free_unit{Me}
 
 unit.remove =
 | $world.remove_unit{Me}
