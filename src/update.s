@@ -37,9 +37,9 @@ world.end_turn =
 
 world.update =
 | NextActive = []
+| for U $active.list: U.update
 | while $active.used
   | U = $active.pop
-  | U.update
   | when U.active: push U NextActive
 | for U NextActive: $active.push{U}
 | !$cycle + 1
