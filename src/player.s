@@ -30,6 +30,7 @@ player.clear =
 | $leader <= 0
 | $pentagram <= 0
 | $researching <= 0
+| $power <= 1
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 // player 0 shouldnt be used
