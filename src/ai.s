@@ -61,8 +61,16 @@ ai.pentagram =
     | when Ms.size
       | $marked_order{Blocker Ms.rand} //move out of the way
       | leave 1
+    | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><swap}
+    | for M Ms
+      | B = $world.block_at{M.xyz}
+      | when B.leader
+        | Ms = B.list_moves{B.xyz}.keep{?type><move}
+        | when Ms.size
+          | $marked_order{B Ms.rand} //move out of the way
+          | leave 1
     | when Leader: less Blocker.id >< Leader.id:
-      | when Turn-Pentagram.moved>4: leave $cast_pentagram
+      | when Turn-Pentagram.moved>6: leave $cast_pentagram
 | Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
 | when Summons.size
   | S = Summons.find{?effect >< unit_ratman}
