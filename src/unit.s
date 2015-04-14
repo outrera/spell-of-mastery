@@ -151,21 +151,20 @@ unit.face XYZ =
 unit.can_move Src Dst =
 | less $world.fast_at{Dst}.empty: leave 0
 | SZ = Src.2
-| DZ = Dst.2
+| DX,DY,DZ = Dst
 | Height = DZ-SZ
 | HeightAbs = Height.abs
-| when HeightAbs << $jumps: leave 1
-| DX = Dst.0
-| DY = Dst.1
+| Jumps = $jumps
 | BelowDst = DX,DY,DZ-1
+| when HeightAbs << Jumps
+  | leave $world.slope_at{BelowDst}><#@1111 or Jumps>3
 | BelowDstTile = $world.fast_at{BelowDst}
-| when BelowDstTile.stairs: leave HeightAbs << (max 4 $jumps)
+| when BelowDstTile.stairs: leave HeightAbs << (max 4 Jumps)
 | SX = Src.0
 | SY = Src.1
 | BelowSrc = SX,SY,SZ-1
-| SlopedSrc = $world.slope_at{BelowSrc}<>#@1111
 | BelowSrcTile = $world.fast_at{BelowSrc}
-| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 $jumps)
+| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 Jumps)
 | 0
 
 

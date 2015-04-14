@@ -107,7 +107,7 @@ act_attack.update A =
       | A.cycles <= 0
       | U.animate{idle}
       | leave
-    | when got!it U.sounds.die: U.main.sound{it.rand}
+    | when got!it Target.sounds.die: Target.main.sound{it.rand}
     | DeathOrder = Target.order.init{act/die cost/0}
     | DeathOrder.priority <= 1000
     | Target.action.cycles <= 1
@@ -246,7 +246,7 @@ action.init act/idle at/self target/0 cost/-1 effect/0 path/0 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
-| when Cost >< -1: Cost <= $unit.level
+| when Cost >< -1: Cost <= 1//$unit.level
 | $xyz.init{At}
 | $target <= Target
 | $priority <= 50

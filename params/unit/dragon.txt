@@ -1,14 +1,14 @@
 sprite: unit_dragon
 level: 4
-health: 5
+health: 6
 attack: 4
 defense: 0
 moves:
-  | 0 1 1 1 0
-  | 1 0 1 0 1
+  | 0 0 1 0 0
+  | 0 0 1 0 0
   | 1 1 0 1 1
-  | 1 0 1 0 1
-  | 0 1 1 1 0
+  | 0 0 1 0 0
+  | 0 0 1 0 0
 sounds: attack,(dragon)
 //       ,impact,()
 //       ,hit,()
