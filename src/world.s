@@ -25,6 +25,7 @@ type world{main W H}
    tilemap
    unit_map
    slope_map
+   move_map
    units
    free_units
    proxies
@@ -65,6 +66,7 @@ world.init W H =
 | $tilemap <= zmap MaxSize
 | $unit_map <= zmap MaxSize
 | $slope_map <= zmap MaxSize
+| $move_map <= zmap MaxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -86,6 +88,7 @@ world.create W H =
 | $clear
 | for P points{1 1 $w $h}: $push_{P $filler}
 | for P points{1 1 $w $h}: $updPilarGfxes{P}
+| for P points{1 1 $w $h}: $update_move_map{P}
 | !$w-1
 | !$h-1
 | $create_borders
@@ -100,6 +103,7 @@ world.create_borders =
 world.clear =
 | for U $units: less U.removed: U.free
 | $tilemap.clear{0}
+| $move_map.clear{0}
 | for P $players: P.clear
 | $player <= $players.0
 | $players.1.human <= 1
@@ -318,6 +322,7 @@ world.updPilarGfxes P =
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
+| $update_move_map{P}
 
 world.height X Y = $tilemap.height{X Y}
 

@@ -39,6 +39,7 @@ world.load Saved =
 | for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 Tilemap.X.Y}
 | $create_borders
 | for P points{1 1 $w+1 $h+1}: $updPilarGfxes{P}
+| for P points{1 1 $w+1 $h+1}: $update_move_map{P}
 | $cycle <= Saved.cycle
 | $turn <= Saved.turn
 | IdMap = t
