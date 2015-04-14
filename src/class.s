@@ -2,7 +2,7 @@ use gfx util param
 
 type class{bank class_name Main static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/[]
-           starts/0 jumps/1 mountaineer/0 ranger/0 leader/Leader
+           starts/0 flyer/0 mountaineer/0 ranger/0 leader/Leader
            health/0 attack/0 defense/0 level/0
            acts/[] sounds/[]}
   type/"[Bank]_[Class_name]"
@@ -15,7 +15,7 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
   shadow/Shadow // unit casts shadow in air
   moves/Moves // moves per turn
   starts/Starts // non-zero if unit starts active
-  jumps/Jumps
+  flyer/Flyer
   mountaineer/Mountaineer
   ranger/Ranger
   leader/Leader

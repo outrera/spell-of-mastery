@@ -1,5 +1,5 @@
 sprite: unit_oculus
-jumps: 4
+flyer: 1
 moves:
   | 0 0 1 0 0
   | 0 0 1 0 0

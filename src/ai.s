@@ -32,24 +32,23 @@ ai.marked_order U Move =
 | U.guess_order_at_mark{Mark}
 | for M Ms: M.free
 
+ai.cast_pentagram =
+| Leader = $player.leader
+| when Leader: case Leader.acts.keep{?act >< pentagram} [Act@_]
+  | $order_act{Leader Act}
+  | leave 1
+| leave 0
+
 ai.pentagram =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 | Turn = $world.turn
 | when Leader and Leader.moved >< Turn: Leader <= 0
-| less Pentagram:
-  | less Leader: leave 0
-  | when Leader:
-    | case Leader.acts.keep{?act >< pentagram} [Act@_]
-      | $order_act{Leader Act}
-      | leave 1
+| less Pentagram: leave $cast_pentagram
 | Blocker = $world.block_at{Pentagram.xyz}
 | when got Blocker:
   | EnemyBlocker = Blocker.owner.id <> $player.id
-  | when EnemyBlocker
-    | when Leader: case Leader.acts.keep{?act >< pentagram} [Act@_]
-      | $order_act{Leader Act} // recreate pentagram near the leader
-      | leave 1
+  | when EnemyBlocker: leave $cast_pentagram
   | less EnemyBlocker
     | when Blocker.moved><Turn: leave 0
     | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
@@ -58,10 +57,12 @@ ai.pentagram =
       | X,Y,Z = M.xyz
       | Harm = HarmMap.X.Y
       | (Harm^^#FF) and (Harm^^#FF00)<A
-    | Ms = Ms.skip{&harmCheck} // avoid harm for battles near pentagram
+    | Ms <= Ms.skip{&harmCheck} // avoid harm for battles near pentagram
     | when Ms.size
       | $marked_order{Blocker Ms.rand} //move out of the way
       | leave 1
+    | when Leader: less Blocker.id >< Leader.id:
+      | when Turn-Pentagram.moved>4: leave $cast_pentagram
 | Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
 | when Summons.size
   | S = Summons.find{?effect >< unit_ratman}

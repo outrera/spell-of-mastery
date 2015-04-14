@@ -150,21 +150,20 @@ unit.face XYZ =
 
 unit.can_move Src Dst =
 | less $world.fast_at{Dst}.empty: leave 0
+| when $flyer: leave 1 // FIXME: check for roof
 | SZ = Src.2
 | DX,DY,DZ = Dst
 | Height = DZ-SZ
 | HeightAbs = Height.abs
-| Jumps = $jumps
 | BelowDst = DX,DY,DZ-1
-| when HeightAbs << Jumps
-  | leave $world.slope_at{BelowDst}><#@1111 or Jumps>3
+| when HeightAbs < 4: leave $world.slope_at{BelowDst}><#@1111
 | BelowDstTile = $world.fast_at{BelowDst}
-| when BelowDstTile.stairs: leave HeightAbs << (max 4 Jumps)
+| when BelowDstTile.stairs: leave HeightAbs << 4
 | SX = Src.0
 | SY = Src.1
 | BelowSrc = SX,SY,SZ-1
 | BelowSrcTile = $world.fast_at{BelowSrc}
-| when BelowSrcTile.stairs and Height<0: leave HeightAbs << (max 4 Jumps)
+| when BelowSrcTile.stairs and Height<0: leave HeightAbs << 4
 | 0
 
 

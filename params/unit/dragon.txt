@@ -3,6 +3,7 @@ level: 4
 health: 6
 attack: 4
 defense: 0
+flyer: 1
 moves:
   | 0 0 1 0 0
   | 0 0 1 0 0
