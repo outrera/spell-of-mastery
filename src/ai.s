@@ -112,7 +112,7 @@ ai.attack Units =
         | Map.X.Y <= NextCost
         | push [Node M.xyz NextCost] Stack
   | EndTime = get_gui{}.ticks{}
-  | say EndTime-StartTime
+  //| say EndTime-StartTime
   | when Targets.size
     | Target = Targets{[Map.(?xyz.0).(?xyz.1) ?]}.sort{?0 < ??0}.0.1
     | XYZ = Target.xyz

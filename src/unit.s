@@ -228,19 +228,17 @@ unit.list_moves XYZ =
 | O = Ms.size/2
 | StackSrc = []
 | StackDst = []
-| XY = O,O
 | for N [[O O-1] [O+1 O] [O O+1] [O-1 O]]:
   | X,Y = N
   | Ys = Ms.X
   | when Ys.Y
     | Ys.Y <= 0
-    | push XY StackSrc 
+    | push XYZ StackSrc 
     | push N StackDst
 | till StackDst.end
-  | SX,SY = pop StackSrc
+  | Src = pop StackSrc
   | DX,DY = pop StackDst
-  | Src = XYZ + [SX-O SY-O 0]
-  | Dst = XYZ + [DX-O DY-O 0]
+  | Dst = [XYZ.0+DX-O XYZ.1+DY-O Src.2]
   | Move = 0
   | !Dst.2 - 1
   | while $world.fast_at{Dst}.empty: !Dst.2 - 1
@@ -261,13 +259,12 @@ unit.list_moves XYZ =
     | Blocked <= 1
   | less Blocked
     | Move <= move move Src Dst
-    | XY = DX,DY
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
       | X,Y = N
       | Ys = Ms.X
       | when Ys.Y
         | Ys.Y <= 0
-        | push XY StackSrc
+        | push Dst StackSrc
         | push N StackDst
   | when Move: push Move Moves
 | Moves.list
