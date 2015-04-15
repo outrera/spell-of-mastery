@@ -149,10 +149,10 @@ unit.face XYZ =
 
 
 world.can_move Src Dst =
+| when Dst.2 < 1: leave 0
 | less $fast_at{Src}.empty and $fast_at{Dst}.empty: leave 0
 | SZ = Src.2
 | DX,DY,DZ = Dst
-| when DZ < 1: leave 0
 | Height = DZ-SZ
 | HeightAbs = Height.abs
 | BelowDst = DX,DY,DZ-1
@@ -167,11 +167,12 @@ world.can_move Src Dst =
 | 0
 
 MoveMapDirMap =
-| T = dup 10: dup 10: dup 10: 0
+| T = dup 4: dup 4: dup 10: 0
 | I = 0
-| for Z [-1 0 1]: for X,Y [[1 0] [-1 0] [0 1] [0 -1]]
-  | T.(X+1).(Y+1).(Z+1) <= I
-  | !I+1
+| for Z [-4 -3 -2 -1 0 1 2 3 4]:
+  | for X,Y [[1 0] [-1 0] [0 1] [0 -1]]
+    | T.(X+1).(Y+1).(Z+4) <= I
+    | !I+1
 | T
 
 world.update_move_map P =
@@ -181,18 +182,19 @@ world.update_move_map P =
   | SZ = SZ+1
   | Src = SX,SY,SZ
   | M = 0
-  //| when P><[4 4]: say [Src $can_move{[4 4 1] [3 4 1]}]
-  | for Z [-1 0 1]: for X,Y [[1 0] [-1 0] [0 1] [0 -1]]:
-    | when $can_move{Src Src+[X Y Z]}
-      | F = MoveMapDirMap.(X+1).(Y+1).(Z+1) 
-      | M <= M ++ (1</F)
+  | for Z [-4 -3 -2 -1 0 1 2 3 4]:
+    | for X,Y [[1 0] [-1 0] [0 1] [0 -1]]:
+      | when $can_move{Src Src+[X Y Z]}
+        | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
+        | M <= M ++ (1</F)
   | $move_map.set{Src M}
 
 unit.can_move Src Dst =
 | when $flyer: leave $world.fast_at{Dst}.empty // FIXME: check for roof
 | M = $world.move_map.at{Src}
 | X,Y,Z = Dst-Src
-| F = MoveMapDirMap.(X+1).(Y+1).(Z+1) 
+| when Z.abs > 4: leave 0
+| F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
 | M^^(1</F)
 
 /*
