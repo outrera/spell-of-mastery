@@ -1,4 +1,0 @@
-author: `Daimonin team`
-license: `GPL2` 
-height: 4
-xy: 0,8

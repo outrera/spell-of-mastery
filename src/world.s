@@ -95,10 +95,10 @@ world.create W H =
 
 // add movement blocking walls
 world.create_borders =
-| for P points{0    0    $w+2 1   }: times I 15: $push_{P $filler}
-| for P points{0    0    1    $h+2}: times I 15: $push_{P $filler}
-| for P points{0    $h+1 $w+2 1   }: times I 15: $push_{P $filler}
-| for P points{$w+1 0    1    $h+2}: times I 15: $push_{P $filler}
+| for P points{0    0    $w+2 1   }: times I 26: $push_{P $filler}
+| for P points{0    0    1    $h+2}: times I 26: $push_{P $filler}
+| for P points{0    $h+1 $w+2 1   }: times I 26: $push_{P $filler}
+| for P points{$w+1 0    1    $h+2}: times I 26: $push_{P $filler}
 
 world.clear =
 | for U $units: less U.removed: U.free
