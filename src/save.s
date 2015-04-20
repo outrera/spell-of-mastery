@@ -58,11 +58,11 @@ world.load Saved =
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved] = X
   | U = $alloc_unit{Type}
   | U.serial <= Serial
-  | U.move{XYZ}
   | U.xy.init{SXYZ}
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.pick_facing{Facing}
+  | U.move{XYZ}
   | U.owner <= $players.Owner
   | U.moved <= Moved
   | when U.leader: U.owner.leader <= U
