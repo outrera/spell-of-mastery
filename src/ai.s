@@ -1,4 +1,4 @@
-use stack gui
+use stack gui queue
 
 player.active =
 | PID = $id
@@ -91,16 +91,17 @@ ai.attack Units =
 | less Attackers.size: leave 0
 | Div = Turn%Attackers.size
 | Attackers = [@Attackers.drop{Div} @Attackers.take{Div}]
+| Queue = queue 256*256
 | for N,U Attackers.i.flip:
   | UID = U.id
   | X,Y,Z = U.xyz
   | Targets = []
   | StartCost = N*#1000000
   | Map.X.Y <= StartCost
-  | Stack = [[0 U.xyz StartCost]]
+  | Queue.push{[0 U.xyz StartCost]}
   | StartTime = get_gui{}.ticks{}
-  | till Stack.end
-    | Node = pop Stack
+  | till Queue.end
+    | Node = Queue.pop
     | [Prev XYZ Cost] = Node
     | X,Y,Z = XYZ
     | NextCost = Cost+1
@@ -110,7 +111,8 @@ ai.attack Units =
           | less Targets.any{?id >< T.id}: push T Targets
       | case M.xyz X,Y,Z: when NextCost < Map.X.Y:
         | Map.X.Y <= NextCost
-        | push [Node M.xyz NextCost] Stack
+        | Queue.push{[Node M.xyz NextCost]}
+      | when Targets.size: Queue.clear
   | EndTime = get_gui{}.ticks{}
   //| say EndTime-StartTime
   | when Targets.size
