@@ -1,6 +1,3 @@
-Unless specified otherwise, art assets are licensed under CC3-BY-SA license, meaning that assets free and can be used for any purpose, even commercial, if you credit this game (The Spell of Mastery), original authors, and if you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+Each piece of art is licensed under its own license, declared by its accompanying file, together with URL from where it came. Most is licensed under CC-BY-SA or GPL.
 
-More on CC3-BY-SA license at
-https://creativecommons.org/licenses/by-sa/3.0/
-
-For art licensed under different licenses see `./licenses` subfolder
+Required licenses for used artwork are inside of `./licenses` folder
