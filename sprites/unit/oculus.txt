@@ -1,2 +1,5 @@
-author: `Nikita Sadkov`
+author: `Nikita Sadkov`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
 height: 4
+xy: 0,40
+frames: folder
+anims: | idle (idle0 9) (idle1 9) (idle2 9) (idle3 9)
