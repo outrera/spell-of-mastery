@@ -4,6 +4,6 @@ license: `CC3-BY-SA`
 height: 4
 xy: -2,58
 frames: folder
-anims: | idle (idle0 24)
+anims: | idle (idle0 9) (idle1 9) (idle2 9) (idle3 9)
        | move (move1 6) (move2 6) (move3 6) (move4 6)
-       | attack (attack1 12) (attack2 12) (attack3 6) (attack4 6) (attack5 6)
+       | attack (attack1 6) (attack2 6) (attack3 6) (attack4 6) (attack5 6) (attack6 6)
