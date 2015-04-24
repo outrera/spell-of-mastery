@@ -1,6 +1,6 @@
 act: summon
 effect: unit_wraith
 target: pentagram
-icon: wizard
+icon: spell_wraith
 research: 8
 cost: 8

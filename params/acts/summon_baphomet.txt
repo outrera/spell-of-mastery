@@ -1,6 +1,6 @@
 act: summon
 effect: unit_baphomet
 target: pentagram
-icon: wizard
+icon: spell_baphomet
 research: 8
 cost: 8

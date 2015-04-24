@@ -1,6 +1,6 @@
 act: summon
 effect: unit_minotaur
 target: pentagram
-icon: wizard
+icon: spell_minotaur
 research: 8
 cost: 8

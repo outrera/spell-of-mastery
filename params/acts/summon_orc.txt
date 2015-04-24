@@ -1,7 +1,7 @@
 act: summon
 effect: unit_orc
 target: pentagram
-icon: wizard
+icon: spell_orc
 research: 4
 cost: 4
 cost: 4

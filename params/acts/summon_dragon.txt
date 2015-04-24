@@ -1,6 +1,6 @@
 act: summon
 effect: unit_dragon
 target: pentagram
-icon: wizard
+icon: spell_dragon
 research: 16
 cost: 16
