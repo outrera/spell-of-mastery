@@ -83,14 +83,18 @@ act_attack.update A =
 | when A.cycles > 9000 // if target is dying, wait till it is dead
   | when U.world.waiting: leave
   | A.target <= 0
-  | A.cycles <= max 1 U.sprite.speed/2
-  | move_start A
+  | when A.unit.ranged:
+    | A.cycles <= 1
+    | leave
+  | less A.unit.ranged: 
+    | A.cycles <= max 1 U.sprite.speed/2
+    | move_start A
   | leave
 | when A.data > 0: move_update A
 | when A.cycles >< 1 and A.data < 2:
   | when A.data >< 1:
     | leave
-    | less A.unit.ranger: leave
+    | less A.unit.ranged: leave
     | move_finish A
     | A.xyz.init{A.fromXYZ}
     | A.cycles <= max 1 A.unit.sprite.speed*2/3

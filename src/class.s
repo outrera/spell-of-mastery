@@ -2,7 +2,7 @@ use gfx util param
 
 type class{bank class_name Main static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/[]
-           starts/0 flyer/0 mountaineer/0 ranger/0 leader/Leader
+           starts/0 flyer/0 mountaineer/0 ranged/0 leader/Leader
            health/0 attack/0 defense/0 level/0
            acts/[] sounds/[]}
   type/"[Bank]_[Class_name]"
@@ -17,7 +17,7 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
   starts/Starts // non-zero if unit starts active
   flyer/Flyer
   mountaineer/Mountaineer
-  ranger/Ranger
+  ranged/Ranged
   leader/Leader
   health/Health
   attack/Attack
