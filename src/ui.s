@@ -277,6 +277,9 @@ main.run =
     | Icon.number <= if ResearchRemain > 0 then ResearchRemain else No
     | Icon.research <= Unit.owner.researching >< Act.type
                        and ResearchRemain > 0
+    | Icon.frame <= 0
+    | Icon.w <= Icon.fg.w
+    | Icon.h <= Icon.fg.h
     | ActIcons.I.show <= Active
   | UnitPanel.set_unit{Unit}
 | ModeIcon = No

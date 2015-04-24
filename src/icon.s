@@ -42,6 +42,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    disabled
    research
    number/No
+   frame/1
    data/Data
    on_click/Click
    //popup/icon_popup{}
@@ -49,7 +50,7 @@ icon.draw G P =
 | less $fg: leave
 | less IconFrame: IconFrame <= skin{'icon_frame'}
 | XY = if $pressed then P + [1 1] else P
-| G.blit{XY IconFrame}
+| when $frame: G.blit{XY IconFrame}
 | G.blit{XY+[2 2] $fg}
 | when $picked: G.rect{#0000FF 0 P.0-1 P.1-1 $w+2 $h+2}
 | when $disabled:
