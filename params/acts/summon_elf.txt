@@ -1,6 +1,6 @@
 act: summon
 effect: unit_elf
 target: pentagram
-icon: spell_elf
+icon: unit_elf
 research: 4
 cost: 4

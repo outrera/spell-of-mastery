@@ -1,6 +1,6 @@
 act: summon
-effect: unit_dragon
+effect: unit_golem
 target: pentagram
-icon: spell_golem
+icon: unit_golem
 research: 16
 cost: 16

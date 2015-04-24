@@ -1,6 +1,6 @@
 act: summon
-effect: unit_baphomet
+effect: unit_hydra
 target: pentagram
-icon: unit_baphomet
+icon: unit_hydra
 research: 8
 cost: 8

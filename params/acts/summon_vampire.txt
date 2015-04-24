@@ -1,6 +1,6 @@
 act: summon
 effect: unit_vampire
 target: pentagram
-icon: spell_vampire
+icon: unit_vampire
 research: 8
 cost: 8

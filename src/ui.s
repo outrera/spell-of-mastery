@@ -50,9 +50,8 @@ GameMenu <=
 
 
 type unit_panel.widget{main}
-     w/0 h/0 unit icon_bg laurels moved
+     w/0 h/0 unit laurels moved
      power_icon health_icon attack_icon defense_icon
-| $icon_bg <= $main.img{unit_icon_bg}
 | $laurels <= $main.img{ui_laurels}
 | $moved <= $main.img{ui_unit_moved}
 | $power_icon <= $main.img{stats_power}
@@ -90,9 +89,8 @@ info_line.render =
 unit_panel.draw G P =
 | less $unit: leave
 | ClassName = $unit.class_name
-| IconXY = P+[12 4]
-| Icon = $unit.main.sprites."unit_icon_[ClassName]"
-//| G.blit{IconXY $icon_bg}
+| IconXY = P+[18 16]
+| Icon = $unit.main.sprites."icons_unit_[ClassName]"
 | when got Icon: G.blit{IconXY Icon.frames.0}
 | G.blit{P+[8 8] $laurels}
 | when $unit.moved >< $unit.world.turn: G.blit{P+[34 54] $moved}

@@ -1,6 +1,6 @@
 act: summon
 effect: unit_observer
 target: pentagram
-icon: spell_observer
+icon: unit_observer
 research: 16
 cost: 16

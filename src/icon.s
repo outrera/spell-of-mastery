@@ -48,20 +48,22 @@ type icon.widget{fg data/0 click/(Icon=>)}
    //popup/icon_popup{}
 icon.draw G P =
 | less $fg: leave
-| less IconFrame: IconFrame <= skin{'icon_frame'}
 | XY = if $pressed then P + [1 1] else P
-| when $frame: G.blit{XY IconFrame}
-| G.blit{XY+[2 2] $fg}
-| when $picked: G.rect{#0000FF 0 P.0-1 P.1-1 $w+2 $h+2}
+| when $frame
+  | less IconFrame: IconFrame <= skin{'icon_frame'}
+  | G.blit{XY IconFrame}
+  | !XY + [2 2]
+| G.blit{XY $fg}
+| when $picked: G.rect{#0000FF 0 P.0-2 P.1-2 $w+4 $h+4}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
-  |  G.blit{XY+[2 2] DisabledIconOverlay}
+  |  G.blit{XY DisabledIconOverlay}
 | when $research:
   | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
-  |  G.blit{XY+[28 20] ResearchIconOverlay}
+  |  G.blit{XY+[26 18] ResearchIconOverlay}
 | when got $number
   | Font = font small
-  | Font.draw{G XY+[2 2] "[$number]"}
+  | Font.draw{G XY "[$number]"}
 icon.input In =
 | when $disabled: leave
 | case In

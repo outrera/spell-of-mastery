@@ -1,7 +1,6 @@
 act: summon
 effect: unit_oculus
 target: pentagram
-icon: spell_oculus
+icon: unit_oculus
 research: 0
-cost: 2
 cost: 2
