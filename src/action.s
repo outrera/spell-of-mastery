@@ -59,14 +59,14 @@ act_move.update A = move_update A
 
 act_move.finish A = move_finish A
 
-type act_attack.act_class class_name/move anim/attack
+type act_attack.act_class class_name/attack anim/attack
 
 act_attack.valid A =
 | T = A.target
 | when T.is_list or T.removed or T.empty or not T.health: leave 0
 | U = A.unit
 //| when U.skirmisher: leave (T.xyz - U.xyz).all{?.abs<<1}
-| U.can_move{U.xyz T.xyz}
+| if U.ranged then 1 else U.can_move{U.xyz T.xyz}
 
 act_attack.init A =
 | A.data <= 0

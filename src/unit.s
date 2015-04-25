@@ -205,7 +205,8 @@ unit.list_moves XYZ =
 | less $moves.size: leave []
 | Moves = []
 | I = 0
-| Ms = $moves.deep_copy
+| OMs = $moves
+| Ms = OMs.deep_copy
 | O = Ms.size/2
 | StackSrc = []
 | StackDst = []
@@ -235,8 +236,9 @@ unit.list_moves XYZ =
           then | when and it.moves.size
                       and it.can_move{Dst Src}:
                  | Move <= move swap Src Dst
-          else when it.hits < it.health and it.defense < $attack:
-               | Move <= move attack Src Dst
+          else | when it.hits < it.health and it.defense < $attack:
+                 | when OMs.DX.DY >< 1
+                   | Move <= move attack Src Dst
     | Blocked <= 1
   | less Blocked
     | Move <= move move Src Dst

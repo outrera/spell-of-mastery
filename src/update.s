@@ -65,6 +65,10 @@ unit.update =
     | leave 1
   | $action.finish
   | Path = $next_action.path
+  | when $ranged and $next_action.class_name >< attack:
+    | Path^uncons{path}{?free}
+    | Path <= 0
+    | $next_action.path <= 0
   | when Path
     | swap $ordered $next_action
     | $ordered.path <= Path.path
