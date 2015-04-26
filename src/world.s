@@ -316,7 +316,7 @@ world.updPilarGfxes P =
 | if PrevGs.size >< Gs.size then PrevGs.init{Gs}
   else if PrevGs.size > Gs.size
     then PrevGs.init{[@Gs @(dup PrevGs.size-Gs.size 0)]}
-  else $gfxes.Y.X <= Gs //FIXME: use `init` method instead
+  else $gfxes.Y.X <= Gs
 | for U $column_units_at{X Y}: U.environment_updated
 
 world.updElev P =

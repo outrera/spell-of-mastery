@@ -1,19 +1,5 @@
 use gfx util
 
-transparentize Base Alpha =
-| Empty = 255
-| as R Base.copy
-  | for [X Y] points{0 0 64 64}: when X^^1 >< Y^^1: R.set{X Y Empty}
-
-DummyGfx = gfx 1 1
-
-genTransition Mask From To =
-| Empty = 255
-| as R To.copy
-  | for [X Y] points{0 0 64 32}
-    | less Mask.get{X Y} >< Empty
-      | R.set{X Y From.get{X Y}}
-
 type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
           match/same stairs/0}
@@ -38,6 +24,19 @@ type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
      stairs/Stairs
 
 TrnsCache = t
+
+
+transparentize Base Alpha =
+| Empty = 255
+| as R Base.copy
+  | for [X Y] points{0 0 64 64}: when X^^1 >< Y^^1: R.set{X Y Empty}
+
+genTransition Mask From To =
+| Empty = 255
+| as R To.copy
+  | for [X Y] points{0 0 64 32}
+    | less Mask.get{X Y} >< Empty
+      | R.set{X Y From.get{X Y}}
 
 tile.render P Z Below Above Seed =
 | BE = Below.empty
