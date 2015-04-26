@@ -156,7 +156,8 @@ world.can_move Src Dst =
 | Height = DZ-SZ
 | HeightAbs = Height.abs
 | BelowDst = DX,DY,DZ-1
-| when HeightAbs < 4: leave $slope_at{BelowDst}><#@1111
+| when HeightAbs < 4: leave: $slope_at{BelowDst}><#@1111
+                             or $fast_at{BelowDst}.stairs
 | BelowDstTile = $fast_at{BelowDst}
 | when BelowDstTile.stairs: leave HeightAbs << 4
 | SX = Src.0

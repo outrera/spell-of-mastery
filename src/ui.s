@@ -167,9 +167,9 @@ main.run =
 | Ingame = No
 | ScenarioMenu = No
 | MainMenu = No
-| PauseSpacer = hidden: spacer ScreenW ScreenH
-| pause = | PauseSpacer.show <= 1; View.pause
-| unpause = | PauseSpacer.show <= 0; View.unpause
+| InputBlocker = hidden: spacer ScreenW ScreenH
+| pause = | InputBlocker.show <= 1; View.pause
+| unpause = | InputBlocker.show <= 0; View.unpause
 | InfoText = info_line Me
 | WorldProperties = No
 | parse_int_normalized Default Text =
@@ -198,6 +198,7 @@ main.run =
 | $world.on_player_change <= Player =>
   | PlayerWidget.picked <= Player.id
 | $world.on_update <= =>
+  | when $world.player.human: InputBlocker.show <= 0
   | when got $world.params.winner
     | pause
     | sound_play: sound_load "[$data]/music/victory.ogg" music/1
@@ -313,14 +314,16 @@ main.run =
 | GearsIcon = hidden: button 'GEARS' skin/gears: =>
   | pause
   | Tabs.pick{game_menu}
-| HourglassIcon = hidden: button 'HOURGLASS' skin/hourglass: => $world.end_turn
+| HourglassIcon = hidden: button 'HOURGLASS' skin/hourglass: =>
+  | InputBlocker.show <= 1
+  | $world.end_turn
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
   |  0   0| ViewUI
   |  ScreenW-54 4| EditorIcons
   |  ScreenW-111 0| GearsIcon
   |  ScreenW-73 110| HourglassIcon
-  |  0   0| PauseSpacer
+  |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
   |  0   0| MessageBox
