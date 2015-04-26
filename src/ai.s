@@ -149,13 +149,18 @@ ai.attack Units =
 
 unit.list_attack_moves XYZ =
 | less $attack: leave []
+| Map = $moves
+| $moves <= Map.deep_copy
+| for Xs $moves: for I Xs.size: when Xs.I >< 2: Xs.I <= 1
 | Ms = $list_moves{XYZ}
-| O =  $moves.size/2
+| $moves <= Map
+| O =  Map.size/2
 | OO = [O O 0]
 | Map = $moves
 | Ms.keep{M => 
           | X,Y,Z = OO+M.xyz-XYZ
-          | Map.Y.X >< 1}
+          | V = Map.Y.X
+          | V >< 1 or V >< 2}
 
 ai.update =
 | Turn = $world.turn

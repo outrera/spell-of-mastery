@@ -220,6 +220,7 @@ unit.list_moves XYZ =
 | till StackDst.end
   | Src = pop StackSrc
   | DX,DY = pop StackDst
+  | V = OMs.DY.DX
   | Dst = [XYZ.0+DX-O XYZ.1+DY-O Src.2]
   | Move = 0
   | !Dst.2 - 1
@@ -237,11 +238,11 @@ unit.list_moves XYZ =
                       and it.can_move{Dst Src}:
                  | Move <= move swap Src Dst
           else | when it.hits < it.health and it.defense < $attack:
-                 | when OMs.DY.DX >< 1
+                 | when V < 3
                    | Move <= move attack Src Dst
     | Blocked <= 1
   | less Blocked
-    | Move <= move move Src Dst
+    | less V><2: Move <= move move Src Dst
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
       | X,Y = N
       | Xs = Ms.Y
