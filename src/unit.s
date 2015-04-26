@@ -212,9 +212,9 @@ unit.list_moves XYZ =
 | StackDst = []
 | for N [[O O-1] [O+1 O] [O O+1] [O-1 O]]:
   | X,Y = N
-  | Ys = Ms.X
-  | when Ys.Y
-    | Ys.Y <= 0
+  | Xs = Ms.Y
+  | when Xs.X
+    | Xs.X <= 0
     | push XYZ StackSrc 
     | push N StackDst
 | till StackDst.end
@@ -237,16 +237,16 @@ unit.list_moves XYZ =
                       and it.can_move{Dst Src}:
                  | Move <= move swap Src Dst
           else | when it.hits < it.health and it.defense < $attack:
-                 | when OMs.DX.DY >< 1
+                 | when OMs.DY.DX >< 1
                    | Move <= move attack Src Dst
     | Blocked <= 1
   | less Blocked
     | Move <= move move Src Dst
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
       | X,Y = N
-      | Ys = Ms.X
-      | when Ys.Y
-        | Ys.Y <= 0
+      | Xs = Ms.Y
+      | when Xs.X
+        | Xs.X <= 0
         | push Dst StackSrc
         | push N StackDst
   | when Move: push Move Moves

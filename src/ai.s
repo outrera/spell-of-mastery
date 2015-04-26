@@ -147,6 +147,16 @@ ai.attack Units =
              | leave 1
 | 0
 
+unit.list_attack_moves XYZ =
+| less $attack: leave []
+| Ms = $list_moves{XYZ}
+| O =  $moves.size/2
+| OO = [O O 0]
+| Map = $moves
+| Ms.keep{M => 
+          | X,Y,Z = OO+M.xyz-XYZ
+          | Map.Y.X >< 1}
+
 ai.update =
 | Turn = $world.turn
 | Player = $player
@@ -163,20 +173,20 @@ ai.update =
     | $marked_order{U A}
     | leave
 | for Xs HarmMap: for I Xs.size: Xs.I <= 0
-| for U Units.keep{?attack}{U=>U.list_moves{U.xyz}}.join: 
+| for U Units{U=>U.list_attack_moves{U.xyz}}.join:
   | XYZ = U.xyz
   | !HarmMap.(XYZ.0).(XYZ.1) + #100
 | isEnemy U = U.owner.id <> PID and U.health and not U.removed
 | Es = $world.active.list.keep{&isEnemy}
-| Ts = Es{U=>U.list_moves{U.xyz}{[U ?]}}.join
+| Ts = Es{U=>U.list_attack_moves{U.xyz}{[U ?]}}.join
 | for U,T Ts
   | XYZ = T.xyz
   | X,Y,Z = XYZ
   | O = U.owner
   | Mobile = O.moves + O.power > 0
-  | if U.attack and Mobile
-    then !HarmMap.X.Y + #1
-    else !HarmMap.X.Y + #1000000
+  | when Mobile:
+    | if U.ranged then HarmMap.X.Y <= #1
+      else !HarmMap.X.Y + #1
 | Ts <= Ts{?1}
 | for U Units
   | X,Y,Z = U.xyz
@@ -186,7 +196,9 @@ ai.update =
     | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
     | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
     | when SafeMoves.size
-      | $marked_order{U SafeMoves.rand} //avoid harm
+      | M = SafeMoves.find{M => U.list_moves{M.xyz}.keep{?type><attack}.size}
+      | less got M: M <= SafeMoves.rand
+      | $marked_order{U M} //avoid harm
       | leave
 | for U Units: when U.attack: //see if we can threat some enemy unit
   | X,Y,Z = U.xyz
