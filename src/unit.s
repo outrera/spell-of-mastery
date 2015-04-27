@@ -224,18 +224,14 @@ unit.list_moves XYZ =
   | V = OMs.DY.DX
   | Dst = [XYZ.0+DX-O XYZ.1+DY-O Src.2]
   | Move = 0
-  | NotEmpty = not $world.fast_at{Dst}.empty
-  | when NotEmpty:
+  | less $world.fast_at{Dst}.empty:
     | I = 0
-    | till I><6 or $world.fast_at{Dst}.empty:
-      | !Dst.2 + 1
+    | till I><4 or $world.fast_at{Dst}.empty:
+      | !Dst.2 + $world.fast_at{Dst}.height
       | !I+1
   | !Dst.2 - 1
   | while $world.fast_at{Dst}.empty: !Dst.2 - 1
   | !Dst.2 + 1
-  | less $can_move{Src Dst}
-    | AboveDst = Dst + [0 0 $world.fast_at{Dst}.height]
-    | when $can_move{Src AboveDst}: Dst <= AboveDst
   | Blocked = 0
   | less $world.no_block_at{Dst} and $can_move{Src Dst}:
     | when got!it $world.block_at{Dst}:
