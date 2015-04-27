@@ -1,8 +1,7 @@
 ZMapHeight = 64
 type zmap{Size} size/Size data/(dup Size: dup Size: dup ZMapHeight 0)
 
-zmap.clear Value =
-| for Ys $data: for Zs Ys: for I Zs.size: Zs.I <= Value
+zmap.clear Value = for Ys $data: for Zs Ys: Zs.clear{Value}
 
 // gets cube at P in the form of [Value OriginXYZ EdgeLength]
 zmap.get XYZ =
@@ -28,6 +27,12 @@ zmap.setPilar X Y Ys =
     | !Z+1
     | !Count-1
 
-zmap.height X Y = ZMapHeight - $getPilar{X Y}.last.0
+zmap.height X Y =
+| Vs = $data.X.Y
+| Z = ZMapHeight
+| while Z
+  | !Z-1
+  | when Vs.Z: leave Z+1
+| leave 0
 
 export zmap

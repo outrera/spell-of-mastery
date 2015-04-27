@@ -55,6 +55,8 @@ type world{main W H}
 | $init{W H}
 
 world.init W H =
+//| W <= 128
+//| H <= 128
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -78,7 +80,11 @@ world.init W H =
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $alloc_unit{unit_nil}
+//| StartTime = clock
 | $create{W H}
+//| EndTime = clock
+//| say EndTime-StartTime
+//| halt
 
 world.create W H =
 | $w <= W
@@ -86,19 +92,19 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
-| for P points{1 1 $w $h}: $push_{P $filler}
-| for P points{1 1 $w $h}: $updPilarGfxes{P}
-| for P points{1 1 $w $h}: $update_move_map{P}
+| for Y $h: when Y: for X $w: when X: $push_{X Y $filler}
+| for Y $h: when Y: for X $w: when X: $updPilarGfxes{X,Y}
+| for Y $h: when Y: for X $w: when X: $update_move_map{X,Y}
 | !$w-1
 | !$h-1
 | $create_borders
 
 // add movement blocking walls
 world.create_borders =
-| for P points{0    0    $w+2 1   }: times I 26: $push_{P $filler}
-| for P points{0    0    1    $h+2}: times I 26: $push_{P $filler}
-| for P points{0    $h+1 $w+2 1   }: times I 26: $push_{P $filler}
-| for P points{$w+1 0    1    $h+2}: times I 26: $push_{P $filler}
+| for P points{0    0    $w+2 1   }: times I 26: $push_{P.0 P.1 $filler}
+| for P points{0    0    1    $h+2}: times I 26: $push_{P.0 P.1 $filler}
+| for P points{0    $h+1 $w+2 1   }: times I 26: $push_{P.0 P.1 $filler}
+| for P points{$w+1 0    1    $h+2}: times I 26: $push_{P.0 P.1 $filler}
 
 world.clear =
 | for U $units: less U.removed: U.free
@@ -291,25 +297,23 @@ world.updPilarGfxes P =
 | X,Y = P
 | when X < 0 or Y < 0: leave 0
 | Seed = $seed.Y.X
-| Cs = $getPilar{X Y}
 | Gs = []
 | Z = 0
+| Column = $tilemap.data.X.Y
 | Below = $tid_map.0
-| for [Count TileId] Cs
-  | less TileId //end?
-    | Below <= $tid_map.0
-    | !Z + Count
-    | _goto for_break
-  | C = $tid_map.|if TileId < 0 then $get{X Y Z-TileId} else TileId
-  | if TileId < 0 or C.invisible
-    then | when C.invisible: push Count Gs
-         | less TileId < 0: Below <= C
-         | !Z + Count
-    else times I Count
-         | Above = if I+1 < Count then Below else $tid_map.($get{X Y Z+1})
-         | push C.render{P Z Below Above Seed} Gs
-         | Below <= C
-         | !Z + 1
+| C = $tid_map.(Column.0)
+| while C.id
+  | NextZ = Z + C.height
+  | TileId = Column.NextZ
+  | when TileId < 0: TileId <= Column.(NextZ-TileId)
+  | Above = $tid_map.TileId
+  | if C.invisible
+    then push 1 Gs
+    else // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
+         push C.render{P NextZ-1 Below Above Seed} Gs
+  | Below <= C
+  | C <= Above
+  | Z <= NextZ
 | _label for_break
 | Gs = Gs.flip
 | PrevGs = $gfxes.Y.X
@@ -326,7 +330,7 @@ world.updElev P =
 
 world.height X Y = $tilemap.height{X Y}
 
-world.push_ X,Y Tile =
+world.push_ X Y Tile =
 | Z = $height{X Y}
 | H = Tile.height-1
 | times I H: $set_{X Y Z+I I-H} // push padding
@@ -335,7 +339,7 @@ world.push_ X,Y Tile =
 
 // push Tile on top of pilar at X,Y
 world.push XY Tile =
-| $push_{XY Tile}
+| $push_{XY.0 XY.1 Tile}
 | $updElev{XY}
 
 world.pop_ X,Y =

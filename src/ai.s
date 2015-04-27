@@ -1,4 +1,4 @@
-use stack gui queue
+use gui queue
 
 player.active =
 | PID = $id
