@@ -13,19 +13,12 @@ zmap.set X,Y,Z V =
 
 zmap.at X,Y,Z = $data.X.Y.Z
 
-// get column of voxels at X,Y in the form of [@_[Count Id]@_]
-zmap.getPilar X Y =
-| Xs = ($data.X.Y){[1 ?]}
-| on Xs | @r$_ [@H A,V B,&V @T] => [@H @[A+B,V @T]^r]
+zmap.getPilar X Y = $data.X.Y.take{$height{X Y}}
 
-zmap.setPilar X Y Ys =
+zmap.setPilar X Y Zs =
 | Vs = $data.X.Y
-| Z = 0
-| for Count,V Ys
-  | while Count
-    | Vs.Z <= V
-    | !Z+1
-    | !Count-1
+| Vs.clear{0}
+| for I Zs.size: Vs.I <= Zs.I
 
 zmap.height X Y =
 | Vs = $data.X.Y
