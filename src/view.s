@@ -251,7 +251,7 @@ view.update_pick =
 
 view.update_brush = 
 | X,Y,Z = $cursor
-| Z <= $world.fix_z{$cursor}
+| Z <= $fix_z{$cursor}
 | when $mice_click><left: case $brush
   [obj Bank,Type]
     | Mirror = $keys.m >< 1
@@ -279,8 +279,8 @@ view.update_brush =
       | less Tile.empty
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
       | $world.set{X Y Z $main.tiles.Type}
-      | when Tile.empty: leave
-      | Z <= $world.fix_z{X,Y,Z}
+      | when Tile.empty and (Tile.id><0 or $keys.e<>1): leave
+      | Z <= $fix_z{X,Y,Z}
 | when $mice_click><right: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
   [tile Type]
@@ -291,7 +291,7 @@ view.update_brush =
       | less Tile.height: leave
       | $world.clear_tile{X,Y,Z-1}
       | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
-      | Z <= $world.fix_z{X,Y,Z}
+      | Z <= $fix_z{X,Y,Z}
 
 view.update_play =
 | Player = $world.player
@@ -356,7 +356,8 @@ view.update =
     Else | bad "bad view mode ([$mode])"
 | 1
 
-view.fix_z = $cursor.2 <= $world.fix_z{$cursor}
+view.fix_z XYZ =
+| if $keys.e><1 then $world.fix_z_void{XYZ} else $world.fix_z{XYZ}
 
 view.input In =
 | case In
@@ -365,13 +366,13 @@ view.input In =
     | $mice_xy.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
     | $cursor.init{[CX CY $cursor.2]}
-    | $fix_z
+    | $cursor.2 <= $fix_z{$cursor}
   [mice left State XY]
     | $mice_click <= if State then \left else 0
-    | if State then $anchor.init{$cursor} else $fix_z
+    | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
   [mice right State XY]
     | $mice_click <= if State then \right else 0
-    | if State then $anchor.init{$cursor} else $fix_z
+    | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
   [key Name S] | $keys.Name <= S
 
 view.pause = $paused <= 1

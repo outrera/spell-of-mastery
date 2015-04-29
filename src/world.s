@@ -180,6 +180,15 @@ world.fix_z XYZ =
 | !Z+1
 | Z
 
+world.fix_z_void XYZ =
+| X,Y,Z = XYZ
+| while $fast_at{X,Y,Z}.id: !Z+1
+| !Z-1
+| till $fast_at{X,Y,Z}.id: !Z-1
+| !Z+1
+| Z
+
+
 world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
@@ -307,7 +316,7 @@ world.updPilarGfxes P =
   | when TileId < 0: TileId <= Column.(NextZ-TileId)
   | Above = $tid_map.TileId
   | if C.invisible
-    then push 1 Gs
+    then push C.height Gs
     else // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
          push C.render{P NextZ-1 Below Above Seed} Gs
   | Below <= C
