@@ -236,21 +236,22 @@ world.update_pick Units =
 | for U $picked^uncons{picked}: U.picked <= 0
 | $picked <= Units^cons{picked}
 
-view.select_unit X Y Z = 
+view.select_unit XYZ = 
 | Picked = []
-| Us = $world.units_at{X,Y,Z}.skip{?aux}
+| Us = $world.units_at{XYZ}.skip{?aux}
 | when Us.size
   | !$pick_count+1
   | Picked <= [Us.($pick_count%Us.size)]
 | $world.update_pick{Picked}
 
-view.update_pick X Y Z = 
-| when $mice_click >< left
-  | $select_unit{X Y Z}
+view.update_pick =
+| when $mice_click >< left: $select_unit{$cursor}
 | $mice_click <= 0
 | $main.update
 
-view.update_brush X Y Z = 
+view.update_brush = 
+| X,Y,Z = $cursor
+| Z <= $world.fix_z{$cursor}
 | when $mice_click><left: case $brush
   [obj Bank,Type]
     | Mirror = $keys.m >< 1
@@ -273,34 +274,34 @@ view.update_brush X Y Z =
       | U.move{X,Y,Z}
   [tile Type]
     | while 1
-      | Z <= $world.fix_z{X,Y,Z}
       | less Z << $anchor.2 and $world.fast_at{X,Y,Z}.empty: leave
       | Tile = $main.tiles.Type
       | less Tile.empty
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
       | $world.set{X Y Z $main.tiles.Type}
       | when Tile.empty: leave
+      | Z <= $world.fix_z{X,Y,Z}
 | when $mice_click><right: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
   [tile Type]
     | while 1
-      | Z <= $world.fix_z{X,Y,Z}
       | less Z >> $anchor.2 and Z > 1: leave
       | less Z > 1: leave
       | Tile = $world.at{X,Y,Z-1}
       | less Tile.height: leave
       | $world.clear_tile{X,Y,Z-1}
       | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
+      | Z <= $world.fix_z{X,Y,Z}
 
-view.update_play X Y Z =
+view.update_play =
 | Player = $world.player
 | if not $world.picked.idle or $world.waiting then
   else if not Player.human then Player.ai.update
   else if Player.moves << 0 then $world.end_turn
   else
   | case $mice_click
-    left | $select_unit{X Y Z}
-    right | when $world.picked: $world.picked.guess_order_at{X,Y,Z}
+    left | $select_unit{$cursor}
+    right | when $world.picked: $world.picked.guess_order_at{$cursor}
   | $mice_click <= 0
   | Picked = $world.picked
   | less Picked: Picked <= $world.nil
@@ -345,11 +346,11 @@ view.update =
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
 | Mirror = $keys.m >< 1
-| $world.update_cursor{[X Y Z] Brush Mirror}
+| $world.update_cursor{$cursor Brush Mirror}
 | case $mode
-    play | $update_play{X Y Z}
+    play | $update_play
          | $main.update
-    brush | $update_brush{X Y $world.height{X Y}}
+    brush | $update_brush
     pick | $update_pick{X Y Z}
          | $main.update //ensure deleted units get updated
     Else | bad "bad view mode ([$mode])"
