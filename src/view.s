@@ -13,17 +13,13 @@ type view.widget{M W H}
   h/H
   frame
   paused
-  cursor
   keys/(t)
   view_origin/[0 0]
   blit_origin/[W/2 -170]
-  mice_left
-  mice_right
-  mice_right_xy/[0 0]
-  mice_left_xy/[0 0]
+  mice_click
   mice_xy/[0 0]
-  mice_z
-  cell_xyz/[2 2 2]
+  cursor/[2 2 2]
+  anchor/[2 2 2]
   brush/[0 0]
   mode/brush
   pick_count // used to pick different units from the same cell
@@ -120,7 +116,7 @@ view.render_iso =
 | YUnit = YUnit
 | ZUnit = ZUnit
 | FB = $fb
-| Z = if $mice_left or $mice_right then $mice_z else $cell_xyz.2
+| Z = if $mice_click then $anchor.2 else $cursor.2
 | BlitOrigin = [$w/2 170]
 | TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
@@ -137,7 +133,7 @@ view.render_iso =
     | when 0<X and X<<WW: // FIXME: moved this out of the loop
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
-      | render_pilar Wr X Y BX BY Heap $cell_xyz
+      | render_pilar Wr X Y BX BY Heap $cursor
       //| Key = (X+Y)*WW*WH+X
       //| Heap.push{Key [Gs.0 BX BY 0]}
 //| Font = font small
@@ -162,7 +158,7 @@ Indicators = 0
 
 view.draw_indicators =
 | less Indicators: Indicators <= $main.img{ui_indicators}
-| X,Y,Z = $cell_xyz
+| X,Y,Z = $cursor
 | IP = [($w-Indicators.w)/2 0]
 | $fb.blit{IP Indicators}
 | Font = font medium
@@ -249,15 +245,13 @@ view.select_unit X Y Z =
 | $world.update_pick{Picked}
 
 view.update_pick X Y Z = 
-| when $mice_left
+| when $mice_click >< left
   | $select_unit{X Y Z}
-  | $mice_left <= 0
-| when $mice_right
-  | $mice_right <= 0
+| $mice_click <= 0
 | $main.update
 
 view.update_brush X Y Z = 
-| when $mice_left and Z << $mice_z: case $brush
+| when $mice_click><left and Z << $anchor.2: case $brush
   [obj Bank,Type]
     | Mirror = $keys.m >< 1
     | ClassName = if $keys.r >< 1
@@ -278,11 +272,12 @@ view.update_brush X Y Z =
       | when $keys.t >< 1: U.facing <= 3.rand
       | U.move{X,Y,Z}
   [tile Type]
-    | Tile = $main.tiles.Type
-    | less Tile.empty
-      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
-    | $world.push{X,Y $main.tiles.Type}
-| when $mice_right and Z >> $mice_z: case $brush
+    | while $world.height{X Y} << $anchor.2
+      | Tile = $main.tiles.Type
+      | less Tile.empty
+        | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+      | $world.push{X,Y $main.tiles.Type}
+| when $mice_click><right and Z >> $anchor.2: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
   [tile Type]
   | when Z > 1:
@@ -296,12 +291,10 @@ view.update_play X Y Z =
   else if not Player.human then Player.ai.update
   else if Player.moves << 0 then $world.end_turn
   else
-  | when $mice_left
-    | $select_unit{X Y Z}
-    | $mice_left <= 0
-  | when $mice_right
-    | when $world.picked: $world.picked.guess_order_at{X,Y,Z}
-    | $mice_right <= 0
+  | case $mice_click
+    left | $select_unit{X Y Z}
+    right | when $world.picked: $world.picked.guess_order_at{X,Y,Z}
+  | $mice_click <= 0
   | Picked = $world.picked
   | less Picked: Picked <= $world.nil
   | $on_unit_pick{}{Picked}
@@ -341,7 +334,7 @@ view.update =
 | case $keys.down 1: $move{$view_origin+[1 1]}
 | case $keys.left 1: $move{$view_origin-[1 -1]}
 | case $keys.right 1: $move{$view_origin+[1 -1]}
-| X,Y,Z = $cell_xyz
+| X,Y,Z = $cursor
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
 | Mirror = $keys.m >< 1
@@ -355,13 +348,13 @@ view.update =
     Else | bad "bad view mode ([$mode])"
 | 1
 
-view.update_z =
-| X,Y,Z = $cell_xyz
+view.fix_z =
+| X,Y,Z = $cursor
 | till $world.fast_at{X,Y,Z}.empty: !Z+1
 | !Z-1
 | while $world.fast_at{X,Y,Z}.empty: !Z-1
 | !Z+1
-| $cell_xyz.2 <= Z
+| $cursor.2 <= Z
 
 view.input In =
 | case In
@@ -369,22 +362,14 @@ view.input In =
     | !XY+[0 32]
     | $mice_xy.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
-    | $cell_xyz.init{[CX CY $cell_xyz.2]}
-    | $update_z
-  [mice left 1 XY]
-    | $mice_left <= 1
-    | $mice_left_xy.init{XY}
-    | $update_z
-    | $mice_z <= $cell_xyz.2
-  [mice left 0 XY]
-    | $mice_left <= 0
-  [mice right 1 XY]
-    | $mice_right <= 1
-    | $mice_right_xy.init{XY}
-    | $update_z
-    | $mice_z <= $cell_xyz.2
-  [mice right 0 XY]
-    | $mice_right <= 0
+    | $cursor.init{[CX CY $cursor.2]}
+    | $fix_z
+  [mice left State XY]
+    | $mice_click <= if State then \left else 0
+    | if State then $anchor.init{$cursor} else $fix_z
+  [mice right State XY]
+    | $mice_click <= if State then \right else 0
+    | if State then $anchor.init{$cursor} else $fix_z
   [key Name S] | $keys.Name <= S
 
 view.pause = $paused <= 1
