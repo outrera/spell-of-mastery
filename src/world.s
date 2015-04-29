@@ -289,10 +289,6 @@ world.getCornersTrns P Z Role = `[]`
  [$getTrn{P+[ 1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[ 1 0] Z}].all{is{&Role+0}}
  [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
 
-world.getPilar X Y =
-| when X < 0 or Y < 0: leave [$filler X,Y,0 MaxSize-1]
-| $tilemap.getPilar{X Y}
-
 world.updPilarGfxes P =
 | X,Y = P
 | when X < 0 or Y < 0: leave 0

@@ -84,7 +84,7 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
 | UnitZ = 0
 | Key = ((X+Y)</40)
 | for G Gs: if G.is_int
-  then | when Cursor
+  then | when Cursor and Z < CursorZ:
          | BY = BY-YUnit-Z*ZUnit
          | Key = Key + (Z</30)
          | Heap.push{Key [G BX BY #4000+(G</16)]}
@@ -94,12 +94,13 @@ render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
        | TH = T.height
        | ZZ = Z*ZUnit
        | Key = Key + ((Z*2)</30)
-       | when Cursor | Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
+       | DrawCursor = Cursor and Z < CursorZ
+       | when DrawCursor: Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
        | UnitZ <= Z + TH
        | TZ = UnitZ - 4
        | when AboveCursor or TZ << CursorZ or CurHH-TZ/YDiv >> 0:
          | Heap.push{Key [G BX BY-G.h-ZZ 0]}
-       | when Cursor | Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
+       | when DrawCursor: Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
        | Z <= UnitZ
 | for U Wr.column_units_at{X Y}
   | XYZ = U.xyz
@@ -342,7 +343,7 @@ view.update =
 | case $keys.left 1: $move{$view_origin-[1 -1]}
 | case $keys.right 1: $move{$view_origin+[1 -1]}
 | X,Y = $cell_xy
-| Z = $world.height{X Y}
+| Z = $cell_z
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
 | Mirror = $keys.m >< 1
@@ -356,25 +357,36 @@ view.update =
     Else | bad "bad view mode ([$mode])"
 | 1
 
+view.update_z =
+| less $mode >< play:
+  | $cell_z <= $world.height{@$cell_xy}
+  | leave
+| Z = $cell_z
+| till $world.fast_at{[@$cell_xy Z]}.empty: !Z+1
+| !Z-1
+| while $world.fast_at{[@$cell_xy Z]}.empty: !Z-1
+| !Z+1
+| $cell_z <= Z
+
 view.input In =
 | case In
   [mice_move _ XY]
     | !XY+[0 32]
     | $mice_xy.init{XY}
     | $cell_xy.init{$viewToWorld{$mice_xy}}
-    | $cell_z <= $world.height{@$cell_xy}
+    | $update_z
   [mice left 1 XY]
     | $mice_left <= 1
     | $mice_left_xy.init{XY}
-    | $mice_z <= $world.height{@$cell_xy}
-    | $cell_z <= $mice_z
+    | $update_z
+    | $mice_z <= $cell_z
   [mice left 0 XY]
     | $mice_left <= 0
   [mice right 1 XY]
     | $mice_right <= 1
     | $mice_right_xy.init{XY}
-    | $mice_z <= $world.height{@$cell_xy}
-    | $cell_z <= $mice_z
+    | $update_z
+    | $mice_z <= $cell_z
   [mice right 0 XY]
     | $mice_right <= 0
   [key Name  S] | $keys.Name <= S
