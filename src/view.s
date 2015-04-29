@@ -18,8 +18,8 @@ type view.widget{M W H}
   blit_origin/[W/2 -170]
   mice_click
   mice_xy/[0 0]
-  cursor/[2 2 2]
-  anchor/[2 2 2]
+  cursor/[1 1 1]
+  anchor/[1 1 1]
   brush/[0 0]
   mode/brush
   pick_count // used to pick different units from the same cell
@@ -283,11 +283,14 @@ view.update_brush X Y Z =
 | when $mice_click><right: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
   [tile Type]
-  | less Z >> $anchor.2: leave
-  | when Z > 1:
-    | Tile = $world.at{X,Y,Z-1}
-    | when Z > 1: $world.pop{X,Y}
-    | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
+    | while 1
+      | Z <= $world.fix_z{X,Y,Z}
+      | less Z >> $anchor.2 and Z > 1: leave
+      | less Z > 1: leave
+      | Tile = $world.at{X,Y,Z-1}
+      | less Tile.height: leave
+      | $world.clear_tile{X,Y,Z-1}
+      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
 
 view.update_play X Y Z =
 | Player = $world.player
