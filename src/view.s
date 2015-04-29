@@ -23,8 +23,7 @@ type view.widget{M W H}
   mice_left_xy/[0 0]
   mice_xy/[0 0]
   mice_z
-  cell_xy/[2 2]
-  cell_z/2
+  cell_xyz/[2 2 2]
   brush/[0 0]
   mode/brush
   pick_count // used to pick different units from the same cell
@@ -71,10 +70,11 @@ draw_cursor V Front FB X Y H =
 | FB.line{V B B+[0 H]}
 | FB.line{V C C+[0 H]}
 
-render_pilar Wr X Y BX BY Heap CursorXY CursorZ =
+render_pilar Wr X Y BX BY Heap CursorXYZ =
 | Gs = Wr.gfxes.Y.X
-| CurX = CursorXY.0
-| CurY = CursorXY.1
+| CurX = CursorXYZ.0
+| CurY = CursorXYZ.1
+| CursorZ = CursorXYZ.2
 | CurH = (CurX+CurY)/2
 | XY2 = (X+Y)/2
 | AboveCursor = CurH >> XY2
@@ -120,7 +120,7 @@ view.render_iso =
 | YUnit = YUnit
 | ZUnit = ZUnit
 | FB = $fb
-| Z = if $mice_left or $mice_right then $mice_z else $cell_z
+| Z = if $mice_left or $mice_right then $mice_z else $cell_xyz.2
 | BlitOrigin = [$w/2 170]
 | TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
@@ -137,7 +137,7 @@ view.render_iso =
     | when 0<X and X<<WW: // FIXME: moved this out of the loop
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
-      | render_pilar Wr X Y BX BY Heap $cell_xy $cell_z
+      | render_pilar Wr X Y BX BY Heap $cell_xyz
       //| Key = (X+Y)*WW*WH+X
       //| Heap.push{Key [Gs.0 BX BY 0]}
 //| Font = font small
@@ -162,8 +162,7 @@ Indicators = 0
 
 view.draw_indicators =
 | less Indicators: Indicators <= $main.img{ui_indicators}
-| X,Y = $cell_xy
-| Z = $world.height{X Y}
+| X,Y,Z = $cell_xyz
 | IP = [($w-Indicators.w)/2 0]
 | $fb.blit{IP Indicators}
 | Font = font medium
@@ -342,53 +341,51 @@ view.update =
 | case $keys.down 1: $move{$view_origin+[1 1]}
 | case $keys.left 1: $move{$view_origin-[1 -1]}
 | case $keys.right 1: $move{$view_origin+[1 -1]}
-| X,Y = $cell_xy
+| X,Y,Z = $cell_xyz
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
 | Mirror = $keys.m >< 1
-| $world.update_cursor{[X Y $cell_z] Brush Mirror}
+| $world.update_cursor{[X Y Z] Brush Mirror}
 | case $mode
-    play | $update_play{X Y $cell_z}
+    play | $update_play{X Y Z}
          | $main.update
     brush | $update_brush{X Y $world.height{X Y}}
-    pick | $update_pick{X Y $world.height{X Y}}
+    pick | $update_pick{X Y Z}
          | $main.update //ensure deleted units get updated
     Else | bad "bad view mode ([$mode])"
 | 1
 
 view.update_z =
-| less $mode >< play:
-  | $cell_z <= $world.height{@$cell_xy}
-  | leave
-| Z = $cell_z
-| till $world.fast_at{[@$cell_xy Z]}.empty: !Z+1
+| X,Y,Z = $cell_xyz
+| till $world.fast_at{X,Y,Z}.empty: !Z+1
 | !Z-1
-| while $world.fast_at{[@$cell_xy Z]}.empty: !Z-1
+| while $world.fast_at{X,Y,Z}.empty: !Z-1
 | !Z+1
-| $cell_z <= Z
+| $cell_xyz.2 <= Z
 
 view.input In =
 | case In
   [mice_move _ XY]
     | !XY+[0 32]
     | $mice_xy.init{XY}
-    | $cell_xy.init{$viewToWorld{$mice_xy}}
+    | CX,CY = $viewToWorld{$mice_xy}
+    | $cell_xyz.init{[CX CY $cell_xyz.2]}
     | $update_z
   [mice left 1 XY]
     | $mice_left <= 1
     | $mice_left_xy.init{XY}
     | $update_z
-    | $mice_z <= $cell_z
+    | $mice_z <= $cell_xyz.2
   [mice left 0 XY]
     | $mice_left <= 0
   [mice right 1 XY]
     | $mice_right <= 1
     | $mice_right_xy.init{XY}
     | $update_z
-    | $mice_z <= $cell_z
+    | $mice_z <= $cell_xyz.2
   [mice right 0 XY]
     | $mice_right <= 0
-  [key Name  S] | $keys.Name <= S
+  [key Name S] | $keys.Name <= S
 
 view.pause = $paused <= 1
 view.unpause = $paused <= 0
