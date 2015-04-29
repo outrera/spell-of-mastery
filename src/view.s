@@ -343,16 +343,15 @@ view.update =
 | case $keys.left 1: $move{$view_origin-[1 -1]}
 | case $keys.right 1: $move{$view_origin+[1 -1]}
 | X,Y = $cell_xy
-| Z = $cell_z
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
 | Mirror = $keys.m >< 1
 | $world.update_cursor{[X Y $cell_z] Brush Mirror}
 | case $mode
-    play | $update_play{X Y Z}
+    play | $update_play{X Y $cell_z}
          | $main.update
-    brush | $update_brush{X Y Z}
-    pick | $update_pick{X Y Z}
+    brush | $update_brush{X Y $world.height{X Y}}
+    pick | $update_pick{X Y $world.height{X Y}}
          | $main.update //ensure deleted units get updated
     Else | bad "bad view mode ([$mode])"
 | 1
