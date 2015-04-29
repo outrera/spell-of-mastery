@@ -251,7 +251,7 @@ view.update_pick X Y Z =
 | $main.update
 
 view.update_brush X Y Z = 
-| when $mice_click><left and Z << $anchor.2: case $brush
+| when $mice_click><left: case $brush
   [obj Bank,Type]
     | Mirror = $keys.m >< 1
     | ClassName = if $keys.r >< 1
@@ -272,14 +272,18 @@ view.update_brush X Y Z =
       | when $keys.t >< 1: U.facing <= 3.rand
       | U.move{X,Y,Z}
   [tile Type]
-    | while $world.height{X Y} << $anchor.2
+    | while 1
+      | Z <= $world.fix_z{X,Y,Z}
+      | less Z << $anchor.2 and $world.fast_at{X,Y,Z}.empty: leave
       | Tile = $main.tiles.Type
       | less Tile.empty
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
-      | $world.push{X,Y $main.tiles.Type}
-| when $mice_click><right and Z >> $anchor.2: case $brush
+      | $world.set{X Y Z $main.tiles.Type}
+      | when Tile.empty: leave
+| when $mice_click><right: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
   [tile Type]
+  | less Z >> $anchor.2: leave
   | when Z > 1:
     | Tile = $world.at{X,Y,Z-1}
     | when Z > 1: $world.pop{X,Y}
@@ -348,13 +352,7 @@ view.update =
     Else | bad "bad view mode ([$mode])"
 | 1
 
-view.fix_z =
-| X,Y,Z = $cursor
-| till $world.fast_at{X,Y,Z}.empty: !Z+1
-| !Z-1
-| while $world.fast_at{X,Y,Z}.empty: !Z-1
-| !Z+1
-| $cursor.2 <= Z
+view.fix_z = $cursor.2 <= $world.fix_z{$cursor}
 
 view.input In =
 | case In

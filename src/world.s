@@ -177,6 +177,14 @@ world.set X Y Z Tile =
 | $dirty_set{X Y Z Tile}
 | $updElev{X,Y}
 
+world.fix_z XYZ =
+| X,Y,Z = XYZ
+| till $fast_at{X,Y,Z}.empty: !Z+1
+| !Z-1
+| while $fast_at{X,Y,Z}.empty: !Z-1
+| !Z+1
+| Z
+
 world.slope_at XYZ = $slope_map.at{XYZ}
 
 world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
