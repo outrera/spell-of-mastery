@@ -66,7 +66,7 @@ draw_cursor V Front FB X Y H =
 | FB.line{V B B+[0 H]}
 | FB.line{V C C+[0 H]}
 
-render_pilar Wr X Y BX BY Heap CursorXYZ =
+render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
 | Gs = Wr.gfxes.Y.X
 | CurX = CursorXYZ.0
 | CurY = CursorXYZ.1
@@ -110,13 +110,19 @@ render_pilar Wr X Y BX BY Heap CursorXYZ =
       | Key = Key + (UnitZ</30) + 1
       | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10 0]}
 
-view.render_iso = 
+world.roof XYZ =
+| X,Y,Z = XYZ
+| while $fast_at{X,Y,Z}.empty and Z < 63: !Z+1
+| Z
+
+view.render_iso =
 | Wr = $world
 | XUnit = XUnit
 | YUnit = YUnit
 | ZUnit = ZUnit
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
+| RoofZ = Wr.roof{$cursor}
 | BlitOrigin = [$w/2 170]
 | TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
@@ -133,7 +139,7 @@ view.render_iso =
     | when 0<X and X<<WW: // FIXME: moved this out of the loop
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
-      | render_pilar Wr X Y BX BY Heap $cursor
+      | render_pilar Wr X Y BX BY Heap $cursor RoofZ
       //| Key = (X+Y)*WW*WH+X
       //| Heap.push{Key [Gs.0 BX BY 0]}
 //| Font = font small
