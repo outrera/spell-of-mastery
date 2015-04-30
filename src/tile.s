@@ -38,13 +38,18 @@ genTransition Mask From To =
     | less Mask.get{X Y} >< Empty
       | R.set{X Y From.get{X Y}}
 
+DummyGfx = gfx 1 1
+
 tile.render P Z Below Above Seed =
+| World = $main.world
+| when $invisible
+  | World.set_slope_at{@P,Z #@1111}
+  | leave DummyGfx
 | BE = Below.empty
 | BR = Below.role
 | AH = Above.heavy
 | AR = Above.role
 | AFiller = AR >< filler
-| World = $main.world
 | NeibElevs = #@0000
 | Gs = if BR <> $role then $ds
        else if AR <> $role and not AFiller then $us

@@ -79,28 +79,25 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
 | Z = 0
 | UnitZ = 0
 | Key = ((X+Y)</40)
-| for G Gs: if G.is_int
-  then | when Cursor and Z < CursorZ:
-         | BY = BY-YUnit-Z*ZUnit
-         | Key = Key + (Z</30)
-         | Heap.push{Key [G BX BY #4000+(G</16)]}
-         | Heap.push{Key+1 [G BX BY #8000+(G</16)]}
-       | !Z+G
-  else | T = Wr.tid_map.(Wr.get{X Y Z})
-       | TH = T.height
-       | ZZ = Z*ZUnit
-       | Key = Key + ((Z*2)</30)
-       | DrawCursor = Cursor and Z < CursorZ
-       | when DrawCursor: Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
-       | UnitZ <= Z + TH
-       | TZ = UnitZ - 4
-       | when AboveCursor or TZ << CursorZ or CurHH-TZ/YDiv >> 0:
-         | Heap.push{Key [G BX BY-G.h-ZZ 0]}
-       | when DrawCursor: Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
-       | Z <= UnitZ
+| for G Gs
+  | T = Wr.tid_map.(Wr.get{X Y Z})
+  | TH = T.height
+  | ZZ = Z*ZUnit
+  | Key = Key + ((Z*2)</30)
+  | DrawCursor = Cursor and Z < CursorZ
+  | when DrawCursor: Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
+  | UnitZ <= Z + TH
+  | TZ = UnitZ - 4
+  | less T.invisible
+    | when AboveCursor or TZ << CursorZ or CurHH-TZ/YDiv >> 0:
+      | Heap.push{Key [G BX BY-G.h-ZZ 0]}
+  | when DrawCursor: Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
+  | Z <= UnitZ
+  | when Z >> RoofZ: _goto for_break
+| _label for_break
 | for U Wr.column_units_at{X Y}
   | XYZ = U.xyz
-  | when XYZ.0 >< X and XYZ.1 >< Y:
+  | when XYZ.0 >< X and XYZ.1 >< Y and XYZ.2 < RoofZ:
     | Z = U.xyz.2
     | DrawShadow = Z > UnitZ
     // FIXME: omit units stadning above the current cave

@@ -315,14 +315,11 @@ world.updPilarGfxes P =
   | TileId = Column.NextZ
   | when TileId < 0: TileId <= Column.(NextZ-TileId)
   | Above = $tid_map.TileId
-  | if C.invisible
-    then push C.height Gs
-    else // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
-         push C.render{P NextZ-1 Below Above Seed} Gs
+  // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
+  | push C.render{P NextZ-1 Below Above Seed} Gs
   | Below <= C
   | C <= Above
   | Z <= NextZ
-| _label for_break
 | Gs = Gs.flip
 | PrevGs = $gfxes.Y.X
 | if PrevGs.size >< Gs.size then PrevGs.init{Gs}
