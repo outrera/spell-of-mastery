@@ -46,6 +46,8 @@ world.update =
 | ($on_update){}
 
 unit.update =
+| when $summoned and ($world.turn - $turn) > $ttl and $action.class_name <> die:
+  | DeathOrder = $order.init{act/die cost/0}
 | when $removed
   | $active <= 0
   | leave

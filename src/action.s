@@ -205,6 +205,7 @@ act_summon.start A =
 act_summon.finish A =
 | S = A.unit.world.alloc_unit{A.effect}
 | S.owner <= A.unit.owner
+| S.summoned <= 1
 | S.move{A.target.xyz}
 | S.world.update_pick{[S]}
 

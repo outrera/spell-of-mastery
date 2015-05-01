@@ -13,7 +13,7 @@ world.save =
     units | map U $units.skip{(?removed or ?mark)}
             | list U.id U.serial U.type U.xyz U.xy
                    U.anim U.anim_step U.facing
-                   U.owner.id U.moved
+                   U.owner.id U.moved U.turn
     tilemap | map X $w: map Y $h:
               | $tilemap.getPilar{X+1 Y+1}.drop{1}
 
@@ -56,7 +56,8 @@ world.load Saved =
   | for N,R Research: P.research.N <= R
 | $player <= $players.(Saved.player)
 | for X Saved.units
-  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved] = X
+  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved @Turn] = X
+  | Turn = if Turn.end then 0 else Turn.0
   | U = $alloc_unit{Type}
   | U.serial <= Serial
   | U.xy.init{SXYZ}
@@ -66,6 +67,7 @@ world.load Saved =
   | U.move{XYZ}
   | U.owner <= $players.Owner
   | U.moved <= Moved
+  | U.turn <= Turn
   | when U.leader: U.owner.leader <= U
   | when U.type >< special_pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U

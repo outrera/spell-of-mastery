@@ -28,6 +28,8 @@ type unit.$class{Id World}
   movement_render_hack
   path // next unit in path
   hits // how damages is this unit
+  turn // turn it was created
+  summoned // 1 if this unit was summoned
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -50,6 +52,8 @@ unit.init Class =
 | $path <= 0
 | $hits <= 0
 | $moved <= 0
+| $turn <= $world.turn
+| $summoned <= 0
 | when $starts
   | less $active
     | $world.active.push{Me}
