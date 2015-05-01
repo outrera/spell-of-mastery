@@ -253,8 +253,8 @@ view.update_pick =
 | $main.update
 
 view.update_brush = 
+| $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
-| Z <= $fix_z{$cursor}
 | when $mice_click><left: case $brush
   [obj Bank,Type]
     | Mirror = $keys.m >< 1
@@ -277,24 +277,26 @@ view.update_brush =
       | U.move{X,Y,Z}
   [tile Type]
     | while 1
+      | Z <= $cursor.2
       | less Z << $anchor.2 and $world.fast_at{X,Y,Z}.empty: leave
       | Tile = $main.tiles.Type
       | less Tile.empty
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
       | $world.set{X Y Z $main.tiles.Type}
       | when Tile.empty and (Tile.id><0 or $keys.e<>1): leave
-      | Z <= $fix_z{X,Y,Z}
+      | $cursor.2 <= $fix_z{$cursor}
 | when $mice_click><right: case $brush
   [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
   [tile Type]
     | while 1
+      | Z <= $cursor.2
       | less Z >> $anchor.2 and Z > 1: leave
       | less Z > 1: leave
       | Tile = $world.at{X,Y,Z-1}
       | less Tile.height: leave
       | $world.clear_tile{X,Y,Z-1}
       | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
-      | Z <= $fix_z{X,Y,Z}
+      | $cursor.2 <= $fix_z{$cursor}
 
 view.update_play =
 | Player = $world.player
