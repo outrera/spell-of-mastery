@@ -1,7 +1,7 @@
 sprite: unit_dragon
 level: 4
-health: 6
-attack: 4
+health: 12
+attack: 2
 defense: 0
 flyer: 1
 moves:

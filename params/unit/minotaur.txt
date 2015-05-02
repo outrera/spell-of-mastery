@@ -1,11 +1,11 @@
 sprite: unit_minotaur
 level: 3
-health: 2
-attack: 3
+health: 5
+attack: 2
 defense: 0
 moves:
-  | 0 1 1 1 0
-  | 1 0 1 0 1
+  | 0 0 1 0 0
+  | 0 0 1 0 0
   | 1 1 0 1 1
-  | 1 0 1 0 1
-  | 0 1 1 1 0
+  | 0 0 1 0 0
+  | 0 0 1 0 0

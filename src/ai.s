@@ -199,11 +199,13 @@ ai.update =
   | when Harm^^#FF: less (Harm^^#FF00) and not U.leader:
     | Moves = U.list_moves{U.xyz}.keep{?type><move}
     | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
+    | AttackMoves = Moves.keep{M=>U.list_moves{M.xyz}.keep{?type><attack}.size}
+    | when AttackMoves.size:
+      | $marked_order{U AttackMoves.rand}
+      | leave
     | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
     | when SafeMoves.size
-      | M = SafeMoves.find{M => U.list_moves{M.xyz}.keep{?type><attack}.size}
-      | less got M: M <= SafeMoves.rand
-      | $marked_order{U M} //avoid harm
+      | $marked_order{U SafeMoves.rand} //avoid harm
       | leave
 | for U Units: when U.attack: //see if we can threat some enemy unit
   | X,Y,Z = U.xyz

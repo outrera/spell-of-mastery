@@ -1,4 +1,4 @@
-author: `Camilo Collao (Bo)`
+author: `Camilo Collao (Bo)`,`Natalya Bugrova`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
 xy: 8,40
