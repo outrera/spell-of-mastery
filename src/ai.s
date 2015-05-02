@@ -125,18 +125,18 @@ ai.attack Units =
       | if Moves.size then Move <= Moves.0
         else XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1
     | Ms = U.list_moves{U.xyz}
-    | harmCheck M = 
+    /*| harmCheck M = 
       | X,Y,Z = M.xyz
       | Harm = HarmMap.X.Y
       | (Harm^^#FF) and (Harm^^#FF00)<#200
-    | Ms = Ms.skip{&harmCheck}
+    | Ms = Ms.skip{&harmCheck}*/
     | XYZ = Move.xyz
     | M = Ms.find{?xyz >< XYZ}
     | when got M:
       | B = $world.block_at{M.xyz}
       | if M.type >< swap
         then | Ms = U.list_moves{U.xyz}
-             | Ms = Ms.keep{?type><move}.skip{&harmCheck}
+             //| Ms = Ms.keep{?type><move}.skip{&harmCheck}
              | Ms = Ms{[(?xyz-Target.xyz){?abs}.sum ?]}.sort{?0 < ??0}{?1}
              | Pentagram = $player.pentagram
              | when Pentagram: Ms <= Ms.skip{?xyz >< Pentagram.xyz}

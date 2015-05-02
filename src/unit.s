@@ -241,12 +241,10 @@ unit.list_moves XYZ =
     | when got!it $world.block_at{Dst}:
       | when $can_move{Src Dst}
         | if $owner.id >< it.owner.id
-          then | when and it.moves.size
-                      and it.can_move{Dst Src}:
+          then | when and it.moves.size and it.can_move{Dst Src} and V <> 2:
                  | Move <= move swap Src Dst
-          else | when it.hits < it.health and it.defense < $attack:
-                 | when V < 3
-                   | Move <= move attack Src Dst
+          else | when it.hits < it.health and it.defense < $attack and V < 3:
+                 | Move <= move attack Src Dst
     | Blocked <= 1
   | less Blocked
     | less V><2: Move <= move move Src Dst
