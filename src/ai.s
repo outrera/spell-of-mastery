@@ -3,7 +3,7 @@ use gui queue
 player.active =
 | PID = $id
 | Turn = $world.turn
-| $world.active.list.keep{(?owner.id >< PID and ?moved <> Turn
+| $world.active.list.keep{(?owner.id >< PID and ?moved < Turn
                            and not ?removed)}
 
 Map = dup 256: dup 256: 0
@@ -43,14 +43,14 @@ ai.pentagram =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 | Turn = $world.turn
-| when Leader and Leader.moved >< Turn: Leader <= 0
+| when Leader and Leader.moved >> Turn: Leader <= 0
 | less Pentagram: leave $cast_pentagram
 | Blocker = $world.block_at{Pentagram.xyz}
 | when got Blocker:
   | EnemyBlocker = Blocker.owner.id <> $player.id
   | when EnemyBlocker: leave $cast_pentagram
   | less EnemyBlocker
-    | when Blocker.moved><Turn: leave 0
+    | when Blocker.moved>>Turn: leave 0
     | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
     | A = if Blocker.attack then #200 else #100
     | harmCheck M = 
@@ -79,7 +79,7 @@ ai.pentagram =
       then | $player.researching <= S.type
            | $end_turn
            | leave 1
-      else | when Pentagram.moved >< Turn: leave 0
+      else | when Pentagram.moved >> Turn: leave 0
            | $order_act{Pentagram S}
            | leave 1
 | 0

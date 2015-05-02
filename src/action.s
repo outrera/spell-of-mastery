@@ -153,7 +153,7 @@ act_swap.start A =
 | U = A.unit
 | A.cycles <= max 1 U.sprite.speed
 | move_start A
-| !A.target.owner.moves + (A.unit.level+A.target.level)
+| !A.target.owner.moves + 2
 | A.target.order.init{act/move at/A.fromXYZ}
 
 act_swap.update A =
@@ -161,7 +161,7 @@ act_swap.update A =
 
 act_swap.finish A =
 | move_finish A
-| !A.target.owner.moves - (max A.unit.level A.target.level)
+| !A.target.owner.moves - 1
 
 
 
@@ -251,7 +251,7 @@ action.init act/idle at/self target/0 cost/-1 effect/0 path/0 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
-| when Cost >< -1: Cost <= 1//$unit.level
+| when Cost >< -1: Cost <= 1
 | $xyz.init{At}
 | $target <= Target
 | $priority <= 50

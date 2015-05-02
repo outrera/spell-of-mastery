@@ -78,10 +78,11 @@ unit.update =
     | Path.free
   | less $anim >< idle: $animate{idle}
   | if     $next_action.valid
-       and (   ($owner.moves > 0 and $moved <> $world.turn)
+       and (   ($owner.moves > 0 and $moved < $world.turn)
             or not $next_action.cost)
-    then | less Path: !$owner.moves - $next_action.cost
-         | $moved <= $world.turn
+    then | less Path:
+           | when $next_action.cost: !$owner.moves - 1
+           | $moved <= $world.turn+$next_action.cost-1
     else $next_action.init{act/idle at/$xyz}
   | swap $action $next_action
   | $next_action.class <= 0
@@ -89,7 +90,7 @@ unit.update =
   | when Path
     | swap $ordered $next_action
     | $ordered.class <= 0
-    | $moved <= $world.turn-1
+    | $moved <= $world.turn-1 // restore it back
     | $next_action.priority <= 1000
   | $action.start
 | $action.update

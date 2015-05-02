@@ -3,4 +3,4 @@ effect: unit_ratman
 target: pentagram
 icon: unit_ratman
 research: 2
-cost: 2
+cost: 5

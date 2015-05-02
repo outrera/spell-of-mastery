@@ -133,7 +133,7 @@ view.render_iso =
   | Y = YY + VY
   | when 0<Y and Y<<WH: times XX VS:
     | X = XX + VX
-    | when 0<X and X<<WW: // FIXME: moved this out of the loop
+    | when 0<X and X<<WW: // FIXME: move this out of the loop
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
       | render_pilar Wr X Y BX BY Heap $cursor RoofZ
@@ -319,7 +319,7 @@ world.update_picked =
 | for M $marks^uncons{mark}: M.free
 | $marks <= $nil
 | Picked = $picked
-| less Picked and Picked.moves and Picked.moved<>$turn and $player.moves > 0:
+| less Picked and Picked.moves and Picked.moved<$turn and $player.moves > 0:
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.class_name >< idle:
   | $marks <= [$nil @Picked.mark_moves]^cons{mark}

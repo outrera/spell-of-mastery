@@ -93,17 +93,18 @@ unit_panel.draw G P =
 | Icon = $unit.main.sprites."icons_unit_[ClassName]"
 | when got Icon: G.blit{IconXY Icon.frames.0}
 | G.blit{P+[8 8] $laurels}
-| when $unit.moved >< $unit.world.turn: G.blit{P+[34 54] $moved}
+| X = P.0+4
+| Y = P.1+$laurels.h+16
 | Font = font medium
 | Font.draw{G P+[85 10] "[ClassName.title]"}
 | Font.draw{G P+[85 48] "[$unit.owner.name]"}
-| X = P.0+4
-| Y = P.1+$laurels.h+16
 | Health = max 0 $unit.health-$unit.hits
 | times I Health: G.blit{[X+I*8 Y] $health_icon}
 | times I $unit.level: G.blit{[X+I*8 Y+16] $power_icon}
 | times I $unit.attack: G.blit{[X+I*8 Y+32] $attack_icon}
 | times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
+| Moved = $unit.moved-$unit.world.turn+1
+| when Moved > 0: times I Moved: G.blit{[X+I*8 Y+64] $moved}
 
 
 type world_props.$base{world callback}

@@ -3,7 +3,7 @@ use gfx util param
 type class{bank class_name Main static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/[]
            starts/0 flyer/0 mountaineer/0 ranged/0 leader/Leader
-           health/0 attack/0 defense/0 level/0 ttl/100
+           health/0 attack/0 defense/0 level/0 ttl/100000000
            acts/[] sounds/[]}
   type/"[Bank]_[Class_name]"
   static/Static
