@@ -26,7 +26,7 @@ world.end_turn =
 | less Units.size /*or $player.human*/:
   | $end_turn
   | leave
-| for U Units
+| for U P.units
   | when U.type >< special_pentagram: P.pentagram <= U
   | when U.leader: P.leader <= U
   | when U.level: for V $units_at{U.xyz}

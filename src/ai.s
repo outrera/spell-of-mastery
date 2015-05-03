@@ -6,6 +6,11 @@ player.active =
 | $world.active.list.keep{(?owner.id >< PID and ?moved < Turn
                            and not ?removed)}
 
+player.units =
+| PID = $id
+| Turn = $world.turn
+| $world.active.list.keep{(?owner.id >< PID and not ?removed)}
+
 Map = dup 256: dup 256: 0
 HarmMap = dup 256: dup 256: 0
 
@@ -39,10 +44,11 @@ ai.cast_pentagram =
   | leave 1
 | leave 0
 
-ai.pentagram =
+ai.update_pentagram =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 | Turn = $world.turn
+| when Pentagram and Pentagram.moved >> Turn: leave 0
 | when Leader and Leader.moved >> Turn: Leader <= 0
 | less Pentagram: leave $cast_pentagram
 | Blocker = $world.block_at{Pentagram.xyz}
@@ -84,68 +90,81 @@ ai.pentagram =
            | leave 1
 | 0
 
-ai.attack Units =
+ai.attack_with Map Queue N U =
 | Turn = $world.turn
-| for Xs Map: for I Xs.size: Xs.I <= #FFFFFFFFFFFF
-| Attackers = Units.keep{?attack}
-| less Attackers.size: leave 0
-| Div = Turn%Attackers.size
-| Attackers = [@Attackers.drop{Div} @Attackers.take{Div}]
+| UID = U.id
+| X,Y,Z = U.xyz
+| Targets = []
+| StartCost = N*#1000000
+| Map.X.Y <= StartCost
+| Queue.push{[0 U.xyz StartCost]}
+| StartTime = get_gui{}.ticks{}
+| till Queue.end
+  | Node = Queue.pop
+  | [Prev XYZ Cost] = Node
+  | X,Y,Z = XYZ
+  | NextCost = Cost+1
+  | for M U.list_moves{XYZ}:
+    | when M.type >< attack:
+      | case $world.units_at{M.xyz}.skip{?empty} [T@_]:
+        | less Targets.any{?id >< T.id}: push T Targets
+    | case M.xyz X,Y,Z: when NextCost < Map.X.Y:
+      | Map.X.Y <= NextCost
+      | Queue.push{[Node M.xyz NextCost]}
+    | when Targets.size: Queue.clear
+| EndTime = get_gui{}.ticks{}
+//| say EndTime-StartTime
+| less Targets.size: leave 0
+| Target = Targets{[Map.(?xyz.0).(?xyz.1) ?]}.sort{?0 < ??0}.0.1
+| XYZ = Target.xyz
+| Move = 0
+| till Move
+  | Ms = U.list_moves{XYZ}
+  | Moves = Ms.keep{(Map.(?xyz.0).(?xyz.1)^^#FFFFFF) >< 1}
+  | if Moves.size then Move <= Moves.0
+    else XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1
+| Ms = U.list_moves{U.xyz}
+| XYZ = Move.xyz
+| M = Ms.find{?xyz >< XYZ}
+| less got M: leave 0
+| B = $world.block_at{M.xyz}
+| when M.type >< swap
+  | when B.summoned or B.moved>>Turn: leave 0
+  | Ms = B.list_moves{B.xyz}.skip{?type><swap}
+  | Ms = Ms{[(?xyz-Target.xyz){?abs}.sum ?]}.sort{?0 < ??0}{?1}
+  | Pentagram = $player.pentagram
+  | when Pentagram: Ms <= Ms.skip{?xyz >< Pentagram.xyz}
+  | when Ms.size
+    | $marked_order{B Ms.0} // move it out of the way
+    | leave 1
+  | leave 0
+| $marked_order{U M}
+| leave 1
+
+
+
+ai.update_units Units =
+| Player = $player
+| Pentagram = Player.pentagram
+| Leader = Player.leader
+| Turn = $world.turn
+| AiNextUnit = have $player.params.ai_next_unit [0]
+| AiUnitsRemain = have $player.params.ai_units_remain [0 0]
+| when AiUnitsRemain.0 <> Turn: AiUnitsRemain.init{Turn,Units.size}
+| UnitsRemain = AiUnitsRemain.1
+| for Xs Map: for I Xs.size: Xs.I <= #FFFFFFFFFFFF //pathfinder map
 | Queue = queue 256*256
-| for N,U Attackers.i.flip:
-  | UID = U.id
-  | X,Y,Z = U.xyz
-  | Targets = []
-  | StartCost = N*#1000000
-  | Map.X.Y <= StartCost
-  | Queue.push{[0 U.xyz StartCost]}
-  | StartTime = get_gui{}.ticks{}
-  | till Queue.end
-    | Node = Queue.pop
-    | [Prev XYZ Cost] = Node
-    | X,Y,Z = XYZ
-    | NextCost = Cost+1
-    | for M U.list_moves{XYZ}:
-      | when M.type >< attack:
-        | case $world.units_at{M.xyz}.skip{?empty} [T@_]:
-          | less Targets.any{?id >< T.id}: push T Targets
-      | case M.xyz X,Y,Z: when NextCost < Map.X.Y:
-        | Map.X.Y <= NextCost
-        | Queue.push{[Node M.xyz NextCost]}
-      | when Targets.size: Queue.clear
-  | EndTime = get_gui{}.ticks{}
-  //| say EndTime-StartTime
-  | when Targets.size
-    | Target = Targets{[Map.(?xyz.0).(?xyz.1) ?]}.sort{?0 < ??0}.0.1
-    | XYZ = Target.xyz
-    | Move = 0
-    | till Move
-      | Ms = U.list_moves{XYZ}
-      | Moves = Ms.keep{(Map.(?xyz.0).(?xyz.1)^^#FFFFFF) >< 1}
-      | if Moves.size then Move <= Moves.0
-        else XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1
-    | Ms = U.list_moves{U.xyz}
-    /*| harmCheck M = 
-      | X,Y,Z = M.xyz
-      | Harm = HarmMap.X.Y
-      | (Harm^^#FF) and (Harm^^#FF00)<#200
-    | Ms = Ms.skip{&harmCheck}*/
-    | XYZ = Move.xyz
-    | M = Ms.find{?xyz >< XYZ}
-    | when got M:
-      | B = $world.block_at{M.xyz}
-      | if M.type >< swap
-        then | Ms = U.list_moves{U.xyz}
-             //| Ms = Ms.keep{?type><move}.skip{&harmCheck}
-             | Ms = Ms{[(?xyz-Target.xyz){?abs}.sum ?]}.sort{?0 < ??0}{?1}
-             | Pentagram = $player.pentagram
-             | when Pentagram: Ms <= Ms.skip{?xyz >< Pentagram.xyz}
-             | when Ms.size
-               | $marked_order{U Ms.0}
-               | leave 1
-        else | $marked_order{U M}
-             | leave 1
-| 0
+| PentID = 0
+| when Leader: PentID <= Leader.id
+| when Pentagram: PentID <= Pentagram.id
+| while UnitsRemain > 0
+  | U = Units.(AiNextUnit.0%Units.size)
+  | !AiNextUnit.0 + 1
+  | !UnitsRemain-1
+  | AiUnitsRemain.1 <= UnitsRemain
+  | when U.id >< PentID: when $update_pentagram: leave 1
+  | when U.attack: when $attack_with{Map Queue UnitsRemain U}: leave 1
+| leave 0
 
 unit.list_attack_moves XYZ =
 | less $attack: leave []
@@ -163,13 +182,10 @@ unit.list_attack_moves XYZ =
           | V >< 1 or V >< 2}
 
 ai.update =
-| Turn = $world.turn
 | Player = $player
-| PID = $player.id
-| Units = $player.active.keep{?health}
-| Pentagram = $player.pentagram
-//| PenragramTurn = Turn%2><0
-| PenragramTurn = Turn<2 or 1.rand
+| PID = Player.id
+| Units = Player.active
+| Pentagram = Player.pentagram
 | when $player.moves << 0
   | $end_turn
   | leave
@@ -224,9 +240,7 @@ ai.update =
       | when Harm^^#FF00000 and (not Harm^^#FF or (Harm^^#FF00) > #100):
         | $marked_order{U M}
         | leave
-| when not Pentagram or PenragramTurn: when $pentagram: leave
-| when $attack{Units}: leave
-| less PenragramTurn: when Pentagram and $pentagram: leave
+| when $update_units{Units}: leave
 | $end_turn
 
 
