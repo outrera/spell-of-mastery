@@ -10,8 +10,7 @@ world.new_game =
 
 world.end_turn =
 | Researching = $player.researching
-| when Researching and $player.moves > 0:
-  | !$player.research.Researching + $player.moves
+| when Researching: !$player.research.Researching + $player.power
 | NextPlayer = $player.id+1
 | less NextPlayer < $players.size
   | NextPlayer <= 0
@@ -27,7 +26,7 @@ world.end_turn =
   | $end_turn
   | leave
 | for U P.units
-  | when U.type >< special_pentagram: P.pentagram <= U
+  | when U.bank >< pentagram: P.pentagram <= U
   | when U.leader: P.leader <= U
   | when U.level: for V $units_at{U.xyz}
     | when V.type >< special_node
@@ -46,7 +45,7 @@ world.update =
 | ($on_update){}
 
 unit.update =
-| when $summoned and ($world.turn - $turn) > $ttl and $action.class_name <> die:
+| when $turn and ($world.turn - $turn) > $ttl and $action.class_name <> die:
   | DeathOrder = $order.init{act/die cost/0}
 | when $removed
   | $active <= 0

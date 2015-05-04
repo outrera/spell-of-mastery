@@ -78,7 +78,7 @@ info_line.render =
 | $info_text.value <= ""
 | case ActIcons.keep{(?.show and ?.over)} [Icon@_]
   | Act = $main.params.acts.(Icon.data)
-  | Info = Act.type.replace{_ ' '}
+  | Info =  if got Act.title then Act.title else Act.type.replace{_ ' '}
   | when got Icon.number: Info <= "research [Info] ([Icon.number] moves)"
   | less got Icon.number:
     | Cost = if got Act.cost then Act.cost else 0
@@ -88,15 +88,14 @@ info_line.render =
 
 unit_panel.draw G P =
 | less $unit: leave
-| ClassName = $unit.class_name
 | IconXY = P+[18 16]
-| Icon = $unit.main.sprites."icons_unit_[ClassName]"
+| Icon = $unit.main.sprites."icons_[$unit.icon or $unit.type]"
 | when got Icon: G.blit{IconXY Icon.frames.0}
 | G.blit{P+[8 8] $laurels}
 | X = P.0+4
 | Y = P.1+$laurels.h+16
 | Font = font medium
-| Font.draw{G P+[85 10] "[ClassName.title]"}
+| Font.draw{G P+[85 10] "[$unit.title or $unit.class_name.title]"}
 | Font.draw{G P+[85 48] "[$unit.owner.name]"}
 | Health = max 0 $unit.health-$unit.hits
 | times I Health: G.blit{[X+I*8 Y] $health_icon}
@@ -264,7 +263,8 @@ main.run =
   | NonNil = Unit.type <> unit_nil
   | GameUnitUI.show <= NonNil
   | for Icon ActIcons: Icon.show <= 0
-  | for I,Act Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
+  | when Unit.moved < $world.turn:
+    for I,Act Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
     | Active = 1
     | when Act.act >< summon and not Unit.owner.pentagram:
       | Active <= 0

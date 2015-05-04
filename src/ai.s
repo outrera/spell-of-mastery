@@ -129,7 +129,7 @@ ai.attack_with Map Queue N U =
 | less got M: leave 0
 | B = $world.block_at{M.xyz}
 | when M.type >< swap
-  | when B.summoned or B.moved>>Turn: leave 0
+  | when B.moved>>Turn or (B.attack and not B.defender): leave 0
   | Ms = B.list_moves{B.xyz}.skip{?type><swap}
   | Ms = Ms{[(?xyz-Target.xyz){?abs}.sum ?]}.sort{?0 < ??0}{?1}
   | Pentagram = $player.pentagram

@@ -179,7 +179,7 @@ act_pentagram.finish A =
 | U = A.unit
 | Pentagram = U.owner.pentagram
 | when not Pentagram
-  | Pentagram <= U.world.alloc_unit{special_pentagram}
+  | Pentagram <= U.world.alloc_unit{A.effect}
   | Pentagram.owner <= U.owner
   | U.owner.pentagram <= Pentagram
 | Pentagram.move{A.xyz}
@@ -205,7 +205,6 @@ act_summon.start A =
 act_summon.finish A =
 | S = A.unit.world.alloc_unit{A.effect}
 | S.owner <= A.unit.owner
-| S.summoned <= 1
 | S.move{A.target.xyz}
 | S.world.update_pick{[S]}
 

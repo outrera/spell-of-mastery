@@ -69,7 +69,7 @@ world.load Saved =
   | U.moved <= Moved
   | U.turn <= Turn
   | when U.leader: U.owner.leader <= U
-  | when U.type >< special_pentagram: U.owner.pentagram <= U
+  | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
 
 main.load Path =
