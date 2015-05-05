@@ -15,11 +15,11 @@ init_message_box Main =
   | MessageBox.show <= 0
 | MessageBox <= hidden: dlg: mtx
   |   0   0 | spacer ScreenW ScreenH
-  | 270 100 | Main.img{ui_panel2}
-  | 400 110 | MessageBoxTitle
-  | 285 140 | MessageBoxText
-  | 360 320 | MessageBoxOk
-show_message Title Text =
+  | 270 100 | Main.img{ui_panel5}
+  | 290 110 | MessageBoxTitle
+  | 280 140 | MessageBoxText
+  | 390 420 | MessageBoxOk
+main.show_message Title Text =
 | MessageBoxTitle.value <= Title
 | MessageBoxText.value <= Text
 | MessageBoxOk.show <= 1
@@ -299,7 +299,7 @@ main.run =
   | WorldProperties.update
 | SaveIcon = icon data/pick $img{icons_save} click: Icon =>
   | $save{"[MapsFolder][$world.filename].txt"}
-  //| show_message 'Saved' 'Your map is saved!'
+  //| $show_message{'Saved' 'Your map is saved!'}
 | LoadIcon = icon data/pick $img{icons_load} click: Icon =>
   | pause
   | LoadWorldDlg.show <= 1 
@@ -348,10 +348,10 @@ main.run =
   | $save{"[SavesFolder][Name].txt"}
   | unpause
   | Tabs.pick{ingame}
-  //| show_message 'Saved' 'Your game is saved!'
+  //| show_message{'Saved' 'Your game is saved!'}
 | load_slot Name = 
   | load 0 "[SavesFolder][Name].txt"
-  //| show_message 'Saved' 'Your game is loaded!'
+  //| show_message{'Saved' 'Your game is loaded!'}
 | new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
 | LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'

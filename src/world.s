@@ -52,6 +52,7 @@ type world{main W H}
    marks
    params
    waiting // true if wating for action to complete
+   events
 | $init{W H}
 
 world.init W H =

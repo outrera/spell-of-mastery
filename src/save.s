@@ -5,6 +5,7 @@ world.save =
     filename | $filename
     name | $name
     description | $description
+    events | $events{}{?1}
     tids | $tid_map{}{?type}
     players | map P $players
               | [P.id P.name P.human P.color P.power P.moves
@@ -32,6 +33,7 @@ world.load Saved =
 | $filename <= Saved.filename
 | $name <= Saved.name
 | $description <= Saved.description
+| $events <= if got Saved.events then Saved.events.i else []
 | $serial <= Saved.serial
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}
