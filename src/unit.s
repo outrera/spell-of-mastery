@@ -102,7 +102,7 @@ unit.free =
       else when U.leader: push U Leaders
   | case Leaders [L]
     | $world.params.winner <= L.owner.id
-    | $world.params.victory_type <= \conquest
+    | $world.params.victory_type <= 'Victory by defeating other leaders.'
 | $world.free_unit{Me}
 
 unit.remove =

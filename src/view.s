@@ -247,10 +247,11 @@ view.select_unit XYZ =
   | Picked <= [Us.($pick_count%Us.size)]
 | $world.update_pick{Picked}
 
-view.update_pick =
+view.update_pick XYZ =
 | when $mice_click >< left: $select_unit{$cursor}
 | $mice_click <= 0
-| $main.update
+  // FIXME: following line is outdated
+| $main.update //ensures deleted units get updated
 
 view.update_brush = 
 | $cursor.2 <= $fix_z{$cursor}
@@ -354,10 +355,8 @@ view.update =
 | $world.update_cursor{$cursor Brush Mirror}
 | case $mode
     play | $update_play
-         | $main.update
     brush | $update_brush
     pick | $update_pick{X Y Z}
-         | $main.update //ensure deleted units get updated
     Else | bad "bad view mode ([$mode])"
 | 1
 
@@ -365,6 +364,7 @@ view.fix_z XYZ =
 | if $keys.e><1 then $world.fix_z_void{XYZ} else $world.fix_z{XYZ}
 
 view.input In =
+//| when $paused: leave
 | case In
   [mice_move _ XY]
     | !XY+[0 32]

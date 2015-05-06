@@ -8,13 +8,16 @@ MessageBoxTitle = No
 MessageBoxText = No
 MessageBoxOk = No
 
+Pause =
+Unpause =
+
 init_message_box Main =
 | MessageBoxTitle <= txt medium '' 
 | MessageBoxText <= txt medium ''
 | MessageBoxOk <= hidden: button 'Ok' skin/medium_small: =>
+  | Unpause{}
   | MessageBox.show <= 0
 | MessageBox <= hidden: dlg: mtx
-  |   0   0 | spacer ScreenW ScreenH
   | 270 100 | Main.img{ui_panel5}
   | 290 110 | MessageBoxTitle
   | 280 140 | MessageBoxText
@@ -24,6 +27,7 @@ main.show_message Title Text =
 | MessageBoxText.value <= Text
 | MessageBoxOk.show <= 1
 | MessageBox.show <= 1
+| Pause{}
 
 
 /*
@@ -170,6 +174,8 @@ main.run =
 | InputBlocker = hidden: spacer ScreenW ScreenH
 | pause = | InputBlocker.show <= 1; View.pause
 | unpause = | InputBlocker.show <= 0; View.unpause
+| Pause <= => pause
+| Unpause <= => unpause
 | InfoText = info_line Me
 | WorldProperties = No
 | parse_int_normalized Default Text =
@@ -200,9 +206,13 @@ main.run =
 | $world.on_update <= =>
   | when $world.player.human: InputBlocker.show <= 0
   | when got $world.params.winner
-    | pause
-    | sound_play: sound_load "[$data]/music/victory.ogg" music/1
-    | Tabs.pick{victory}
+    | NextWorld = $world.params.next_world
+    | less got NextWorld:
+      | pause
+      | sound_play: sound_load "[$data]/music/victory.ogg" music/1
+      | Tabs.pick{victory}
+    | when got NextWorld:
+      | $load{"[MapsFolder][NextWorld].txt"}
 | BankName =
 | TileNames = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
 | BankNames = [terrain unit @$bank_names.skip{unit}]
@@ -382,7 +392,7 @@ main.run =
   | 100 100 | txt medium: =>
               | Player = $world.players.($world.params.winner)
               | Type = $world.params.victory_type.replace{_ ' '}
-              | "[Player.name] has won by [Type]!"
+              | "[Player.name] has won!\n[Type]"
   | ScreenW-360 ScreenH-100
         | button 'EXIT TO MENU' skin/scroll: =>
           | Tabs.pick{main_menu}

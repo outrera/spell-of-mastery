@@ -1,0 +1,44 @@
+(version 0.1 w 8 h 8 serial 53304 cycle 0 turn 0 filename default name `Level 0` description `Level 0 - Tutorial`
+events (
+/*((turn 1) (msg `  Level 0 - Forest`
+  `During his usual herb gathering, wizard`
+  `was confronted by two hungry goblins.`
+  `Wizard managed to teleport away, yet`
+  `goblins still feel him and will soon`
+  `close the distance.`
+  ``
+  `Select wizard and click pentagram icon`
+  `This will create a pentagram required to`
+  `summon defenders.`
+  ))*/
+((got_unit 1 pentagram_0) (msg `  The Pentagram is Ready to Rock!`
+  `Now click the wizard again to select`
+  `the pentagram under him. Then click`
+  `ratman icon to begin researching summon`
+  `Click wizard one more time and move him`
+  `out of pentagram to free space for`
+  `future summoning.`
+  ``
+  `After that keep clicking the large`
+  `hourglass icon, until research`
+  `completes`
+  ))
+((researched 1 summon_ratman) (msg `  Reasearch completes just in time!`
+  `Research is complete!`
+  `but goblins are too close.`
+  `Pick pentagram and click summon ratman`
+  ))
+((got_unit 1 unit_ratman) (msg `  Summoned`
+  `Finally something to counter goblins!`
+  `Move the ratman towards goblins.`
+  `Wait for pentagram to recharge.`
+  `Then summon an additional ratman.`
+  ))
+((not got_unit 2 unit_goblin) (msg `  Victory!`
+  `Now with goblins out of the way,`
+  `Wizard can return to his tower!`
+  )
+ (victory 1 `Survived goblin attack.`))
+)
+next_world level1
+tids (void grass floor empty dummy dirt cloud house_roof base_ stairs filler water rock sand wall4 trns test wall1 wall2 column column2 column0 column1 plain house_wall_b house_wall_f) players ((0 Independent 0 white 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ()) (1 Player1 1 red 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ()) (2 Player2 0 blue 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ()) (3 Player3 0 cyan 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ()) (4 Player4 0 violet 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ()) (5 Player5 0 orange 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ()) (6 Player6 0 black 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ()) (7 Player7 0 yellow 1 0 ((aiSwapXYZ (0 0 0)) (researching 0)) ())) player 2 units ((1 3228 tree_fir3 (1 1 5) (0 0) idle 0 3 1 0 0) (2 28737 tree_fir3 (1 6 5) (0 0) idle 0 3 2 0 0) (3 4542 tree_fir2 (5 2 5) (0 0) idle 0 3 1 0 0) (4 3469 tree_fir2 (1 2 5) (0 0) idle 0 3 1 0 0) (5 4722 tree_fir2 (4 3 5) (0 0) idle 0 3 1 0 0) (6 3502 tree_fir2 (2 1 5) (0 0) idle 0 3 1 0 0) (7 16988 tree_fir3 (4 4 5) (0 0) idle 0 3 2 0 0) (8 4068 tree_fir3 (8 1 5) (0 0) idle 0 3 1 0 0) (9 4265 tree_fir2 (8 2 5) (0 0) idle 0 3 1 0 0) (10 4315 tree_fir2 (7 1 5) (0 0) idle 0 3 1 0 0) (11 6369 tree_fir3 (5 3 5) (0 0) idle 0 3 1 0 0) (12 5539 tree_fir3 (3 5 5) (0 0) idle 0 3 1 0 0) (13 5514 tree_fir3 (2 6 5) (0 0) idle 0 3 1 0 0) (14 5832 tree_fir2 (2 5 5) (0 0) idle 0 3 1 0 0) (15 5863 tree_fir2 (3 6 5) (0 0) idle 0 3 1 0 0) (16 9256 tree_fir3 (1 5 5) (0 0) idle 0 3 1 0 0) (17 30567 ground_stone06 (1 8 5) (0 0) idle 0 3 2 0 0) (18 16726 tree_fir2 (3 4 5) (0 0) idle 0 3 2 0 0) (19 19647 ground_shroom01 (4 5 5) (0 0) idle 0 3 2 0 0) (20 21882 ground_log1 (7 2 5) (0 0) idle 0 3 2 0 0) (21 25228 tree_fir3 (8 8 5) (0 0) idle 0 3 2 0 0) (22 25351 tree_fir2 (8 7 5) (0 0) idle 0 3 2 0 0) (23 25451 tree_fir2 (7 8 5) (0 0) idle 0 3 2 0 0) (24 25559 tree_fir2 (8 5 5) (0 0) idle 0 3 2 0 0) (25 25601 tree_fir2 (8 4 5) (0 0) idle 0 3 2 0 0) (26 27993 tree_fir2 (1 7 5) (0 0) idle 0 3 2 0 0) (27 46505 bush_03 (6 5 5) (0 0) idle 0 3 1 0 0) (28 45860 ground_plant1 (8 3 5) (0 0) idle 0 3 1 0 0) (29 40453 ground_stone03 (8 6 5) (0 0) idle 0 3 1 0 0) (30 48289 bush_02 (6 2 5) (0 0) idle 0 3 1 0 0) (31 39677 ground_plant4 (2 2 5) (0 0) idle 0 3 1 0 0) (32 41467 ground_stone04 (5 1 5) (0 0) idle 0 3 1 0 0) (33 47336 bush_01 (2 6 5) (0 0) idle 0 3 1 0 0) (34 46869 bush_01_dead (4 4 5) (0 0) idle 0 3 1 0 0) (35 50778 unit_goblin (1 3 5) (0 0) idle 0 3 2 0 0) (36 52509 wizard_wizard0 (3 7 5) (0 0) idle 0 3 1 0 0) (40 53207 unit_goblin (1 4 5) (0 0) idle 0 3 2 0 0)) tilemap (((-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 5) (-3 -2 -1 23)) ((-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23)) ((-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23)) ((-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23)) ((-3 -2 -1 23) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23)) ((-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23)) ((-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 23) (-3 -2 -1 5)) ((-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 5) (-3 -2 -1 5))))

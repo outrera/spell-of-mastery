@@ -8,21 +8,35 @@ world.new_game =
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
 
+EventActions = []
+
 world.process_events =
 | DisabledEvents = have $params.disabled_events []
-| for [Id [When What]] $events: when no DisabledEvents.find{Id}:
+| for [Id [When @Actions]] $events: when no DisabledEvents.find{Id}:
   | Repeat = 0
-  | case When [repeat RealWhen]
+  | case When [repeat @RealWhen]
     | When <= RealWhen
     | Repeat <= 1
+  | Negate = 0
+  | case When [not @RealWhen]
+    | When <= RealWhen
+    | Negate <= 1
   | True = case When
     [turn N] | N><$turn
     [got_unit Player UnitType]
-    | got $players.Player.units.find{?type><UnitType}
-  | when True: case What
-    [msg Title @Body] | $main.show_message{Title Body.text{'\n'}}
+      | Units = $players.Player.units
+      | got Units.find{?type><UnitType}
+    [researched Player ActName]
+      | Act = $main.params.acts.ActName
+      | less got ActName: "World events references unknown act [ActName]"
+      | ResearchSpent = $players.Player.research.(Act.type)
+      | ResearchRemain = Act.research - ResearchSpent
+      | ResearchRemain << 0
+  | when Negate: True <= not True
   | less True: Repeat <= 1
   | less Repeat: push Id $params.disabled_events
+  | when True: push Actions EventActions
+| EventActions <= EventActions.flip.join
 
 world.end_turn =
 | Researching = $player.researching
@@ -52,6 +66,14 @@ world.end_turn =
 | $on_player_change P
 
 world.update =
+| till EventActions.end
+  | case EventActions^pop
+    [msg Title @Body]
+      | $main.show_message{Title Body.text{'\n'}}
+      | leave
+    [victory Player Reason]
+      | $params.winner <= Player
+      | $params.victory_type <= Reason
 | NextActive = []
 | for U $active.list: U.update
 | while $active.used

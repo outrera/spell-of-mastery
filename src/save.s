@@ -5,6 +5,7 @@ world.save =
     filename | $filename
     name | $name
     description | $description
+    params | map [K V] $params [K V]
     events | $events{}{?1}
     tids | $tid_map{}{?type}
     players | map P $players
@@ -35,6 +36,7 @@ world.load Saved =
 | $description <= Saved.description
 | $events <= if got Saved.events then Saved.events.i else []
 | $serial <= Saved.serial
+| when got!it Saved.params: for [K V] it: $params.K <= V
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}
 | Tilemap = remap_tids LookupTable Saved.tilemap
