@@ -1,6 +1,6 @@
 sprite: unit_ratman
 level: 1
-health: 3
+health: 2
 attack: 1
 defense: 0
 sounds: attack,(attack2)

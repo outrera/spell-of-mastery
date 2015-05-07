@@ -1,0 +1,5 @@
+title: `Pentagram`
+act: pentagram
+effect: pentagram_1_witch
+target: self
+icon: spell_pentagram

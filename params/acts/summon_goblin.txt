@@ -1,0 +1,6 @@
+act: summon
+effect: unit_goblin
+target: pentagram
+icon: unit_goblin
+research: 20
+cost: 6

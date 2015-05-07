@@ -74,14 +74,15 @@ world.update =
     [victory Player Reason]
       | $params.winner <= Player
       | $params.victory_type <= Reason
-| NextActive = []
-| for U $active.list: U.update
-| while $active.used
-  | U = $active.pop
-  | when U.active: push U NextActive
-| for U NextActive: $active.push{U}
-| !$cycle + 1
-| ($on_update){}
+| times I 2
+  | NextActive = []
+  | for U $active.list: U.update
+  | while $active.used
+    | U = $active.pop
+    | when U.active: push U NextActive
+  | for U NextActive: $active.push{U}
+  | !$cycle + 1
+  | ($on_update){}
 
 unit.update =
 | when $turn and ($world.turn - $turn) > $ttl and $action.class_name <> die:

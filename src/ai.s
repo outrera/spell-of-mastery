@@ -79,7 +79,7 @@ ai.update_pentagram =
       | when Turn-Pentagram.moved>6: leave $cast_pentagram
 | Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
 | when Summons.size
-  | S = Summons.find{?effect >< unit_ratman}
+  | S = Summons.find{?effect >< unit_goblin}
   | when got S
     | if $player.research_remain{S} > 0
       then | $player.researching <= S.type
