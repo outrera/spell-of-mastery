@@ -7,24 +7,27 @@ MessageBox = No
 MessageBoxTitle = No
 MessageBoxText = No
 MessageBoxOk = No
+MessageBoxWidth = 1
 
 Pause =
 Unpause =
 
 init_message_box Main =
+| BG = Main.img{ui_panel5}
+| MessageBoxWidth <= BG.w
 | MessageBoxTitle <= txt medium '' 
 | MessageBoxText <= txt medium ''
 | MessageBoxOk <= hidden: button 'Ok' skin/medium_small: =>
   | Unpause{}
   | MessageBox.show <= 0
 | MessageBox <= hidden: dlg: mtx
-  | 270 100 | Main.img{ui_panel5}
+  | 270 100 | BG
   | 290 110 | MessageBoxTitle
   | 280 140 | MessageBoxText
   | 390 420 | MessageBoxOk
 main.show_message Title Text =
 | MessageBoxTitle.value <= Title
-| MessageBoxText.value <= Text
+| MessageBoxText.value <= MessageBoxText.font.format{MessageBoxWidth Text}
 | MessageBoxOk.show <= 1
 | MessageBox.show <= 1
 | Pause{}

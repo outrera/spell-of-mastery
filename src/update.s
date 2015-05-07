@@ -69,7 +69,7 @@ world.update =
 | till EventActions.end
   | case EventActions^pop
     [msg Title @Body]
-      | $main.show_message{Title Body.text{'\n'}}
+      | $main.show_message{Title Body.text{' '}}
       | leave
     [victory Player Reason]
       | $params.winner <= Player

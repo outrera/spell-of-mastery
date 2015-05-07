@@ -1,42 +1,35 @@
 (version 0.1 w 8 h 8 serial 53304 cycle 0 turn 0 filename default name `Level 0` description `Level 0 - Tutorial`
 events (
-/*((turn 1) (msg `  Level 0 - Forest`
-  `During his usual herb gathering, wizard`
-  `was confronted by two hungry goblins.`
-  `Wizard managed to teleport away, yet`
-  `goblins still feel him and will soon`
-  `close the distance.`
-  ``
-  `Select wizard and click pentagram icon`
-  `This will create a pentagram required to`
-  `summon defenders.`
-  ))*/
+((turn 1) (msg `  Level 0 - Forest`
+  `During his usual herb gathering, wizard was confronted by two hungry goblins.
+   Wizard managed to teleport away, yet goblins still feel him and will soon
+   close the distance.
+   <br> <br>
+   Select wizard and click pentagram icon. This will create a pentagram required to
+   summon defenders.
+   `
+  ))
 ((got_unit 1 pentagram_0) (msg `  The Pentagram is Ready to Rock!`
-  `Now click the wizard again to select`
-  `the pentagram under him. Then click`
-  `ratman icon to begin researching summon`
-  `Click wizard one more time and move him`
-  `out of pentagram to free space for`
-  `future summoning.`
-  ``
-  `After that keep clicking the large`
-  `hourglass icon, until research`
-  `completes`
+  `Now click the wizard again to select the pentagram under him.
+   Then click ratman icon to begin researching it.
+   Click wizard one more time and move him out of pentagram
+   to free space for future summoning.
+   After that keep clicking the large hourglass icon, until research
+   completes
+   `
   ))
 ((researched 1 summon_ratman) (msg `  Reasearch completes just in time!`
-  `Research is complete!`
-  `but goblins are too close.`
-  `Pick pentagram and click summon ratman`
+  `Research is complete! But goblins are too close.
+   Pick pentagram and click summon ratman`
   ))
 ((got_unit 1 unit_ratman) (msg `  Ratman Summoned`
-  `Finally something to counter goblins!`
-  `Move the ratman towards goblins.`
-  `Wait for pentagram to recharge.`
-  `Then summon an additional ratman.`
+  `Finally something to counter goblins!
+   Move the ratman towards goblins.
+   Wait for pentagram to recharge.
+   Then summon an additional ratman.`
   ))
 ((not got_unit 2 unit_goblin) (msg `  Victory!`
-  `Now with goblins out of the way,`
-  `Wizard can return to his tower!`
+  `Now with goblins out of the way, the Wizard can return to his tower!`
   )
  (victory 1 `Survived goblin attack.`))
 )

@@ -37,6 +37,32 @@ font.draw G P Text =
     | G.blit{[CX CY] Gs.I}
     | W+1+!CX
   | !CY + H
+font.format MaxLineWidth Text =
+| SpaceWidth = $width{' '}
+| Words = Text.replace{'\n' ' '}.split{' '}{Word=>[Word $width{Word}]}
+| Line = []
+| Lines = []
+| LineWidth = 0
+| till Words.end
+  | Word,Width = pop Words
+  | less Line.end: !Width+SpaceWidth
+  | when Word >< ' '
+    | Word <= ''
+    | Width <= 0
+  | when Word >< '<br>'
+    | push Line Lines
+    | Line <= []
+    | LineWidth <= 0
+    | Width <= 0
+    | Word <= ''
+  | when LineWidth+Width > MaxLineWidth: less Line.end:
+    | push Line Lines
+    | Line <= []
+    | LineWidth <= 0
+  | less Word >< '': push Word Line
+  | !LineWidth+Width
+| less Line.end: push Line Lines
+| Lines{?flip.text{' '}}.flip.text{'\n'}
 
 type txt.widget{font_name value} w h v value_/'' font
 | $font <= font $font_name
