@@ -258,6 +258,20 @@ unit.list_moves XYZ =
   | when Move: push Move Moves
 | Moves.list
 
+unit.list_attack_moves XYZ =
+| less $attack: leave []
+| Map = $moves
+| $moves <= Map.deep_copy
+| for Xs $moves: for I Xs.size: when Xs.I >< 2: Xs.I <= 1
+| Ms = $list_moves{XYZ}
+| $moves <= Map
+| O =  Map.size/2
+| OO = [O O 0]
+| Map = $moves
+| Ms.keep{M => 
+          | X,Y,Z = OO+M.xyz-XYZ
+          | V = Map.Y.X
+          | V >< 1 or V >< 2}
 
 unit.mark_moves @As =
 | XYZ = if As.size then As.0 else $xyz

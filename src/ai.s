@@ -11,7 +11,6 @@ player.units =
 | Turn = $world.turn
 | $world.active.list.keep{(?owner.id >< PID and not ?removed)}
 
-Map = dup 256: dup 256: 0
 HarmMap = dup 256: dup 256: 0
 
 unit.order_act Act = $order.init{@Act.list.join}
@@ -90,58 +89,79 @@ ai.update_pentagram =
            | leave 1
 | 0
 
-ai.attack_with Map Queue N U =
-| Turn = $world.turn
-| UID = U.id
+PFMap = dup 256: dup 256: #FFFFFFFFFFFF
+PFQueue = queue 256*256
+PFCount = #FFFFFF
+
+pf_reset_count =
+| for Xs PFMap: Xs.init{#FFFFFFFFFFFF}
+| PFCount <= #FFFFFF
+
+world.pathfind Closest U Type =
 | X,Y,Z = U.xyz
 | Targets = []
-| StartCost = N*#1000000
-| Map.X.Y <= StartCost
-| Queue.push{[0 U.xyz StartCost]}
-| StartTime = get_gui{}.ticks{}
-| till Queue.end
-  | Node = Queue.pop
+| !PFCount-1
+| less PFCount: pf_reset_count
+| StartCost = PFCount*#1000000
+| PFMap.X.Y <= StartCost
+| PFQueue.push{[0 U.xyz StartCost]}
+| till PFQueue.end
+  | Node = PFQueue.pop
   | [Prev XYZ Cost] = Node
   | X,Y,Z = XYZ
   | NextCost = Cost+1
   | for M U.list_moves{XYZ}:
     | when M.type >< attack:
-      | case $world.units_at{M.xyz}.skip{?empty} [T@_]:
-        | less Targets.any{?id >< T.id}: push T Targets
-    | case M.xyz X,Y,Z: when NextCost < Map.X.Y:
-      | Map.X.Y <= NextCost
-      | Queue.push{[Node M.xyz NextCost]}
-    | when Targets.size: Queue.clear
+      | case $units_at{M.xyz}.skip{?empty} [T@_]:
+        | less Targets.any{?id >< T.id}:
+          | push T Targets
+          | when Closest: _goto end
+    | case M.xyz X,Y,Z: when NextCost < PFMap.X.Y:
+      | PFMap.X.Y <= NextCost
+      | PFQueue.push{[Node M.xyz NextCost]}
+| _label end
 | EndTime = get_gui{}.ticks{}
 //| say EndTime-StartTime
 | less Targets.size: leave 0
-| Target = Targets{[Map.(?xyz.0).(?xyz.1) ?]}.sort{?0 < ??0}.0.1
-| XYZ = Target.xyz
-| Move = 0
-| till Move
+| Targets <= Targets{?xyz}
+| PFQueue.clear
+| when Closest: leave Targets.0
+| Targets
+
+unit.pathfind Closest Type = $world.pathfind{Closest Me Type}
+
+world.path U Target =
+| XYZ = Target
+| Path = [XYZ]
+| UXYZ = U.xyz
+| UCost = PFMap.(UXYZ.0).(UXYZ.1)
+| till PFMap.(XYZ.0).(XYZ.1)-UCost >< 1
   | Ms = U.list_moves{XYZ}
-  | Moves = Ms.keep{(Map.(?xyz.0).(?xyz.1)^^#FFFFFF) >< 1}
-  | if Moves.size then Move <= Moves.0
-    else XYZ <= Ms{[Map.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1
+  | XYZ <= Ms{[PFMap.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1
+  | push XYZ Path
+| Path.list
+
+ai.attack_with U =
+| TargetXYZ = U.pathfind{1 attack}
+| less TargetXYZ: leave 0
+| XYZ = $world.path{U TargetXYZ}.0
+| Turn = $world.turn
 | Ms = U.list_moves{U.xyz}
-| XYZ = Move.xyz
 | M = Ms.find{?xyz >< XYZ}
 | less got M: leave 0
 | B = $world.block_at{M.xyz}
 | when M.type >< swap
   | when B.moved>>Turn or (B.attack and not B.defender): leave 0
   | Ms = B.list_moves{B.xyz}.skip{?type><swap}
-  | Ms = Ms{[(?xyz-Target.xyz){?abs}.sum ?]}.sort{?0 < ??0}{?1}
+  | Ms = Ms{[(?xyz-TargetXYZ){?abs}.sum ?]}.sort{?0 < ??0}{?1}
   | Pentagram = $player.pentagram
   | when Pentagram: Ms <= Ms.skip{?xyz >< Pentagram.xyz}
   | when Ms.size
-    | $marked_order{B Ms.0} // move it out of the way
+    | $marked_order{B Ms.rand} // move it out of the way
     | leave 1
   | leave 0
 | $marked_order{U M}
 | leave 1
-
-
 
 ai.update_units Units =
 | Player = $player
@@ -152,8 +172,6 @@ ai.update_units Units =
 | AiUnitsRemain = have $player.params.ai_units_remain [0 0]
 | when AiUnitsRemain.0 <> Turn: AiUnitsRemain.init{Turn,Units.size}
 | UnitsRemain = AiUnitsRemain.1
-| for Xs Map: for I Xs.size: Xs.I <= #FFFFFFFFFFFF //pathfinder map
-| Queue = queue 256*256
 | PentID = 0
 | when Leader: PentID <= Leader.id
 | when Pentagram: PentID <= Pentagram.id
@@ -163,23 +181,8 @@ ai.update_units Units =
   | !UnitsRemain-1
   | AiUnitsRemain.1 <= UnitsRemain
   | when U.id >< PentID: when $update_pentagram: leave 1
-  | when U.attack: when $attack_with{Map Queue UnitsRemain U}: leave 1
+  | when U.attack: when $attack_with{U}: leave 1
 | leave 0
-
-unit.list_attack_moves XYZ =
-| less $attack: leave []
-| Map = $moves
-| $moves <= Map.deep_copy
-| for Xs $moves: for I Xs.size: when Xs.I >< 2: Xs.I <= 1
-| Ms = $list_moves{XYZ}
-| $moves <= Map
-| O =  Map.size/2
-| OO = [O O 0]
-| Map = $moves
-| Ms.keep{M => 
-          | X,Y,Z = OO+M.xyz-XYZ
-          | V = Map.Y.X
-          | V >< 1 or V >< 2}
 
 ai.update =
 | Player = $player
@@ -240,7 +243,8 @@ ai.update =
       | when Harm^^#FF00000 and (not Harm^^#FF or (Harm^^#FF00) > #100):
         | $marked_order{U M}
         | leave
-| when $update_units{Units}: leave
+| Quit = $update_units{Units}
+| when Quit: leave
 | $end_turn
 
 
