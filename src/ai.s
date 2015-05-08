@@ -89,12 +89,12 @@ ai.update_pentagram =
            | leave 1
 | 0
 
-PFMap = dup 256: dup 256: #FFFFFFFFFFFF
+PFMap = dup 134: dup 134: dup 64: #FFFFFFFFFFFF
 PFQueue = queue 256*256
 PFCount = #FFFFFF
 
 pf_reset_count =
-| for Xs PFMap: Xs.init{#FFFFFFFFFFFF}
+| for Ys PFMap: for Xs Ys: Xs.init{#FFFFFFFFFFFF}
 | PFCount <= #FFFFFF
 
 world.pathfind Closest U Type =
@@ -103,7 +103,7 @@ world.pathfind Closest U Type =
 | !PFCount-1
 | less PFCount: pf_reset_count
 | StartCost = PFCount*#1000000
-| PFMap.X.Y <= StartCost
+| PFMap.X.Y.Z <= StartCost
 | PFQueue.push{[0 U.xyz StartCost]}
 | till PFQueue.end
   | Node = PFQueue.pop
@@ -116,8 +116,10 @@ world.pathfind Closest U Type =
         | less Targets.any{?id >< T.id}:
           | push T Targets
           | when Closest: _goto end
-    | case M.xyz X,Y,Z: when NextCost < PFMap.X.Y:
-      | PFMap.X.Y <= NextCost
+    | X,Y,Z = M.xyz
+    | MXY = PFMap.X.Y
+    | when NextCost < MXY.Z:
+      | MXY.Z <= NextCost
       | PFQueue.push{[Node M.xyz NextCost]}
 | _label end
 | EndTime = get_gui{}.ticks{}
@@ -133,11 +135,11 @@ unit.pathfind Closest Type = $world.pathfind{Closest Me Type}
 world.path U Target =
 | XYZ = Target
 | Path = [XYZ]
-| UXYZ = U.xyz
-| UCost = PFMap.(UXYZ.0).(UXYZ.1)
-| till PFMap.(XYZ.0).(XYZ.1)-UCost >< 1
+| UX,UY,UZ = U.xyz
+| UCost = PFMap.UX.UY.UZ
+| till PFMap.(XYZ.0).(XYZ.1).(XYZ.2)-UCost >< 1
   | Ms = U.list_moves{XYZ}
-  | XYZ <= Ms{[PFMap.(?xyz.0).(?xyz.1) ?xyz]}.sort{?0 < ??0}.0.1
+  | XYZ <= Ms{[PFMap.(?xyz.0).(?xyz.1).(?xyz.2) ?xyz]}.sort{?0 < ??0}.0.1
   | push XYZ Path
 | Path.list
 
