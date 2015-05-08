@@ -74,7 +74,8 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
 | CurH = (CurX+CurY)/2
 | XY2 = (X+Y)/2
 | AboveCursor = CurH >> XY2
-| CurHH = XY2-CurH-2
+| CurHH = YDiv*(XY2-CurH-2)+3
+| CutZ = max CursorZ CurHH
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
@@ -89,7 +90,7 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
-    | when AboveCursor or TZ << CursorZ or CurHH-TZ/YDiv >> 0:
+    | when AboveCursor or TZ << CutZ:
       | Heap.push{Key [G BX BY-G.h-ZZ 0]}
   | when DrawCursor: Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
   | Z <= UnitZ
@@ -97,10 +98,10 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
 | _label for_break
 | for U Wr.column_units_at{X Y}
   | XYZ = U.xyz
-  | when XYZ.0 >< X and XYZ.1 >< Y and XYZ.2 < RoofZ:
-    | Z = U.xyz.2
+  | Z = XYZ.2
+  | TZ = Z-4
+  | when TZ < RoofZ and (AboveCursor or TZ << CutZ):
     | DrawShadow = Z > UnitZ
-    // FIXME: omit units stadning above the current cave
     | U.render{Heap BX BY-ZUnit*Z}
     | when DrawShadow
       | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
