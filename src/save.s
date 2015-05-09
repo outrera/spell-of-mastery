@@ -10,7 +10,7 @@ world.save =
     tids | $tid_map{}{?type}
     players | map P $players
               | [P.id P.name P.human P.color P.power P.moves
-                 P.params.list P.research.list.keep{?1}]
+                 P.params.list P.research.list.keep{?1} P.mana]
     player | $player.id
     units | map U $units.skip{(?removed or ?mark)}
             | list U.id U.serial U.type U.xyz U.xy
@@ -49,11 +49,12 @@ world.load Saved =
 | $turn <= Saved.turn
 | IdMap = t
 | for X Saved.players
-  | [Id Name Human Color Power Moves Params Research] = X
+  | [Id Name Human Color Power Moves Params Research @Mana] = X
   | P = $players.Id
   | P.name <= Name
   | P.human <= Human
   | P.color <= Color
+  | P.mana <= if Mana.size then Mana.0 else 0
   | P.power <= Power
   | P.moves <= Moves
   | for K,V Params: P.params.K <= V

@@ -11,7 +11,7 @@ ai.clear =
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
-type player{id world} name ai human color power moves leader pentagram
+type player{id world} name ai human color mana power moves leader pentagram
                       params research/(t) picked
 | $name <= if $id >< 0 then "Independent" else "Player[$id]"
 | $color <= PlayerColors.$id
