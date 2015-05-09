@@ -38,6 +38,8 @@ world.process_events =
   | when True: push Actions EventActions
 | EventActions <= EventActions.flip.join
 
+EndTurnDepth = 0
+
 world.end_turn =
 | Researching = $player.researching
 | when Researching: !$player.research.Researching + $player.power
@@ -54,7 +56,12 @@ world.end_turn =
 | P.leader <= 0
 | Units = $player.active
 | less Units.size /*or $player.human*/:
+  | when EndTurnDepth>16
+    | EndTurnDepth<=0
+    | leave
+  | !EndTurnDepth+1
   | $end_turn
+  | EndTurnDepth <= 0
   | leave
 | for U P.units
   | when U.bank >< pentagram: P.pentagram <= U
