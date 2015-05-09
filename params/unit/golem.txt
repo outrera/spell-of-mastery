@@ -3,6 +3,7 @@ level: 4
 health: 5
 attack: 4
 defense: 1
+speed: -2
 moves:
   | 0 0 0 0 0
   | 0 0 1 0 0

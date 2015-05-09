@@ -86,10 +86,10 @@ info_line.render =
 | case ActIcons.keep{(?.show and ?.over)} [Icon@_]
   | Act = $main.params.acts.(Icon.data)
   | Info =  if got Act.title then Act.title else Act.type.replace{_ ' '}
-  | when got Icon.number: Info <= "research [Info] ([Icon.number] moves)"
+  | when got Icon.number: Info <= "research [Info] ([Icon.number] TURNS)"
   | less got Icon.number:
     | Cost = if got Act.cost then Act.cost else 0
-    | Info <= "[Info] ([Act.cost] moves)"
+    | Info <= "[Info] ([Act.cost] MANA)"
   | $info_text.value <= Info.upcase
 | $info_text.render
 

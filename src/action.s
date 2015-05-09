@@ -112,8 +112,9 @@ act_attack.update A =
       | U.animate{idle}
       | leave
     | when got!it Target.sounds.die: Target.main.sound{it.rand}
-    | DeathOrder = Target.order.init{act/die cost/0}
+    | DeathOrder = Target.order.init{act/die}
     | DeathOrder.priority <= 1000
+    | DeathOrder.moves <= 0
     | Target.action.cycles <= 1
     | U.world.waiting <= Target.id
     | U.animate{idle}
@@ -239,6 +240,7 @@ type action{unit}
    priority // used to check if action can be preempted
    fromXYZ/[0 0 0]
    fromXY/[0 0]
+   moves // if this action formally moves unit
    data // data used by class
    cost
    effect
@@ -246,17 +248,17 @@ type action{unit}
 
 action.as_text = "#action{[$class_name] [$priority] [$target]}"
 
-action.init act/idle at/self target/0 cost/-1 effect/0 path/0 =
+action.init act/idle at/self target/0 cost/0 effect/0 path/0 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
-| when Cost >< -1: Cost <= 1
 | $xyz.init{At}
 | $target <= Target
 | $priority <= 50
 | $class <= ActionClasses.Act
 | $cycles <= -1
-| $cost <= if Act >< swap then max $unit.level $target.level else Cost
+| $cost <= Cost
+| $moves <= 1
 | $effect <= Effect
 | $path <= Path
 | less got $class: bad "unknown action class [Act]"

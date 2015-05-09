@@ -43,7 +43,7 @@ ai.cast_pentagram =
   | leave 1
 | leave 0
 
-ai.update_pentagram =
+ai.update_leader =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 | Turn = $world.turn
@@ -84,7 +84,7 @@ ai.update_pentagram =
       then | $player.researching <= S.type
            | $end_turn
            | leave 1
-      else | when Pentagram.moved >> Turn: leave 0
+      else | when Pentagram.moved >> Turn and $player.mana>>S.cost: leave 0
            | $order_act{Pentagram S}
            | leave 1
 | 0
@@ -182,7 +182,7 @@ ai.update_units Units =
   | !AiNextUnit.0 + 1
   | !UnitsRemain-1
   | AiUnitsRemain.1 <= UnitsRemain
-  | when U.id >< PentID: when $update_pentagram: leave 1
+  | when U.id >< PentID: when $update_leader: leave 1
   | when U.attack: when $attack_with{U}: leave 1
 | leave 0
 
