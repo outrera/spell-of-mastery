@@ -2,5 +2,5 @@ act: summon
 effect: unit_beetle
 target: pentagram
 icon: unit_beetle
-research: 2
-cost: 2
+research: 0
+cost: 5
