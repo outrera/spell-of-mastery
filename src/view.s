@@ -98,9 +98,9 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
 | _label for_break
 | for U Wr.column_units_at{X Y}
   | XYZ = U.xyz
-  | Z = XYZ.2
+  | UX,UY,Z = XYZ
   | TZ = Z-4
-  | when TZ < RoofZ and (AboveCursor or TZ << CutZ):
+  | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
     | DrawShadow = Z > UnitZ
     | U.render{Heap BX BY-ZUnit*Z}
     | when DrawShadow
