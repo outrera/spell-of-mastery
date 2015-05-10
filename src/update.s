@@ -82,6 +82,10 @@ world.update =
     [victory Player Reason]
       | $params.winner <= Player
       | $params.victory_type <= Reason
+| when $player.leader and $player.pentagram:
+  | Moved = max $player.pentagram.moved $player.leader.moved
+  | $player.pentagram.moved <= Moved
+  | $player.leader.moved <= Moved
 | times I 2
   | NextActive = []
   | for U $active.list: U.update

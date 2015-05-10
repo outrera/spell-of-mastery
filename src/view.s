@@ -166,8 +166,10 @@ view.draw_indicators =
 | IP = [($w-Indicators.w)/2 0]
 | $fb.blit{IP Indicators}
 | Font = font medium
-| Font.draw{$fb IP+[28 1] "[$world.player.mana]+[$world.player.power]"}
-| Font.draw{$fb IP+[148 1] "[$world.turn]:[$world.player.id]:[$world.player.moves]"}
+| P = $world.player
+| Font.draw{$fb IP+[28 1] "[P.mana]+[P.power]"}
+| Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]:[P.moves]"}
+| Font.draw{$fb IP+[148 16] "[P.name]"}
 | Font = font small
 | Font.draw{$fb IP+[246 1] "[X],[Y],[Z]"}
 | Font.draw{$fb IP+[246 9] "[$world.at{X,Y,Z-1}.type]"}
