@@ -82,10 +82,6 @@ world.update =
     [victory Player Reason]
       | $params.winner <= Player
       | $params.victory_type <= Reason
-| when $player.leader and $player.pentagram:
-  | Moved = max $player.pentagram.moved $player.leader.moved
-  | $player.pentagram.moved <= Moved
-  | $player.leader.moved <= Moved
 | times I 2
   | NextActive = []
   | for U $active.list: U.update
@@ -133,10 +129,8 @@ unit.update =
   | Speed = if MoveAction then $speed else $next_action.speed
   | if     $next_action.valid
        and (not $next_action.speed
-            or ($owner.moves > 0 and $moved < $world.turn
-                and $owner.mana>>$next_action.cost))
+            or ($moved < $world.turn and $owner.mana>>$next_action.cost))
     then | less Path:
-           | !$owner.moves - 1
            | !$owner.mana-$next_action.cost
            | when Speed: $moved <= $world.turn-Speed-1
     else $next_action.init{act/idle at/$xyz}

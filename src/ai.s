@@ -166,6 +166,7 @@ ai.attack_with U =
 | leave 1
 
 ai.update_units Units =
+| less Units.size: leave 0
 | Player = $player
 | Pentagram = Player.pentagram
 | Leader = Player.leader
@@ -191,9 +192,6 @@ ai.update =
 | PID = Player.id
 | Units = Player.active
 | Pentagram = Player.pentagram
-| when $player.moves << 0
-  | $end_turn
-  | leave
 | for U Units: // check if we can attack someone 
   | case U.list_moves{U.xyz}.keep{?type >< attack} [A@_]
     | $marked_order{U A}
@@ -209,10 +207,8 @@ ai.update =
   | XYZ = T.xyz
   | X,Y,Z = XYZ
   | O = U.owner
-  | Mobile = O.moves + O.power > 0
-  | when Mobile:
-    | if U.ranged then HarmMap.X.Y <= #1
-      else !HarmMap.X.Y + #1
+  | if U.ranged then HarmMap.X.Y <= #1
+    else !HarmMap.X.Y + #1
 | Ts <= Ts{?1}
 | for U Units
   | X,Y,Z = U.xyz

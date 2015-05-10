@@ -276,7 +276,7 @@ main.run =
   | NonNil = Unit.type <> unit_nil
   | GameUnitUI.show <= NonNil
   | for Icon ActIcons: Icon.show <= 0
-  | when Unit.moved < $world.turn:
+  | when 1: //Unit.moved < $world.turn:
     for I,Act Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
     | Active = 1
     | when Act.act >< summon and not Unit.owner.pentagram:

@@ -168,7 +168,7 @@ view.draw_indicators =
 | Font = font medium
 | P = $world.player
 | Font.draw{$fb IP+[28 1] "[P.mana]+[P.power]"}
-| Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]:[P.moves]"}
+| Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]"}
 | Font.draw{$fb IP+[148 16] "[P.name]"}
 | Font = font small
 | Font.draw{$fb IP+[246 1] "[X],[Y],[Z]"}
@@ -310,7 +310,8 @@ view.update_play =
   else
   | case $mice_click
     left | $select_unit{$cursor}
-    right | when $world.picked: $world.picked.guess_order_at{$cursor}
+    right | when $world.picked and $picked.owner.id >< Player.id:
+            | $world.picked.guess_order_at{$cursor}
   | $mice_click <= 0
   | Picked = $world.picked
   | less Picked: Picked <= $world.nil

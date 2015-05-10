@@ -221,7 +221,7 @@ act_spell_of_mastery.start A =
 act_spell_of_mastery.finish A =
 | U = A.unit
 | U.world.params.winner <= U.owner.id
-| U.world.params.victory_type <= 'Victory by casting the Spell of Masetry'
+| U.world.params.victory_type <= 'Victory by casting the Spell of Mastery'
 
 
 
