@@ -148,7 +148,9 @@ type act_swap.act_class class_name/swap anim/action
 act_swap.valid A =
 | T = A.target
 | less A.target and not A.target.removed: leave 0
-| A.unit.owner.id >< T.owner.id and A.unit.owner.moves > 0
+| U = A.unit
+| Turn = U.world.turn
+| U.owner.id >< T.owner.id and U.moved < Turn and T.moved < Turn
 
 act_swap.start A =
 | U = A.unit

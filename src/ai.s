@@ -152,16 +152,6 @@ ai.attack_with U =
 | M = Ms.find{?xyz >< XYZ}
 | less got M: leave 0
 | B = $world.block_at{M.xyz}
-| when M.type >< swap
-  | when B.moved>>Turn or (B.attack and not B.defender): leave 0
-  | Ms = B.list_moves{B.xyz}.skip{?type><swap}
-  | Ms = Ms{[(?xyz-TargetXYZ){?abs}.sum ?]}.sort{?0 < ??0}{?1}
-  | Pentagram = $player.pentagram
-  | when Pentagram: Ms <= Ms.skip{?xyz >< Pentagram.xyz}
-  | when Ms.size
-    | $marked_order{B Ms.rand} // move it out of the way
-    | leave 1
-  | leave 0
 | $marked_order{U M}
 | leave 1
 
