@@ -95,7 +95,7 @@ world.update =
 unit.update =
 | when $turn and ($world.turn - $turn) > $ttl and $action.class_name <> die:
   | DeathOrder = $order.init{act/die}
-  | DeathOrder.moves <= 0
+  | DeathOrder.speed <= 0
 | when $removed
   | $active <= 0
   | leave
@@ -125,14 +125,16 @@ unit.update =
     | $next_action.init{act/move at/Path.xyz}
     | Path.free
   | less $anim >< idle: $animate{idle}
+  | MoveAction = $next_action.class_name >< move
+  | Speed = if MoveAction then $speed else $next_action.speed
   | if     $next_action.valid
-       and (not $next_action.moves
+       and (not $next_action.speed
             or ($owner.moves > 0 and $moved < $world.turn
                 and $owner.mana>>$next_action.cost))
     then | less Path:
            | !$owner.moves - 1
            | !$owner.mana-$next_action.cost
-           | when $next_action.moves: $moved <= $world.turn-$speed-1
+           | when Speed: $moved <= $world.turn-Speed-1
     else $next_action.init{act/idle at/$xyz}
   | swap $action $next_action
   | $next_action.class <= 0
@@ -140,7 +142,7 @@ unit.update =
   | when Path
     | swap $ordered $next_action
     | $ordered.class <= 0
-    | when $next_action.moves: $moved <= $world.turn+$speed+1 // restore it back
+    | when Speed: $moved <= $world.turn+Speed+1 // restore it back
     | $next_action.priority <= 1000
   | $action.start
 | $action.update
