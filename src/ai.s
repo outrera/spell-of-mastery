@@ -1,24 +1,6 @@
 use gui queue
 
-player.active =
-| PID = $id
-| Turn = $world.turn
-| $world.active.list.keep{(?owner.id >< PID and ?moved < Turn
-                           and not ?removed)}
-
-player.units =
-| PID = $id
-| Turn = $world.turn
-| $world.active.list.keep{(?owner.id >< PID and not ?removed)}
-
 HarmMap = dup 256: dup 256: 0
-
-unit.order_act Act = $order.init{@Act.list.join}
-
-player.research_remain Act =
-| ResearchSpent = $research.(Act.type)
-| ResearchRemain = Act.research - ResearchSpent
-| ResearchRemain
 
 ai.end_turn =
 | $world.update_pick{[]}

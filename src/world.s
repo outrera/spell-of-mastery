@@ -116,6 +116,7 @@ world.clear =
 | $players.1.human <= 1
 | $marks <= $nil
 | $params <= t
+| $active.clear
 
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName

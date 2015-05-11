@@ -8,6 +8,41 @@ world.new_game =
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
 
+EndTurnDepth = 0
+
+world.end_turn =
+| Researching = $player.researching
+| when Researching: !$player.research.Researching + $player.power
+| NextPlayer = $player.id+1
+| less NextPlayer < $players.size
+  | NextPlayer <= 0
+  | !$turn + 1
+| P = $players.NextPlayer
+| $player <= P
+| P.power <= 1
+| PID = P.id
+| P.pentagram <= 0
+| P.leader <= 0
+| Units = $player.active
+| less Units.size /*or $player.human*/:
+  | when EndTurnDepth>16
+    | EndTurnDepth<=0
+    | leave
+  | !EndTurnDepth+1
+  | $end_turn
+  | EndTurnDepth <= 0
+  | leave
+| for U P.units
+  | when U.bank >< pentagram: P.pentagram <= U
+  | when U.leader: P.leader <= U
+  | when U.level: for V $units_at{U.xyz}
+    | when V.type >< special_node
+      | !P.power+1
+| P.moves <= min $player.power P.moves+$player.power
+| less $turn><1: !P.mana+$player.power
+| $on_player_change P
+
+
 EventActions = []
 
 world.process_events =
@@ -38,43 +73,9 @@ world.process_events =
   | when True: push Actions EventActions
 | EventActions <= EventActions.flip.join
 
-EndTurnDepth = 0
-
-world.end_turn =
-| Researching = $player.researching
-| when Researching: !$player.research.Researching + $player.power
-| NextPlayer = $player.id+1
-| less NextPlayer < $players.size
-  | NextPlayer <= 0
-  | !$turn + 1
-  | $process_events
-| P = $players.NextPlayer
-| $player <= P
-| P.power <= 1
-| PID = P.id
-| P.pentagram <= 0
-| P.leader <= 0
-| Units = $player.active
-| less Units.size /*or $player.human*/:
-  | when EndTurnDepth>16
-    | EndTurnDepth<=0
-    | leave
-  | !EndTurnDepth+1
-  | $end_turn
-  | EndTurnDepth <= 0
-  | leave
-| for U P.units
-  | when U.bank >< pentagram: P.pentagram <= U
-  | when U.leader: P.leader <= U
-  | when U.level: for V $units_at{U.xyz}
-    | when V.type >< special_node
-      | !P.power+1
-| P.moves <= min $player.power P.moves+$player.power
-| less $turn><1: !P.mana+$player.power
-| $on_player_change P
-
 world.update =
-| till EventActions.end
+| when EventActions.end: $process_events
+| when not $picked or $picked.idle: less $waiting: till EventActions.end
   | case EventActions^pop
     [msg Title @Body]
       | $main.show_message{Title Body.text{' '}}

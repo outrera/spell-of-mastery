@@ -33,7 +33,20 @@ player.clear =
 | $power <= 1
 | for Type,Act $main.params.acts: $research.Type <= 0
 
-// player 0 shouldnt be used
-// player 1 would be neutral creatures, moving on their own
+
+player.active =
+| PID = $id
+| Turn = $world.turn
+| $world.active.list.keep{(?owner.id >< PID and ?moved < Turn
+                           and not ?removed)}
+player.units =
+| PID = $id
+| Turn = $world.turn
+| $world.active.list.keep{(?owner.id >< PID and not ?removed)}
+
+player.research_remain Act =
+| ResearchSpent = $research.(Act.type)
+| ResearchRemain = Act.research - ResearchSpent
+| ResearchRemain
 
 export player

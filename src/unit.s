@@ -113,6 +113,8 @@ unit.removed = $xyz.2 >< -1
 
 unit.order = $ordered
 
+unit.order_act Act = $order.init{@Act.list.join}
+
 unit.guess_order_at_mark Mark =
 | XYZ = Mark.xyz
 | Us = $world.units_at{XYZ}
