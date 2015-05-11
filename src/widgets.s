@@ -110,8 +110,6 @@ button.draw  G P =
   | X = BG.w/2-FW/2 + SF.0
   | Y = BG.h/2-FH/2 + SF.1
   | F.draw{G P+[X Y]+Shift $value}
-
-
 button.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | case $state normal: Me.state <= \pressed

@@ -310,7 +310,8 @@ view.update_play =
   else
   | case $mice_click
     left | $select_unit{$cursor}
-    right | when $world.picked and $picked.owner.id >< Player.id:
+    right | Picked = $world.picked
+          | when Picked.id and Picked.owner.id >< Player.id:
             | $world.picked.guess_order_at{$cursor}
   | $mice_click <= 0
   | Picked = $world.picked
