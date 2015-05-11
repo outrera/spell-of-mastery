@@ -157,24 +157,6 @@ type load_world_dlg.$base{world folder cancelCB loadCB}
   | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
 
 
-type input_catcher_item.$base{parent base}
-input_catcher_item.base_ = $base
-input_catcher_item.input In =
-| View = $parent.view
-| when View.mode >< play: less View.paused: case In [key z 0]
-  | when View.world.player.human: $parent.main.world.end_turn
-  | leave
-| $base.input{In}
-
-
-type input_catcher.$base{Main View Base} main/Main view/View base/Base child
-| $child <= input_catcher_item Me 0
-input_catcher.itemAt Point XY WH =
-| [Item WXY WWH] = $base.itemAt{Point XY WH} 
-| $child.base <= Item
-| [$child WXY WWH]
-
-
 MapsFolder = 'work/worlds/'
 SavesFolder = 'work/saves/'
 
@@ -435,7 +417,12 @@ main.run =
   | X 410 | LoadButtons.d
   | X 500 | button 'CANCEL' skin/scroll: =>
             | Tabs.pick{main_menu}
-| Ingame = input_catcher Me View Ingame
+| Ingame = input_split Ingame: Base In =>
+  | Handled = 0
+  | when View.mode >< play: less View.paused: case In [key z 0]
+    | when $world.player.human: $world.end_turn
+    | Handled <= 1
+  | less Handled: Base.input{In}
 | Tabs <= tabs ingame: t
           main_menu(MainMenu)
           game_menu(GameMenu)

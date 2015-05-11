@@ -79,4 +79,5 @@ world.load Saved =
 
 main.load Path =
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table
+| Saved.filename <= Path.url.1
 | $world.load{Saved}
