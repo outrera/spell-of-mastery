@@ -29,7 +29,7 @@ type unit.$class{Id World}
   path // next unit in path
   hits // how damages is this unit
   turn // turn it was created
-  defender // 1 if unit cant be used by AI to initiate offense
+  flags
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -37,6 +37,12 @@ type unit.$class{Id World}
 unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
+
+int.bit N = Me^^(1</N)
+int.bit_set N Bit = Me--Bit--(Me^^(Bit</N))
+
+unit.attacker = $flags.bit{0}
+unit.`!attacker` State = $flags <= $flags.bit_set{0 State}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
@@ -53,7 +59,7 @@ unit.init Class =
 | $hits <= 0
 | $moved <= 0
 | $turn <= $world.turn
-| $defender <= 0
+| $flags <= 0
 | when $starts
   | less $active
     | $world.active.push{Me}
@@ -286,6 +292,19 @@ unit.mark_moves @As =
   | Mark
 | for M Marks: when M.path: for N Marks: when M.path >< N.xyz: M.path <= N
 | Marks
+
+unit.harm Attacker Damage =
+| !$hits + Damage
+| less $owner.human: $owner.ai.harm{Attacker Me}
+| when $hits < $health:
+  | when got!it $sounds.hit: $main.sound{it.rand}
+  | leave
+| when got!it $sounds.die: $main.sound{it.rand}
+| DeathOrder = $order.init{act/die}
+| DeathOrder.priority <= 1000
+| DeathOrder.speed <= 0
+| $action.cycles <= 1
+| $world.waiting <= $id
 
 unit.render Heap X Y =
 | G = $frame

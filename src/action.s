@@ -104,22 +104,15 @@ act_attack.update A =
     | Target = A.target
     | U.world.effect{Target.xyz blood}
     | Damage = max 0 U.attack-Target.defense
-    | !A.target.hits + Damage
+    | !Target.hits + Damage
+    | when Target.harm{U Damage}
+    | U.animate{idle}
     | when Target.hits < Target.health:
-      | when got!it Target.sounds.hit: U.main.sound{it.rand}
       | A.data <= 2
       | A.cycles <= 0
-      | U.animate{idle}
       | leave
-    | when got!it Target.sounds.die: Target.main.sound{it.rand}
-    | DeathOrder = Target.order.init{act/die}
-    | DeathOrder.priority <= 1000
-    | DeathOrder.speed <= 0
-    | Target.action.cycles <= 1
-    | U.world.waiting <= Target.id
-    | U.animate{idle}
-    | A.cycles <= 90000
     | A.data <= 1
+    | A.cycles <= 90000
 
 act_attack.finish A =
 | move_finish A
@@ -208,6 +201,7 @@ act_summon.start A =
 act_summon.finish A =
 | S = A.unit.world.alloc_unit{A.effect}
 | S.owner <= A.unit.owner
+| S.attacker <= 1 // mark it available for attack
 | S.move{A.target.xyz}
 | S.world.update_pick{[S]}
 

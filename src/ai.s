@@ -156,8 +156,11 @@ ai.update_units Units =
   | !UnitsRemain-1
   | AiUnitsRemain.1 <= UnitsRemain
   | when U.id >< PentID: when $update_leader: leave 1
-  | when U.attack: when $attack_with{U}: leave 1
+  | when U.attack and U.attacker: when $attack_with{U}: leave 1
 | leave 0
+
+ai.harm Attacker Victim =
+| Victim.attacker <= 1 //have to be aggressive
 
 ai.update =
 | Player = $player
@@ -166,6 +169,7 @@ ai.update =
 | Pentagram = Player.pentagram
 | for U Units: // check if we can attack someone 
   | case U.list_moves{U.xyz}.keep{?type >< attack} [A@_]
+    | U.attacker <= 1
     | $marked_order{U A}
     | leave
 | for Xs HarmMap: for I Xs.size: Xs.I <= 0
