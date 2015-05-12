@@ -19,7 +19,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   icon/Icon
   form
 | XYs = []
-| for Y,Hs Form.tail.i: for X,H Hs.i: when H: push [X Y 0] XYs
+| for Y,Hs Form.tail.i: for X,H Hs.i: when H: push [-X Y 0] XYs
 | $form <= XYs.list
 | $anims <= @table: map [Name@Frames] Anims.tail
   | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}

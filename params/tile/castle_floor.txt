@@ -1,0 +1,4 @@
+sprite: tiles_castle
+height: 2
+role: wall
+1111: 0
