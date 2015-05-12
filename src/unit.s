@@ -317,7 +317,8 @@ unit.render Heap X Y =
 | when $movement_render_hack
   | !UX+1
   | !UY+1
-| Key = ((UX+UY)</40) + ((UZ*2-1)</30) + ((UX+$draw_order)</21) + $serial
+| Key = ((max UX UY)</54) + ((UX*128+UY)</38) + ((UZ*2-1)</30)
+       + ((UX+$draw_order)</22) + $serial
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
