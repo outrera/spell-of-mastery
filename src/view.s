@@ -84,7 +84,7 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
   | ZZ = Z*ZUnit
-  | Key = Key + ((Z*2)</30) 
+  | Key = Key + ((Z*2)</30)
   | DrawCursor = Cursor and Z < CursorZ
   | when DrawCursor: Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
   | UnitZ <= Z + TH
