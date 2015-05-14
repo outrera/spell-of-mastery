@@ -104,7 +104,6 @@ act_attack.update A =
     | Target = A.target
     | U.world.effect{Target.xyz blood}
     | Damage = max 0 U.attack-Target.defense
-    | !Target.hits + Damage
     | when Target.harm{U Damage}
     | U.animate{idle}
     | when Target.hits < Target.health:
