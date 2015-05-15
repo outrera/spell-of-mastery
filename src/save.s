@@ -76,6 +76,7 @@ world.load Saved =
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
+| $view.clear
 
 main.load Path =
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table

@@ -36,6 +36,7 @@ type view.widget{M W H}
 | $fpsD <= $fpsGoal.float+8.0
 | $param <= $main.params.ui
 | Wr = $world
+| Wr.view <= Me
 | XUnit <= Wr.xunit
 | YUnit <= Wr.yunit
 | ZUnit <= Wr.zunit
@@ -43,8 +44,15 @@ type view.widget{M W H}
 
 view.init =
 | $fpsT <= clock
+| $clear
+
+view.clear =
 | $view_origin.init{-[$h/32 $h/32]+[6 6]}
 | $move{$view_origin} //normalize view
+| $blit_origin.init{[$w/2 -170]}
+| $mice_xy.init{[0 0]}
+| $cursor.init{[1 1 1]}
+| $anchor.init{[1 1 1]}
 
 view.set_brush NewBrush = $brush.init{NewBrush}
 
