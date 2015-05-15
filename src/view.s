@@ -31,6 +31,7 @@ type view.widget{M W H}
   param
   on_unit_pick/(Picked=>)
   view_size/32  // render 32x32 world chunk
+  center/[0 0 0]
 | $fb <= gfx W H
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
@@ -47,12 +48,22 @@ view.init =
 | $clear
 
 view.clear =
-| $view_origin.init{-[$h/32 $h/32]+[6 6]}
-| $move{$view_origin} //normalize view
+| $center_at{[0 0 0]}
 | $blit_origin.init{[$w/2 -170]}
 | $mice_xy.init{[0 0]}
 | $cursor.init{[1 1 1]}
 | $anchor.init{[1 1 1]}
+
+view.center_at XYZ cursor/0 =
+| X,Y,Z = XYZ
+| X = X.clip{1 $world.w}
+| Y = Y.clip{1 $world.h}
+| Z = Z.clip{1 64}
+| $center.init{X,Y,Z}
+| when Cursor: $cursor.init{X,Y,Z}
+| VO = -[$h/32 $h/32]+[X Y]-[Z/8 Z/8]+[6 6]
+| when Z > 31: !VO+[2 2] //hack to improve high altitude centering
+| $view_origin.init{VO}
 
 view.set_brush NewBrush = $brush.init{NewBrush}
 
@@ -239,13 +250,6 @@ view.mice_rect =
 | V = max AY BY
 | [X Y U-X V-Y]
 
-view.move NewXY =
-| $view_origin.init{NewXY}
-//| [X Y] = NewXY
-//| $view_origin.init{[X.clip{0 $world.w-1} Y.clip{0 $world.h-1}]}
-
-view.center_at XY = $move{XY*32-[$w $h]/2}
-
 world.update_pick Units =
 | for U $picked^uncons{picked}: U.picked <= 0
 | $picked <= Units^cons{picked}
@@ -357,10 +361,10 @@ world.update_cursor CXYZ Brush Mirror =
 
 view.update =
 | when $paused: leave
-| case $keys.up 1: $move{$view_origin-[1 1]}
-| case $keys.down 1: $move{$view_origin+[1 1]}
-| case $keys.left 1: $move{$view_origin-[1 -1]}
-| case $keys.right 1: $move{$view_origin+[1 -1]}
+| case $keys.up 1: $center_at{$center-[1 1 0]}
+| case $keys.down 1: $center_at{$center+[1 1 0]}
+| case $keys.left 1: $center_at{$center-[1 -1 0]}
+| case $keys.right 1: $center_at{$center+[1 -1 0]}
 | X,Y,Z = $cursor
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0

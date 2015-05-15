@@ -13,6 +13,8 @@ EndTurnDepth = 0
 world.end_turn =
 | Researching = $player.researching
 | when Researching: !$player.research.Researching + $player.power
+| $player.params.view.init{$view.center}
+| $player.params.cursor.init{$view.cursor}
 | NextPlayer = $player.id+1
 | less NextPlayer < $players.size
   | NextPlayer <= 0
@@ -40,6 +42,9 @@ world.end_turn =
       | !P.power+1
 | P.moves <= min $player.power P.moves+$player.power
 | less $turn><1: !P.mana+$player.power
+| $view.center_at{$player.params.view}
+| $view.cursor.init{$player.params.cursor}
+| when $turn><1 and P.leader: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
 
 
@@ -134,6 +139,7 @@ unit.update =
     then | less Path:
            | !$owner.mana-$next_action.cost
            | when Speed: $moved <= $world.turn-Speed-1
+         | less $owner.human: $world.view.center_at{$xyz cursor/1}
     else $next_action.init{act/idle at/$xyz}
   | swap $action $next_action
   | $next_action.class <= 0

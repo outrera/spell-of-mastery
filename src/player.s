@@ -1,6 +1,8 @@
 type ai{player} world
 | $world <= $player.world
 | $params.aiSwapXYZ <= [0 0 0]
+| $params.view <= [0 0 0]
+| $params.cursor <= [0 0 1]
 
 ai.params = $player.params
 
