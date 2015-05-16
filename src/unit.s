@@ -38,11 +38,8 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
 
-int.bit N = Me^^(1</N)
-int.bit_set N Bit = Me--Bit--(Me^^(Bit</N))
-
-unit.attacker = $flags.bit{0}
-unit.`!attacker` State = $flags <= $flags.bit_set{0 State}
+unit.attacker = $flags.get{0}
+unit.`!attacker` State = $flags <= $flags.set{0 State}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
