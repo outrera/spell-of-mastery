@@ -1,4 +1,4 @@
-use util zmap unit stack heap player
+use stack heap bits zmap util unit player
 
 MaxSize = No
 MaxUnits = No
@@ -54,6 +54,8 @@ type world{main W H}
    waiting // true if wating for action to complete
    events
    view
+   explored // explored tiles
+   fow // fog of war
 | $init{W H}
 
 world.init W H =
@@ -71,6 +73,8 @@ world.init W H =
 | $unit_map <= zmap MaxSize
 | $slope_map <= zmap MaxSize
 | $move_map <= zmap MaxSize
+| $explored <= bits 256*256
+| $fow <= bits 256*256
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -94,6 +98,8 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
+| $explored.clear
+| $fow.clear
 | for Y $h: when Y: for X $w: when X: $push_{X Y $filler}
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X,Y}
 | for Y $h: when Y: for X $w: when X: $update_move_map{X,Y}
