@@ -68,8 +68,9 @@ world.load Saved =
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.pick_facing{Facing}
-  | U.move{XYZ}
+  | less U.health: Owner <= 0
   | U.owner <= $players.Owner
+  | U.move{XYZ}
   | U.moved <= Moved
   | U.turn <= Turn
   | U.flags <= if Flags.size then Flags.0 else 0

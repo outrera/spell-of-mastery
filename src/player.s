@@ -1,3 +1,5 @@
+use bits
+
 type ai{player} world
 | $world <= $player.world
 | $params.aiSwapXYZ <= [0 0 0]
@@ -13,11 +15,14 @@ ai.clear =
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
-type player{id world} name ai human color mana power moves leader pentagram
-                      params research/(t) picked
+type player{id world}
+   name ai human color mana power moves leader pentagram
+   params research/(t) picked
+   sight // fog of war
 | $name <= if $id >< 0 then "Independent" else "Player[$id]"
 | $color <= PlayerColors.$id
 | $params <= t
+| $sight <= dup 256: 256.bytes
 | $ai <= ai Me
 | $clear
 
@@ -27,6 +32,7 @@ player.researching = $params.researching
 player.`!researching` R = $params.researching <= R
 
 player.clear =
+| for Xs $sight: Xs.clear{1}
 | $ai.clear
 | $picked <= $world.nil
 | $leader <= 0

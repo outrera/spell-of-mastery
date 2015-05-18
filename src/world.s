@@ -1,4 +1,4 @@
-use stack heap bits zmap util unit player
+use stack heap zmap util unit player
 
 MaxSize = No
 MaxUnits = No
@@ -54,8 +54,6 @@ type world{main W H}
    waiting // true if wating for action to complete
    events
    view
-   explored // explored tiles
-   fow // fog of war
 | $init{W H}
 
 world.init W H =
@@ -73,8 +71,6 @@ world.init W H =
 | $unit_map <= zmap MaxSize
 | $slope_map <= zmap MaxSize
 | $move_map <= zmap MaxSize
-| $explored <= bits 256*256
-| $fow <= bits 256*256
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -98,8 +94,6 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
-| $explored.clear
-| $fow.clear
 | for Y $h: when Y: for X $w: when X: $push_{X Y $filler}
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X,Y}
 | for Y $h: when Y: for X $w: when X: $update_move_map{X,Y}
@@ -240,6 +234,12 @@ world.place_unit U =
   | U.xyz.init{XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]}
   | $place_unitS{U}
 | U.xyz.init{XYZ}
+| Sight = U.sight
+| Explored = U.owner.sight
+| UX = XYZ.0
+| UY = XYZ.1
+| for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
+  | Explored.Y.X <= 1
 
 world.remove_unitS U =
 | XYZ = U.xyz

@@ -7,6 +7,7 @@ world.new_game =
 | $player <= $players.($players.size-1)
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
+| for P $players: for S P.sight: S.clear{0}
 
 EndTurnDepth = 0
 

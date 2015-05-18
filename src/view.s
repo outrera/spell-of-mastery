@@ -134,6 +134,8 @@ world.roof XYZ =
 
 view.render_iso =
 | Wr = $world
+| Player = Wr.player
+| Explored = Player.sight
 | XUnit = XUnit
 | YUnit = YUnit
 | ZUnit = ZUnit
@@ -156,7 +158,8 @@ view.render_iso =
     | when 0<X and X<<WW: // FIXME: move this out of the loop
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
-      | render_pilar Wr X Y BX BY Heap $cursor RoofZ
+      | E = Explored.Y.X
+      | when E: render_pilar Wr X Y BX BY Heap $cursor RoofZ
       //| Key = (X+Y)*WW*WH+X
       //| Heap.push{Key [Gs.0 BX BY 0]}
 //| Font = font small

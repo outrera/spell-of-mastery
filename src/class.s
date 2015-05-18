@@ -1,7 +1,7 @@
 use gfx util param
 
 type class{bank class_name Main static/0 empty/0 sprite/system_dummy
-           unit/0 draw_order/10 aux/0 shadow/0 moves/[] speed/-1
+           unit/0 draw_order/10 aux/0 shadow/0 moves/[] speed/-1 sight/-1
            starts/0 flyer/0 mountaineer/0 ranged/0 leader/Leader
            health/0 attack/0 defense/0 level/0 ttl/100000000
            acts/[] sounds/[] icon/0 title/0}
@@ -15,6 +15,7 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
   shadow/Shadow // unit casts shadow in air
   moves/Moves // movement pattern
   speed/Speed // number of turns it has to wait, before moving again
+  sight/Sight
   starts/Starts // non-zero if unit starts active
   flyer/Flyer
   mountaineer/Mountaineer
@@ -29,6 +30,7 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
   sounds/Sounds.group{2}.table
   icon/Icon
   title/Title
+| when $sight < 0: $sight <= if $health then 1 else 0
 | less $moves.is_list: bad "wrong `moves` field for [$type]"
 | less $moves.size: leave Me
 | Ms = $moves.tail
