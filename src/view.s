@@ -134,8 +134,7 @@ world.roof XYZ =
 
 view.render_iso =
 | Wr = $world
-| Player = Wr.player
-| Explored = Player.sight
+| Explored = Wr.human.sight
 | XUnit = XUnit
 | YUnit = YUnit
 | ZUnit = ZUnit

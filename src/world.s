@@ -32,6 +32,7 @@ type world{main W H}
    free_proxies
    players
    player // currently moving player
+   human // human player hosting this session
    gfxes
    seed
    tid_map/Main.tid_map
@@ -115,6 +116,7 @@ world.clear =
 | for P $players: P.clear
 | $player <= $players.0
 | $players.1.human <= 1
+| $human <= $players.1
 | $marks <= $nil
 | $params <= t
 | $active.clear
@@ -227,6 +229,16 @@ world.place_unitS UU =
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
+unit.explore =
+| Sight = $sight
+| when no Sight: leave
+| XYZ = $xyz
+| Explored = $owner.sight
+| UX = XYZ.0
+| UY = XYZ.1
+| for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
+  | Explored.Y.X <= 1
+
 world.place_unit U =
 | XYZ = U.xyz.copy
 | Mirror = U.facing >< 5
@@ -234,12 +246,7 @@ world.place_unit U =
   | U.xyz.init{XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]}
   | $place_unitS{U}
 | U.xyz.init{XYZ}
-| Sight = U.sight
-| Explored = U.owner.sight
-| UX = XYZ.0
-| UY = XYZ.1
-| for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
-  | Explored.Y.X <= 1
+| U.explore
 
 world.remove_unitS U =
 | XYZ = U.xyz

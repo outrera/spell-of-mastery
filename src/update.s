@@ -7,7 +7,11 @@ world.new_game =
 | $player <= $players.($players.size-1)
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
-| for P $players: for S P.sight: S.clear{0}
+| for P $players
+  | for S P.sight: S.clear{0}
+  | for U P.units: U.explore
+| $human <= $players.1
+| when got!it $players.find{?human}: $human <= it
 
 EndTurnDepth = 0
 
@@ -22,6 +26,9 @@ world.end_turn =
   | !$turn + 1
 | P = $players.NextPlayer
 | $player <= P
+| when P.human
+  | $view.center_at{$player.params.view}
+  | $view.cursor.init{$player.params.cursor}
 | P.power <= 1
 | PID = P.id
 | P.pentagram <= 0
@@ -43,9 +50,7 @@ world.end_turn =
       | !P.power+1
 | P.moves <= min $player.power P.moves+$player.power
 | less $turn><1: !P.mana+$player.power
-| $view.center_at{$player.params.view}
-| $view.cursor.init{$player.params.cursor}
-| when $turn><1 and P.leader: $view.center_at{P.leader.xyz cursor/1}
+| when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
 
 
@@ -140,7 +145,10 @@ unit.update =
     then | less Path:
            | !$owner.mana-$next_action.cost
            | when Speed: $moved <= $world.turn-Speed-1
-         | less $owner.human: $world.view.center_at{$xyz cursor/1}
+         | less $owner.human
+           | X,Y = $xyz.take{2}
+           | when $world.human.sight.Y.X
+             | $world.view.center_at{$xyz cursor/1}
     else $next_action.init{act/idle at/$xyz}
   | swap $action $next_action
   | $next_action.class <= 0

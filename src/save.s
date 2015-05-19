@@ -68,7 +68,7 @@ world.load Saved =
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.pick_facing{Facing}
-  | less U.health: Owner <= 0
+  | less U.health or U.bank >< pentagram: Owner <= 0
   | U.owner <= $players.Owner
   | U.move{XYZ}
   | U.moved <= Moved
