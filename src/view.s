@@ -132,6 +132,14 @@ world.roof XYZ =
 | while $fast_at{X,Y,Z}.empty and Z < 63: !Z+1
 | Z
 
+
+Unexplored = 0
+
+render_unexplored Wr X Y BX BY Heap =
+| less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
+| Key = (((max X Y))</54) + ((X*128+Y)</38)
+| Heap.push{Key [Unexplored BX BY-ZUnit-Unexplored.h 0]}
+
 view.render_iso =
 | Wr = $world
 | Explored = Wr.human.sight
@@ -158,7 +166,8 @@ view.render_iso =
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
       | E = Explored.Y.X
-      | when E: render_pilar Wr X Y BX BY Heap $cursor RoofZ
+      | if E then render_pilar Wr X Y BX BY Heap $cursor RoofZ
+        else render_unexplored Wr X Y BX BY Heap
       //| Key = (X+Y)*WW*WH+X
       //| Heap.push{Key [Gs.0 BX BY 0]}
 //| Font = font small
@@ -183,11 +192,14 @@ Indicators = 0
 
 view.draw_indicators =
 | less Indicators: Indicators <= $main.img{ui_indicators}
-| X,Y,Z = $cursor
 | IP = [($w-Indicators.w)/2 0]
-| $fb.blit{IP Indicators}
-| Font = font medium
 | P = $world.player
+| Font = font medium
+| less P.human or $mode <> play:
+  | Font.draw{$fb IP+[148 16] "[P.name]"}
+  | leave
+| X,Y,Z = $cursor
+| $fb.blit{IP Indicators}
 | Font.draw{$fb IP+[28 1] "[P.mana]+[P.power]"}
 | Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]"}
 | Font.draw{$fb IP+[148 16] "[P.name]"}
@@ -389,8 +401,9 @@ view.input In =
     | !XY+[0 32]
     | $mice_xy.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
-    | $cursor.init{[CX CY $cursor.2]}
-    | $cursor.2 <= $fix_z{$cursor}
+    | when $mode <> play or $world.human.sight.CY.CX:
+      | $cursor.init{[CX CY $cursor.2]}
+      | $cursor.2 <= $fix_z{$cursor}
   [mice left State XY]
     | $mice_click <= if State then \left else 0
     | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
