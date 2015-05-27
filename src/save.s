@@ -1,6 +1,12 @@
-use util
+use util rle
 
 world.save =
+| ActivePlayers = dup 32 0
+| Units = map U $units.skip{(?removed or ?mark)}
+  | ActivePlayers.(U.owner.id) <= 1
+  | list U.id U.serial U.type U.xyz U.xy
+         U.anim U.anim_step U.facing
+         U.owner.id U.moved U.turn U.flags
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
     filename | $filename
     name | $name
@@ -12,12 +18,11 @@ world.save =
               | [P.id P.name P.human P.color P.power P.moves
                  P.params.list P.research.list.keep{?1} P.mana]
     player | $player.id
-    units | map U $units.skip{(?removed or ?mark)}
-            | list U.id U.serial U.type U.xyz U.xy
-                   U.anim U.anim_step U.facing
-                   U.owner.id U.moved U.turn U.flags
+    units | Units
     tilemap | map X $w: map Y $h:
               | $tilemap.getPilar{X+1 Y+1}.drop{1}
+    explored | map Id,Active ActivePlayers.i.keep{?.1}
+               | [Id $players.Id.sight{}{X=>rle_encode X}]
 
 main.save Path = Path.set{[version(0.1) @$world.save].as_text}
 
@@ -80,6 +85,11 @@ world.load Saved =
 | $view.clear
 | Leader = $player.units.find{?leader}
 | when got Leader: $view.center_at{Leader.xyz}
+| Explored = Saved.explored
+| when got Explored:
+  | for PID,Sight Explored
+    | PS = $players.PID.sight
+    | for I PS.size PS.I.init{Sight.I^rle_decode}
 
 main.load Path =
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table

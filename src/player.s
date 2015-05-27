@@ -22,7 +22,7 @@ type player{id world}
 | $name <= if $id >< 0 then "Independent" else "Player[$id]"
 | $color <= PlayerColors.$id
 | $params <= t
-| $sight <= dup 256: 256.bytes
+| $sight <= dup 132: 132.bytes
 | $ai <= ai Me
 | $clear
 

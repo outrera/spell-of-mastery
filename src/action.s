@@ -52,8 +52,13 @@ move_finish A =
 | U.movement_render_hack <= 0
 
 act_move.start A =
-| when A.cycles >< -1: A.cycles <=  A.unit.sprite.speed
+| U = A.unit
+| when A.cycles >< -1: A.cycles <=  U.sprite.speed
 | move_start A
+| X,Y,Z = U.xyz
+| less U.world.human.sight.Y.X
+  | A.cycles <= 0
+  | move_finish A
 
 act_move.update A = move_update A
 
