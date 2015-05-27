@@ -149,6 +149,11 @@ unit.move XYZ =
 | $environment_updated
 | Me
 
+unit.seen =
+| X = $xyz.0
+| Y = $xyz.1
+| $world.human.sight.Y.X
+
 unit.environment_updated =
 | [UX UY UZ] = $xyz
 | $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@1111 => 0

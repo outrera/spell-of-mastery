@@ -145,10 +145,7 @@ unit.update =
     then | less Path:
            | !$owner.mana-$next_action.cost
            | when Speed: $moved <= $world.turn-Speed-1
-         | less $owner.human
-           | X,Y = $xyz.take{2}
-           | when $world.human.sight.Y.X
-             | $world.view.center_at{$xyz cursor/1}
+         | less $owner.human: when $seen: $world.view.center_at{$xyz cursor/1}
     else $next_action.init{act/idle at/$xyz}
   | swap $action $next_action
   | $next_action.class <= 0

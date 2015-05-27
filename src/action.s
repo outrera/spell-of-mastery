@@ -56,7 +56,7 @@ act_move.start A =
 | when A.cycles >< -1: A.cycles <=  U.sprite.speed
 | move_start A
 | X,Y,Z = U.xyz
-| less U.world.human.sight.Y.X
+| less U.seen
   | A.cycles <= 0
   | move_finish A
 
