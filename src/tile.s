@@ -84,6 +84,7 @@ tile.render P Z Below Above Seed =
 // returns 1 if this tile compresses the shape of tile below of it
 tile.heavy = not $empty
 
+main.tile_names = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
 
 main.load_tiles =
 | Tiles = t

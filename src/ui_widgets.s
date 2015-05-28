@@ -5,38 +5,38 @@ MessageBoxTitle = No
 MessageBoxText = No
 MessageBoxOk = No
 MessageBoxWidth = 1
-Main = No
+UI = No
 
-message_box M =
-| Main <= M
-| BG = Main.img{ui_panel5}
+message_box UI_ =
+| UI <= UI_
+| BG = UI.img{ui_panel5}
 | MessageBoxWidth <= BG.w
 | MessageBoxTitle <= txt medium '' 
 | MessageBoxText <= txt medium ''
 | MessageBoxOk <= hidden: button 'Ok' skin/medium_small: =>
-  | Main.unpause
+  | UI.unpause
   | MessageBox.show <= 0
 | MessageBox <= hidden: dlg: mtx
   | 270 100 | BG
   | 290 110 | MessageBoxTitle
   | 280 140 | MessageBoxText
   | 390 420 | MessageBoxOk
-main.show_message Title Text =
+ui.show_message Title Text =
 | MessageBoxTitle.value <= Title
 | MessageBoxText.value <= MessageBoxText.font.format{MessageBoxWidth Text}
 | MessageBoxOk.show <= 1
 | MessageBox.show <= 1
-| Main.pause
+| UI.pause
 
-type unit_panel.widget{main}
+type unit_panel.widget{ui}
      w/0 h/0 unit laurels moved
      power_icon health_icon attack_icon defense_icon
-| $laurels <= $main.img{ui_laurels}
-| $moved <= $main.img{ui_unit_moved}
-| $power_icon <= $main.img{stats_power}
-| $health_icon <= $main.img{stats_health}
-| $attack_icon <= $main.img{stats_attack}
-| $defense_icon <= $main.img{stats_defense}
+| $laurels <= $ui.img{ui_laurels}
+| $moved <= $ui.img{ui_unit_moved}
+| $power_icon <= $ui.img{stats_power}
+| $health_icon <= $ui.img{stats_health}
+| $attack_icon <= $ui.img{stats_attack}
+| $defense_icon <= $ui.img{stats_defense}
 unit_panel.set_unit Unit =
 | $unit <= Unit
 | if $unit
@@ -93,12 +93,12 @@ world_props.update =
 | $height.value <= "[W.h]"
 
 
-type info_line.widget{main} info_text/txt{small ''}
+type info_line.widget{ui} info_text/txt{small ''}
 
 info_line.render =
 | $info_text.value <= ""
-| case Main.act_icons.keep{(?.show and ?.over)} [Icon@_]
-  | Act = $main.params.acts.(Icon.data)
+| case UI.act_icons.keep{(?.show and ?.over)} [Icon@_]
+  | Act = UI.params.acts.(Icon.data)
   | Info =  if got Act.title then Act.title else Act.type.replace{_ ' '}
   | when got Icon.number: Info <= "research [Info] ([Icon.number] TURNS)"
   | less got Icon.number:

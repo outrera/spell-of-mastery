@@ -13,20 +13,30 @@ ActIcon = 0
 Pause =
 Unpause =
 
-main.act_icons = ActIcons
-main.pause = Pause{}
-main.unpause = Unpause{}
 
 
-// FIXME: refactor following into UI type
-main.run =
-| ScreenW <= $params.ui.width
-| ScreenH <= $params.ui.height
-| set_main Me
-| MapsFolder = "[$data][MapsFolder]"
-| SavesFolder = "[$data][SavesFolder]"
+type ui.$base{main} base width height world
+| $world <= $main.world
+| $width <= $params.ui.width
+| $height <= $params.ui.height
+| ScreenW <= $width
+| ScreenH <= $height
+| $init
+
+ui.data = $main.data
+ui.load File = $main.load{File}
+ui.params = $main.params
+
+ui.act_icons = ActIcons
+ui.pause = Pause{}
+ui.unpause = Unpause{}
+ui.img File = $main.img{File}
+
+ui.init =
+| MapsFolder <= "[$data][MapsFolder]"
+| SavesFolder <= "[$data][SavesFolder]"
 | PanelW = 200
-| View = view Me ScreenW ScreenH
+| View = view $main ScreenW ScreenH
 | Tabs = No
 | Ingame = No
 | ScenarioMenu = No
@@ -74,8 +84,8 @@ main.run =
     | when got NextWorld:
       | $load{"[MapsFolder][NextWorld].txt"}
 | BankName =
-| TileNames = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
-| BankNames = [terrain unit @$bank_names.skip{unit}]
+| TileNames = $main.tile_names
+| BankNames = [terrain unit @$main.bank_names.skip{unit}]
 | ItemList = litems w/(PanelW-80) lines/40 [] f: N =>
   | Brush = if BankName >< terrain
             then [tile N]
@@ -86,7 +96,7 @@ main.run =
   | if BankName >< terrain
     then | ItemList.data <= TileNames
          | ItemList.pick{TileNames.locate{plain}}
-    else | ItemList.data <= $classes_banks.BankName
+    else | ItemList.data <= $main.classes_banks.BankName
          | ItemList.pick{0}
 | BrushUI = dlg: mtx
   | 0 0 | View
@@ -95,7 +105,7 @@ main.run =
 | PickedUnit = 0
 //| sound_play: sound_load "[$data]/music/thaxted.ogg" music/1
 | ActClick = Icon =>
-  | $sound{ui_click}
+  | $main.sound{ui_click}
   | when ActIcon: ActIcon.picked <= 0
   | Icon.picked <= 1
   | ActIcon <= Icon
@@ -291,4 +301,11 @@ main.run =
 | BankList.pick{0}
 | begin_ingame 1
 //| pause
-| gui Tabs cursor/$img{ui_cursor_point}
+| $base <= Tabs
+
+main.run =
+| set_main Me
+| UI = ui Me
+| gui UI cursor/$img{ui_cursor_point}
+
+
