@@ -1,32 +1,27 @@
 use gui widgets
 
-MessageBox = No
-MessageBoxTitle = No
-MessageBoxText = No
-MessageBoxOk = No
-MessageBoxWidth = 1
-UI = No
-
-message_box UI_ =
-| UI <= UI_
-| BG = UI.img{ui_panel5}
-| MessageBoxWidth <= BG.w
-| MessageBoxTitle <= txt medium '' 
-| MessageBoxText <= txt medium ''
-| MessageBoxOk <= hidden: button 'Ok' skin/medium_small: =>
-  | UI.unpause
-  | MessageBox.show <= 0
-| MessageBox <= hidden: dlg: mtx
+type message_box.$base{ui} base title text ok width
+| BG = $ui.img{ui_panel5}
+| $width <= BG.w
+| $title <= txt medium '' 
+| $text <= txt medium ''
+| $ok <= hidden: button 'Ok' skin/medium_small: =>
+  | $ui.unpause
+  | $show <= 0
+| $base <= hidden: dlg: mtx
   | 270 100 | BG
-  | 290 110 | MessageBoxTitle
-  | 280 140 | MessageBoxText
-  | 390 420 | MessageBoxOk
-ui.show_message Title Text =
-| MessageBoxTitle.value <= Title
-| MessageBoxText.value <= MessageBoxText.font.format{MessageBoxWidth Text}
-| MessageBoxOk.show <= 1
-| MessageBox.show <= 1
-| UI.pause
+  | 290 110 | $title
+  | 280 140 | $text
+  | 390 420 | $ok
+
+message_box.display Title Text =
+| $title.value <= Title
+| $text.value <= $text.font.format{$width Text}
+| $ok.show <= 1
+| $show <= 1
+| $ui.pause
+
+main.show_message Title Text = $ui.message_box.display{Title Text}
 
 type unit_panel.widget{ui}
      w/0 h/0 unit laurels moved
@@ -97,8 +92,8 @@ type info_line.widget{ui} info_text/txt{small ''}
 
 info_line.render =
 | $info_text.value <= ""
-| case UI.act_icons.keep{(?.show and ?.over)} [Icon@_]
-  | Act = UI.params.acts.(Icon.data)
+| case $ui.act_icons.keep{(?.show and ?.over)} [Icon@_]
+  | Act = $ui.params.acts.(Icon.data)
   | Info =  if got Act.title then Act.title else Act.type.replace{_ ' '}
   | when got Icon.number: Info <= "research [Info] ([Icon.number] TURNS)"
   | less got Icon.number:

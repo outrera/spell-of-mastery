@@ -16,6 +16,7 @@ type main{Data}
      tid_map
      aux_tiles
      sounds
+     ui
 | $load_params
 | for K,V $params.main: $params.K <= V
 | $load_sprites

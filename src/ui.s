@@ -15,18 +15,16 @@ Unpause =
 
 
 
-type ui.$base{main} base width height world
+type ui.$base{main} base width height world message_box
 | $world <= $main.world
 | $width <= $params.ui.width
 | $height <= $params.ui.height
 | ScreenW <= $width
 | ScreenH <= $height
-| $init
 
 ui.data = $main.data
 ui.load File = $main.load{File}
 ui.params = $main.params
-
 ui.act_icons = ActIcons
 ui.pause = Pause{}
 ui.unpause = Unpause{}
@@ -37,6 +35,7 @@ ui.init =
 | SavesFolder <= "[$data][SavesFolder]"
 | PanelW = 200
 | View = view $main ScreenW ScreenH
+| $message_box <= message_box Me
 | Tabs = No
 | Ingame = No
 | ScenarioMenu = No
@@ -178,7 +177,7 @@ ui.init =
   | WorldProperties.update
 | SaveIcon = icon data/pick $img{icons_save} click: Icon =>
   | $save{"[MapsFolder][$world.filename].txt"}
-  //| $show_message{'Saved' 'Your map is saved!'}
+  //| $main.show_message{'Saved' 'Your map is saved!'}
 | LoadIcon = icon data/pick $img{icons_load} click: Icon =>
   | pause
   | LoadWorldDlg.show <= 1 
@@ -206,7 +205,7 @@ ui.init =
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
-  |  0   0| message_box Me
+  |  0   0| $message_box
 | View.init
 | begin_ingame Editor = 
   | EditorIcons.show <= Editor
@@ -227,10 +226,10 @@ ui.init =
   | $save{"[SavesFolder][Name].txt"}
   | unpause
   | Tabs.pick{ingame}
-  //| show_message{'Saved' 'Your game is saved!'}
+  //| $main.show_message{'Saved' 'Your game is saved!'}
 | load_slot Name = 
   | load 0 "[SavesFolder][Name].txt"
-  //| show_message{'Saved' 'Your game is loaded!'}
+  //| $main.show_message{'Saved' 'Your game is loaded!'}
 | new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
 | LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
@@ -305,7 +304,8 @@ ui.init =
 
 main.run =
 | set_main Me
-| UI = ui Me
-| gui UI cursor/$img{ui_cursor_point}
+| $ui <= ui Me
+| $ui.init
+| gui $ui cursor/$img{ui_cursor_point}
 
 
