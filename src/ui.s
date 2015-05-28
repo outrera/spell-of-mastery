@@ -1,171 +1,28 @@
-use gui widgets view icon
+use gui widgets view icon ui_widgets
 
 ScreenW = No
 ScreenH = No
 
-MessageBox = No
-MessageBoxTitle = No
-MessageBoxText = No
-MessageBoxOk = No
-MessageBoxWidth = 1
-
-Pause =
-Unpause =
-
-init_message_box Main =
-| BG = Main.img{ui_panel5}
-| MessageBoxWidth <= BG.w
-| MessageBoxTitle <= txt medium '' 
-| MessageBoxText <= txt medium ''
-| MessageBoxOk <= hidden: button 'Ok' skin/medium_small: =>
-  | Unpause{}
-  | MessageBox.show <= 0
-| MessageBox <= hidden: dlg: mtx
-  | 270 100 | BG
-  | 290 110 | MessageBoxTitle
-  | 280 140 | MessageBoxText
-  | 390 420 | MessageBoxOk
-main.show_message Title Text =
-| MessageBoxTitle.value <= Title
-| MessageBoxText.value <= MessageBoxText.font.format{MessageBoxWidth Text}
-| MessageBoxOk.show <= 1
-| MessageBox.show <= 1
-| Pause{}
-
-
-/*
-GameMenu <=
-| Save = button 'Save' skin/medium_small state/disabled (=>)
-| Load = button 'Load' skin/medium_small state/disabled (=>)
-| hidden: dlg: mtx
-  |   0   0 | spacer ScreenW ScreenH
-  | 270 100 | Main.img{ui_panel1}
-  | 346 110 | txt medium 'Game Menu'
-  | 285 140 | layV s/8: list
-              layH{s/12 [Save Load]}
-              button{'Options' state/disabled (=>)}
-              button{'Objectives' state/disabled (=>)}
-              (button 'Abandon Game': =>
-                | View.pause
-                | GameMenu.show <= 0
-                | Tabs.pick{main_menu})
-              spacer{1 20}
-              (button 'Return to Game': =>
-                 | View.unpause
-                 | GameMenu.show <= 0)
-*/
-
-
-type unit_panel.widget{main}
-     w/0 h/0 unit laurels moved
-     power_icon health_icon attack_icon defense_icon
-| $laurels <= $main.img{ui_laurels}
-| $moved <= $main.img{ui_unit_moved}
-| $power_icon <= $main.img{stats_power}
-| $health_icon <= $main.img{stats_health}
-| $attack_icon <= $main.img{stats_attack}
-| $defense_icon <= $main.img{stats_defense}
-
-unit_panel.set_unit Unit =
-| $unit <= Unit
-| if $unit
-  then | $w <= $laurels.w
-       | $h <= $laurels.h
-  else | $w <= 0
-       | $h <= 0
-
+MapsFolder = 'work/worlds/'
+SavesFolder = 'work/saves/'
 
 MaxActIcons = 24
 ActIcons = []
 ActIcon = 0
 
-type info_line.widget{main} info_text/txt{small ''}
+Pause =
+Unpause =
 
-info_line.render =
-| $info_text.value <= ""
-| case ActIcons.keep{(?.show and ?.over)} [Icon@_]
-  | Act = $main.params.acts.(Icon.data)
-  | Info =  if got Act.title then Act.title else Act.type.replace{_ ' '}
-  | when got Icon.number: Info <= "research [Info] ([Icon.number] TURNS)"
-  | less got Icon.number:
-    | Cost = if got Act.cost then Act.cost else 0
-    | Info <= "[Info] ([Act.cost] MANA)"
-  | $info_text.value <= Info.upcase
-| $info_text.render
+main.act_icons = ActIcons
+main.pause = Pause{}
+main.unpause = Unpause{}
 
-unit_panel.draw G P =
-| less $unit: leave
-| IconXY = P+[18 16]
-| Icon = $unit.main.sprites."icons_[$unit.icon or $unit.type]"
-| when got Icon: G.blit{IconXY Icon.frames.0}
-| G.blit{P+[8 8] $laurels}
-| X = P.0+4
-| Y = P.1+$laurels.h+16
-| Font = font medium
-| Font.draw{G P+[85 10] "[$unit.title or $unit.class_name.title]"}
-| Font.draw{G P+[85 48] "[$unit.owner.name]"}
-| Health = max 0 $unit.health-$unit.hits
-| times I Health: G.blit{[X+I*8 Y] $health_icon}
-| times I $unit.level: G.blit{[X+I*8 Y+16] $power_icon}
-| times I $unit.attack: G.blit{[X+I*8 Y+32] $attack_icon}
-| times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
-| Moved = $unit.moved-$unit.world.turn+1
-| when Moved > 0: times I Moved: G.blit{[X+I*8 Y+64] $moved}
-
-
-type world_props.$base{world callback}
-     filename name description width height base
-| $filename <= txt_input{''}
-| $name <= txt_input{''}
-| $description <= txt_input{w/240 ''}
-| $width <= txt_input{''}
-| $height <= txt_input{''}
-| PropFields = ['File Name:',$filename
-                'World Name:',$name 
-                'Description:',$description
-                'Width:',$width
-                'Height:',$height
-               ]
-| $base <= dlg: mtx
-  |   0   0 | $world.main.img{ui_panel5}
-  | 130  10 | txt medium 'Properties'
-  |  15  40 | layV s/8 PropFields{(txt small ?0)}
-  | 100  36 | layV PropFields{?1}
-  |  15 305 | button 'Done' skin/medium_small: => ($callback){Me}
-
-world_props.update =
-| W = $world
-| $filename.value <= W.filename
-| $name.value <= W.name
-| $description.value <= W.description
-| $width.value <= "[W.w]"
-| $height.value <= "[W.h]"
-
-type load_world_dlg.$base{world folder cancelCB loadCB}
-  filename base picked
-| LoadButton = button 'Load' skin/medium_small: => ($loadCB){$picked}
-| LoadButton.state <= 'disabled'
-| $base <= dlg: mtx
-  |   0   0 | $world.main.img{ui_panel5}
-  | 130  10 | txt medium 'Load World'
-  |  15  40 | folder_widget $folder: File =>
-              | $picked <= File
-              | LoadButton.state <= if File.exists and File.urls.size >< 0
-                then 'normal'
-                else 'disabled'
-  |  15 305 | LoadButton
-  | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
-
-
-MapsFolder = 'work/worlds/'
-SavesFolder = 'work/saves/'
 
 // FIXME: refactor following into UI type
 main.run =
 | ScreenW <= $params.ui.width
 | ScreenH <= $params.ui.height
 | set_main Me
-| init_message_box Me
 | MapsFolder = "[$data][MapsFolder]"
 | SavesFolder = "[$data][SavesFolder]"
 | PanelW = 200
@@ -339,7 +196,7 @@ main.run =
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
-  |  0   0| MessageBox
+  |  0   0| message_box Me
 | View.init
 | begin_ingame Editor = 
   | EditorIcons.show <= Editor
