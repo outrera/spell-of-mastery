@@ -17,7 +17,11 @@ EndTurnDepth = 0
 
 world.end_turn =
 | Researching = $player.researching
-| when Researching: !$player.research.Researching + $player.power
+| when Researching
+  | !$player.research.Researching + $player.power
+  | Act = $main.params.acts.Researching
+  | less $player.research_remain{Act} > 0:
+    | $player.researching <= 0
 | $player.params.view.init{$view.center}
 | $player.params.cursor.init{$view.cursor}
 | NextPlayer = $player.id+1

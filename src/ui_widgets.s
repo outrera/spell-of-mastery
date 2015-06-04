@@ -117,4 +117,28 @@ type load_world_dlg.$base{world folder cancelCB loadCB}
   |  15 305 | LoadButton
   | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
 
-export message_box unit_panel world_props info_line load_world_dlg
+
+type research_icon.$base{ui OnClick} base text icon world acts
+| Icon = icon data/research 0 click/OnClick
+| Icon.fg <= 0 //$ui.img{icons_unit_orc}
+| Icon.frame <= 0
+| Icon.research <= 1
+| $world <= $ui.main.world
+| $acts <= $ui.main.params.acts
+| $icon <= Icon
+| $text <= txt medium "Researching: "
+| $base <= hidden: layH s/4 (layV spacer{1 8},$text),Icon
+
+research_icon.render =
+| Player = $world.player
+| $base.show <= 0
+| Researching = Player.researching
+| when Researching and Player.human:
+  | $base.show <= 1
+  | Icon = $icon
+  | Act = $acts.Researching
+  | Icon.fg <= $ui.img{"icons_[Act.icon]"}
+  | Icon.number <= Player.research_remain{Act}
+| $base.render
+
+export message_box unit_panel world_props info_line load_world_dlg research_icon

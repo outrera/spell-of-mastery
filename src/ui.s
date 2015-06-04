@@ -13,8 +13,6 @@ ActIcon = 0
 Pause =
 Unpause =
 
-
-
 type ui.$base{main} base width height world message_box
 | $world <= $main.world
 | $width <= $params.ui.width
@@ -196,12 +194,15 @@ ui.init =
 | HourglassIcon = hidden: button 'HOURGLASS' skin/hourglass: =>
   | InputBlocker.show <= 1
   | $world.end_turn
+| ResearchIcon = research_icon Me: Icon =>
+  | say 'Research clicked!'
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
   |  0   0| ViewUI
   |  ScreenW-54 4| EditorIcons
   |  ScreenW-111 0| GearsIcon
   |  ScreenW-73 110| HourglassIcon
+  | 240 36| ResearchIcon
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
