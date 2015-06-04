@@ -13,6 +13,7 @@ ActIcon = 0
 Pause =
 Unpause =
 
+
 type ui.$base{main} base width height world message_box
 | $world <= $main.world
 | $width <= $params.ui.width

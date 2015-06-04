@@ -1,4 +1,4 @@
-use gui widgets
+use gui widgets icon
 
 type message_box.$base{ui} base title text ok width
 | BG = $ui.img{ui_panel5}
