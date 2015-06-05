@@ -1,0 +1,3 @@
+author: `Wesnoth Team`, `Nikita Sadkov`
+license: gpl2
+xy: 0,6

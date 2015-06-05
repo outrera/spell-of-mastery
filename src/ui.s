@@ -23,6 +23,7 @@ type ui.$base{main} base width height world message_box
 
 ui.data = $main.data
 ui.load File = $main.load{File}
+ui.save File = $main.save{File}
 ui.params = $main.params
 ui.act_icons = ActIcons
 ui.pause = Pause{}

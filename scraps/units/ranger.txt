@@ -1,2 +1,0 @@
-author: `Wesnoth Team`, `Nikita Sadkov`
-xy: 0,6

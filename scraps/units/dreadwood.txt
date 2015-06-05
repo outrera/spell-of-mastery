@@ -1,2 +1,0 @@
-author: `Allacrost Team`
-xy: 0,0

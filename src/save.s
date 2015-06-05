@@ -6,7 +6,7 @@ world.save =
   | ActivePlayers.(U.owner.id) <= 1
   | list U.id U.serial U.type U.xyz U.xy
          U.anim U.anim_step U.facing
-         U.owner.id U.moved U.turn U.flags
+         U.owner.id U.moved U.turn U.flags U.hits
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
     filename | $filename
     name | $name
@@ -66,7 +66,8 @@ world.load Saved =
   | for N,R Research: P.research.N <= R
 | $player <= $players.(Saved.player)
 | for X Saved.units
-  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Turn @Flags] = X
+  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Turn Flags @Hits]
+        = X
   | U = $alloc_unit{Type}
   | U.serial <= Serial
   | U.xy.init{SXYZ}
@@ -78,7 +79,8 @@ world.load Saved =
   | U.move{XYZ}
   | U.moved <= Moved
   | U.turn <= Turn
-  | U.flags <= if Flags.size then Flags.0 else 0
+  | U.flags <= Flags
+  | U.hits <= if Hits.size then Hits.0 else 0
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
