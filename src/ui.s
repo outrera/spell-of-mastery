@@ -167,7 +167,7 @@ ui.init =
   | Mode = Icon.data
   | View.mode <= Mode
   | ViewUI.pick{Mode}
-  | when Mode >< play: $world.new_game
+  | if Mode >< play then $world.new_game else $world.explore
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
 | PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
 | WorldIcon = icon data/pick $img{icons_world} click: Icon =>

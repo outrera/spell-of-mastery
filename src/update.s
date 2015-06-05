@@ -13,6 +13,9 @@ world.new_game =
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it
 
+world.explore =
+| for P $players: for S P.sight: S.clear{1}
+
 EndTurnDepth = 0
 
 world.end_turn =
