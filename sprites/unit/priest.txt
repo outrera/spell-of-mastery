@@ -1,5 +1,6 @@
 author: Blarumyrran, `Nikita Sadkov`, `Sergey Abramov (InQvisions Company)`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
-license: `CC3-BY-SA`
+copyright: Blarumyrran,`Nikita Sadkov`
+source: `http://opengameart.org/content/wizard-0`
 xy: 0,32
 frames: folder
 anims: | idle (idle0 9) (idle1 9) (idle2 9) (idle3 9)

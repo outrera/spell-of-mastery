@@ -1,5 +1,6 @@
 author: surt,`Dmitrij Makovoz`
-license: `CC-BY`
+copyright: surt,`Nikita Sadkov`
+http: `http://opengameart.org/content/painted-iso-roguelike-tiles`
 xy: 0,48
 frames: folder
 anims: | idle (idle0 24)

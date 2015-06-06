@@ -1,6 +1,5 @@
 author: `Matthew Griebner`, `Alexandr Sidorov`
 copyright: `Nikita Sadkov`
-license: CC3-BY-SA
 height: 4
 xy: -22,48
 frames: folder

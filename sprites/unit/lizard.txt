@@ -1,6 +1,5 @@
 author: `Matthew Griebner`, `Alexandr Sidorov`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
 copyright: `Nikita Sadkov`
-license: `CC3-BY-SA`
 height: 4
 xy: -2,58
 frames: folder

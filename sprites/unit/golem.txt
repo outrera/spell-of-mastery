@@ -1,6 +1,5 @@
 author: `Thomas Frose`, `Alexander Luchkin`
 copyright: `Nikita Sadkov`
-license: `CC3-BY-SA`
 xy: 0,38
 frames: folder
 anims: | idle (idle0 60)
