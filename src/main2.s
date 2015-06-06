@@ -1,4 +1,4 @@
-use param sprite class tile sound world update ui save generate ai
+use world
 
 type main{Data}
      world
@@ -30,6 +30,4 @@ type main{Data}
   | N,$classes{}{?1}.keep{(?bank >< N and not ?aux)}{?class_name}.sort
 | world Me
 
-@run: main: main_root
-
-say 'Goodbye!'
+export main
