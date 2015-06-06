@@ -84,9 +84,6 @@ world.load Saved =
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
-| $view.clear
-| Leader = $player.units.find{?leader}
-| when got Leader: $view.center_at{Leader.xyz}
 | Explored = Saved.explored
 | when got Explored:
   | for PID,Sight Explored

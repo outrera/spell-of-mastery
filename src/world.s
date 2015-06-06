@@ -16,7 +16,7 @@ proxy.init Unit =
 | $next <= 0
 | $column_next <= 0
 
-type world{main W H}
+type world{main}
    w
    h
    filename/`default`
@@ -55,11 +55,9 @@ type world{main W H}
    waiting // true if wating for action to complete
    events
    view
-| $init{W H}
+| $init
 
-world.init W H =
-//| W <= 128
-//| H <= 128
+world.init =
 | $main.world <= Me
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
@@ -83,11 +81,6 @@ world.init W H =
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $alloc_unit{unit_nil}
-//| StartTime = clock
-| $create{W H}
-//| EndTime = clock
-//| say EndTime-StartTime
-//| halt
 
 world.create W H =
 | $w <= W

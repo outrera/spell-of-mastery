@@ -42,10 +42,7 @@ type view.widget{M W H}
 | YUnit <= Wr.yunit
 | ZUnit <= Wr.zunit
 | YDiv <= YUnit/ZUnit
-
-view.init =
 | $fpsT <= clock
-| $clear
 
 view.clear =
 | $center_at{[0 0 0]}
@@ -53,6 +50,8 @@ view.clear =
 | $mice_xy.init{[0 0]}
 | $cursor.init{[1 1 1]}
 | $anchor.init{[1 1 1]}
+| Leader = $world.player.units.find{?leader}
+| when got Leader: $center_at{Leader.xyz}
 
 view.center_at XYZ cursor/0 =
 | X,Y,Z = XYZ
@@ -282,7 +281,7 @@ view.update_pick XYZ =
   // FIXME: following line is outdated
 | $main.update //ensures deleted units get updated
 
-view.update_brush = 
+view.update_brush =
 | $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
 | when $mice_click><left: case $brush
@@ -379,6 +378,8 @@ view.update =
 | case $keys.down 1: $center_at{$center+[1 1 0]}
 | case $keys.left 1: $center_at{$center-[1 -1 0]}
 | case $keys.right 1: $center_at{$center+[1 -1 0]}
+//| $cursor.0 <= $cursor.0.clip{1 $world.w}
+//| $cursor.1 <= $cursor.1.clip{1 $world.h}
 | X,Y,Z = $cursor
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0

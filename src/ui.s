@@ -14,7 +14,7 @@ Pause =
 Unpause =
 
 
-type ui.$base{main} base width height world message_box
+type ui.$base{main} base width height world message_box view
 | $world <= $main.world
 | $width <= $params.ui.width
 | $height <= $params.ui.height
@@ -22,27 +22,37 @@ type ui.$base{main} base width height world message_box
 | ScreenH <= $height
 
 ui.data = $main.data
-ui.load File = $main.load{File}
+ui.load File =
+| $main.load{File}
+| $view.clear
 ui.save File = $main.save{File}
 ui.params = $main.params
 ui.act_icons = ActIcons
 ui.pause = Pause{}
 ui.unpause = Unpause{}
 ui.img File = $main.img{File}
+ui.create W H =
+| $world.create{W H}
+| $view.clear
 
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
 | PanelW = 200
-| View = view $main ScreenW ScreenH
+| $view <= view $main ScreenW ScreenH
+//| StartTime = clock
+| $create{8 8}
+//| EndTime = clock
+//| say EndTime-StartTime
+//| halt
 | $message_box <= message_box Me
 | Tabs = No
 | Ingame = No
 | ScenarioMenu = No
 | MainMenu = No
 | InputBlocker = hidden: spacer ScreenW ScreenH
-| pause = | InputBlocker.show <= 1; View.pause
-| unpause = | InputBlocker.show <= 0; View.unpause
+| pause = | InputBlocker.show <= 1; $view.pause
+| unpause = | InputBlocker.show <= 0; $view.unpause
 | Pause <= => pause
 | Unpause <= => unpause
 | InfoText = info_line Me
@@ -52,8 +62,7 @@ ui.init =
 | WorldProperties <= hidden: world_props $world: P =>
   | W = parse_int_normalized{$world.w P.width.value}.clip{4 240}
   | H = parse_int_normalized{$world.h P.height.value}.clip{4 240}
-  | when W <> $world.w or H <> $world.h:
-    | $world.create{W H}
+  | when W <> $world.w or H <> $world.h: $create{W H}
   | $world.filename <= P.filename.value
   | $world.name <= P.name.value
   | $world.description <= P.description.value
@@ -89,7 +98,7 @@ ui.init =
   | Brush = if BankName >< terrain
             then [tile N]
             else [obj BankName,N]
-  | View.set_brush{Brush}
+  | $view.set_brush{Brush}
 | BankList = litems w/80 lines/40 BankNames f: N =>
   | BankName <= N
   | if BankName >< terrain
@@ -98,7 +107,7 @@ ui.init =
     else | ItemList.data <= $main.classes_banks.BankName
          | ItemList.pick{0}
 | BrushUI = dlg: mtx
-  | 0 0 | View
+  | 0 0 | $view
   | 0 0 | layH: BankList,ItemList
   | PanelW 0 | PlayerWidget
 | PickedUnit = 0
@@ -128,16 +137,14 @@ ui.init =
   |  0   0| UnitPanel
 | EndTurnIcon = hidden: icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
 | GameUI = dlg: mtx
-  |  0   0| View
+  |  0   0| $view
   |  0   0| GameUnitUI
   |  4 ScreenH-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
   |  4 ScreenH-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 ScreenH-10 | InfoText
   | ScreenW-54 ScreenH-64 | EndTurnIcon
-| ViewUI = tabs brush: t
-           brush(BrushUI)
-           play(GameUI)
-| View.on_unit_pick <= Unit =>
+| ViewUI = tabs brush: t brush(BrushUI) play(GameUI)
+| $view.on_unit_pick <= Unit =>
   | PickedUnit <= Unit
   | NonNil = Unit.type <> unit_nil
   | GameUnitUI.show <= NonNil
@@ -166,7 +173,7 @@ ui.init =
   | Icon.picked <= 1
   | ModeIcon <= Icon
   | Mode = Icon.data
-  | View.mode <= Mode
+  | $view.mode <= Mode
   | ViewUI.pick{Mode}
   | if Mode >< play then $world.new_game else $world.explore
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
@@ -209,13 +216,12 @@ ui.init =
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
   |  0   0| $message_box
-| View.init
 | begin_ingame Editor = 
   | EditorIcons.show <= Editor
   | EndTurnIcon.show <= Editor
   | GearsIcon.show <= not Editor
   | HourglassIcon.show <= not Editor
-  | View.mode <= [play brush].Editor
+  | $view.mode <= [play brush].Editor
 | MenuBG = $img{ui_menu_bg}
 | X = ScreenW/2 - 162
 | load NewGame Path =
@@ -244,7 +250,7 @@ ui.init =
             | for N,B LoadButtons: B.show <= "[SavesFolder][N].txt".exists
             | Tabs.pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
-            | $world.create{8 8}
+            | $create{8 8}
             | begin_ingame 1
             | unpause
             | Tabs.pick{ingame}
@@ -288,7 +294,7 @@ ui.init =
             | Tabs.pick{main_menu}
 | Ingame = input_split Ingame: Base In =>
   | Handled = 0
-  | when View.mode >< play: less View.paused: case In [key z 0]
+  | when $view.mode >< play: less $view.paused: case In [key z 0]
     | when $world.player.human: $world.end_turn
     | Handled <= 1
   | less Handled: Base.input{In}
