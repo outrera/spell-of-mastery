@@ -11,7 +11,7 @@ health: 3 // hit points - number of hits, before this unit is dead
 attack: 0 // amount of damage this unit deals
 defence: 0 // amount of damage this unit can absorb, without losing health
 sight: 2
-speed: -2
+//speed: -2
 moves: // how this unit moves
   | 0 1 0
   | 1 0 1
