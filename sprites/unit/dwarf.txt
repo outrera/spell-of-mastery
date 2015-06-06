@@ -1,4 +1,4 @@
-author: `Natalya Bugrova`
+author: `Natalya Bugrova`, `Leha (kharagh@bk.ru)`
 copyright: `Nikita Sadkov`
 xy: 6,80
 frames: folder
