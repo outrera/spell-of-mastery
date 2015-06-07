@@ -1,2 +1,6 @@
-author: 'Nethack Team'
-xy: 0,14
+author: `Artem Belov`
+copyright: `Nikita Sadkov`
+xy: 0,8
+frames: folder
+anims: | idle (idle01 6) (idle02 6) (idle03 6)
+              (idle04 6) (idle05 6) (idle06 6)
