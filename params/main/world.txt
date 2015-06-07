@@ -6,3 +6,4 @@ y_unit: 32
 z_unit: 8 // height of world cell in pixels
 tile_banks: tile
 class_banks: unit,wizard,special,pentagram
+unexplored: 0
