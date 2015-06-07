@@ -79,7 +79,7 @@ pf_reset_count =
 | for Ys PFMap: for Xs Ys: Xs.init{#FFFFFFFFFFFF}
 | PFCount <= #FFFFFF
 
-world.pathfind Closest U Type =
+world.pathfind Closest U Check =
 | X,Y,Z = U.xyz
 | Targets = []
 | !PFCount-1
@@ -93,8 +93,8 @@ world.pathfind Closest U Type =
   | X,Y,Z = XYZ
   | NextCost = Cost+1
   | for M U.list_moves{XYZ}:
-    | when M.type >< attack:
-      | case $units_at{M.xyz}.skip{?empty} [T@_]:
+    | when Check M:
+      | case $units_at{M.xyz}/*.skip{?empty}*/ [T@_]:
         | less Targets.any{?id >< T.id}:
           | push T Targets
           | when Closest: _goto end
@@ -112,28 +112,35 @@ world.pathfind Closest U Type =
 | when Closest: leave Targets.0
 | Targets
 
-unit.pathfind Closest Type = $world.pathfind{Closest Me Type}
+unit.pathfind Closest Check = $world.pathfind{Closest Me Check}
 
 world.path U Target =
 | XYZ = Target
 | Path = [XYZ]
 | UX,UY,UZ = U.xyz
 | UCost = PFMap.UX.UY.UZ
-| till PFMap.(XYZ.0).(XYZ.1).(XYZ.2)-UCost >< 1
+| while PFMap.(XYZ.0).(XYZ.1).(XYZ.2)-UCost > 1
   | Ms = U.list_moves{XYZ}
   | XYZ <= Ms{[PFMap.(?xyz.0).(?xyz.1).(?xyz.2) ?xyz]}.sort{?0 < ??0}.0.1
   | push XYZ Path
+| when Path.size > 1 and Path.0 >< U.xyz: pop Path
 | Path.list
 
 ai.attack_with U =
-| TargetXYZ = U.pathfind{1 attack}
+| World = $world
+| OId = U.owner.id
+| Check = Move =>
+  | if Move.type><attack then 1
+    else | Node = World.units_at{Move.xyz}.find{?type><special_node}
+         | if got Node and no World.block_at{Move.xyz} then 1
+           else 0
+| TargetXYZ = U.pathfind{1 Check}
 | less TargetXYZ: leave 0
 | XYZ = $world.path{U TargetXYZ}.0
 | Turn = $world.turn
 | Ms = U.list_moves{U.xyz}
 | M = Ms.find{?xyz >< XYZ}
 | less got M: leave 0
-| B = $world.block_at{M.xyz}
 | $marked_order{U M}
 | leave 1
 
@@ -156,7 +163,9 @@ ai.update_units Units =
   | !UnitsRemain-1
   | AiUnitsRemain.1 <= UnitsRemain
   | when U.id >< PentID: when $update_leader: leave 1
-  | when U.attack and U.attacker: when $attack_with{U}: leave 1
+  | when U.attack /*and U.attacker*/:
+    | when no $world.units_at{U.xyz}.find{?type><special_node}:
+      | when $attack_with{U}: leave 1
 | leave 0
 
 ai.harm Attacker Victim =
