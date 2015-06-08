@@ -4,10 +4,11 @@ main.update =
 | $world.update
 
 world.new_game =
+| for K,V $main.params.world: $params.K <= V
 | $player <= $players.($players.size-1)
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
-| when $main.params.world.unexplored
+| when $params.unexplored
   | for P $players
     | for S P.sight: S.clear{0}
     | for U P.units: U.explore
@@ -37,7 +38,9 @@ world.end_turn =
 | when P.human
   | $view.center_at{$player.params.view}
   | $view.cursor.init{$player.params.cursor}
-| P.power <= 1
+| BaseIncome = $params.base_income
+| NodeIncome = $params.node_income
+| P.power <= BaseIncome
 | PID = P.id
 | P.pentagram <= 0
 | P.leader <= 0
@@ -55,7 +58,7 @@ world.end_turn =
   | when U.leader: P.leader <= U
   | when U.level: for V $units_at{U.xyz}
     | when V.type >< special_node
-      | !P.power+1
+      | !P.power+NodeIncome
 | P.moves <= min $player.power P.moves+$player.power
 | less $turn><1: !P.mana+$player.power
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
@@ -161,7 +164,6 @@ unit.update =
   | when Path
     | swap $ordered $next_action
     | $ordered.class <= 0
-    | when Speed: $moved <= $world.turn+Speed+1 // restore it back
     | $next_action.priority <= 1000
   | $action.start
 | $action.update
