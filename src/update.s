@@ -54,6 +54,7 @@ world.end_turn =
   | EndTurnDepth <= 0
   | leave
 | for U P.units
+  | U.handled <= 0
   | when U.bank >< pentagram: P.pentagram <= U
   | when U.leader: P.leader <= U
   | when U.level: for V $units_at{U.xyz}

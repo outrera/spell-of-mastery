@@ -25,50 +25,67 @@ ai.cast_pentagram =
   | leave 1
 | leave 0
 
+// recasts pentagram, when it doesnt exist or occupied by enemy
 ai.update_leader =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 | Turn = $world.turn
-| when Pentagram and Pentagram.moved >> Turn: leave 0
 | when Leader and Leader.moved >> Turn: Leader <= 0
 | less Pentagram: leave $cast_pentagram
 | Blocker = $world.block_at{Pentagram.xyz}
 | when got Blocker:
   | EnemyBlocker = Blocker.owner.id <> $player.id
   | when EnemyBlocker: leave $cast_pentagram
-  | less EnemyBlocker
-    | when Blocker.moved>>Turn: leave 0
-    | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
-    | A = if Blocker.attack then #200 else #100
-    | harmCheck M = 
-      | X,Y,Z = M.xyz
-      | Harm = HarmMap.X.Y
-      | (Harm^^#FF) and (Harm^^#FF00)<A
-    | Ms <= Ms.skip{&harmCheck} // avoid harm for battles near pentagram
+| 0
+
+ai.remove_blocker Blocker =
+| Turn = $world.turn
+| when Blocker.moved>>Turn: leave 0
+| Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
+| A = if Blocker.attack then #200 else #100
+| harmCheck M = 
+  | X,Y,Z = M.xyz
+  | Harm = HarmMap.X.Y
+  | (Harm^^#FF) and (Harm^^#FF00)<A
+| Ms <= Ms.skip{&harmCheck} // avoid harm when enemies near pentagram
+| when Ms.size
+  | $marked_order{Blocker Ms.rand} //move out of the way
+  | leave 1
+| Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><swap}
+| for M Ms
+  | B = $world.block_at{M.xyz}
+  | when B.leader
+    | Ms = B.list_moves{B.xyz}.keep{?type><move}
     | when Ms.size
-      | $marked_order{Blocker Ms.rand} //move out of the way
+      | $marked_order{B Ms.rand} //move out of the way
       | leave 1
-    | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><swap}
-    | for M Ms
-      | B = $world.block_at{M.xyz}
-      | when B.leader
-        | Ms = B.list_moves{B.xyz}.keep{?type><move}
-        | when Ms.size
-          | $marked_order{B Ms.rand} //move out of the way
-          | leave 1
-    | when Leader: less Blocker.id >< Leader.id:
-      | when Turn-Pentagram.moved>6: leave $cast_pentagram
-| Summons = if got Blocker then [] else Pentagram.acts.keep{?act >< summon}
-| when Summons.size
-  | S = Summons.find{?effect >< unit_goblin}
-  | when got S
-    | if $player.research_remain{S} > 0
-      then | $player.researching <= S.type
-           | $end_turn
-           | leave 1
-      else | when Pentagram.moved >> Turn and $player.mana>>S.cost: leave 0
-           | $order_act{Pentagram S}
-           | leave 1
+//| when Leader: less Blocker.id >< Leader.id:
+//  | when Turn-Pentagram.moved>6: leave $cast_pentagram
+
+ai.update_research =
+| Pentagram = $player.pentagram
+| less Pentagram: leave 0
+| Summons = Pentagram.acts.keep{?act >< summon}
+| less Summons.size: leave 0
+| S = Summons.find{?effect >< unit_goblin}
+| when got S and $player.research_remain{S} > 0:
+  | $player.researching <= S.type
+  | leave 1
+| 0
+
+ai.update_pentagram =
+| Pentagram = $player.pentagram
+| less Pentagram: leave 0
+| Blocker = $world.block_at{Pentagram.xyz}
+| when got Blocker: leave 0
+| Summons = Pentagram.acts.keep{?act >< summon}
+| less Summons.size: leave 0
+| S = Summons.find{?effect >< unit_goblin}
+| Turn = $world.turn
+| when got S and $player.research_remain{S} << 0:
+  | when Pentagram.moved >> Turn or S.cost>$player.mana: leave 0
+  | $order_act{Pentagram S}
+  | leave 1
 | 0
 
 PFMap = dup 134: dup 134: dup 64: #FFFFFFFFFFFF
@@ -144,28 +161,31 @@ ai.attack_with U =
 | $marked_order{U M}
 | leave 1
 
+Count = 0
+
 ai.update_units Units =
-| less Units.size: leave 0
 | Player = $player
 | Pentagram = Player.pentagram
 | Leader = Player.leader
-| Turn = $world.turn
-| AiNextUnit = have $player.params.ai_next_unit [0]
-| AiUnitsRemain = have $player.params.ai_units_remain [0 0]
-| when AiUnitsRemain.0 <> Turn: AiUnitsRemain.init{Turn,Units.size}
-| UnitsRemain = AiUnitsRemain.1
 | PentID = 0
-| when Leader: PentID <= Leader.id
-| when Pentagram: PentID <= Pentagram.id
-| while UnitsRemain > 0
-  | U = Units.(AiNextUnit.0%Units.size)
-  | !AiNextUnit.0 + 1
-  | !UnitsRemain-1
-  | AiUnitsRemain.1 <= UnitsRemain
-  | when U.id >< PentID: when $update_leader: leave 1
-  | when U.attack /*and U.attacker*/:
+| PentXYZ = [-1 -1 -1]
+| LeaderID = 0
+| when Leader: LeaderID <= Leader.id
+| when Pentagram:
+  | PentID <= Pentagram.id
+  | PentXYZ <= Pentagram.xyz
+| for U Units: less U.handled:
+  | U.handled <= 1
+  | Attacker = U.attack /*and U.attacker*/
+  | when Attacker:
     | when no $world.units_at{U.xyz}.find{?type><special_node}:
       | when $attack_with{U}: leave 1
+  | less Attacker:
+    | when U.id >< LeaderID: when $update_leader: leave 1
+    | when U.id >< PentID: when $update_pentagram: leave 1
+  | when U.xyz >< PentXYZ and U.id <> PentID:
+    | when $remove_blocker{U}: leave 1
+| $update_research
 | leave 0
 
 ai.harm Attacker Victim =

@@ -41,6 +41,9 @@ unit.main = $world.main
 unit.attacker = $flags.get{0}
 unit.`!attacker` State = $flags <= $flags.set{0 State}
 
+unit.handled = $flags.get{1}
+unit.`!handled` State = $flags <= $flags.set{1 State}
+
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
