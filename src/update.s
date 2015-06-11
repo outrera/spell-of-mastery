@@ -106,6 +106,8 @@ world.update =
     [victory Player Reason]
       | $params.winner <= Player
       | $params.victory_type <= Reason
+    [guards_to_attackers PlayerId]
+      | for U $players.PlayerId.units: U.attacker <= 1
 | times I 2
   | NextActive = []
   | for U $active.list: U.update

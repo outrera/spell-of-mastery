@@ -176,7 +176,7 @@ ai.update_units Units =
   | PentXYZ <= Pentagram.xyz
 | for U Units: less U.handled:
   | U.handled <= 1
-  | Attacker = U.attack /*and U.attacker*/
+  | Attacker = U.attack and U.attacker
   | when Attacker:
     | when no $world.units_at{U.xyz}.find{?type><special_node}:
       | when $attack_with{U}: leave 1

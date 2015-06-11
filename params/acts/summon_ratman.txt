@@ -2,5 +2,5 @@ act: summon
 effect: unit_ratman
 target: pentagram
 icon: unit_ratman
-research: 10
-cost: 7
+research: 500
+cost: 400

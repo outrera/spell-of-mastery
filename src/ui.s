@@ -91,6 +91,7 @@ ui.init =
       | Tabs.pick{victory}
     | when got NextWorld:
       | $load{"[MapsFolder][NextWorld].txt"}
+      | $world.new_game
 | BankName =
 | TileNames = $main.tile_names
 | BankNames = [terrain unit @$main.bank_names.skip{unit}]
