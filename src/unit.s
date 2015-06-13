@@ -44,6 +44,13 @@ unit.`!attacker` State = $flags <= $flags.set{0 State}
 unit.handled = $flags.get{1}
 unit.`!handled` State = $flags <= $flags.set{1 State}
 
+unit.alive = $hits < $health
+
+// extort income from the territory occupied by the unit
+unit.extort =
+| when not $alive or $empty: leave
+| for V $world.units_at{$xyz}: when V.empty: !$owner.power+V.income
+
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
@@ -336,5 +343,6 @@ unit.render Heap X Y =
   | Heap.push{Key-1 [H X Y-32 #4000+(H</16)]}
   | Heap.push{Key+1 [H X Y-32 #8000+(H</16)]}*/
 | Heap.push{Key [G XX YY Flags]}
+
 
 export unit

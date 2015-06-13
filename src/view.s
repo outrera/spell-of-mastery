@@ -331,7 +331,6 @@ view.update_play =
 | Player = $world.player
 | if not $world.picked.idle or $world.waiting then
   else if not Player.human then Player.ai.update
-  else if Player.moves << 0 then $world.end_turn
   else
   | case $mice_click
     left | $select_unit{$cursor}
@@ -350,7 +349,7 @@ world.update_picked =
 | for M $marks^uncons{mark}: M.free
 | $marks <= $nil
 | Picked = $picked
-| less Picked and Picked.moves and Picked.moved<$turn and $player.moves > 0:
+| less Picked and Picked.moves and Picked.moved<$turn:
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.class_name >< idle:
   | $marks <= [$nil @Picked.mark_moves]^cons{mark}

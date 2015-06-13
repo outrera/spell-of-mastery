@@ -16,7 +16,10 @@ ai.clear =
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
 type player{id world}
-   name ai human color mana power moves leader pentagram
+   name ai human color mana power
+   moves //use to be number for creatues movable per turn; currently obsolete
+   leader
+   pentagram
    params research/(t) picked
    sight // fog of war
 | $name <= if $id >< 0 then "Independent" else "Player[$id]"

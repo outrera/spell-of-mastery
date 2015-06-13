@@ -1,3 +1,4 @@
 sprite: unit_witch
 leader: 1
 //speed: -2
+income: 50

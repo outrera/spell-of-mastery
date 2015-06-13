@@ -38,9 +38,7 @@ world.end_turn =
 | when P.human
   | $view.center_at{$player.params.view}
   | $view.cursor.init{$player.params.cursor}
-| BaseIncome = $params.base_income
-| NodeIncome = $params.node_income
-| P.power <= BaseIncome
+| P.power <= 0
 | PID = P.id
 | P.pentagram <= 0
 | P.leader <= 0
@@ -57,11 +55,10 @@ world.end_turn =
   | U.handled <= 0
   | when U.bank >< pentagram: P.pentagram <= U
   | when U.leader: P.leader <= U
-  | when U.level: for V $units_at{U.xyz}
-    | when V.type >< special_node
-      | !P.power+NodeIncome
-| P.moves <= min $player.power P.moves+$player.power
+  | !P.power + U.income
+  | U.extort
 | less $turn><1: !P.mana+$player.power
+| when P.mana < 0: P.mana <= 0
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
 

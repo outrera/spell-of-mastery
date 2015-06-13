@@ -50,6 +50,7 @@ move_finish A =
 | U = A.unit
 | U.xy.init{A.fromXY}
 | U.movement_render_hack <= 0
+| U.extort
 
 act_move.start A =
 | U = A.unit
