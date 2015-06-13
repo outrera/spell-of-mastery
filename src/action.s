@@ -209,7 +209,7 @@ act_summon.finish A =
 | S.attacker <= 1 // mark it available for attack
 | S.move{A.target.xyz}
 | S.world.update_pick{[S]}
-
+| !S.owner.power + S.income
 
 type act_spell_of_mastery.act_class class_name/summon anim/action
 

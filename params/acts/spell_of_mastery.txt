@@ -1,4 +1,4 @@
 act: spell_of_mastery
 target: self
 icon: spell_of_mastery
-research: 1000
+research: 60000

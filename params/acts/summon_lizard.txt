@@ -2,5 +2,5 @@ act: summon
 effect: unit_lizard
 target: pentagram
 icon: unit_lizard
-research: 4
-cost: 4
+research: 1000
+cost: 500

@@ -3,3 +3,4 @@ act: pentagram
 effect: pentagram_all
 target: self
 icon: spell_pentagram
+cost: 2000

@@ -3,3 +3,4 @@ level: 1
 health: 3
 attack: 1
 defense: 0
+income: -7

@@ -49,7 +49,9 @@ unit.alive = $hits < $health
 // extort income from the territory occupied by the unit
 unit.extort =
 | when not $alive or $empty: leave
-| for V $world.units_at{$xyz}: when V.empty: !$owner.power+V.income
+| for V $world.units_at{$xyz}:
+  | when V.empty and V.income > 0 and V.owner.id >< 0:
+    | !$owner.power+V.income
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
