@@ -2,5 +2,5 @@ act: summon
 effect: unit_baphomet
 target: pentagram
 icon: unit_baphomet
-research: 8
-cost: 8
+research: 10000
+cost: 5000

@@ -2,5 +2,5 @@ act: summon
 effect: unit_griffin
 target: pentagram
 icon: unit_griffin
-research: 8
-cost: 8
+research: 10000
+cost: 5000

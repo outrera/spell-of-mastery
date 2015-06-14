@@ -4,4 +4,4 @@ health: 2
 attack: 1
 defense: 0
 speed: -2
-income: -3
+income: -5

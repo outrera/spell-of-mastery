@@ -2,5 +2,5 @@ act: summon
 effect: unit_dwarf
 target: pentagram
 icon: unit_dwarf
-research: 4
-cost: 4
+research: 1400
+cost: 700

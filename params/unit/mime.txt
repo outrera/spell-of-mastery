@@ -1,4 +1,5 @@
 sprite: unit_mime
 health: 3
 leader: 1
+income: 50
 acts: (pentagram)

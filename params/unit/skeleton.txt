@@ -1,5 +1,6 @@
 sprite: unit_skeleton
 level: 2
-health: 1
+health: 2
 attack: 2
 defense: 1
+income: -15

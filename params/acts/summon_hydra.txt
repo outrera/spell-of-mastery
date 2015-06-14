@@ -2,5 +2,5 @@ act: summon
 effect: unit_hydra
 target: pentagram
 icon: unit_hydra
-research: 8
-cost: 8
+research: 10000
+cost: 5000

@@ -2,5 +2,5 @@ act: summon
 effect: unit_skeleton
 target: pentagram
 icon: unit_skeleton
-research: 4
-cost: 4
+research: 3000
+cost: 2000

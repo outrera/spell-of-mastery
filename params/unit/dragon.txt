@@ -1,9 +1,10 @@
 sprite: unit_dragon
 level: 4
 health: 12
-attack: 2
-defense: 0
+attack: 3
+defense: 1
 flyer: 1
+income: -50
 moves:
   | 0 0 1 0 0
   | 0 0 1 0 0

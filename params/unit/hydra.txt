@@ -1,8 +1,9 @@
 sprite: unit_hydra
 level: 3
-health: 5
-attack: 2
+health: 18
+attack: 4
 defense: 0
+income: -50
 moves:
   | 0 1 0
   | 1 0 1

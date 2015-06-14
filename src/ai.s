@@ -178,7 +178,7 @@ ai.update_units Units =
   | U.handled <= 1
   | Attacker = U.attack and U.attacker
   | when Attacker:
-    | when no $world.units_at{U.xyz}.find{?income}:
+    | when no $world.units_at{U.xyz}.find{(?income>0 and ?empty)}:
       | when $attack_with{U}: leave 1
   | less Attacker:
     | when U.id >< LeaderID: when $update_leader: leave 1

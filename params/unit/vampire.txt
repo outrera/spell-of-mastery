@@ -1,1 +1,13 @@
 sprite: unit_vampire
+level: 3
+health: 3
+attack: 2
+defense: 1
+ranged: 1
+income: -25
+moves:
+  | 0 0 2 0 0
+  | 0 0 1 0 0
+  | 2 1 0 1 2
+  | 0 0 1 0 0
+  | 0 0 2 0 0

@@ -1,5 +1,6 @@
 sprite: unit_oculus
 flyer: 1
+income: -5
 moves:
   | 0 0 1 0 0
   | 0 0 1 0 0

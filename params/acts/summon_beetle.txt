@@ -3,4 +3,4 @@ effect: unit_beetle
 target: pentagram
 icon: unit_beetle
 research: 0
-cost: 5
+cost: 500

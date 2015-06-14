@@ -3,4 +3,4 @@ effect: unit_oculus
 target: pentagram
 icon: unit_oculus
 research: 0
-cost: 5
+cost: 500

@@ -1,6 +1,6 @@
 act: summon
-effect: unit_elf
+effect: unit_knight
 target: pentagram
-icon: unit_elf
+icon: unit_knight
 research: 1400
 cost: 700

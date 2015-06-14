@@ -1,9 +1,10 @@
 sprite: unit_golem
 level: 4
-health: 5
-attack: 4
-defense: 1
+health: 10
+attack: 3
+defense: 2
 speed: -2
+income: -50
 moves:
   | 0 0 0 0 0
   | 0 0 1 0 0

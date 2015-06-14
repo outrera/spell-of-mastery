@@ -1,8 +1,9 @@
 sprite: unit_minotaur
 level: 3
-health: 5
-attack: 2
+health: 6
+attack: 3
 defense: 0
+income: -25
 moves:
   | 0 0 1 0 0
   | 0 0 1 0 0

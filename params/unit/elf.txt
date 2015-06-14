@@ -1,9 +1,10 @@
 sprite: unit_elf
 level: 2
-health: 2
-attack: 1
+health: 1
+attack: 2
 defense: 0
 ranged: 1
+income: -14
 moves:
   | 0 0 2 0 0
   | 0 0 1 0 0
