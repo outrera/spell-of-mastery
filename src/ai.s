@@ -96,6 +96,14 @@ pf_reset_count =
 | for Ys PFMap: for Xs Ys: Xs.init{#FFFFFFFFFFFF}
 | PFCount <= #FFFFFF
 
+node_to_path Node =
+| Path = []
+| while Node
+  | [Prev XYZ Cost] = Node
+  | push XYZ Path
+  | Node <= Prev
+| Path.tail.list
+
 world.pathfind Closest U Check =
 | X,Y,Z = U.xyz
 | Targets = []
@@ -109,39 +117,26 @@ world.pathfind Closest U Check =
   | [Prev XYZ Cost] = Node
   | X,Y,Z = XYZ
   | NextCost = Cost+1
-  | for M U.list_moves{XYZ}:
-    | when Check M:
-      | case $units_at{M.xyz}/*.skip{?empty}*/ [T@_]:
-        | less Targets.any{?id >< T.id}:
-          | push T Targets
+  | for Dst U.list_moves{XYZ}:
+    | when Check Dst:
+      | case $units_at{Dst.xyz}/*.skip{?empty}*/ [T@_]:
+        | less Targets.any{?1.xyz >< Dst.xyz}:
+          | push [Node Dst.xyz T] Targets
           | when Closest: _goto end
-    | X,Y,Z = M.xyz
+    | X,Y,Z = Dst.xyz
     | MXY = PFMap.X.Y
     | when NextCost < MXY.Z:
       | MXY.Z <= NextCost
-      | PFQueue.push{[Node M.xyz NextCost]}
+      | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end
 | EndTime = get_gui{}.ticks{}
 //| say EndTime-StartTime
 | less Targets.size: leave 0
-| Targets <= Targets{?xyz}
 | PFQueue.clear
 | when Closest: leave Targets.0
 | Targets
 
 unit.pathfind Closest Check = $world.pathfind{Closest Me Check}
-
-world.path U Target =
-| XYZ = Target
-| Path = [XYZ]
-| UX,UY,UZ = U.xyz
-| UCost = PFMap.UX.UY.UZ
-| while PFMap.(XYZ.0).(XYZ.1).(XYZ.2)-UCost > 1
-  | Ms = U.list_moves{XYZ}
-  | XYZ <= Ms{[PFMap.(?xyz.0).(?xyz.1).(?xyz.2) ?xyz]}.sort{?0 < ??0}.0.1
-  | push XYZ Path
-| when Path.size > 1 and Path.0 >< U.xyz: pop Path
-| Path.list
 
 ai.attack_with U =
 | World = $world
@@ -151,9 +146,9 @@ ai.attack_with U =
     else | Node = World.units_at{Move.xyz}.find{?income}
          | if got Node and no World.block_at{Move.xyz} then 1
            else 0
-| TargetXYZ = U.pathfind{1 Check}
-| less TargetXYZ: leave 0
-| XYZ = $world.path{U TargetXYZ}.0
+| TargetNode = U.pathfind{1 Check}
+| less TargetNode: leave 0
+| XYZ = TargetNode^node_to_path.0
 | Turn = $world.turn
 | Ms = U.list_moves{U.xyz}
 | M = Ms.find{?xyz >< XYZ}
@@ -176,7 +171,7 @@ ai.update_units Units =
   | PentXYZ <= Pentagram.xyz
 | for U Units: less U.handled:
   | U.handled <= 1
-  | Attacker = U.attack and U.attacker
+  | Attacker = U.attack //and U.attacker
   | when Attacker:
     | when no $world.units_at{U.xyz}.find{(?income>0 and ?empty)}:
       | when $attack_with{U}: leave 1

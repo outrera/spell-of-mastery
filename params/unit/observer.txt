@@ -7,11 +7,11 @@ flyer: 1
 income: -25
 ranged: 1
 moves:
-  | 0 0 2 0 0
   | 0 0 1 0 0
-  | 2 1 0 1 2
   | 0 0 1 0 0
-  | 0 0 2 0 0
+  | 1 1 0 1 1
+  | 0 0 1 0 0
+  | 0 0 1 0 0
 
 
 sounds: attack,(observer_attack)
