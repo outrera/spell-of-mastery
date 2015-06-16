@@ -1,0 +1,4 @@
+author: `Antoine Glédel`
+license: `CC-BY-SA`
+http: `https://commons.wikimedia.org/wiki/File:Orque-Terre_du_Milieu.jpg`
+xy: 0,6
