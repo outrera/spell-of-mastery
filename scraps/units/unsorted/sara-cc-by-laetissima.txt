@@ -1,3 +1,0 @@
-author: laetissima,`Nikita Sadkov`
-http: `http://opengameart.org/content/painted-sara`
-xy: 10,8
