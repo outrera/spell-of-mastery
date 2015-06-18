@@ -1,4 +1,0 @@
-author: `rg1024`
-license: `public domain`
-http: `https://openclipart.org/detail/20079/little-octopus`
-xy: 0,6
