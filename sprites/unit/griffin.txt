@@ -1,8 +1,9 @@
-author: `Matthew Griebner`, `Alexandr Sidorov`
+author: `Matthew Griebner`, `Alexandr Sidorov`,`Leha (kharagh@bk.ru)`
 copyright: `Nikita Sadkov`
 height: 4
-xy: -22,48
+xy: -18,48
 frames: folder
-anims: | idle (idle0 60)
-       | move (move1 8) (move2 8) (move3 8)
-       | attack (attack1 24)
+anims: | idle (idle0 24) (idle1 24)
+       | move (move1 6) (move2 6) (move3 6) (move4 6) (move5 6)
+       | death (death1 6) (death2 6) (death3 24)
+       | attack (attack1 6) (attack2 6) (attack3 6) (attack4 6)
