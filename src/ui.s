@@ -107,10 +107,6 @@ ui.init =
          | ItemList.pick{TileNames.locate{plain}}
     else | ItemList.data <= $main.classes_banks.BankName
          | ItemList.pick{0}
-| BrushUI = dlg: mtx
-  | 0 0 | $view
-  | 0 0 | layH: BankList,ItemList
-  | PanelW 0 | PlayerWidget
 | PickedUnit = 0
 //| sound_play: sound_load "[$data]/music/thaxted.ogg" music/1
 | ActClick = Icon =>
@@ -127,8 +123,6 @@ ui.init =
       | Order = PickedUnit.order.init{@Act.list.join}
 | ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
-| ArrowClick = Icon =>
-| Arrows = 9{I=>icon data/I $img{"icons_arrow[I]"} click/ArrowClick}
 | PickedUnitTitle = txt medium ''
 | PickedUnitOwner = txt medium 'unknown'
 | PickedUnitLevel = txt medium 'unknown'
@@ -144,7 +138,12 @@ ui.init =
   |  4 ScreenH-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 ScreenH-10 | InfoText
   | ScreenW-54 ScreenH-64 | EndTurnIcon
-| ViewUI = tabs brush: t brush(BrushUI) play(GameUI)
+| BrushUI = dlg: mtx
+  | 0 0 | $view
+  | 0 0 | layH: BankList,ItemList
+  | PanelW 0 | PlayerWidget
+| PickUI = GameUI
+| ViewUI = tabs brush: t brush(BrushUI) pick(PickUI) play(GameUI)
 | $view.on_unit_pick <= Unit =>
   | PickedUnit <= Unit
   | NonNil = Unit.type <> unit_nil
@@ -175,11 +174,13 @@ ui.init =
   | ModeIcon <= Icon
   | Mode = Icon.data
   | $view.mode <= Mode
+  | EndTurnIcon.show <= Mode >< play
   | ViewUI.pick{Mode}
   | if Mode >< play then $world.new_game else $world.explore
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
+| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
 | PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
-| WorldIcon = icon data/pick $img{icons_world} click: Icon =>
+| WorldIcon = icon $img{icons_world} click: Icon =>
   | pause
   | WorldProperties.show <= 1
   | WorldProperties.update
@@ -194,8 +195,8 @@ ui.init =
   | pause
   | Tabs.pick{main_menu}
 | EditorIcons = hidden: layV s/8
-    BrushIcon,spacer{8 0},PlayIcon,spacer{8 0},WorldIcon,
-    spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
+    BrushIcon,spacer{8 0},PickIcon,spacer{8 0},PlayIcon,spacer{8 0},
+    WorldIcon,spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
 | GearsIcon = hidden: button 'GEARS' skin/gears: =>

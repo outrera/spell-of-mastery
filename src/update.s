@@ -12,7 +12,9 @@ world.new_game =
   | for P $players
     | for S P.sight: S.clear{0}
     | for U P.units: U.explore
-| for P $players: P.mana <= 2000
+| for P $players:
+  | P.mana <= 2000
+  | for U P.units: U.moved <= 0
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it
 

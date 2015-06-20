@@ -275,12 +275,6 @@ view.select_unit XYZ =
   | Picked <= [Us.($pick_count%Us.size)]
 | $world.update_pick{Picked}
 
-view.update_pick XYZ =
-| when $mice_click >< left: $select_unit{$cursor}
-| $mice_click <= 0
-  // FIXME: following line is outdated
-| $main.update //ensures deleted units get updated
-
 view.update_brush =
 | $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
@@ -326,6 +320,15 @@ view.update_brush =
       | $world.clear_tile{X,Y,Z-1}
       | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
       | $cursor.2 <= $fix_z{$cursor}
+
+view.update_pick =
+| when $mice_click >< left: $select_unit{$cursor}
+| $mice_click <= 0
+| Picked = $world.picked
+| less Picked: Picked <= $world.nil
+| $on_unit_pick{}{Picked}
+  // FIXME: following line is outdated
+| $main.update //ensures deleted units get updated
 
 view.update_play =
 | Player = $world.player
@@ -387,7 +390,7 @@ view.update =
 | case $mode
     play | $update_play
     brush | $update_brush
-    pick | $update_pick{X Y Z}
+    pick | $update_pick
     Else | bad "bad view mode ([$mode])"
 | 1
 
