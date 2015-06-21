@@ -108,6 +108,7 @@ unit.animate Anim =
 | $anim_wait <= $anim_seq.$anim_step.1
 
 unit.free =
+| when $owner: !$owner.power - $income
 | when $leader and $hits >> $health:
   | O = $owner
   | Leaders = []
