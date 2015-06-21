@@ -1,0 +1,3 @@
+act: disband
+target: self
+icon: act_disband

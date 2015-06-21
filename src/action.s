@@ -186,6 +186,14 @@ act_pentagram.finish A =
 | Pentagram.move{A.xyz}
 
 
+type act_disband.act_class class_name/disband anim/action
+
+act_disband.valid A = 1
+act_disband.start A =
+| A.unit.main.sound{cancel}
+| free_unit A.unit
+
+
 type act_summon.act_class class_name/summon anim/action
 
 act_summon.valid A =
@@ -231,6 +239,7 @@ ActionClasses = t idle(act_idle) move(act_move) attack(act_attack) die(act_die)
                   pentagram(act_pentagram) 
                   spell_of_mastery(act_spell_of_mastery)
                   summon(act_summon)
+                  disband(act_disband)
 
 type action{unit}
    class
