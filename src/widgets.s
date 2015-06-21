@@ -89,7 +89,7 @@ bar.draw G P =
 
 
 type button.widget{Text Fn state/normal skin/medium_large}
-  value/Text on_click/Fn state/State sprite over w h
+  text/Text value on_click/Fn state/State sprite over w h
 | $sprite <= Main.spr{"ui_button_[Skin]"} 
 | $w <= $sprite.frames.normal.0.w
 | $h <= $sprite.frames.normal.0.h
@@ -105,18 +105,18 @@ button.draw  G P =
   | Shift = case State pressed [SF.5 SF.6] _ [0 0]
   | FontName = SF.| case State pressed+over(3) disabled(4) _(2)
   | F = font FontName
-  | FW = F.width{$value}
+  | FW = F.width{$text}
   | FH = F.height
   | X = BG.w/2-FW/2 + SF.0
   | Y = BG.h/2-FH/2 + SF.1
-  | F.draw{G P+[X Y]+Shift $value}
+  | F.draw{G P+[X Y]+Shift $text}
 button.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | case $state normal: Me.state <= \pressed
   [mice left 0 P] | case $state pressed
                     | when $over: $on_click{}{}
                     | $state <= \normal
-button.as_text = "#button{[$value]}"
+button.as_text = "#button{[$text]}"
 
 type litem.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init

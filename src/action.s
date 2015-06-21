@@ -189,9 +189,17 @@ act_pentagram.finish A =
 type act_disband.act_class class_name/disband anim/action
 
 act_disband.valid A = 1
+
 act_disband.start A =
-| A.unit.main.sound{cancel}
-| free_unit A.unit
+| A.cycles <= 4
+| A.unit.main.show_message
+  {'Disband Unit?' buttons/[yes,'Yes' no,'No']
+   'Are you sure this unit should be disbanded?'}
+
+act_disband.finish A =
+| when A.unit.main.dialog_result><yes
+  | A.unit.main.sound{cancel}
+  | free_unit A.unit
 
 
 type act_summon.act_class class_name/summon anim/action

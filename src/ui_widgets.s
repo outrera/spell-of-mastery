@@ -1,27 +1,43 @@
 use gui widgets icon
 
-type message_box.$base{ui} base title text ok width
+DialogResult = 0
+
+type message_box.$base{ui} base title text buttons width
 | BG = $ui.img{ui_panel5}
 | $width <= BG.w
 | $title <= txt medium '' 
 | $text <= txt medium ''
-| $ok <= hidden: button 'Ok' skin/medium_small: =>
+| button_click Result = 
+  | DialogResult <= Result
   | $ui.unpause
   | $show <= 0
+| Buttons =
+| Buttons <= 3{I => button 'Text' skin/medium_small: =>
+                    | button_click Buttons.I.value}
+| $buttons <= map B Buttons: hidden B
 | $base <= hidden: dlg: mtx
   | 270 100 | BG
   | 290 110 | $title
   | 280 140 | $text
-  | 390 420 | $ok
+  | 290 420 | layH s/5 $buttons
 
-message_box.display Title Text =
+message_box.display Buttons Title Text =
+| DialogResult <= 0
 | $title.value <= Title
 | $text.value <= $text.font.format{$width Text}
-| $ok.show <= 1
+| for B $buttons: B.show <= 0
+| for [I [Value Text]] Buttons.i
+  | B = $buttons.I
+  | B.show <= 1
+  | B.text <= Text
+  | B.value <= Value
 | $show <= 1
 | $ui.pause
 
-main.show_message Title Text = $ui.message_box.display{Title Text}
+main.show_message Title Text buttons/[ok,'Ok'] =
+| $ui.message_box.display{Buttons Title Text}
+
+main.dialog_result = DialogResult
 
 type unit_panel.widget{ui}
      w/0 h/0 unit laurels moved
