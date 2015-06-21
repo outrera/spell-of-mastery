@@ -25,7 +25,7 @@ EndTurnDepth = 0
 
 world.end_turn =
 | Researching = $player.researching
-| when Researching
+| when Researching and $player.power > 0:
   | !$player.research.Researching + $player.power
   | Act = $main.params.acts.Researching
   | less $player.research_remain{Act} > 0:
