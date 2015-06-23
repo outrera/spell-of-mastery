@@ -1,54 +1,59 @@
 use stack
 
-type item{id} ctrls
 
-item._ Method Args =
-| Type = Method^_method_name
-| Cs = $ctrls^uncons{next}
-| if Args.size > 1
-  then | Type = Type.tail
-       | for C Cs: when C.type >< Type: C.value <= Args.1
-       | leave 0
-  else for C Cs: when C.type >< Type: leave C.value
-| No
+Entities =
+FreedEntities =
+Systems = t
+Arrays =  t
+Registered = []
+Cycle = 0
 
-item.update =
-| for D $ctrls^uncons{next}: D.update
+ecs_init MaxEntities =
+| Entities <= stack: dup Id MaxEntities Id
+| FreedEntities <= stack Entities.size
+| Size = Entities.size
+| for Constructor Registered:
+  | Array = dup Size 0
+  | System = Constructor{Array}
+  | System.init
+  | Name = typename System
+  | Systems.Name <= System
+  | Arrays.Name <= Array
 
-ctrl TypeName @Args =
-| form @| type TypeName active/1 next item $@Args
+ecs_new @Components =
+| Cs = Components
+| Id = Entities.pop
+| while Cs.size
+  | Name = pop Cs
+  | Value = pop Cs
+  | System = Systems.Name
+  | System.new{Id Value}
+| Id
 
-type ecs{max_items} cycle items ctrls active
-| $items <= stack: dup Id $max_items: item Id
-| $ctrls <= t
-| $active <= stack $max_items*50
+ecs_free Id = FreedEntities.push{Id}
 
-ecs.update =
-| for A $active: A.update
-| NextActive = []
-| while $active.used
-  | A = $active.pop
-  | when A.active: push A NextActive
-| for A NextActive: $active.push{A}
-| !$cycle + 1
+ecs_array Name = Arrays.Name
 
-ecs.register Constructor =
-| Xs = dup $max_items Constructor{}
-| Type = Xs.0.type
-| $ctrls.Type <= stack Xs
+ecs_register @Systems = for System Systems: push System Registered
 
-ecs.new @Components =
-| Item = $items.pop
-| Item.ctrls <= 0
-| for Type Components:
-  | TypeStack = $ctrls.Type
-  | less got TypeStack: bad "ecs.new: missing type - [Type]"
-  | C = TypeStack.pop
-  | C.item <= Item
-  | when C.active: $active.push{C}
-  | C.next <= Item.ctrls
-  | Item.ctrls <= C
-| Item
+ecs_update =
+| Ss = Systems.list{}{?1}
+| for S Ss: S.update
+| while FreedEntities.used:
+  | Id = FreedEntities.pop
+  | for S Ss: S.free{Id}
+  | Entities.push{Id}
+| !Cycle+1
 
 
-export ecs 'ctrl'
+type component
+component.init =
+| IV = $init_value
+| for I $array.size: $array.I <= IV.copy
+component.new Id Value = $array.Id <= Value
+component.free Id =
+component.update =
+component.init_value = 0
+
+
+export ecs_init ecs_register ecs_update ecs_new ecs_free ecs_array component
