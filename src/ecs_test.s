@@ -1,19 +1,17 @@
 use ecs
 
+component &health
+component xyz/[0 0 0]
+xyz.`.` Id = $array.Id
+xyz.`!` Id Value = $array.Id.init{Value}
 
-type health.component{array}
 
-type pos.component{array}
-pos.init_value = [0 0 0]
-pos.new Id Value = $array.Id.init{Value}
 
-ecs_register &health &pos
+ECS = ecs 1024
 
-ecs_init 1024
+new_unit = ECS.new{health/31 xyz/[1 2 3]}
+O = new_unit
 
-Health = ecs_array health
-Pos = ecs_array pos
+O.xyz <= [123 456 789]
 
-O = ecs_new health/31 pos/[1 2 3]
-
-say [Health.O Pos.O]
+say [O.health O.xyz]
