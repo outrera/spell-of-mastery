@@ -1,4 +1,4 @@
-use stack
+use stack bits
 
 ECS =
 Systems =
@@ -8,6 +8,7 @@ ecs_register @Systems = for System Systems: push System Registered
 
 type ecs{max_entities}
      entities freed systems/(t) arrays/(t) cycle
+     bits
 | ECS <= Me
 | Systems <= $systems
 | $entities <= stack: @flip: dup Id $max_entities Id
@@ -16,7 +17,9 @@ type ecs{max_entities}
 | I = 0
 | for Constructor Registered:
   | Array = dup Size 0
-  | System = Constructor{Me I Array}
+  | Entities = stack Size
+  | EntitiesFlags = bits Size
+  | System = Constructor{Me I Array Entities EntitiesFlags}
   | System.init
   | Name = typename System
   | $systems.Name <= System
@@ -31,6 +34,8 @@ ecs.new @Components =
   | Value = pop Cs
   | System = $systems.Name
   | less got System: bad "ECS: unknown system - [Name]"
+  | System.entities.push{Id}
+  | System.entities_flags.Id <= 1
   | System.new{Id Value}
 | Id
 
@@ -39,12 +44,18 @@ ecs.array Name = $arrays.Name
 ecs.`.` Name = $systems.Name
 
 ecs.update =
-| Ss = $systems.list{}{?1}
-| for S Ss: S.update
-| while $freed.used:
+| Systems = $systems.list{}{?1}
+| for System Systems: System.update
+| Freed = $freed.list.uniq
+| $freed.clear
+| when Freed.size
   | Id = $freed.pop
-  | for S Ss: S.free{Id}
-  | $entities.push{Id}
+  | for System Systems:
+    | EF = System.entities_flags
+    | for Id Freed: when EF.Id:
+      | System.entities.remove{Id}
+      | EF.Id <= 0
+  | for Id Freed: $entities.push{Id}
 | !$cycle+1
 
 
@@ -65,12 +76,16 @@ component_.`!` Id Value = $array.Id <= Value
 
 component Name @Fields =
 | Fast = 0
+| Vector = 0
 | InitValue = 0
+| case Name [`/` N IV]
+  | InitValue <= IV
+  | Name <= N
 | case Name [`&` N]
   | Fast <= 1
   | Name <= N
-| case Name [`/` N IV]
-  | InitValue <= IV
+| case Name [`&` N]
+  | Vector <= 1
   | Name <= N
 | Component_ = "Component_[Name]_"
 | Array_ = "Array_[Name]_"
@@ -79,11 +94,16 @@ component Name @Fields =
 | Xs = form
   | Array_ =
   | Component_ =
-  | type Name.component_{ecs id array} $@Fields
+  | type Name.component_{ecs id array entities entities_flags} $@Fields
     | Component_ <= Me
     | Array_ <= Me.array
   | Name.init_value = InitValue
   | ecs_register &Name
+| when Vector
+  | Fs = @tail: form
+    | Name.`.` ~Id = Me.array.~Id
+    | Name.`!` ~Id ~V = Me.array.~Id.init{~V}
+  | Xs <= [@Xs @Fs]
 | Accessors = @tail: form
   | int.Name = $if Fast
                 then form Array_.Me
