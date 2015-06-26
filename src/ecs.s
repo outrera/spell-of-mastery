@@ -1,5 +1,10 @@
 use stack bits
 
+// NOTE: number of used components combinations are pretty limited
+//       this fact allows entity-id embedding information about used companents
+//       as a number of their combination
+//       even treating usual objects as component based
+
 ECS =
 Systems =
 Registered = []
@@ -7,13 +12,13 @@ Registered = []
 ecs_register @Systems = for System Systems: push System Registered
 
 type ecs{max_entities}
-     entities freed systems/(t) arrays/(t) cycle
-     bits
+     entities entities_flags freed systems/(t) arrays/(t) cycle
 | ECS <= Me
 | Systems <= $systems
 | $entities <= stack: @flip: dup Id $max_entities Id
-| $freed <= stack $entities.size
 | Size = $entities.size
+| $entities_flags <= bits Size
+| $freed <= stack $entities.size
 | I = 0
 | for Constructor Registered:
   | Array = dup Size 0
@@ -29,6 +34,7 @@ type ecs{max_entities}
 ecs.new @Components =
 | Cs = Components
 | Id = $entities.pop
+| $entities_flags.Id <= 1
 | while Cs.size
   | Name = pop Cs
   | Value = pop Cs
@@ -43,20 +49,36 @@ ecs.free Id = $freed.push{Id}
 ecs.array Name = $arrays.Name
 ecs.`.` Name = $systems.Name
 
-ecs.update =
-| Systems = $systems.list{}{?1}
-| for System Systems: System.update
+ecs.clear_freed =
 | Freed = $freed.list.uniq
 | $freed.clear
 | when Freed.size
-  | Id = $freed.pop
+  | Systems = $systems.list{}{?1}
   | for System Systems:
     | EF = System.entities_flags
     | for Id Freed: when EF.Id:
       | System.entities.remove{Id}
       | EF.Id <= 0
-  | for Id Freed: $entities.push{Id}
+  | for Id Freed
+    | $entities_flags.Id <= 0
+    | $entities.push{Id}
+
+
+ecs.update =
+| Systems = $systems.list{}{?1}
+| for System Systems: System.update
+| $clear_freed
 | !$cycle+1
+
+ecs.clear =
+| for Id $entities_flags.active: $free{Id}
+| $clear_freed
+| $cycle <= 0
+
+ecs.text =
+| @text: map Name,System $systems:
+  | As = System.array
+  | "([Name] [System.entities{}{"([?] [As.?.as_text])"}.text])"
 
 
 int.`.` System = Systems.System.Me

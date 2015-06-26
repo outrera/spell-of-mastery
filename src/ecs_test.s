@@ -1,4 +1,4 @@
-use ecs
+use ecs bits
 
 //FIXME: use linked lists to determine which entities belong to which systems
 
@@ -15,6 +15,10 @@ A = new_unit
 
 A.xyz <= [123 456 789]
 
-
-
 say [A.health A.xyz]
+
+//ECS.clear
+
+ECS.free{0}
+
+say ECS.text
