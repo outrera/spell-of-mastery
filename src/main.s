@@ -1,8 +1,8 @@
-use ecs_test
+//use ecs_test
 
 
-//use param sprite class tile sound world update ui save generate ai main2
+use param sprite class tile sound world update ui save generate ai main2
 
-//@run: main: main_root
+@run: main: main_root
 
 say 'Goodbye!'
