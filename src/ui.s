@@ -240,7 +240,7 @@ ui.init =
   //| $main.show_message{'Saved' 'Your game is saved!'}
 | load_slot Name = 
   | load 0 "[SavesFolder][Name].txt"
-  //| $main.show_message{'Saved' 'Your game is loaded!'}
+  //| $main.show_message{'Loaded' 'Your game is loaded!'}
 | new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
 | LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'

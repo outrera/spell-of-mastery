@@ -119,6 +119,7 @@ unit.free =
   | case Leaders [L]
     | $world.params.winner <= L.owner.id
     | $world.params.victory_type <= 'Victory by defeating other leaders.'
+| $active <= 0
 | $world.free_unit{Me}
 
 unit.remove =
