@@ -2,7 +2,7 @@ use gui widgets icon
 
 DialogResult = 0
 
-type message_box.$base{ui} base title text buttons width
+type message_box.$base{ui} base title text buttons width margin/[0 0]
 | BG = $ui.img{ui_panel5}
 | $width <= BG.w
 | $title <= txt medium '' 
@@ -15,16 +15,19 @@ type message_box.$base{ui} base title text buttons width
 | Buttons <= 3{I => button 'Text' skin/medium_small: =>
                     | button_click Buttons.I.value}
 | $buttons <= map B Buttons: hidden B
+| MarginW = 65
+| MarginH = 50
+| $margin.init{[MarginW MarginH]}
 | $base <= hidden: dlg: mtx
-  | 270 100 | BG
+  | 270-MarginW 100-MarginH | BG
   | 290 110 | $title
   | 280 140 | $text
-  | 290 420 | layH s/5 $buttons
+  | 290 395 | layH s/5 $buttons
 
 message_box.display Buttons Title Text =
 | DialogResult <= 0
 | $title.value <= Title
-| $text.value <= $text.font.format{$width Text}
+| $text.value <= $text.font.format{$width-$margin.0*2 Text}
 | for B $buttons: B.show <= 0
 | for [I [Value Text]] Buttons.i
   | B = $buttons.I
@@ -88,8 +91,10 @@ type world_props.$base{world callback}
                 'Width:',$width
                 'Height:',$height
                ]
+| MarginW = 65
+| MarginH = 50
 | $base <= dlg: mtx
-  |   0   0 | $world.main.img{ui_panel5}
+  | -MarginW  -MarginH | $world.main.img{ui_panel5}
   | 130  10 | txt medium 'Properties'
   |  15  40 | layV s/8 PropFields{(txt small ?0)}
   | 100  36 | layV PropFields{?1}
@@ -122,8 +127,10 @@ type load_world_dlg.$base{world folder cancelCB loadCB}
   filename base picked
 | LoadButton = button 'Load' skin/medium_small: => ($loadCB){$picked}
 | LoadButton.state <= 'disabled'
+| MarginW = 65
+| MarginH = 50
 | $base <= dlg: mtx
-  |   0   0 | $world.main.img{ui_panel5}
+  | -MarginW   -MarginH | $world.main.img{ui_panel5}
   | 130  10 | txt medium 'Load World'
   |  15  40 | folder_widget $folder: File =>
               | $picked <= File

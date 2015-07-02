@@ -194,6 +194,7 @@ view.draw_indicators =
 | IP = [($w-Indicators.w)/2 0]
 | P = $world.player
 | Font = font medium
+| when $mode <> play: !IP.0 + 80
 | less P.human or $mode <> play:
   | Font.draw{$fb IP+[148 16] "[P.name]"}
   | leave
