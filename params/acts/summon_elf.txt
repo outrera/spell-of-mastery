@@ -1,4 +1,4 @@
-act: summon
+type: summon
 effect: unit_elf
 target: pentagram
 icon: unit_elf

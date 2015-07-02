@@ -1,28 +1,10 @@
 // unit controlling related stuff
+use action_
 
-/*
 Acts = t
 
-Acts->idle.start <= A => when A.cycles >< -1: A.cycles <= 4
-*/
 
-type act_class
-
-act_class.init A =
-act_class.valid A = 1
-act_class.start A = A.cycles <= A.unit.sprite.speed
-act_class.update A =
-act_class.finish A =
-
-type act_idle.act_class
-
-act_idle.start A =  when A.cycles >< -1: A.cycles <= 4
-
-type act_move.act_class
-
-act_move.valid A =
-| U = A.unit
-| U.world.no_block_at{A.xyz} and U.can_move{U.xyz A.xyz}
+dact idle.start | when A.cycles >< -1: A.cycles <= 4
 
 // dirs requiring dummy to avoid overlapping unit with tiles
 OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
@@ -58,7 +40,11 @@ move_finish A =
 | U.movement_render_hack <= 0
 | U.extort
 
-act_move.start A =
+dact move.valid
+| U = A.unit
+| U.world.no_block_at{A.xyz} and U.can_move{U.xyz A.xyz}
+
+dact move.start
 | U = A.unit
 | when A.cycles >< -1: A.cycles <=  U.sprite.speed
 | move_start A
@@ -67,30 +53,25 @@ act_move.start A =
   | A.cycles <= 0
   | move_finish A
 
-act_move.update A = move_update A
+dact move.update | move_update A
+dact move.finish | move_finish A
 
-act_move.finish A = move_finish A
-
-type act_attack.act_class
-
-act_attack.valid A =
+dact attack.valid
 | T = A.target
 | when T.is_list or T.removed or T.empty or not T.health: leave 0
 | U = A.unit
 //| when U.skirmisher: leave (T.xyz - U.xyz).all{?.abs<<1}
 | if U.ranged then 1 else U.can_move{U.xyz T.xyz}
 
-act_attack.init A =
-| A.data <= 0
+dact attack.init | A.data <= 0
 
-act_attack.start A =
+dact attack.start
 | U = A.unit
 | U.face{A.target.xyz}
 | A.cycles <= max 1 U.sprite.anim_speed{attack}
 | U.animate{attack}
 | when got!it U.sounds.attack: U.main.sound{it.rand}
-
-act_attack.update A =
+dact attack.update
 | U = A.unit
 | when A.cycles > 9000 // if target is dying, wait till it is dead
   | when U.world.waiting: leave
@@ -125,64 +106,53 @@ act_attack.update A =
     | A.data <= 1
     | A.cycles <= 90000
 
-act_attack.finish A =
-| move_finish A
-
-
-type act_die.act_class
-
-act_die.valid A = 1
+dact attack.finish | move_finish A
 
 free_unit U = 
 | when U.id >< U.world.waiting: U.world.waiting <= 0
 | U.free
 
-act_die.start A =
+dact die.start
 | U = A.unit
 | U.animate{death}
 | less not U.hits or got U.sprite.anims.death:
   | free_unit U
   | A.cycles <= 1000
 
-act_die.finish A =
-| free_unit A.unit
+dact die.finish | free_unit A.unit
 
-type act_swap.act_class
 
-act_swap.valid A =
+dact swap.valid
 | T = A.target
 | less A.target and not A.target.removed: leave 0
 | U = A.unit
 | Turn = U.world.turn
 | U.owner.id >< T.owner.id and U.moved < Turn and T.moved < Turn
 
-act_swap.start A =
+
+dact swap.start
 | U = A.unit
 | A.cycles <= max 1 U.sprite.speed
 | move_start A
 | !A.target.owner.moves + 2
-| A.target.order.init{act/move at/A.fromXYZ}
+| A.target.order.init{type/move at/A.fromXYZ}
 
-act_swap.update A =
+dact swap.update
 | move_update A
 
-act_swap.finish A =
+dact swap.finish
 | move_finish A
 | !A.target.owner.moves - 1
 
-
-
-type act_pentagram.act_class
-
-act_pentagram.valid A =
+dact pentagram.valid
 | T = A.unit
 | T.world.units_at{T.xyz}.all{?.empty >< 0}
 
-act_pentagram.start A =
+dact pentagram.start
 | A.unit.animate{attack}
 | A.unit.main.sound{pentagram}
 
-act_pentagram.finish A =
+dact pentagram.finish
 | U = A.unit
 | Pentagram = U.owner.pentagram
 | when not Pentagram
@@ -192,30 +162,23 @@ act_pentagram.finish A =
 | Pentagram.move{A.xyz}
 
 
-type act_disband.act_class
-
-act_disband.valid A = 1
-
-act_disband.start A =
+dact disband.start
 | A.cycles <= 4
 | A.unit.main.show_message
   {'Disband Unit?' buttons/[yes,'Yes' no,'No']
    'Are you sure this unit should be disbanded?'}
 
-act_disband.finish A =
+dact disband.finish
 | when A.unit.main.dialog_result><yes
   | A.unit.main.sound{cancel}
   | free_unit A.unit
 
-
-type act_summon.act_class
-
-act_summon.valid A =
+dact summon.valid
 | T = A.target
 | less A.target and not A.target.removed: leave 0
 | T.world.units_at{T.xyz}.all{?empty}
 
-act_summon.start A =
+dact summon.start
 | U = A.unit
 | U.animate{attack}
 | U.main.sound{summon}
@@ -225,7 +188,7 @@ act_summon.start A =
   | Leader.face{U.xyz}
 | U.world.effect{A.target.xyz teleport}
 
-act_summon.finish A =
+dact summon.finish
 | S = A.unit.world.alloc_unit{A.effect}
 | S.owner <= A.unit.owner
 | S.attacker <= 1 // mark it available for attack
@@ -233,31 +196,34 @@ act_summon.finish A =
 | S.world.update_pick{[S]}
 | !S.owner.power + S.income
 
-type act_spell_of_mastery.act_class
 
-act_spell_of_mastery.start A =
+dact spell_of_mastery.start
 | U = A.unit
 | U.animate{attack}
 | U.main.sound{summon}
 | U.world.effect{U.xyz teleport}
 
-act_spell_of_mastery.finish A =
+dact spell_of_mastery.finish
 | U = A.unit
 | U.world.params.winner <= U.owner.id
 | U.world.params.victory_type <= 'Victory by casting the Spell of Mastery'
 
 
+default_init A =
+default_valid A = 1
+default_start A = A.cycles <= A.unit.sprite.speed
+default_update A =
+default_finish A =
 
-ActionClasses = t idle(act_idle) move(act_move) attack(act_attack) die(act_die)
-                  swap(act_swap)
-                  pentagram(act_pentagram) 
-                  spell_of_mastery(act_spell_of_mastery)
-                  summon(act_summon)
-                  disband(act_disband)
+for Name,Act Acts
+| have Act.init &default_init
+| have Act.valid &default_valid
+| have Act.start &default_start
+| have Act.update &default_update
+| have Act.finish &default_finish
 
 type action{unit}
-   class
-   class_name/idle
+   type
    target // when action targets a unit
    xyz/[0 0 0] // target x,y,z
    cycles // cooldown cycles remaining till the action safe-to-change state
@@ -266,42 +232,53 @@ type action{unit}
    fromXYZ/[0 0 0]
    fromXY/[0 0]
    speed
-   data // data used by class
+   data // data used by action handlers
    cost
    effect
    path
+   act_init/&default_init
+   act_valid/&default_valid
+   act_start/&default_start
+   act_update/&default_update
+   act_finish/&default_finish
 
-action.as_text = "#action{[$class_name] [$priority] [$target]}"
+action.as_text = "#action{[$type] [$priority] [$target]}"
 
-action.init act/idle at/self target/0 cost/0 effect/0 path/0 speed/-1 =
+action.init type/idle at/self target/0 cost/0 effect/0 path/0 speed/-1 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
 | $xyz.init{At}
 | $target <= Target
 | $priority <= 50
-| $class_name <= Act
-| $class <= ActionClasses.Act
+| $type <= Type
+| A = Acts.Type
+| less got A: bad "unknown action type [Type]"
+| $act_init <= A.init
+| $act_valid <= A.valid
+| $act_start <= A.start
+| $act_update <= A.update
+| $act_finish <= A.finish
 | $cycles <= -1
 | $cost <= Cost
 | $speed <= Speed
 | $effect <= Effect
 | $path <= Path
-| less got $class: bad "unknown action class [Act]"
-| $class.init{Me}
+| $act_init{}{Me}
 | Me
 
-action.valid = $class and $class.valid{Me}
+action.valid = $act_valid{}{Me}
 
 action.start =
-| $class.start{Me}
+| $act_start{}{Me}
 
 action.update =
-| $class.update{Me}
+| $act_update{}{Me}
 | !$cycles - 1
 
 action.finish =
-| $class.finish{Me}
+| $act_finish{}{Me}
 | when $path: $path^uncons{path}{?free}
+
 
 export action

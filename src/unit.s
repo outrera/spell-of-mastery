@@ -73,13 +73,13 @@ unit.init Class =
   | less $active
     | $world.active.push{Me}
     | $active <= 1
-  | $ordered.class <= 0
-  | $next_action.class <= 0
+  | $ordered.type <= 0
+  | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
 
-unit.idle = not $ordered.class and
-           [$action $next_action].all{?class_name^~{0 idle} >< idle}
+unit.idle = not $ordered.type and
+           [$action $next_action].all{?type^~{0 idle} >< idle}
 
 //FIXME: move these into sprite loading code
 AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]
@@ -141,13 +141,13 @@ unit.guess_order_at_mark Mark =
   | Node
 | case Mark.type
   mark_move
-    | $order.init{act/move at/XYZ path/Path}
+    | $order.init{type/move at/XYZ path/Path}
   mark_attack
     | Target = Us.skip{?empty}.0
-    | $order.init{act/attack target/Target at/XYZ path/Path}
+    | $order.init{type/attack target/Target at/XYZ path/Path}
   mark_swap
     | Target = Us.skip{?empty}.0
-    | $order.init{act/swap target/Target at/XYZ path/Path}
+    | $order.init{type/swap target/Target at/XYZ path/Path}
   Else | leave 0
 | 1
 
@@ -316,7 +316,7 @@ unit.harm Attacker Damage =
   | when got!it $sounds.hit: $main.sound{it.rand}
   | leave
 | when got!it $sounds.die: $main.sound{it.rand}
-| DeathOrder = $order.init{act/die}
+| DeathOrder = $order.init{type/die}
 | DeathOrder.priority <= 1000
 | DeathOrder.speed <= 0
 | $action.cycles <= 1

@@ -1,5 +1,5 @@
+type: pentagram
 title: `Pentagram`
-act: pentagram
 effect: pentagram_0
 target: self
 icon: spell_pentagram

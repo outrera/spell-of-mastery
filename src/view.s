@@ -355,7 +355,7 @@ world.update_picked =
 | Picked = $picked
 | less Picked and Picked.moves and Picked.moved<$turn:
   | Picked <= 0
-| when Picked and Picked.picked and Picked.action.class_name >< idle:
+| when Picked and Picked.picked and Picked.action.type >< idle:
   | $marks <= [$nil @Picked.mark_moves]^cons{mark}
 
 world.update_cursor CXYZ Brush Mirror =

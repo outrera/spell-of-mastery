@@ -20,7 +20,7 @@ ai.marked_order U Move =
 
 ai.cast_pentagram =
 | Leader = $player.leader
-| when Leader: case Leader.acts.keep{?act >< pentagram} [Act@_]
+| when Leader: case Leader.acts.keep{?type >< pentagram} [Act@_]
   | $order_act{Leader Act}
   | leave 1
 | leave 0
@@ -65,7 +65,7 @@ ai.remove_blocker Blocker =
 ai.update_research =
 | Pentagram = $player.pentagram
 | less Pentagram: leave 0
-| Summons = Pentagram.acts.keep{?act >< summon}
+| Summons = Pentagram.acts.keep{?type >< summon}
 | less Summons.size: leave 0
 | S = Summons.find{?effect >< unit_goblin}
 | when got S and $player.research_remain{S} > 0:
@@ -78,7 +78,7 @@ ai.update_pentagram =
 | less Pentagram: leave 0
 | Blocker = $world.block_at{Pentagram.xyz}
 | when got Blocker: leave 0
-| Summons = Pentagram.acts.keep{?act >< summon}
+| Summons = Pentagram.acts.keep{?type >< summon}
 | less Summons.size: leave 0
 | S = Summons.find{?effect >< unit_goblin}
 | Turn = $world.turn

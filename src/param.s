@@ -19,6 +19,7 @@ main.load_params =
     | load_params Params "[BankFolder][Name].txt"
     | Name,Params
   | BankName,Bank
-| for ActType,Act $params.acts: Act.type <= ActType
-
+| for ActName,Act $params.acts:
+  | Act.name <= ActName
+  | when no Act.title: Act.title <= ActName.replace{_ ' '}
 export load_params

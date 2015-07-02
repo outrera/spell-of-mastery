@@ -1,4 +1,4 @@
-act: summon
+type: summon
 effect: unit_golem
 target: pentagram
 icon: unit_golem

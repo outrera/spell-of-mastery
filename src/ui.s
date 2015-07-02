@@ -116,7 +116,7 @@ ui.init =
   | ActIcon <= Icon
   | Act = $params.acts.(Icon.data)
   | when got Icon.number:
-    | PickedUnit.owner.researching <= Act.type
+    | PickedUnit.owner.researching <= Act.name
   | when no Icon.number:
     | Target = Act.target
     | when Target >< self or Target >< pentagram:
@@ -157,10 +157,10 @@ ui.init =
     | Icon = ActIcons.I.widget
     | Player = Unit.owner
     | ResearchRemain = Player.research_remain{Act}
-    | Icon.data <= Act.type
+    | Icon.data <= Act.name
     | Icon.fg <= Act.icon_gfx
     | Icon.number <= if ResearchRemain > 0 then ResearchRemain else No
-    | Icon.research <= Unit.owner.researching >< Act.type
+    | Icon.research <= Unit.owner.researching >< Act.name
                        and ResearchRemain > 0
     | Icon.frame <= 0
     | Icon.w <= Icon.fg.w

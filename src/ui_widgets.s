@@ -115,7 +115,7 @@ info_line.render =
 | $info_text.value <= ""
 | case $ui.act_icons.keep{(?.show and ?.over)} [Icon@_]
   | Act = $ui.params.acts.(Icon.data)
-  | Info =  if got Act.title then Act.title else Act.type.replace{_ ' '}
+  | Info = Act.title
   | when got Icon.number: Info <= "research [Info] ([Icon.number] TURNS)"
   | less got Icon.number:
     | Cost = if got Act.cost then Act.cost else 0

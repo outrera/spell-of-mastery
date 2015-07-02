@@ -1,4 +1,4 @@
-act: summon
+type: summon
 effect: unit_minotaur
 target: pentagram
 icon: unit_minotaur

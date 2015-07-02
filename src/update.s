@@ -27,8 +27,8 @@ world.end_turn =
 | Researching = $player.researching
 | when Researching and $player.power > 0:
   | !$player.research.Researching + $player.power
-  | Act = $main.params.acts.Researching
-  | less $player.research_remain{Act} > 0:
+  | ActName = $main.params.acts.Researching
+  | less $player.research_remain{ActName} > 0:
     | $player.researching <= 0
 | $player.params.view.init{$view.center}
 | $player.params.cursor.init{$view.cursor}
@@ -87,7 +87,7 @@ world.process_events =
     [researched Player ActName]
       | Act = $main.params.acts.ActName
       | less got ActName: "World events references unknown act [ActName]"
-      | ResearchSpent = $players.Player.research.(Act.type)
+      | ResearchSpent = $players.Player.research.(Act.name)
       | ResearchRemain = Act.research - ResearchSpent
       | ResearchRemain << 0
   | when Negate: True <= not True
@@ -119,8 +119,8 @@ world.update =
   | ($on_update){}
 
 unit.update =
-| when $turn and ($world.turn - $turn) > $ttl and $action.class_name <> die:
-  | DeathOrder = $order.init{act/die}
+| when $turn and ($world.turn - $turn) > $ttl and $action.type <> die:
+  | DeathOrder = $order.init{type/die}
   | DeathOrder.speed <= 0
 | when $removed
   | $active <= 0
@@ -130,43 +130,44 @@ unit.update =
   | $anim_step <= ($anim_step+1)%$anim_seq.size
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
-| when $ordered.class
+| when $ordered.type
   | when ($ordered.path or $ordered.valid)
          and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
-  | $ordered.class <= 0
+  | $ordered.type <= 0
 | till $action.cycles > 0 // action is done?
   | when $anim<>idle and $anim<>move and
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave 1
   | $action.finish
   | Path = $next_action.path
-  | when $ranged and $next_action.class_name >< attack:
+  | when $ranged and $next_action.type >< attack:
     | Path^uncons{path}{?free}
     | Path <= 0
     | $next_action.path <= 0
   | when Path
     | swap $ordered $next_action
     | $ordered.path <= Path.path
-    | $next_action.init{act/move at/Path.xyz}
+    | $next_action.init{type/move at/Path.xyz}
     | Path.free
   | less $anim >< idle: $animate{idle}
-  | MoveAction = $next_action.class_name >< move
+  | MoveAction = $next_action.type >< move
   | Speed = if MoveAction then $speed else $next_action.speed
-  | if     $next_action.valid
+  | if     $next_action.type and $next_action.valid
        and (not $next_action.speed
             or ($moved < $world.turn and $owner.mana>>$next_action.cost))
     then | less Path:
            | !$owner.mana-$next_action.cost
            | when Speed: $moved <= $world.turn-Speed-1
-         | less $owner.human: when $seen: $world.view.center_at{$xyz cursor/1}
-    else $next_action.init{act/idle at/$xyz}
+         | less $owner.human: when $seen:
+           | $world.view.center_at{$xyz cursor/1}
+    else $next_action.init{type/idle at/$xyz}
   | swap $action $next_action
-  | $next_action.class <= 0
+  | $next_action.type <= 0
   | $next_action.priority <= 0
   | when Path
     | swap $ordered $next_action
-    | $ordered.class <= 0
+    | $ordered.type <= 0
     | $next_action.priority <= 1000
   | $action.start
 | $action.update

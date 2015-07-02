@@ -56,7 +56,7 @@ player.units =
 | $world.active.list.keep{(?owner.id >< PID and not ?removed)}
 
 player.research_remain Act =
-| ResearchSpent = $research.(Act.type)
+| ResearchSpent = $research.(Act.name)
 | ResearchRemain = Act.research - ResearchSpent
 | ResearchRemain
 

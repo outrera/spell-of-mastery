@@ -268,7 +268,7 @@ world.remove_unit U =
 world.effect X,Y,Z What =
 | E = $alloc_unit{"effect_[What]"}
 | E.move{X,Y,Z}
-| A = E.order.init{act/die}
+| A = E.order.init{type/die}
 | A.speed <= 0
 | A.priority <= 1000
 

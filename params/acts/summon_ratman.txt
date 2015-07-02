@@ -1,4 +1,4 @@
-act: summon
+type: summon
 effect: unit_ratman
 target: pentagram
 icon: unit_ratman
