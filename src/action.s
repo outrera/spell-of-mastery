@@ -1,5 +1,11 @@
 // unit controlling related stuff
 
+/*
+Acts = t
+
+Acts->idle.start <= A => when A.cycles >< -1: A.cycles <= 4
+*/
+
 type act_class
 
 act_class.init A =
@@ -8,11 +14,11 @@ act_class.start A = A.cycles <= A.unit.sprite.speed
 act_class.update A =
 act_class.finish A =
 
-type act_idle.act_class class_name/idle anim/idle
+type act_idle.act_class
 
 act_idle.start A =  when A.cycles >< -1: A.cycles <= 4
 
-type act_move.act_class class_name/move anim/move
+type act_move.act_class
 
 act_move.valid A =
 | U = A.unit
@@ -65,7 +71,7 @@ act_move.update A = move_update A
 
 act_move.finish A = move_finish A
 
-type act_attack.act_class class_name/attack anim/attack
+type act_attack.act_class
 
 act_attack.valid A =
 | T = A.target
@@ -123,7 +129,7 @@ act_attack.finish A =
 | move_finish A
 
 
-type act_die.act_class class_name/die anim/action
+type act_die.act_class
 
 act_die.valid A = 1
 
@@ -141,7 +147,7 @@ act_die.start A =
 act_die.finish A =
 | free_unit A.unit
 
-type act_swap.act_class class_name/swap anim/action
+type act_swap.act_class
 
 act_swap.valid A =
 | T = A.target
@@ -166,7 +172,7 @@ act_swap.finish A =
 
 
 
-type act_pentagram.act_class class_name/pentagram anim/action
+type act_pentagram.act_class
 
 act_pentagram.valid A =
 | T = A.unit
@@ -186,7 +192,7 @@ act_pentagram.finish A =
 | Pentagram.move{A.xyz}
 
 
-type act_disband.act_class class_name/disband anim/action
+type act_disband.act_class
 
 act_disband.valid A = 1
 
@@ -202,7 +208,7 @@ act_disband.finish A =
   | free_unit A.unit
 
 
-type act_summon.act_class class_name/summon anim/action
+type act_summon.act_class
 
 act_summon.valid A =
 | T = A.target
@@ -227,7 +233,7 @@ act_summon.finish A =
 | S.world.update_pick{[S]}
 | !S.owner.power + S.income
 
-type act_spell_of_mastery.act_class class_name/summon anim/action
+type act_spell_of_mastery.act_class
 
 act_spell_of_mastery.start A =
 | U = A.unit
@@ -251,6 +257,7 @@ ActionClasses = t idle(act_idle) move(act_move) attack(act_attack) die(act_die)
 
 type action{unit}
    class
+   class_name/idle
    target // when action targets a unit
    xyz/[0 0 0] // target x,y,z
    cycles // cooldown cycles remaining till the action safe-to-change state
@@ -273,6 +280,7 @@ action.init act/idle at/self target/0 cost/0 effect/0 path/0 speed/-1 =
 | $xyz.init{At}
 | $target <= Target
 | $priority <= 50
+| $class_name <= Act
 | $class <= ActionClasses.Act
 | $cycles <= -1
 | $cost <= Cost
@@ -282,8 +290,6 @@ action.init act/idle at/self target/0 cost/0 effect/0 path/0 speed/-1 =
 | less got $class: bad "unknown action class [Act]"
 | $class.init{Me}
 | Me
-
-action.class_name = $class and $class.class_name
 
 action.valid = $class and $class.valid{Me}
 
