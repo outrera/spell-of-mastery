@@ -6,7 +6,7 @@ dact Method Body =
   Else | bad "dact: invalid method ([Method])"
 | FName = Name.rand
 | form @
-  | FName $'A' = Body
+  | FName $'Me' = Body
   | $\Acts->Type.Name <= &FName
 
 export 'dact'

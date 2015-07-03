@@ -4,214 +4,214 @@ use action_
 Acts = t
 
 
-dact idle.start | when A.cycles >< -1: A.cycles <= 4
+dact idle.start | when $cycles >< -1: $cycles <= 4
 
 // dirs requiring dummy to avoid overlapping unit with tiles
 OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
 
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
-move_start A =
-| U = A.unit
-| X,Y,Z = A.xyz - U.xyz
+move_start Me =
+| U = $unit
+| X,Y,Z = $xyz - U.xyz
 | U.movement_render_hack <= got OverlapDirs.locate{X,Y}
-| A.fromXY.init{U.xy}
-| A.fromXYZ.init{U.xyz}
-| U.move{A.xyz}
+| $fromXY.init{U.xy}
+| $fromXYZ.init{U.xyz}
+| U.move{$xyz}
 | U.facing <= Dirs.locate{X,Y}
 | U.animate{move}
-| A.start_cycles <= A.cycles
+| $start_cycles <= $cycles
 | when got!it U.sounds.move: U.main.sound{it.rand}
 
-move_update A =
-| U = A.unit
-| X,Y,Z = A.fromXYZ-U.xyz
+move_update Me =
+| U = $unit
+| X,Y,Z = $fromXYZ-U.xyz
 | XUnit = U.world.xunit
 | YUnit = U.world.yunit
 | when not (X and Y)
   | !XUnit/2
   | !YUnit/2
 | X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
-| U.xy.init{A.fromXY + [X*XUnit Y*YUnit]*A.cycles/A.start_cycles}
+| U.xy.init{$fromXY + [X*XUnit Y*YUnit]*$cycles/$start_cycles}
 
-move_finish A =
-| U = A.unit
-| U.xy.init{A.fromXY}
+move_finish Me =
+| U = $unit
+| U.xy.init{$fromXY}
 | U.movement_render_hack <= 0
 | U.extort
 
 dact move.valid
-| U = A.unit
-| U.world.no_block_at{A.xyz} and U.can_move{U.xyz A.xyz}
+| U = $unit
+| U.world.no_block_at{$xyz} and U.can_move{U.xyz $xyz}
 
 dact move.start
-| U = A.unit
-| when A.cycles >< -1: A.cycles <=  U.sprite.speed
-| move_start A
+| U = $unit
+| when $cycles >< -1: $cycles <=  U.sprite.speed
+| move_start Me
 | X,Y,Z = U.xyz
 | less U.seen
-  | A.cycles <= 0
-  | move_finish A
+  | $cycles <= 0
+  | move_finish Me
 
-dact move.update | move_update A
-dact move.finish | move_finish A
+dact move.update | move_update Me
+dact move.finish | move_finish Me
 
 dact attack.valid
-| T = A.target
+| T = $target
 | when T.is_list or T.removed or T.empty or not T.health: leave 0
-| U = A.unit
+| U = $unit
 //| when U.skirmisher: leave (T.xyz - U.xyz).all{?.abs<<1}
 | if U.ranged then 1 else U.can_move{U.xyz T.xyz}
 
-dact attack.init | A.data <= 0
+dact attack.init | $data <= 0
 
 dact attack.start
-| U = A.unit
-| U.face{A.target.xyz}
-| A.cycles <= max 1 U.sprite.anim_speed{attack}
+| U = $unit
+| U.face{$target.xyz}
+| $cycles <= max 1 U.sprite.anim_speed{attack}
 | U.animate{attack}
 | when got!it U.sounds.attack: U.main.sound{it.rand}
 dact attack.update
-| U = A.unit
-| when A.cycles > 9000 // if target is dying, wait till it is dead
+| U = $unit
+| when $cycles > 9000 // if target is dying, wait till it is dead
   | when U.world.waiting: leave
-  | A.target <= 0
-  | when A.unit.ranged:
-    | A.cycles <= 1
+  | $target <= 0
+  | when $unit.ranged:
+    | $cycles <= 1
     | leave
-  | less A.unit.ranged: 
-    | A.cycles <= max 1 U.sprite.speed/2
-    | move_start A
+  | less $unit.ranged: 
+    | $cycles <= max 1 U.sprite.speed/2
+    | move_start Me
   | leave
-| when A.data > 0: move_update A
-| when A.cycles >< 1 and A.data < 2:
-  | when A.data >< 1:
+| when $data > 0: move_update Me
+| when $cycles >< 1 and $data < 2:
+  | when $data >< 1:
     | leave
-    | less A.unit.ranged: leave
-    | move_finish A
-    | A.xyz.init{A.fromXYZ}
-    | A.cycles <= max 1 A.unit.sprite.speed*2/3
-    | move_start A
-    | A.data <= 2
-  | when A.data >< 0:
-    | Target = A.target
+    | less $unit.ranged: leave
+    | move_finish Me
+    | $xyz.init{$fromXYZ}
+    | $cycles <= max 1 $unit.sprite.speed*2/3
+    | move_start Me
+    | $data <= 2
+  | when $data >< 0:
+    | Target = $target
     | U.world.effect{Target.xyz blood}
     | Damage = max 0 U.attack-Target.defense
     | when Target.harm{U Damage}
     | U.animate{idle}
     | when Target.hits < Target.health:
-      | A.data <= 2
-      | A.cycles <= 0
+      | $data <= 2
+      | $cycles <= 0
       | leave
-    | A.data <= 1
-    | A.cycles <= 90000
+    | $data <= 1
+    | $cycles <= 90000
 
-dact attack.finish | move_finish A
+dact attack.finish | move_finish Me
 
 free_unit U = 
 | when U.id >< U.world.waiting: U.world.waiting <= 0
 | U.free
 
 dact die.start
-| U = A.unit
+| U = $unit
 | U.animate{death}
 | less not U.hits or got U.sprite.anims.death:
   | free_unit U
-  | A.cycles <= 1000
+  | $cycles <= 1000
 
-dact die.finish | free_unit A.unit
+dact die.finish | free_unit $unit
 
 
 dact swap.valid
-| T = A.target
-| less A.target and not A.target.removed: leave 0
-| U = A.unit
+| T = $target
+| less $target and not $target.removed: leave 0
+| U = $unit
 | Turn = U.world.turn
 | U.owner.id >< T.owner.id and U.moved < Turn and T.moved < Turn
 
 
 dact swap.start
-| U = A.unit
-| A.cycles <= max 1 U.sprite.speed
-| move_start A
-| !A.target.owner.moves + 2
-| A.target.order.init{type/move at/A.fromXYZ}
+| U = $unit
+| $cycles <= max 1 U.sprite.speed
+| move_start Me
+| !$target.owner.moves + 2
+| $target.order.init{type/move at/$fromXYZ}
 
 dact swap.update
-| move_update A
+| move_update Me
 
 dact swap.finish
-| move_finish A
-| !A.target.owner.moves - 1
+| move_finish Me
+| !$target.owner.moves - 1
 
 dact pentagram.valid
-| T = A.unit
+| T = $unit
 | T.world.units_at{T.xyz}.all{?.empty >< 0}
 
 dact pentagram.start
-| A.unit.animate{attack}
-| A.unit.main.sound{pentagram}
+| $unit.animate{attack}
+| $unit.main.sound{pentagram}
 
 dact pentagram.finish
-| U = A.unit
+| U = $unit
 | Pentagram = U.owner.pentagram
 | when not Pentagram
-  | Pentagram <= U.world.alloc_unit{A.effect}
+  | Pentagram <= U.world.alloc_unit{$effect}
   | Pentagram.owner <= U.owner
   | U.owner.pentagram <= Pentagram
-| Pentagram.move{A.xyz}
+| Pentagram.move{$xyz}
 
 
 dact disband.start
-| A.cycles <= 4
-| A.unit.main.show_message
+| $cycles <= 4
+| $unit.main.show_message
   {'Disband Unit?' buttons/[yes,'Yes' no,'No']
    'Are you sure this unit should be disbanded?'}
 
 dact disband.finish
-| when A.unit.main.dialog_result><yes
-  | A.unit.main.sound{cancel}
-  | free_unit A.unit
+| when $unit.main.dialog_result><yes
+  | $unit.main.sound{cancel}
+  | free_unit $unit
 
 dact summon.valid
-| A.unit.world.units_at{A.xyz}.all{?empty}
+| $unit.world.units_at{$xyz}.all{?empty}
 
 dact summon.start
-| U = A.unit
+| U = $unit
 | U.animate{attack}
 | U.main.sound{summon}
 | Leader = U.owner.leader
 | when Leader
   | Leader.animate{attack}
-  | Leader.face{A.xyz}
-| U.world.effect{A.xyz teleport}
+  | Leader.face{$xyz}
+| U.world.effect{$xyz teleport}
 
 dact summon.finish
-| S = A.unit.world.alloc_unit{A.effect}
-| S.owner <= A.unit.owner
+| S = $unit.world.alloc_unit{$effect}
+| S.owner <= $unit.owner
 | S.attacker <= 1 // mark it available for attack
-| S.move{A.xyz}
+| S.move{$xyz}
 | S.world.update_pick{[S]}
 | !S.owner.power + S.income
 
 
 dact spell_of_mastery.start
-| U = A.unit
+| U = $unit
 | U.animate{attack}
 | U.main.sound{summon}
 | U.world.effect{U.xyz teleport}
 
 dact spell_of_mastery.finish
-| U = A.unit
+| U = $unit
 | U.world.params.winner <= U.owner.id
 | U.world.params.victory_type <= 'Victory by casting the Spell of Mastery'
 
 
-default_init A =
-default_valid A = 1
-default_start A = A.cycles <= A.unit.sprite.speed
-default_update A =
-default_finish A =
+default_init Me =
+default_valid Me = 1
+default_start Me = $cycles <= $unit.sprite.speed
+default_update Me =
+default_finish Me =
 
 for Name,Act Acts
 | have Act.init &default_init
