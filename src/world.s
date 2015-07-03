@@ -55,6 +55,7 @@ type world{main}
    waiting // true if wating for action to complete
    events
    view
+   act
 | $init
 
 world.init =
@@ -103,6 +104,7 @@ world.create_borders =
 | for P points{$w+1 0    1    $h+2}: times I 26: $push_{P.0 P.1 $filler}
 
 world.clear =
+| $act <= 0
 | for U $units: less U.removed: U.free
 | $tilemap.clear{0}
 | $move_map.clear{0}

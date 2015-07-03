@@ -110,6 +110,7 @@ ui.init =
 | PickedUnit = 0
 //| sound_play: sound_load "[$data]/music/thaxted.ogg" music/1
 | ActClick = Icon =>
+  | $world.act <= 0
   | $main.sound{ui_click}
   | when ActIcon: ActIcon.picked <= 0
   | Icon.picked <= 1
@@ -119,8 +120,9 @@ ui.init =
     | PickedUnit.owner.researching <= Act.name
   | when no Icon.number:
     | Target = Act.target
-    | when Target >< self or Target >< pentagram:
-      | Order = PickedUnit.order.init{@Act.list.join}
+    | if Target >< self or Target >< pentagram
+      then PickedUnit.order.init{@Act.list.join}
+      else $world.act <= Act
 | ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | PickedUnitTitle = txt medium ''

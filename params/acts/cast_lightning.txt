@@ -1,0 +1,6 @@
+type: summon
+effect: unit_observer
+target: any
+icon: spell_lightning
+research: 0
+cost: 10

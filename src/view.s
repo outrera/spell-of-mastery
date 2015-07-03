@@ -331,16 +331,38 @@ view.update_pick =
   // FIXME: following line is outdated
 | $main.update //ensures deleted units get updated
 
+update_lmb Me Player =
+| less $world.act:
+  | $select_unit{$cursor}
+  | leave
+| Picked = $world.picked
+| less Picked.id and Picked.owner.id >< Player.id:
+  | $world.act <= 0
+  | leave
+| Act = $world.act.deep_copy
+| Target = $world.block_at{$cursor}^~{No 0}
+| when not Target and $world.act.target <> any: leave
+| Act.target <= Target
+| Act.at <= $cursor
+| Picked.order.init{@Act.list.join}
+| $world.act <= 0
+
+update_rmb Me Player =
+| when $world.act:
+  | $world.act <= 0
+  | leave
+| Picked = $world.picked
+| when Picked.id and Picked.owner.id >< Player.id:
+  | $world.picked.guess_order_at{$cursor}
+
 view.update_play =
 | Player = $world.player
 | if not $world.picked.idle or $world.waiting then
   else if not Player.human then Player.ai.update
   else
   | case $mice_click
-    left | $select_unit{$cursor}
-    right | Picked = $world.picked
-          | when Picked.id and Picked.owner.id >< Player.id:
-            | $world.picked.guess_order_at{$cursor}
+    left | update_lmb Me Player
+    right | update_rmb Me Player
   | $mice_click <= 0
   | Picked = $world.picked
   | less Picked: Picked <= $world.nil
@@ -360,8 +382,10 @@ world.update_picked =
 
 world.update_cursor CXYZ Brush Mirror =
 | Marks = $marks^uncons{mark}.flip
-| push $alloc_unit{mark_cursor0}.move{CXYZ} Marks
-| push $alloc_unit{mark_cursor1}.move{CXYZ} Marks
+| if $act
+  then | push $alloc_unit{mark_cursor_target}.move{CXYZ} Marks
+  else | push $alloc_unit{mark_cursor0}.move{CXYZ} Marks
+       | push $alloc_unit{mark_cursor1}.move{CXYZ} Marks
 | case Brush
   [obj Bank,Type]
     | ClassName = "[Bank]_[Type]"

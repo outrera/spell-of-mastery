@@ -174,9 +174,7 @@ dact disband.finish
   | free_unit A.unit
 
 dact summon.valid
-| T = A.target
-| less A.target and not A.target.removed: leave 0
-| T.world.units_at{T.xyz}.all{?empty}
+| A.unit.world.units_at{A.xyz}.all{?empty}
 
 dact summon.start
 | U = A.unit
@@ -185,14 +183,14 @@ dact summon.start
 | Leader = U.owner.leader
 | when Leader
   | Leader.animate{attack}
-  | Leader.face{U.xyz}
-| U.world.effect{A.target.xyz teleport}
+  | Leader.face{A.xyz}
+| U.world.effect{A.xyz teleport}
 
 dact summon.finish
 | S = A.unit.world.alloc_unit{A.effect}
 | S.owner <= A.unit.owner
 | S.attacker <= 1 // mark it available for attack
-| S.move{A.target.xyz}
+| S.move{A.xyz}
 | S.world.update_pick{[S]}
 | !S.owner.power + S.income
 
@@ -244,10 +242,11 @@ type action{unit}
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
-action.init type/idle at/self target/0 cost/0 effect/0 path/0 speed/-1 =
+action.init type/idle at/0 target/0 cost/0 effect/0 path/0 speed/-1 =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
+| less At: At <= $unit.xyz
 | $xyz.init{At}
 | $target <= Target
 | $priority <= 50
