@@ -342,6 +342,8 @@ update_lmb Me Player =
 | Act = $world.act.deep_copy
 | Target = $world.block_at{$cursor}^~{No 0}
 | when not Target and $world.act.target <> any: leave
+| when got Act.range:
+  | when ($cursor-Picked.xyz){?abs}.max > Act.range: leave
 | Act.target <= Target
 | Act.at <= $cursor
 | Picked.order.init{@Act.list.join}
@@ -369,6 +371,19 @@ view.update_play =
   | $on_unit_pick{}{Picked}
 | $main.update
 
+mark_range Me Picked =
+| Marks = []
+| Act = $act
+| R = Act.range
+| less got R: leave Marks
+| for X,Y points{-R -R R*2+1 R*2+1}
+  | XYZ = Picked.xyz+[X Y 0]
+  | when XYZ.all{(?>0 and ?<$w)}
+    | Mark = $alloc_unit{"mark_ranged"}
+    | Mark.move{XYZ}
+    | push Mark Marks
+| Marks
+
 world.update_picked = 
 | SanitizedPicked = $picked^uncons{picked}.skip{?removed}
 | $picked <= [$nil @SanitizedPicked]^cons{picked}
@@ -378,7 +393,10 @@ world.update_picked =
 | less Picked and Picked.moves and Picked.moved<$turn:
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.type >< idle:
-  | $marks <= [$nil @Picked.mark_moves]^cons{mark}
+  | Marks = if $act
+    then mark_range Me Picked
+    else Picked.mark_moves
+  | $marks <= [$nil @Marks]^cons{mark}
 
 world.update_cursor CXYZ Brush Mirror =
 | Marks = $marks^uncons{mark}.flip

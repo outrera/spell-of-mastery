@@ -3,4 +3,5 @@ effect: unit_observer
 target: any
 icon: spell_lightning
 research: 0
+range: 1
 cost: 10

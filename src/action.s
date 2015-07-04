@@ -233,6 +233,7 @@ type action{unit}
    data // data used by action handlers
    cost
    effect
+   range
    path
    act_init/&default_init
    act_valid/&default_valid
@@ -242,13 +243,14 @@ type action{unit}
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
-action.init type/idle at/0 target/0 cost/0 effect/0 path/0 speed/-1 =
+action.init type/idle at/0 target/0 cost/0 effect/0 path/0 speed/-1 range/No =
 | when Target >< self: Target <= $unit
 | when Target >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
 | $xyz.init{At}
 | $target <= Target
+| $range <= Range
 | $priority <= 50
 | $type <= Type
 | A = Acts.Type
@@ -266,7 +268,8 @@ action.init type/idle at/0 target/0 cost/0 effect/0 path/0 speed/-1 =
 | $act_init{}{Me}
 | Me
 
-action.valid = $act_valid{}{Me}
+action.valid =
+| $act_valid{}{Me}
 
 action.start =
 | $act_start{}{Me}
