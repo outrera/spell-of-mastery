@@ -173,7 +173,8 @@ unit.environment_updated =
 | $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@1111 => 0
 
 unit.face XYZ =
-| $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
+| XY = (XYZ-$xyz).take{2}{?sign}
+| less XY >< [0 0]: $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
 
 world.can_move Src Dst =

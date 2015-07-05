@@ -207,7 +207,7 @@ dact cast.valid | if $affects >< unit then $target else 1
 dact cast.start
 | U = $unit
 | U.animate{attack}
-//| U.face{$xyz}
+| U.face{$xyz}
 | apply_effect U $affects $effect $target $xyz
 
 
