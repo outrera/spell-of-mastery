@@ -1,6 +1,6 @@
 type: summon
 effect: unit_minotaur
-target: pentagram
+affects: pentagram
 icon: unit_minotaur
 research: 8
 cost: 8

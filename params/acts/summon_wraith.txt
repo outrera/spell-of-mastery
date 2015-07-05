@@ -1,6 +1,6 @@
 type: summon
 effect: unit_wraith
-target: pentagram
+affects: pentagram
 icon: unit_wraith
 research: 10000
 cost: 5000

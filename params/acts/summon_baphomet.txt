@@ -1,6 +1,6 @@
 type: summon
 effect: unit_baphomet
-target: pentagram
+affects: pentagram
 icon: unit_baphomet
 research: 10000
 cost: 5000

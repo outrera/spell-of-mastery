@@ -1,6 +1,6 @@
 type: summon
 effect: unit_knight
-target: pentagram
+affects: pentagram
 icon: unit_knight
 research: 1400
 cost: 700

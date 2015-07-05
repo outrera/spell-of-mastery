@@ -1,4 +1,4 @@
 type: disband
-target: self
+affects: self
 icon: act_disband
 speed: 0

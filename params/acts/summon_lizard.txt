@@ -1,6 +1,6 @@
 type: summon
 effect: unit_lizard
-target: pentagram
+affects: pentagram
 icon: unit_lizard
 research: 1400
 cost: 700

@@ -1,0 +1,3 @@
+author: `Augmentality (Brandon Morris)`
+license: `CC-BY`
+origin: `http://opengameart.org/content/spell-sounds`

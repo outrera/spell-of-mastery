@@ -119,8 +119,8 @@ ui.init =
   | when got Icon.number:
     | PickedUnit.owner.researching <= Act.name
   | when no Icon.number:
-    | Target = Act.target
-    | if Target >< self or Target >< pentagram
+    | Affects = Act.affects
+    | if Affects >< self or Affects >< pentagram
       then PickedUnit.order.init{@Act.list.join}
       else $world.act <= Act
 | ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick

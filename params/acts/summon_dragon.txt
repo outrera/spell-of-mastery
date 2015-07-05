@@ -1,6 +1,6 @@
 type: summon
 effect: unit_dragon
-target: pentagram
+affects: pentagram
 icon: unit_dragon
 research: 20000
 cost: 10000

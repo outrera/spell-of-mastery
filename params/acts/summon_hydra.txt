@@ -1,6 +1,6 @@
 type: summon
 effect: unit_hydra
-target: pentagram
+affects: pentagram
 icon: unit_hydra
 research: 10000
 cost: 5000

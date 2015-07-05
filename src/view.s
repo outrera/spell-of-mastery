@@ -341,9 +341,9 @@ update_lmb Me Player =
   | leave
 | Act = $world.act.deep_copy
 | Target = $world.block_at{$cursor}^~{No 0}
-| when not Target and $world.act.target <> any: leave
+| when not Target and $world.act.affects <> cell: leave
 | when got Act.range:
-  | when ($cursor-Picked.xyz){?abs}.max > Act.range: leave
+  | when ($cursor-Picked.xyz).take{2}{?abs}.max > Act.range: leave
 | Act.target <= Target
 | Act.at <= $cursor
 | Picked.order.init{@Act.list.join}
@@ -375,12 +375,13 @@ mark_range Me Picked =
 | Marks = []
 | Act = $act
 | R = Act.range
+| when R > 9: R <= 9 //otherwise we may overflow MaxUnits
 | less got R: leave Marks
 | for X,Y points{-R -R R*2+1 R*2+1}
   | XYZ = Picked.xyz+[X Y 0]
   | when XYZ.all{(?>0 and ?<$w)}
-    | Mark = $alloc_unit{"mark_ranged"}
-    | Mark.move{XYZ}
+    | Mark = $alloc_unit{"mark_magic"}
+    | Mark.move{[XYZ.0 XYZ.1 $fix_z{XYZ}]}
     | push Mark Marks
 | Marks
 

@@ -1,6 +1,6 @@
 type: summon
 effect: unit_dwarf
-target: pentagram
+affects: pentagram
 icon: unit_dwarf
 research: 1400
 cost: 700

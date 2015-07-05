@@ -1,6 +1,6 @@
 type: pentagram
 title: `Pentagram`
 effect: pentagram_1
-target: self
+affects: self
 icon: spell_pentagram
 cost: 2000

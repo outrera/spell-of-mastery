@@ -1,7 +1,7 @@
-type: summon
-effect: unit_observer
-target: any
+type: cast
+affects: unit
+effect: harm,1,impact,electrical,hit_sound,electrical
 icon: spell_lightning
 research: 0
-range: 1
+range: 20
 cost: 10

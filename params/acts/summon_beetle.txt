@@ -1,6 +1,6 @@
 type: summon
 effect: unit_beetle
-target: pentagram
+affects: pentagram
 icon: unit_beetle
 research: 0
 cost: 500

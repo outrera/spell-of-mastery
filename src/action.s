@@ -97,7 +97,7 @@ dact attack.update
     | Target = $target
     | U.world.effect{Target.xyz blood}
     | Damage = max 0 U.attack-Target.defense
-    | when Target.harm{U Damage}
+    | Target.harm{U Damage}
     | U.animate{idle}
     | when Target.hits < Target.health:
       | $data <= 2
@@ -195,6 +195,22 @@ dact summon.finish
 | !S.owner.power + S.income
 
 
+apply_effect U Affects Effect Target TargetXYZ =
+| Effect = Effect.group{2}
+| case Effect.find{?0><impact} _,Impact: U.world.effect{TargetXYZ Impact}
+| case Effect.find{?0><hit_sound} _,Sound: U.main.sound{Sound}
+| when Affects >< unit: case Effect.find{?0><harm} _,Damage:
+  | Target.harm{U Damage}
+
+dact cast.valid | if $affects >< unit then $target else 1
+
+dact cast.start
+| U = $unit
+| U.animate{attack}
+//| U.face{$xyz}
+| apply_effect U $affects $effect $target $xyz
+
+
 dact spell_of_mastery.start
 | U = $unit
 | U.animate{attack}
@@ -222,6 +238,7 @@ for Name,Act Acts
 
 type action{unit}
    type
+   affects
    target // when action targets a unit
    xyz/[0 0 0] // target x,y,z
    cycles // cooldown cycles remaining till the action safe-to-change state
@@ -243,12 +260,14 @@ type action{unit}
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
-action.init type/idle at/0 target/0 cost/0 effect/0 path/0 speed/-1 range/No =
-| when Target >< self: Target <= $unit
-| when Target >< pentagram: Target <= $unit.owner.pentagram
+action.init type/idle at/0 affects/0 target/0
+            cost/0 effect/0 path/0 speed/-1 range/No =
+| when Affects >< self: Target <= $unit
+| when Affects >< pentagram: Target <= $unit.owner.pentagram
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
 | $xyz.init{At}
+| $affects <= Affects
 | $target <= Target
 | $range <= Range
 | $priority <= 50

@@ -1,6 +1,6 @@
 type: summon
 effect: unit_griffin
-target: pentagram
+affects: pentagram
 icon: unit_griffin
 research: 10000
 cost: 5000

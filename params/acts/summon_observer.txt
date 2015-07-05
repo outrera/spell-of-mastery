@@ -1,6 +1,6 @@
 type: summon
 effect: unit_observer
-target: pentagram
+affects: pentagram
 icon: unit_observer
 research: 20000
 cost: 10000
