@@ -1,4 +1,5 @@
 author: Redshrike, `Sergey Abramov (InQvisions Company)`
+source: `http://opengameart.org/content/lpc-in-battle-rpg-sprites`
 xy: 0,10
 height: 4
 frames: folder
