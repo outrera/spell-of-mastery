@@ -1,4 +1,4 @@
-author: surt,`Dmitrij Makovoz`
+author: surt,`Dmitrij Makovoz`,`Natalya Bugrova`
 copyright: surt,`Nikita Sadkov`
 http: `http://opengameart.org/content/painted-iso-roguelike-tiles`
 xy: 0,48
