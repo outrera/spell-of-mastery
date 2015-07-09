@@ -341,7 +341,8 @@ update_lmb Me Player =
   | leave
 | Act = $world.act.deep_copy
 | Target = $world.block_at{$cursor}^~{No 0}
-| when not Target and $world.act.affects <> cell: leave
+| when Target and $world.act.affects >< free_cell: leave
+| when not Target and $world.act.affects >< unit: leave
 | when got Act.range:
   | when ($cursor-Picked.xyz).take{2}{?abs}.max > Act.range: leave
 | Act.target <= Target

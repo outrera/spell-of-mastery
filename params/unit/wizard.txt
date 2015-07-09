@@ -2,5 +2,5 @@ sprite: unit_wizard
 health: 3
 leader: 1
 //speed: -2
-acts: (pentagram spell_of_mastery cast_lightning)
+acts: (pentagram spell_of_mastery cast_lightning cast_teleport)
 income: 50

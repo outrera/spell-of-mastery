@@ -120,8 +120,7 @@ world.update =
 
 unit.update =
 | when $turn and ($world.turn - $turn) > $ttl and $action.type <> die:
-  | DeathOrder = $order.init{type/die}
-  | DeathOrder.speed <= 0
+  | $die
 | when $removed
   | $active <= 0
   | leave

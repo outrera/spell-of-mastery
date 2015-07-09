@@ -310,18 +310,27 @@ unit.mark_moves @As =
 | for M Marks: when M.path: for N Marks: when M.path >< N.xyz: M.path <= N
 | Marks
 
+// order taking over any other order
+unit.forced_order @As =
+| O = $order.init{@As}
+| O.priority <= 1000
+| O.speed <= 0
+| O
+
+unit.die =
+| when got!it $sounds.die: $main.sound{it.rand}
+| $world.waiting <= $id
+| $forced_order{type/die}
+
 unit.harm Attacker Damage =
 | !$hits + Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hits < $health:
   | when got!it $sounds.hit: $main.sound{it.rand}
   | leave
-| when got!it $sounds.die: $main.sound{it.rand}
-| DeathOrder = $order.init{type/die}
-| DeathOrder.priority <= 1000
-| DeathOrder.speed <= 0
+| $die
 | $action.cycles <= 1
-| $world.waiting <= $id
+
 
 unit.render Heap X Y =
 | G = $frame

@@ -2,6 +2,6 @@ type: cast
 affects: unit
 effect: harm,1,impact,electrical,hit_sound,electrical
 icon: spell_lightning
-research: 0
-range: 20
-cost: 10
+range: 2
+//research: 5000
+cost: 700
