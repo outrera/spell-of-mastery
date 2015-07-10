@@ -3,5 +3,5 @@ affects: unit
 effect: harm,1,impact,electrical,hit_sound,electrical
 icon: spell_lightning
 range: 2
-//research: 5000
+research: 5000
 cost: 700
