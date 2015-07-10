@@ -1,4 +1,4 @@
-use gui util widgets heap 
+use gui util widgets heap action
 
 
 XUnit = No
@@ -331,6 +331,29 @@ view.update_pick =
   // FIXME: following line is outdated
 | $main.update //ensures deleted units get updated
 
+
+action_list_moves Me Picked Act =
+| A = action Picked
+| A.init{@Act.list.join}
+| Affects = Act.affects
+| Moves = []
+| R = Act.range
+| when R > 9: R <= 9 //otherwise we may overflow MaxUnits
+| less got R: leave Moves
+| for X,Y points{-R -R R*2+1 R*2+1}
+  | XYZ = Picked.xyz+[X Y 0]
+  | XYZ.2 <= $fix_z{XYZ}
+  | when XYZ.all{(?>0 and ?<$w)}
+    | Target = $block_at{XYZ}^~{No 0}
+    | Valid = 1
+    | when Target and Affects >< free_cell: Valid <= 0
+    | when not Target and Affects >< unit: Valid <= 0
+    | A.xyz.init{XYZ}
+    | A.target <= Target
+    | when Valid and A.valid:
+      | push XYZ Moves
+| Moves
+
 update_lmb Me Player =
 | less $world.act:
   | $select_unit{$cursor}
@@ -340,12 +363,9 @@ update_lmb Me Player =
   | $world.act <= 0
   | leave
 | Act = $world.act.deep_copy
-| Target = $world.block_at{$cursor}^~{No 0}
-| when Target and $world.act.affects >< free_cell: leave
-| when not Target and $world.act.affects >< unit: leave
-| when got Act.range:
-  | when ($cursor-Picked.xyz).take{2}{?abs}.max > Act.range: leave
-| Act.target <= Target
+| Ms = action_list_moves{$world Picked Act}
+| when no Ms.find{$cursor}: leave
+| Act.target <= $world.block_at{$cursor}^~{No 0}
 | Act.at <= $cursor
 | Picked.order.init{@Act.list.join}
 | $world.act <= 0
@@ -372,20 +392,6 @@ view.update_play =
   | $on_unit_pick{}{Picked}
 | $main.update
 
-mark_range Me Picked =
-| Marks = []
-| Act = $act
-| R = Act.range
-| when R > 9: R <= 9 //otherwise we may overflow MaxUnits
-| less got R: leave Marks
-| for X,Y points{-R -R R*2+1 R*2+1}
-  | XYZ = Picked.xyz+[X Y 0]
-  | when XYZ.all{(?>0 and ?<$w)}
-    | Mark = $alloc_unit{"mark_magic"}
-    | Mark.move{[XYZ.0 XYZ.1 $fix_z{XYZ}]}
-    | push Mark Marks
-| Marks
-
 world.update_picked = 
 | SanitizedPicked = $picked^uncons{picked}.skip{?removed}
 | $picked <= [$nil @SanitizedPicked]^cons{picked}
@@ -396,7 +402,10 @@ world.update_picked =
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.type >< idle:
   | Marks = if $act
-    then mark_range Me Picked
+    then | map XYZ action_list_moves{Me Picked $act}
+           | Mark = $alloc_unit{"mark_magic"}
+           | Mark.move{XYZ}
+           | Mark
     else Picked.mark_moves
   | $marks <= [$nil @Marks]^cons{mark}
 
