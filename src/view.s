@@ -331,11 +331,11 @@ view.update_pick =
   // FIXME: following line is outdated
 | $main.update //ensures deleted units get updated
 
-
 action_list_moves Me Picked Act =
 | A = action Picked
 | A.init{@Act.list.join}
 | Affects = Act.affects
+| Path = []
 | Moves = []
 | R = Act.range
 | when R > 9: R <= 9 //otherwise we may overflow MaxUnits
@@ -350,9 +350,10 @@ action_list_moves Me Picked Act =
     | when not Target and Affects >< unit: Valid <= 0
     | A.xyz.init{XYZ}
     | A.target <= Target
-    | when Valid and A.valid:
-      | push XYZ Moves
-| Moves
+    | if Valid and A.valid
+      then push XYZ Moves
+      else push XYZ Path
+| [Moves Path]
 
 update_lmb Me Player =
 | less $world.act:
@@ -363,7 +364,7 @@ update_lmb Me Player =
   | $world.act <= 0
   | leave
 | Act = $world.act.deep_copy
-| Ms = action_list_moves{$world Picked Act}
+| Ms = action_list_moves{$world Picked Act}.0
 | when no Ms.find{$cursor}: leave
 | Act.target <= $world.block_at{$cursor}^~{No 0}
 | Act.at <= $cursor
@@ -402,10 +403,16 @@ world.update_picked =
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.type >< idle:
   | Marks = if $act
-    then | map XYZ action_list_moves{Me Picked $act}
+    then | Ms,Path = action_list_moves{Me Picked $act}
+         | As = map XYZ Ms
+           | Mark = $alloc_unit{"mark_magic_hit"}
+           | Mark.move{XYZ}
+           | Mark
+         | Bs = map XYZ Path
            | Mark = $alloc_unit{"mark_magic"}
            | Mark.move{XYZ}
            | Mark
+         | [@As @Bs]
     else Picked.mark_moves
   | $marks <= [$nil @Marks]^cons{mark}
 
