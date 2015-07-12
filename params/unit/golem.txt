@@ -3,7 +3,7 @@ level: 4
 health: 10
 attack: 3
 defense: 2
-speed: -2
+//speed: -2
 income: -50
 moves:
   | 0 0 0 0 0
