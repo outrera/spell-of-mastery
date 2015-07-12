@@ -1,4 +1,4 @@
-author: `Thomas Frose`, `Alexander Luchkin`
+author: `Thomas Frose`, `Alexander Luchkin`, `Leha (kharagh@bk.ru)`
 copyright: `Nikita Sadkov`
 xy: 0,38
 frames: folder
