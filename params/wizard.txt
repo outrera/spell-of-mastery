@@ -12,10 +12,7 @@ attack: 0 // amount of damage this unit deals
 defence: 0 // amount of damage this unit can absorb, without losing health
 sight: 2
 //speed: -2
-moves: // how this unit moves
-  | 0 1 0
-  | 1 0 1
-  | 0 1 0
+moves: matrix.move1 // how this unit moves
 selectable: 1
 flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit

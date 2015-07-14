@@ -19,6 +19,12 @@ main.load_params =
     | load_params Params "[BankFolder][Name].txt"
     | Name,Params
   | BankName,Bank
+| Main = $params.main
+| for BName,Bank $params: for PName,Params Bank: for Key,Value Params:
+  | case Value [`.` SPName SKey]
+    | less got Main.SPName and got Main.SPName.SKey:
+      | bad "[BName]/[PName].txt/[Key]: missing main/[SPName].txt/[SKey]"
+    | $params.BName.PName.Key <= Main.SPName.SKey
 | for ActName,Act $params.acts:
   | Act.name <= ActName
   | when no Act.title: Act.title <= ActName.replace{_ ' '}
