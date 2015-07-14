@@ -1,0 +1,6 @@
+type: summon
+effect: unit_blob
+affects: pentagram
+icon: unit_blob
+research: 0
+cost: 500

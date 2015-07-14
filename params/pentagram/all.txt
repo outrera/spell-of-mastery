@@ -1,4 +1,4 @@
-acts: summon_oculus, summon_beetle, summon_ratman, summon_goblin,
+acts: summon_oculus, summon_blob, summon_ratman, summon_goblin,
       summon_lizard, summon_orc, summon_skeleton, summon_elf, summon_dwarf,
       summon_griffin, summon_minotaur, summon_baphomet, summon_vampire, summon_wraith,
       summon_hydra, summon_observer, summon_golem, summon_dragon

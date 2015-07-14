@@ -342,8 +342,10 @@ action_list_moves Me Picked Act =
 | less got R: leave Moves
 | for X,Y points{-R -R R*2+1 R*2+1}
   | XYZ = Picked.xyz+[X Y 0]
-  | XYZ.2 <= $fix_z{XYZ}
-  | when XYZ.all{(?>0 and ?<$w)}
+  | X = XYZ.0
+  | Y = XYZ.1
+  | when X>0 and X<$w and Y>0 and Y<$h:
+    | XYZ.2 <= $fix_z{XYZ}
     | Target = $block_at{XYZ}^~{No 0}
     | Valid = 1
     | when Target and Affects >< free_cell: Valid <= 0
