@@ -344,7 +344,7 @@ action_list_moves Me Picked Act =
   | XYZ = Picked.xyz+[X Y 0]
   | X = XYZ.0
   | Y = XYZ.1
-  | when X>0 and X<$w and Y>0 and Y<$h:
+  | when X>0 and X<<$w and Y>0 and Y<<$h:
     | XYZ.2 <= $fix_z{XYZ}
     | Target = $block_at{XYZ}^~{No 0}
     | Valid = 1
