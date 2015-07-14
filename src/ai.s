@@ -69,7 +69,7 @@ ai.update_research =
 | less Summons.size: leave 0
 | S = Summons.find{?effect >< unit_goblin}
 | when got S and $player.research_remain{S} > 0:
-  | $player.researching <= S.type
+  | $player.researching <= S.name
   | leave 1
 | 0
 
