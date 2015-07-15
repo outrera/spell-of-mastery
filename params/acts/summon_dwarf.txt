@@ -1,6 +1,7 @@
-type: summon
-effect: unit_dwarf
-affects: pentagram
+type: cast
+effect: impact,teleport,hit_sound,summon,summon,unit_dwarf
+affects: empty
+auto: 1
 icon: unit_dwarf
 research: 1400
 cost: 700

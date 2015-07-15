@@ -1,6 +1,7 @@
-type: summon
-effect: unit_oculus
-affects: pentagram
+type: cast
+effect: impact,teleport,hit_sound,summon,summon,unit_oculus
+affects: empty
+auto: 1
 icon: unit_oculus
 research: 0
 cost: 500

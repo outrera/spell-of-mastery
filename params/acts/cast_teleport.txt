@@ -1,6 +1,6 @@
 type: cast
-affects: free_cell
-effect: teleport,self
+affects: empty
+effect: teleport,self,impact,teleport,hit_sound,summon
 icon: spell_teleport
 range: 2
 //research: 5000

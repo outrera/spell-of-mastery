@@ -1,4 +1,5 @@
 type: disband
-affects: self
+affects: unit
+auto: 1
 icon: act_disband
 speed: 0

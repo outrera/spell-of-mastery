@@ -1,4 +1,4 @@
 type: spell_of_mastery
-affects: self
+affects: empty
 icon: spell_of_mastery
 research: 60000

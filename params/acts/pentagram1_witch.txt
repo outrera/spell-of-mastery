@@ -1,6 +1,7 @@
 type: pentagram
 title: `Pentagram`
 effect: pentagram_1_witch
-affects: self
+affects: any
+auto: 1
 icon: spell_pentagram
 cost: 2000

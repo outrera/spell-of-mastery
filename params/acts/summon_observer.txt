@@ -1,6 +1,7 @@
-type: summon
-effect: unit_observer
-affects: pentagram
+type: cast
+effect: impact,teleport,hit_sound,summon,summon,unit_observer
+affects: empty
+auto: 1
 icon: unit_observer
 research: 20000
 cost: 10000

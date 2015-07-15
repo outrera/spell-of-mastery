@@ -1,0 +1,5 @@
+sprite: effect_firewall
+health: 3
+attack: 1
+defense: 0
+moves: matrix.move1

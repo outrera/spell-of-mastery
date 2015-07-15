@@ -349,7 +349,7 @@ action_list_moves Me Picked Act =
     | XYZ.2 <= $fix_z{XYZ}
     | Target = $block_at{XYZ}^~{No 0}
     | Valid = 1
-    | when Target and Affects >< free_cell: Valid <= 0
+    | when Target and Affects >< empty: Valid <= 0
     | when not Target and Affects >< unit: Valid <= 0
     | A.xyz.init{XYZ}
     | A.target <= Target

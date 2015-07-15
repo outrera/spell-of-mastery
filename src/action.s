@@ -173,27 +173,6 @@ dact disband.finish
   | $unit.main.sound{cancel}
   | free_unit $unit
 
-dact summon.valid
-| $unit.world.units_at{$xyz}.all{?empty}
-
-dact summon.start
-| U = $unit
-| U.animate{attack}
-| U.main.sound{summon}
-| Leader = U.owner.leader
-| when Leader
-  | Leader.animate{attack}
-  | Leader.face{$xyz}
-| U.world.effect{$xyz teleport}
-
-dact summon.finish
-| S = $unit.world.alloc_unit{$effect}
-| S.owner <= $unit.owner
-| S.attacker <= 1 // mark it available for attack
-| S.move{$xyz}
-| S.world.update_pick{[S]}
-| !S.owner.power + S.income
-
 
 dact teleport.start | $unit.move{$xyz}
 
@@ -204,11 +183,22 @@ apply_effect U Affects Effect Target TargetXYZ =
 | when Affects >< unit: case Effect.find{?0><harm} _,Damage:
   | Target.harm{U Damage}
 | case Effect.find{?0><teleport} _,Whom:
-  | U.main.sound{summon}
-  | U.world.effect{TargetXYZ teleport}
   | U.forced_order{type/teleport at/TargetXYZ}
 
-dact cast.valid | if $affects >< unit then $target else 1
+apply_post_effect U Affects Effect Target TargetXYZ =
+| Effect = Effect.group{2}
+| case Effect.find{?0><summon} _,What:
+  | S = U.world.alloc_unit{What}
+  | S.owner <= U.owner
+  | S.attacker <= 1 // mark it available for attack
+  | S.move{TargetXYZ}
+  | less case Effect.find{?0><nopick} _,1: S.world.update_pick{[S]}
+  | !S.owner.power + S.income
+
+dact cast.valid
+| when $affects >< unit: leave $target
+| when $affects >< empty: leave $unit.world.units_at{$xyz}.all{?empty}
+| 1
 
 dact cast.start
 | U = $unit
@@ -216,6 +206,8 @@ dact cast.start
 | U.face{$xyz}
 | apply_effect $unit $affects $effect $target $xyz
 
+dact cast.finish
+| apply_post_effect $unit $affects $effect $target $xyz
 
 dact spell_of_mastery.start
 | U = $unit
@@ -266,10 +258,9 @@ type action{unit}
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
-action.init type/idle at/0 affects/0 target/0
+action.init type/idle at/0 affects/0 target/0 auto/0
             cost/0 effect/0 path/0 speed/-1 range/No =
-| when Affects >< self: Target <= $unit
-| when Affects >< pentagram: Target <= $unit.owner.pentagram
+| when Auto: Target <= $unit
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
 | $xyz.init{At}

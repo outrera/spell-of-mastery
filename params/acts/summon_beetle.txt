@@ -1,6 +1,7 @@
-type: summon
-effect: unit_beetle
-affects: pentagram
+type: cast
+effect: impact,teleport,hit_sound,summon,summon,unit_beetle
+affects: empty
+auto: 1
 icon: unit_beetle
 research: 0
 cost: 500

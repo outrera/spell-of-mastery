@@ -1,6 +1,7 @@
-type: summon
-effect: unit_elf
-affects: pentagram
+type: cast
+effect: impact,teleport,hit_sound,summon,summon,unit_elf
+affects: empty
+auto: 1
 icon: unit_elf
 research: 1400
 cost: 700

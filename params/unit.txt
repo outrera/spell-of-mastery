@@ -15,6 +15,7 @@ flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
 invincible: 0
 leader: 0
+income: 0
 sounds: attack,(attack2)
        //,impact,()
        //,hit,()
