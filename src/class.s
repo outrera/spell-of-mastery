@@ -33,10 +33,7 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
   income/Income
 | less $moves.is_list: bad "wrong `moves` field for [$type]"
 | less $moves.size: leave Me
-| Ms = $moves.tail
-| Pad = dup Ms.size 0
-| Ms <= [Pad @Ms Pad]{[0 @? 0]}
-| $moves <= Ms
+| $moves <= add_border_to_matrix $moves.tail 0
 
 class.height = $default_sprite.height
 

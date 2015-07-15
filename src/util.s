@@ -9,4 +9,10 @@ list.overlaps [BX BY BW BH] =
 Dirs = 8{(?.float-2.0)*PI/4.0}{[?.cos ?.sin].round.int}
 dirN V = Dirs.locate{V.sign}
 
-export points Dirs dirN
+
+add_border_to_matrix Ms Value =
+| Pad = dup Ms.size Value
+| [Pad @Ms Pad]{[Value @? Value]}
+
+
+export points Dirs dirN add_border_to_matrix
