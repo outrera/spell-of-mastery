@@ -14,5 +14,10 @@ add_border_to_matrix Ms Value =
 | Pad = dup Ms.size Value
 | [Pad @Ms Pad]{[Value @? Value]}
 
+points_in_range R = points{-R -R R*2+1 R*2+1}
 
-export points Dirs dirN add_border_to_matrix
+points_in_matrix Ms =
+| R = Ms.size/2
+| points_in_range{R}.keep{X,Y=>Ms.(R+Y).(R+X)}
+
+export points Dirs dirN add_border_to_matrix points_in_range points_in_matrix

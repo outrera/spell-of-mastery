@@ -338,10 +338,11 @@ action_list_moves Me Picked Act =
 | Path = []
 | Moves = []
 | R = Act.range
-| when R > 9: R <= 9 //otherwise we may overflow MaxUnits
 | less got R: leave Moves
-| for X,Y points{-R -R R*2+1 R*2+1}
-  | XYZ = Picked.xyz+[X Y 0]
+| PXYZ = Picked.xyz
+| Points = if R.is_int then points_in_range{R} else points_in_matrix{R.tail}
+| for X,Y Points
+  | XYZ = PXYZ+[X Y 0]
   | X = XYZ.0
   | Y = XYZ.1
   | when X>0 and X<<$w and Y>0 and Y<<$h:
