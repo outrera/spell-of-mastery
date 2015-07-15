@@ -340,7 +340,7 @@ action_list_moves Me Picked Act =
 | R = Act.range
 | less got R: leave Moves
 | PXYZ = Picked.xyz
-| Points = if R.is_int then points_in_range{R} else points_in_matrix{R.tail}
+| Points = if R.is_int then points_in_circle R else points_in_matrix R.tail
 | for X,Y Points
   | XYZ = PXYZ+[X Y 0]
   | X = XYZ.0
