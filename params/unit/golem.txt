@@ -5,9 +5,3 @@ attack: 3
 defense: 2
 //speed: -2
 income: -50
-moves:
-  | 0 0 0 0 0
-  | 0 0 1 0 0
-  | 0 1 0 1 0
-  | 0 0 1 0 0
-  | 0 0 0 0 0

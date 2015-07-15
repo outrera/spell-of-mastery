@@ -6,13 +6,7 @@ defense: 0
 flyer: 1
 income: -25
 ranged: 1
-moves:
-  | 0 0 1 0 0
-  | 0 0 1 0 0
-  | 1 1 0 1 1
-  | 0 0 1 0 0
-  | 0 0 1 0 0
-
+moves: matrix.move2
 
 sounds: attack,(observer_attack)
 //       ,impact,()

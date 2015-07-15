@@ -4,9 +4,4 @@ health: 6
 attack: 3
 defense: 0
 income: -25
-moves:
-  | 0 0 1 0 0
-  | 0 0 1 0 0
-  | 1 1 0 1 1
-  | 0 0 1 0 0
-  | 0 0 1 0 0
+moves: matrix.move2

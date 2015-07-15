@@ -1,0 +1,7 @@
+author: `Hero of Allacrost Team`, `Artem Belov`
+license: GPL2
+origin: `https://sourceforge.net/projects/allacrost/`
+height: 8
+form: | 4 4
+      | 4 4
+xy: -4,12
