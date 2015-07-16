@@ -1,4 +1,5 @@
 type: spell_of_mastery
 affects: empty
 icon: spell_of_mastery
-research: 60000
+//research: 60000
+research: 0

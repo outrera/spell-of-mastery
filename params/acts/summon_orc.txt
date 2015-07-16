@@ -1,7 +1,7 @@
 type: cast
 effect: impact,teleport,hit_sound,summon,summon,unit_orc
 affects: empty
-auto: 1
+range: 0
 icon: unit_orc
 research: 1400
 cost: 700

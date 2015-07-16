@@ -1,7 +1,7 @@
 type: cast
 effect: impact,teleport,hit_sound,summon,summon,unit_griffin
 affects: empty
-auto: 1
+range: 0
 icon: unit_griffin
 research: 10000
 cost: 5000

@@ -119,7 +119,7 @@ ui.init =
   | when got Icon.number:
     | PickedUnit.owner.researching <= Act.name
   | when no Icon.number:
-    | if Act.auto >< 1
+    | if Act.range >< 0
       then when PickedUnit.owner.id >< $world.player.id
            | PickedUnit.order.init{@Act.list.join}
       else $world.act <= Act

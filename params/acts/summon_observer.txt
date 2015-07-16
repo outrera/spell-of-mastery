@@ -1,7 +1,7 @@
 type: cast
 effect: impact,teleport,hit_sound,summon,summon,unit_observer
 affects: empty
-auto: 1
+range: 0
 icon: unit_observer
 research: 20000
 cost: 10000

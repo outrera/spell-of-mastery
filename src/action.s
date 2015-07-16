@@ -258,9 +258,8 @@ type action{unit}
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
-action.init type/idle at/0 affects/0 target/0 auto/0
+action.init type/idle at/0 affects/0 target/0
             cost/0 effect/0 path/0 speed/-1 range/No =
-| when Auto: Target <= $unit
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
 | $xyz.init{At}

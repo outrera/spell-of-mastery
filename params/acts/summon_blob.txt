@@ -1,7 +1,7 @@
 type: cast
 effect: impact,teleport,hit_sound,summon,summon,unit_blob
 affects: empty
-auto: 1
+range: 0
 icon: unit_blob
 research: 0
 cost: 500
