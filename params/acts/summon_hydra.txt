@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_hydra
+effect: impact,teleport,sound,summon,summon,unit_hydra
 affects: empty
-range: 0
 icon: unit_hydra
 research: 10000
 cost: 5000

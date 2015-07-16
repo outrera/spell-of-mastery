@@ -2,6 +2,5 @@ type: pentagram
 title: `Pentagram`
 effect: pentagram_all
 affects: any
-range: 0
 icon: spell_pentagram
 cost: 2000

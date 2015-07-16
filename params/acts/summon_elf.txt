@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_elf
+effect: impact,teleport,sound,summon,summon,unit_elf
 affects: empty
-range: 0
 icon: unit_elf
 research: 1400
 cost: 700

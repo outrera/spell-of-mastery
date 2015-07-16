@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_vampire
+effect: impact,teleport,sound,summon,summon,unit_vampire
 affects: empty
-range: 0
 icon: unit_vampire
 research: 10000
 cost: 5000

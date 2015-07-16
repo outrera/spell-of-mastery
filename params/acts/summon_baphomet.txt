@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_baphomet
+effect: impact,teleport,sound,summon,summon,unit_baphomet
 affects: empty
-range: 0
 icon: unit_baphomet
 research: 10000
 cost: 5000

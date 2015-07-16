@@ -1,5 +1,6 @@
-type: spell_of_mastery
-affects: empty
+type: cast
+affects: any
+effect: impact,teleport,sound,summon,spell_of_mastery,1
 icon: spell_of_mastery
 //research: 60000
-research: 0
+

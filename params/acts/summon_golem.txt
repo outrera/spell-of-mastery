@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_golem
+effect: impact,teleport,sound,summon,summon,unit_golem
 affects: empty
-range: 0
 icon: unit_golem
 research: 20000
 cost: 10000

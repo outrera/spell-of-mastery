@@ -1,5 +1,4 @@
 type: disband
 affects: unit
-range: 0
 icon: act_disband
 speed: 0

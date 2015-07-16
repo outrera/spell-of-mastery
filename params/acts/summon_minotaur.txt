@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_minotaur
+effect: impact,teleport,sound,summon,summon,unit_minotaur
 affects: empty
-range: 0
 icon: unit_minotaur
 research: 8
 cost: 8

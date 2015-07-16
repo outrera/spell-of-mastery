@@ -1,6 +1,6 @@
 type: cast
 affects: any
-effect: summon,unit_firewall,nopick,1,impact,teleport,hit_sound,summon
+effect: summon,unit_firewall,nopick,1,impact,teleport,sound,summon
 icon: spell_firewall
 range: 2
 //research: 5000

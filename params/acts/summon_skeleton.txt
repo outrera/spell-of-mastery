@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_skeleton
+effect: impact,teleport,sound,summon,summon,unit_skeleton
 affects: empty
-range: 0
 icon: unit_skeleton
 research: 3000
 cost: 2000

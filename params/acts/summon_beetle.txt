@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_beetle
+effect: impact,teleport,sound,summon,summon,unit_beetle
 affects: empty
-range: 0
 icon: unit_beetle
 research: 0
 cost: 500

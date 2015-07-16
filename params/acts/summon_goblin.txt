@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_goblin
+effect: impact,teleport,sound,summon,summon,unit_goblin
 affects: empty
-range: 0
 icon: unit_goblin
 research: 1000
 cost: 500

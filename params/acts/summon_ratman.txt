@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_ratman
+effect: impact,teleport,sound,summon,summon,unit_ratman
 affects: empty
-range: 0
 icon: unit_ratman
 research: 500
 cost: 400

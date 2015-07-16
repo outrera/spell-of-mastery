@@ -179,11 +179,12 @@ dact teleport.start | $unit.move{$xyz}
 apply_effect U Affects Effect Target TargetXYZ =
 | Effect = Effect.group{2}
 | case Effect.find{?0><impact} _,Impact: U.world.effect{TargetXYZ Impact}
-| case Effect.find{?0><hit_sound} _,Sound: U.main.sound{Sound}
+| case Effect.find{?0><sound} _,Sound: U.main.sound{Sound}
 | when Affects >< unit: case Effect.find{?0><harm} _,Damage:
   | Target.harm{U Damage}
 | case Effect.find{?0><teleport} _,Whom:
   | U.forced_order{type/teleport at/TargetXYZ}
+
 
 apply_post_effect U Affects Effect Target TargetXYZ =
 | Effect = Effect.group{2}
@@ -194,7 +195,10 @@ apply_post_effect U Affects Effect Target TargetXYZ =
   | S.move{TargetXYZ}
   | less case Effect.find{?0><nopick} _,1: S.world.update_pick{[S]}
   | !S.owner.power + S.income
-
+| case Effect.find{?0><spell_of_mastery} _,Arg:
+  | WP = U.world.params
+  | WP.winner <= U.owner.id
+  | WP.victory_type <= 'Victory by casting the Spell of Mastery'
 dact cast.valid
 | when $affects >< unit: leave $target
 | when $affects >< empty: leave $unit.world.units_at{$xyz}.all{?empty}
@@ -208,18 +212,6 @@ dact cast.start
 
 dact cast.finish
 | apply_post_effect $unit $affects $effect $target $xyz
-
-dact spell_of_mastery.start
-| U = $unit
-| U.animate{attack}
-| U.main.sound{summon}
-| U.world.effect{U.xyz teleport}
-
-dact spell_of_mastery.finish
-| U = $unit
-| U.world.params.winner <= U.owner.id
-| U.world.params.victory_type <= 'Victory by casting the Spell of Mastery'
-
 
 default_init Me =
 default_valid Me = 1

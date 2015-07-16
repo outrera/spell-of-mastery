@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_wraith
+effect: impact,teleport,sound,summon,summon,unit_wraith
 affects: empty
-range: 0
 icon: unit_wraith
 research: 10000
 cost: 5000

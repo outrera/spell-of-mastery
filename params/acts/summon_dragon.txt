@@ -1,7 +1,6 @@
 type: cast
-effect: impact,teleport,hit_sound,summon,summon,unit_dragon
+effect: impact,teleport,sound,summon,summon,unit_dragon
 affects: empty
-range: 0
 icon: unit_dragon
 research: 20000
 cost: 10000
