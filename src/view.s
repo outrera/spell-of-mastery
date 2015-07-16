@@ -50,6 +50,7 @@ view.clear =
 | $mice_xy.init{[0 0]}
 | $cursor.init{[1 1 1]}
 | $anchor.init{[1 1 1]}
+| $pick_count <= 0
 | Leader = $world.player.units.find{?leader}
 | when got Leader: $center_at{Leader.xyz}
 
@@ -203,6 +204,8 @@ view.draw_indicators =
 | Font.draw{$fb IP+[28 1] "[P.mana]+[P.power]"}
 | Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]"}
 | Font.draw{$fb IP+[148 16] "[P.name]"}
+| Debug = $world.params.debug
+| when got Debug: Font.draw{$fb IP+[148 32] "[Debug]"}
 | Font = font small
 | Font.draw{$fb IP+[246 1] "[X],[Y],[Z]"}
 | Font.draw{$fb IP+[246 9] "[$world.at{X,Y,Z-1}.type]"}
@@ -271,6 +274,7 @@ world.update_pick Units =
 view.select_unit XYZ = 
 | Picked = []
 | Us = $world.units_at{XYZ}.skip{?aux}
+| when not $world.picked or $world.picked.xyz <> XYZ: $pick_count <= 0
 | when Us.size
   | !$pick_count+1
   | Picked <= [Us.($pick_count%Us.size)]

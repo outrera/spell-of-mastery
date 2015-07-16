@@ -113,6 +113,7 @@ world.clear =
 | $players.1.human <= 1
 | $human <= $players.1
 | $marks <= $nil
+| $waiting <= 0
 | $params <= t
 | $active.clear
 
