@@ -120,10 +120,17 @@ world.clear =
 world.alloc_unit ClassName =
 | Class = $main.classes.ClassName
 | less got Class: bad "Missing class `[ClassName]`"
+| Player = $player
 | U = $free_units.pop
+| when Class.bank >< pentagram
+  | Pentagram = Player.pentagram
+  | when Pentagram
+    | $free_units.push{U}
+    | leave Pentagram
+  | Player.pentagram <= U
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
-| U.owner <= $player
+| U.owner <= Player
 | U
 
 world.free_unit U =

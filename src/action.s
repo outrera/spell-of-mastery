@@ -144,24 +144,6 @@ dact swap.finish
 | move_finish Me
 | !$target.owner.moves - 1
 
-dact pentagram.valid
-| T = $unit
-| T.world.units_at{T.xyz}.all{?.empty >< 0}
-
-dact pentagram.start
-| $unit.animate{attack}
-| $unit.main.sound{pentagram}
-
-dact pentagram.finish
-| U = $unit
-| Pentagram = U.owner.pentagram
-| when not Pentagram
-  | Pentagram <= U.world.alloc_unit{$effect}
-  | Pentagram.owner <= U.owner
-  | U.owner.pentagram <= Pentagram
-| Pentagram.move{$xyz}
-
-
 dact disband.start
 | $cycles <= 4
 | $unit.main.show_message

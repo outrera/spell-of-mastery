@@ -20,7 +20,7 @@ ai.marked_order U Move =
 
 ai.cast_pentagram =
 | Leader = $player.leader
-| when Leader: case Leader.acts.keep{?type >< pentagram} [Act@_]
+| when Leader: case Leader.acts.keep{?hint >< pentagram} [Act@_]
   | $order_act{Leader Act}
   | leave 1
 | leave 0

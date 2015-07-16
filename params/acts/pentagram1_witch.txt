@@ -1,6 +1,7 @@
-type: pentagram
+type: cast
 title: `Pentagram`
-effect: pentagram_1_witch
+effect: impact,teleport,sound,pentagram,summon,pentagram_1_witch
 affects: any
 icon: spell_pentagram
 cost: 2000
+hint: pentagram
