@@ -121,7 +121,7 @@ ui.init =
   | when no Icon.number:
     | if Act.range >< 0
       then when PickedUnit.owner.id >< $world.player.id
-           | PickedUnit.order.init{@Act.list.join}
+           | PickedUnit.order.init{target PickedUnit @Act.list.join}
       else $world.act <= Act
 | ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}

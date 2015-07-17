@@ -144,32 +144,27 @@ dact swap.finish
 | move_finish Me
 | !$target.owner.moves - 1
 
-dact disband.start
-| $cycles <= 4
-| $unit.main.show_message
-  {'Disband Unit?' buttons/[yes,'Yes' no,'No']
-   'Are you sure this unit should be disbanded?'}
-
-dact disband.finish
-| when $unit.main.dialog_result><yes
-  | $unit.main.sound{cancel}
-  | free_unit $unit
-
-
 dact teleport.start | $unit.move{$xyz}
 
 apply_effect U Affects Effect Target TargetXYZ =
 | Effect = Effect.group{2}
+| case Effect.find{?0><confirm} _,[Title Msg]:
+  | U.main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}
+| case Effect.find{?0><animate} _,Anim: U.animate{Anim}
 | case Effect.find{?0><impact} _,Impact: U.world.effect{TargetXYZ Impact}
 | case Effect.find{?0><sound} _,Sound: U.main.sound{Sound}
 | when Affects >< unit: case Effect.find{?0><harm} _,Damage:
   | Target.harm{U Damage}
-| case Effect.find{?0><teleport} _,Whom:
+| case Effect.find{?0><teleport} _,Arg:
   | U.forced_order{type/teleport at/TargetXYZ}
-
 
 apply_post_effect U Affects Effect Target TargetXYZ =
 | Effect = Effect.group{2}
+| case Effect.find{?0><confirm} _,[Title Msg]:
+  | less U.main.dialog_result><yes: leave
+| case Effect.find{?0><post_sound} _,Sound: U.main.sound{Sound}
+| case Effect.find{?0><remove} _,Arg:
+  | free_unit Target
 | case Effect.find{?0><summon} _,What:
   | S = U.world.alloc_unit{What}
   | S.owner <= U.owner
@@ -181,6 +176,7 @@ apply_post_effect U Affects Effect Target TargetXYZ =
   | WP = U.world.params
   | WP.winner <= U.owner.id
   | WP.victory_type <= 'Victory by casting the Spell of Mastery'
+
 dact cast.valid
 | when $affects >< unit: leave $target
 | when $affects >< empty: leave $unit.world.units_at{$xyz}.all{?empty}
@@ -188,6 +184,7 @@ dact cast.valid
 
 dact cast.start
 | U = $unit
+| when $speed <> -1: $cycles <= $speed
 | U.animate{attack}
 | U.face{$xyz}
 | apply_effect $unit $affects $effect $target $xyz

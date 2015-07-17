@@ -1,4 +1,7 @@
-type: disband
+type: cast
 affects: unit
+effect: animate,idle,remove,1,post_sound,cancel
+       ,confirm,(`Disband Unit?` `Are you sure this unit should be disbanded?`)
+speed: 4
 icon: act_disband
-speed: 0
+
