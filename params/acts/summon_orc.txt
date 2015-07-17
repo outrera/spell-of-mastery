@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_orc
+effect: impact,teleport,sound,summon
+after: summon,unit_orc
 affects: empty
 icon: unit_orc
 research: 1400

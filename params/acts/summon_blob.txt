@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_blob
+effect: impact,teleport,sound,summon
+after: summon,unit_blob
 affects: empty
 icon: unit_blob
 research: 0

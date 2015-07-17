@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_wraith
+effect: impact,teleport,sound,summon
+after: summon,unit_wraith
 affects: empty
 icon: unit_wraith
 research: 10000

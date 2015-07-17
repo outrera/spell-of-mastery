@@ -1,6 +1,7 @@
 type: cast
 affects: any
-effect: impact,teleport,sound,summon,spell_of_mastery,1
+effect: impact,teleport,sound,summon
+after: spell_of_mastery,1
 icon: spell_of_mastery
 //research: 60000
 

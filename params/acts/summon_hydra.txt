@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_hydra
+effect: impact,teleport,sound,summon
+after: summon,unit_hydra
 affects: empty
 icon: unit_hydra
 research: 10000

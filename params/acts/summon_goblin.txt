@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_goblin
+effect: impact,teleport,sound,summon
+after: summon,unit_goblin
 affects: empty
 icon: unit_goblin
 research: 1000

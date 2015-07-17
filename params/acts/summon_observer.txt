@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_observer
+effect: impact,teleport,sound,summon
+after: summon,unit_observer
 affects: empty
 icon: unit_observer
 research: 20000

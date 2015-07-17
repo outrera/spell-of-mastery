@@ -148,30 +148,30 @@ dact teleport.start | $unit.move{$xyz}
 
 apply_effect U Affects Effect Target TargetXYZ =
 | Effect = Effect.group{2}
+| case Effect.find{?0><when} _,When:
+  | when When><confirmed: less U.main.dialog_result><yes: leave
 | case Effect.find{?0><confirm} _,[Title Msg]:
   | U.main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}
+| case Effect.find{?0><remove} _,Arg:
+  | free_unit Target
 | case Effect.find{?0><animate} _,Anim: U.animate{Anim}
 | case Effect.find{?0><impact} _,Impact: U.world.effect{TargetXYZ Impact}
 | case Effect.find{?0><sound} _,Sound: U.main.sound{Sound}
 | when Affects >< unit: case Effect.find{?0><harm} _,Damage:
   | Target.harm{U Damage}
-| case Effect.find{?0><teleport} _,Arg:
-  | U.forced_order{type/teleport at/TargetXYZ}
-
-apply_post_effect U Affects Effect Target TargetXYZ =
-| Effect = Effect.group{2}
-| case Effect.find{?0><confirm} _,[Title Msg]:
-  | less U.main.dialog_result><yes: leave
-| case Effect.find{?0><post_sound} _,Sound: U.main.sound{Sound}
-| case Effect.find{?0><remove} _,Arg:
-  | free_unit Target
 | case Effect.find{?0><summon} _,What:
+  | NoPick = 0
+  | case What nopick,W:
+    | NoPick <= 1
+    | What <= W
   | S = U.world.alloc_unit{What}
   | S.owner <= U.owner
   | S.attacker <= 1 // mark it available for attack
   | S.move{TargetXYZ}
   | less case Effect.find{?0><nopick} _,1: S.world.update_pick{[S]}
   | !S.owner.power + S.income
+| case Effect.find{?0><teleport} _,Arg:
+  | U.forced_order{type/teleport at/TargetXYZ}
 | case Effect.find{?0><spell_of_mastery} _,Arg:
   | WP = U.world.params
   | WP.winner <= U.owner.id
@@ -187,10 +187,10 @@ dact cast.start
 | when $speed <> -1: $cycles <= $speed
 | U.animate{attack}
 | U.face{$xyz}
-| apply_effect $unit $affects $effect $target $xyz
+| when $effect: apply_effect $unit $affects $effect $target $xyz
 
 dact cast.finish
-| apply_post_effect $unit $affects $effect $target $xyz
+| when $after: apply_effect $unit $affects $after $target $xyz
 
 default_init Me =
 default_valid Me = 1
@@ -219,6 +219,7 @@ type action{unit}
    data // data used by action handlers
    cost
    effect
+   after
    range
    path
    act_init/&default_init
@@ -230,7 +231,7 @@ type action{unit}
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
 action.init type/idle at/0 affects/0 target/0
-            cost/0 effect/0 path/0 speed/-1 range/No =
+            cost/0 effect/0 after/0 path/0 speed/-1 range/No =
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
 | $xyz.init{At}
@@ -250,6 +251,7 @@ action.init type/idle at/0 affects/0 target/0
 | $cost <= Cost
 | $speed <= Speed
 | $effect <= Effect
+| $after <= After
 | $path <= Path
 | $act_init{}{Me}
 | Me

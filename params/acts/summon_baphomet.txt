@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_baphomet
+effect: impact,teleport,sound,summon
+after: summon,unit_baphomet
 affects: empty
 icon: unit_baphomet
 research: 10000

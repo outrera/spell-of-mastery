@@ -1,7 +1,8 @@
 type: cast
 title: `Pentagram`
 affects: any
-effect: impact,teleport,sound,pentagram,summon,pentagram_0
+effect: impact,teleport,sound,pentagram
+after: summon,pentagram_0
 icon: spell_pentagram
 cost: 2000
 hint: pentagram

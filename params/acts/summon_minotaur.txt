@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_minotaur
+effect: impact,teleport,sound,summon
+after: summon,unit_minotaur
 affects: empty
 icon: unit_minotaur
 research: 8

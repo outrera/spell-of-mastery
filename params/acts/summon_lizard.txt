@@ -1,5 +1,6 @@
 type: cast
-effect: impact,teleport,sound,summon,summon,unit_lizard
+effect: impact,teleport,sound,summon
+after: summon,unit_lizard
 affects: empty
 icon: unit_lizard
 research: 1400
