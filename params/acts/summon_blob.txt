@@ -1,5 +1,5 @@
 type: cast
-effect: impact,teleport,sound,summon
+effect: impact,pentagram_summoning,sound,summon
 after: summon,unit_blob
 affects: empty
 icon: unit_blob

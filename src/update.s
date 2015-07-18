@@ -130,6 +130,8 @@ unit.update =
   | leave
 | !$anim_wait - 1
 | less $anim_wait > 0
+  | when $anim >< attack and $anim_step+1 >< $anim_seq.size:
+    | $animate{idle}
   | $anim_step <= ($anim_step+1)%$anim_seq.size
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
