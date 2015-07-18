@@ -1,0 +1,5 @@
+sprite: effect_firewall
+empty: 1
+sight: 1
+ttl: 3
+heal: -1,explosion4

@@ -24,6 +24,10 @@ world.explore =
 EndTurnDepth = 0
 
 world.end_turn =
+| for U $player.units: when U.health:
+  | for V $units_at{U.xyz}: case V.heal Amount,Effect:
+    | U.world.effect{U.xyz Effect}
+    | U.harm{V -Amount}
 | Researching = $player.researching
 | when Researching and $player.power > 0:
   | !$player.research.Researching + $player.power
@@ -119,7 +123,7 @@ world.update =
   | ($on_update){}
 
 unit.update =
-| when $turn and ($world.turn - $turn) > $ttl and $action.type <> die:
+| when $turn and ($world.turn - $turn) >> $ttl and $action.type <> die:
   | $die
 | when $removed
   | $active <= 0
