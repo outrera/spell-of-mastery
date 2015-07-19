@@ -1,5 +1,5 @@
 type: cast
-effect: impact,teleport,sound,summon
+effect: misc.summon
 after: summon,unit_griffin
 affects: empty
 icon: unit_griffin

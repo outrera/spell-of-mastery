@@ -1,6 +1,6 @@
 type: cast
 affects: any
-effect: impact,teleport,sound,summon
+effect: misc.summon
 after: summon,(nopick special_firewall)
 icon: spell_firewall
 range: 2
