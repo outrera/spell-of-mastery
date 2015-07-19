@@ -1,5 +1,5 @@
 sprite: unit_goblin
-level: 1
+tier: 1
 health: 3
 attack: 1
 defense: 0

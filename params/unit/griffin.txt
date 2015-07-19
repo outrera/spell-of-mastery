@@ -1,5 +1,5 @@
 sprite: unit_griffin
-level: 3
+tier: 3
 health: 6
 attack: 2
 defense: 0

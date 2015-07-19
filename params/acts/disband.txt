@@ -1,8 +1,6 @@
-type: cast
 affects: unit
-effect: animate,idle
+before: animate,idle
        ,confirm,(`Disband Unit?` `Are you sure this unit should be disbanded?`)
 after: when,confirmed,remove,1,sound,cancel
 speed: 4
 icon: act_disband
-

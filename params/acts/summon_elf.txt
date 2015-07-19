@@ -1,5 +1,4 @@
-type: cast
-effect: misc.summon
+before: misc.summon
 after: summon,unit_elf
 affects: empty
 icon: unit_elf

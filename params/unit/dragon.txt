@@ -1,5 +1,5 @@
 sprite: unit_dragon
-level: 4
+tier: 4
 health: 12
 attack: 3
 defense: 1

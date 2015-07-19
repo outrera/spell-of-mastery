@@ -1,4 +1,4 @@
-level: 1
+type: custom
 research: 0
 cost: 0
 range: 0

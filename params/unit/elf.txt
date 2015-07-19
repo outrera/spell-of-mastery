@@ -1,5 +1,5 @@
 sprite: unit_elf
-level: 2
+tier: 2
 health: 1
 attack: 2
 defense: 0

@@ -1,6 +1,5 @@
-type: cast
 affects: any
-effect: misc.summon
+before: misc.summon
 after: summon,(nopick special_firewall)
 icon: spell_firewall
 range: 2

@@ -1,5 +1,5 @@
 sprite: unit_orc
-level: 2
+tier: 2
 health: 3
 attack: 2
 defense: 0

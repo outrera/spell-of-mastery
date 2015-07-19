@@ -1,4 +1,5 @@
 sprite: unit_priest
+tier: 10
 health: 3
 leader: 1
 //speed: -2

@@ -1,5 +1,5 @@
 sprite: unit_knight
-level: 2
+tier: 2
 health: 3
 attack: 3
 defense: 1

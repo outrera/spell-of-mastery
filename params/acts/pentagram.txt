@@ -1,7 +1,6 @@
-type: cast
 title: `Pentagram`
 affects: any
-effect: impact,pentagram_appearance,sound,pentagram
+before: impact,pentagram_appearance,sound,pentagram
 after: summon,pentagram_all
 icon: spell_pentagram
 //cost: 2000

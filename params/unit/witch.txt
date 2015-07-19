@@ -1,4 +1,5 @@
 sprite: unit_witch
-leader: 1
+tier: 10
+health: 3
 //speed: -2
 income: 50

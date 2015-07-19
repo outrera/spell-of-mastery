@@ -1,5 +1,5 @@
 sprite: unit_golem
-level: 4
+tier: 4
 health: 10
 attack: 3
 defense: 2

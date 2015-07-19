@@ -43,11 +43,9 @@ main.show_message Title Text buttons/[ok,'Ok'] =
 main.dialog_result = DialogResult
 
 type unit_panel.widget{ui}
-     w/0 h/0 unit laurels moved
-     power_icon health_icon attack_icon defense_icon
+     w/0 h/0 unit laurels moved health_icon attack_icon defense_icon
 | $laurels <= $ui.img{ui_laurels}
 | $moved <= $ui.img{ui_unit_moved}
-| $power_icon <= $ui.img{stats_power}
 | $health_icon <= $ui.img{stats_health}
 | $attack_icon <= $ui.img{stats_attack}
 | $defense_icon <= $ui.img{stats_defense}
@@ -72,7 +70,6 @@ unit_panel.draw G P =
 | Font.draw{G P+[85 48] "[$unit.owner.name]"}
 | Health = max 0 $unit.health-$unit.hits
 | times I Health: G.blit{[X+I*8 Y] $health_icon}
-| times I $unit.level: G.blit{[X+I*8 Y+16] $power_icon}
 | times I $unit.attack: G.blit{[X+I*8 Y+32] $attack_icon}
 | times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
 | Moved = $unit.moved-$unit.world.turn+1

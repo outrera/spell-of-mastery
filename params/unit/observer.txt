@@ -1,5 +1,5 @@
 sprite: unit_observer
-level: 4
+tier: 4
 health: 8
 attack: 3
 defense: 0

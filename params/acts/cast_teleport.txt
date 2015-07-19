@@ -1,6 +1,5 @@
-type: cast
 affects: empty
-effect: impact,teleport,sound,summon
+before: impact,teleport,sound,summon
 after: teleport,self
 icon: spell_teleport
 range: 2

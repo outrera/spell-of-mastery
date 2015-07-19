@@ -1,6 +1,5 @@
-type: cast
 affects: unit
-effect: harm,1,impact,electrical,sound,electrical
+before: harm,1,impact,electrical,sound,electrical
 icon: spell_lightning
 range: 2
 //research: 5000

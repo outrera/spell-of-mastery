@@ -1,5 +1,5 @@
 sprite: unit_skeleton
-level: 2
+tier: 2
 health: 2
 attack: 2
 defense: 1

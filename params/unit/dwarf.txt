@@ -1,5 +1,5 @@
 sprite: unit_dwarf
-level: 2
+tier: 2
 health: 5
 attack: 1
 defense: 0

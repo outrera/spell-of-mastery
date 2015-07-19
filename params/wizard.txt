@@ -5,8 +5,7 @@ unit: 1
 entity: 1
 starts: still // initial animation
 draw_order: 50
-level: 1 // number of move points it takes to move unit
-cost: 4 // number of move points it takes to summon unit
+tier: 10
 health: 3 // hit points - number of hits, before this unit is dead
 attack: 0 // amount of damage this unit deals
 defence: 0 // amount of damage this unit can absorb, without losing health

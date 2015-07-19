@@ -177,19 +177,19 @@ apply_effect U Affects Effect Target TargetXYZ =
   | WP.winner <= U.owner.id
   | WP.victory_type <= 'Victory by casting the Spell of Mastery'
 
-dact cast.valid
+dact custom.valid
 | when $affects >< unit: leave $target
 | when $affects >< empty: leave $unit.world.units_at{$xyz}.all{?empty}
 | 1
 
-dact cast.start
+dact custom.start
 | U = $unit
 | when $speed <> -1: $cycles <= $speed
 | U.animate{attack}
 | U.face{$xyz}
-| when $effect: apply_effect $unit $affects $effect $target $xyz
+| when $before: apply_effect $unit $affects $before $target $xyz
 
-dact cast.finish
+dact custom.finish
 | when $after: apply_effect $unit $affects $after $target $xyz
 
 default_init Me =
@@ -218,7 +218,7 @@ type action{unit}
    speed
    data // data used by action handlers
    cost
-   effect
+   before
    after
    range
    path
@@ -231,7 +231,7 @@ type action{unit}
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
 action.init type/idle at/0 affects/0 target/0
-            cost/0 effect/0 after/0 path/0 speed/-1 range/No =
+            cost/0 before/0 after/0 path/0 speed/-1 range/No =
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
 | $xyz.init{At}
@@ -250,7 +250,7 @@ action.init type/idle at/0 affects/0 target/0
 | $cycles <= -1
 | $cost <= Cost
 | $speed <= Speed
-| $effect <= Effect
+| $before <= Before
 | $after <= After
 | $path <= Path
 | $act_init{}{Me}

@@ -1,5 +1,5 @@
 sprite: unit_vampire
-level: 3
+tier: 3
 health: 3
 attack: 2
 defense: 1

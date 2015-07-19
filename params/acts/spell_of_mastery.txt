@@ -1,7 +1,5 @@
-type: cast
 affects: any
-effect: misc.summon
+before: misc.summon
 after: spell_of_mastery,1
 icon: spell_of_mastery
 //research: 60000
-

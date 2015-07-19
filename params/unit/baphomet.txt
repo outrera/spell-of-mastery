@@ -1,5 +1,5 @@
 sprite: unit_baphomet
-level: 4
+tier: 4
 health: 2
 attack: 11
 defense: 0
