@@ -27,5 +27,7 @@ main.load_params =
     | $params.BName.PName.Key <= Main.SPName.SKey
 | for ActName,Act $params.acts:
   | Act.name <= ActName
+  | Act.before_table <= Act.before.group{2}.table
+  | Act.after_table <= Act.after.group{2}.table
   | when no Act.title: Act.title <= ActName.replace{_ ' '}
 export load_params

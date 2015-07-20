@@ -65,9 +65,9 @@ ai.remove_blocker Blocker =
 ai.update_research =
 | Pentagram = $player.pentagram
 | less Pentagram: leave 0
-| Summons = Pentagram.acts.keep{?type >< summon}
+| Summons = Pentagram.acts.keep{?after_table.summon^got}
 | less Summons.size: leave 0
-| S = Summons.find{?effect >< unit_goblin}
+| S = Summons.find{?after_table.summon >< unit_goblin}
 | when got S and $player.research_remain{S} > 0:
   | $player.researching <= S.name
   | leave 1
@@ -78,9 +78,9 @@ ai.update_pentagram =
 | less Pentagram: leave 0
 | Blocker = $world.block_at{Pentagram.xyz}
 | when got Blocker: leave 0
-| Summons = Pentagram.acts.keep{?type >< summon}
+| Summons = Pentagram.acts.keep{?after_table.summon^got}
 | less Summons.size: leave 0
-| S = Summons.find{?effect >< unit_goblin}
+| S = Summons.find{?after_table.summon >< unit_goblin}
 | Turn = $world.turn
 | when got S and $player.research_remain{S} << 0:
   | when Pentagram.moved >> Turn or S.cost>$player.mana: leave 0
