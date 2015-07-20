@@ -61,30 +61,27 @@ init_frames_from_folder S Folder =
   | Frames.Name.Angle <= G
 | S.frames <= Frames
 
-main.load_sprites =
-| Folder = "[$data]/sprites/"
-| $sprites <= @table: @join: map BankName Folder.folders
-  | ParamsFile = "[Folder][BankName].txt"
-  | RootParams = if ParamsFile.exists
-                 then @table: load_params2 ParamsFile
-                 else t
-  | BankFolder = "[Folder][BankName]/"
-  | map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
-    | Params = RootParams.deep_copy
-    | ParamsFile = "[BankFolder][Name].txt"
-    | when ParamsFile.exists
-      | KVs = load_params2 ParamsFile
-      | for K,V KVs: Params.K <= V
-    | S = sprite BankName Name @Params.list.join
-    | if S.frames >< folder
-      then init_frames_from_folder S "[BankFolder][Name]/"
-      else init_frames S gfx."[BankFolder][Name].png"
-    //| have S.margins
-    //  | S.margins <= S.frames.(S.anims.idle.0.0).margins
-    | "[BankName]_[Name]",S
+init_sprites Me =
+| Sprites = $sprites
+| for SpriteName,Params Sprites
+  | S = sprite Params.bank Params.name @Params.list.join
+  | if S.frames >< folder
+    then init_frames_from_folder S "[Params.origin]/"
+    else init_frames S gfx."[Params.origin].png"
+  //| have S.margins
+  //  | S.margins <= S.frames.(S.anims.idle.0.0).margins
+  | $sprites.SpriteName <= S
 | Base = generate_base_tile $params.editor.opaque_base 64 32 8
-| $sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
+| Sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
 
+join_banks Bs =
+| @table: @join: map BankName,Bank Bs:
+                 map PName,Params Bank: "[BankName]_[PName]",Params
+
+main.load_sprites =
+| Params = load_params "[$data]/sprites/"
+| $sprites <= join_banks Params
+| init_sprites Me
 
 main.img Name =
 | S = $sprites."[Name]"

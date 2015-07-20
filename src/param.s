@@ -7,15 +7,11 @@ load_params2 File =
                      | X => [X]
   | Key,Value
 
-join_banks Bs =
-| @table: @join: map BankName,Bank Bs:
-                 map PName,Params Bank: "[BankName]_[PName]",Params
-
 load_params Folder =
 | @table: map BankName Folder.folders
-  | ParamsFile = "[Folder][BankName].txt"
-  | RootParams = if ParamsFile.exists
-                 then @table: load_params2 ParamsFile
+  | RootParamsFile = "[Folder][BankName].txt"
+  | RootParams = if RootParamsFile.exists
+                 then @table: load_params2 RootParamsFile
                  else t
   | BankFolder = "[Folder][BankName]/"
   | Bank = @table: map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
@@ -25,6 +21,8 @@ load_params Folder =
       [[proto _] @_] | Params <= KVs.table
       Else | Params <= RootParams.deep_copy
            | for K,V KVs: Params.K <= V
+    | Params.bank <= BankName
+    | Params.name <= Name
     | Params.origin <= "[BankFolder][Name]"
     | Name,Params
   | BankName,Bank
@@ -61,4 +59,4 @@ main.load_params =
 | params_handle_prototypes Me
 | params_handle_acts Me
 
-export load_params load_params2
+export load_params
