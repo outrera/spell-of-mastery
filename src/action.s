@@ -156,6 +156,7 @@ apply_effect U Affects Effect Target TargetXYZ =
   | free_unit Target
 | case Effect.find{?0><animate} _,Anim: U.animate{Anim}
 | case Effect.find{?0><impact} _,Impact: U.world.effect{TargetXYZ Impact}
+| case Effect.find{?0><effect} _,Effect: U.world.effect{U.xyz Effect}
 | case Effect.find{?0><sound} _,Sound: U.main.sound{Sound}
 | when Affects >< unit: case Effect.find{?0><harm} _,Damage:
   | Target.harm{U Damage}
