@@ -1,4 +1,4 @@
-use gfx util param
+use gfx util param sprite_util
 
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
@@ -61,44 +61,19 @@ init_frames_from_folder S Folder =
   | Frames.Name.Angle <= G
 | S.frames <= Frames
 
-draw_iso_line Color X,Y Size Step Axis G =
-| ICount = Size.abs
-| JCount = Step.abs
-| S = Size.sign
-| if Axis >< 0
-  then times I ICount: times J JCount: G.set{X+I*Step+J Y+I*S Color}
-  else times I ICount: times J JCount: G.set{X+I*S Y+I*Step+J Color}
-
-generate_base_tile Fill XUnit YUnit ZUnit =
-| Color = #00a0a0
-| A = [XUnit/2  0]
-| B = [0        YUnit/2]
-| C = [XUnit/2  YUnit]
-| D = [XUnit    YUnit/2]
-| G = gfx XUnit YUnit+2
-| G.clear{#FF000000}
-| G.xy <= 0,-ZUnit
-| when Fill
-  | G.triangle{Color A B C}
-  | G.triangle{Color A B D}
-  | G.triangle{Color B C D}
-| draw_iso_line 0 [0 YUnit/2] -YUnit/2 2 0 G
-| draw_iso_line 0 [XUnit-2 YUnit/2] -YUnit/2 -2 0 G
-| draw_iso_line 0 [0 YUnit/2] YUnit/2 2 0 G
-| draw_iso_line 0 [XUnit-2 YUnit/2] YUnit/2 -2 0 G
-| G
-
 main.load_sprites =
 | Folder = "[$data]/sprites/"
 | $sprites <= @table: @join: map BankName Folder.folders
   | ParamsFile = "[Folder][BankName].txt"
-  | RootParams = if ParamsFile.exists then @table: load_params ParamsFile else t
+  | RootParams = if ParamsFile.exists
+                 then @table: load_params2 ParamsFile
+                 else t
   | BankFolder = "[Folder][BankName]/"
   | map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
     | Params = RootParams.deep_copy
     | ParamsFile = "[BankFolder][Name].txt"
     | when ParamsFile.exists
-      | KVs = load_params ParamsFile
+      | KVs = load_params2 ParamsFile
       | for K,V KVs: Params.K <= V
     | S = sprite BankName Name @Params.list.join
     | if S.frames >< folder
