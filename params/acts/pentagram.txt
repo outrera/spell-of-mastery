@@ -1,0 +1,2 @@
+proto: pentagram_proto
+//cost: 0
