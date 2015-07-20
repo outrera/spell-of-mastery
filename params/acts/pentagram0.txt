@@ -1,7 +1,2 @@
-title: `Pentagram`
-affects: any
-before: impact,teleport,sound,pentagram
+proto: pentagram_proto
 after: summon,pentagram_0
-icon: spell_pentagram
-cost: 2000
-hint: pentagram

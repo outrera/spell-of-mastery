@@ -1,6 +1,5 @@
-before: misc.summon
+proto: summon__proto
 after: summon,unit_baphomet
-affects: empty
 icon: unit_baphomet
 research: 10000
 cost: 5000

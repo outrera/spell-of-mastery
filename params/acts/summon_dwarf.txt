@@ -1,6 +1,5 @@
-before: misc.summon
+proto: summon__proto
 after: summon,unit_dwarf
-affects: empty
 icon: unit_dwarf
 research: 1400
 cost: 700

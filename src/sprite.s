@@ -91,14 +91,15 @@ generate_base_tile Fill XUnit YUnit ZUnit =
 main.load_sprites =
 | Folder = "[$data]/sprites/"
 | $sprites <= @table: @join: map BankName Folder.folders
-  | RootParams = t
   | ParamsFile = "[Folder][BankName].txt"
-  | when ParamsFile.exists: load_params RootParams ParamsFile
+  | RootParams = if ParamsFile.exists then @table: load_params ParamsFile else t
   | BankFolder = "[Folder][BankName]/"
   | map Name BankFolder.urls.keep{is.[@_ txt]}{?1}
     | Params = RootParams.deep_copy
     | ParamsFile = "[BankFolder][Name].txt"
-    | when ParamsFile.exists: load_params Params ParamsFile
+    | when ParamsFile.exists
+      | KVs = load_params ParamsFile
+      | for K,V KVs: Params.K <= V
     | S = sprite BankName Name @Params.list.join
     | if S.frames >< folder
       then init_frames_from_folder S "[BankFolder][Name]/"

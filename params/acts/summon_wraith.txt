@@ -1,6 +1,5 @@
-before: misc.summon
+proto: summon__proto
 after: summon,unit_wraith
-affects: empty
 icon: unit_wraith
 research: 10000
 cost: 5000

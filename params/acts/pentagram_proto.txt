@@ -3,6 +3,6 @@ affects: any
 before: impact,pentagram_appearance,sound,pentagram
 after: summon,pentagram_all
 icon: spell_pentagram
-//cost: 2000
+cost: 2000
 speed: 50
 hint: pentagram

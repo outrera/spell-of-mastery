@@ -1,6 +1,5 @@
-before: misc.summon
+proto: summon__proto
 after: summon,unit_goblin
-affects: empty
 icon: unit_goblin
 research: 1000
 cost: 500

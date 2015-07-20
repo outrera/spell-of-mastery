@@ -1,6 +1,5 @@
-before: misc.summon
+proto: summon__proto
 after: summon,unit_skeleton
-affects: empty
 icon: unit_skeleton
 research: 3000
 cost: 2000

@@ -1,6 +1,5 @@
-before: misc.summon
+proto: summon__proto
 after: summon,unit_vampire
-affects: empty
 icon: unit_vampire
 research: 10000
 cost: 5000

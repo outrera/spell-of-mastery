@@ -1,6 +1,5 @@
-before: misc.summon
+proto: summon__proto
 after: summon,unit_elf
-affects: empty
 icon: unit_elf
 research: 1400
 cost: 700
