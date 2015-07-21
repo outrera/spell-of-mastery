@@ -15,7 +15,7 @@ world.save =
     events | $events{}{?1}
     tids | $tid_map{}{?type}
     players | map P $players
-              | [P.id P.name P.human P.color P.power P.moves
+              | [P.id P.name P.human P.color 0 0
                  P.params.list P.research.list.keep{?1} P.mana]
     player | $player.id
     units | Units
@@ -60,8 +60,6 @@ world.load Saved =
   | P.human <= Human
   | P.color <= Color
   | P.mana <= Mana
-  | P.power <= Power
-  | P.moves <= Moves
   | for K,V Params: P.params.K <= V
   | for N,R Research: P.research.N <= R
 | $player <= $players.(Saved.player)
@@ -75,7 +73,7 @@ world.load Saved =
   | U.anim_step <= AnimStep
   | U.pick_facing{Facing}
   | less U.health or U.bank >< pentagram: Owner <= 0
-  | U.owner <= $players.Owner
+  | U.change_owner{$players.Owner}
   | U.move{XYZ}
   | U.moved <= Moved
   | U.turn <= Turn
@@ -84,6 +82,7 @@ world.load Saved =
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
+| for [Id@_] Saved.players: $players.Id.recalc
 | Explored = Saved.explored
 | when got Explored:
   | for PID,Sight Explored

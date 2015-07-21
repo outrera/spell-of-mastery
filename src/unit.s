@@ -51,7 +51,7 @@ unit.extort =
 | when not $alive or $empty: leave
 | for V $world.units_at{$xyz}:
   | when V.empty and V.income > 0 and V.owner.id >< 0:
-    | !$owner.power+V.income
+    | $owner.got_income{V.income}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
@@ -77,6 +77,11 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
+
+unit.change_owner NewOwner =
+| $owner.lost_unit{Me}
+| $owner <= NewOwner
+| NewOwner.got_unit{Me}
 
 unit.idle = not $ordered.type and
            [$action $next_action].all{?type^~{0 idle} >< idle}
@@ -108,7 +113,7 @@ unit.animate Anim =
 | $anim_wait <= $anim_seq.$anim_step.1
 
 unit.free =
-| when $owner: !$owner.power - $income
+| when $owner: $owner.lost_unit{Me}
 | when $leader and $hits >> $health:
   | O = $owner
   | Leaders = []

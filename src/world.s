@@ -64,6 +64,7 @@ world.init =
 | MaxSize <= WParam.max_size
 | MaxUnits <= WParam.max_units
 | $players <= map Id WParam.max_players: player Id Me
+| $player <= $players.0
 | $xunit <= WParam.x_unit
 | $yunit <= WParam.y_unit
 | $zunit <= WParam.z_unit
@@ -131,6 +132,7 @@ world.alloc_unit ClassName =
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
 | U.owner <= Player
+| U.owner.got_unit{U}
 | U
 
 world.free_unit U =

@@ -201,7 +201,7 @@ view.draw_indicators =
   | leave
 | X,Y,Z = $cursor
 | $fb.blit{IP Indicators}
-| Font.draw{$fb IP+[28 1] "[P.mana]+[P.power]"}
+| Font.draw{$fb IP+[28 1] "[P.mana]+[P.income-P.upkeep]-[-P.upkeep]"}
 | Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]"}
 | Font.draw{$fb IP+[148 16] "[P.name]"}
 | Debug = $world.params.debug

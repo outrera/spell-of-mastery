@@ -24,19 +24,21 @@ world.explore =
 EndTurnDepth = 0
 
 world.end_turn =
-| for U $player.units: when U.health:
+| P = $player
+| for U P.units: when U.health:
   | for V $units_at{U.xyz}: case V.heal Amount,Effect:
     | U.world.effect{U.xyz Effect}
     | U.harm{V -Amount}
-| Researching = $player.researching
-| when Researching and $player.power > 0:
-  | !$player.research.Researching + $player.power
+| Researching = P.researching
+| ResearchIncome = P.income-P.upkeep
+| when Researching and ResearchIncome > 0:
+  | !P.research.Researching + ResearchIncome
   | ActName = $main.params.acts.Researching
-  | less $player.research_remain{ActName} > 0:
-    | $player.researching <= 0
-| $player.params.view.init{$view.center}
-| $player.params.cursor.init{$view.cursor}
-| NextPlayer = $player.id+1
+  | less P.research_remain{ActName} > 0:
+    | P.researching <= 0
+| P.params.view.init{$view.center}
+| P.params.cursor.init{$view.cursor}
+| NextPlayer = P.id+1
 | less NextPlayer < $players.size
   | NextPlayer <= 0
   | !$turn + 1
@@ -45,10 +47,7 @@ world.end_turn =
 | when P.human
   | $view.center_at{$player.params.view}
   | $view.cursor.init{$player.params.cursor}
-| P.power <= 0
 | PID = P.id
-| P.pentagram <= 0
-| P.leader <= 0
 | Units = $player.active
 | less Units.size /*or $player.human*/:
   | when EndTurnDepth>16
@@ -58,13 +57,9 @@ world.end_turn =
   | $end_turn
   | EndTurnDepth <= 0
   | leave
-| for U P.units
-  | U.handled <= 0
-  | when U.bank >< pentagram: P.pentagram <= U
-  | when U.leader: P.leader <= U
-  | !P.power + U.income
-  | U.extort
-| less $turn><1: !P.mana+$player.power
+| for U P.units: U.handled <= 0
+| P.recalc
+| less $turn><1: !P.mana+$player.income
 | when P.mana < 0: P.mana <= 0
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P

@@ -134,15 +134,11 @@ dact swap.start
 | U = $unit
 | $cycles <= max 1 U.sprite.speed
 | move_start Me
-| !$target.owner.moves + 2
 | $target.order.init{type/move at/$fromXYZ}
 
-dact swap.update
-| move_update Me
+dact swap.update | move_update Me
 
-dact swap.finish
-| move_finish Me
-| !$target.owner.moves - 1
+dact swap.finish | move_finish Me
 
 dact teleport.start | $unit.move{$xyz}
 
@@ -166,11 +162,10 @@ apply_effect U Affects Effect Target TargetXYZ =
     | NoPick <= 1
     | What <= W
   | S = U.world.alloc_unit{What}
-  | S.owner <= U.owner
+  | S.change_owner{U.owner}
   | S.attacker <= 1 // mark it available for attack
   | S.move{TargetXYZ}
   | less case Effect.find{?0><nopick} _,1: S.world.update_pick{[S]}
-  | !S.owner.power + S.income
 | case Effect.find{?0><teleport} _,Arg:
   | U.forced_order{type/teleport at/TargetXYZ}
 | case Effect.find{?0><spell_of_mastery} _,Arg:
