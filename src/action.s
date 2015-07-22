@@ -163,7 +163,7 @@ apply_effect U Affects Effect Target TargetXYZ =
   | S = U.world.alloc_unit{What owner/U.owner}
   | S.attacker <= 1 // mark it available for attack
   | S.move{TargetXYZ}
-  | less case Effect.find{?0><nopick} _,1: S.world.update_pick{[S]}
+  | less NoPick: S.world.update_pick{[S]}
 | case Effect.find{?0><teleport} _,Arg:
   | U.forced_order{type/teleport at/TargetXYZ}
 | case Effect.find{?0><spell_of_mastery} _,Arg:
