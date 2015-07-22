@@ -66,14 +66,13 @@ world.load Saved =
 | for X Saved.units
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Turn Flags @Hits]
         = X
-  | U = $alloc_unit{Type}
+  | U = $alloc_unit{Type owner/$players.Owner}
   | U.serial <= Serial
   | U.xy.init{SXYZ}
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.pick_facing{Facing}
   | less U.health or U.bank >< pentagram: Owner <= 0
-  | U.change_owner{$players.Owner}
   | U.move{XYZ}
   | U.moved <= Moved
   | U.turn <= Turn

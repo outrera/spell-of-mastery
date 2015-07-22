@@ -82,7 +82,7 @@ world.init =
 | SS = MaxSize*MaxSize
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
-| $nil <= $alloc_unit{unit_nil}
+| $nil <= $alloc_unit{unit_nil owner/$players.0}
 
 world.create W H =
 | $w <= W
@@ -118,20 +118,20 @@ world.clear =
 | $params <= t
 | $active.clear
 
-world.alloc_unit ClassName =
+world.alloc_unit ClassName owner/0 =
 | Class = $main.classes.ClassName
 | less got Class: bad "Missing class `[ClassName]`"
-| Player = $player
 | U = $free_units.pop
+| less Owner: Owner <= $player
 | when Class.bank >< pentagram
-  | Pentagram = Player.pentagram
+  | Pentagram = Owner.pentagram
   | when Pentagram
     | $free_units.push{U}
     | leave Pentagram
-  | Player.pentagram <= U
+  | Owner.pentagram <= U
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
-| U.owner <= Player
+| U.owner <= Owner
 | U.owner.got_unit{U}
 | U
 
@@ -278,7 +278,7 @@ world.remove_unit U =
 
 
 world.effect X,Y,Z What =
-| E = $alloc_unit{"effect_[What]"}
+| E = $alloc_unit{"effect_[What]" owner/$players.0}
 | E.move{X,Y,Z}
 | E.die
 

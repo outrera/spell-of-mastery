@@ -160,8 +160,7 @@ apply_effect U Affects Effect Target TargetXYZ =
   | case What nopick,W:
     | NoPick <= 1
     | What <= W
-  | S = U.world.alloc_unit{What}
-  | S.change_owner{U.owner}
+  | S = U.world.alloc_unit{What owner/U.owner}
   | S.attacker <= 1 // mark it available for attack
   | S.move{TargetXYZ}
   | less case Effect.find{?0><nopick} _,1: S.world.update_pick{[S]}

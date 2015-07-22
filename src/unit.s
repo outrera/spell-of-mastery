@@ -149,7 +149,7 @@ unit.guess_order_at_mark Mark =
 | XYZ = Mark.xyz
 | Us = $world.units_at{XYZ}
 | Path = cons path: map M Mark^uncons{path}.lead.flip
-  | Node = $world.alloc_unit{mark_node}
+  | Node = $world.alloc_unit{mark_node owner/$owner}
   | Node.move{M.xyz}
   | Node
 | case Mark.type
@@ -316,7 +316,7 @@ unit.mark_moves @As =
 | XYZ = if As.size then As.0 else $xyz
 | Moves = $list_moves{XYZ}
 | Marks = map Move Moves
-  | Mark = $world.alloc_unit{"mark_[Move.type]"}
+  | Mark = $world.alloc_unit{"mark_[Move.type]" owner/$owner}
   | Mark.move{Move.xyz}
   | Src = Move.src
   | Mark.path <= if Src >< XYZ then 0 else Move.src
