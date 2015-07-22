@@ -68,7 +68,7 @@ player.recalc =
   | when U.bank >< pentagram: $pentagram <= U
   | when U.leader: $leader <= U
   | $got_income{U.income}
-  | U.extort
+  | U.move_in{1}
 
 player.active =
 | PID = $id

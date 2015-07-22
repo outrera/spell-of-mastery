@@ -38,7 +38,6 @@ move_finish Me =
 | U = $unit
 | U.xy.init{$fromXY}
 | U.movement_render_hack <= 0
-| U.extort
 
 dact move.valid
 | U = $unit

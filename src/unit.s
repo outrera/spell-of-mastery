@@ -46,12 +46,19 @@ unit.`!handled` State = $flags <= $flags.set{1 State}
 
 unit.alive = $hits < $health
 
+
+world.income_at XYZ =
+| for U $units_at{XYZ}:
+  | when U.empty and U.income and U.owner.id >< 0:
+    | leave U.income
+| 0
+
 // extort income from the territory occupied by the unit
-unit.extort =
+unit.move_in State =
 | when not $alive or $empty: leave
-| for V $world.units_at{$xyz}:
-  | when V.empty and V.income > 0 and V.owner.id >< 0:
-    | $owner.got_income{V.income}
+| Income = $world.income_at{$xyz}
+| if State then $owner.got_income{Income} else $owner.lost_income{Income}
+
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
@@ -128,6 +135,7 @@ unit.free =
 | $world.free_unit{Me}
 
 unit.remove =
+| when $xyz.2 <> -1: $move_in{0}
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
 
@@ -166,6 +174,7 @@ unit.move XYZ =
 | $xy.init{0,0}
 | $world.place_unit{Me}
 | $environment_updated
+| $move_in{1}
 | Me
 
 unit.seen =
