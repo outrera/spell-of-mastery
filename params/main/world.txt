@@ -9,3 +9,4 @@ class_banks: unit,wizard,special,pentagram
 unexplored: 0
 base_income: 50
 node_income: 25
+defeat_threshold: -5000

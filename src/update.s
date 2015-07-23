@@ -27,7 +27,7 @@ world.end_turn =
 | P = $player
 | for U P.units: when U.health:
   | for V $units_at{U.xyz}: case V.heal Amount,Effect:
-    | U.world.effect{U.xyz Effect}
+    | $effect{U.xyz Effect}
     | U.harm{V -Amount}
 | Researching = P.researching
 | ResearchIncome = P.income-P.upkeep
@@ -60,7 +60,12 @@ world.end_turn =
 | for U P.units: U.handled <= 0
 | P.recalc
 | less $turn><1: !P.mana+$player.income
-| when P.mana < 0: P.mana <= 0
+| Leader = P.leader
+| when P.mana < $params.defeat_threshold and Leader and Units.size:
+  |  $main.show_message{'Wizard has Lost Too Much Mana'
+       "[P.name] is too exhausted and cannot continue his life."}
+  | Leader.harm{Leader 1000}
+  | $effect{Leader.xyz electrical}
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
 
