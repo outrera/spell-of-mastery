@@ -57,6 +57,7 @@ player.got_unit U =
 | $got_income{U.income}
 
 player.lost_unit U =
+| when U.bank >< pentagram: $pentagram <= 0
 | $lost_income{U.income}
 
 player.recalc =

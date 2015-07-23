@@ -125,9 +125,10 @@ world.pathfind Closest U Check =
           | when Closest: _goto end
     | X,Y,Z = Dst.xyz
     | MXY = PFMap.X.Y
-    | when NextCost < MXY.Z:
-      | MXY.Z <= NextCost
-      | PFQueue.push{[Node Dst.xyz NextCost]}
+    | when NextCost < MXY.Z and Dst.type <> swap:
+      | when Dst.type <> swap or not $block_at{Dst.xyz}.attacker:
+        | MXY.Z <= NextCost
+        | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end
 | EndTime = get_gui{}.ticks{}
 //| say EndTime-StartTime
@@ -171,6 +172,7 @@ ai.update_units Units =
   | PentXYZ <= Pentagram.xyz
 | for U Units: less U.handled:
   | U.handled <= 1
+  //| U.attacker <= 1
   | Attacker = U.attack and U.attacker
   | when Attacker:
     | when no $world.units_at{U.xyz}.find{(?income>0 and ?empty)}:
