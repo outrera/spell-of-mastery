@@ -63,7 +63,7 @@ unit.move_in State =
     | case U.item
       mana,Amount | !$owner.mana+Amount
     | $world.effect{$xyz pickup}
-    | $main.sound{ring}
+    | $main.sound{pickup}
     | U.free
 
 //FIXME: when serials get exhausted, compress serial space
