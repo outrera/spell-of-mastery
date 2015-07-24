@@ -1,0 +1,4 @@
+sprite: item_mana
+empty: 1
+item: mana,500
+

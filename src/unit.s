@@ -58,7 +58,11 @@ unit.move_in State =
 | when not $alive or $empty: leave
 | Income = $world.income_at{$xyz}
 | if State then $owner.got_income{Income} else $owner.lost_income{Income}
-
+| for U $world.units_at{$xyz}:
+  | when U.item:
+    | case U.item
+      mana,Amount | !$owner.mana+Amount
+    | U.free
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
