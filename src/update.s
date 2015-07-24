@@ -29,13 +29,8 @@ world.end_turn =
   | for V $units_at{U.xyz}: case V.heal Amount,Effect:
     | $effect{U.xyz Effect}
     | U.harm{V -Amount}
-| Researching = P.researching
 | ResearchIncome = P.income-P.upkeep
-| when Researching and ResearchIncome > 0:
-  | !P.research.Researching + ResearchIncome
-  | ActName = $main.params.acts.Researching
-  | less P.research_remain{ActName} > 0:
-    | P.researching <= 0
+| when ResearchIncome > 0: P.reasearch_boost{ResearchIncome}
 | P.params.view.init{$view.center}
 | P.params.cursor.init{$view.cursor}
 | NextPlayer = P.id+1

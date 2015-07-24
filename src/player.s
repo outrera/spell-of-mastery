@@ -71,6 +71,16 @@ player.recalc =
   | $got_income{U.income}
   | U.move_in{1}
 
+player.reasearch_boost Amount =
+| less $researching: leave Amount
+| !$research.$researching + Amount
+| ActName = $main.params.acts.$researching
+| Remain = $research_remain{ActName}
+| less Remain > 0:
+  | $researching <= 0
+  | leave Remain
+| 0
+
 player.active =
 | PID = $id
 | Turn = $world.turn
