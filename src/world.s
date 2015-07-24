@@ -281,6 +281,7 @@ world.effect X,Y,Z What =
 | E = $alloc_unit{"effect_[What]" owner/$players.0}
 | E.move{X,Y,Z}
 | E.die
+| E
 
 world.filled X,Y Z =
 | when X < 0 or Y < 0: leave 1
