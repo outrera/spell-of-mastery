@@ -62,6 +62,12 @@ unit.move_in State =
   | when U.item:
     | case U.item
       mana,Amount | !$owner.mana+Amount
+      knowledge,Type
+      | when $owner.human:
+        | Title = Type.replace{'_' ' '}
+        | $main.show_message{'Knowledge Gained'
+           "The secret knowledge of [Title] has been revealed"}
+      | $owner.reasearch_boost{Type 99999999}
     | $world.effect{$xyz pickup}
     | $main.sound{pickup}
     | U.free

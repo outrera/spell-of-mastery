@@ -30,7 +30,7 @@ world.end_turn =
     | $effect{U.xyz Effect}
     | U.harm{V -Amount}
 | ResearchIncome = P.income-P.upkeep
-| when ResearchIncome > 0: P.reasearch_boost{ResearchIncome}
+| when ResearchIncome > 0: P.reasearch_boost{0 ResearchIncome}
 | P.params.view.init{$view.center}
 | P.params.cursor.init{$view.cursor}
 | NextPlayer = P.id+1
@@ -57,7 +57,7 @@ world.end_turn =
 | less $turn><1: !P.mana+$player.income
 | Leader = P.leader
 | when P.mana < $params.defeat_threshold and Leader and Units.size:
-  |  $main.show_message{'Wizard has Lost Too Much Mana'
+  | $main.show_message{'Wizard has Lost Too Much Mana'
        "[P.name] is too exhausted and cannot continue his life."}
   | Leader.harm{Leader 1000}
   | $effect{Leader.xyz electrical}

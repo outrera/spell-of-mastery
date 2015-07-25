@@ -1,2 +1,3 @@
 entity: 1
+empty: 1
 starts: still // initial animation

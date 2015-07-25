@@ -167,7 +167,7 @@ apply_effect U Affects Effect Target TargetXYZ =
 | case Effect.find{?0><teleport} _,Arg:
   | U.forced_order{type/teleport at/TargetXYZ}
 | case Effect.find{?0><research} _,Amount:
-  | !Target.owner.mana + Target.owner.reasearch_boost{Amount}
+  | !Target.owner.mana + Target.owner.reasearch_boost{0 Amount}
 | case Effect.find{?0><spell_of_mastery} _,Arg:
   | WP = U.world.params
   | WP.winner <= U.owner.id
