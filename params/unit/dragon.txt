@@ -4,7 +4,7 @@ health: 12
 attack: 3
 defense: 1
 flyer: 1
-income: -50
+income: -40
 moves: matrix.move2
 sounds: attack,(dragon)
 //       ,impact,()

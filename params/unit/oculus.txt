@@ -1,5 +1,5 @@
 sprite: unit_oculus
 tier: 1
 flyer: 1
-income: -5
+income: -6
 moves: matrix.move2

@@ -3,4 +3,4 @@ tier: 2
 health: 3
 attack: 2
 defense: 0
-income: -14
+income: -10

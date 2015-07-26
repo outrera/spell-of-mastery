@@ -4,7 +4,7 @@ health: 8
 attack: 3
 defense: 0
 flyer: 1
-income: -25
+income: -40
 ranged: 1
 moves: matrix.move2
 

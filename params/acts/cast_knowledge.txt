@@ -2,5 +2,5 @@ affects: self
 before: effect,teleport,sound,summon
 after: research,500
 icon: spell_knowledge
-//research: 5000
+research: 500
 cost: 500

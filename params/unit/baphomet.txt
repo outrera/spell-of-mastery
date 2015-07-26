@@ -2,5 +2,5 @@ sprite: unit_baphomet
 tier: 4
 health: 2
 attack: 11
-defense: 0
-income: -50
+defense: 2
+income: -40

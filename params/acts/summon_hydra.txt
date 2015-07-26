@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon,unit_hydra
 icon: unit_hydra
-research: 10000
-cost: 5000
+research: 20000
+cost: 10000

@@ -3,7 +3,7 @@ tier: 2
 health: 5
 attack: 1
 defense: 0
-income: -14
+income: -10
 /*sounds: attack,(attack2)
        //,impact,()
        ,hit,(rat_death)
