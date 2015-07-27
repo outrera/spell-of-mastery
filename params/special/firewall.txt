@@ -1,4 +1,4 @@
 sprite: effect_firewall
 sight: 1
 ttl: 6
-heal: -1,explosion4
+heal: -1,fire_ring
