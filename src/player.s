@@ -29,6 +29,10 @@ type player{id world}
 | $ai <= ai Me
 | $clear
 
+player.notify Text =
+| less $human: leave
+| $world.notify{Text}
+
 player.main = $world.main
 
 player.researching = $params.researching

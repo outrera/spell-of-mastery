@@ -206,6 +206,12 @@ view.draw_indicators =
 | Font.draw{$fb IP+[148 16] "[P.name]"}
 | Debug = $world.params.debug
 | when got Debug: Font.draw{$fb IP+[148 32] "[Debug]"}
+| C = 32
+| Notes = $world.notes
+| Clock = clock
+| for [Expires Chars] $world.notes: when Clock < Expires:
+  | Font.draw{$fb IP+[-16 C] "* [Chars.text]"}
+  | !C+16
 | Font = font small
 | Font.draw{$fb IP+[246 1] "[X],[Y],[Z]"}
 | Font.draw{$fb IP+[246 9] "[$world.at{X,Y,Z-1}.type]"}

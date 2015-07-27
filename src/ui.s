@@ -117,7 +117,9 @@ ui.init =
   | ActIcon <= Icon
   | Act = $params.acts.(Icon.data)
   | when got Icon.number:
-    | PickedUnit.owner.researching <= Act.name
+    | O = PickedUnit.owner
+    | O.notify{"Began researching [Act.title]"}
+    | O.researching <= Act.name
   | when no Icon.number:
     | if Act.range >< 0
       then when PickedUnit.owner.id >< $world.player.id
@@ -215,7 +217,8 @@ ui.init =
   |  ScreenW-54 4| EditorIcons
   |  ScreenW-111 0| GearsIcon
   |  ScreenW-73 110| HourglassIcon
-  | 240 36| ResearchIcon
+  | ScreenW-220 0 | ResearchIcon
+  //| 240 36| ResearchIcon
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg

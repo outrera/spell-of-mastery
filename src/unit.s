@@ -61,7 +61,9 @@ unit.move_in State =
 | for U $world.units_at{$xyz}:
   | when U.item:
     | case U.item
-      mana,Amount | !$owner.mana+Amount
+      mana,Amount
+      | $owner.notify{"Gained [Amount] mana."}
+      | !$owner.mana+Amount
       knowledge,Type
       | when $owner.human:
         | Title = Type.replace{'_' ' '}

@@ -161,7 +161,17 @@ unit.update =
            | when Speed: $moved <= $world.turn-Speed-1
          | less $owner.human: when $seen:
            | $world.view.center_at{$xyz cursor/1}
-    else $next_action.init{type/idle at/$xyz}
+    else
+    | if not $next_action.type
+        then
+      else if not $moved < $world.turn
+        then $owner.notify{'Unit is not ready to move.'}
+      else if not $owner.mana>>$next_action.cost
+        then $owner.notify{'Not enough mana.'}
+      else if not $next_action.valid
+        then $owner.notify{'Cant perform action.'}
+      else
+    | $next_action.init{type/idle at/$xyz}
   | swap $action $next_action
   | $next_action.type <= 0
   | $next_action.priority <= 0

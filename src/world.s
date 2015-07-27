@@ -3,6 +3,7 @@ use stack heap zmap util unit player
 MaxSize = No
 MaxUnits = No
 MaxActiveUnits = 4096
+NoteLife = 1.0
 
 type proxy.$unit_{id}
   unit_ 
@@ -56,6 +57,7 @@ type world{main}
    events
    view
    act
+   notes
 | $init
 
 world.init =
@@ -63,6 +65,10 @@ world.init =
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
 | MaxUnits <= WParam.max_units
+| NoteSize = WParam.note_size
+| NoteLife <= WParam.note_life
+| $notes <= dup WParam.max_notes
+  | [0.0 (dup NoteSize ``)]
 | $players <= map Id WParam.max_players: player Id Me
 | $player <= $players.0
 | $xunit <= WParam.x_unit
@@ -117,6 +123,18 @@ world.clear =
 | $waiting <= 0
 | $params <= t
 | $active.clear
+
+world.notify Text =
+| Clock = clock
+| Used = $notes.keep{?0 > Clock}
+| Free = $notes.skip{?0 > Clock}
+| less Free.size: push Used^pop Free
+| N = Free.0
+| N.0 <= Clock + NoteLife
+| Chars = N.1
+| Chars.clear{``}
+| for I Text.size: Chars.I <= Text.I
+| $notes.init{[@Used @Free]}
 
 world.alloc_unit ClassName owner/0 =
 | Class = $main.classes.ClassName

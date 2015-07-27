@@ -147,7 +147,7 @@ type research_icon.$base{ui OnClick} base text icon world acts
 | $acts <= $ui.main.params.acts
 | $icon <= Icon
 | $text <= txt medium "Researching: "
-| $base <= hidden: layH s/4 (layV spacer{1 8},$text),Icon
+| $base <= hidden: layV s/4 $text,Icon
 
 research_icon.render =
 | Player = $world.player

@@ -3,5 +3,5 @@ before: effect,teleport,sound,summon
 after: impact,teleport,teleport,self
 icon: spell_teleport
 range: 2
-//research: 5000
-//cost: 800
+research: 5000
+cost: 500
