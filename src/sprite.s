@@ -3,7 +3,7 @@ use gfx util param sprite_util
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
             class/0 margins/0 pick_height/0 speed/24
-            font/Font icon/0 form/[`|` [4]]}
+            font/Font icon/0 shadow/0 form/[`|` [4]]}
   bank/Bank
   name/Name
   height/Height
@@ -17,6 +17,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   speed/Speed // how many cycles it takes to move between cells
   font/Font
   icon/Icon
+  shadow/Shadow
   form
 | XYs = []
 | for Y,Hs Form.tail.i: for X,H Hs.i: when H: push [-X Y 0] XYs
@@ -73,6 +74,7 @@ init_sprites Me =
   | $sprites.SpriteName <= S
 | Base = generate_base_tile $params.editor.opaque_base 64 32 8
 | Sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
+| for Name,Sprite $sprites: when!it Sprite.shadow: Sprite.shadow <= $img{it}
 
 join_banks Bs =
 | @table: @join: map BankName,Bank Bs:

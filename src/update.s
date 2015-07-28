@@ -153,9 +153,10 @@ unit.update =
   | less $anim >< idle: $animate{idle}
   | MoveAction = $next_action.type >< move
   | Speed = if MoveAction then $speed else $next_action.speed
+  | Cost = $next_action.cost
   | if     $next_action.type and $next_action.valid
        and (not $next_action.speed
-            or ($moved < $world.turn and $owner.mana>>$next_action.cost))
+            or ($moved < $world.turn and (not Cost or $owner.mana>>Cost)))
     then | less Path:
            | !$owner.mana-$next_action.cost
            | when Speed: $moved <= $world.turn-Speed-1
@@ -166,7 +167,7 @@ unit.update =
         then
       else if not $moved < $world.turn
         then $owner.notify{'Unit is not ready to move.'}
-      else if not $owner.mana>>$next_action.cost
+      else if Cost and not $owner.mana>>Cost
         then $owner.notify{'Not enough mana.'}
       else if not $next_action.valid
         then $owner.notify{'Cant perform action.'}

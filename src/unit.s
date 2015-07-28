@@ -375,6 +375,9 @@ unit.render Heap X Y =
   | !UY+1
 | Key = ((max UX UY)</54) + ((UX*128+UY)</38) + ((UZ*2-1)</30)
        + ((UX+$draw_order)</22) + $serial
+| Shadow = $sprite.shadow
+| when Shadow
+  | Heap.push{Key-1 [Shadow X+$xy.0+8 Y+$xy.1-38 Flags]}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
