@@ -2,5 +2,6 @@ affects: empty
 before: misc.summon
 after: ()
 icon: unit_baphomet
+speed: -5
 research: 0
 cost: 0
