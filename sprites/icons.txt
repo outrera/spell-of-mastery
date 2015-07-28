@@ -1,4 +1,2 @@
 height: 0
 shadow: system_shadow
-class: empty,1
-//xy: 0,-6
