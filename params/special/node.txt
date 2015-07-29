@@ -1,2 +1,3 @@
 sprite: special_node
 income: 25
+ai: hold

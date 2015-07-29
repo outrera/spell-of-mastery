@@ -1,0 +1,10 @@
+sprite: special_hexagram
+tier: 2
+health: 1
+attack: 1
+defense: 0
+ranged: 1
+income: 0
+empty: 1
+moves: matrix.turret
+ai: turret

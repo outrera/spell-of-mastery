@@ -58,21 +58,8 @@ unit.move_in State =
 | when not $alive or $empty: leave
 | Income = $world.income_at{$xyz}
 | if State then $owner.got_income{Income} else $owner.lost_income{Income}
-| for U $world.units_at{$xyz}:
-  | when U.item:
-    | case U.item
-      mana,Amount
-      | $owner.notify{"Gained [Amount] mana."}
-      | !$owner.mana+Amount
-      knowledge,Type
-      | when $owner.human:
-        | Title = Type.replace{'_' ' '}
-        | $main.show_message{'Knowledge Gained'
-           "The secret knowledge of [Title] has been revealed"}
-      | $owner.reasearch_boost{Type 99999999}
-    | $world.effect{$xyz pickup}
-    | $main.sound{pickup}
-    | U.free
+| for U $world.units_at{$xyz}: when U.item:
+  | U.effect{[effect pickup sound pickup remove self @U.item] Me Me.xyz}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =

@@ -141,36 +141,44 @@ dact swap.finish | move_finish Me
 
 dact teleport.start | $unit.move{$xyz}
 
-apply_effect U Affects Effect Target TargetXYZ =
+unit.effect Effect Target TargetXYZ =
 | Effect = Effect.group{2}
 | case Effect.find{?0><when} _,When:
-  | when When><confirmed: less U.main.dialog_result><yes: leave
+  | when When><confirmed: less $main.dialog_result><yes: leave
 | case Effect.find{?0><confirm} _,[Title Msg]:
-  | U.main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}
-| case Effect.find{?0><remove} _,Arg:
-  | free_unit Target
-| case Effect.find{?0><animate} _,Anim: U.animate{Anim}
-| case Effect.find{?0><impact} _,Impact: U.world.effect{TargetXYZ Impact}
-| case Effect.find{?0><effect} _,Effect: U.world.effect{U.xyz Effect}
-| case Effect.find{?0><sound} _,Sound: U.main.sound{Sound}
-| when Affects >< unit: case Effect.find{?0><harm} _,Damage:
-  | Target.harm{U Damage}
+  | $main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}
+| case Effect.find{?0><animate} _,Anim: $animate{Anim}
+| case Effect.find{?0><impact} _,Impact: $world.effect{TargetXYZ Impact}
+| case Effect.find{?0><effect} _,Effect: $world.effect{$xyz Effect}
+| case Effect.find{?0><sound} _,Sound: $main.sound{Sound}
+| case Effect.find{?0><harm} _,Damage: Target.harm{Me Damage}
+| case Effect.find{?0><notify} _,Text: Target.owner.notify{Text}
+| case Effect.find{?0><mana} _,Amount: !Target.owner.mana+Amount
+| case Effect.find{?0><gain} _,Type:
+  | when Target.owner.human:
+    | Title = Type.replace{'_' ' '}
+    | $main.show_message{'Knowledge Gained'
+       "The secret knowledge of [Title] has been revealed"}
+  | Target.owner.reasearch_boost{Type 99999999}
+| case Effect.find{?0><remove} _,Whom: case Whom
+  target | free_unit Target
+  self | free_unit Me
 | case Effect.find{?0><summon} _,What:
   | NoPick = 0
   | case What nopick,W:
     | NoPick <= 1
     | What <= W
-  | S = U.world.alloc_unit{What owner/U.owner}
+  | S = $world.alloc_unit{What owner/$owner}
   | S.attacker <= 1 // mark it available for attack
   | S.move{TargetXYZ}
   | less NoPick: S.world.update_pick{[S]}
 | case Effect.find{?0><teleport} _,Arg:
-  | U.forced_order{type/teleport at/TargetXYZ}
+  | $forced_order{type/teleport at/TargetXYZ}
 | case Effect.find{?0><research} _,Amount:
   | !Target.owner.mana + Target.owner.reasearch_boost{0 Amount}
 | case Effect.find{?0><spell_of_mastery} _,Arg:
-  | WP = U.world.params
-  | WP.winner <= U.owner.id
+  | WP = $world.params
+  | WP.winner <= $owner.id
   | WP.victory_type <= 'Victory by casting the Spell of Mastery'
 
 dact custom.valid
@@ -183,10 +191,11 @@ dact custom.start
 | when $speed <> -1: $cycles <= $speed
 | U.animate{attack}
 | U.face{$xyz}
-| when $before: apply_effect $unit $affects $before $target $xyz
+| when $before: U.effect{$before $target $xyz}
 
 dact custom.finish
-| when $after: apply_effect $unit $affects $after $target $xyz
+| U = $unit
+| when $after: U.effect{$after $target $xyz}
 
 default_init Me =
 default_valid Me = 1

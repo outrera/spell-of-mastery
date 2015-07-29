@@ -26,9 +26,7 @@ EndTurnDepth = 0
 world.end_turn =
 | P = $player
 | for U P.units: when U.health:
-  | for V $units_at{U.xyz}: case V.heal Amount,Effect:
-    | $effect{U.xyz Effect}
-    | U.harm{V -Amount}
+  | for V $units_at{U.xyz}: when V.trigger: U.effect{V.trigger U U.xyz}
 | ResearchIncome = P.income-P.upkeep
 | when ResearchIncome > 0: P.reasearch_boost{0 ResearchIncome}
 | P.params.view.init{$view.center}

@@ -143,10 +143,14 @@ ai.attack_with U =
 | World = $world
 | OId = U.owner.id
 | Check = Move =>
-  | if Move.type><attack then 1
-    else | Node = World.units_at{Move.xyz}.find{?income}
-         | if got Node and no World.block_at{Move.xyz} then 1
-           else 0
+  | MoveIn = 0
+  | for V World.units_at{Move.xyz}
+    | AI = V.ai
+    | if not AI then
+      else if AI><unit and V.owner.id <> OId then MoveIn <= 1
+      else if AI><hold then MoveIn <= 1
+      else
+  | MoveIn
 | TargetNode = U.pathfind{1 Check}
 | less TargetNode: leave 0
 | XYZ = TargetNode^node_to_path.0
@@ -175,7 +179,7 @@ ai.update_units Units =
   //| U.attacker <= 1
   | Attacker = U.attack and U.attacker
   | when Attacker:
-    | when no $world.units_at{U.xyz}.find{(?income>0 and ?empty)}:
+    | when no $world.units_at{U.xyz}.find{?ai><hold}:
       | when $attack_with{U}: leave 1
   | less Attacker:
     | when U.id >< LeaderID: when $update_leader: leave 1
