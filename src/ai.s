@@ -149,6 +149,7 @@ ai.attack_with U =
     | if not AI then
       else if AI><unit and V.owner.id <> OId then MoveIn <= 1
       else if AI><hold then MoveIn <= 1
+      else if AI><turret then MoveIn <= 1
       else
   | MoveIn
 | TargetNode = U.pathfind{1 Check}
@@ -216,20 +217,6 @@ ai.update =
   | if U.ranged then HarmMap.X.Y <= #1
     else !HarmMap.X.Y + #1
 | Ts <= Ts{?1}
-| for U Units
-  | X,Y,Z = U.xyz
-  | Harm = HarmMap.X.Y
-  | when Harm^^#FF: less (Harm^^#FF00) and not U.leader:
-    | Moves = U.list_moves{U.xyz}.keep{?type><move}
-    | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
-    | AttackMoves = Moves.keep{M=>U.list_moves{M.xyz}.keep{?type><attack}.size}
-    | when AttackMoves.size:
-      | $marked_order{U AttackMoves.rand}
-      | leave
-    | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
-    | when SafeMoves.size
-      | $marked_order{U SafeMoves.rand} //avoid harm
-      | leave
 | for U Units: when U.attack: //see if we can threat some enemy unit
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
@@ -249,6 +236,20 @@ ai.update =
         | leave
 | Quit = $update_units{Units}
 | when Quit: leave
+| for U Units
+  | X,Y,Z = U.xyz
+  | Harm = HarmMap.X.Y
+  | when Harm^^#FF: less (Harm^^#FF00) and not U.leader:
+    | Moves = U.list_moves{U.xyz}.keep{?type><move}
+    | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
+    | AttackMoves = Moves.keep{M=>U.list_moves{M.xyz}.keep{?type><attack}.size}
+    | when AttackMoves.size:
+      | $marked_order{U AttackMoves.rand}
+      | leave
+    | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
+    | when SafeMoves.size
+      | $marked_order{U SafeMoves.rand} //avoid harm
+      | leave
 | $end_turn
 
 

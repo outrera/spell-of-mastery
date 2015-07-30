@@ -29,6 +29,8 @@ type player{id world}
 | $ai <= ai Me
 | $clear
 
+player.is_enemy P = $id <> P.id
+
 player.notify Text =
 | less $human: leave
 | $world.notify{Text}

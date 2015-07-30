@@ -144,6 +144,8 @@ dact teleport.start | $unit.move{$xyz}
 unit.effect Effect Target TargetXYZ =
 | Effect = Effect.group{2}
 | case Effect.find{?0><when} _,When:
+  | when When><ally: when $owner.is_enemy{Target.owner}: leave
+  | when When><enemy: less $owner.is_enemy{Target.owner}: leave
   | when When><confirmed: less $main.dialog_result><yes: leave
 | case Effect.find{?0><confirm} _,[Title Msg]:
   | $main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}

@@ -7,4 +7,5 @@ ranged: 1
 income: 0
 empty: 1
 moves: matrix.turret
+trigger: when,enemy,remove,self,effect,pickup
 ai: turret
