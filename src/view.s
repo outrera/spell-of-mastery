@@ -377,8 +377,9 @@ update_lmb Me Player =
   | $world.act <= 0
   | leave
 | Act = $world.act.deep_copy
-| Ms = action_list_moves{$world Picked Act}.0
-| when no Ms.find{$cursor}: leave
+| less Act.range >< any
+  | Ms = action_list_moves{$world Picked Act}.0
+  | when no Ms.find{$cursor}: leave
 | Act.target <= $world.block_at{$cursor}^~{No 0}
 | Act.at <= $cursor
 | Picked.order.init{@Act.list.join}
@@ -415,7 +416,7 @@ world.update_picked =
 | less Picked and Picked.moves and Picked.moved<$turn:
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.type >< idle:
-  | Marks = if $act
+  | Marks = if $act and $act.range <> any
     then | Ms,Path = action_list_moves{Me Picked $act}
          | As = map XYZ Ms
            | Mark = $alloc_unit{"mark_magic_hit"}

@@ -176,6 +176,11 @@ unit.effect Effect Target TargetXYZ =
   | less NoPick: S.world.update_pick{[S]}
 | case Effect.find{?0><teleport} _,Arg:
   | $forced_order{type/teleport at/TargetXYZ}
+| case Effect.find{?0><swap} _,Arg:
+  | XYZ = $xyz.copy
+  | Target.remove
+  | $move{TargetXYZ}
+  | Target.move{XYZ}
 | case Effect.find{?0><research} _,Amount:
   | !Target.owner.mana + Target.owner.reasearch_boost{0 Amount}
 | case Effect.find{?0><spell_of_mastery} _,Arg:
@@ -185,7 +190,9 @@ unit.effect Effect Target TargetXYZ =
 
 dact custom.valid
 | when $affects >< unit: leave $target
-| when $affects >< empty: leave $unit.world.units_at{$xyz}.all{?empty}
+| U = $unit
+| when $affects >< ally: leave: $target and not U.owner.is_enemy{$target.owner}
+| when $affects >< empty: leave U.world.units_at{$xyz}.all{?empty}
 | 1
 
 dact custom.start

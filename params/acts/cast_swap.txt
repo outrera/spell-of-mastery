@@ -1,0 +1,7 @@
+affects: ally
+before: effect,teleport,sound,summon,impact,teleport,swap,self
+after: ()
+icon: spell_swap
+range: any
+research: 0
+cost: 0
