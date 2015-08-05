@@ -162,6 +162,11 @@ unit.effect Effect Target TargetXYZ =
     | $main.show_message{'Knowledge Gained'
        "The secret knowledge of [Title] has been revealed"}
   | Target.owner.reasearch_boost{Type 99999999}
+| case Effect.find{?0><swap} _,Arg:
+  | XYZ = $xyz.copy
+  | Target.remove
+  | $move{TargetXYZ}
+  | Target.move{XYZ}
 | case Effect.find{?0><remove} _,Whom: case Whom
   target | free_unit Target
   self | free_unit Me
@@ -176,11 +181,6 @@ unit.effect Effect Target TargetXYZ =
   | less NoPick: S.world.update_pick{[S]}
 | case Effect.find{?0><teleport} _,Arg:
   | $forced_order{type/teleport at/TargetXYZ}
-| case Effect.find{?0><swap} _,Arg:
-  | XYZ = $xyz.copy
-  | Target.remove
-  | $move{TargetXYZ}
-  | Target.move{XYZ}
 | case Effect.find{?0><research} _,Amount:
   | !Target.owner.mana + Target.owner.reasearch_boost{0 Amount}
 | case Effect.find{?0><spell_of_mastery} _,Arg:

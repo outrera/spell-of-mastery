@@ -2,4 +2,5 @@ sprite: unit_oculus
 tier: 1
 flyer: 1
 income: -6
+acts: (cast_swap)
 moves: matrix.move2
