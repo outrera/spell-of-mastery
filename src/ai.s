@@ -146,11 +146,14 @@ ai.attack_with U =
   | MoveIn = 0
   | for V World.units_at{Move.xyz}
     | AI = V.ai
-    | if not AI then
-      else if AI><unit and V.owner.id <> OId then MoveIn <= 1
-      else if AI><hold then MoveIn <= 1
-      else if AI><turret then MoveIn <= 1
-      else
+    | when AI:
+      | Bloacked = World.block_at{Move.xyz}
+      | Enemy = V.owner.id <> OId
+      | if AI><unit and Enemy then MoveIn <= 1
+        else if AI><hold and no Bloacked then MoveIn <= 1
+        else if AI><turret and no Bloacked then MoveIn <= 1
+        else if AI><pentagram and Enemy then MoveIn <= 1
+        else
   | MoveIn
 | TargetNode = U.pathfind{1 Check}
 | less TargetNode: leave 0
