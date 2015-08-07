@@ -1,0 +1,15 @@
+sprite: unit_lich
+tier: 4
+health: 8
+attack: 3
+defense: 0
+flyer: 1
+income: -40
+ranged: 1
+moves: matrix.move2
+
+sounds: attack,(observer_attack)
+//       ,impact,()
+//       ,hit,()
+//       ,die,()
+       ,move,(step)
