@@ -1,0 +1,6 @@
+affects: unit
+before: impact,pentagram_appearance,sound,pentagram
+after: target,alive,harm,1,impact,electrical
+icon: spell_armageddon
+research: 0
+cost: 0

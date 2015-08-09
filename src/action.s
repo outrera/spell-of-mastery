@@ -142,6 +142,9 @@ dact swap.finish | move_finish Me
 dact teleport.start | $unit.move{$xyz}
 
 unit.effect Effect Target TargetXYZ =
+| case Effect [target alive @Effect]
+  | for U $world.active: when U.alive: $effect{Effect U U.xyz}
+  | leave
 | Effect = Effect.group{2}
 | case Effect.find{?0><when} _,When:
   | when When><ally: when $owner.is_enemy{Target.owner}: leave
