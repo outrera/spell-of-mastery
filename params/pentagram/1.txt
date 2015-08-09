@@ -1,1 +1,0 @@
-acts: (summon_beetle summon_ratman summon_goblin)

@@ -23,6 +23,7 @@ world.save =
               | $tilemap.getPilar{X+1 Y+1}.drop{1}
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
+    actions_enabled | map Name,Act $main.params.acts: Name,Act.enabled
 
 main.save Path = Path.set{[version(0.1) @$world.save].as_text}
 
@@ -88,6 +89,9 @@ world.load Saved =
   | for PID,Sight Explored
     | PS = $players.PID.sight
     | for I PS.size PS.I.init{Sight.I^rle_decode}
+| AEs = Saved.actions_enabled
+| Acts = $main.params.acts
+| when got AEs: for Name,Enabled AEs: Acts.Name <= Enabled
 
 main.load Path =
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table

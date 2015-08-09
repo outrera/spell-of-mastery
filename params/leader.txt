@@ -17,6 +17,7 @@ flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
 invincible: 0
 leader: 1
+acts: (pentagram spell_of_mastery cast_lightning cast_teleport cast_firewall cast_heal cast_knowledge cast_armageddon)
 income: 50
 ai: unit
 sounds: attack,(attack2)

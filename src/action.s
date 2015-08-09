@@ -141,6 +141,15 @@ dact swap.finish | move_finish Me
 
 dact teleport.start | $unit.move{$xyz}
 
+set_act_enabled Me State Players ActNames =
+| Acts = $params.acts
+| for ActName ActNames:
+  | Act = Acts.ActName
+  | less got Act: bad "missing act [ActName]"
+  | Es = Act.enabled
+  | for Id Players: Es <= Es.set{Id State}
+  | Act.enabled <= Es
+
 unit.effect Effect Target TargetXYZ =
 | case Effect [target alive @Effect]
   | for U $world.active: when U.alive: $effect{Effect U U.xyz}
@@ -150,6 +159,14 @@ unit.effect Effect Target TargetXYZ =
   | when When><ally: when $owner.is_enemy{Target.owner}: leave
   | when When><enemy: less $owner.is_enemy{Target.owner}: leave
   | when When><confirmed: less $main.dialog_result><yes: leave
+| case Effect.find{?0><enable} _,[State Players ActNames]:
+  | when Players >< owner: Players <= [$owner.id] 
+  | when Players >< target_owner: Players <= [Target.owner.id]
+  | when Players >< all: Players <= 16{(?)}
+  | when ActNames >< all: ActNames <= $main.params.acts{}{?0}
+  | when Players.is_int: Players <= [Players]
+  | when ActNames.is_text: ActNames <= [ActNames]
+  | set_act_enabled $main State Players ActNames
 | case Effect.find{?0><confirm} _,[Title Msg]:
   | $main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}
 | case Effect.find{?0><animate} _,Anim: $animate{Anim}

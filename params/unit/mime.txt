@@ -1,6 +1,0 @@
-sprite: unit_mime
-tier: 10
-health: 3
-leader: 1
-income: 50
-acts: (pentagram)

@@ -1,4 +1,0 @@
-title: `Witch`
-icon: `unit_witch`
-sprite: unit_witch
-acts: (pentagram1_witch)

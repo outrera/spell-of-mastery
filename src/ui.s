@@ -153,8 +153,9 @@ ui.init =
   | NonNil = Unit.type <> unit_nil
   | GameUnitUI.show <= NonNil
   | for Icon ActIcons: Icon.show <= 0
-  | when 1: //Unit.moved < $world.turn:
-    for I,Act Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
+  //| when nit.moved < $world.turn:
+  | As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
+  | for I,Act As: when Act.enabled.get{Unit.owner.id}:
     | Active = 1
     | when Act.act >< summon and not Unit.owner.pentagram:
       | Active <= 0

@@ -49,6 +49,7 @@ params_handle_prototypes Me =
 params_handle_acts Me =
 | for ActName,Act $params.acts:
   | Act.name <= ActName
+  | Act.enabled <= #FFFFFF
   | Act.before_table <= Act.before.group{2}.table
   | Act.after_table <= Act.after.group{2}.table
   | when no Act.title: Act.title <= ActName.replace{_ ' '}

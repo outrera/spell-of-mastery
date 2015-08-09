@@ -1,5 +1,0 @@
-sprite: unit_witch
-tier: 10
-health: 3
-//speed: -2
-income: 50
