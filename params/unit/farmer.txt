@@ -1,4 +1,4 @@
-sprite: unit_peasant
+sprite: unit_farmer
 tier: 1
 health: 2
 attack: 1
