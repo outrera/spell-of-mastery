@@ -169,14 +169,16 @@ unit.effect Effect Target TargetXYZ =
   | set_act_enabled $main State Players ActNames
 | case Effect.find{?0><explore} _,[Player State]:
   | $world.explore{State}
-| case Effect.find{?0><confirm} _,[Title Msg]:
-  | $main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}
+| case Effect.find{?0><confirm} _,[Title Text]:
+  | $main.show_message{Title buttons/[yes,'Yes' no,'No'] Text}
 | case Effect.find{?0><animate} _,Anim: $animate{Anim}
 | case Effect.find{?0><impact} _,Impact: $world.effect{TargetXYZ Impact}
 | case Effect.find{?0><effect} _,Effect: $world.effect{$xyz Effect}
 | case Effect.find{?0><sound} _,Sound: $main.sound{Sound}
 | case Effect.find{?0><harm} _,Damage: Target.harm{Me Damage}
 | case Effect.find{?0><notify} _,Text: Target.owner.notify{Text}
+| case Effect.find{?0><msg} _,[Title @Body]:
+  | $main.show_message{Title Body.text{' '}}
 | case Effect.find{?0><mana} _,Amount: !Target.owner.mana+Amount
 | case Effect.find{?0><gain} _,Type:
   | when Target.owner.human:
@@ -205,11 +207,13 @@ unit.effect Effect Target TargetXYZ =
   | $forced_order{type/teleport at/TargetXYZ}
 | case Effect.find{?0><research} _,Amount:
   | !Target.owner.mana + Target.owner.reasearch_boost{0 Amount}
-| case Effect.find{?0><spell_of_mastery} _,Arg:
+| case Effect.find{?0><victory} _,[Player Reason]:
   | WP = $world.params
-  | WP.winner <= $owner.id
-  | WP.victory_type <= 'Victory by casting the Spell of Mastery'
-
+  | when Player >< owner: Player <= $owner.id
+  | WP.winner <= Player
+  | WP.victory_type <= Reason
+| case Effect.find{?0><guards_to_attackers} _,PlayerId:
+  | for U $world.players.PlayerId.units: U.attacker <= 1
 dact custom.valid
 | when $affects >< unit: leave $target
 | U = $unit

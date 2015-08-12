@@ -93,19 +93,14 @@ world.process_events =
 world.update =
 | when EventActions.end: $process_events
 | when not $picked or $picked.idle: less $waiting: till EventActions.end
-  | case EventActions^pop
-    [effect @Effect]
-      | $nil.effect{Effect $nil [0 0 0]}
-    [enable State Players Actions]
-      | $nil.effect{[enable State,Players,Actions] $nil [0 0 0]}
-    [msg Title @Body]
-      | $main.show_message{Title Body.text{' '}}
-      | leave
-    [victory Player Reason]
-      | $params.winner <= Player
-      | $params.victory_type <= Reason
-    [guards_to_attackers PlayerId]
-      | for U $players.PlayerId.units: U.attacker <= 1
+  | Effect = EventActions^pop
+  | case Effect
+    [`{}` EffectName Args @Rest]
+      | if Rest.size then Args <= [Args @Rest]
+        else Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
+      | $nil.effect{[EffectName Args] $nil [0 0 0]}
+      | when EffectName >< msg: leave //hack to show message before victory
+    Else | bad "bad event effect ([Effect])"
 | times I 2
   | NextActive = []
   | for U $active.list: U.update
