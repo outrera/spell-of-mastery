@@ -167,6 +167,8 @@ unit.effect Effect Target TargetXYZ =
   | when Players.is_int: Players <= [Players]
   | when ActNames.is_text: ActNames <= [ActNames]
   | set_act_enabled $main State Players ActNames
+| case Effect.find{?0><explore} _,[Player State]:
+  | $world.explore{State}
 | case Effect.find{?0><confirm} _,[Title Msg]:
   | $main.show_message{Title buttons/[yes,'Yes' no,'No'] Msg}
 | case Effect.find{?0><animate} _,Anim: $animate{Anim}

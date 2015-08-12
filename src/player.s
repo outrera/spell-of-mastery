@@ -40,6 +40,13 @@ player.main = $world.main
 player.researching = $params.researching
 player.`!researching` R = $params.researching <= R
 
+player.explore State =
+| when State
+  | for S $sight: S.clear{1}
+  | leave
+| for S $sight: S.clear{0}
+| for U $units: U.explore
+
 player.clear =
 | for Xs $sight: Xs.clear{1}
 | $ai.clear
@@ -50,6 +57,7 @@ player.clear =
 | $income <= 0
 | $upkeep <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
+
 
 player.got_income A =
 | !$income + A

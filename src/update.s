@@ -3,24 +3,20 @@
 main.update =
 | $world.update
 
+world.explore State = for P $players: P.explore{State}
+
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
 | $player <= $players.($players.size-1)
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
-| when $params.unexplored
-  | for P $players
-    | for S P.sight: S.clear{0}
-    | for U P.units: U.explore
+| less $params.explored: $explore{0}
 | for P $players:
   | P.mana <= 2000
   | for U P.units: U.moved <= 0
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it
-
-world.explore =
-| for P $players: for S P.sight: S.clear{1}
 
 EndTurnDepth = 0
 
@@ -98,6 +94,8 @@ world.update =
 | when EventActions.end: $process_events
 | when not $picked or $picked.idle: less $waiting: till EventActions.end
   | case EventActions^pop
+    [effect @Effect]
+      | $nil.effect{Effect $nil [0 0 0]}
     [enable State Players Actions]
       | $nil.effect{[enable State,Players,Actions] $nil [0 0 0]}
     [msg Title @Body]
