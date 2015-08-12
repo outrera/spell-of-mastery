@@ -94,6 +94,8 @@ world.load Saved =
 | when got AEs: for Name,Enabled AEs: Acts.Name <= Enabled
 
 main.load Path =
+| File = Path.get
+| less got File: bad "cant load [Path]"
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table
 | Saved.filename <= Path.url.1
 | $world.load{Saved}

@@ -179,6 +179,17 @@ unit.effect Effect Target TargetXYZ =
 | case Effect.find{?0><msg} _,[Title @Body]:
   | $main.show_message{Title Body.text{' '}}
 | case Effect.find{?0><mana} _,Amount: !Target.owner.mana+Amount
+| case Effect.find{?0><set} _,Pairs
+  | WP = $world.params
+  | for Name,Value Pairs.group{2}
+    | when Value >< `?owner`: Value <= $owner.id
+    | when Value >< `?self`: Value <= $id
+    | when Value >< `?self_type`: Value <= $type
+    | if Value.is_list
+      then | when no WP.Name:
+             | WP.Name <= dup Value.size
+           | WP.Name.init{Value}
+      else WP.Name <= Value
 | case Effect.find{?0><gain} _,Type:
   | when Target.owner.human:
     | Title = Type.replace{'_' ' '}
