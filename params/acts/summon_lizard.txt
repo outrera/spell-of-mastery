@@ -1,5 +1,5 @@
 proto: summon__proto
-after: summon,unit_lizard
+after: summon{unit_lizard}
 icon: unit_lizard
 research: 1400
 cost: 700

@@ -1,6 +1,6 @@
 affects: unit
-before: impact,pentagram_appearance,sound,pentagram//,enable,(0 owner cast_armageddon)
-after: target,alive,harm,1,impact,fire_ring
+before: impact{pentagram_appearance},sound{pentagram}//,enable{0,owner,cast_armageddon}
+after: target{alive},harm{1},impact{fire_ring}
 icon: spell_armageddon
 research: 0
 cost: 0

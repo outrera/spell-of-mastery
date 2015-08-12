@@ -1,10 +1,24 @@
+normalize_curly E =
+| case E
+  [`{}` Name Args @Rest]
+    | if Rest.size then Args <= [Args @Rest]
+      else case Args [`,` @_]: Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
+    | [Name Args]
+  Else | E
+
 load_params2 File =
 | less File.exists: bad "cant open [File]"
 | Xs = File.get.utf8.parse{src File}^|$_ [[]] => []
 | map Key,Value Xs{?1.0,?2.0}
-  | case Value [`,` A B]
-    | Value <= Value^| @r [`,` A B] => [@A^r B]
-                     | X => [X]
+  | case Value
+    [`,` A B]
+      | Value <= Value^| @r [`,` A B] => [@A^r B]
+                       | X => [X]
+      | Value <= Value{(normalize_curly ?)}
+    [`{}` Name Args @Rest]
+      | Value <= normalize_curly Value
+      | Value <= [Value]
+    Else | Value
   | Key,Value
 
 load_params Folder =
@@ -50,8 +64,8 @@ params_handle_acts Me =
 | for ActName,Act $params.acts:
   | Act.name <= ActName
   | Act.enabled <= #FFFFFF
-  | Act.before_table <= Act.before.group{2}.table
-  | Act.after_table <= Act.after.group{2}.table
+  | Act.before_table <= Act.before.table
+  | Act.after_table <= Act.after.table
   | when no Act.title: Act.title <= ActName.replace{_ ' '}
 
 main.load_params =

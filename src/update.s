@@ -97,8 +97,9 @@ world.update =
   | case Effect
     [`{}` EffectName Args @Rest]
       | if Rest.size then Args <= [Args @Rest]
-        else Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
-      | $nil.effect{[EffectName Args] $nil [0 0 0]}
+        else case Args [`,` @_]
+             | Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
+      | $nil.effect{[EffectName,Args] $nil [0 0 0]}
       | when EffectName >< msg: leave //hack to show message before victory
     Else | bad "bad event effect ([Effect])"
 | times I 2

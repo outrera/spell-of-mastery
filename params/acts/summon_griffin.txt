@@ -1,5 +1,5 @@
 proto: summon__proto
-after: summon,unit_griffin
+after: summon{unit_griffin}
 icon: unit_griffin
 research: 10000
 cost: 5000

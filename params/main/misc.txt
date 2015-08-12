@@ -1,1 +1,1 @@
-summon: impact,teleport,sound,summon
+summon: impact{teleport},sound{summon}

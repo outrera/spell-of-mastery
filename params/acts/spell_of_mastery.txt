@@ -1,5 +1,5 @@
 affects: any
 before: misc.summon
-after: victory,(owner `Victory by casting the Spell of Mastery`)
+after: victory{owner,`Victory by casting the Spell of Mastery`}
 icon: spell_of_mastery
 //research: 60000

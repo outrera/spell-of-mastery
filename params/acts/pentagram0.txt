@@ -1,2 +1,2 @@
 proto: pentagram_proto
-after: summon,pentagram_0
+after: summon{pentagram_0}

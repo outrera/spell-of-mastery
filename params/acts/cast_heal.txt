@@ -1,5 +1,5 @@
 affects: unit
-before: harm,-1,impact,explosion_blood,sound,summon
+before: harm{-1},impact{explosion_blood},sound{summon}
 icon: spell_heal
 range: 2
 //research: 5000

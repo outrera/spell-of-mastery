@@ -1,6 +1,6 @@
 affects: unit
-before: animate,idle
-       ,confirm,(`Disband Unit?` `Are you sure this unit should be disbanded?`)
-after: when,confirmed,remove,target,sound,cancel
+before: animate{idle}
+       ,confirm{`Disband Unit?`,`Are you sure this unit should be disbanded?`}
+after: when{confirmed},remove{target},sound{cancel}
 speed: 4
 icon: act_disband

@@ -151,10 +151,9 @@ set_act_enabled Me State Players ActNames =
   | Act.enabled <= Es
 
 unit.effect Effect Target TargetXYZ =
-| case Effect [target alive @Effect]
+| case Effect [target,alive @Effect]
   | for U $world.active: when U.alive: $effect{Effect U U.xyz}
   | leave
-| Effect = Effect.group{2}
 | case Effect.find{?0><when} _,When:
   | when When><ally: when $owner.is_enemy{Target.owner}: leave
   | when When><enemy: less $owner.is_enemy{Target.owner}: leave

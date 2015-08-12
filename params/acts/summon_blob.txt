@@ -1,5 +1,5 @@
 proto: summon__proto
-after: summon,unit_blob
+after: summon{unit_blob}
 icon: unit_blob
 research: 0
 cost: 500
