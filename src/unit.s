@@ -121,6 +121,7 @@ unit.animate Anim =
 | $anim_wait <= $anim_seq.$anim_step.1
 
 unit.free =
+| when $id >< $world.waiting: $world.waiting <= 0
 | when $owner: $owner.lost_unit{Me}
 | when $leader and $hits >> $health:
   | O = $owner
