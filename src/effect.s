@@ -39,7 +39,9 @@ effect impact Impact: $world.effect{TargetXYZ Impact}
 
 effect effect Effect: $world.effect{$xyz Effect}
 
-effect sound Sound: $main.sound{Sound}
+effect sound Sound:
+| when not $id or (not $removed and $world.human.explored{$xyz}):
+  | $main.sound{Sound}
 
 effect harm Damage: Target.harm{Me Damage}
 

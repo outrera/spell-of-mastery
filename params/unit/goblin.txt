@@ -4,3 +4,9 @@ health: 3
 attack: 1
 defense: 0
 income: -7
+
+sounds: attack,(attack2)
+       //,impact,()
+       ,hit,(goblin_hit)
+       ,die,(goblin_die)
+       ,move,(step)

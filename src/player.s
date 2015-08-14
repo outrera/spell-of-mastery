@@ -47,6 +47,9 @@ player.explore State =
 | for S $sight: S.clear{0}
 | for U $units: U.explore
 
+
+player.explored X,Y,Z = $sight.Y.X
+
 player.clear =
 | for Xs $sight: Xs.clear{1}
 | $ai.clear

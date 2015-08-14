@@ -343,7 +343,8 @@ unit.harm Attacker Damage =
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hits < $health:
   | if Damage >> 0
-    then when got!it $sounds.hit: $main.sound{it.rand}
+    then | when got!it $sounds.hit: $main.sound{it.rand}
+         | $animate{hit}
     else when $hits << 0: $hits <= 0
   | leave
 | $die

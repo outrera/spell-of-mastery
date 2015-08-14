@@ -9,4 +9,6 @@ main.load_sounds =
   | [Name SoundFile^sound_load]
 
 main.sound Name =
-| sound_play $sounds.Name
+| S = $sounds.Name
+| when no S: bad "missing sound ([Name])"
+| sound_play S

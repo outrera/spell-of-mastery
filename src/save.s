@@ -91,7 +91,7 @@ world.load Saved =
     | for I PS.size PS.I.init{Sight.I^rle_decode}
 | AEs = Saved.actions_enabled
 | Acts = $main.params.acts
-| when got AEs: for Name,Enabled AEs: Acts.Name <= Enabled
+| when got AEs: for Name,Enabled AEs: Acts.Name.enabled <= Enabled
 
 main.load Path =
 | File = Path.get
