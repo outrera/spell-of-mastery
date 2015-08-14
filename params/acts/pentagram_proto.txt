@@ -1,8 +1,0 @@
-title: `Pentagram`
-affects: any
-before: impact{pentagram_appearance},sound{pentagram}
-after: summon{nopick,pentagram_all}
-icon: spell_pentagram
-cost: 500
-speed: 50
-hint: pentagram

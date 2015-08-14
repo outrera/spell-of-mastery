@@ -8,7 +8,7 @@ x_unit: 64
 y_unit: 32
 z_unit: 8 // height of world cell in pixels
 tile_banks: tile
-class_banks: unit,leader,special,pentagram
+class_banks: unit,leader,special
 explored: 1
 base_income: 50
 node_income: 25

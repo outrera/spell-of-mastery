@@ -1,9 +1,0 @@
-title: `Pentagram`
-icon: special_pentagram
-sprite: special_pentagram
-empty: 1
-entity: 1
-starts: still // initial animation
-sight: 1
-trigger: when,enemy,remove,self,effect,pickup
-ai: pentagram
