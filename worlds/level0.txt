@@ -1,12 +1,15 @@
 (version 0.1 w 8 h 8 serial 56706 cycle 0 turn 0 filename default name `Level 0` description `Level 0 - Tutorial` params ((next_world level1)) events (
-((turn 1) msg{`  Level 0 - Forest` `During his usual herb gathering, wizard was confronted by a hungry goblins.
+((turn 1)
+enable{0 1 all}
+enable{1 1 (pentagram summon_ratman)}
+msg{`  Level 0 - Forest` `During his usual herb gathering, wizard was confronted by a hungry goblins.
    Wizard managed to teleport away, yet goblins still feel him and will soon
    close the distance.
    <br> <br>
    Select wizard and click pentagram icon. This will create a pentagram required to
    summon defenders.
    `})
-((turn 15) guards_to_attackers{2})
+((turn 15) pset{2 attack_with_guards 1})
 ((got_unit 1 special_pentagram)
  msg{`  The Pentagram is Ready to Rock!` `Now click the wizard again to select the pentagram under him.
    Then click ratman icon to begin researching it.

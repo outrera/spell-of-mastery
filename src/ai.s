@@ -178,10 +178,11 @@ ai.update_units Units =
 | when Pentagram:
   | PentID <= Pentagram.id
   | PentXYZ <= Pentagram.xyz
+| AWG = Player.params.attack_with_guards >< 1
 | for U Units: less U.handled:
   | U.handled <= 1
   //| U.attacker <= 1
-  | Attacker = U.attack and U.attacker
+  | Attacker = U.attack and (U.attacker or AWG)
   | when Attacker:
     | when no $world.units_at{U.xyz}.find{?ai><hold}:
       | when $attack_with{U}: leave 1

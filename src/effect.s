@@ -48,17 +48,35 @@ effect msg Title @Body: $main.show_message{Title Body.text{' '}}
 
 effect mana Amount: !Target.owner.mana+Amount
 
+// sets world param
 effect set @Pairs:
-| WP = $world.params
+| Params = $world.params
 | for Name,Value Pairs.group{2}
   | when Value >< `?owner`: Value <= $owner.id
   | when Value >< `?self`: Value <= $id
   | when Value >< `?self_type`: Value <= $type
   | if Value.is_list
-    then | when no WP.Name:
-           | WP.Name <= dup Value.size
-         | WP.Name.init{Value}
-    else WP.Name <= Value
+    then | when no Params.Name:
+           | Params.Name <= dup Value.size
+         | Params.Name.init{Value}
+    else Params.Name <= Value
+
+// sets player param
+effect pset Player @Pairs:
+| when Player >< owner: Player <= $owner.id
+| Params = $world.players.Player.params
+| for Name,Value Pairs.group{2}
+  | when Value >< `?owner`: Value <= $owner.id
+  | when Value >< `?self`: Value <= $id
+  | when Value >< `?self_type`: Value <= $type
+  | if Value.is_list
+    then | when no Params.Name:
+           | Params.Name <= dup Value.size
+         | Params.Name.init{Value}
+    else Params.Name <= Value
+
+effect guards_to_attackers PlayerId:
+| for U $world.players.PlayerId.units: U.attacker <= 1
 
 effect swap Arg:
 | XYZ = $xyz.copy
@@ -90,9 +108,6 @@ effect victory Player Reason:
 | when Player >< owner: Player <= $owner.id
 | WP.winner <= Player
 | WP.victory_type <= Reason
-
-effect guards_to_attackers PlayerId:
-| for U $world.players.PlayerId.units: U.attacker <= 1
 
 unit.effect Effect Target TargetXYZ =
 | case Effect [when,When @Es]
