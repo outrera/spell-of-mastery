@@ -141,7 +141,7 @@ world.alloc_unit ClassName owner/0 =
 | less got Class: bad "Missing class `[ClassName]`"
 | U = $free_units.pop
 | less Owner: Owner <= $player
-| when Class.bank >< pentagram
+| when Class.ai >< pentagram
   | Pentagram = Owner.pentagram
   | when Pentagram
     | $free_units.push{U}

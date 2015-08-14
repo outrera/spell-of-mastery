@@ -3,6 +3,10 @@ use util effect_
 Effects = t
 
 set_act_enabled Me State Players ActNames =
+| when Players >< all: Players <= 16{(?)}
+| when ActNames >< all: ActNames <= $params.acts{}{?0}
+| when Players.is_int: Players <= [Players]
+| when ActNames.is_text: ActNames <= [ActNames]
 | Acts = $params.acts
 | for ActName ActNames:
   | Act = Acts.ActName
@@ -14,10 +18,6 @@ set_act_enabled Me State Players ActNames =
 effect enable State Players ActNames:
 | when Players >< owner: Players <= [$owner.id] 
 | when Players >< target_owner: Players <= [Target.owner.id]
-| when Players >< all: Players <= 16{(?)}
-| when ActNames >< all: ActNames <= $main.params.acts{}{?0}
-| when Players.is_int: Players <= [Players]
-| when ActNames.is_text: ActNames <= [ActNames]
 | set_act_enabled $main State Players ActNames
 
 effect gain Type:
@@ -25,6 +25,7 @@ effect gain Type:
   | Title = Type.replace{'_' ' '}
   | $main.show_message{'Knowledge Gained'
      "The secret knowledge of [Title] has been revealed"}
+| set_act_enabled $main 1 Target.owner.id Type
 | Target.owner.reasearch_boost{Type 99999999}
 
 effect explore Player State: $world.explore{State}

@@ -71,7 +71,7 @@ player.got_unit U =
 | $got_income{U.income}
 
 player.lost_unit U =
-| when U.bank >< pentagram: $pentagram <= 0
+| when U.ai >< pentagram: $pentagram <= 0
 | $lost_income{U.income}
 
 player.recalc =
@@ -80,7 +80,7 @@ player.recalc =
 | $pentagram <= 0
 | $leader <= 0
 | for U $units
-  | when U.bank >< pentagram: $pentagram <= U
+  | when U.ai >< pentagram: $pentagram <= U
   | when U.leader: $leader <= U
   | $got_income{U.income}
   | U.move_in{1}
