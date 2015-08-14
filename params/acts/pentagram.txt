@@ -1,0 +1,8 @@
+title: `Pentagram`
+affects: any
+before: impact{pentagram_appearance},sound{pentagram}
+after: summon{nopick,special_pentagram}
+icon: spell_pentagram
+cost: 500
+speed: 50
+hint: pentagram
