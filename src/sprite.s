@@ -26,7 +26,7 @@ type sprite{Bank Name height/1 xy/[0 0]
   | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}
   | [Name Frames]
 | when got $anims.death and no $anims.hit:
-  | $anims.hit <= [[$anims.death.0.0 24]] //supply default hit anim
+  | $anims.hit <= [[$anims.idle.0.0 24]] //supply default hit anim
 
 sprite.anim_speed AnimName =
 | Anim = $anims.AnimName
