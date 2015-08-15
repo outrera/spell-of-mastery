@@ -7,6 +7,7 @@ type unit.$class{Id World}
   serial
   class
   xyz/[0 0 -1] // world coordinates
+  from/[0 0 0]
   xy/[0 0] // fine X,Y
   anim // animation id
   anim_step // frame index inside of current animation
@@ -77,6 +78,7 @@ unit.init Class =
 | $moved <= 0
 | $turn <= $world.turn
 | $flags <= 0
+| $from.init{0,0,-1}
 | when $starts
   | less $active
     | $world.active.push{Me}
@@ -171,6 +173,7 @@ unit.guess_order_at XYZ =
 | for Mark Marks: when $guess_order_at_mark{Mark}: leave
 
 unit.move XYZ =
+| $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
 | $xy.init{0,0}

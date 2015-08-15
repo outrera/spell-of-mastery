@@ -158,9 +158,17 @@ ai.attack_with U =
   | MoveIn
 | TargetNode = U.pathfind{1 Check}
 | less TargetNode: leave 0
+| TargetXYZ = TargetNode.1
+| Target = $world.block_at{TargetXYZ}
+| EnemyTarget = got Target and Target.owner.id <> OId
 | XYZ = TargetNode^node_to_path.0
 | Turn = $world.turn
 | Ms = U.list_moves{U.xyz}
+| when EnemyTarget and (XYZ-Target.from).all{?abs << 1}:
+  | M = Ms.find{?xyz >< Target.from}
+  | when got M:
+    | $marked_order{U M}
+    | leave 1
 | M = Ms.find{?xyz >< XYZ}
 | less got M: leave 0
 | $marked_order{U M}

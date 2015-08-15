@@ -4,7 +4,8 @@ world.save =
 | ActivePlayers = dup 32 0
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
-  | list U.id U.serial U.type U.xyz U.xy
+  | XYZ = if U.from.2>0 then [U.xyz U.from] else U.xyz
+  | list U.id U.serial U.type XYZ U.xy
          U.anim U.anim_step U.facing
          U.owner.id U.moved U.turn U.flags U.hits
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
@@ -71,6 +72,9 @@ world.load Saved =
   | less U.health or U.ai >< pentagram:
     | U.change_owner{$players.0}
   | U.serial <= Serial
+  | case XYZ A,B:
+    | XYZ <= A
+    | U.from.init{B}
   | U.xy.init{SXYZ}
   | U.animate{Anim}
   | U.anim_step <= AnimStep
