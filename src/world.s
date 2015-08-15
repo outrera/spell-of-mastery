@@ -58,6 +58,7 @@ type world{main}
    view
    act
    notes
+   mode/brush
 | $init
 
 world.init =

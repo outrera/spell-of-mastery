@@ -21,7 +21,6 @@ type view.widget{M W H}
   cursor/[1 1 1]
   anchor/[1 1 1]
   brush/[0 0]
-  mode/brush
   pick_count // used to pick different units from the same cell
   infoText/txt{small info}
   fps/1
@@ -43,6 +42,9 @@ type view.widget{M W H}
 | ZUnit <= Wr.zunit
 | YDiv <= YUnit/ZUnit
 | $fpsT <= clock
+
+view.mode = $world.mode
+view.`!mode` V = $world.mode <= V
 
 view.clear =
 | $center_at{[0 0 0]}
@@ -280,6 +282,7 @@ world.update_pick Units =
 view.select_unit XYZ = 
 | Picked = []
 | Us = $world.units_at{XYZ}.skip{?aux}
+| when $mode >< play: Us <= Us.keep{?show}
 | when not $world.picked or $world.picked.xyz <> XYZ: $pick_count <= 0
 | when Us.size
   | !$pick_count+1

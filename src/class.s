@@ -4,7 +4,8 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/[] speed/-1 sight/No
            starts/0 flyer/0 ranged/0 leader/Leader
            health/0 attack/0 defense/0 ttl/100000000
-           acts/[] sounds/[] icon/0 title/0 income/0 trigger/0 item/0 ai/0}
+           acts/[] sounds/[] icon/0 title/0 income/0 trigger/0 item/0
+           ai/0 show/1}
   type/"[Bank]_[Class_name]"
   static/Static
   empty/Empty
@@ -31,6 +32,7 @@ type class{bank class_name Main static/0 empty/0 sprite/system_dummy
   income/Income
   item/Item
   ai/Ai
+  show/Show
   trigger/Trigger
 | less $moves.is_list: bad "wrong `moves` field for [$type]"
 | less $moves.size: leave Me

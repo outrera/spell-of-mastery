@@ -65,7 +65,9 @@ unit.move_in State =
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
-| $sprite <= $default_sprite
+| $sprite <= if $show or $world.mode <> play
+             then $default_sprite
+             else $world.nil.sprite
 | $facing <= 3
 | $mirror <= 0
 | $serial <= $world.serial

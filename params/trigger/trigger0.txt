@@ -1,0 +1,4 @@
+sprite: special_trigger0
+item: mana{500},notify{`Gained 500 mana.`}
+show: 0
+ai: trigger
