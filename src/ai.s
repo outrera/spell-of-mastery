@@ -125,8 +125,9 @@ world.pathfind Closest U Check =
           | when Closest: _goto end
     | X,Y,Z = Dst.xyz
     | MXY = PFMap.X.Y
-    | when NextCost < MXY.Z and Dst.type <> swap:
-      | when Dst.type <> swap or not $block_at{Dst.xyz}.attacker:
+    | when NextCost < MXY.Z:
+      | B = $block_at{Dst.xyz}
+      | when Dst.type <> swap or not B.attacker or (U.xyz-B.xyz).any{?abs > 2}:
         | MXY.Z <= NextCost
         | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end
@@ -147,11 +148,11 @@ ai.attack_with U =
   | for V World.units_at{Move.xyz}
     | AI = V.ai
     | when AI:
-      | Bloacked = World.block_at{Move.xyz}
+      | Blocked = World.block_at{Move.xyz}
       | Enemy = V.owner.id <> OId
       | if AI><unit and Enemy then MoveIn <= 1
-        else if AI><hold and no Bloacked then MoveIn <= 1
-        else if AI><turret and no Bloacked then MoveIn <= 1
+        else if AI><hold and no Blocked then MoveIn <= 1
+        else if AI><turret and no Blocked then MoveIn <= 1
         else if AI><pentagram and Enemy then MoveIn <= 1
         else
   | MoveIn
@@ -178,11 +179,13 @@ ai.update_units Units =
 | when Pentagram:
   | PentID <= Pentagram.id
   | PentXYZ <= Pentagram.xyz
-| AWG = Player.params.attack_with_guards >< 1
+| when Player.params.attack_with_guards >< 1:
+  | for U Units: U.attacker <= 1
+  | Player.params.attack_with_guards <= 0
 | for U Units: less U.handled:
   | U.handled <= 1
   //| U.attacker <= 1
-  | Attacker = U.attack and (U.attacker or AWG)
+  | Attacker = U.attack and U.attacker
   | when Attacker:
     | when no $world.units_at{U.xyz}.find{?ai><hold}:
       | when $attack_with{U}: leave 1
