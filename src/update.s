@@ -13,7 +13,6 @@ world.new_game =
 | $end_turn // hack to begin turns from 1
 | less $params.explored: $explore{0}
 | for P $players:
-  | P.mana <= 2000
   | for U P.units: U.moved <= 0
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it

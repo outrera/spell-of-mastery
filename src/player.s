@@ -57,6 +57,7 @@ player.clear =
 | $leader <= 0
 | $pentagram <= 0
 | $researching <= 0
+| $mana <= 0
 | $income <= 0
 | $upkeep <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
