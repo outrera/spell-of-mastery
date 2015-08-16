@@ -1,0 +1,6 @@
+sprite: special_no_ai
+item: remove{self}
+show: 0
+ai: avoid
+draw_order: 60
+note: `points places that ai should avoid`

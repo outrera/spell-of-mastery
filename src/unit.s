@@ -56,10 +56,10 @@ world.income_at XYZ =
 
 // extort income from the territory occupied by the unit
 unit.move_in State =
-| when not $alive or $empty: leave
+| when not $alive or $item <> pickup: leave
 | Income = $world.income_at{$xyz}
 | if State then $owner.got_income{Income} else $owner.lost_income{Income}
-| for U $world.units_at{$xyz}: when U.item:
+| for U $world.units_at{$xyz}: when U.item and U.item <> pickup:
   | Add = if U.show then [effect,pickup sound,pickup remove,self] else []
   | U.effect{[@Add @U.item] Me Me.xyz}
 

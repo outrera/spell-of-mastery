@@ -2,3 +2,4 @@ entity: 1
 empty: 1
 starts: still // initial animation
 editor: 1
+draw_order: 60

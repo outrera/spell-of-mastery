@@ -1,4 +1,4 @@
 sprite: special_trigger2
 item: set{trigger2 1}
 show: 0
-ai: trigger
+

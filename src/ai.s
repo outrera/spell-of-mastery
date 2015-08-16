@@ -125,7 +125,7 @@ world.pathfind Closest U Check =
           | when Closest: _goto end
     | X,Y,Z = Dst.xyz
     | MXY = PFMap.X.Y
-    | when NextCost < MXY.Z:
+    | when NextCost < MXY.Z and Dst.type:
       | B = $block_at{Dst.xyz}
       | when Dst.type <> swap or not B.attacker or (U.xyz-B.xyz).any{?abs > 2}:
         | MXY.Z <= NextCost
@@ -143,6 +143,7 @@ unit.pathfind Closest Check = $world.pathfind{Closest Me Check}
 ai.attack_with U =
 | World = $world
 | OId = U.owner.id
+| Blockers = []
 | Check = Move =>
   | MoveIn = 0
   | for V World.units_at{Move.xyz}
@@ -154,6 +155,11 @@ ai.attack_with U =
         else if AI><hold and no Blocked then MoveIn <= 1
         else if AI><turret and no Blocked then MoveIn <= 1
         else if AI><pentagram and Enemy then MoveIn <= 1
+        else if AI><avoid and no Blocked then
+           | B = World.alloc_unit{unit_block owner/U.owner}
+           | B.move{Move.xyz}
+           | push B Blockers
+           | Move.type <= 0
         else
   | MoveIn
 | TargetNode = U.pathfind{1 Check}
@@ -164,6 +170,7 @@ ai.attack_with U =
 | XYZ = TargetNode^node_to_path.0
 | Turn = $world.turn
 | Ms = U.list_moves{U.xyz}
+| for B Blockers: B.free
 | when EnemyTarget and (XYZ-Target.from).all{?abs << 1}:
   | M = Ms.find{?xyz >< Target.from}
   | when got M:
@@ -192,10 +199,16 @@ ai.update_units Units =
   | Player.params.attack_with_guards <= 0
 | for U Units: less U.handled:
   | U.handled <= 1
+  | Os = $world.units_at{U.xyz}
+  | AttackTrigger = Os.find{?ai><attack}
+  | when got AttackTrigger and U.ai<>attack:
+    | U.attacker <= 1
+    | Os = Os.skip{?ai><attack}
+    | AttackTrigger.free
   //| U.attacker <= 1
   | Attacker = U.attack and U.attacker
   | when Attacker:
-    | when no $world.units_at{U.xyz}.find{?ai><hold}:
+    | when no Os.find{?ai><hold}:
       | when $attack_with{U}: leave 1
   | less Attacker:
     | when U.id >< LeaderID: when $update_leader: leave 1

@@ -16,6 +16,7 @@ invincible: 0
 leader: 0
 income: 0
 ai: unit
+item: pickup
 sounds: attack,(attack2)
        //,impact,()
        //,hit,()

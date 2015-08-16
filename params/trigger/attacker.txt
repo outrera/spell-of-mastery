@@ -1,0 +1,5 @@
+sprite: special_attacker
+show: 0
+ai: attack
+draw_order: 60
+note: `unit sharing cell with this object becomes aggressive`
