@@ -4,3 +4,4 @@ flyer: 1
 income: -6
 acts: (cast_swap cast_lightning cast_teleport cast_firewall cast_heal cast_knowledge cast_armageddon)
 moves: matrix.move2
+leader: 2

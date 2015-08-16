@@ -128,13 +128,13 @@ unit.animate Anim =
 unit.free =
 | when $id >< $world.waiting: $world.waiting <= 0
 | when $owner: $owner.lost_unit{Me}
-| when $leader and $hits >> $health:
+| when $leader><1 and $hits >> $health:
   | O = $owner
   | Leaders = []
   | for U $world.active.list:
     | if U.owner.id >< O.id
       then when U.id <> $id: U.free
-      else when U.leader: push U Leaders
+      else when U.leader><1: push U Leaders
   | case Leaders [L]
     | $world.params.winner <= L.owner.id
     | $world.params.victory_type <= 'Victory by defeating other leaders.'

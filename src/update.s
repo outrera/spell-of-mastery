@@ -153,7 +153,10 @@ unit.update =
             or ($moved < $world.turn and (not Cost or $owner.mana>>Cost)))
     then | less Path:
            | !$owner.mana-$next_action.cost
-           | when Speed: $moved <= $world.turn-Speed-1
+           | when Speed
+             | $moved <= $world.turn-Speed-1
+             | when $leader: for U $owner.active:
+               | when U.leader: U.moved  <= $moved
          | less $owner.human: when $seen:
            | $world.view.center_at{$xyz cursor/1}
     else
