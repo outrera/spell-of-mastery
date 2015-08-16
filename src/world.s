@@ -263,6 +263,8 @@ unit.explore =
 | for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
   | Explored.Y.X <= 1
 
+world.explore State = for P $players: P.explore{State}
+
 world.place_unit U =
 | XYZ = U.xyz.copy
 | Mirror = U.facing >< 5

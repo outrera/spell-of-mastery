@@ -3,8 +3,6 @@
 main.update =
 | $world.update
 
-world.explore State = for P $players: P.explore{State}
-
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
