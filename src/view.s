@@ -31,6 +31,7 @@ type view.widget{M W H}
   on_unit_pick/(Picked=>)
   view_size/32  // render 32x32 world chunk
   center/[0 0 0]
+  zfix/1
 | $fb <= gfx W H
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
@@ -47,6 +48,7 @@ view.mode = $world.mode
 view.`!mode` V = $world.mode <= V
 
 view.clear =
+| $zfix <= 1
 | $center_at{[0 0 0]}
 | $blit_origin.init{[$w/2 -170]}
 | $mice_xy.init{[0 0]}
@@ -460,6 +462,17 @@ view.update =
 | case $keys.right 1: $center_at{$center+[1 -1 0]}
 //| $cursor.0 <= $cursor.0.clip{1 $world.w}
 //| $cursor.1 <= $cursor.1.clip{1 $world.h}
+| case $keys.`[` 1:
+  | $zfix <= 0
+  | when $cursor.2>1: !$cursor.2 - 1
+  | $keys.`[` <= 0
+| case $keys.`]` 1:
+  | $zfix <= 0
+  | when $cursor.2<62: !$cursor.2 + 1
+  | $keys.`]` <= 0
+| case $keys.p 1:
+  | $zfix <= 1
+  | $keys.p <= 0
 | X,Y,Z = $cursor
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
@@ -473,6 +486,7 @@ view.update =
 | 1
 
 view.fix_z XYZ =
+| less $zfix: leave XYZ.2
 | if $keys.e><1 then $world.fix_z_void{XYZ} else $world.fix_z{XYZ}
 
 view.input In =
@@ -486,12 +500,15 @@ view.input In =
       | $cursor.init{[CX CY $cursor.2]}
       | $cursor.2 <= $fix_z{$cursor}
   [mice left State XY]
+    | $zfix <= 1
     | $mice_click <= if State then \left else 0
     | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
   [mice right State XY]
+    | $zfix <= 1
     | $mice_click <= if State then \right else 0
     | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
-  [key Name S] | $keys.Name <= S
+  [key Name S]
+    | $keys.Name <= S
 
 view.pause = $paused <= 1
 view.unpause = $paused <= 0

@@ -97,6 +97,18 @@ effect swap Arg:
 effect remove Whom: case Whom
   target | Target.free
   self | Me.free
+  X,Y,Z | U = $world.block_at{X,Y,Z}
+        | when got U: U.free
+  Serial | U = $world.units.find{?serial><Serial}
+         | when got U and U.xyz.2<>-1: U.free
+
+effect clear What:
+| XYZ = case What
+  target | TargetXYZ
+  X,Y,Z | X,Y,Z
+| when no XYZ: bad "effect clear: invalid target ([What])"
+| $world.clear_tile{XYZ}
+
 
 effect summon What:
 | NoPick = 0

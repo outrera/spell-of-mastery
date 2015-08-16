@@ -178,7 +178,7 @@ world.fast_at XYZ =
 
 world.set_ X Y Z V = $tilemap.set{[X Y Z] V}
 
-world.clear_tile XYZ =
+world.clear_tile_ XYZ =
 | Id = $tilemap.at{XYZ}
 | less Id: leave
 | X,Y,Z = XYZ
@@ -189,10 +189,17 @@ world.clear_tile XYZ =
   | $set_slope_at{X,Y,(Z-I) #@0000}
 | $updElev{X,Y}
 
+world.clear_tile XYZ =
+| $clear_tile_{XYZ}
+| XY = XYZ.take{2}
+| $update_move_map{XY}
+| for D Dirs: $update_move_map{XY+D}
+
+
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =
 | H = Tile.height
-| times I H: $clear_tile{X,Y,Z+I}
+| times I H: $clear_tile_{X,Y,Z+I}
 | H = H-1
 | times I H: $set_{X Y Z+I I-H} // push padding
 | $set_{X Y Z+H Tile.id}
