@@ -1,0 +1,4 @@
+sprite: special_trigger4
+item: set{trigger4 1}
+show: 0
+ai: trigger

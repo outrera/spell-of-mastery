@@ -60,7 +60,8 @@ unit.move_in State =
 | Income = $world.income_at{$xyz}
 | if State then $owner.got_income{Income} else $owner.lost_income{Income}
 | for U $world.units_at{$xyz}: when U.item:
-  | U.effect{[effect,pickup sound,pickup remove,self @U.item] Me Me.xyz}
+  | Add = if U.show then [effect,pickup sound,pickup remove,self] else []
+  | U.effect{[@Add @U.item] Me Me.xyz}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =

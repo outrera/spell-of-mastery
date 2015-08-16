@@ -71,6 +71,8 @@ world.process_events =
     | When <= RealWhen
     | Negate <= 1
   | True = case When
+    [eq VarName Value] | $params.VarName >< Value
+    [peq Player VarName Value] | $players.Player.params.VarName >< Value
     [turn N] | N><$turn
     [got_unit Player UnitType]
       | Units = $players.Player.units
