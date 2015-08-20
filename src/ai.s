@@ -146,13 +146,15 @@ ai.attack_with U =
 | Blockers = []
 | Check = Move =>
   | MoveIn = 0
-  | for V World.units_at{Move.xyz}
+  | Vs = World.units_at{Move.xyz}
+  | for V Vs
     | AI = V.ai
     | when AI:
       | Blocked = World.block_at{Move.xyz}
       | Enemy = V.owner.id <> OId
       | if AI><unit and Enemy then MoveIn <= 1
-        else if AI><hold and no Blocked then MoveIn <= 1
+        else if AI><hold and no Blocked and no Vs.find{?ai><unhold}
+           then MoveIn <= 1
         else if AI><turret and no Blocked then MoveIn <= 1
         else if AI><pentagram and Enemy then MoveIn <= 1
         else if AI><avoid and no Blocked then
@@ -160,6 +162,7 @@ ai.attack_with U =
            | B.move{Move.xyz}
            | push B Blockers
            | Move.type <= 0
+           | MoveIn <= 0
         else
   | MoveIn
 | TargetNode = U.pathfind{1 Check}
@@ -208,7 +211,7 @@ ai.update_units Units =
   //| U.attacker <= 1
   | Attacker = U.attack and U.attacker
   | when Attacker:
-    | when no Os.find{?ai><hold}:
+    | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
       | when $attack_with{U}: leave 1
   | less Attacker:
     | when U.id >< LeaderID: when $update_leader: leave 1
@@ -234,10 +237,10 @@ ai.update =
 | for Xs HarmMap: for I Xs.size: Xs.I <= 0
 | for U Units{U=>U.list_attack_moves{U.xyz}}.join:
   | XYZ = U.xyz
-  | !HarmMap.(XYZ.0).(XYZ.1) + #100
+  | !HarmMap.(XYZ.0).(XYZ.1) + #100 // mark where allies can attack
 | isEnemy U = U.owner.id <> PID and U.health and not U.removed
 | Es = $world.active.list.keep{&isEnemy}
-| Ts = Es{U=>U.list_attack_moves{U.xyz}{[U ?]}}.join
+| Ts = Es{U=>U.list_attack_moves{U.xyz}{[U ?]}}.join //threated map cells
 | for U,T Ts
   | XYZ = T.xyz
   | X,Y,Z = XYZ
@@ -245,39 +248,24 @@ ai.update =
   | if U.ranged then HarmMap.X.Y <= #1
     else !HarmMap.X.Y + #1
 | Ts <= Ts{?1}
-| for U Units: when U.attack: //see if we can threat some enemy unit
+| for U Units: when U.attack:
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
-  | less Harm^^#FF
-    | Ms = U.list_moves{U.xyz}.keep{?type >< move}
-    | for M Ms // try provoking enemy attack, so we can counter-attack
-      | X,Y,Z = M.xyz
-      | Harm = HarmMap.X.Y
-      | when Harm^^#FF and (Harm^^#FF00) > #100:
-        | $marked_order{U M}
-        | leave
-    | for M Ms // otherwise try blocking enemy movements
-      | X,Y,Z = M.xyz
-      | Harm = HarmMap.X.Y
-      | when Harm^^#FF00000 and (not Harm^^#FF or (Harm^^#FF00) > #100):
-        | $marked_order{U M}
-        | leave
+  | when Harm^^#FF and no $world.units_at{U.xyz}.find{?ai><unhold}:
+    | U.attacker <= 1
+    | UH = $world.alloc_unit{trigger_unhold}
+    | UH.move{U.xyz}
 | Quit = $update_units{Units}
 | when Quit: leave
 | for U Units
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
-  | when Harm^^#FF: less (Harm^^#FF00) and not U.leader:
+  | when Harm^^#FF:
     | Moves = U.list_moves{U.xyz}.keep{?type><move}
-    | when Pentagram: Moves.skip{?xyz><Pentagram.xyz}
-    | AttackMoves = Moves.keep{M=>U.list_moves{M.xyz}.keep{?type><attack}.size}
-    | when AttackMoves.size:
-      | $marked_order{U AttackMoves.rand}
-      | leave
     | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
-    | when SafeMoves.size
-      | $marked_order{U SafeMoves.rand} //avoid harm
-      | leave
+    | when SafeMoves.size //avoid harm
+      | $marked_order{U SafeMoves.(($world.turn+U.id)%SafeMoves.size)}
+      | leave // using SafeMoves.rand will complicate debug
 | $end_turn
 
 
