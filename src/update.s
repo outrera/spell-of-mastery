@@ -71,8 +71,14 @@ world.process_events =
     | When <= RealWhen
     | Negate <= 1
   | True = case When
-    [eq VarName Value] | $params.VarName >< Value
-    [peq Player VarName Value] | $players.Player.params.VarName >< Value
+    [N<eq+atleast Var Value]
+      | V = case Var
+          [`.` Player Var]
+            | P = $players.Player
+            | if Var >< mana then P.mana else P.params.Var
+          Else | $params.Var
+      | if got V then if N><eq then V >< Value else V >> Value
+        else 0
     [turn N] | N><$turn
     [got_unit Player UnitType]
       | Units = $players.Player.units
