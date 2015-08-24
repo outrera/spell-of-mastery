@@ -2,6 +2,8 @@ use gui queue
 
 HarmMap = dup 256: dup 256: 0
 
+PerCycle = 0
+
 ai.end_turn =
 | $world.update_pick{[]}
 | $world.end_turn
@@ -67,10 +69,13 @@ ai.update_research =
 | less Pentagram: leave 0
 | Summons = Pentagram.acts.keep{?after_table.summon^got}
 | less Summons.size: leave 0
-| S = Summons.find{?after_table.summon >< unit_goblin}
-| when got S and $player.research_remain{S} > 0:
-  | $player.researching <= S.name
-  | leave 1
+| Missing = PerCycle.missing
+| less got Missing: leave
+| for Type Missing:
+  | S = Summons.find{?after_table.summon >< Type}
+  | when got S and $player.research_remain{S} > 0:
+    | $player.researching <= S.name
+    | leave 1
 | 0
 
 ai.update_pentagram =
@@ -80,12 +85,15 @@ ai.update_pentagram =
 | when got Blocker: leave 0
 | Summons = Pentagram.acts.keep{?after_table.summon^got}
 | less Summons.size: leave 0
-| S = Summons.find{?after_table.summon >< unit_goblin}
-| Turn = $world.turn
-| when got S and $player.research_remain{S} << 0:
-  | when Pentagram.moved >> Turn or S.cost>$player.mana: leave 0
-  | $order_act{Pentagram S}
-  | leave 1
+| Missing = PerCycle.missing
+| less got Missing: leave
+| for Type Missing:
+  | S = Summons.find{?after_table.summon >< Type}
+  | Turn = $world.turn
+  | when got S and $player.research_remain{S} << 0:
+    | when Pentagram.moved < Turn and S.cost<<$player.mana:
+      | $order_act{Pentagram S}
+      | leave 1
 | 0
 
 PFMap = dup 134: dup 134: dup 64: #FFFFFFFFFFFF
@@ -184,8 +192,6 @@ ai.attack_with U =
 | $marked_order{U M}
 | leave 1
 
-Count = 0
-
 ai.update_units Units =
 | Player = $player
 | Pentagram = Player.pentagram
@@ -208,7 +214,6 @@ ai.update_units Units =
     | U.attacker <= 1
     | Os = Os.skip{?ai><attack}
     | AttackTrigger.free
-  //| U.attacker <= 1
   | Attacker = U.attack and U.attacker
   | when Attacker:
     | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
@@ -218,17 +223,59 @@ ai.update_units Units =
     | when U.id >< PentID: when $update_pentagram: leave 1
   | when U.xyz >< PentXYZ and U.id <> PentID:
     | when $remove_blocker{U}: leave 1
-| $update_research
 | leave 0
 
 ai.harm Attacker Victim =
 | Victim.attacker <= 1 //have to be aggressive
 
-ai.update =
+ai.group_attack Types =
+| Units = $player.active
+| UTs = Units.keep{U => not U.attacker and U.turn>0}.div{?type}
+| As = []
+| Missing = []
+| for T Types:
+  if UTs.T^~{[]}.size then push UTs.T^pop As
+  else push T Missing
+| when Missing.size:
+  | PerCycle.missing <= Missing.flip
+  | leave 0
+| PerCycle.missing <= No
+| for A As: A.attacker <= 1
+| leave 1
+
+ai.script =
+| Params = $main.params
+| Player = $player
+| PParams = Player.params
+| when PParams.aiWait > 0:
+  | !PParams.aiWait-1
+  | leave 0
+| AIType = PParams.aiType
+| AIStep = PParams.aiStep
+| AISteps = Params.main.ai.AIType
+| less AIStep<AISteps.size:
+  | AIStep <= 0
+  | PParams.aiStep <= 0
+| Command = AISteps.AIStep
+| case Command
+  [attack Types]
+    | less $group_attack{Types{"unit_[?]"}}: leave 0
+    | !PParams.aiStep+1
+  [wait Turns]
+    | PParams.aiWait <= Turns
+    | !PParams.aiStep+1
+  [goto NewAIType]
+    | PParams.aiType <= NewAIType
+    | PParams.aiStep <= 0
+| leave 1
+
+ai_update Me =
 | Player = $player
 | PID = Player.id
-| Units = Player.active
 | Pentagram = Player.pentagram
+| Params = $main.params
+| while $script><1:
+| Units = Player.active
 | for U Units: // check if we can attack someone 
   | case U.list_moves{U.xyz}.keep{?type >< attack} [A@_]
     | U.attacker <= 1
@@ -257,6 +304,7 @@ ai.update =
     | UH.move{U.xyz}
 | Quit = $update_units{Units}
 | when Quit: leave
+| $update_research
 | for U Units
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
@@ -267,6 +315,11 @@ ai.update =
       | $marked_order{U SafeMoves.(($world.turn+U.id)%SafeMoves.size)}
       | leave // using SafeMoves.rand will complicate debug
 | $end_turn
+
+ai.update =
+| PerCycle <= t
+| ai_update Me
+| PerCycle <= 0
 
 
 export

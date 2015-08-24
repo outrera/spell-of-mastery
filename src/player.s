@@ -6,12 +6,16 @@ type ai{player} world
 | $params.view <= [0 0 0]
 | $params.cursor <= [0 0 1]
 
+ai.main = $player.main
 ai.params = $player.params
 
 ai.picked = $world.picked
 
 ai.clear =
 | $params.aiSwapXYZ.init{[0 0 0]}
+| $params.aiType <= 'default'
+| $params.aiStep <= 0
+| $params.aiWait <= 0
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 

@@ -2,4 +2,4 @@ sprite: effect_firewall
 sight: 1
 ttl: 6
 trigger: harm{1},effect{fire_ring}
-ai: avoid
+//ai: avoid

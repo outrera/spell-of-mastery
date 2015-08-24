@@ -20,13 +20,22 @@ effect enable State Players ActNames:
 | when Players >< target_owner: Players <= [Target.owner.id]
 | set_act_enabled $main State Players ActNames
 
-effect gain Type:
-| when Target.owner.human:
-  | Title = Type.replace{'_' ' '}
-  | $main.show_message{'Knowledge Gained'
-     "The secret knowledge of [Title] has been revealed"}
-| set_act_enabled $main 1 Target.owner.id Type
-| Target.owner.reasearch_boost{Type 99999999}
+effect gain @Args:
+| ActNames = []
+| Player = 0
+| case Args
+   [ANs] | ActNames <= ANs
+         | Player = Target.owner
+   [PId ANs] | ActNames <= ANs
+             | Player <= $world.players.PId
+| when ActNames >< all: ActNames <= $main.params.acts{}{?0}
+| for ActName ActNames:
+  | when ActNames.size><1 and Target.owner.human:
+    | Title = ActName.replace{'_' ' '}
+    | $main.show_message{'Knowledge Gained'
+       "The secret knowledge of [Title] has been revealed"}
+  | set_act_enabled $main 1 Player.id ActName
+  | Player.reasearch_boost{ActName 99999999}
 
 effect explore Player State: $world.explore{State}
 
@@ -74,7 +83,8 @@ effect set @Pairs:
 // sets player param
 effect pset Player @Pairs:
 | when Player >< owner: Player <= $owner.id
-| Params = $world.players.Player.params
+| P = $world.players.Player
+| Params = P.params
 | for Name,Value Pairs.group{2}
   | when Value >< `?owner`: Value <= $owner.id
   | when Value >< `?self`: Value <= $id
@@ -84,6 +94,7 @@ effect pset Player @Pairs:
            | Params.Name <= dup Value.size
          | Params.Name.init{Value}
     else Params.Name <= Value
+  | when Name >< mana: P.mana <= Value
 
 effect guards_to_attackers PlayerId:
 | for U $world.players.PlayerId.units: U.attacker <= 1
@@ -116,7 +127,7 @@ effect summon What:
   | NoPick <= 1
   | What <= W
 | S = $world.alloc_unit{What owner/$owner}
-| S.attacker <= 1 // mark it available for attack
+| S.attacker <= 0 // mark it available for attack
 | S.move{TargetXYZ}
 | less NoPick: S.world.update_pick{[S]}
 
