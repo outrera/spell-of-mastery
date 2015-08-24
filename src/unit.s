@@ -229,7 +229,7 @@ MoveMapDirMap =
 
 world.update_move_map P =
 | SX,SY = P
-| when SX < 0 or SY < 0: leave 0
+| when SX < 1 or SY < 1: leave 0
 | for SZ $height{SX SY}
   | SZ = SZ+1
   | Src = SX,SY,SZ
