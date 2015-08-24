@@ -24,6 +24,7 @@ ai.cast_pentagram =
 | Leader = $player.leader
 | when Leader: case Leader.acts.keep{?hint >< pentagram} [Act@_]
   | $order_act{Leader Act}
+  | Leader.handled <= 0
   | leave 1
 | leave 0
 
@@ -51,7 +52,8 @@ ai.remove_blocker Blocker =
   | (Harm^^#FF) and (Harm^^#FF00)<A
 | Ms <= Ms.skip{&harmCheck} // avoid harm when enemies near pentagram
 | when Ms.size
-  | $marked_order{Blocker Ms.rand} //move out of the way
+  | $marked_order{Blocker Ms.(Turn%Ms.size)} //move out of the way
+  | Blocker.moved <= Turn-1
   | leave 1
 | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><swap}
 | for M Ms
@@ -59,7 +61,7 @@ ai.remove_blocker Blocker =
   | when B.leader
     | Ms = B.list_moves{B.xyz}.keep{?type><move}
     | when Ms.size
-      | $marked_order{B Ms.rand} //move out of the way
+      | $marked_order{B Ms.(Turn%Ms.size)} //move out of the way
       | leave 1
 //| when Leader: less Blocker.id >< Leader.id:
 //  | when Turn-Pentagram.moved>6: leave $cast_pentagram
