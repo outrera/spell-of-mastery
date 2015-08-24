@@ -1,4 +1,3 @@
-author: `superjoe (Andrew Kelley)`
-copyright: `superjoe (Andrew Kelley)`
-license: `Public Domain`
-http: `http://opengameart.org/content/electrical-disintegration-animation`
+author: `Wesnoth Team`
+license: `GPL2`
+http: `wesnoth.org`
