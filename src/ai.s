@@ -148,10 +148,19 @@ world.pathfind Closest U Check =
 
 unit.pathfind Closest Check = $world.pathfind{Closest Me Check}
 
-ai.attack_with U =
+ai.roam_with Radius U =
 | World = $world
-| OId = U.owner.id
+| Owner = U.owner
+| OId = Owner.id
 | Blockers = []
+| block XYZ =
+  | B = World.alloc_unit{unit_block owner/U.owner}
+  | B.move{XYZ}
+  | push B Blockers
+| free_blockers = for B Blockers: B.free
+| Player = $player
+| PentXYZ = if Player.pentagram then Player.pentagram.xyz else [-100 -100 -100]
+| when Radius: less (PentXYZ-U.xyz).all{?abs<Radius}: leave 0
 | Check = Move =>
   | MoveIn = 0
   | Vs = World.units_at{Move.xyz}
@@ -159,29 +168,32 @@ ai.attack_with U =
     | AI = V.ai
     | when AI:
       | Blocked = World.block_at{Move.xyz}
-      | Enemy = V.owner.id <> OId
+      | Enemy = Owner.is_enemy{V.owner}
       | if AI><unit and Enemy then MoveIn <= 1
         else if AI><hold and no Blocked and no Vs.find{?ai><unhold}
            then MoveIn <= 1
+        else if Move.type><swap and V.summoned then
+           | block Move.xyz
+           | Move.type <= 0
         else if AI><turret and no Blocked then MoveIn <= 1
         else if AI><pentagram and Enemy then MoveIn <= 1
         else if AI><avoid and no Blocked then
-           | B = World.alloc_unit{unit_block owner/U.owner}
-           | B.move{Move.xyz}
-           | push B Blockers
+           | block Move.xyz
            | Move.type <= 0
            | MoveIn <= 0
         else
   | MoveIn
 | TargetNode = U.pathfind{1 Check}
-| less TargetNode: leave 0
+| less TargetNode:
+  | free_blockers
+  | leave 0
 | TargetXYZ = TargetNode.1
 | Target = $world.block_at{TargetXYZ}
 | EnemyTarget = got Target and Target.owner.id <> OId
 | XYZ = TargetNode^node_to_path.0
 | Turn = $world.turn
 | Ms = U.list_moves{U.xyz}
-| for B Blockers: B.free
+| free_blockers
 | when EnemyTarget and (XYZ-Target.from).all{?abs << 1}:
   | M = Ms.find{?xyz >< Target.from}
   | when got M:
@@ -217,10 +229,12 @@ ai.update_units Units =
   | Attacker = U.attack and U.attacker
   | when Attacker:
     | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
-      | when $attack_with{U}: leave 1
+      | when $roam_with{0 U}: leave 1
   | less Attacker:
     | when U.id >< LeaderID: when $update_leader: leave 1
     | when U.id >< PentID: when $update_pentagram: leave 1
+    | when U.summoned:
+      | when $roam_with{4 U}: leave 1
   | when U.xyz >< PentXYZ and U.id <> PentID:
     | when $remove_blocker{U}: leave 1
 | leave 0
@@ -230,7 +244,7 @@ ai.harm Attacker Victim =
 
 ai.group_attack Types =
 | Units = $player.active
-| UTs = Units.keep{U => not U.attacker and U.turn>0}.div{?type}
+| UTs = Units.keep{U => not U.attacker and U.summoned}.div{?type}
 | As = []
 | Missing = []
 | for T Types:
@@ -287,7 +301,7 @@ ai_update Me =
   | !HarmMap.(XYZ.0).(XYZ.1) + #100 // mark where allies can attack
 | isEnemy U = U.owner.id <> PID and U.health and not U.removed
 | Es = $world.active.list.keep{&isEnemy}
-| Ts = Es{U=>U.list_attack_moves{U.xyz}{[U ?]}}.join //threated map cells
+| Ts = Es{U=>U.list_attack_moves{U.xyz}{[U ?]}}.join //threatened map cells
 | for U,T Ts
   | XYZ = T.xyz
   | X,Y,Z = XYZ

@@ -127,7 +127,7 @@ effect summon What:
   | NoPick <= 1
   | What <= W
 | S = $world.alloc_unit{What owner/$owner}
-| S.attacker <= 0 // mark it available for attack
+| S.summoned <= 1
 | S.move{TargetXYZ}
 | less NoPick: S.world.update_pick{[S]}
 
