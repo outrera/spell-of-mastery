@@ -15,7 +15,6 @@ ai.order_act U Act =
 ai.marked_order U Move =
 | Ms = U.mark_moves
 | Mark = Ms.find{?xyz><Move.xyz}
-| $player.picked.moved <= $world.turn
 | $world.update_pick{[U]}
 | U.guess_order_at_mark{Mark}
 | for M Ms: M.free
@@ -53,7 +52,6 @@ ai.remove_blocker Blocker =
 | Ms <= Ms.skip{&harmCheck} // avoid harm when enemies near pentagram
 | when Ms.size
   | $marked_order{Blocker Ms.(Turn%Ms.size)} //move out of the way
-  | Blocker.moved <= Turn-1
   | leave 1
 | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><swap}
 | for M Ms
