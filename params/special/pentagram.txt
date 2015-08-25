@@ -5,7 +5,7 @@ empty: 1
 entity: 1
 starts: still // initial animation
 sight: 1
-trigger: when{enemy},remove{self},effect{pickup}
+trigger: when{enemy},effect{pickup},remove{self}
 ai: pentagram
 
 acts: summon_oculus, summon_blob, summon_ratman, summon_goblin,
