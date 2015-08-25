@@ -1,0 +1,6 @@
+affects: unit
+before: paralyze{3},impact{electrical},sound{electrical}
+icon: spell_shock
+range: 2
+research: 2000
+cost: 500

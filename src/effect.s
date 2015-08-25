@@ -61,6 +61,8 @@ effect sound Sound:
 
 effect harm Damage: Target.harm{Me Damage}
 
+effect paralyze Time: Target.moved <= $world.turn+Time
+
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
@@ -119,7 +121,6 @@ effect clear What:
   X,Y,Z | X,Y,Z
 | when no XYZ: bad "effect clear: invalid target ([What])"
 | $world.clear_tile{XYZ}
-
 
 effect summon What:
 | NoPick = 0

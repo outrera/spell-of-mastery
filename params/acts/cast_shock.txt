@@ -1,6 +1,0 @@
-affects: unit
-before: harm{1},impact{electrical},sound{electrical}
-icon: spell_shock
-range: 2
-research: 500
-cost: 150
