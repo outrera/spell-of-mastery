@@ -63,6 +63,8 @@ effect harm Damage: Target.harm{Me Damage}
 
 effect paralyze Time: Target.moved <= $world.turn+Time
 
+effect restore_movement Arg: Target.moved <= $world.turn-1
+
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
