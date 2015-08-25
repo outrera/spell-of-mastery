@@ -34,7 +34,7 @@ font.draw G P Text =
   | for C L
     | I = C.code-CodePoint
     | W = Ws.I
-    | G.blit{[CX CY] Gs.I}
+    | G.blit{CX CY Gs.I}
     | W+1+!CX
   | !CY + H
 font.format MaxLineWidth Text =
@@ -84,8 +84,8 @@ bar.render =
 bar.value = $value_
 bar.set_value New = $value_ <= New.clip{0 100}
 bar.draw G P =
-| G.blit{P $bg}
-| G.rect{#347004 1 P+[3 3] [152*$value_/100 14]}
+| G.blit{P.0 P.1 $bg}
+| G.rectangle{#347004 1 P+[3 3] [152*$value_/100 14]}
 
 
 type button.widget{Text Fn state/normal skin/medium_large}
@@ -99,7 +99,7 @@ button.draw  G P =
 | when State >< normal and $over: State <= \over
 | Sprite = $sprite
 | BG = Sprite.frames.(case State over normal Else State).0
-| G.blit{P BG}
+| G.blit{P.0 P.1 BG}
 | SF = Sprite.font
 | when SF <> `none`
   | Shift = case State pressed [SF.5 SF.6] _ [0 0]
@@ -134,8 +134,8 @@ litem.`!text` Text =
 | $text_ <= Text
 litem.draw G P =
 | BG = "litem-[$state]"^skin
-| G.blit{P BG rect/[0 0 $w-10 BG.h]}
-| G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
+| G.blit{P.0 P.1 BG.rect{0 0 $w-10 BG.h}}
+| G.blit{P.0+$w-10 P.1 BG.rect{BG.w-10 0 10 BG.h}}
 | X = 2
 | Y = BG.h/2-$fh/2
 | $font.draw{G P+[X Y] $text_}
@@ -161,12 +161,12 @@ droplist.draw G P =
 | when $drop
   | Y = 0
   | for R $rs
-    | G.blit{P+[0 Y] R}
+    | G.blit{P.0 P.1+Y R}
     | !Y + R.h
 | less $drop
-  | G.blit{P $rs.$picked}
+  | G.blit{P.0 P.1 $rs.$picked}
   | A = Main.spr{"ui_arrow"}.frames.down_normal.0
-  | G.blit{P+[$w-A.w 0] A}
+  | G.blit{P.0+$w-A.w P.1 A}
 | $rs <= 0
 | No
 droplist.input In = case In
@@ -249,14 +249,14 @@ slider_.draw G P =
 | I = 0
 | when $dir >< v
   | while I < $size
-    | G.blit{P+[0 I] BG rect/[0 0 BG.w (min BG.h $size-I)]}
+    | G.blit{P.0 P.1+I BG.rect{0 0 BG.w (min BG.h $size-I)}}
     | !I + BG.h
-  | G.blit{P+[1 $pos.int*($size-K.h)/$size+1] K}
+  | G.blit{P.0+1 P.1+$pos.int*($size-K.h)/$size+1 K}
 | when $dir >< h
   | while I < $size
-    | G.blit{P+[I 0] BG rect/[0 0 (min BG.w $size-I) BG.h]}
+    | G.blit{P.0+I P.1 BG.rect{0 0 (min BG.w $size-I) BG.h}}
     | !I + BG.w
-  | G.blit{P+[$pos.int*($size-K.w)/$size+1 1] K}
+  | G.blit{P.0+$pos.int*($size-K.w)/$size+1 P.1+1 K}
 slider_.input In = case In
   [mice_move _ P] | when $state >< pressed
                     | NP = @clip 0 $size: if $dir >< v then P.1 else P.0
@@ -306,8 +306,8 @@ txt_input.`!value` Text =
 | $text_ <= Text
 txt_input.draw G P =
 | BG = "litem-[$state]"^skin
-| G.blit{P BG rect/[0 0 $w-10 BG.h]}
-| G.blit{P+[$w-10 0] BG rect/[BG.w-10 0 10 BG.h]}
+| G.blit{P.0 P.1 BG.rect{0 0 $w-10 BG.h}}
+| G.blit{P.0+$w-10 P.1 BG.rect{BG.w-10 0 10 BG.h}}
 | X = 2
 | Y = BG.h/2-$fh/2
 | $font.draw{G P+[X Y] $text_}

@@ -182,9 +182,9 @@ view.render_iso =
   | BY = TY + BY
   | if F then // check flags
      | when F ^^ #2
-       | FB.rect{#00FF00 0 BX BY G.w G.h}
+       | FB.rectangle{#00FF00 0 BX BY G.w G.h}
        | !F -- #2
-     | if F ^^ #1 then FB.blit{BX,BY G flipX/1}
+     | if F ^^ #1 then FB.blit{BX BY G.flop}
        else if F ^^ #4000 then draw_cursor{#FF0000 0 FB BX BY F/>16}
        else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
        else FB.blitRaw{BX BY G}
@@ -204,7 +204,7 @@ view.draw_indicators =
   | Font.draw{$fb IP+[148 16] "[P.name]"}
   | leave
 | X,Y,Z = $cursor
-| $fb.blit{IP Indicators}
+| $fb.blit{IP.0 IP.1 Indicators}
 | Font.draw{$fb IP+[28 1] "[P.mana]+[P.income-P.upkeep]-[-P.upkeep]"}
 | Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]"}
 | Font.draw{$fb IP+[148 16] "[P.name]"}

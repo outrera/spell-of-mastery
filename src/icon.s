@@ -10,8 +10,8 @@ minimap.draw G P =
 | Y = Y*$h/$main.world.h
 | W = $main.view_w/32*$w/$main.world.w
 | H = $main.view_h/32*$h/$main.world.h
-| G.blit{P MM}
-| G.rect{#A0A0A0 0 P.0+X P.1+Y W H}
+| G.blit{P.0 P.1 MM}
+| G.rectangle{#A0A0A0 0 P.0+X P.1+Y W H}
 
 minimap.center_at P = ($center){[P.0*$main.world.w/$w P.1*$main.world.h/$h]}
 
@@ -51,16 +51,16 @@ icon.draw G P =
 | XY = if $pressed then P + [1 1] else P
 | when $frame
   | less IconFrame: IconFrame <= skin{'icon_frame'}
-  | G.blit{XY IconFrame}
+  | G.blit{XY.0 XY.1 IconFrame}
   | !XY + [2 2]
-| G.blit{XY $fg}
-| when $picked: G.rect{#0000FF 0 P.0-2 P.1-2 $w+4 $h+4}
+| G.blit{XY.0 XY.1 $fg}
+| when $picked: G.rectangle{#0000FF 0 P.0-2 P.1-2 $w+4 $h+4}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
-  |  G.blit{XY DisabledIconOverlay}
+  |  G.blit{XY.0 XY.1 DisabledIconOverlay}
 | when $research:
   | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
-  |  G.blit{XY+[26 18] ResearchIconOverlay}
+  |  G.blit{XY.0+26 XY.1+18 ResearchIconOverlay}
 | when got $number
   | Font = font small
   | Font.draw{G XY "[$number]"}

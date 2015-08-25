@@ -61,19 +61,19 @@ unit_panel.draw G P =
 | less $unit: leave
 | IconXY = P+[18 16]
 | Icon = $unit.main.sprites."icons_[$unit.icon or $unit.type]"
-| when got Icon: G.blit{IconXY Icon.frames.0}
-| G.blit{P+[8 8] $laurels}
+| when got Icon: G.blit{IconXY.0 IconXY.1 Icon.frames.0}
+| G.blit{P.0+8 P.1+8 $laurels}
 | X = P.0+4
 | Y = P.1+$laurels.h+16
 | Font = font medium
 | Font.draw{G P+[85 10] "[$unit.title or $unit.class_name.title]"}
 | Font.draw{G P+[85 48] "[$unit.owner.name]"}
 | Health = max 0 $unit.health-$unit.hits
-| times I Health: G.blit{[X+I*8 Y] $health_icon}
-| times I $unit.attack: G.blit{[X+I*8 Y+32] $attack_icon}
-| times I $unit.defense: G.blit{[X+I*8 Y+48] $defense_icon}
+| times I Health: G.blit{X+I*8 Y $health_icon}
+| times I $unit.attack: G.blit{X+I*8 Y+32 $attack_icon}
+| times I $unit.defense: G.blit{X+I*8 Y+48 $defense_icon}
 | Moved = $unit.moved-$unit.world.turn+1
-| when Moved > 0: times I Moved: G.blit{[X+I*8 Y+64] $moved}
+| when Moved > 0: times I Moved: G.blit{X+I*8 Y+64 $moved}
 
 type world_props.$base{world callback}
      filename name description width height base
