@@ -1,0 +1,6 @@
+affects: any
+before: sound{summon},summon{nopick,unit_telekinesis}
+icon: spell_telekinesis
+range: 5
+research: 500
+cost: 100

@@ -1,0 +1,9 @@
+sprite: system_dummy
+empty: 1
+aux: 1
+ttl: 1
+health: 999
+attack: 0
+defense: 999
+show: 0
+moves: ()
