@@ -184,7 +184,7 @@ view.render_iso =
      | when F ^^ #2
        | FB.rectangle{#00FF00 0 BX BY G.w G.h}
        | !F -- #2
-     | if F ^^ #1 then FB.blit{BX BY G.flop}
+     | if F ^^ #1 then FB.blitRaw{BX BY G.flop}
        else if F ^^ #4000 then draw_cursor{#FF0000 0 FB BX BY F/>16}
        else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
        else FB.blitRaw{BX BY G}
