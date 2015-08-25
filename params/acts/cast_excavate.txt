@@ -1,6 +1,6 @@
 affects: any
 before: sound{summon}
-after: impact{teleport},clear{target},sound{stone_hit}
+after: impact{explosion6},clear{target},sound{stone_hit}
 icon: spell_excavate
 range: any
 research: 0
