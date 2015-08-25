@@ -63,7 +63,10 @@ effect harm Damage: Target.harm{Me Damage}
 
 effect paralyze Time: Target.moved <= $world.turn+Time
 
-effect restore_movement Arg: Target.moved <= $world.turn-1
+effect haste Whom:
+| if Target.moved>>$world.turn
+  then Target.moved <= $world.turn-1
+  else Target.haste <= 1
 
 effect notify Text: Target.owner.notify{Text}
 

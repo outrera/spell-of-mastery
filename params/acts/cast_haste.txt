@@ -1,0 +1,6 @@
+affects: unit
+before: haste{target},impact{explosion_blood},sound{orbit2}
+icon: spell_haste
+range: 2
+research: 2000
+cost: 200

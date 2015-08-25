@@ -48,6 +48,9 @@ unit.`!handled` State = $flags <= $flags.set{1 State}
 unit.summoned = $flags.get{2}
 unit.`!summoned` State = $flags <= $flags.set{2 State}
 
+unit.haste = $flags.get{3}
+unit.`!haste` State = $flags <= $flags.set{3 State}
+
 unit.alive = $hits < $health
 
 

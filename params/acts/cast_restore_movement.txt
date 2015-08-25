@@ -1,6 +1,0 @@
-affects: unit
-before: restore_movement{target},impact{explosion_blood},sound{orbit2}
-icon: spell_restore_movement
-range: 2
-research: 2000
-cost: 200
