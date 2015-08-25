@@ -51,6 +51,9 @@ unit.`!summoned` State = $flags <= $flags.set{2 State}
 unit.haste = $flags.get{3}
 unit.`!haste` State = $flags <= $flags.set{3 State}
 
+unit.shell = $flags.get{4}
+unit.`!shell` State = $flags <= $flags.set{4 State}
+
 unit.alive = $hits < $health
 
 
@@ -351,6 +354,9 @@ unit.die =
 | $forced_order{type/die}
 
 unit.harm Attacker Damage =
+| when $shell and Damage > 0:
+  | $shell <= 0
+  | leave
 | !$hits + Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hits < $health:

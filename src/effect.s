@@ -68,6 +68,8 @@ effect haste Whom:
   then Target.moved <= $world.turn-1
   else Target.haste <= 1
 
+effect shell Whom: Target.shell <= 1
+
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}

@@ -2,5 +2,5 @@ affects: unit
 before: harm{-1},impact{explosion_blood},sound{summon}
 icon: spell_heal
 range: 2
-//research: 5000
-//cost: 800
+research: 1000
+cost: 200

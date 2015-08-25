@@ -1,0 +1,6 @@
+affects: unit
+before: shell{target},impact{explosion_blood},sound{orbit2}
+icon: spell_shell
+range: 2
+research: 2000
+cost: 200
