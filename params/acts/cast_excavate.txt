@@ -1,0 +1,7 @@
+affects: any
+before: sound{summon}
+after: impact{teleport},clear{target},sound{stone_hit}
+icon: spell_excavate
+range: any
+research: 0
+cost: 0

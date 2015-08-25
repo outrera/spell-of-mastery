@@ -1,7 +1,0 @@
-affects: any
-before: sound{summon}
-after: impact{teleport},clear{target}
-icon: spell_teleport
-range: any
-research: 0
-cost: 0
