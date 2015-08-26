@@ -3,15 +3,15 @@ use widgets gfx
 /*
 type minimap.widget{Main CenterAt}
      main/Main w/128 h/128 pressed center/CenterAt
-minimap.draw G P =
+minimap.draw G PX PY =
 | MM = $main.world.minimap
 | [X Y] = $main.world.player.view/32
 | X = X*$w/$main.world.w
 | Y = Y*$h/$main.world.h
 | W = $main.view_w/32*$w/$main.world.w
 | H = $main.view_h/32*$h/$main.world.h
-| G.blit{P.0 P.1 MM}
-| G.rectangle{#A0A0A0 0 P.0+X P.1+Y W H}
+| G.blit{PX PY MM}
+| G.rectangle{#A0A0A0 0 PX+X PY+Y W H}
 
 minimap.center_at P = ($center){[P.0*$main.world.w/$w P.1*$main.world.h/$h]}
 
@@ -46,24 +46,29 @@ type icon.widget{fg data/0 click/(Icon=>)}
    data/Data
    on_click/Click
    //popup/icon_popup{}
-icon.draw G P =
+icon.draw G PX PY =
 | less $fg: leave
-| XY = if $pressed then P + [1 1] else P
+| X = PX
+| Y = PY
+| when $pressed:
+  | !X+1
+  | !Y+1
 | when $frame
   | less IconFrame: IconFrame <= skin{'icon_frame'}
-  | G.blit{XY.0 XY.1 IconFrame}
-  | !XY + [2 2]
-| G.blit{XY.0 XY.1 $fg}
-| when $picked: G.rectangle{#0000FF 0 P.0-2 P.1-2 $w+4 $h+4}
+  | G.blit{X Y IconFrame}
+  | !X+2
+  | !Y+2
+| G.blit{X Y $fg}
+| when $picked: G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
-  |  G.blit{XY.0 XY.1 DisabledIconOverlay}
+  |  G.blit{X Y DisabledIconOverlay}
 | when $research:
   | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
-  |  G.blit{XY.0+26 XY.1+18 ResearchIconOverlay}
+  |  G.blit{X+26 Y+18 ResearchIconOverlay}
 | when got $number
   | Font = font small
-  | Font.draw{G XY "[$number]"}
+  | Font.draw{G X Y "[$number]"}
 icon.input In =
 | when $disabled: leave
 | case In

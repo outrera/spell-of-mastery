@@ -21,8 +21,7 @@ font N = have Fonts.N:
 | Ws.0 <= W/2
 | new_font Glyphs Ws H
 font.width Line = | Ws = $widths; Line{C.code => Ws.(C-' '.code)+1}.sum
-font.draw G P Text =
-| X,Y = P
+font.draw G X Y Text =
 | Ls = Text.lines
 | Ws = $widths
 | Gs = $glyphs
@@ -74,7 +73,7 @@ txt.render =
   | $w <= $value_.lines{}{L => F.width{L}}.max
   | $h <= F.height
 | Me
-txt.draw G P = $font.draw{G P $value_}
+txt.draw G X Y = $font.draw{G X Y $value_}
 txt.as_text = "#txt{[$value]}"
 
 type bar.widget{V} value_/V.clip{0 100} bg/No
@@ -83,9 +82,9 @@ bar.render =
 | Me
 bar.value = $value_
 bar.set_value New = $value_ <= New.clip{0 100}
-bar.draw G P =
-| G.blit{P.0 P.1 $bg}
-| G.rectangle{#347004 1 P+[3 3] [152*$value_/100 14]}
+bar.draw G X Y =
+| G.blit{X Y $bg}
+| G.rectangle{#347004 1 X+3 Y+3 152*$value_/100 14}
 
 
 type button.widget{Text Fn state/normal skin/medium_large}
@@ -94,22 +93,26 @@ type button.widget{Text Fn state/normal skin/medium_large}
 | $w <= $sprite.frames.normal.0.w
 | $h <= $sprite.frames.normal.0.h
 button.render = Me
-button.draw  G P =
+button.draw G PX PY =
 | State = $state
 | when State >< normal and $over: State <= \over
 | Sprite = $sprite
 | BG = Sprite.frames.(case State over normal Else State).0
-| G.blit{P.0 P.1 BG}
+| G.blit{PX PY BG}
 | SF = Sprite.font
 | when SF <> `none`
-  | Shift = case State pressed [SF.5 SF.6] _ [0 0]
+  | ShiftX = 0
+  | ShiftY = 0
+  | case State pressed
+    | ShiftX <= SF.5
+    | ShiftY <= SF.6
   | FontName = SF.| case State pressed+over(3) disabled(4) _(2)
   | F = font FontName
   | FW = F.width{$text}
   | FH = F.height
   | X = BG.w/2-FW/2 + SF.0
   | Y = BG.h/2-FH/2 + SF.1
-  | F.draw{G P+[X Y]+Shift $text}
+  | F.draw{G PX+X+ShiftX PY+Y+ShiftY $text}
 button.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | case $state normal: Me.state <= \pressed
@@ -132,13 +135,13 @@ litem.text = $text_
 litem.`!text` Text =
 | $init <= 0
 | $text_ <= Text
-litem.draw G P =
+litem.draw G PX PY =
 | BG = "litem-[$state]"^skin
-| G.blit{P.0 P.1 BG.rect{0 0 $w-10 BG.h}}
-| G.blit{P.0+$w-10 P.1 BG.rect{BG.w-10 0 10 BG.h}}
+| G.blit{PX PY BG.rect{0 0 $w-10 BG.h}}
+| G.blit{PX+$w-10 PY BG.rect{BG.w-10 0 10 BG.h}}
 | X = 2
 | Y = BG.h/2-$fh/2
-| $font.draw{G P+[X Y] $text_}
+| $font.draw{G PX+X PY+Y $text_}
 litem.input In = case In
   [mice left 1 P] | $state <= case $state normal(\picked) picked(\normal) X(X)
 
@@ -157,16 +160,16 @@ droplist.render =
 | when $drop: $h <= $ih*$rs.size
 | less $drop: $h <= $ih
 | Me
-droplist.draw G P =
+droplist.draw G PX PY =
 | when $drop
   | Y = 0
   | for R $rs
-    | G.blit{P.0 P.1+Y R}
+    | G.blit{PX PY+Y R}
     | !Y + R.h
 | less $drop
-  | G.blit{P.0 P.1 $rs.$picked}
+  | G.blit{PX PY $rs.$picked}
   | A = Main.spr{"ui_arrow"}.frames.down_normal.0
-  | G.blit{P.0+$w-A.w P.1 A}
+  | G.blit{PX+$w-A.w PY A}
 | $rs <= 0
 | No
 droplist.input In = case In
@@ -243,20 +246,20 @@ slider_.render =
 | Me
 slider_.inc = !$value + $delta
 slider_.dec = !$value - $delta
-slider_.draw G P =
+slider_.draw G PX PY =
 | BG = skin "slider-[$dir]-normal"
 | K = skin "slider-knob"
 | I = 0
 | when $dir >< v
   | while I < $size
-    | G.blit{P.0 P.1+I BG.rect{0 0 BG.w (min BG.h $size-I)}}
+    | G.blit{PX PY+I BG.rect{0 0 BG.w (min BG.h $size-I)}}
     | !I + BG.h
-  | G.blit{P.0+1 P.1+$pos.int*($size-K.h)/$size+1 K}
+  | G.blit{PX+1 PY+$pos.int*($size-K.h)/$size+1 K}
 | when $dir >< h
   | while I < $size
-    | G.blit{P.0+I P.1 BG.rect{0 0 (min BG.w $size-I) BG.h}}
+    | G.blit{PX+I PY BG.rect{0 0 (min BG.w $size-I) BG.h}}
     | !I + BG.w
-  | G.blit{P.0+$pos.int*($size-K.w)/$size+1 P.1+1 K}
+  | G.blit{PX+$pos.int*($size-K.w)/$size+1 PY+1 K}
 slider_.input In = case In
   [mice_move _ P] | when $state >< pressed
                     | NP = @clip 0 $size: if $dir >< v then P.1 else P.0
@@ -304,13 +307,13 @@ txt_input.value = $text_
 txt_input.`!value` Text =
 | $init <= 0
 | $text_ <= Text
-txt_input.draw G P =
+txt_input.draw G PX PY =
 | BG = "litem-[$state]"^skin
-| G.blit{P.0 P.1 BG.rect{0 0 $w-10 BG.h}}
-| G.blit{P.0+$w-10 P.1 BG.rect{BG.w-10 0 10 BG.h}}
+| G.blit{PX PY BG.rect{0 0 $w-10 BG.h}}
+| G.blit{PX+$w-10 PY BG.rect{BG.w-10 0 10 BG.h}}
 | X = 2
 | Y = BG.h/2-$fh/2
-| $font.draw{G P+[X Y] $text_}
+| $font.draw{G PX+X PY+Y $text_}
 txt_input.wants_focus = 1
 txt_input.input In = case In
   [focus State P] | $state <= if State then \picked else \normal

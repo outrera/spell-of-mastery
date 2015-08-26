@@ -189,36 +189,37 @@ view.render_iso =
        else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
        else FB.blitRaw{BX BY G}
     else FB.blitRaw{BX BY G}
-  //| Font.draw{FB [BX+18 BY+4] "[Order]"}
+  //| Font.draw{FB BX+18 BY+4 "[Order]"}
   //| !Order+1
 
 Indicators = 0
 
 view.draw_indicators =
 | less Indicators: Indicators <= $main.img{ui_indicators}
-| IP = [($w-Indicators.w)/2 0]
+| IX = ($w-Indicators.w)/2
+| IY = 0
 | P = $world.player
 | Font = font medium
-| when $mode <> play: !IP.0 + 80
+| when $mode <> play: !IX + 80
 | less P.human or $mode <> play:
-  | Font.draw{$fb IP+[148 16] "[P.name]"}
+  | Font.draw{$fb IX+148 IY+16 "[P.name]"}
   | leave
 | X,Y,Z = $cursor
-| $fb.blit{IP.0 IP.1 Indicators}
-| Font.draw{$fb IP+[28 1] "[P.mana]+[P.income-P.upkeep]-[-P.upkeep]"}
-| Font.draw{$fb IP+[148 1] "[$world.turn]:[P.id]"}
-| Font.draw{$fb IP+[148 16] "[P.name]"}
+| $fb.blit{IX IY Indicators}
+| Font.draw{$fb IX+28 IY+1 "[P.mana]+[P.income-P.upkeep]-[-P.upkeep]"}
+| Font.draw{$fb IX+148 IY+1 "[$world.turn]:[P.id]"}
+| Font.draw{$fb IX+148 IY+16 "[P.name]"}
 | Debug = $world.params.debug
-| when got Debug: Font.draw{$fb IP+[148 32] "[Debug]"}
+| when got Debug: Font.draw{$fb IX+148 IY+32 "[Debug]"}
 | C = 32
 | Notes = $world.notes
 | Clock = clock
 | for [Expires Chars] $world.notes: when Clock < Expires:
-  | Font.draw{$fb IP+[-16 C] "* [Chars.text]"}
+  | Font.draw{$fb IX-16 IY+C "* [Chars.text]"}
   | !C+16
 | Font = font small
-| Font.draw{$fb IP+[246 1] "[X],[Y],[Z]"}
-| Font.draw{$fb IP+[246 9] "[$world.at{X,Y,Z-1}.type]"}
+| Font.draw{$fb IX+246 IY+1 "[X],[Y],[Z]"}
+| Font.draw{$fb IX+246 IY+9 "[$world.at{X,Y,Z-1}.type]"}
 
 view.render_frame =
 | $fb.clear{#929292/*#00A0C0*/}
@@ -229,7 +230,7 @@ view.render_frame =
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
-| $infoText.draw{$fb 4,($h-10)}
+| $infoText.draw{$fb 4 ($h-10)}
 | $infoText.value <= ''
 
 // calculates current framerate and adjusts sleeping accordingly

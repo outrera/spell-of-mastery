@@ -1,6 +1,4 @@
 sprite: unit_wizard
-title: `Wizard`
-icon: `unit_wizard`
 unit: 1
 entity: 1
 starts: still // initial animation

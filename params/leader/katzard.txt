@@ -1,1 +1,2 @@
 sprite: unit_katzard
+icon: unit_katzard
