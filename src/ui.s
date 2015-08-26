@@ -74,6 +74,7 @@ ui.init =
   | unpause
 | LoadWorldDlgW = load_world_dlg $world MapsFolder &hideLoadWorldDlg: X =>
   | $load{X}
+  | $world.explore{1}
   | hideLoadWorldDlg
 | LoadWorldDlgW.folder <= MapsFolder
 | LoadWorldDlg <= hidden: LoadWorldDlgW

@@ -194,10 +194,7 @@ unit.move XYZ =
 | $move_in{1}
 | Me
 
-unit.seen =
-| X = $xyz.0
-| Y = $xyz.1
-| $world.human.sight.Y.X
+unit.seen = $world.seen{$xyz.0 $xyz.1}
 
 unit.environment_updated =
 | [UX UY UZ] = $xyz
@@ -349,7 +346,7 @@ unit.forced_order @As =
 | O
 
 unit.die =
-| when got!it $sounds.die: $main.sound{it.rand}
+| $sound{die}
 | $world.waiting <= $id
 | $forced_order{type/die}
 
@@ -361,12 +358,16 @@ unit.harm Attacker Damage =
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hits < $health:
   | if Damage >> 0
-    then | when got!it $sounds.hit: $main.sound{it.rand}
+    then | $sound{hit}
          | $animate{hit}
     else when $hits << 0: $hits <= 0
   | leave
 | $die
 | $action.cycles <= 1
+
+unit.sound Type =
+| less $world.human.explored{$xyz}>1: leave
+| when got!it $sounds.Type: $main.sound{it.rand}
 
 unit.key =
 | UX,UY,UZ = $xyz

@@ -134,7 +134,7 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
   | when Z >> RoofZ: _goto for_break
 | _label for_break
 | Us = Wr.column_units_at{X Y}
-| when Fog: Us <= Us.skip{(?owner.id or ?health)}
+| when Fog: Us <= Us.skip{(?owner.id or ?health or ?bank><effect)}
 | for U Us: when U.frame.w > 1:
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
@@ -290,6 +290,7 @@ world.update_pick Units =
 | $picked <= Units^cons{picked}
 
 view.select_unit XYZ = 
+| less $world.seen{XYZ.0 XYZ.1}: leave 0
 | Picked = []
 | Us = $world.units_at{XYZ}.skip{?aux}
 | when $mode >< play: Us <= Us.keep{?show}
@@ -389,6 +390,7 @@ update_lmb Me Player =
 | less Picked.id and Picked.owner.id >< Player.id:
   | $world.act <= 0
   | leave
+| less $world.seen{@$cursor.take{2}}: leave
 | Act = $world.act.deep_copy
 | less Act.range >< any
   | Ms = action_list_moves{$world Picked Act}.0
@@ -402,6 +404,7 @@ update_rmb Me Player =
 | when $world.act:
   | $world.act <= 0
   | leave
+| less $world.seen{@$cursor.take{2}}: leave
 | Picked = $world.picked
 | when Picked.id and Picked.owner.id >< Player.id:
   | $world.picked.guess_order_at{$cursor}
@@ -431,6 +434,8 @@ world.update_picked =
 | when Picked and Picked.picked and Picked.action.type >< idle:
   | Marks = if $act and $act.range <> any
     then | Ms,Path = action_list_moves{Me Picked $act}
+         | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
+         | Path = Path.keep{X,Y,Z=>$seen{X Y}}
          | As = map XYZ Ms
            | Mark = $alloc_unit{"mark_magic_hit"}
            | Mark.move{XYZ}

@@ -46,7 +46,7 @@ player.`!researching` R = $params.researching <= R
 
 player.explore State =
 | when State
-  | for S $sight: S.clear{2}
+  | for S $sight: S.clear{3}
   | leave
 | for S $sight: S.clear{0}
 | for U $units: U.explore{1}
@@ -55,7 +55,7 @@ player.explore State =
 player.explored X,Y,Z = $sight.Y.X
 
 player.clear =
-| for Xs $sight: Xs.clear{2}
+| for Xs $sight: Xs.clear{3}
 | $ai.clear
 | $picked <= $world.nil
 | $leader <= 0

@@ -21,7 +21,7 @@ move_start Me =
 | U.facing <= Dirs.locate{X,Y}
 | U.animate{move}
 | $start_cycles <= $cycles
-| when got!it U.sounds.move: U.main.sound{it.rand}
+| U.sound{move}
 
 move_update Me =
 | U = $unit
@@ -69,7 +69,7 @@ dact attack.start
 | U.face{$target.xyz}
 | $cycles <= max 1 U.sprite.anim_speed{attack}
 | U.animate{attack}
-| when got!it U.sounds.attack: U.main.sound{it.rand}
+| U.sound{attack}
 dact attack.update
 | U = $unit
 | when $cycles > 9000 // if target is dying, wait till it is dead

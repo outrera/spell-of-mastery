@@ -54,7 +54,7 @@ SoundPlayedTurn = 0
 effect sound Sound:
 | when SoundPlayedCycle >< $world.cycle and SoundPlayedTurn >< $world.turn:
   | leave
-| when not $id or (not $removed and $world.human.explored{$xyz}):
+| when not $id or (not $removed and $world.human.explored{$xyz}>1):
   | $main.sound{Sound}
   | SoundPlayedCycle <= $world.cycle
   | SoundPlayedTurn <= $world.turn
