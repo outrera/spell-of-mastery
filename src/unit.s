@@ -368,30 +368,29 @@ unit.harm Attacker Damage =
 | $die
 | $action.cycles <= 1
 
-
-unit.render Heap X Y =
-| G = $frame
-| when G.w >< 1: leave// avoid drawing dummies
-| XX = X+32-G.w/2 + $xy.0
-| YY = Y-16-G.h+$slope*16 + $xy.1
-| when $mirror: G.flop
+unit.key =
 | UX,UY,UZ = $xyz
 | when $movement_render_hack
   | !UX+1
   | !UY+1
-| Key = ((max UX UY)</54) + ((UX*128+UY)</38) + ((UZ*2-1)</30)
-       + ((UX+$draw_order)</22) + $serial
+| ((max UX UY)</54) + ((UX*128+UY)</38) + ((UZ*2-1)</30)
+  + ((UX+$draw_order)</22) + $serial
+
+unit.draw FB X Y =
+| G = $frame
+| XX = X+32-G.w/2 + $xy.0
+| YY = Y-16-G.h+$slope*16 + $xy.1
+| UX,UY,UZ = $xyz
 | Shadow = $sprite.shadow
-| when Shadow
-  | Heap.push{Key-1 [Shadow X+$xy.0+8 Y+$xy.1-38 0]}
+| when Shadow: FB.blit{X+$xy.0+8 Y+$xy.1-38 Shadow}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
   | PH = $sprite.pick_height
   | less PH: PH <= $height*8+16
   | PH <= PH + Mark.h + Wave
-  | Heap.push{Key+1 [Mark X+$xy.0+32-Mark.w/2 Y+$xy.1-PH 0]}
-| Heap.push{Key [G XX YY 0]}
-
+  | FB.blit{X+$xy.0+32-Mark.w/2 Y+$xy.1-PH Mark}
+| when $mirror: G.flop
+| FB.blit{XX YY G}
 
 export unit

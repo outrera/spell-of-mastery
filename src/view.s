@@ -116,29 +116,29 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
   | DrawCursor = Cursor and Z < CursorZ
   | when DrawCursor:
     | G = cursor #FF0000 0 TH
-    | Heap.push{Key-1 [G BX BY-YUnit-ZZ 0]}
+    | Heap.push{Key-1 [G BX BY-YUnit-ZZ]}
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
     | when AboveCursor or TZ << CutZ:
-      | Heap.push{Key [G BX BY-G.h-ZZ 0]}
+      | Heap.push{Key [G BX BY-G.h-ZZ]}
   | when DrawCursor:
     | G = cursor #00FF00 1 TH
-    | Heap.push{Key+1 [G BX BY-YUnit-ZZ 0]}
+    | Heap.push{Key+1 [G BX BY-YUnit-ZZ]}
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
-| for U Wr.column_units_at{X Y}
+| for U Wr.column_units_at{X Y}: when U.frame.w > 1:
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
   | TZ = Z-4
   | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
     | DrawShadow = Z > UnitZ
-    | U.render{Heap BX BY-ZUnit*Z}
+    | Heap.push{U.key [U BX BY-ZUnit*Z]}
     | when DrawShadow
       | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
       | Key = Key + (UnitZ</30) + 1
-      | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10 0]}
+      | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10]}
 
 world.roof XYZ =
 | X,Y,Z = XYZ
@@ -151,7 +151,7 @@ Unexplored = 0
 render_unexplored Wr X Y BX BY Heap =
 | less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
 | Key = (((max X Y))</54) + ((X*128+Y)</38)
-| Heap.push{Key [Unexplored BX BY-ZUnit-Unexplored.h 0]}
+| Heap.push{Key [Unexplored BX BY-ZUnit-Unexplored.h]}
 
 view.render_iso =
 | Wr = $world
@@ -181,18 +181,12 @@ view.render_iso =
       | E = Explored.Y.X
       | if E then render_pilar Wr X Y BX BY Heap $cursor RoofZ
         else render_unexplored Wr X Y BX BY Heap
-      //| Key = (X+Y)*WW*WH+X
-      //| Heap.push{Key [Gs.0 BX BY 0]}
 //| Font = font small
 //| Order = 0
 | while!it Heap.pop:
-  | [G BX BY F] = it.value
+  | [G BX BY] = it.value
   | BX = TX + BX
   | BY = TY + BY
-  | when F: // check flags
-     | when F ^^ #2
-       | FB.rectangle{#00FF00 0 BX BY G.w G.h}
-       | !F -- #2
   | FB.blit{BX BY G}
   //| Font.draw{FB BX+18 BY+4 "[Order]"}
   //| !Order+1
