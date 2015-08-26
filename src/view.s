@@ -73,7 +73,12 @@ view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.world = $main.world
 
-draw_cursor V Front FB X Y H =
+type cursor{color front height}
+
+cursor.draw FB X Y =
+| V = $color
+| Front = $front
+| H = $height
 | !H*ZUnit
 | !Y - H
 | !Y - 2
@@ -109,13 +114,17 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
   | ZZ = Z*ZUnit
   | Key = Key + ((Z*2)</30)
   | DrawCursor = Cursor and Z < CursorZ
-  | when DrawCursor: Heap.push{Key-1 [G BX BY-YUnit-ZZ #4000+(TH</16)]}
+  | when DrawCursor:
+    | G = cursor #FF0000 0 TH
+    | Heap.push{Key-1 [G BX BY-YUnit-ZZ 0]}
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
     | when AboveCursor or TZ << CutZ:
       | Heap.push{Key [G BX BY-G.h-ZZ 0]}
-  | when DrawCursor: Heap.push{Key+1 [G BX BY-YUnit-ZZ #8000+(TH</16)]}
+  | when DrawCursor:
+    | G = cursor #00FF00 1 TH
+    | Heap.push{Key+1 [G BX BY-YUnit-ZZ 0]}
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
@@ -180,15 +189,11 @@ view.render_iso =
   | [G BX BY F] = it.value
   | BX = TX + BX
   | BY = TY + BY
-  | if F then // check flags
+  | when F: // check flags
      | when F ^^ #2
        | FB.rectangle{#00FF00 0 BX BY G.w G.h}
        | !F -- #2
-     | if F ^^ #1 then FB.blitRaw{BX BY G.flop}
-       else if F ^^ #4000 then draw_cursor{#FF0000 0 FB BX BY F/>16}
-       else if F ^^ #8000 then draw_cursor{#00FF00 1 FB BX BY F/>16}
-       else FB.blitRaw{BX BY G}
-    else FB.blitRaw{BX BY G}
+  | FB.blit{BX BY G}
   //| Font.draw{FB BX+18 BY+4 "[Order]"}
   //| !Order+1
 

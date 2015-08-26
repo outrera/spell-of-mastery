@@ -374,8 +374,7 @@ unit.render Heap X Y =
 | when G.w >< 1: leave// avoid drawing dummies
 | XX = X+32-G.w/2 + $xy.0
 | YY = Y-16-G.h+$slope*16 + $xy.1
-| FlipX = $mirror
-| Flags = FlipX
+| when $mirror: G.flop
 | UX,UY,UZ = $xyz
 | when $movement_render_hack
   | !UX+1
@@ -384,19 +383,15 @@ unit.render Heap X Y =
        + ((UX+$draw_order)</22) + $serial
 | Shadow = $sprite.shadow
 | when Shadow
-  | Heap.push{Key-1 [Shadow X+$xy.0+8 Y+$xy.1-38 Flags]}
+  | Heap.push{Key-1 [Shadow X+$xy.0+8 Y+$xy.1-38 0]}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
   | PH = $sprite.pick_height
   | less PH: PH <= $height*8+16
   | PH <= PH + Mark.h + Wave
-  | Heap.push{Key+1 [Mark X+$xy.0+32-Mark.w/2 Y+$xy.1-PH Flags]}
-/*  //| !Flags ++ #2
-  | H = $sprite.height
-  | Heap.push{Key-1 [H X Y-32 #4000+(H</16)]}
-  | Heap.push{Key+1 [H X Y-32 #8000+(H</16)]}*/
-| Heap.push{Key [G XX YY Flags]}
+  | Heap.push{Key+1 [Mark X+$xy.0+32-Mark.w/2 Y+$xy.1-PH 0]}
+| Heap.push{Key [G XX YY 0]}
 
 
 export unit

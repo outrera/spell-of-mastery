@@ -1,4 +1,3 @@
-sprite: unit_wizard
 unit: 1
 entity: 1
 starts: still // initial animation
