@@ -94,7 +94,11 @@ cursor.draw FB X Y =
 | FB.line{V B B+[0 H]}
 | FB.line{V C C+[0 H]}
 
-render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
+type fogged{g}
+fogged.draw FB X Y = FB.blit{X Y $g.dither{1}}
+
+
+render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
 | Gs = Wr.gfxes.Y.X
 | CurX = CursorXYZ.0
 | CurY = CursorXYZ.1
@@ -121,14 +125,17 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ =
   | TZ = UnitZ - 4
   | less T.invisible
     | when AboveCursor or TZ << CutZ:
-      | Heap.push{Key [G BX BY-G.h-ZZ]}
+      | GG = if Fog then fogged G else G
+      | Heap.push{Key [GG BX BY-G.h-ZZ]}
   | when DrawCursor:
     | G = cursor #00FF00 1 TH
     | Heap.push{Key+1 [G BX BY-YUnit-ZZ]}
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
-| for U Wr.column_units_at{X Y}: when U.frame.w > 1:
+| Us = Wr.column_units_at{X Y}
+| when Fog: Us <= Us.skip{(?owner.id or ?health)}
+| for U Us: when U.frame.w > 1:
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
   | TZ = Z-4
@@ -179,7 +186,8 @@ view.render_iso =
       | BX = XX*XUnit2 - YY*XUnit2
       | BY = XX*YUnit2 + YY*YUnit2
       | E = Explored.Y.X
-      | if E then render_pilar Wr X Y BX BY Heap $cursor RoofZ
+      | if E then
+        | render_pilar Wr X Y BX BY Heap $cursor RoofZ E><1
         else render_unexplored Wr X Y BX BY Heap
 //| Font = font small
 //| Order = 0

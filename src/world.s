@@ -260,7 +260,7 @@ world.place_unitS UU =
 | Id = if Consed then Consed.id else 0
 | $unit_map.set{XYZ.0,XYZ.1,0 Id}
 
-unit.explore =
+unit.explore V =
 | Sight = $sight
 | when no Sight: leave
 | XYZ = $xyz
@@ -268,7 +268,9 @@ unit.explore =
 | UX = XYZ.0
 | UY = XYZ.1
 | for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
-  | Explored.Y.X <= 1
+  | E = Explored.Y
+  | less E.X: E.X <= 1
+  | !E.X+V
 
 world.explore State = for P $players: P.explore{State}
 
@@ -279,9 +281,10 @@ world.place_unit U =
   | U.xyz.init{XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]}
   | $place_unitS{U}
 | U.xyz.init{XYZ}
-| U.explore
+| U.explore{1}
 
 world.remove_unitS U =
+| U.explore{-1}
 | XYZ = U.xyz
 | Us = []
 | for P $proxies_at{XYZ}: if P.unit_.id >< U.id 
