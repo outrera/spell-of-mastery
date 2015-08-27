@@ -1,0 +1,7 @@
+left click - place object/tile
+right click - remove object/tile
+
+Click Modifiers:
+E - while holding `E` key, right click remove empty tiles (like grass), while left click places on top of empty tiles.  Without `E`, objects get placed inside of grass
+M - place sprite mirrored
+R - pick random object from selected sprite bank. Useful for placing decorations, like bushes
