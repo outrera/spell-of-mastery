@@ -142,7 +142,7 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
   | TZ = Z-4
   | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
     | DrawShadow = Z > UnitZ
-    | Heap.push{U.key [U BX BY-ZUnit*Z]}
+    | Heap.push{U.draw_order [U BX BY-ZUnit*Z]}
     | when DrawShadow
       | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
       | Key = Key + (UnitZ</30) + 1

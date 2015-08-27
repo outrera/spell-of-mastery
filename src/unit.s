@@ -26,11 +26,11 @@ type unit.$class{Id World}
   mark // next mark in the map marks chain
   active // true if this unit resides in the list of active units
   slope // unit is standing on a sloped terrain
-  movement_render_hack
   path // next unit in path
   hits // how damaged is this unit
   turn // turn it was created
   flags
+  draw_order
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -192,6 +192,7 @@ unit.move XYZ =
 | $world.place_unit{Me}
 | $environment_updated
 | $move_in{1}
+| $update_draw_order{@XYZ}
 | Me
 
 unit.seen = $world.seen{$xyz.0 $xyz.1}
@@ -369,13 +370,10 @@ unit.sound Type =
 | less $world.human.explored{$xyz}>1: leave
 | when got!it $sounds.Type: $main.sound{it.rand}
 
-unit.key =
-| UX,UY,UZ = $xyz
-| when $movement_render_hack
-  | !UX+1
-  | !UY+1
-| ((max UX UY)</54) + ((UX*128+UY)</38) + ((UZ*2-1)</30)
-  + ((UX+$draw_order)</22) + $serial
+unit.update_draw_order X Y Z =
+| $draw_order <= ((max X Y)</54) + ((X*128+Y)</38) + ((Z*2-1)</30)
+                 + ((X+$class.draw_order)</22) + $serial
+
 
 unit.draw FB X Y =
 | G = $frame

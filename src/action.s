@@ -14,7 +14,10 @@ Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 move_start Me =
 | U = $unit
 | X,Y,Z = $xyz - U.xyz
-| U.movement_render_hack <= got OverlapDirs.locate{X,Y}
+| DrawOrderHack = got OverlapDirs.locate{X,Y}
+| when DrawOrderHack:
+  | P = U.xyz
+  | U.update_draw_order{P.0+1 P.1+1 P.2}
 | $fromXY.init{U.xy}
 | $fromXYZ.init{U.xyz}
 | U.move{$xyz}
@@ -37,7 +40,7 @@ move_update Me =
 move_finish Me =
 | U = $unit
 | U.xy.init{$fromXY}
-| U.movement_render_hack <= 0
+| U.update_draw_order{@U.xyz}
 
 dact move.valid
 | U = $unit
