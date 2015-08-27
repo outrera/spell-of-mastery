@@ -112,7 +112,7 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
-| Key = (((max X Y))</28) + ((X*128+Y)</12)
+| Key = (((max X Y))</24) + ((X*128+Y)</10)
 | for G Gs
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
@@ -158,7 +158,7 @@ Unexplored = 0
 
 render_unexplored Wr X Y BX BY Heap =
 | less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
-| Key = (((max X Y))</28) + ((X*128+Y)</12)
+| Key = (((max X Y))</24) + ((X*128+Y)</10)
 | Heap.push{Key [Unexplored BX BY-ZUnit-Unexplored.h]}
 
 view.render_iso =
