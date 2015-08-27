@@ -322,7 +322,7 @@ view.update_brush =
       | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
       | Us = $world.units_at{XYZ}
       | Place <= if XYZ.any{?<0} then 0
-                 else if Class.unit then Us.all{?empty}
+                 else if not Class.empty then Us.all{?empty}
                  else if $keys.r >< 1 then Us.end
                  else not Us.any{?class^address >< Class^address}
     | when Place

@@ -372,8 +372,7 @@ unit.sound Type =
 
 unit.update_draw_order X Y Z =
 | $draw_order <= ((max X Y)</54) + ((X*128+Y)</38) + ((Z*2-1)</30)
-                 + ((X+$class.draw_order)</22) + $serial
-
+                 + $class.draw_order
 
 unit.draw FB X Y =
 | G = $frame

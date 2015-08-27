@@ -1,6 +1,5 @@
 sprite: system_dummy
 show: 0
 ai: unhold
-draw_order: 60
 ttl: 6
 note: `temporary trigger, disabling hold property`

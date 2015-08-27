@@ -1,5 +1,4 @@
 sprite: special_ai
 show: 0
 ai: hold
-draw_order: 60
 note: `used to to point places for AI to guard`
