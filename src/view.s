@@ -112,12 +112,12 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
-| Key = (((max X Y))</54) + ((X*128+Y)</38)
+| Key = (((max X Y))</28) + ((X*128+Y)</12)
 | for G Gs
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
   | ZZ = Z*ZUnit
-  | Key = Key + (Z</30)
+  | Key = Key + (Z</4)
   | DrawCursor = Cursor and Z < CursorZ
   | when DrawCursor:
     | G = cursor #FF0000 0 TH
@@ -145,7 +145,7 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
     | Heap.push{U.draw_order [U BX BY-ZUnit*Z]}
     | when DrawShadow
       | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
-      | Key = Key + (UnitZ</30) + 1
+      | Key = Key + (UnitZ</4) + 1
       | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10]}
 
 world.roof XYZ =
@@ -158,7 +158,7 @@ Unexplored = 0
 
 render_unexplored Wr X Y BX BY Heap =
 | less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
-| Key = (((max X Y))</54) + ((X*128+Y)</38)
+| Key = (((max X Y))</28) + ((X*128+Y)</12)
 | Heap.push{Key [Unexplored BX BY-ZUnit-Unexplored.h]}
 
 view.render_iso =
