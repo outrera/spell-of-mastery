@@ -1,4 +1,4 @@
-use gui util widgets heap action
+use gfx gui util widgets heap action
 
 
 XUnit = No
@@ -32,7 +32,8 @@ type view.widget{M W H}
   view_size/32  // render 32x32 world chunk
   center/[0 0 0]
   zfix/1
-| $fb <= gfx W H
+  zbuffer/0
+| $zbuffer <= ffi_alloc W*H*4
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
 | $param <= $main.params.ui
@@ -167,6 +168,8 @@ view.render_iso =
 | YUnit = YUnit
 | ZUnit = ZUnit
 | FB = $fb
+| FB.zbuffer <= $zbuffer
+| ffi_memset $zbuffer 0 4*FB.w*FB.h
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
 | BlitOrigin = [$w/2 170]
@@ -198,6 +201,7 @@ view.render_iso =
   | FB.blit{BX BY G}
   //| Font.draw{FB BX+18 BY+4 "[Order]"}
   //| !Order+1
+| FB.zbuffer <= 0
 
 Indicators = 0
 
@@ -252,14 +256,17 @@ view.calc_fps StartTime FinishTime =
 | SleepTime = 1.0/$fpsD - (FinishTime-StartTime)
 | when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
 
-view.render =
+view.draw FB X Y =
+| $fb <= FB
 | GUI = get_gui
 | StartTime = GUI.ticks
 | $update
 | $render_frame
 | FinishTime = GUI.ticks
 | $calc_fps{StartTime FinishTime}
-| $fb
+| $fb <= 0 //no framebuffer outside of view.draw
+
+view.render = Me
 
 view.worldToView P =
 | [X Y] = P - $view_origin
