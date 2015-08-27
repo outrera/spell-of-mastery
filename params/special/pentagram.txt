@@ -3,8 +3,9 @@ icon: special_pentagram
 sprite: special_pentagram
 empty: 1
 entity: 1
-starts: still // initial animation
+pickable: 1
 sight: 1
+starts: still // initial animation
 trigger: when{enemy},effect{pickup},remove{self}
 ai: pentagram
 

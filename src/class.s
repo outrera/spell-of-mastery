@@ -1,13 +1,13 @@
 use gfx util param
 
-type class{bank class_name Main static/0 empty/0 sprite/system_dummy
+type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 draw_order/10 aux/0 shadow/0 moves/[] speed/-1 sight/No
-           starts/0 flyer/0 ranged/0 leader/Leader
+           starts/0 flyer/0 ranged/0 leader/0
            health/0 attack/0 defense/0 ttl/100000000
            acts/[] sounds/[] icon/0 title/0 income/0 trigger/0 item/0
            ai/0 show/1}
   type/"[Bank]_[Class_name]"
-  static/Static
+  pickable/Pickable
   empty/Empty
   default_sprite/Sprite
   unit/Unit
