@@ -371,7 +371,7 @@ unit.sound Type =
 | when got!it $sounds.Type: $main.sound{it.rand}
 
 unit.update_draw_order X Y Z =
-| $draw_order <= ((max X Y)</54) + ((X*128+Y)</38) + ((Z*2-1)</30)
+| $draw_order <= ((max X Y)</54) + ((X*128+Y)</38) + (Z</30)
                  + $class.draw_order
 
 unit.draw FB X Y =

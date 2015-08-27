@@ -117,7 +117,7 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
   | ZZ = Z*ZUnit
-  | Key = Key + ((Z*2)</30)
+  | Key = Key + (Z</30)
   | DrawCursor = Cursor and Z < CursorZ
   | when DrawCursor:
     | G = cursor #FF0000 0 TH
