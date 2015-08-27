@@ -1,0 +1,4 @@
+sprite: special_missing
+show: 0
+draw_order: 60
+note: `placeholder for missing objects`

@@ -139,7 +139,9 @@ world.notify Text =
 
 world.alloc_unit ClassName owner/0 =
 | Class = $main.classes.ClassName
-| less got Class: bad "Missing class `[ClassName]`"
+| less got Class:
+  | $notify{"Missing class `[ClassName]`"}
+  | Class <= $main.classes.trigger_missing
 | U = $free_units.pop
 | less Owner: Owner <= $player
 | when Class.ai >< pentagram
