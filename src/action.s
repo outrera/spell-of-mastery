@@ -14,13 +14,13 @@ Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 move_start Me =
 | U = $unit
 | X,Y,Z = $xyz - U.xyz
+| $fromXY.init{U.xy}
+| $fromXYZ.init{U.xyz}
+| U.move{$xyz}
 | DrawOrderHack = got OverlapDirs.locate{X,Y}
 | when DrawOrderHack:
   | P = U.xyz
   | U.update_draw_order{P.0+1 P.1+1 P.2}
-| $fromXY.init{U.xy}
-| $fromXYZ.init{U.xyz}
-| U.move{$xyz}
 | U.facing <= Dirs.locate{X,Y}
 | U.animate{move}
 | $start_cycles <= $cycles

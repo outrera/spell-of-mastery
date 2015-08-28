@@ -371,16 +371,16 @@ unit.sound Type =
 | when got!it $sounds.Type: $main.sound{it.rand}
 
 unit.update_draw_order X Y Z =
-//| $draw_order <= (Z</26) + ((max X Y)</18) + ((X*128+Y)</4) + $class.draw_order
 | $draw_order <= ((max X Y)</24) + ((X*128+Y)</10) + (Z</4) + $class.draw_order
 
 unit.draw FB X Y =
 | G = $frame
-| XX = X+32-G.w/2 + $xy.0
-| YY = Y-16-G.h+$slope*16 + $xy.1
+| !X + $xy.0
+| !Y + $xy.1
+| XX = X+32-G.w/2
+| YY = Y-16-G.h+$slope*16
 | UX,UY,UZ = $xyz
 | Shadow = $sprite.shadow
-| when Shadow: FB.blit{X+$xy.0+8 Y+$xy.1-38 Shadow.z{$draw_order}}
 | when $mirror: G.flop
 | FB.blit{XX YY G.z{$draw_order}}
 | when $picked and $world.player.id >< $owner.id:
@@ -389,6 +389,7 @@ unit.draw FB X Y =
   | PH = $sprite.pick_height
   | less PH: PH <= $height*8+16
   | PH <= PH + Mark.h + Wave
-  | FB.blit{X+$xy.0+32-Mark.w/2 Y+$xy.1-PH Mark.z{$draw_order}}
+  | FB.blit{X+32-Mark.w/2 Y-PH Mark.z{$draw_order}}
+| when Shadow: FB.blit{X+8 Y-38 Shadow.z{$draw_order}}
 
 export unit
