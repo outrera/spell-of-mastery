@@ -31,6 +31,7 @@ type unit.$class{Id World}
   turn // turn it was created
   flags
   draw_order
+  draw_cycle //last draw cycle
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -382,6 +383,7 @@ unit.draw FB X Y =
 | UX,UY,UZ = $xyz
 | Shadow = $sprite.shadow
 | when $mirror: G.flop
+| when Shadow: FB.blit{X+8 Y-38 Shadow.z{$draw_order}}
 | FB.blit{XX YY G.z{$draw_order}}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
@@ -390,6 +392,5 @@ unit.draw FB X Y =
   | less PH: PH <= $height*8+16
   | PH <= PH + Mark.h + Wave
   | FB.blit{X+32-Mark.w/2 Y-PH Mark.z{$draw_order}}
-| when Shadow: FB.blit{X+8 Y-38 Shadow.z{$draw_order}}
 
 export unit

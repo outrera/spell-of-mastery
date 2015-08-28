@@ -96,6 +96,7 @@ cursor.draw FB X Y =
 | FB.line{V C C+[0 H]}
 
 render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
+| VisibleUnits = []
 | Gs = Wr.gfxes.Y.X
 | CurX = CursorXYZ.0
 | CurY = CursorXYZ.1
@@ -137,12 +138,14 @@ render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
   | UX,UY,Z = XYZ
   | TZ = Z-4
   | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
-    | DrawShadow = Z > UnitZ
-    | U.draw{FB BX BY-ZUnit*Z}
+    | push [U BX BY-ZUnit*Z] VisibleUnits
+    //| U.draw{FB BX BY-ZUnit*Z}
+    /*| DrawShadow = Z > UnitZ
     | when DrawShadow
       | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
       | Key = Key + (UnitZ</4) + 1
-      | FB.blit{BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10 S.z{Key}}
+      | FB.blit{BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10 S.z{Key}}*/
+| VisibleUnits
 
 world.roof XYZ =
 | X,Y,Z = XYZ
@@ -159,6 +162,7 @@ render_unexplored Wr X Y BX BY FB =
 
 view.render_iso =
 | Wr = $world
+| VisibleUnits = []
 | Explored = Wr.human.sight
 | XUnit = XUnit
 | YUnit = YUnit
@@ -184,8 +188,11 @@ view.render_iso =
       | BX = TX + XX*XUnit2 - YY*XUnit2
       | BY = TY + XX*YUnit2 + YY*YUnit2
       | E = Explored.Y.X
-      | if E then render_pilar Wr X Y BX BY FB $cursor RoofZ E><1
+      | if E then
+          | VUs = render_pilar Wr X Y BX BY FB $cursor RoofZ E><1
+          | when VUs.size: push VUs VisibleUnits
         else render_unexplored Wr X Y BX BY FB
+| for Us VisibleUnits: for U,BX,BY Us: U.draw{FB BX BY}
 | FB.zbuffer <= 0
 
 Indicators = 0
