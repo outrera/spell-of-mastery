@@ -95,11 +95,7 @@ cursor.draw FB X Y =
 | FB.line{V B B+[0 H]}
 | FB.line{V C C+[0 H]}
 
-type fogged{g}
-fogged.draw FB X Y = FB.blit{X Y $g.dither{1}}
-
-
-render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
+render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
 | Gs = Wr.gfxes.Y.X
 | CurX = CursorXYZ.0
 | CurY = CursorXYZ.1
@@ -121,16 +117,16 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
   | DrawCursor = Cursor and Z < CursorZ
   | when DrawCursor:
     | G = cursor #FF0000 0 TH
-    | Heap.push{Key-1 [G BX BY-YUnit-ZZ]}
+    //| Heap.push{Key-1 [G BX BY-YUnit-ZZ]}
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
     | when AboveCursor or TZ << CutZ:
-      | GG = if Fog then fogged G else G
-      | Heap.push{Key [GG BX BY-G.h-ZZ]}
+      | when Fog: G.dither{1}
+      | FB.blit{BX BY-G.h-ZZ G.z{Key}}
   | when DrawCursor:
     | G = cursor #00FF00 1 TH
-    | Heap.push{Key+1 [G BX BY-YUnit-ZZ]}
+    //| Heap.push{Key+1 [G BX BY-YUnit-ZZ]}
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
@@ -142,11 +138,11 @@ render_pilar Wr X Y BX BY Heap CursorXYZ RoofZ Fog =
   | TZ = Z-4
   | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
     | DrawShadow = Z > UnitZ
-    | Heap.push{U.draw_order [U BX BY-ZUnit*Z]}
+    | U.draw{FB BX BY-ZUnit*Z}
     | when DrawShadow
       | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
       | Key = Key + (UnitZ</4) + 1
-      | Heap.push{Key [S BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10]}
+      | FB.blit{BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10 S.z{Key}}
 
 world.roof XYZ =
 | X,Y,Z = XYZ
@@ -156,10 +152,10 @@ world.roof XYZ =
 
 Unexplored = 0
 
-render_unexplored Wr X Y BX BY Heap =
+render_unexplored Wr X Y BX BY FB =
 | less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
 | Key = (((max X Y))</24) + ((X*128+Y)</10)
-| Heap.push{Key [Unexplored BX BY-ZUnit-Unexplored.h]}
+| FB.blit{BX BY-ZUnit-Unexplored.h Unexplored.z{Key}}
 
 view.render_iso =
 | Wr = $world
@@ -175,7 +171,6 @@ view.render_iso =
 | BlitOrigin = [$w/2 170]
 | TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
-| Heap = heap
 | WW = Wr.w
 | WH = Wr.h
 | VS = $view_size
@@ -186,21 +181,11 @@ view.render_iso =
   | when 0<Y and Y<<WH: times XX VS:
     | X = XX + VX
     | when 0<X and X<<WW: // FIXME: move this out of the loop
-      | BX = XX*XUnit2 - YY*XUnit2
-      | BY = XX*YUnit2 + YY*YUnit2
+      | BX = TX + XX*XUnit2 - YY*XUnit2
+      | BY = TY + XX*YUnit2 + YY*YUnit2
       | E = Explored.Y.X
-      | if E then
-        | render_pilar Wr X Y BX BY Heap $cursor RoofZ E><1
-        else render_unexplored Wr X Y BX BY Heap
-//| Font = font small
-//| Order = 0
-| while!it Heap.pop:
-  | [G BX BY] = it.value
-  | BX = TX + BX
-  | BY = TY + BY
-  | FB.blit{BX BY G}
-  //| Font.draw{FB BX+18 BY+4 "[Order]"}
-  //| !Order+1
+      | if E then render_pilar Wr X Y BX BY FB $cursor RoofZ E><1
+        else render_unexplored Wr X Y BX BY FB
 | FB.zbuffer <= 0
 
 Indicators = 0

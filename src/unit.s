@@ -388,6 +388,6 @@ unit.draw FB X Y =
   | PH <= PH + Mark.h + Wave
   | FB.blit{X+$xy.0+32-Mark.w/2 Y+$xy.1-PH Mark}
 | when $mirror: G.flop
-| FB.blit{XX YY G}
+| FB.blit{XX YY G.z{$draw_order}}
 
 export unit
