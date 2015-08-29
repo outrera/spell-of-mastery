@@ -6,3 +6,9 @@ defense: 0
 ranged: 1
 income: -10
 moves: matrix.ranged1
+
+sounds: attack,(arrow_hit)
+       //,impact,()
+       ,hit,(grunt4)
+       ,die,(grunt_die1)
+       ,move,(step)

@@ -1,2 +1,8 @@
 sprite: unit_wizard
 icon: unit_wizard
+
+sounds: //attack,()
+       //,impact,()
+       hit,(grunt2)
+       ,die,(orbit)
+       ,move,(step)
