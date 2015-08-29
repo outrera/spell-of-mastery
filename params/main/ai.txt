@@ -1,3 +1,5 @@
+nop_loop: wait{5}
+
 default:
   attack{(ratman)},
   attack{(ratman goblin ratman)},

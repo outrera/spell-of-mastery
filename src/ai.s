@@ -130,13 +130,14 @@ world.pathfind Closest U Check =
     | when Check Dst:
       | case $units_at{Dst.xyz}/*.skip{?empty}*/ [T@_]:
         | less Targets.any{?1.xyz >< Dst.xyz}:
+          | when got!it $block_at{Dst.xyz}: T <= it
           | push [Node Dst.xyz T] Targets
           | when Closest: _goto end
     | X,Y,Z = Dst.xyz
     | MXY = PFMap.X.Y
     | when NextCost < MXY.Z and Dst.type:
       | B = $block_at{Dst.xyz}
-      | when Dst.type <> swap or not B.attacker or (U.xyz-B.xyz).any{?abs > 2}:
+      | when Dst.type><move or (Dst.type >< swap and (not B.attacker or (U.xyz-B.xyz).any{?abs > 2})):
         | MXY.Z <= NextCost
         | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end
@@ -268,6 +269,9 @@ ai.script =
 | AIType = PParams.aiType
 | AIStep = PParams.aiStep
 | AISteps = Params.main.ai.AIType
+| less got AISteps
+  | $world.notify{"Missing AI type: [AIType]"}
+  | leave 0
 | less AIStep<AISteps.size:
   | AIStep <= 0
   | PParams.aiStep <= 0
