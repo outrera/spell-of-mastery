@@ -371,6 +371,20 @@ unit.sound Type =
 | less $world.human.explored{$xyz}>1: leave
 | when got!it $sounds.Type: $main.sound{it.rand}
 
+/*
+//kludge to get around large units being cluttered be tiles in front of them
+unit.large_unit_update_draw_order X Y Z =
+| UX,UY,UZ = $xyz
+| XYTI = $world.at{[UX+1 UY+1 UZ]}.invisible
+| when XYTI:
+  | XTI = $world.at{[UX+1 UY UZ]}.invisible
+  | YTI = $world.at{[UX UY+1 UZ]}.invisible
+  | if XTI then !X+1
+    else if YTI then !Y+1
+    else
+| $draw_order <= ((max X Y)</24) + ((X*128+Y)</10) + (Z</4) + $class.draw_order
+*/
+
 unit.update_draw_order X Y Z =
 | $draw_order <= ((max X Y)</24) + ((X*128+Y)</10) + (Z</4) + $class.draw_order
 
