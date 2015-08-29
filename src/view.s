@@ -74,26 +74,33 @@ view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.world = $main.world
 
-type cursor{color front height}
 
-cursor.draw FB X Y =
-| V = $color
-| Front = $front
-| H = $height
-| !H*ZUnit
-| !Y - H
-| !Y - 2
-| !Y+YUnit/2
-| A = [X Y]
-| B = [X+XUnit/2 if Front then Y+YUnit/2 else Y-YUnit/2]
-| C = [X+XUnit Y]
-| FB.line{V A B}
-| FB.line{V B C}
-| FB.line{V A+[0 H] B+[0 H]}
-| FB.line{V B+[0 H] C+[0 H]}
-| FB.line{V A A+[0 H]}
-| FB.line{V B B+[0 H]}
-| FB.line{V C C+[0 H]}
+cursor_draw_back Me FB X Y Z Height =
+| Bar = $main.img{mark_cell_red_bar}
+| Corner = $main.img{mark_cell_red_corner}
+| !Y-2
+| !Y+(ZUnit*2)
+| FB.blit{X Y-16 Corner.z{Z}}
+| !Y-(Height*ZUnit)
+| FB.blit{X Y-16 Corner.z{Z}}
+| for I Height:
+  | YY = Y+I*ZUnit
+  | FB.blit{X+32 YY-16 Bar.z{Z}}
+
+cursor_draw_front Me FB X Y Z Height =
+| Bar = $main.img{mark_cell_green_bar}
+| Corner = $main.img{mark_cell_green_corner}
+| !Y+(ZUnit*2)
+| !Y-2
+| FB.blit{X Y Corner.z{Z}}
+| !Y-(Height*ZUnit)
+| FB.blit{X Y Corner.z{Z}}
+| for I Height:
+  | YY = Y+I*ZUnit
+  | FB.blit{X YY Bar.z{Z}}
+  | FB.blit{X+64 YY Bar.z{Z}}
+  | FB.blit{X+32 YY+16 Bar.z{Z}}
+
 
 render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
 | VisibleUnits = []
@@ -117,8 +124,7 @@ render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
   | Key = Key + (Z</4)
   | DrawCursor = Cursor and Z < CursorZ
   | when DrawCursor:
-    | G = cursor #FF0000 0 TH
-    //| Heap.push{Key-1 [G BX BY-YUnit-ZZ]}
+    | cursor_draw_back Wr FB BX BY-YUnit-ZZ Key TH
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
@@ -126,8 +132,7 @@ render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
       | when Fog: G.dither{1}
       | FB.blit{BX BY-G.h-ZZ G.z{Key}}
   | when DrawCursor:
-    | G = cursor #00FF00 1 TH
-    //| Heap.push{Key+1 [G BX BY-YUnit-ZZ]}
+    | cursor_draw_front Wr FB BX BY-YUnit-ZZ Key TH
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
