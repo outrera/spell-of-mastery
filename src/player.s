@@ -47,6 +47,7 @@ player.`!researching` R = $params.researching <= R
 player.explore State =
 | when State
   | for S $sight: S.clear{3}
+  | for U $units: U.explore{1}
   | leave
 | for S $sight: S.clear{0}
 | for U $units: U.explore{1}

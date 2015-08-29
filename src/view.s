@@ -101,8 +101,14 @@ cursor_draw_front Me FB X Y Z Height =
   | FB.blit{X+64 YY Bar.z{Z}}
   | FB.blit{X+32 YY+16 Bar.z{Z}}
 
+draw_text FB X Y Msg =
+| Font = font small
+| ZB = FB.zbuffer
+| FB.zbuffer <= 0
+| Font.draw{FB X Y Msg}
+| FB.zbuffer <= ZB
 
-render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
+render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 | VisibleUnits = []
 | Gs = Wr.gfxes.Y.X
 | CurX = CursorXYZ.0
@@ -117,6 +123,7 @@ render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
 | Z = 0
 | UnitZ = 0
 | Key = (((max X Y))</24) + ((X*128+Y)</10)
+| Fog = Explored><1
 | for G Gs
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
@@ -138,6 +145,7 @@ render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Fog =
 | _label for_break
 | Us = Wr.column_units_at{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?health or ?bank><effect)}
+//| draw_text FB BX+32 BY-ZUnit*Z-20 "[Explored]"
 | for U Us: when U.frame.w > 1:
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
@@ -194,7 +202,7 @@ view.render_iso =
       | BY = TY + XX*YUnit2 + YY*YUnit2
       | E = Explored.Y.X
       | if E then
-          | VUs = render_pilar Wr X Y BX BY FB $cursor RoofZ E><1
+          | VUs = render_pilar Wr X Y BX BY FB $cursor RoofZ E
           | when VUs.size: push VUs VisibleUnits
         else render_unexplored Wr X Y BX BY FB
 | for Us VisibleUnits: for U,BX,BY Us: U.draw{FB BX BY}
