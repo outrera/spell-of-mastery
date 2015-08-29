@@ -22,6 +22,7 @@ ai.marked_order U Move =
 ai.cast_pentagram =
 | Leader = $player.leader
 | when Leader: case Leader.acts.keep{?hint >< pentagram} [Act@_]
+  | when $player.mana < Act.cost: leave 0
   | $order_act{Leader Act}
   | Leader.handled <= 0
   | leave 1
