@@ -4,3 +4,9 @@ health: 2
 attack: 2
 defense: 1
 income: -15
+
+sounds: attack,(attack2)
+       //,impact,()
+       ,hit,(skeleton_hit)
+       ,die,(skeleton_die)
+       ,move,(step)

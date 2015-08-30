@@ -136,6 +136,8 @@ render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | TZ = UnitZ - 4
   | less T.invisible
     | when AboveCursor or TZ << CutZ:
+      | when G.is_list:
+        | G <= G.((Wr.cycle/T.anim_wait)%G.size)
       | when Fog: G.dither{1}
       | FB.blit{BX BY-G.h-ZZ G.z{Key}}
   | when DrawCursor:

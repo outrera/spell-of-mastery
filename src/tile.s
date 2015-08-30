@@ -2,7 +2,7 @@ use gfx util
 
 type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
-          match/same stairs/0}
+          match/same stairs/0 anim_wait/0}
      id/Id
      main/Main
      type/Type
@@ -22,6 +22,7 @@ type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
      shadow/Shadow
      match/Match
      stairs/Stairs
+     anim_wait/Anim_wait
 
 TrnsCache = t
 
@@ -71,8 +72,8 @@ tile.render P Z Below Above Seed =
              | R <= Gs.NeibElevs
            | R
 | World.set_slope_at{@P,Z if $tiling >< side then #@1111 else NeibElevs}
-| G = G.(Seed%G.size)
-| when not $trn or NeibElevs <> #@1111: leave G
+| less $anim_wait: G <= G.(Seed%G.size)
+| when when $anim_wait or not $trn or NeibElevs <> #@1111: leave G
 | Cs = World.getCornersTrns{P Z $role}.digits{2}
 | when Cs >< #@1111: leave G
 | Index = [Cs G^address $plain^address]
