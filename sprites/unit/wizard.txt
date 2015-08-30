@@ -1,4 +1,4 @@
-author: `Natalya Bugrova`, `James Biddulph`
+author: `Natalya Bugrova`,`Leha (kharagh@bk.ru)`, `James Biddulph`
 copyright: `Nikita Sadkov`
 xy: 5,44
 frames: folder
