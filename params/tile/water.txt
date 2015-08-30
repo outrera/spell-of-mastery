@@ -1,5 +1,5 @@
 sprite: tiles_water
-height: 1
+height: 2
 empty: 1
 filler: 0
 no_lineup: 1
