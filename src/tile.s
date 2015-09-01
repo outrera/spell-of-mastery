@@ -101,12 +101,19 @@ main.load_tiles =
 | for Type,Tile $params.tile
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
-  | Frames = $sprites.(Tile.sprite).frames
+  | SpriteName = Tile.sprite
+  | Sprite = $sprites.SpriteName
+  | less got Sprite: bad "Tile [Type] references missing sprite [SpriteName]"
+  | Frames = Sprite.frames
+  | NFrames = Frames.size
   | Tile.gfxes <= dup 16 No
   | for CornersElevation Es: when got!it Tile.CornersElevation:
     | E = CornersElevation.digits.digits{2}
     | Is = if it.is_list then it else [it]
-    | Gs = Is{Frames.?}
+    | Gs = map I Is
+           | less I < NFrames:
+             | bad "Tile `[Type]` wants missing frame [I] in `[SpriteName]`"
+           | Frames.I
     | when got!a Tile.alpha: Gs <= Gs{(transparentize ? a)}
     | when Gs.size: Tile.gfxes.E <= Gs
 | Trns = Tiles.trns.gfxes

@@ -1,4 +1,4 @@
-sprite: tiles_default
+sprite: system_dummy
 empty: 0
 invisible: 0
 trn: 0
