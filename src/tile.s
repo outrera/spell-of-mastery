@@ -1,28 +1,29 @@
 use gfx util
 
-type tile{Main Type Role Id Lineup Ds Ms Us Trns Plain
+type tile{Main Type Role Id Lineup Base Middle Top Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
-          match/same stairs/0 anim_wait/0}
+          match/same stairs/0 anim_wait/0 water/0}
      id/Id
      main/Main
      type/Type
      role/Role
      lineup/Lineup
-     ds/Ds
-     ms/Ms
-     us/Us
+     base/Base // column base
+     middle/Middle // column segment
+     top/Top // column top
      trns/Trns
      plain/Plain
      height/Height
      trn/Trn
      empty/Empty
-     filler/Filler
+     filler/Filler //true if tile fills space, matching with other tiles
      invisible/Invisible
      tiling/Tiling
      shadow/Shadow
      match/Match
      stairs/Stairs
      anim_wait/Anim_wait
+     water/Water
 
 TrnsCache = t
 
@@ -36,7 +37,7 @@ genTransition Mask From To =
 | Empty = 255
 | as R To.copy
   | for [X Y] points{0 0 64 32}
-    | less Mask.get{X Y} >< Empty
+    | less Mask.get{X Y}^^#FF000000:
       | R.set{X Y From.get{X Y}}
 
 DummyGfx = gfx 1 1
@@ -52,9 +53,13 @@ tile.render P Z Below Above Seed =
 | AR = Above.role
 | AFiller = AR >< filler
 | NeibElevs = #@0000
-| Gs = if BR <> $role then $ds
-       else if AR <> $role and not AFiller then $us
-       else $ms
+| T = Me
+| Water = $water
+| when Water and got World.neibs{P.0 P.1 Z-$height+1}.find{?type><water}:
+  | T <= $main.tiles.Water
+| Gs = if BR <> $role then T.base
+       else if AR <> $role and not AFiller then T.top
+       else T.middle
 | G = if $lineup and (AH or AFiller or AR >< $role)
       then | NeibElevs <= #@1111
            | Gs.NeibElevs
@@ -108,13 +113,13 @@ main.load_tiles =
 | Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
 | for K,V Tiles
-  | [Ds Ms Us] = if got V.stack then V.stack{}{Tiles.?.gfxes}
-                 else | T = V.gfxes; [T T T]
+  | [Base Middle Top] = if got V.stack then V.stack{}{Tiles.?.gfxes}
+                        else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
   | Id = if K >< void then 0
          else | !$last_tid + 1
               | $last_tid
-  | $tiles.K <= tile Me K V.role^~{K} Id Lineup Ds Ms Us Trns Plain
+  | $tiles.K <= tile Me K V.role^~{K} Id Lineup Base Middle Top Trns Plain
                      @V.list.join
 
 export tile

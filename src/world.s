@@ -319,6 +319,10 @@ world.effect X,Y,Z What =
 | E.die
 | E
 
+world.neibs X Y Z =
+  [$at{X,Y-1,Z} $at{X+1,Y,Z} $at{X,Y+1,Z} $at{X-1,Y,Z}
+   $at{X+1,Y-1,Z} $at{X+1,Y+1,Z} $at{X-1,Y+1,Z} $at{X-1,Y-1,Z}]
+
 world.filled X,Y Z =
 | when X < 0 or Y < 0: leave 1
 | $tid_map.($get{X Y Z}).filler
