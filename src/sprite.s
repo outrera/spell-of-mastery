@@ -1,4 +1,4 @@
-use gfx util param sprite_util
+use gfx util param
 
 type sprite{Bank Name height/1 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
@@ -74,8 +74,6 @@ init_sprites Me =
   //| have S.margins
   //  | S.margins <= S.frames.(S.anims.idle.0.0).margins
   | $sprites.SpriteName <= S
-| Base = generate_base_tile $params.editor.opaque_base 64 32 8
-| Sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
 | for Name,Sprite $sprites: when!it Sprite.shadow: Sprite.shadow <= $img{it}
 
 join_banks Bs =

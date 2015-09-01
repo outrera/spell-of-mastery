@@ -27,4 +27,7 @@ generate_base_tile Fill XUnit YUnit ZUnit =
 | draw_iso_line 0 [XUnit-2 YUnit/2] YUnit/2 -2 0 G
 | G
 
+//| Base = generate_base_tile $params.editor.opaque_base 64 32 8
+//| Sprites.tiles_base_ <= sprite tiles base_ frames/[Base]
+
 export generate_base_tile

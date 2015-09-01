@@ -240,7 +240,8 @@ view.draw_indicators =
 | Font.draw{$fb IX+246 IY+9 "[$world.at{X,Y,Z-1}.type]"}
 
 view.render_frame =
-| $fb.clear{#929292/*#00A0C0*/}
+//| $fb.clear{#929292/*#00A0C0*/}
+| $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
 | /*when $mode >< play:*/ $draw_indicators
 | InfoText = []
