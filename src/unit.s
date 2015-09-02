@@ -55,6 +55,9 @@ unit.`!haste` State = $flags <= $flags.set{3 State}
 unit.shell = $flags.get{4}
 unit.`!shell` State = $flags <= $flags.set{4 State}
 
+unit.flyer = $flags.get{5}
+unit.`!flyer` State = $flags <= $flags.set{5 State}
+
 unit.alive = $hits < $health
 
 
@@ -91,6 +94,7 @@ unit.init Class =
 | $moved <= 0
 | $turn <= $world.turn
 | $flags <= 0
+| when $class.flyer: $flyer <= 1
 | $from.init{0,0,-1}
 | when $starts
   | less $active
