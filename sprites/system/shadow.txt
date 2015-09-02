@@ -1,2 +1,3 @@
 author: `Nikita Sadkov`
+frames: 48*24
 xy: 0,8

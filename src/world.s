@@ -38,7 +38,7 @@ type world{main}
    seed
    tid_map/Main.tid_map
    filler
-   shadows
+   shadow
    cycle // counts calls to world.update
    serial
    turn // turn in terms of game logic
@@ -84,7 +84,7 @@ world.init =
 | $proxies <= MaxUnits{(proxy ?)}
 | $free_proxies <= stack $proxies.flip
 | $active <= stack MaxActiveUnits
-| $shadows <= $main.sprites.unit_shadows.frames
+| $shadow <= $main.sprites.system_shadow.frames
 | $filler <= $main.tiles.base_
 | SS = MaxSize*MaxSize
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}

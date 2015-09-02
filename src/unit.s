@@ -7,6 +7,7 @@ type unit.$class{Id World}
   serial
   class
   xyz/[0 0 -1] // world coordinates
+  fix_z/0
   from/[0 0 0]
   xy/[0 0] // fine X,Y
   anim // animation id
@@ -193,6 +194,7 @@ unit.move XYZ =
 | $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
+| $fix_z <= $world.fix_z{XYZ}
 | $xy.init{0,0}
 | $world.place_unit{Me}
 | $environment_updated
@@ -398,10 +400,14 @@ unit.draw FB X Y =
 | !Y + $xy.1
 | XX = X+32-G.w/2
 | YY = Y-16-G.h+$slope*16
-| UX,UY,UZ = $xyz
-| Shadow = $sprite.shadow
 | when $mirror: G.flop
-| when Shadow: FB.blit{X+8 Y-38 Shadow.z{$draw_order}}
+| when $sprite.shadow:
+  | S = $world.shadow
+  | ZZ = $xyz.2-$fix_z
+  | I = min (ZZ/4).abs S.size-1
+  | SGfx = S.I
+  | ShadowDO = $draw_order-(ZZ</4)
+  | FB.blit{X+8 Y-38+ZZ*8 SGfx.z{ShadowDO}}
 | FB.blit{XX YY G.z{$draw_order}}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)

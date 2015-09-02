@@ -154,12 +154,6 @@ render_pilar Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | TZ = Z-4
   | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
     | push [U BX BY-ZUnit*Z] VisibleUnits
-    //| U.draw{FB BX BY-ZUnit*Z}
-    /*| DrawShadow = Z > UnitZ
-    | when DrawShadow
-      | S = Wr.shadows.(2-min{(@abs (Z-UnitZ)/2-2) 2}).3
-      | Key = Key + (UnitZ</4) + 1
-      | FB.blit{BX-S.w/2+32 BY-S.h-UnitZ*ZUnit-10 S.z{Key}}*/
 | VisibleUnits
 
 world.roof XYZ =
