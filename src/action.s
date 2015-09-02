@@ -173,6 +173,7 @@ for Name,Act Acts
 
 type action{unit}
    type
+   name
    affects
    target // when action targets a unit
    xyz/[0 0 0] // target x,y,z
@@ -196,7 +197,7 @@ type action{unit}
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
-action.init type/idle at/0 affects/0 target/0
+action.init type/idle name/0 at/0 affects/0 target/0
             cost/0 before/0 after/0 path/0 speed/-1 range/No =
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
@@ -213,6 +214,7 @@ action.init type/idle at/0 affects/0 target/0
 | $act_start <= A.start
 | $act_update <= A.update
 | $act_finish <= A.finish
+| $name <= Name
 | $cycles <= -1
 | $cost <= Cost
 | $speed <= Speed

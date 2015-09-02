@@ -23,6 +23,9 @@ world.end_turn =
   | for V $units_at{U.xyz}: when V.trigger: V.effect{V.trigger U U.xyz}
 | ResearchIncome = P.income-P.upkeep
 | when ResearchIncome > 0: P.reasearch_boost{0 ResearchIncome}
+| PResearch = P.research
+| for Type,Act $main.params.acts: when PResearch.Type > Act.research:
+  | !PResearch.Type-1
 | P.params.view.init{$view.center}
 | P.params.cursor.init{$view.cursor}
 | NextPlayer = P.id+1

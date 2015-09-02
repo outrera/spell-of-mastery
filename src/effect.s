@@ -37,6 +37,10 @@ effect gain @Args:
   | set_act_enabled $main 1 Player.id ActName
   | Player.reasearch_boost{ActName 99999999}
 
+effect latency Time:
+| ActName = $action.name
+| !$owner.research.ActName + Time
+
 effect explore Player State: $world.explore{State}
 
 effect confirm Title Text:

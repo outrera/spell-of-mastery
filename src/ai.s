@@ -91,7 +91,7 @@ ai.update_pentagram =
 | for Type Missing:
   | S = Summons.find{?after_table.summon >< Type}
   | Turn = $world.turn
-  | when got S and $player.research_remain{S} << 0:
+  | when got S and $player.research_remain{S} >< 0:
     | when Pentagram.moved < Turn and S.cost<<$player.mana:
       | $order_act{Pentagram S}
       | leave 1

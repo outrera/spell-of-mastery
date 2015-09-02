@@ -24,7 +24,9 @@ type player{id world}
    moves //use to be number for creatues movable per turn; currently obsolete
    leader
    pentagram
-   params research/(t) picked
+   params
+   research/(t) //research and latency
+   picked //picked unit
    sight // fog of war
 | $name <= if $id >< 0 then "Independent" else "Player[$id]"
 | $color <= PlayerColors.$id
@@ -100,6 +102,7 @@ player.reasearch_boost What Amount =
 | !$research.What + Amount
 | ActName = $main.params.acts.What
 | Remain = $research_remain{ActName}
+| when Remain < 0: !$research.What + Remain
 | when What >< $researching: less Remain > 0:
   | $researching <= 0
   | leave -Remain

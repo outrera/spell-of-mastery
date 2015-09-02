@@ -117,15 +117,18 @@ ui.init =
   | Icon.picked <= 1
   | ActIcon <= Icon
   | Act = $params.acts.(Icon.data)
-  | when got Icon.number:
-    | O = PickedUnit.owner
-    | O.notify{"Began researching [Act.title]"}
-    | O.researching <= Act.name
-  | when no Icon.number:
-    | if Act.range >< 0
-      then when PickedUnit.owner.id >< $world.player.id
-           | PickedUnit.order.init{target PickedUnit @Act.list.join}
-      else $world.act <= Act
+  | Remain = Icon.number
+  | less got Remain: Remain <= 0
+  | O = PickedUnit.owner
+  | if Remain > 0 then
+      | O.notify{"Began researching [Act.title]"}
+      | O.researching <= Act.name
+    else if Remain < 0 then
+      | O.notify{"[Act.title] needs [-Remain] turns to recharge."}
+    else | if Act.range >< 0
+           then when O.id >< $world.player.id:
+                | PickedUnit.order.init{target PickedUnit @Act.list.join}
+           else $world.act <= Act
 | ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | PickedUnitTitle = txt medium ''
@@ -165,9 +168,9 @@ ui.init =
     | ResearchRemain = Player.research_remain{Act}
     | Icon.data <= Act.name
     | Icon.fg <= Act.icon_gfx
-    | Icon.number <= if ResearchRemain > 0 then ResearchRemain else No
+    | Icon.number <= if ResearchRemain <> 0 then ResearchRemain else No
     | Icon.research <= Unit.owner.researching >< Act.name
-                       and ResearchRemain > 0
+                       and ResearchRemain <> 0
     | Icon.frame <= 0
     | Icon.w <= Icon.fg.w
     | Icon.h <= Icon.fg.h

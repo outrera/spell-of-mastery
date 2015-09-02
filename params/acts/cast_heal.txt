@@ -1,6 +1,7 @@
 affects: unit
 before: harm{-1},impact{explosion_blood},sound{summon}
+after: latency{2}
 icon: spell_heal
 range: 2
-research: 1000
-cost: 200
+//research: 1000
+//cost: 200
