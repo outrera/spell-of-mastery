@@ -242,9 +242,9 @@ world.column_proxies_at X Y =
 
 world.units_at XYZ = $proxies_at{XYZ}{?unit_}
 
-world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
-
 world.column_units_at X Y = $column_proxies_at{X Y}{?unit_}
+
+world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
 
 world.block_at XYZ =
 | Block = $units_at{XYZ}.skip{?empty}

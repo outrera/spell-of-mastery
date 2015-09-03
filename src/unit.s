@@ -297,18 +297,18 @@ unit.list_moves XYZ =
   | !Dst.2 - 1
   | while $world.fast_at{Dst}.empty: !Dst.2 - 1
   | !Dst.2 + 1
-  | Blocked = 0
-  | less $world.no_block_at{Dst} and $can_move{Src Dst}:
-    | when got!it $world.block_at{Dst}:
-      | when $can_move{Src Dst}
-        | if $owner.id >< it.owner.id
-          then | when it.moves.size and it.can_move{Dst Src} and V <> 2:
-                 | Move <= move swap Src Dst
-          else | when it.hits < it.health and it.defense < $attack and V < 3:
-                 | Move <= move attack Src Dst
-    | Blocked <= 1
+  | Blocked = not $can_move{Src Dst}
+  | B = $world.block_at{Dst}
+  | when got B:
+    | less Blocked:
+      | Blocked <= $owner.id <> B.owner.id
+      | if Blocked
+        then | when B.hits < B.health and B.defense < $attack and V < 3:
+               | Move <= move attack Src Dst
+        else | when B.moves.size and B.can_move{Dst Src} and V <> 2:
+               | Move <= move swap Src Dst
   | less Blocked
-    | Move <= if V><2 then move node Src Dst else move move Src Dst
+    | less Move: Move <= if V><2 then move node Src Dst else move move Src Dst
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
       | X,Y = N
       | Xs = Ms.Y

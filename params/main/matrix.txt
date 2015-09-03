@@ -1,3 +1,11 @@
+/*
+Legend:
+ 0 - cant act here
+ 1 - can move and attack here
+ 2 - can attack, but not move
+ 3 - can move, but not attack
+*/
+
 move0: ()
 move1:
 | 0 1 0
@@ -17,16 +25,16 @@ move_l:
 | 0 1 1 1 0
 ranged1:
 | 0 0 2 0 0
-| 0 0 1 0 0
-| 2 1 0 1 2
-| 0 0 1 0 0
+| 0 0 3 0 0
+| 2 3 0 3 2
+| 0 0 3 0 0
 | 0 0 2 0 0
 ranged2:
 | 0 0 0 2 0 0 0
 | 0 0 0 2 0 0 0
-| 0 0 0 1 0 0 0
-| 2 2 1 0 1 2 2
-| 0 0 0 1 0 0 0
+| 0 0 0 3 0 0 0
+| 2 2 3 0 3 2 2
+| 0 0 0 3 0 0 0
 | 0 0 0 2 0 0 0
 | 0 0 0 2 0 0 0
 turret:

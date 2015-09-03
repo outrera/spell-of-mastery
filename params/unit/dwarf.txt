@@ -1,9 +1,9 @@
 sprite: unit_dwarf
 tier: 2
 health: 5
-attack: 1
+attack: 2
 defense: 0
-income: -10
+income: -15
 /*sounds: attack,(attack2)
        //,impact,()
        ,hit,(rat_death)

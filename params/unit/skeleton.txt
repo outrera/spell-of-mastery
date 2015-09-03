@@ -3,7 +3,7 @@ tier: 2
 health: 2
 attack: 2
 defense: 1
-income: -15
+income: -10
 
 sounds: attack,(attack2)
        //,impact,()
