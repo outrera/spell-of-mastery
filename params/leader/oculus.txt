@@ -1,0 +1,13 @@
+sprite: unit_oculus
+tier: 1
+health: 1
+flyer: 1
+income: -6
+moves: matrix.move2
+leader: 2
+
+sounds: //attack,()
+       //,impact,()
+       //,hit,(grunt2)
+       die,(orbit)
+       ,move,(step)

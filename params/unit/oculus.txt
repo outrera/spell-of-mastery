@@ -1,7 +1,0 @@
-sprite: unit_oculus
-tier: 1
-flyer: 1
-income: -6
-acts: (cast_swap cast_lightning cast_teleport cast_firewall cast_heal)
-moves: matrix.move2
-leader: 2
