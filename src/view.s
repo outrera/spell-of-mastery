@@ -301,7 +301,8 @@ world.update_pick Units =
 view.select_unit XYZ = 
 | less $world.seen{XYZ.0 XYZ.1}: leave 0
 | Picked = []
-| Us = $world.units_at{XYZ}.skip{?bank><mark}
+| X,Y,Z = XYZ
+| Us = $world.column_units_at{X Y}.skip{?bank><mark}.keep{?fix_z><Z}
 | when $mode >< play: Us <= Us.keep{?pickable}
 | when not $world.picked or $world.picked.xyz <> XYZ: $pick_count <= 0
 | when Us.size
