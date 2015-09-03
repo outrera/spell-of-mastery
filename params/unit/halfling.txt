@@ -1,0 +1,12 @@
+sprite: unit_halfling
+tier: 1
+health: 1
+attack: 2
+defense: 0
+income: -5
+
+sounds: attack,(attack2)
+       //,impact,()
+       ,hit,(orc_hit)
+       ,die,(orc_die)
+       ,move,(step)
