@@ -323,7 +323,7 @@ view.update_brush =
     | Place = 1
     | for XX,YY,ZZ Class.form: when Place:
       | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
-      | Us = $world.units_at{XYZ}
+      | Us = $world.units_at{XYZ}.skip{?bank><mark}
       | Place <= if XYZ.any{?<0} then 0
                  else if not Class.empty then Us.all{?empty}
                  else if $keys.r >< 1 then Us.end
