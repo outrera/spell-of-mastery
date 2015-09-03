@@ -408,8 +408,10 @@ unit.draw FB X Y =
   | SGfx = S.I
   | ShadowDO = $draw_order-(ZZ</4)
   | FB.blit{X+8 Y-38+ZZ*8 SGfx.z{ShadowDO}}
-| YYY = if $flyer then YY-16 else YY
-| FB.blit{XX YYY G.z{$draw_order}}
+| when $flyer
+  | !YY-16
+  | !Y-16
+| FB.blit{XX YY G.z{$draw_order}}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
