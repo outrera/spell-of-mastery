@@ -13,7 +13,7 @@ pickable: 1
 flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
 leader: 1
-acts: (pentagram cast_knowledge cast_lightning cast_flight cast_teleport cast_telekinesis cast_excavate cast_firewall cast_heal cast_shell cast_paralyze cast_haste cast_armageddon spell_of_mastery)
+acts: (pentagram cast_knowledge cast_lightning cast_flight cast_teleport cast_telekinesis cast_excavate cast_firewall cast_heal cast_shell cast_paralyze cast_haste cast_armageddon cast_disrupt_mastery spell_of_mastery)
 income: 50
 ai: unit
 item: pickup

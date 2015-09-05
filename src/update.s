@@ -17,6 +17,19 @@ world.new_game =
 
 EndTurnDepth = 0
 
+update_spell_of_mastery Me P =
+| SOM = P.params.spell_of_mastery
+| when got SOM:
+  | !SOM-1
+  | less SOM > 0:
+    | $params.winner <= P.id
+    | $params.victory_type <= 'Victory by casting the Spell of Mastery'
+    | leave
+  | P.params.spell_of_mastery <= SOM
+| when P.human: for Q $players:
+  | S = Q.params.spell_of_mastery
+  | when got S: P.notify{"[Q.name] will finish Spell of Mastery in [S] turns"}
+
 world.end_turn =
 | P = $player
 | for U P.units: when U.health>0:
@@ -34,6 +47,7 @@ world.end_turn =
   | !$turn + 1
 | P = $players.NextPlayer
 | $player <= P
+| update_spell_of_mastery Me P
 | when P.human
   | $view.center_at{$player.params.view}
   | $view.cursor.init{$player.params.cursor}

@@ -1,7 +1,7 @@
 sprite: unit_skeleton
 tier: 2
-health: 2
-attack: 1
+health: 1
+attack: 2
 defense: 1
 income: -10
 

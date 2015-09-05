@@ -96,20 +96,22 @@ effect set @Pairs:
     else Params.Name <= Value
 
 // sets player param
-effect pset Player @Pairs:
-| when Player >< owner: Player <= $owner.id
-| P = $world.players.Player
-| Params = P.params
-| for Name,Value Pairs.group{2}
-  | when Value >< `?owner`: Value <= $owner.id
-  | when Value >< `?self`: Value <= $id
-  | when Value >< `?self_type`: Value <= $type
-  | if Value.is_list
-    then | when no Params.Name:
-           | Params.Name <= dup Value.size
-         | Params.Name.init{Value}
-    else Params.Name <= Value
-  | when Name >< mana: P.mana <= Value
+effect pset PlayerId @Pairs:
+| when PlayerId >< owner: PlayerId <= $owner.id
+| Ps = if PlayerId >< all then $world.players{}{?id} else [PlayerId]
+| for PlayerId Ps
+  | P = $world.players.PlayerId
+  | Params = P.params
+  | for Name,Value Pairs.group{2}
+    | when Value >< `?owner`: Value <= $owner.id
+    | when Value >< `?self`: Value <= $id
+    | when Value >< `?self_type`: Value <= $type
+    | if Value.is_list
+      then | when no Params.Name:
+             | Params.Name <= dup Value.size
+           | Params.Name.init{Value}
+      else Params.Name <= Value
+    | when Name >< mana: P.mana <= Value
 
 effect guards_to_attackers PlayerId:
 | for U $world.players.PlayerId.units: U.attacker <= 1
