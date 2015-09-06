@@ -1,4 +1,3 @@
-height: 8
 anims: | idle (0 24)
 shadow: system_shadow
 faces: 8

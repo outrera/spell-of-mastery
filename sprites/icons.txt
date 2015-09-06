@@ -1,2 +1,1 @@
-height: 0
 shadow: system_shadow

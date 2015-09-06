@@ -1,0 +1,5 @@
+sprite: system_dummy
+invisible: 1
+height: 8
+aux: 1
+1111: 0

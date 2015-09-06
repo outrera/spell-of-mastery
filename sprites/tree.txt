@@ -1,2 +1,1 @@
-height: 4
-class: empty,0,invincible,1
+class: empty,0,invincible,1,height,4

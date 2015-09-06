@@ -5,8 +5,9 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            starts/0 flyer/0 ranged/0 leader/0
            health/0 attack/0 defense/0 ttl/100000000
            acts/[] sounds/[] icon/0 title/0 income/0 trigger/0 item/0
-           ai/0 show/1}
+           ai/0 show/1 height/0}
   type/"[Bank]_[Class_name]"
+  block/0
   pickable/Pickable
   empty/Empty
   default_sprite/Sprite
@@ -34,11 +35,12 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   ai/Ai
   show/Show
   trigger/Trigger
+  height/Height
+| Block = Main.tiles."block[$height]_"
+| when got Block: $block <= Block
 | less $moves.is_list: bad "wrong `moves` field for [$type]"
 | less $moves.size: leave Me
 | $moves <= add_border_to_matrix $moves.tail 0
-
-class.height = $default_sprite.height
 
 class.form = $default_sprite.form
 
