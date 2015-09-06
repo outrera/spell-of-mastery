@@ -1,7 +1,7 @@
 author: `Matthew Griebner`, `Alexandr Sidorov`,`Leha (kharagh@bk.ru)`
 copyright: `Nikita Sadkov`
 height: 4
-xy: -18,48
+xy: -18,64
 frames: folder
 anims: | idle (idle0 28) (idle1 24)
        | move (move1 6) (move2 6) (move3 6) (move4 6) (move5 6)

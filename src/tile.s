@@ -2,9 +2,10 @@ use gfx util
 
 type tile{Main Type Role Id Lineup Base Middle Top Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
-          match/same stairs/0 anim_wait/0 water/0}
+          match/same stairs/0 anim_wait/0 water/0 bank/0}
      id/Id
      main/Main
+     bank/Bank
      type/Type
      role/Role
      lineup/Lineup
@@ -90,15 +91,19 @@ tile.render P Z Below Above Seed =
 // returns 1 if this tile compresses the shape of tile below of it
 tile.heavy = not $empty
 
-main.tile_names = $tiles{}{?0}.skip{$aux_tiles.?^got}.sort
+main.tile_names Bank =
+| $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort
 
 main.load_tiles =
+| BankNames = case $params.world.tile_banks [@Xs](Xs) X[X]
+| $params.world.tile_banks <= BankNames 
 | Tiles = t
 | $aux_tiles <= t
 | Frames = No
 | Es = [1111 1000 1100 1001 0100 0001 0110 0011
         0010 0111 1011 1101 1110 1010 0101 0000]
-| for Type,Tile $params.tile
+| for Bank BankNames: for Type,Tile $params.Bank
+  | Tile.bank <= Bank
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
   | SpriteName = Tile.sprite

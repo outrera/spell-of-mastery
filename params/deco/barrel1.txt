@@ -1,0 +1,2 @@
+sprite: object_barrel1
+1111: 0

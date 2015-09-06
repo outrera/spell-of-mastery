@@ -93,19 +93,20 @@ ui.init =
     | when got NextWorld:
       | $load{"[MapsFolder][NextWorld].txt"}
       | $world.new_game
+| TileBanks = $main.params.world.tile_banks
 | BankName =
-| TileNames = $main.tile_names
-| BankNames = [terrain unit @$main.bank_names.skip{unit}]
+| BankNames = [@TileBanks unit @$main.bank_names.skip{unit}]
 | ItemList = litems w/(PanelW-80) lines/40 [] f: N =>
-  | Brush = if BankName >< terrain
+  | Brush = if got TileBanks.find{BankName}
             then [tile N]
             else [obj BankName,N]
   | $view.set_brush{Brush}
 | BankList = litems w/80 lines/40 BankNames f: N =>
   | BankName <= N
-  | if BankName >< terrain
-    then | ItemList.data <= TileNames
-         | ItemList.pick{TileNames.locate{plain}}
+  | if got TileBanks.find{BankName}
+    then | ItemList.data <= $main.tile_names{BankName}
+         | ItemList.pick{0}
+         //| ItemList.pick{TileNames.locate{plain}}
     else | ItemList.data <= $main.classes_banks.BankName
          | ItemList.pick{0}
 | PickedUnit = 0

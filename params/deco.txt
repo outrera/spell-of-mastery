@@ -1,0 +1,8 @@
+sprite: system_dummy
+empty: 0
+invisible: 0
+trn: 0
+tiling: corner
+match: any
+shadow: 1
+height: 4 // height in world units (8 pixels/unit by default)
