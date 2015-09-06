@@ -1,6 +1,6 @@
 // fills space for neighbor tiles
-sprite: system_dummy
 empty: 1
 filler: 1
 invisible: 1
 1111: 0
+heavy: 0

@@ -2,3 +2,4 @@ class: empty,1
       ,draw_order,9
       ,starts,still
       ,height,4
+      ,passable,0

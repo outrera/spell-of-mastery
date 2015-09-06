@@ -310,11 +310,14 @@ view.select_unit XYZ =
   | Picked <= [Us.($pick_count%Us.size)]
 | $world.update_pick{Picked}
 
+view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
+
 view.update_brush =
 | $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
 | when $mice_click><left: case $brush
   [obj Bank,Type]
+    | less Z << $anchor.2: leave
     | Mirror = $keys.m >< 1
     | ClassName = if $keys.r >< 1
                   then "[Bank]_[$main.classes_banks.Bank.rand]"
@@ -344,7 +347,16 @@ view.update_brush =
       | when Tile.empty and (Tile.id><0 or $keys.e<>1): leave
       | $cursor.2 <= $fix_z{$cursor}
 | when $mice_click><right: case $brush
-  [obj Type] | for U $world.units_at{X,Y,Z}.skip{?mark}: U.free
+  [obj Type]
+    | Us = $units_at{X,Y,Z}
+    | BelowUs = []
+    | T = $world.at{X,Y,Z-1}
+    | when T.unit:
+      | !Z-T.height
+      | BelowUs <= $units_at{X,Y,Z}
+      | when BelowUs.size: $mice_click <= 0
+    | less Us.size: Us <= BelowUs
+    | for U Us: U.free
   [tile Type]
     | while 1
       | Z <= $cursor.2

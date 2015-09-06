@@ -6,3 +6,4 @@ tiling: corner
 match: any
 shadow: 1
 height: 4 // height in world units (8 pixels/unit by default)
+heavy: 1 //true if tile compresses the shape of tile below of it into cube

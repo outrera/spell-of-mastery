@@ -2,7 +2,7 @@ use gfx util
 
 type tile{Main Type Role Id Lineup Base Middle Top Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
-          match/same stairs/0 anim_wait/0 water/0 bank/0}
+          match/same stairs/0 anim_wait/0 water/0 bank/0 unit/0 heavy/1}
      id/Id
      main/Main
      bank/Bank
@@ -25,6 +25,8 @@ type tile{Main Type Role Id Lineup Base Middle Top Trns Plain
      stairs/Stairs
      anim_wait/Anim_wait
      water/Water
+     unit/Unit //used for units that act as platforms
+     heavy/Heavy
 
 TrnsCache = t
 
@@ -88,9 +90,6 @@ tile.render P Z Below Above Seed =
   | TrnsCache.Index <= R
   | leave R
 
-// returns 1 if this tile compresses the shape of tile below of it
-tile.heavy = not $empty
-
 main.tile_names Bank =
 | $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort
 
@@ -100,6 +99,13 @@ main.load_tiles =
 | Tiles = t
 | $aux_tiles <= t
 | Frames = No
+| T = $params.tile
+| HT = T.height_
+| for I 15: // object height blockers
+  | T."h[I+1]_" <=
+    | R = HT.deep_copy
+    | R.height <= I+1
+    | R
 | Es = [1111 1000 1100 1001 0100 0001 0110 0011
         0010 0111 1011 1101 1110 1010 0101 0000]
 | for Bank BankNames: for Type,Tile $params.Bank

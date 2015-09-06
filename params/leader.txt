@@ -11,6 +11,7 @@ sight: 2
 //speed: -2
 moves: matrix.move1 // how this unit moves
 pickable: 1
+passable: 0
 flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
 leader: 1

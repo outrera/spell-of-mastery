@@ -157,7 +157,9 @@ unit.free =
 | $world.free_unit{Me}
 
 unit.remove =
-| when $xyz.2 <> -1: $move_in{0}
+| when $xyz.2 <> -1:
+  | when $passable and $block: $world.clear_tile{$xyz}
+  | $move_in{0}
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
 
@@ -197,6 +199,7 @@ unit.move XYZ =
 | $fix_z <= $world.fix_z{XYZ}
 | $xy.init{0,0}
 | $world.place_unit{Me}
+| when $passable and $block: $world.set{@$xyz $block}
 | $environment_updated
 | $move_in{1}
 | $update_draw_order{@XYZ}

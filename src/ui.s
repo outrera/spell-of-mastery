@@ -95,7 +95,7 @@ ui.init =
       | $world.new_game
 | TileBanks = $main.params.world.tile_banks
 | BankName =
-| BankNames = [@TileBanks unit @$main.bank_names.skip{unit}]
+| BankNames = [@TileBanks unit leader @$main.bank_names.skip{unit}.skip{leader}]
 | ItemList = litems w/(PanelW-80) lines/40 [] f: N =>
   | Brush = if got TileBanks.find{BankName}
             then [tile N]
