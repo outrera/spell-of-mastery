@@ -227,6 +227,10 @@ world.fix_z_void XYZ =
 | !Z+1
 | Z
 
+world.roof XYZ =
+| X,Y,Z = XYZ
+| while $fast_at{X,Y,Z}.empty and Z < 63: !Z+1
+| Z
 
 world.slope_at XYZ = $slope_map.at{XYZ}
 
