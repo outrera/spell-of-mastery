@@ -9,7 +9,7 @@ y_unit: 32
 z_unit: 8 // height of world cell in pixels
 tile_banks: tile//,deco
 class_banks: unit,leader,special,trigger
-explored: 0 //all maps are explored from the beginning
+explored: 1 //all maps are explored from the beginning
 release: 0 //set to 1 for releases build
 base_income: 50
 node_income: 25

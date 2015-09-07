@@ -2,3 +2,4 @@ entity: 1
 empty: 1
 height: 0
 starts: still // initial animation
+draw_order: 3

@@ -1,1 +1,2 @@
-author: Reemax
+author: Reemax, Hyptosis
+origin: `http://opengameart.org/content/lpc-forest-tiles`
