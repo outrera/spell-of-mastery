@@ -254,7 +254,7 @@ ui.init =
   //| $main.show_message{'Loaded' 'Your game is loaded!'}
 | new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
 | LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
-| CopyrightLine = 'SymtaEngine v0.1; Copyright (c) 2015 Nikita Sadkov'
+| CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
