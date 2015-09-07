@@ -38,8 +38,9 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   trigger/Trigger
   height/Height
   passable/Passable
-| Block = Main.tiles."h[$height]_"
-| when got Block: $block <= Block
+| less $empty
+  | Block = Main.tiles."h[$height]_"
+  | when got Block: $block <= Block
 | less $moves.is_list: bad "wrong `moves` field for [$type]"
 | less $moves.size: leave Me
 | $moves <= add_border_to_matrix $moves.tail 0

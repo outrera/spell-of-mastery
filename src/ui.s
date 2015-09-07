@@ -311,7 +311,9 @@ ui.init =
     | when $world.player.human: $world.end_turn
     | Handled <= 1
   | less Handled: Base.input{In}
-| Tabs <= tabs ingame: t
+| IsDebug = $main.params.world.release<>1
+| InitTab = if IsDebug then \ingame else \main_menu
+| Tabs <= tabs InitTab: t
           main_menu(MainMenu)
           game_menu(GameMenu)
           save_menu(SaveMenu)
