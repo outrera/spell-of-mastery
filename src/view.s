@@ -346,27 +346,30 @@ view.update_brush =
       | $world.set{X Y Z $main.tiles.Type}
       | when Tile.empty and (Tile.id><0 or $keys.e<>1): leave
       | $cursor.2 <= $fix_z{$cursor}
-| when $mice_click><right: case $brush
-  [obj Type]
-    | Us = $units_at{X,Y,Z}
-    | BelowUs = []
-    | T = $world.at{X,Y,Z-1}
-    | when T.unit:
-      | !Z-T.height
-      | BelowUs <= $units_at{X,Y,Z}
-      | when BelowUs.size: $mice_click <= 0
-    | less Us.size: Us <= BelowUs
-    | for U Us: U.free
-  [tile Type]
-    | while 1
-      | Z <= $cursor.2
-      | less Z >> $anchor.2 and Z > 1: leave
-      | less Z > 1: leave
-      | Tile = $world.at{X,Y,Z-1}
-      | less Tile.height: leave
-      | $world.clear_tile{X,Y,Z-1}
-      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
-      | $cursor.2 <= $fix_z{$cursor}
+| when $mice_click><right:
+  | Brush = $brush
+  | T = $world.at{X,Y,Z-1}
+  | when T.unit: Brush <= [obj dummy]
+  | case Brush
+    [obj Type]
+      | Us = $units_at{X,Y,Z}
+      | BelowUs = []
+      | when T.unit:
+        | !Z-T.height
+        | BelowUs <= $units_at{X,Y,Z}
+        | when BelowUs.size: $mice_click <= 0
+      | less Us.size: Us <= BelowUs
+      | for U Us: U.free
+    [tile Type]
+      | while 1
+        | Z <= $cursor.2
+        | less Z >> $anchor.2 and Z > 1: leave
+        | less Z > 1: leave
+        | Tile = $world.at{X,Y,Z-1}
+        | less Tile.height: leave
+        | $world.clear_tile{X,Y,Z-1}
+        | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
+        | $cursor.2 <= $fix_z{$cursor}
 
 view.update_pick =
 | when $mice_click >< left: $select_unit{$cursor}
