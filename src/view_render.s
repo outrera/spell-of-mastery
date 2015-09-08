@@ -1,6 +1,7 @@
 use gfx gui util widgets action
 
-YDiv =
+BrightFactor = 0
+YDiv = No
 
 cursor_draw_back Me FB X Y Z Height =
 | Bar = $main.img{mark_cell_red_bar}
@@ -51,6 +52,8 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 | UnitZ = 0
 | Key = (((max X Y))</24) + ((X*128+Y)</10)
 | Fog = Explored><1
+| Br = @int -([CurX CurY]-[X Y]).abs
+| !Br*BrightFactor
 | for G Gs
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
@@ -66,6 +69,7 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
       | when G.is_list:
         | G <= G.((Wr.cycle/T.anim_wait)%G.size)
       | when Fog: G.dither{1}
+      | when Br: G.brighten{Br}
       | FB.blit{BX BY-G.h-ZZ G.z{Key}}
   | when DrawCursor:
     | cursor_draw_front Wr FB BX BY-$yunit-ZZ Key TH
@@ -80,6 +84,7 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | UX,UY,Z = XYZ
   | TZ = Z-4
   | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
+    | U.brighten <= Br
     | push [U BX BY-$zunit*Z] VisibleUnits
 | VisibleUnits
 
@@ -153,6 +158,8 @@ view.draw_indicators =
 | Font.draw{$fb IX+246 IY+9 "[$world.at{X,Y,Z-1}.type]"}
 
 view.render_frame =
+| IsNight = $world.params.night><1
+| BrightFactor <= if IsNight then 10 else 0
 //| $fb.clear{#929292/*#00A0C0*/}
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso

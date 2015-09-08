@@ -89,6 +89,7 @@ effect set @Pairs:
   | when Value >< `?owner`: Value <= $owner.id
   | when Value >< `?self`: Value <= $id
   | when Value >< `?self_type`: Value <= $type
+  | say [Name Value]
   | if Value.is_list
     then | when no Params.Name:
            | Params.Name <= dup Value.size

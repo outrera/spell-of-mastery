@@ -33,6 +33,7 @@ type unit.$class{Id World}
   flags
   draw_order
   draw_cycle //last draw cycle
+  brighten
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -414,6 +415,7 @@ unit.draw FB X Y =
 | when $flyer
   | !YY-16
   | !Y-16
+| G.brighten{$brighten}
 | FB.blit{XX YY G.z{$draw_order}}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
