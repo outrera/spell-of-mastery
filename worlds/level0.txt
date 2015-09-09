@@ -6,7 +6,7 @@
    Select wizard and right-click nearby orb to restore the mana spent on teleportation.
    `))
 ((atleast 1.mana 500) msg{`Got Enough Mana for Summoning Circle!` `End turn (either click large hourglass icon or press 'z'), then click pentagram icon. This will create a pentagram required to summon defenders.`})
-((turn 15) (`{}` pset 2 attack_with_guards 1)) ((got_unit 1 special_pentagram) (`{}` msg `  The Pentagram is Ready to Rock!` `Now click the wizard again to select the pentagram under him.
+((turn 15) (`{}` set 2 attack_with_guards 1)) ((got_unit 1 special_pentagram) (`{}` msg `  The Pentagram is Ready to Rock!` `Now click the wizard again to select the pentagram under him.
    Then click ratman icon to begin researching it.
    <br> <br>
    After that keep clicking the large hourglass icon, until research

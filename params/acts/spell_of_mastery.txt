@@ -1,6 +1,5 @@
 affects: any
 before: misc.summon
-after: set{self hits 2}
-//after: set{owner spell_of_mastery 10}
+after: set{owner spell_of_mastery 10}
 icon: spell_of_mastery
 //research: 60000

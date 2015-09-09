@@ -82,8 +82,6 @@ effect mana Amount: !Target.owner.mana+Amount
 
 effect flyer State: Target.flyer <= State
 
-//UnitSetters = 
-
 type unit_setter{unit}
 
 unit_setter.`!` K V =

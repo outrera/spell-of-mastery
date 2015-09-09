@@ -32,8 +32,8 @@ type unit.$class{Id World}
   turn // turn it was created
   flags
   draw_order
-  draw_cycle //last draw cycle
   brighten
+  alpha
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -96,6 +96,7 @@ unit.init Class =
 | $moved <= 0
 | $turn <= $world.turn
 | $flags <= 0
+| $alpha <= 0
 | when $class.flyer: $flyer <= 1
 | $from.init{0,0,-1}
 | when $starts
@@ -416,6 +417,7 @@ unit.draw FB X Y =
   | !YY-16
   | !Y-16
 | G.brighten{$brighten}
+| G.alpha{$alpha}
 | FB.blit{XX YY G.z{$draw_order}}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
