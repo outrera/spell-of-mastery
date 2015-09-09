@@ -82,6 +82,15 @@ effect mana Amount: !Target.owner.mana+Amount
 
 effect flyer State: Target.flyer <= State
 
+//UnitSetters = 
+
+type unit_setter{unit}
+
+unit_setter.`!` K V =
+| Setter = $unit.main.params.unit_setters_.K
+| when no Setter: bad "unknown unit field [K]"
+| Setter $unit V
+
 // sets world param
 effect set @Args:
 | What = \world
@@ -100,6 +109,8 @@ effect set @Args:
        else if What.is_int then Players <= [$world.players.What]
        else if What >< owner then Players <= [$owner]
        else if What >< all then Players <= $world.players
+       else if What >< target then [0,(unit_setter Target)]
+       else if What >< self then [0,(unit_setter Me)]
        else
 | when Players: Ps <= Players{?,?.params}
 | when Value >< `?owner`: Value <= $owner.id

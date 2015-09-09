@@ -90,6 +90,8 @@ world.init =
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $alloc_unit{unit_nil owner/$players.0}
+| $main.params.unit_setters_ <=
+  | ($nil)^methods_.keep{?0.0 >< '!'}{[?0.tail ?1]}.table
 
 world.create W H =
 | $w <= W
