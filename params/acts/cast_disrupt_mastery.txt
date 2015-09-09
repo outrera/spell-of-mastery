@@ -1,6 +1,6 @@
 affects: any
 before: misc.summon
-after: pset{all spell_of_mastery No}
+after: set{all spell_of_mastery No}
 icon: spell_disrupt_mastery
 research: 1000
 cost: 1000

@@ -83,38 +83,34 @@ effect mana Amount: !Target.owner.mana+Amount
 effect flyer State: Target.flyer <= State
 
 // sets world param
-effect set @Pairs:
-| Params = $world.params
-| for Name,Value Pairs.group{2}
-  | when Value >< `?owner`: Value <= $owner.id
-  | when Value >< `?self`: Value <= $id
-  | when Value >< `?self_type`: Value <= $type
+effect set @Args:
+| What = \world
+| Name = No
+| Value = 1
+| Players = 0
+| case Args
+  [A B C] | What <= A
+          | Name <= B
+          | Value <= C
+  [A B] | Name <= A
+        | Value <= B
+  [A] | Name <= A
+  Else | bad "invalid arglist [Args]"
+| Ps = if What >< world then [0,$world.params]
+       else if What.is_int then Players <= [$world.players.What]
+       else if What >< owner then Players <= [$owner]
+       else if What >< all then Players <= $world.players
+       else
+| when Players: Ps <= Players{?,?.params}
+| when Value >< `?owner`: Value <= $owner.id
+| when Value >< `?self`: Value <= $id
+| when Value >< `?self_type`: Value <= $type
+| for Player,Params Ps
   | if Value.is_list
-    then | when no Params.Name:
-           | Params.Name <= dup Value.size
+    then | when no Params.Name: Params.Name <= dup Value.size
          | Params.Name.init{Value}
     else Params.Name <= Value
-
-// sets player param
-effect pset PlayerId @Pairs:
-| when PlayerId >< owner: PlayerId <= $owner.id
-| Ps = if PlayerId >< all then $world.players{}{?id} else [PlayerId]
-| for PlayerId Ps
-  | P = $world.players.PlayerId
-  | Params = P.params
-  | for Name,Value Pairs.group{2}
-    | when Value >< `?owner`: Value <= $owner.id
-    | when Value >< `?self`: Value <= $id
-    | when Value >< `?self_type`: Value <= $type
-    | if Value.is_list
-      then | when no Params.Name:
-             | Params.Name <= dup Value.size
-           | Params.Name.init{Value}
-      else Params.Name <= Value
-    | when Name >< mana: P.mana <= Value
-
-effect guards_to_attackers PlayerId:
-| for U $world.players.PlayerId.units: U.attacker <= 1
+  | when Player and Name >< mana: Player.mana <= Value
 
 effect swap Arg:
 | XYZ = $xyz.copy

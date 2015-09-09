@@ -9,7 +9,7 @@ world.new_game =
 | $player <= $players.($players.size-1)
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
-| less $params.explored: $explore{0}
+| if $params.explored then $explore{1} else $explore{0}
 | for P $players:
   | for U P.units: U.moved <= 0
 | $human <= $players.1
