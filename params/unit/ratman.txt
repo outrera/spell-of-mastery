@@ -1,9 +1,9 @@
 sprite: unit_ratman
 tier: 1
-health: 2
+health: 3
 attack: 1
 defense: 0
-income: -5
+income: -7
 sounds: attack,(attack2)
        //,impact,()
        ,hit,(rat_death)

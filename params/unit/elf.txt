@@ -1,6 +1,6 @@
 sprite: unit_elf
 tier: 2
-health: 1
+health: 2
 attack: 2
 defense: 0
 ranged: 1

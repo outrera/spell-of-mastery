@@ -96,6 +96,7 @@ world.process_events =
           Else | $params.Var
       | if got V then if N><eq then V >< Value else V >> Value
         else 0
+    [always] | 1
     [turn N] | N><$turn
     [got_unit Player UnitType]
       | Units = $players.Player.units

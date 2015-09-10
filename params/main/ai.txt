@@ -8,3 +8,6 @@ default:
 
 default_cycle:
   attack{(goblin elf goblin)}
+
+
+l2: attack{(ratman goblin ratman)}
