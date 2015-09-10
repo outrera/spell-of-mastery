@@ -33,7 +33,8 @@ type unit.$class{Id World}
   flags
   draw_order
   brighten
-  alpha
+  alpha //how transparent is this unit
+  delta //change of transparency per cycle
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -97,6 +98,7 @@ unit.init Class =
 | $turn <= $world.turn
 | $flags <= 0
 | $alpha <= 0
+| $delta <= 0
 | when $class.flyer: $flyer <= 1
 | $from.init{0,0,-1}
 | when $starts

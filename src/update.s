@@ -152,6 +152,14 @@ unit.update =
          and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
   | $ordered.type <= 0
+| when $delta:
+  | !$alpha+$delta
+  | when $alpha > 255:
+    | $alpha <= 255
+    | $delta <= 0
+  | when $alpha < 0:
+    | $alpha <= 0
+    | $delta <= 0
 | till $action.cycles > 0 // action is done?
   | when $anim<>idle and $anim<>move and
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):

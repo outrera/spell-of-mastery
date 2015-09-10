@@ -149,6 +149,8 @@ effect summon What:
   | What <= W
 | S = $world.alloc_unit{What owner/$owner}
 | S.summoned <= 1
+| S.alpha <= 255
+| S.delta <= -25
 | S.move{TargetXYZ}
 | less NoPick: S.world.update_pick{[S]}
 
