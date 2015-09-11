@@ -63,7 +63,10 @@ view.update_brush =
                  else not Us.any{?class^address >< Class^address}
     | when Place
       | U = $world.alloc_unit{ClassName}
-      | U.pick_facing{if Mirror then 5 else 3}
+      | Facing = if Mirror then 5 else 3
+      | Reverse = $keys.n >< 1
+      | when Reverse: Facing <= if Mirror then 1 else 6
+      | U.pick_facing{Facing}
       | when $keys.t >< 1: U.facing <= 3.rand
       | U.move{X,Y,Z}
   [tile Type]
