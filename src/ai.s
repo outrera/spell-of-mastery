@@ -260,10 +260,12 @@ ai.group_attack Types =
 | leave 1
 
 ai.script =
-| Params = $main.params
 | Player = $player
 | PParams = Player.params
+| when PParams.aiLastWait >< $world.turn: leave 0
+| Params = $main.params
 | when PParams.aiWait > 0:
+  | PParams.aiLastWait <= $world.turn
   | !PParams.aiWait-1
   | leave 0
 | AIType = PParams.aiType

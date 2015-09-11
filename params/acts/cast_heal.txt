@@ -4,4 +4,4 @@ after: latency{3}
 icon: spell_heal
 range: 2
 research: 1000
-cost: 200
+cost: 100

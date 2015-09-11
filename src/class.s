@@ -60,7 +60,8 @@ main.load_classes =
   | C = class S.bank S.name Me @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
-| for K,V $classes: when V.health and not V.leader: V.acts <= [@V.acts disband]
+| for K,V $classes:
+  | when V.health and not V.leader: V.acts <= [@V.acts disband]
 | for K,V $classes: V.acts <= map ActName V.acts
   | Act = $params.acts.ActName
   | less got Act: bad "[K] references undefined act [ActName]"

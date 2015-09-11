@@ -2,4 +2,4 @@ proto: summon__proto
 after: summon{unit_goblin}
 icon: unit_goblin
 research: 1000
-cost: 500
+cost: 600
