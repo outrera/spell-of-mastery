@@ -11,4 +11,4 @@ default_cycle:
 
 
 l2: attack{(ratman goblin ratman)},
-    wait{15}
+    wait{20}
