@@ -3,5 +3,5 @@ before: sound{summon}
 after: impact{explosion6},clear{target},sound{stone_hit}
 icon: spell_excavate
 range: any
-research: 0
-cost: 0
+research: 5000
+cost: 300

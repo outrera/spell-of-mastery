@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{leader_oculus}
 icon: unit_oculus
-research: 0
+research: 1000
 cost: 500

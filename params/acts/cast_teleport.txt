@@ -3,5 +3,5 @@ before: effect{teleport},sound{summon},set{self alpha 0},set{self delta 10}
 after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}
 icon: spell_teleport
 range: 2
-//research: 5000
-//cost: 500
+research: 5000
+cost: 500

@@ -2,5 +2,5 @@ affects: unit
 before: paralyze{3},impact{electrical},sound{electrical}
 icon: spell_shock
 range: 2
-research: 1000
-cost: 200
+research: 3000
+cost: 300
