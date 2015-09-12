@@ -36,7 +36,11 @@ draw_text FB X Y Msg =
 | Font.draw{FB X Y Msg}
 | FB.zbuffer <= ZB
 
+Folded = 0
+
 render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
+| DrawnFold = 0
+| less Folded: Folded <= Wr.main.img{ui_folded}
 | VisibleUnits = []
 | Gs = Wr.gfxes.Y.X
 | CurX = CursorXYZ.0
@@ -65,12 +69,19 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
-    | when AboveCursor or TZ << CutZ:
-      | when G.is_list:
-        | G <= G.((Wr.cycle/T.anim_wait)%G.size)
-      | when Fog: G.dither{1}
-      | when Br: G.brighten{Br}
-      | FB.blit{BX BY-G.h-ZZ G.z{Key}}
+    | if AboveCursor or TZ << CutZ then
+        | when G.is_list:
+          | G <= G.((Wr.cycle/T.anim_wait)%G.size)
+        | when Fog: G.dither{1}
+        | when Br: G.brighten{Br}
+        | FB.blit{BX BY-G.h-ZZ G.z{Key}}
+      else less DrawnFold:
+        | DrawnFold <= 1
+        | G = Folded
+        | when Fog: G.dither{1}
+        | when Br: G.brighten{Br}
+        | FB.blit{BX BY-G.h-ZZ G.z{Key}}
+        | FB.blit{BX BY-G.h-ZZ G.z{Key}}
   | when DrawCursor:
     | cursor_draw_front Wr FB BX BY-$yunit-ZZ Key TH
   | Z <= UnitZ
