@@ -174,7 +174,8 @@ ai.roam_with Radius U =
       | if AI><unit and Enemy then MoveIn <= 1
         else if AI><hold and no Blocked and no Vs.find{?ai><unhold}
            then MoveIn <= 1
-        else if Dst.type><swap and V.summoned then
+        else if Dst.type><swap and V.summoned and (U.xyz-Dst.xyz).take{2}.all{?.abs<2}
+           then
            | block Dst.xyz
            | Dst.type <= 0
         else if AI><turret and no Blocked then MoveIn <= 1
