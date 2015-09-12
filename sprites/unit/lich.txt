@@ -1,6 +1,6 @@
 author: `Denzi`, `Crossmagi Team`, `Nikita Sadkov`
-origin: `http://crossmagi.sourceforge.net/`
 license: `GPL2`
+origin: `http://crossmagi.sourceforge.net/`
 height: 4
 xy: -2,16
 frames: folder

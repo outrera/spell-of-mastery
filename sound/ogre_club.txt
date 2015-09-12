@@ -1,0 +1,4 @@
+author: `Wesnoth Team`
+license: `GPL2`
+http: `wesnoth.org`
+//based of dagger-swish and skeleton-big-die

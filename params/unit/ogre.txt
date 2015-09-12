@@ -1,0 +1,12 @@
+sprite: unit_ogre
+tier: 4
+health: 3
+attack: 1
+defense: 0
+income: -10
+
+sounds: attack,(ogre_club)
+       //,impact,()
+       ,hit,(ogre_hit)
+       ,die,(ogre_die)
+       ,move,(step)

@@ -1,0 +1,12 @@
+sprite: unit_spider
+tier: 4
+health: 3
+attack: 1
+defense: 0
+income: -10
+
+sounds: attack,(spider_attack)
+       //,impact,()
+       ,hit,(spider_hit)
+       ,die,(spider_death)
+       ,move,(step)
