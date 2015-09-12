@@ -163,27 +163,32 @@ ai.roam_with Radius U =
 | Player = $player
 | PentXYZ = if Player.pentagram then Player.pentagram.xyz else [-100 -100 -100]
 | when Radius: less (PentXYZ-U.xyz).all{?abs<Radius}: leave 0
-| Check = Move =>
+| Check = Dst =>
   | MoveIn = 0
-  | Vs = World.units_at{Move.xyz}
+  | Vs = World.units_at{Dst.xyz}
   | for V Vs
     | AI = V.ai
     | when AI:
-      | Blocked = World.block_at{Move.xyz}
+      | Blocked = World.block_at{Dst.xyz}
       | Enemy = Owner.is_enemy{V.owner}
       | if AI><unit and Enemy then MoveIn <= 1
         else if AI><hold and no Blocked and no Vs.find{?ai><unhold}
            then MoveIn <= 1
-        else if Move.type><swap and V.summoned then
-           | block Move.xyz
-           | Move.type <= 0
+        else if Dst.type><swap and V.summoned then
+           | block Dst.xyz
+           | Dst.type <= 0
         else if AI><turret and no Blocked then MoveIn <= 1
         else if AI><pentagram and Enemy then MoveIn <= 1
         else if AI><avoid and no Blocked then
-           | block Move.xyz
-           | Move.type <= 0
+           | block Dst.xyz
+           | Dst.type <= 0
            | MoveIn <= 0
+        else if AI><block then
+           | Dst.type <= 0
+           | MoveIn <= 0
+           | _goto end 
         else
+  | _label end
   | MoveIn
 | TargetNode = U.pathfind{1 Check}
 | less TargetNode:

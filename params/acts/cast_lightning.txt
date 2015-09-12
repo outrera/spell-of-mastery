@@ -2,5 +2,5 @@ affects: unit
 before: harm{1},impact{lightning},sound{lightning}
 icon: spell_lightning
 range: 2
-research: 500
+research: 1000
 cost: 150

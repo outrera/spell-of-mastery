@@ -1,4 +1,4 @@
-(version 0.1 w 8 h 8 serial 58316 cycle 0 turn 0 filename level0 name `Level 0` description `Level 0 - Tutorial` params ((next_world level1)) events (((turn 1) (`{}` enable 0 1 all) (`{}` enable 1 1 (pentagram summon_ratman))
+(version 0.1 w 8 h 8 serial 58316 cycle 0 turn 0 filename level0 name `Level 0` description `Level 0 - Tutorial` params ((next_world level1)) events (((turn 1) (`{}` enable 0 1 all) (`{}` enable 1 1 (pentagram disband summon_ratman))
 (`{}` msg `  Level 0 - Forest` `During his usual herb gathering, wizard was confronted by hungry goblins.
    Wizard has managed to teleport away, yet goblins still feel him and will soon
    close the distance.

@@ -2,5 +2,5 @@ affects: unit
 before: flyer{1},impact{explosion_blood},sound{wings}
 icon: spell_flight
 range: 2
-//research: 500
-//cost: 150
+research: 2000
+cost: 1000

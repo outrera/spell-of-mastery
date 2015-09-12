@@ -5,3 +5,4 @@ defense: 999
 show: 0
 moves: ()
 item: 0
+ai: block

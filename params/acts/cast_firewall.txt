@@ -2,5 +2,5 @@ affects: any
 before: impact{fire_ring},sound{summon},summon{nopick,special_firewall}
 icon: spell_firewall
 range: 2
-//research: 5000
-//cost: 700
+research: 1000
+cost: 200
