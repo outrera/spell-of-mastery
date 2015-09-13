@@ -83,8 +83,6 @@ join_banks Bs =
 main.load_sprites =
 | Params = load_params "[$data]/sprites/"
 | $sprites <= join_banks Params
-| for A,B $sprites{}{[?0 ?1.http.as_text]}.keep{?1<>'No'}.sort{?0<??0}: say A,B
-//| for A,B $sprites{}{[?0 ?1.http.as_text]}.sort{?1<??1}: say A,B
 | init_sprites Me
 
 main.img Name =
