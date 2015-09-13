@@ -1,7 +1,7 @@
 author: `Akimasa Shimobayashi`
 copyright: `Akimasa Shimobayashi`
 license: `CC3-BY-SA`
-http: `http://www.shimobayashi.name/`
+origin: `http://www.shimobayashi.name/`
 frames: 64*64
 xy: 0,8
 anims: | idle time-3

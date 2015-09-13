@@ -1,6 +1,6 @@
-author: surt,`Dmitrij Makovoz`,`Natalya Bugrova`
+author: surt,`Dmitrij Makovoz`,`Natalya Bugrova`, `Leha (kharagh@bk.ru)`
 copyright: surt,`Nikita Sadkov`
-http: `http://opengameart.org/content/painted-iso-roguelike-tiles`
+origin: `http://opengameart.org/content/painted-iso-roguelike-tiles`
 xy: 0,48
 frames: folder
 anims: | idle (idle0 60) (idle1 12) (idle2 12) (idle3 12) (idle4 12)

@@ -1,4 +1,4 @@
 author: `Marc Russell`
 copyright: `Marc Russell`
 license: `CC-BY-SA`
-http: `www.spicypixel.net`
+origin: `www.spicypixel.net`

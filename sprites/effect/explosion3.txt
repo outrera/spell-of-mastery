@@ -1,7 +1,7 @@
 author: `Daniel Cook`
 copyright: `Daniel Cook`
 license: `CC3-BY`
-http: `http://lunar.lostgarden.com/labels/free%20game%20graphics.html`
+origin: `http://lunar.lostgarden.com/labels/free%20game%20graphics.html`
 xy: 0,2
 frames: folder
 anims: | idle (idle01 6) (idle02 6) (idle03 6) (idle04 6)
