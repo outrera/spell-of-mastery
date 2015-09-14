@@ -1,2 +1,2 @@
-author: Jetrel
+author: `Natalya Bugrova`
 xy: 0,-16

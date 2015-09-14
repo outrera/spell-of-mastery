@@ -1,3 +1,2 @@
-author: `Nikita Sadkov`
-license: `CC3-BY-SA`
+author: `Natalya Bugrova`
 xy: 0,-16

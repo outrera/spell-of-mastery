@@ -1,2 +1,2 @@
-author: `Henrique Lazarini '7Soul' 'Ails'`
+author: `Natalya Bugrova`
 xy: 0,0

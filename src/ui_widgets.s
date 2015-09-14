@@ -21,7 +21,7 @@ type message_box.$base{ui} base title text buttons width margin/[0 0]
 | $base <= hidden: dlg: mtx
   | 270-MarginW 100-MarginH | BG
   | 290 110 | $title
-  | 280 140 | $text
+  | 276 140 | $text
   | 290 395 | layH s/5 $buttons
 
 message_box.display Buttons Title Text =
