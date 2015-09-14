@@ -1,4 +1,4 @@
-author: `Natalya Bugrova`,`Leha (kharagh@bk.ru)`
+author: `Natalya Bugrova`,`Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 xy: 12,90
 frames: folder

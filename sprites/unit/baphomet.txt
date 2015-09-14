@@ -1,4 +1,4 @@
-author: `Matthew Griebner`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`,`Leha (kharagh@bk.ru)`
+author: `Matthew Griebner`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`,`Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 xy: 4,32
 frames: folder

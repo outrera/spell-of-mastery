@@ -1,4 +1,4 @@
-author: `Nikita Sadkov`, `Camilo Collao (Bo)`,`Leha (kharagh@bk.ru)`
+author: `Nikita Sadkov`, `Camilo Collao (Bo)`,`Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 license: `CC3-BY-SA`
 xy: 0,48

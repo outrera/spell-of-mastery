@@ -6,8 +6,8 @@ defense: 1
 flyer: 1
 income: -40
 moves: matrix.move2
-sounds: attack,(dragon)
+sounds: attack,(dragon_hit)
 //       ,impact,()
-//       ,hit,()
-//       ,die,()
+       ,hit,(dragon_hit)
+       ,die,(dragon_death)
        ,move,(step)

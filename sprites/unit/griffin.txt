@@ -1,4 +1,4 @@
-author: `Matthew Griebner`, `Alexandr Sidorov`,`Leha (kharagh@bk.ru)`
+author: `Matthew Griebner`, `Alexandr Sidorov`,`Ievgen Khomenko`,`Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 height: 4
 xy: -18,64

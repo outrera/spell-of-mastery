@@ -1,7 +1,9 @@
-use gui
+use gui param
 
 main.load_sounds =
-| Folder = "[$data]sound/"
+| Folder = "[$data]sound/units/"
+| Params = load_params "[$data]/sound/"
+| $credits.sound <= extract_params_authors Params
 | $sounds <= @table: map Name Folder.urls.keep{is.[@_ txt]}{?1}
   | SoundFile = "[Folder][Name].wav"
   | less SoundFile.exists: SoundFile <= "[Folder][Name].ogg"

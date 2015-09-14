@@ -255,6 +255,7 @@ ui.init =
 | new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
 | LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
+| CreditsRoll = credits_roll Me $main.credits
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
@@ -268,6 +269,10 @@ ui.init =
             | unpause
             | Tabs.pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
+  |  ScreenW-80 ScreenH-20
+     | button 'Credits' skin/small_medium: =>
+       | CreditsRoll.reset
+       | Tabs.pick{credits}
 | GameMenu = dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
@@ -311,6 +316,11 @@ ui.init =
     | when $world.player.human: $world.end_turn
     | Handled <= 1
   | less Handled: Base.input{In}
+| Credits = dlg: mtx
+  |  0   0 | $img{ui_stars}
+  |  0   0 | CreditsRoll
+  |  ScreenW-80 ScreenH-20
+     | button 'Exit' skin/small_medium: => Tabs.pick{main_menu}
 | IsDebug = $main.params.world.release<>1
 | InitTab = if IsDebug then \ingame else \main_menu
 | Tabs <= tabs InitTab: t
@@ -321,6 +331,7 @@ ui.init =
           ingame(Ingame)
           victory(Victory)
           scenario(ScenarioMenu)
+          credits(Credits)
 | BankList.pick{0}
 | begin_ingame 1
 //| pause

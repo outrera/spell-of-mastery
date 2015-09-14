@@ -1,3 +1,0 @@
-author: `Zabuhailo`,`qubodup`
-license: `CC0`
-origin: `http://freesound.org/people/Zabuhailo/sounds/143125/`

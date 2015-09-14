@@ -1,4 +1,4 @@
-author: `Thomas Frose`, `Alexander Luchkin`, `Leha (kharagh@bk.ru)`
+author: `Thomas Frose`, `Alexander Luchkin`,`Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 xy: 0,38
 frames: folder

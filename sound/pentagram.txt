@@ -1,3 +1,0 @@
-author: `Browser Quest team`
-license: `CC-BY-SA 3.0`
-origin: `github.com/mozilla/BrowserQuest`

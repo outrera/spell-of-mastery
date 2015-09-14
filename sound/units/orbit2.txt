@@ -1,3 +1,3 @@
-author: `Monster Rpg 2 Team`
+author: `Nooskewl Games`
 license: `Public Domain`
 origin: `http://opengameart.org/content/sound-effects-from-monster-rpg-2`

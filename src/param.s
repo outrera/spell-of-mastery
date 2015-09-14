@@ -37,9 +37,24 @@ load_params Folder =
            | for K,V KVs: Params.K <= V
     | Params.bank <= BankName
     | Params.name <= Name
-    | Params.origin <= "[BankFolder][Name]"
+    | Params.path <= "[BankFolder][Name]"
     | Name,Params
   | BankName,Bank
+
+extract_params_authors Params =
+| Authors = t
+| for BankName,Items Params: for Name,Item Items
+  | Author = Item.author
+  | Origin = Item.origin
+  | when got Author:
+    | /*when no Origin:*/ Origin <= "[BankName]/[Name]"
+    | less Author.is_list: Author <= [Author]
+    | less Origin.is_list: Origin <= [Origin]
+    | for A Author
+      | when no Authors.A: Authors.A <= []
+      | for O Origin: push O Authors.A
+| for K,V Authors: Authors.K <= V.uniq
+| Authors
 
 params_handle_vars Me =
 | Main = $params.main
@@ -74,4 +89,4 @@ main.load_params =
 | params_handle_prototypes Me
 | params_handle_acts Me
 
-export load_params
+export load_params extract_params_authors

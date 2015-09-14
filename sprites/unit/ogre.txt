@@ -1,4 +1,4 @@
-author: `Leha (kharagh@bk.ru)`
+author: `Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 xy: 0,20
 frames: folder

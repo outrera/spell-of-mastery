@@ -1,4 +1,4 @@
-author: `Ievgen Khomenko`, `Leha (kharagh@bk.ru)`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
+author: `Ievgen Khomenko`, `Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
 copyright: `Nikita Sadkov`
 xy: -8,32
 frames: folder

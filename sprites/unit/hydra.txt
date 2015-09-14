@@ -1,4 +1,4 @@
-author: `Matthew Griebner`,`Leha (kharagh@bk.ru)`
+author: `Matthew Griebner`,`Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 xy: 8,40
 frames: folder

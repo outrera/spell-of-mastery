@@ -1,4 +1,4 @@
-author: `Tap (Josh Maines)`,`Nikita Sadkov`,`Leha (kharagh@bk.ru)`
+author: `Tap (Josh Maines)`,`Nikita Sadkov`,`Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Nikita Sadkov`
 source: `http://opengameart.org/content/multi-part-sprites-and-other-objects`
 height: 4

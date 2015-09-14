@@ -162,4 +162,15 @@ research_icon.render =
   | Icon.number <= Player.research_remain{Act}
 | $base.render
 
+type credits_roll.widget{ui text} cycle txt
+| $txt <= txt medium $text
+
+credits_roll.draw G PX PY =
+| R = $txt.render
+| R.draw{G PX+10 PY+$ui.height-$cycle/5}
+| !$cycle+1
+
+credits_roll.reset = $cycle <= 0
+
 export message_box unit_panel world_props info_line load_world_dlg research_icon
+       credits_roll

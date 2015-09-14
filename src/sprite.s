@@ -69,8 +69,8 @@ init_sprites Me =
 | for SpriteName,Params Sprites
   | S = sprite Params.bank Params.name @Params.list.join
   | if S.frames >< folder
-    then init_frames_from_folder S "[Params.origin]/"
-    else init_frames S gfx."[Params.origin].png"
+    then init_frames_from_folder S "[Params.path]/"
+    else init_frames S gfx."[Params.path].png"
   //| have S.margins
   //  | S.margins <= S.frames.(S.anims.idle.0.0).margins
   | $sprites.SpriteName <= S
@@ -82,6 +82,7 @@ join_banks Bs =
 
 main.load_sprites =
 | Params = load_params "[$data]/sprites/"
+| $credits.graphics <= extract_params_authors Params
 | $sprites <= join_banks Params
 | init_sprites Me
 
