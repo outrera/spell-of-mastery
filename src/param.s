@@ -37,7 +37,7 @@ load_params Folder =
            | for K,V KVs: Params.K <= V
     | Params.bank <= BankName
     | Params.name <= Name
-    | Params.path <= "[BankFolder][Name]"
+    | Params.filepath <= "[BankFolder][Name]"
     | Name,Params
   | BankName,Bank
 
