@@ -100,13 +100,19 @@ player.reasearch_boost What Amount =
 | less What: What <= $researching
 | less What: leave Amount
 | !$research.What + Amount
-| ActName = $main.params.acts.What
-| Remain = $research_remain{ActName}
+| Act = $main.params.acts.What
+| Remain = $research_remain{Act}
 | when Remain < 0: !$research.What + Remain
 | when What >< $researching: less Remain > 0:
+  | $notify{"Done researching [Act.title]"}
   | $researching <= 0
   | leave -Remain
 | 0
+
+player.research_remain Act =
+| ResearchSpent = $research.(Act.name)
+| ResearchRemain = Act.research - ResearchSpent
+| ResearchRemain
 
 player.active =
 | PID = $id
@@ -118,9 +124,5 @@ player.units =
 | Turn = $world.turn
 | $world.active.list.keep{(?owner.id >< PID and not ?removed)}
 
-player.research_remain Act =
-| ResearchSpent = $research.(Act.name)
-| ResearchRemain = Act.research - ResearchSpent
-| ResearchRemain
 
 export player
