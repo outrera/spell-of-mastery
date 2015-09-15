@@ -183,20 +183,38 @@ world.fast_at XYZ =
 
 world.set_ X Y Z V = $tilemap.set{[X Y Z] V}
 
-world.clear_tile_ XYZ =
+world.clear_tile_ XYZ Filler =
 | Id = $tilemap.at{XYZ}
 | less Id: leave
 | X,Y,Z = XYZ
 | when Id<0: !Z-Id
 | Tile = $tid_map.($tilemap.at{X,Y,Z})
 | times I Tile.height
-  | $set_{X Y Z-I 0}
+  | $set_{X Y Z-I Filler}
   | $set_slope_at{X,Y,(Z-I) #@0000}
 | $updElev{X,Y}
 
-world.clear_tile XYZ =
-| $clear_tile_{XYZ}
+world.clear_tile XYZ Filler =
+| $clear_tile_{XYZ 0}
 | XY = XYZ.take{2}
+| $update_move_map{XY}
+| for D Dirs: $update_move_map{XY+D}
+
+world.clear_passage X Y Z =
+| HH = $fix_z{X,Y,Z}
+| H = HH
+| when H-Z < 5: leave
+| ZZ = Z
+| while Z<H:
+  | less $at{X,Y,Z}.clear: H<=Z
+  | !Z+1
+| Z <= ZZ
+| when H-Z < 5: leave
+| while Z<H:
+  | $set{X Y Z $main.tiles.filler1}
+  | !Z+1
+| when H><HH: $set{X Y H-1 $main.tiles.floor}
+| XY = X,Y
 | $update_move_map{XY}
 | for D Dirs: $update_move_map{XY+D}
 
@@ -204,7 +222,7 @@ world.clear_tile XYZ =
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =
 | H = Tile.height
-| times I H: $clear_tile_{X,Y,Z+I}
+| times I H: $clear_tile_{X,Y,Z+I 0}
 | H = H-1
 | times I H: $set_{X Y Z+I I-H} // push padding
 | $set_{X Y Z+H Tile.id}

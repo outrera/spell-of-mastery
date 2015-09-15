@@ -162,7 +162,7 @@ unit.free =
 
 unit.remove =
 | when $xyz.2 <> -1:
-  | when $passable and $block: $world.clear_tile{$xyz}
+  | when $passable and $block: $world.clear_tile{$xyz 0}
   | $move_in{0}
 | $world.remove_unit{Me}
 | $xyz.2 <= -1

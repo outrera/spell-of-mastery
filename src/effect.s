@@ -136,11 +136,18 @@ effect remove Whom: case Whom
          | when got U and U.xyz.2<>-1: U.free
 
 effect clear What:
-| XYZ = case What
-  target | TargetXYZ
+| X,Y,Z = case What
+  target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
-| when no XYZ: bad "effect clear: invalid target ([What])"
-| $world.clear_tile{XYZ}
+  Else | bad "effect clear: invalid target ([What])"
+| $world.clear_tile{X,Y,Z $main.tiles.filler.id}
+
+effect clear_passage What:
+| X,Y,Z = case What
+  target | TargetXYZ.deep_copy
+  X,Y,Z | X,Y,Z
+  Else | bad "effect clear: invalid target ([What])"
+| $world.clear_passage{X Y Z}
 
 effect summon What:
 | NoPick = 0

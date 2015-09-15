@@ -1,7 +1,8 @@
-affects: any
+affects: land
 before: sound{summon}
-after: impact{explosion6},clear{target},sound{stone_hit}
+after: impact{explosion6},clear_passage{target},sound{stone_hit}
 icon: spell_excavate
-range: any
-research: 5000
-cost: 300
+range: 1
+fix_z: caster
+//research: 5000
+//cost: 300

@@ -100,7 +100,7 @@ view.update_brush =
         | less Z > 1: leave
         | Tile = $world.at{X,Y,Z-1}
         | less Tile.height: leave
-        | $world.clear_tile{X,Y,Z-1}
+        | $world.clear_tile{X,Y,Z-1 0}
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
         | $cursor.2 <= $fix_z{$cursor}
 
@@ -153,7 +153,9 @@ update_lmb Me Player =
 | less Act.range >< any
   | Ms = action_list_moves{$world Picked Act}.0
   | when no Ms.find{$cursor}: leave
-| Act.target <= $world.block_at{$cursor}^~{No 0}
+| Act.target <= if Act.affects><land then 0
+                else $world.block_at{$cursor}^~{No 0}
+| when Act.fix_z><caster: $cursor.2 <= Picked.xyz.2
 | Act.at <= $cursor
 | Picked.order.init{@Act.list.join}
 | $world.act <= 0

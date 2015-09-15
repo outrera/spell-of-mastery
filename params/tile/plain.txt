@@ -1,6 +1,7 @@
 sprite: tiles_plain
 trn: 1
 water: plain_water
+clear: 1
 1111: 16,17,16,17,16,17,19
 0000: 18
 1000: 0
