@@ -104,7 +104,7 @@ unit.init Class =
 | when $starts
   | less $active
     | $world.active.push{Me}
-    | $active <= 1
+  | $active <= 1
   | $ordered.type <= 0
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
@@ -157,7 +157,7 @@ unit.free =
   | case Leaders [L]
     | $world.params.winner <= L.owner.id
     | $world.params.victory_type <= 'Victory by defeating other leaders.'
-| $active <= 0
+| when $active: $active <= 2 //request removal from active list
 | $world.free_unit{Me}
 
 unit.remove =

@@ -148,11 +148,11 @@ world.update =
   | ($on_update){}
 
 unit.update =
-| when $turn and ($world.turn - $turn) >> $ttl and $action.type <> die:
-  | $die
-| when $removed
+| when $removed or $active<>1:
   | $active <= 0
   | leave
+| when $turn and ($world.turn - $turn) >> $ttl and $action.type <> die:
+  | $die
 | !$anim_wait - 1
 | less $anim_wait > 0
   | when $anim >< attack and $anim_step+1 >< $anim_seq.size:
