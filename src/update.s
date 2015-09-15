@@ -3,6 +3,16 @@
 main.update =
 | $world.update
 
+
+alloc_ai_blockers Me =
+| for U $units: less U.removed: when U.ai >< avoid:
+  | B = $alloc_unit{unit_block owner/U.owner}
+  | B.move{U.xyz}
+
+free_ai_blockers Me =
+| for U $units: less U.removed: when U.type >< unit_block:
+  | U.free
+
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
@@ -32,6 +42,7 @@ update_spell_of_mastery Me P =
 
 world.end_turn =
 | P = $player
+| less P.human: free_ai_blockers Me
 | for U P.units: when U.health>0:
   | for V $units_at{U.xyz}: when V.trigger: V.effect{V.trigger U U.xyz}
 | ResearchIncome = P.income-P.upkeep
@@ -47,6 +58,7 @@ world.end_turn =
   | !$turn + 1
 | P = $players.NextPlayer
 | $player <= P
+| less P.human: alloc_ai_blockers Me
 | update_spell_of_mastery Me P
 | when P.human
   | $view.center_at{$player.params.view}
