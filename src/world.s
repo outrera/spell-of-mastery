@@ -205,15 +205,23 @@ world.clear_passage X Y Z =
 | H = HH
 | when H-Z < 5: leave
 | ZZ = Z
+| AddCeil = 1
 | while Z<H:
-  | less $at{X,Y,Z}.clear: H<=Z
+  | less $at{X,Y,Z}.clear:
+    | H<=Z
+    | AddCeil <= 0
+  | !Z+1
+| Z <= ZZ
+| when H-Z < 5: leave
+| while Z<H:
+  | when Dirs.all{DX,DY=>$at{[X+DX Y+DY Z]}.empty}: H<=Z
   | !Z+1
 | Z <= ZZ
 | when H-Z < 5: leave
 | while Z<H:
   | $set{X Y Z $main.tiles.filler1}
   | !Z+1
-| when H><HH: $set{X Y H-1 $main.tiles.floor}
+| when AddCeil: $set{X Y H-1 $main.tiles.floor}
 | XY = X,Y
 | $update_move_map{XY}
 | for D Dirs: $update_move_map{XY+D}
