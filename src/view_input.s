@@ -178,9 +178,9 @@ view.update_play =
     left | update_lmb Me Player
     right | update_rmb Me Player
   | $mice_click <= 0
-  | Picked = $world.picked
-  | less Picked: Picked <= $world.nil
-  | $on_unit_pick{}{Picked}
+| Picked = $world.picked
+| less Picked: Picked <= $world.nil
+| $on_unit_pick{}{Picked}
 | $main.update
 
 world.update_picked = 
