@@ -1,0 +1,3 @@
+sprite: tiles_floor_wooden
+height: 1
+1111: 0

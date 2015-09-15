@@ -221,7 +221,7 @@ world.clear_passage X Y Z =
 | while Z<H:
   | $set{X Y Z $main.tiles.filler1}
   | !Z+1
-| when AddCeil: $set{X Y H-1 $main.tiles.floor}
+| when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y
 | $update_move_map{XY}
 | for D Dirs: $update_move_map{XY+D}
