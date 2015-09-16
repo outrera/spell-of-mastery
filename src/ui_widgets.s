@@ -63,7 +63,7 @@ unit_panel.draw G PX PY =
 | IconY = PY+16
 | Icon = $unit.main.sprites."icons_[$unit.icon or $unit.type]"
 | when got Icon: G.blit{IconX IconY Icon.frames.0}
-| G.blit{PX+8 PY+8 $laurels}
+| G.blit{PX+9 PY+8 $laurels}
 | X = PX+4
 | Y = PY+$laurels.h+16
 | Font = font medium
