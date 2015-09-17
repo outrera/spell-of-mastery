@@ -2,4 +2,4 @@ author: `Wesnoth Team`
 license: `GPL2`
 origin: `wesnoth.org`
 
-//originally pincers.ogg
+//originally slowed.waw

@@ -1,5 +1,5 @@
 affects: unit
-before: haste{target},impact{explosion_blood},sound{orbit2}
+before: haste{target},impact{explosion_blood},sound{hasted}
 icon: spell_haste
 range: 2
 research: 2000

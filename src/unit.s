@@ -427,6 +427,19 @@ unit.draw FB X Y =
   | PH = $sprite.pick_height
   | less PH: PH <= $height*8+16
   | PH <= PH + Mark.h + Wave
-  | FB.blit{X+32-Mark.w/2 Y-PH Mark.z{$draw_order}}
+  | XX = X+32-Mark.w/2
+  | YY = Y-PH
+  | FB.blit{XX YY Mark.z{$draw_order}}
+  | Icons = []
+  | when $shell: push 2 Icons
+  | when $haste: push 5 Icons
+  | when Icons.size
+    | XX <= XX - Icons.size*8 + Mark.w/2
+    | !YY-16
+    | Fs = $main.effect.frames
+    | for I Icons
+      | F = Fs.I
+      | FB.blit{XX YY F.z{$draw_order}}
+      | !XX+16
 
 export unit

@@ -18,6 +18,7 @@ type main{Data}
      sounds
      ui
      credits
+     effect
 | $credits <= t
 | $load_params
 | for K,V $params.main: $params.K <= V

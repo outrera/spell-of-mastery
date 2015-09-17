@@ -85,6 +85,7 @@ main.load_sprites =
 | $credits.graphics <= extract_params_authors Params
 | $sprites <= join_banks Params
 | init_sprites Me
+| $effect <= $spr{stats_effect}
 
 main.img Name =
 | S = $sprites."[Name]"
