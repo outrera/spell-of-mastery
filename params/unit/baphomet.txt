@@ -4,3 +4,9 @@ health: 2
 attack: 11
 defense: 2
 income: -40
+
+sounds: attack,(attack1)
+       //,impact,()
+       ,hit,(baphomet_hit)
+       ,die,(baphomet_hit)
+       ,move,(step)

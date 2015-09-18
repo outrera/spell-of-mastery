@@ -4,8 +4,8 @@ health: 5
 attack: 1
 defense: 0
 income: -15
-/*sounds: attack,(attack2)
+sounds: attack,(attack2)
        //,impact,()
-       ,hit,(rat_death)
-       ,die,(rat_death)
-       ,move,(step)*/
+       ,hit,(dwarf_hit)
+       ,die,(dwarf_die)
+       ,move,(step)

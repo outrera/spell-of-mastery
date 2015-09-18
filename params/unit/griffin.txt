@@ -6,3 +6,9 @@ defense: 0
 flyer: 1
 income: -25
 moves: matrix.move_l
+
+sounds: attack,(attack2)
+       //,impact,()
+       ,hit,(griffin_hit)
+       ,die,(griffin_die)
+       ,move,(wings)

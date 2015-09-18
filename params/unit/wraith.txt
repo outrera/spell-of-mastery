@@ -4,3 +4,9 @@ health: 2
 attack: 3
 defense: 2
 income: -20
+
+sounds: attack,(attack2)
+       //,impact,()
+       ,hit,(wraith_hit)
+       ,die,(wraith_die)
+       ,move,(wings)

@@ -2,5 +2,5 @@ affects: unit
 before: shell{target},impact{shell},sound{shell}
 icon: spell_shell
 range: 2
-//research: 2000
-//cost: 200
+research: 2000
+cost: 200

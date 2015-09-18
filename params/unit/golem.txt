@@ -5,3 +5,9 @@ attack: 3
 defense: 2
 //speed: -2
 income: -40
+
+sounds: attack,(ogre_club)
+       //,impact,()
+       ,hit,(golem_hit)
+       ,die,(golem_die)
+       ,move,(step)

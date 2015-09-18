@@ -7,6 +7,6 @@ income: -5
 
 sounds: attack,(attack2)
        //,impact,()
-       ,hit,(orc_hit)
-       ,die,(orc_die)
+       ,hit,(halfling_hit)
+       ,die,(halfling_die)
        ,move,(step)

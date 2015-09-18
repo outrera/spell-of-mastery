@@ -9,7 +9,7 @@ ranged: 1
 moves: matrix.move2
 
 sounds: attack,(observer_attack)
-//       ,impact,()
-//       ,hit,()
-//       ,die,()
-       ,move,(step)
+       //,impact,()
+       //,hit,(observer_die)
+       ,die,(observer_die)
+       ,move,(wings)

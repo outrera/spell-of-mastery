@@ -4,3 +4,9 @@ health: 18
 attack: 4
 defense: 0
 income: -40
+
+sounds: attack,(hydra_attack)
+       //,impact,()
+       ,hit,(hydra_hit)
+       ,die,(hydra_hit)
+       ,move,(step)

@@ -1,0 +1,3 @@
+author: `David Mckee 'ViRiX' (www.soundcloud.com/virix)`
+license: `CC-BY`
+origin: `http://opengameart.org/content/magic-sfx-sample`

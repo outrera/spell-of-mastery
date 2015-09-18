@@ -4,3 +4,9 @@ health: 2
 attack: 1
 defense: 0
 income: -5
+
+sounds: attack,(attack2)
+       //,impact,()
+       ,hit,(halfling_hit)
+       ,die,(halfling_die)
+       ,move,(step)
