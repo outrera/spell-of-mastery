@@ -82,6 +82,8 @@ effect mana Amount: !Target.owner.mana+Amount
 
 effect flyer State: Target.flyer <= State
 
+effect poison State: Target.poison <= State
+
 type unit_setter{unit}
 
 unit_setter.`!` K V =

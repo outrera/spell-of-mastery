@@ -99,6 +99,7 @@ dact attack.update
     | Target = $target
     | U.world.effect{Target.xyz blood}
     | Damage = max 0 U.attack-Target.defense
+    | when U.impact: U.effect{U.impact Target Target.xyz}
     | Target.harm{U Damage}
     | U.animate{idle}
     | when Target.hits < Target.health:

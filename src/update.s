@@ -44,7 +44,11 @@ world.end_turn =
 | P = $player
 | less P.human: free_ai_blockers Me
 | for U P.units: when U.health>0:
-  | for V $units_at{U.xyz}: when V.trigger: V.effect{V.trigger U U.xyz}
+  | when U.poison and U.health-U.hits>1:
+    | $effect{U.xyz explosion_blood}
+    | U.harm{$nil 1}
+  | for V $units_at{U.xyz}: when V.trigger:
+    | V.effect{V.trigger U U.xyz}
 | ResearchIncome = P.income-P.upkeep
 | when ResearchIncome > 0: P.reasearch_boost{0 ResearchIncome}
 | PResearch = P.research

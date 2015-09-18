@@ -61,6 +61,9 @@ unit.`!shell` State = $flags <= $flags.set{4 State}
 unit.flyer = $flags.get{5}
 unit.`!flyer` State = $flags <= $flags.set{5 State}
 
+unit.poison = $flags.get{6}
+unit.`!poison` State = $flags <= $flags.set{6 State}
+
 unit.alive = $hits < $health
 
 
@@ -434,6 +437,7 @@ unit.draw FB X Y =
   | FB.blit{XX YY Mark.z{$draw_order}}
   | Icons = []
   | when $shell: push 2 Icons
+  | when $poison: push 4 Icons
   | when $haste: push 5 Icons
   | when Icons.size
     | XX <= XX - Icons.size*8 + Mark.w/2

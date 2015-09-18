@@ -3,7 +3,7 @@ tier: 4
 health: 3
 attack: 1
 defense: 0
-income: -10
+income: -40
 
 sounds: attack,(ogre_club)
        //,impact,()

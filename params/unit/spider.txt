@@ -1,9 +1,10 @@
 sprite: unit_spider
-tier: 4
-health: 3
-attack: 1
+tier: 3
+health: 4
+attack: 2
 defense: 0
 income: -10
+impact: poison{1},impact{explosion_blood}
 
 sounds: attack,(spider_attack)
        //,impact,()
