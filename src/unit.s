@@ -368,6 +368,8 @@ unit.die =
 unit.harm Attacker Damage =
 | when $shell and Damage > 0:
   | $shell <= 0
+  | $world.effect{$xyz shell}
+  | $main.sound{shell}
   | leave
 | !$hits + Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
