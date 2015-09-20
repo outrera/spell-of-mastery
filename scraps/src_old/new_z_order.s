@@ -5,12 +5,11 @@ type blit_item
   id
   object
   gfx
-  flags
   sx sx2   // Screenspace X coords
   sy sy2   // Screenspace Y coords
-  x x2  // Worldspace bounding box x (xright = x)
-  y y2   // Worldspace bounding box y (ynear = y)
-  z z2   // Worldspace bounding box z (z2 = z)
+  x x2     // Worldspace bounding box x
+  y y2     // Worldspace bounding box y
+  z z2     // Worldspace bounding box z
   sxleft   // Screenspace bounding box left extent    (LNT x coord)
   sxright  // Screenspace bounding box right extent   (RFT x coord)
   sxtop    // Screenspace bounding box top x coord    (LFT x coord)
@@ -72,6 +71,7 @@ type item{x y z xd yd zd gfx} id
 type test.widget{unit block} mx my serial objects/dup{100}
 | $add_item{item{50   50 0 37 37 64 $unit}}
 | $add_item{item{200  100 0 64 64 64 $block}}
+| $add_item{item{400  100 64 64 64 64 $block}}
 
 
 test.add_item Item =
@@ -94,7 +94,7 @@ test.input In =
       | O.x <= ($mx/2 + $my)
       | O.y <= ($my - $mx/2) 
 
-to_iso X,Y = [X-Y (X+Y)/2]
+to_iso X,Y,Z = [X-Y (X+Y)/2-Z]
 
 test.draw FB BX BY =
 | CamX,CamY,CamZ = 0,0,0
@@ -140,14 +140,14 @@ test.draw FB BX BY =
   | G = B.gfx
   | P = [-CamSX -CamSY]
   | ZD = B.object.zd
-  | P1 = to_iso{B.x2,B.y2} - [0 ZD] + P
-  | P2 = to_iso{B.x2,B.y} - [0 ZD] + P
-  | P3 = to_iso{B.x,B.y2} - [0 ZD] + P
-  | P4 = to_iso{B.x,B.y} - [0 ZD] + P
-  | P5 = to_iso{B.x2,B.y} + P
-  | P6 = to_iso{B.x,B.y2} + P
-  | P7 = to_iso{B.x,B.y} + P
-  | P8 = to_iso{B.x2,B.y2} + P
+  | P1 = to_iso{B.x2,B.y2,B.z} - [0 ZD] + P
+  | P2 = to_iso{B.x2,B.y,B.z} - [0 ZD] + P
+  | P3 = to_iso{B.x,B.y2,B.z} - [0 ZD] + P
+  | P4 = to_iso{B.x,B.y,B.z} - [0 ZD] + P
+  | P5 = to_iso{B.x2,B.y,B.z} + P
+  | P6 = to_iso{B.x,B.y2,B.z} + P
+  | P7 = to_iso{B.x,B.y,B.z} + P
+  | P8 = to_iso{B.x2,B.y2,B.z} + P
   | FB.blit{P7.0-G.w/2 P7.1-G.h B.gfx}
   | for A,B [P5,P7 P6,P7 P5,P8 P6,P8
              P5,P2 P6,P3 P8,P1 P7,P4
