@@ -5,31 +5,16 @@ type blit_item
   id
   object
   gfx
-  sx sx2   // Screenspace X coords
-  sy sy2   // Screenspace Y coords
-  x x2     // Worldspace bounding box x
-  y y2     // Worldspace bounding box y
-  z z2     // Worldspace bounding box z
-  sxleft   // Screenspace bounding box left extent    (LNT x coord)
-  sxright  // Screenspace bounding box right extent   (RFT x coord)
-  sxtop    // Screenspace bounding box top x coord    (LFT x coord)
-  sytop    // Screenspace bounding box top extent     (LFT y coord)
-  sxbot    // Screenspace bounding box bottom x coord (RNB x coord) ss origin
-  sybot    // Screenspace bounding box bottom extent  (RNB y coord) ss origin
+  x y z    // bounding box 1st point
+  x2 y2 z2 // bounding box 2nd point
   f32x32   // flag: 32x32 flat (floor tile)
   flat     // flag: floor tile with 0 height
   occl     // flag: occludes other tiles
   solid    // flag
   draw     // flag
   roof     // flag
-  noisy    // flag
   anim     // flag: tile is animated
   trans    // flag: tile is transparent
-  fixed    // flag
-  land     // flag
-  occluded  // Set true if occluded
-  clipped  // Clipped to RenderSurface
-  order // Rendering order. -1 is not yet drawn
 
 
 compare_items A B =
@@ -114,26 +99,6 @@ test.draw FB BX BY =
   | B.y2 <= O.y - O.yd/2
   | B.z2 <= O.z + O.zd/2
   | B.flat <= O.zd >< 0
-
-    // Screenspace bounding box left extent    (LNT x coord)
-  | B.sxleft <= B.x2 - B.y - CamSX
-    // Screenspace bounding box right extent   (RFT x coord)
-  | B.sxright <= B.x/2 - B.y2/2 - CamSX
-
-    // Screenspace bounding box top x coord    (LFT x coord)
-  | B.sxtop <= B.x2 - B.y2- CamSX
-    // Screenspace bounding box top extent     (LFT y coord)
-  | B.sytop <= B.x2/2 + B.y2/2 - B.z2 - CamSY
-
-    // Screenspace bounding box bottom x coord (RNB x coord)
-  | B.sxbot <= B.x - B.y - CamSX
-    // Screenspace bounding box bottom extent  (RNB y coord)
-  | B.sybot <= B.x/2 + B.y/2 - B.z - CamSY
-    // Real Screenspace coords
-  | B.sx <= B.sxbot - B.gfx.xy.0 // Left
-  | B.sy <= B.sybot - B.gfx.xy.1 // Top
-  | B.sx2 <= B.sx + B.gfx.w // Right
-  | B.sy2 <= B.sy + B.gfx.h // Bottom
   | B
 | Bs = Bs.sort{&compare_items}
 | for B Bs:
