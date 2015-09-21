@@ -60,7 +60,6 @@ compare_items A B =
 | BothFlat = A.flat and B.flat //flat tiles are floor tiles
 | when BothFlat
   | when A.z2 <> B.z2: leave A.z2 < B.z2
-  // Equal z
   | when A.anim <> B.anim:
     | leave A.anim < B.anim // allows animation overlay on top of static tiles
   | when A.trans <> B.trans:
@@ -183,7 +182,6 @@ unit.draw FB B =
       | F = Fs.I
       | FB.blit{XX YY F.z{$draw_order}}
       | !XX+16
-| draw_bounding_box #0000FF FB B
 
 tile.size = [64 64 $height*8]
 
@@ -211,7 +209,6 @@ tile.draw FB BlitItem =
 | B = BlitItem
 | G = B.gfx
 | FB.blit{B.sx B.sy G}
-| draw_bounding_box #00FF00 FB B
 
 Folded = 0
 BlitItems = 0
@@ -287,8 +284,6 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
     | B.sy <= BY-$zunit*Z
     | B.brighten <= Br
     | push B BlitItems
-    //| U.brighten <= Br
-    //| push [U BX BY-$zunit*Z] VisibleUnits
 
 Unexplored = 0
 
@@ -325,8 +320,10 @@ view.render_iso =
       | E = Explored.Y.X
       | if E then render_pilar Me Wr X Y BX BY FB $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY FB
-| for B BlitItems.sort{&compare_items}: B.object.draw{FB B}
-//| for Us VisibleUnits: for U,BX,BY Us: U.draw{FB BX BY}
+| for B BlitItems.sort{&compare_items}:
+  | O = B.object
+  | O.draw{FB B}
+  //| draw_bounding_box (if O.is_unit then #0000FF else #00FF00) FB B
 | BlitItems <= 0
 //| FB.zbuffer <= 0
 
