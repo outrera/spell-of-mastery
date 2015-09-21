@@ -1,5 +1,6 @@
 use gfx gui util widgets action macros
 
+ScreenXY = [0 0]
 BrightFactor = 0
 YDiv = No
 
@@ -89,6 +90,23 @@ compare_items A B =
 | when A.y <> B.y: leave A.y < B.y
 | leave A.id < B.id
 
+to_iso X Y Z = [X-Y (X+Y)/2-Z]
+
+draw_bounding_box Color FB B =
+| ZD = B.zd
+| P = ScreenXY
+| P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + P
+| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
+| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
+| P4 = to_iso{B.x B.y B.z} - [0 ZD] + P
+| P5 = to_iso{B.x2 B.y B.z} + P
+| P6 = to_iso{B.x B.y2 B.z} + P
+| P7 = to_iso{B.x B.y B.z} + P
+| P8 = to_iso{B.x2 B.y2 B.z} + P
+| for A,B [P5,P7 P6,P7 P5,P8 P6,P8
+           P5,P2 P6,P3 P8,P1 P7,P4
+           P2,P4 P3,P4 P2,P1 P3,P1]
+  | FB.line{Color A B}
 
 unit.size = [37 37 70]
 
@@ -97,8 +115,8 @@ blit_item_from_unit U =
 | B.id <= U.serial
 | B.object <= U
 | X,Y,Z = U.xyz
-| !X*64
-| !Y*64
+| !X*32
+| !Y*32
 | !Z*8
 | DX,DY = U.xy
 | DDX = (DX+2*DY)/2
@@ -165,7 +183,7 @@ unit.draw FB B =
       | F = Fs.I
       | FB.blit{XX YY F.z{$draw_order}}
       | !XX+16
-
+| draw_bounding_box #0000FF FB B
 
 tile.size = [64 64 $height*8]
 
@@ -173,8 +191,8 @@ blit_item_from_tile X Y Z T =
 | B = blit_item
 | B.id <= -X*Y*Z
 | B.object <= T
-| !X*64
-| !Y*64
+| !X*32
+| !Y*32
 | !Z*8
 | B.x <= X
 | B.y <= Y
@@ -193,6 +211,7 @@ tile.draw FB BlitItem =
 | B = BlitItem
 | G = B.gfx
 | FB.blit{B.sx B.sy G}
+| draw_bounding_box #00FF00 FB B
 
 Folded = 0
 BlitItems = 0
@@ -287,10 +306,10 @@ view.render_iso =
 //| ffi_memset $zbuffer 0 4*FB.w*FB.h
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
-| BlitOrigin = [$w/2 170]
 | YDiv <= $yunit/$zunit
 | TX,TY = $blit_origin+[0 Z]%YDiv*$zunit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
+| ScreenXY.init{[TX+32 TY]+to_iso{-VX*32 -VY*32 0}}
 | WW = Wr.w
 | WH = Wr.h
 | VS = $view_size
