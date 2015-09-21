@@ -1,4 +1,4 @@
-use gfx gui util widgets action
+use gfx gui util widgets action macros
 
 BrightFactor = 0
 YDiv = No
@@ -36,12 +36,170 @@ draw_text FB X Y Msg =
 | Font.draw{FB X Y Msg}
 | FB.zbuffer <= ZB
 
+
+type blit_item
+  id
+  object
+  gfx
+  sx sy    // screen x,y
+  x y z    // bounding box 1st point
+  x2 y2 z2 // bounding box 2nd point
+  xd yd zd // object dimensions
+  f32x32   // flag: 32x32 flat (floor tile)
+  flat     // flag: floor tile with 0 height
+  occl     // flag: occludes other tiles
+  solid    // flag
+  draw     // flag
+  roof     // flag
+  anim     // flag: tile is animated
+  trans    // flag: tile is transparent
+  brighten
+
+compare_items A B =
+| BothFlat = A.flat and B.flat //flat tiles are floor tiles
+| when BothFlat
+  | when A.z2 <> B.z2: leave A.z2 < B.z2
+  // Equal z
+  | when A.anim <> B.anim:
+    | leave A.anim < B.anim // allows animation overlay on top of static tiles
+  | when A.trans <> B.trans:
+    | leave A.trans < B.trans // allows overlay on top of other tiles
+  | when A.draw <> B.draw: leave A.draw > B.draw 
+  | when A.solid <> B.solid: leave A.solid > B.solid
+  | when A.occl <> B.occl: leave A.occl > B.occl 
+  | when A.f32x32 <> B.f32x32: leave A.f32x32 > B.f32x32
+| less BothFlat
+  | when A.z2 << B.z: leave 1
+  | when A.z >> B.z2: leave 0
+| when A.x << B.x2: leave 1
+| when A.x2 >> B.x: leave 0
+| when A.y << B.y2: leave 1
+| when A.y2 >> B.y: leave 0
+| when A.z < B.z: leave 1
+| when A.z > B.z: leave 0
+| when (A.z2+A.z)/2 << B.z: leave 1
+| when A.z >> (B.z2+B.z)/2: leave 0
+| when (A.x+A.x2)/2 << B.x2: leave 1
+| when A.x2 >> (B.x+B.x2)/2: leave 0
+| when (A.y+A.y2)/2 << B.y2: leave 1
+| when A.y2 >> (B.y+B.y2)/2: leave 0
+| when A.x+A.y <> B.x+B.y: leave A.x+A.y < B.x+B.y
+| when A.x2+A.y2 <> B.x2+B.y2: leave A.x2+A.y2 < B.x2+B.y2
+| when A.x <> B.x: leave A.x < B.x
+| when A.y <> B.y: leave A.y < B.y
+| leave A.id < B.id
+
+
+unit.size = [37 37 70]
+
+blit_item_from_unit U =
+| B = blit_item
+| B.id <= U.serial
+| B.object <= U
+| X,Y,Z = U.xyz
+| !X*64
+| !Y*64
+| !Z*8
+| DX,DY = U.xy
+| DDX = (DX+2*DY)/2
+| DDY = 2*DY-DDX
+| !X+DDX
+| !Y+DDY
+| B.x <= X
+| B.y <= Y
+| B.z <= Z
+| XD,YD,ZD = U.size
+| when U.mirror
+  | T = XD
+  | XD <= YD
+  | YD <= T
+| B.x2 <= X-XD/2
+| B.y2 <= Y-YD/2
+| B.z2 <= Z+ZD/2
+| B.xd <= XD
+| B.yd <= YD
+| B.zd <= ZD
+| B.flat <= ZD >< 0
+| B
+
+unit.draw FB B =
+| X = B.sx
+| Y = B.sy
+| G = $frame
+| !X + $xy.0
+| !Y + $xy.1
+| XX = X+32-G.w/2
+| YY = Y-16-G.h+$slope*16
+| when $mirror: G.flop
+| when $sprite.shadow:
+  | S = $world.shadow
+  | ZZ = $xyz.2-$fix_z
+  | I = min (ZZ/4).abs S.size-1
+  | SGfx = S.I
+  | ShadowDO = $draw_order-(ZZ</4)
+  | FB.blit{X+8 Y-38+ZZ*8 SGfx.z{ShadowDO}}
+| when $flyer
+  | !YY-16
+  | !Y-16
+| G.brighten{$brighten}
+| G.alpha{$alpha}
+| FB.blit{XX YY G.z{$draw_order}}
+| when $picked and $world.player.id >< $owner.id:
+  | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
+  | Mark = $main.img{ui_picked_mark}
+  | PH = $sprite.pick_height
+  | less PH: PH <= $height*8+16
+  | PH <= PH + Mark.h + Wave
+  | XX = X+32-Mark.w/2
+  | YY = Y-PH
+  | FB.blit{XX YY Mark.z{$draw_order}}
+  | Icons = []
+  | when $shell: push 2 Icons
+  | when $poison: push 4 Icons
+  | when $haste: push 5 Icons
+  | when Icons.size
+    | XX <= XX - Icons.size*8 + Mark.w/2
+    | !YY-16
+    | Fs = $main.effect.frames
+    | for I Icons
+      | F = Fs.I
+      | FB.blit{XX YY F.z{$draw_order}}
+      | !XX+16
+
+
+tile.size = [64 64 $height*8]
+
+blit_item_from_tile X Y Z T =
+| B = blit_item
+| B.id <= -X*Y*Z
+| B.object <= T
+| !X*64
+| !Y*64
+| !Z*8
+| B.x <= X
+| B.y <= Y
+| B.z <= Z
+| XD,YD,ZD = T.size
+| B.x2 <= X-XD/2
+| B.y2 <= Y-YD/2
+| B.z2 <= Z+ZD/2
+| B.xd <= XD
+| B.yd <= YD
+| B.zd <= ZD
+| B.flat <= ZD >< 0
+| B
+
+tile.draw FB BlitItem =
+| B = BlitItem
+| G = B.gfx
+| FB.blit{B.sx B.sy G}
+
 Folded = 0
+BlitItems = 0
 
 render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 | DrawnFold = 0
 | less Folded: Folded <= Wr.main.img{ui_folded}
-| VisibleUnits = []
 | Gs = Wr.gfxes.Y.X
 | CurX = CursorXYZ.0
 | CurY = CursorXYZ.1
@@ -64,12 +222,22 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | ZZ = Z*$zunit
   | Key = Key + (Z</4)
   | DrawCursor = Cursor and Z < CursorZ
-  | when DrawCursor:
-    | cursor_draw_back Wr FB BX BY-$yunit-ZZ Key TH
+  //| when DrawCursor:
+  //  | cursor_draw_back Wr FB BX BY-$yunit-ZZ Key TH
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
-    | if AboveCursor or TZ << CutZ then
+    | when AboveCursor or TZ << CutZ:
+      | when G.is_list:
+        | G <= G.((Wr.cycle/T.anim_wait)%G.size)
+      | B = blit_item_from_tile X Y Z T
+      | B.gfx <= G
+      | B.sx <= BX
+      | B.sy <= BY-G.h-ZZ
+      | B.brighten <= Br
+      | push B BlitItems
+      //| FB.blit{BX BY-G.h-ZZ G.z{Key}}
+    /*| if AboveCursor or TZ << CutZ then
         | when G.is_list:
           | G <= G.((Wr.cycle/T.anim_wait)%G.size)
         | when Fog: G.dither{1}
@@ -81,9 +249,9 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
         | when Fog: G.dither{1}
         | when Br: G.brighten{Br}
         | FB.blit{BX BY-G.h-ZZ G.z{Key}}
-        | FB.blit{BX BY-G.h-ZZ G.z{Key}}
-  | when DrawCursor:
-    | cursor_draw_front Wr FB BX BY-$yunit-ZZ Key TH
+        | FB.blit{BX BY-G.h-ZZ G.z{Key}}*/
+  //| when DrawCursor:
+  //  | cursor_draw_front Wr FB BX BY-$yunit-ZZ Key TH
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
@@ -95,24 +263,28 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | UX,UY,Z = XYZ
   | TZ = Z-4
   | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
-    | U.brighten <= Br
-    | push [U BX BY-$zunit*Z] VisibleUnits
-| VisibleUnits
+    | B = blit_item_from_unit U
+    | B.sx <= BX
+    | B.sy <= BY-$zunit*Z
+    | B.brighten <= Br
+    | push B BlitItems
+    //| U.brighten <= Br
+    //| push [U BX BY-$zunit*Z] VisibleUnits
 
 Unexplored = 0
 
 render_unexplored Me Wr X Y BX BY FB =
 | less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
-| Key = (((max X Y))</24) + ((X*128+Y)</10)
-| FB.blit{BX BY-$zunit-Unexplored.h Unexplored.z{Key}}
+/*| Key = (((max X Y))</24) + ((X*128+Y)</10)
+| FB.blit{BX BY-$zunit-Unexplored.h Unexplored.z{Key}}*/
 
 view.render_iso =
 | Wr = $world
-| VisibleUnits = []
+| BlitItems <= []
 | Explored = Wr.human.sight
 | FB = $fb
-| FB.zbuffer <= $zbuffer
-| ffi_memset $zbuffer 0 4*FB.w*FB.h
+//| FB.zbuffer <= $zbuffer
+//| ffi_memset $zbuffer 0 4*FB.w*FB.h
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
 | BlitOrigin = [$w/2 170]
@@ -132,12 +304,12 @@ view.render_iso =
       | BX = TX + XX*XUnit2 - YY*XUnit2
       | BY = TY + XX*YUnit2 + YY*YUnit2
       | E = Explored.Y.X
-      | if E then
-          | VUs = render_pilar Me Wr X Y BX BY FB $cursor RoofZ E
-          | when VUs.size: push VUs VisibleUnits
+      | if E then render_pilar Me Wr X Y BX BY FB $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY FB
-| for Us VisibleUnits: for U,BX,BY Us: U.draw{FB BX BY}
-| FB.zbuffer <= 0
+| for B BlitItems.sort{&compare_items}: B.object.draw{FB B}
+//| for Us VisibleUnits: for U,BX,BY Us: U.draw{FB BX BY}
+| BlitItems <= 0
+//| FB.zbuffer <= 0
 
 Indicators = 0
 

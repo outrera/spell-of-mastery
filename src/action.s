@@ -6,9 +6,6 @@ Acts = t
 
 dact idle.start | when $cycles >< -1: $cycles <= 4
 
-// dirs requiring dummy to avoid overlapping unit with tiles
-OverlapDirs = list [-1  1] [-1  0] [-1 -1] [ 0 -1]
-
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
 move_start Me =
@@ -17,10 +14,6 @@ move_start Me =
 | $fromXY.init{U.xy}
 | $fromXYZ.init{U.xyz}
 | U.move{$xyz}
-| DrawOrderHack = got OverlapDirs.locate{X,Y}
-| when DrawOrderHack:
-  | P = U.xyz
-  | U.update_draw_order{P.0+1 P.1+1 P.2}
 | U.facing <= Dirs.locate{X,Y}
 | U.animate{move}
 | $start_cycles <= $cycles
@@ -40,7 +33,6 @@ move_update Me =
 move_finish Me =
 | U = $unit
 | U.xy.init{$fromXY}
-| U.update_draw_order{@U.xyz}
 
 dact move.valid
 | U = $unit

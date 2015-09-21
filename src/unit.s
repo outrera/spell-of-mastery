@@ -31,7 +31,6 @@ type unit.$class{Id World}
   hits // how damaged is this unit
   turn // turn it was created
   flags
-  draw_order
   brighten
   alpha //how transparent is this unit
   delta //change of transparency per cycle
@@ -209,7 +208,6 @@ unit.move XYZ =
 | when $passable and $block: $world.set{@$xyz $block}
 | $environment_updated
 | $move_in{1}
-| $update_draw_order{@XYZ}
 | Me
 
 unit.seen = $world.seen{$xyz.0 $xyz.1}
@@ -389,63 +387,5 @@ unit.sound Type =
 | less $world.human.explored{$xyz}>1: leave
 | when got!it $sounds.Type: $main.sound{it.rand}
 
-/*
-//kludge to get around large units being cluttered be tiles in front of them
-unit.large_unit_update_draw_order X Y Z =
-| UX,UY,UZ = $xyz
-| XYTI = $world.at{[UX+1 UY+1 UZ]}.invisible
-| when XYTI:
-  | XTI = $world.at{[UX+1 UY UZ]}.invisible
-  | YTI = $world.at{[UX UY+1 UZ]}.invisible
-  | if XTI then !X+1
-    else if YTI then !Y+1
-    else
-| $draw_order <= ((max X Y)</24) + ((X*128+Y)</10) + (Z</4) + $class.draw_order
-*/
-
-unit.update_draw_order X Y Z =
-| $draw_order <= ((max X Y)</24) + ((X*128+Y)</10) + (Z</4) + $class.draw_order
-
-unit.draw FB X Y =
-| G = $frame
-| !X + $xy.0
-| !Y + $xy.1
-| XX = X+32-G.w/2
-| YY = Y-16-G.h+$slope*16
-| when $mirror: G.flop
-| when $sprite.shadow:
-  | S = $world.shadow
-  | ZZ = $xyz.2-$fix_z
-  | I = min (ZZ/4).abs S.size-1
-  | SGfx = S.I
-  | ShadowDO = $draw_order-(ZZ</4)
-  | FB.blit{X+8 Y-38+ZZ*8 SGfx.z{ShadowDO}}
-| when $flyer
-  | !YY-16
-  | !Y-16
-| G.brighten{$brighten}
-| G.alpha{$alpha}
-| FB.blit{XX YY G.z{$draw_order}}
-| when $picked and $world.player.id >< $owner.id:
-  | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
-  | Mark = $main.img{ui_picked_mark}
-  | PH = $sprite.pick_height
-  | less PH: PH <= $height*8+16
-  | PH <= PH + Mark.h + Wave
-  | XX = X+32-Mark.w/2
-  | YY = Y-PH
-  | FB.blit{XX YY Mark.z{$draw_order}}
-  | Icons = []
-  | when $shell: push 2 Icons
-  | when $poison: push 4 Icons
-  | when $haste: push 5 Icons
-  | when Icons.size
-    | XX <= XX - Icons.size*8 + Mark.w/2
-    | !YY-16
-    | Fs = $main.effect.frames
-    | for I Icons
-      | F = Fs.I
-      | FB.blit{XX YY F.z{$draw_order}}
-      | !XX+16
 
 export unit
