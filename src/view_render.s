@@ -37,7 +37,6 @@ draw_text FB X Y Msg =
 | Font.draw{FB X Y Msg}
 | FB.zbuffer <= ZB
 
-
 type blit_item
   id
   object
@@ -55,8 +54,12 @@ type blit_item
   anim     // flag: tile is animated
   trans    // flag: tile is transparent
   brighten
+  depends/[]
 
 compare_items A B =
+| A.z < B.z or (A.z><B.z and A.x<B.x) or (A.z><B.z and A.x><B.x and A.y<B.y)
+
+compare_items_dep A B =
 | BothFlat = A.flat and B.flat //flat tiles are floor tiles
 | when BothFlat
   | when A.z2 <> B.z2: leave A.z2 < B.z2
@@ -292,6 +295,15 @@ render_unexplored Me Wr X Y BX BY FB =
 /*| Key = (((max X Y))</24) + ((X*128+Y)</10)
 | FB.blit{BX BY-$zunit-Unexplored.h Unexplored.z{Key}}*/
 
+blit_item_draw FB B =
+| Ds = B.depends
+| less Ds: leave
+| B.depends <= 0
+| when Ds.size: for D Ds.flip: blit_item_draw FB D
+| O = B.object
+| O.draw{FB B}
+//| draw_bounding_box (if O.is_unit then #0000FF else #00FF00) FB B
+
 view.render_iso =
 | Wr = $world
 | BlitItems <= []
@@ -320,10 +332,15 @@ view.render_iso =
       | E = Explored.Y.X
       | if E then render_pilar Me Wr X Y BX BY FB $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY FB
-| for B BlitItems.sort{&compare_items}:
-  | O = B.object
-  | O.draw{FB B}
-  //| draw_bounding_box (if O.is_unit then #0000FF else #00FF00) FB B
+| Bs = BlitItems.sort{&compare_items}
+| BBs = []
+| for A Bs:
+  | for B BBs:
+    | if compare_items_dep A B
+      then push A B.depends
+      else push B A.depends
+  | push A BBs
+| for B BlitItems.sort{&compare_items}: blit_item_draw FB B
 | BlitItems <= 0
 //| FB.zbuffer <= 0
 
