@@ -271,9 +271,9 @@ view.render_iso =
   | BL = BlitItems.list
   | isort_begin
   | for I,B BL.i: isort_add I 0 B.x B.y B.z B.x2 B.y2 B.z2
-  | ResultItems = isort_end
+  | ResultSize = isort_end
   | Result = isort_result
-  | Bs <= map I ResultItems:
+  | Bs <= map I ResultSize:
           | N = _ffi_get int Result I
           | BL.N
   | isort_free_result
