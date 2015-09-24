@@ -1,4 +1,4 @@
-use gfx gui util widgets action macros
+use gfx gui util widgets action macros isort_
 
 ScreenXY = [0 0]
 BrightFactor = 0
@@ -41,56 +41,9 @@ type blit_item
   id
   object
   gfx
-  sx sy    // screen x,y
-  x y z    // bounding box 1st point
-  x2 y2 z2 // bounding box 2nd point
-  xd yd zd // object dimensions
-  f32x32   // flag: 32x32 flat (floor tile)
-  flat     // flag: floor tile with 0 height
-  occl     // flag: occludes other tiles
-  solid    // flag
-  draw     // flag
-  roof     // flag
-  anim     // flag: tile is animated
-  trans    // flag: tile is transparent
+  sx sy // screen x,y
+  x y z x2 y2 z2 // bounding box
   brighten
-  depends/[]
-
-compare_items A B =
-| A.z < B.z or (A.z><B.z and A.x<B.x) or (A.z><B.z and A.x><B.x and A.y<B.y)
-
-compare_items_dep A B =
-| BothFlat = A.flat and B.flat //flat tiles are floor tiles
-| when BothFlat
-  | when A.z2 <> B.z2: leave A.z2 < B.z2
-  | when A.anim <> B.anim:
-    | leave A.anim < B.anim // allows animation overlay on top of static tiles
-  | when A.trans <> B.trans:
-    | leave A.trans < B.trans // allows overlay on top of other tiles
-  | when A.draw <> B.draw: leave A.draw > B.draw 
-  | when A.solid <> B.solid: leave A.solid > B.solid
-  | when A.occl <> B.occl: leave A.occl > B.occl 
-  | when A.f32x32 <> B.f32x32: leave A.f32x32 > B.f32x32
-| less BothFlat
-  | when A.z2 << B.z: leave 1
-  | when A.z >> B.z2: leave 0
-| when A.x << B.x2: leave 1
-| when A.x2 >> B.x: leave 0
-| when A.y << B.y2: leave 1
-| when A.y2 >> B.y: leave 0
-| when A.z < B.z: leave 1
-| when A.z > B.z: leave 0
-| when (A.z2+A.z)/2 << B.z: leave 1
-| when A.z >> (B.z2+B.z)/2: leave 0
-| when (A.x+A.x2)/2 << B.x2: leave 1
-| when A.x2 >> (B.x+B.x2)/2: leave 0
-| when (A.y+A.y2)/2 << B.y2: leave 1
-| when A.y2 >> (B.y+B.y2)/2: leave 0
-| when A.x+A.y <> B.x+B.y: leave A.x+A.y < B.x+B.y
-| when A.x2+A.y2 <> B.x2+B.y2: leave A.x2+A.y2 < B.x2+B.y2
-| when A.x <> B.x: leave A.x < B.x
-| when A.y <> B.y: leave A.y < B.y
-| leave A.id < B.id
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
@@ -114,7 +67,6 @@ unit.size = [37 37 70]
 
 blit_item_from_unit U =
 | B = blit_item
-| B.id <= U.serial
 | B.object <= U
 | X,Y,Z = U.xyz
 | !X*32
@@ -136,10 +88,6 @@ blit_item_from_unit U =
 | B.x2 <= X-XD/2
 | B.y2 <= Y-YD/2
 | B.z2 <= Z+ZD/2
-| B.xd <= XD
-| B.yd <= YD
-| B.zd <= ZD
-| B.flat <= ZD >< 0
 | B
 
 unit.draw FB B =
@@ -190,7 +138,6 @@ tile.size = [64 64 $height*8]
 
 blit_item_from_tile X Y Z T =
 | B = blit_item
-| B.id <= -X*Y*Z
 | B.object <= T
 | !X*32
 | !Y*32
@@ -202,10 +149,6 @@ blit_item_from_tile X Y Z T =
 | B.x2 <= X-XD/2
 | B.y2 <= Y-YD/2
 | B.z2 <= Z+ZD/2
-| B.xd <= XD
-| B.yd <= YD
-| B.zd <= ZD
-| B.flat <= ZD >< 0
 | B
 
 tile.draw FB BlitItem =
@@ -295,22 +238,13 @@ render_unexplored Me Wr X Y BX BY FB =
 /*| Key = (((max X Y))</24) + ((X*128+Y)</10)
 | FB.blit{BX BY-$zunit-Unexplored.h Unexplored.z{Key}}*/
 
-blit_item_draw FB B =
-| Ds = B.depends
-| less Ds: leave
-| B.depends <= 0
-| when Ds.size: for D Ds.flip: blit_item_draw FB D
-| O = B.object
-| O.draw{FB B}
-//| draw_bounding_box (if O.is_unit then #0000FF else #00FF00) FB B
+
 
 view.render_iso =
 | Wr = $world
 | BlitItems <= []
 | Explored = Wr.human.sight
 | FB = $fb
-//| FB.zbuffer <= $zbuffer
-//| ffi_memset $zbuffer 0 4*FB.w*FB.h
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
 | YDiv <= $yunit/$zunit
@@ -332,17 +266,22 @@ view.render_iso =
       | E = Explored.Y.X
       | if E then render_pilar Me Wr X Y BX BY FB $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY FB
-| Bs = BlitItems.sort{&compare_items}
-| BBs = []
-| for A Bs:
-  | for B BBs:
-    | if compare_items_dep A B
-      then push A B.depends
-      else push B A.depends
-  | push A BBs
-| for B BlitItems.sort{&compare_items}: blit_item_draw FB B
+| Bs = []
+| less BlitItems.end
+  | BL = BlitItems.list
+  | isort_begin
+  | for I,B BL.i: isort_add I 0 B.x B.y B.z B.x2 B.y2 B.z2
+  | ResultItems = isort_end
+  | Result = isort_result
+  | Bs <= map I ResultItems:
+          | N = _ffi_get int Result I
+          | BL.N
+  | isort_free_result
+| for B Bs:
+  | O = B.object
+  | O.draw{FB B}
+  //| draw_bounding_box (if O.is_unit then #0000FF else #00FF00) FB B
 | BlitItems <= 0
-//| FB.zbuffer <= 0
 
 Indicators = 0
 

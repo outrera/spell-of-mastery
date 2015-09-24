@@ -10,18 +10,19 @@ type blit_item
   f32x32   // flag: 32x32 flat (floor tile)
   flat     // flag: floor tile with 0 height
   occl     // flag: occludes other tiles
-  solid    // flag
-  draw     // flag
-  roof     // flag
+  solid    // flag: non empty (impassable)
+  draw     // flag: draw order priority for floor tiles
+  roof     // flag: ceiling tile
   anim     // flag: tile is animated
   trans    // flag: tile is transparent
 
-
 compare_items A B =
+| A.z < B.z or (A.z><B.z and A.x<B.x) or (A.z><B.z and A.x><B.x and A.y<B.y)
+
+compare_items_dep A B =
 | BothFlat = A.flat and B.flat //flat tiles are floor tiles
 | when BothFlat
   | when A.z2 <> B.z2: leave A.z2 < B.z2
-  // Equal z
   | when A.anim <> B.anim:
     | leave A.anim < B.anim // allows animation overlay on top of static tiles
   | when A.trans <> B.trans:
@@ -50,7 +51,6 @@ compare_items A B =
 | when A.x <> B.x: leave A.x < B.x
 | when A.y <> B.y: leave A.y < B.y
 | leave A.id < B.id
-
 type item{x y z xd yd zd gfx} id
 
 type test.widget{unit block} mx my serial objects/dup{100}
