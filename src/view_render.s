@@ -4,32 +4,6 @@ ScreenXY = [0 0]
 BrightFactor = 0
 YDiv = No
 
-cursor_draw_back Me FB X Y Z Height =
-| Bar = $main.img{mark_cell_red_bar}
-| Corner = $main.img{mark_cell_red_corner}
-| !Y-2
-| !Y+($zunit*2)
-| FB.blit{X Y-16 Corner.z{Z}}
-| !Y-(Height*$zunit)
-| FB.blit{X Y-16 Corner.z{Z}}
-| for I Height:
-  | YY = Y+I*$zunit
-  | FB.blit{X+32 YY-16 Bar.z{Z}}
-
-cursor_draw_front Me FB X Y Z Height =
-| Bar = $main.img{mark_cell_green_bar}
-| Corner = $main.img{mark_cell_green_corner}
-| !Y+($zunit*2)
-| !Y-2
-| FB.blit{X Y Corner.z{Z}}
-| !Y-(Height*$zunit)
-| FB.blit{X Y Corner.z{Z}}
-| for I Height:
-  | YY = Y+I*$zunit
-  | FB.blit{X YY Bar.z{Z}}
-  | FB.blit{X+64 YY Bar.z{Z}}
-  | FB.blit{X+32 YY+16 Bar.z{Z}}
-
 draw_text FB X Y Msg =
 | Font = font small
 | ZB = FB.zbuffer
@@ -69,7 +43,7 @@ draw_bounding_box Color FB B =
   | FB.line{Color A B}
 */
 
-/*
+
 draw_bounding_box_front Color FB B =
 | ZD = B.z2-B.z
 | P = ScreenXY
@@ -94,7 +68,7 @@ draw_bounding_box_back Color FB B =
 | P8 = to_iso{B.x2 B.y2 B.z} + P
 | for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
   | FB.line{Color A B}
-*/
+
 
 
 unit.size = [37 37 70]
@@ -171,6 +145,41 @@ gfx_item.draw FB BlitItem =
 | when B.flags^^#40: G.dither{1}
 | FB.blit{B.sx B.sy G}
 
+type special_blit{what}
+
+special_blit.draw FB BlitItem =
+| if $what >< box_front then draw_bounding_box_front #00FF00 FB BlitItem
+  else if $what >< box_back then draw_bounding_box_back #FF0000 FB BlitItem
+  else
+
+/*
+cursor_draw_back Me FB X Y Z Height =
+| Bar = $main.img{mark_cell_red_bar}
+| Corner = $main.img{mark_cell_red_corner}
+| !Y-2
+| !Y+($zunit*2)
+| FB.blit{X Y-16 Corner.z{Z}}
+| !Y-(Height*$zunit)
+| FB.blit{X Y-16 Corner.z{Z}}
+| for I Height:
+  | YY = Y+I*$zunit
+  | FB.blit{X+32 YY-16 Bar.z{Z}}
+
+cursor_draw_front Me FB X Y Z Height =
+| Bar = $main.img{mark_cell_green_bar}
+| Corner = $main.img{mark_cell_green_corner}
+| !Y+($zunit*2)
+| !Y-2
+| FB.blit{X Y Corner.z{Z}}
+| !Y-(Height*$zunit)
+| FB.blit{X Y Corner.z{Z}}
+| for I Height:
+  | YY = Y+I*$zunit
+  | FB.blit{X YY Bar.z{Z}}
+  | FB.blit{X+64 YY Bar.z{Z}}
+  | FB.blit{X+32 YY+16 Bar.z{Z}}
+*/
+
 Folded = 0
 BlitItems = 0
 
@@ -199,13 +208,18 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | ZZ = Z*$zunit
   | Key = Key + (Z</4)
   | DrawCursor = Cursor and Z < CursorZ
-  //| when DrawCursor:
-  //  | cursor_draw_back Wr FB BX BY-$yunit-ZZ Key TH
+  | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
+  | when DrawCursor:
+    | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 T.height*8
+                        special_blit{box_back}
+    | B.sx <= BX
+    | B.sy <= BY-G.h-ZZ
+    | push B BlitItems
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
+    | G = G
     | if AboveCursor or TZ << CutZ then
-        | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
       else if not DrawnFold then
         | DrawnFold <= 1
         | G <= Folded
@@ -231,8 +245,12 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
         | when Br: G.brighten{Br}
         | FB.blit{BX BY-G.h-ZZ G.z{Key}}
         | FB.blit{BX BY-G.h-ZZ G.z{Key}}*/
-  //| when DrawCursor:
-  //  | cursor_draw_front Wr FB BX BY-$yunit-ZZ Key TH
+  | when DrawCursor:
+    | B = make_blit_item X*32 Y*32 Z*8+2 64 64 T.height*8
+          special_blit{box_front}
+    | B.sx <= BX
+    | B.sy <= BY-G.h-ZZ
+    | push B BlitItems
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
@@ -301,20 +319,10 @@ view.render_iso =
       | B = BL.N
       | O = B.object
       | ZD = B.z2-B.z
-      | P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + BBP
-      | P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + BBP
-      | P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + BBP
-      | P4 = to_iso{B.x B.y B.z} - [0 ZD] + BBP
-      | P5 = to_iso{B.x2 B.y B.z} + BBP
-      | P6 = to_iso{B.x B.y2 B.z} + BBP
-      | P7 = to_iso{B.x B.y B.z} + BBP
-      | P8 = to_iso{B.x2 B.y2 B.z} + BBP
       | Color = if O.is_unit then #0000FF else #00FF00
-      | for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
-        | FB.line{Color A B}
+      | draw_bounding_box_back Color FB B
       | O.draw{FB B}
-      | for A,B [P2,P4 P4,P3 P3,P6 P6,P7 P7,P5 P5,P2 P4,P7]
-        | FB.line{Color A B}
+      | draw_bounding_box_front Color FB B
   | isort_free_result
 | BlitItems <= 0
 
