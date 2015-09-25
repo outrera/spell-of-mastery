@@ -47,8 +47,23 @@ type blit_item
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
+
+    /*
+           1    
+         /   \      
+       /       \ 
+     2           3 
+     | \       / |
+     |   \   /   |
+     |     4     |
+     |     |     |
+     5     |     6
+       \   |   /
+         \ | /    
+           7
+    */
 draw_bounding_box Color FB B =
-| ZD = B.zd
+| ZD = B.z2-B.z
 | P = ScreenXY
 | P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + P
 | P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
@@ -87,7 +102,7 @@ blit_item_from_unit U =
   | YD <= T
 | B.x2 <= X-XD/2
 | B.y2 <= Y-YD/2
-| B.z2 <= Z+ZD/2
+| B.z2 <= Z+ZD
 | B
 
 unit.draw FB B =
@@ -148,7 +163,7 @@ blit_item_from_tile X Y Z T =
 | XD,YD,ZD = T.size
 | B.x2 <= X-XD/2
 | B.y2 <= Y-YD/2
-| B.z2 <= Z+ZD/2
+| B.z2 <= Z+ZD
 | B
 
 tile.draw FB BlitItem =
@@ -240,6 +255,33 @@ render_unexplored Me Wr X Y BX BY FB =
 
 
 
+/*
+draw_bounding_box_front Color FB B =
+| ZD = B.z2-B.z
+| P = ScreenXY
+| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
+| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
+| P4 = to_iso{B.x B.y B.z} - [0 ZD] + P
+| P5 = to_iso{B.x2 B.y B.z} + P
+| P6 = to_iso{B.x B.y2 B.z} + P
+| P7 = to_iso{B.x B.y B.z} + P
+| for A,B [P2,P4 P4,P3 P3,P6 P6,P7 P7,P5 P5,P2 P4,P7]
+  | FB.line{Color A B}
+
+
+draw_bounding_box_back Color FB B =
+| ZD = B.z2-B.z
+| P = ScreenXY
+| P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + P
+| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
+| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
+| P5 = to_iso{B.x2 B.y B.z} + P
+| P6 = to_iso{B.x B.y2 B.z} + P
+| P8 = to_iso{B.x2 B.y2 B.z} + P
+| for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
+  | FB.line{Color A B}
+*/
+
 view.render_iso =
 | Wr = $world
 | BlitItems <= []
@@ -266,22 +308,57 @@ view.render_iso =
       | E = Explored.Y.X
       | if E then render_pilar Me Wr X Y BX BY FB $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY FB
-| Bs = []
 | less BlitItems.end
+  | DrawBoundingBox = $main.params.world.bounding_boxes
   | BL = BlitItems.list
   | isort_begin
   | for I,B BL.i: isort_add I 0 B.x B.y B.z B.x2 B.y2 B.z2
   | ResultSize = isort_end
   | Result = isort_result
-  | Bs <= map I ResultSize:
-          | N = _ffi_get int Result I
-          | BL.N
+  | less DrawBoundingBox: for I ResultSize:
+      | N = _ffi_get int Result I
+      | B = BL.N
+      | O = B.object
+      | O.draw{FB B}
+  | BBP = ScreenXY+[0 -2]
+  | when DrawBoundingBox: for I ResultSize:
+      | N = _ffi_get int Result I
+      | B = BL.N
+      | O = B.object
+      | ZD = B.z2-B.z
+      | P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + BBP
+      | P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + BBP
+      | P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + BBP
+      | P4 = to_iso{B.x B.y B.z} - [0 ZD] + BBP
+      | P5 = to_iso{B.x2 B.y B.z} + BBP
+      | P6 = to_iso{B.x B.y2 B.z} + BBP
+      | P7 = to_iso{B.x B.y B.z} + BBP
+      | P8 = to_iso{B.x2 B.y2 B.z} + BBP
+      | Color = if O.is_unit then #0000FF else #00FF00
+      | for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
+        | FB.line{Color A B}
+      | O.draw{FB B}
+      | for A,B [P2,P4 P4,P3 P3,P6 P6,P7 P7,P5 P5,P2 P4,P7]
+        | FB.line{Color A B}
   | isort_free_result
-| for B Bs:
-  | O = B.object
-  | O.draw{FB B}
-  //| draw_bounding_box (if O.is_unit then #0000FF else #00FF00) FB B
 | BlitItems <= 0
+
+
+/* Bounding Box Format:
+           1    
+         /   \      
+       /       \ 
+     2           3 
+     | \   8   / |
+     |   \   /   |
+     |     4     |
+     | /   |   \ |
+     5     |     6
+       \   |   /
+         \ | /    
+           7
+*/
+
 
 Indicators = 0
 
