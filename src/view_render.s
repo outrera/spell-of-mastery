@@ -39,8 +39,9 @@ draw_text FB X Y Msg =
 
 type blit_item{object x y z x2 y2 z2}
   id
-  gfx
+  data
   sx sy // screen x,y
+  flags
   brighten
 
 make_blit_item X Y Z XD YD ZD Object =
@@ -158,7 +159,16 @@ unit.draw FB B =
 
 tile.draw FB BlitItem =
 | B = BlitItem
-| G = B.gfx
+| G = B.data
+| when B.flags^^#40: G.dither{1}
+| FB.blit{B.sx B.sy G}
+
+type gfx_item
+
+gfx_item.draw FB BlitItem =
+| B = BlitItem
+| G = B.data
+| when B.flags^^#40: G.dither{1}
 | FB.blit{B.sx B.sy G}
 
 Folded = 0
@@ -194,16 +204,20 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
-    | when AboveCursor or TZ << CutZ:
-      | when G.is_list:
-        | G <= G.((Wr.cycle/T.anim_wait)%G.size)
+    | if AboveCursor or TZ << CutZ then
+        | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
+      else if not DrawnFold then
+        | DrawnFold <= 1
+        | G <= Folded
+      else G <= 0
+    | when G
       | B = make_blit_item X*32 Y*32 Z*8 64 64 T.height*8 T
-      | B.gfx <= G
+      | B.data <= G
       | B.sx <= BX
       | B.sy <= BY-G.h-ZZ
       | B.brighten <= Br
+      | when Fog: B.flags <= #40
       | push B BlitItems
-      //| FB.blit{BX BY-G.h-ZZ G.z{Key}}
     /*| if AboveCursor or TZ << CutZ then
         | when G.is_list:
           | G <= G.((Wr.cycle/T.anim_wait)%G.size)
