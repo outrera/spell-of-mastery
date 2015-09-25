@@ -37,31 +37,20 @@ draw_text FB X Y Msg =
 | Font.draw{FB X Y Msg}
 | FB.zbuffer <= ZB
 
-type blit_item
+type blit_item{object x y z x2 y2 z2}
   id
-  object
   gfx
   sx sy // screen x,y
-  x y z x2 y2 z2 // bounding box
   brighten
+
+make_blit_item X Y Z XD YD ZD Object =
+| blit_item Object X Y Z X-XD/2 Y-YD/2 Z+ZD
+
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
 
-    /*
-           1    
-         /   \      
-       /       \ 
-     2           3 
-     | \       / |
-     |   \   /   |
-     |     4     |
-     |     |     |
-     5     |     6
-       \   |   /
-         \ | /    
-           7
-    */
+/*
 draw_bounding_box Color FB B =
 | ZD = B.z2-B.z
 | P = ScreenXY
@@ -77,12 +66,39 @@ draw_bounding_box Color FB B =
            P5,P2 P6,P3 P8,P1 P7,P4
            P2,P4 P3,P4 P2,P1 P3,P1]
   | FB.line{Color A B}
+*/
+
+/*
+draw_bounding_box_front Color FB B =
+| ZD = B.z2-B.z
+| P = ScreenXY
+| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
+| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
+| P4 = to_iso{B.x B.y B.z} - [0 ZD] + P
+| P5 = to_iso{B.x2 B.y B.z} + P
+| P6 = to_iso{B.x B.y2 B.z} + P
+| P7 = to_iso{B.x B.y B.z} + P
+| for A,B [P2,P4 P4,P3 P3,P6 P6,P7 P7,P5 P5,P2 P4,P7]
+  | FB.line{Color A B}
+
+
+draw_bounding_box_back Color FB B =
+| ZD = B.z2-B.z
+| P = ScreenXY
+| P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + P
+| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
+| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
+| P5 = to_iso{B.x2 B.y B.z} + P
+| P6 = to_iso{B.x B.y2 B.z} + P
+| P8 = to_iso{B.x2 B.y2 B.z} + P
+| for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
+  | FB.line{Color A B}
+*/
+
 
 unit.size = [37 37 70]
 
 blit_item_from_unit U =
-| B = blit_item
-| B.object <= U
 | X,Y,Z = U.xyz
 | !X*32
 | !Y*32
@@ -92,18 +108,9 @@ blit_item_from_unit U =
 | DDY = 2*DY-DDX
 | !X+DDX
 | !Y+DDY
-| B.x <= X
-| B.y <= Y
-| B.z <= Z
 | XD,YD,ZD = U.size
-| when U.mirror
-  | T = XD
-  | XD <= YD
-  | YD <= T
-| B.x2 <= X-XD/2
-| B.y2 <= Y-YD/2
-| B.z2 <= Z+ZD
-| B
+| when U.mirror: swap XD YD
+| make_blit_item X Y Z XD YD ZD U
 
 unit.draw FB B =
 | X = B.sx
@@ -149,23 +156,6 @@ unit.draw FB B =
       | FB.blit{XX YY F.z{$draw_order}}
       | !XX+16
 
-tile.size = [64 64 $height*8]
-
-blit_item_from_tile X Y Z T =
-| B = blit_item
-| B.object <= T
-| !X*32
-| !Y*32
-| !Z*8
-| B.x <= X
-| B.y <= Y
-| B.z <= Z
-| XD,YD,ZD = T.size
-| B.x2 <= X-XD/2
-| B.y2 <= Y-YD/2
-| B.z2 <= Z+ZD
-| B
-
 tile.draw FB BlitItem =
 | B = BlitItem
 | G = B.gfx
@@ -207,7 +197,7 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
     | when AboveCursor or TZ << CutZ:
       | when G.is_list:
         | G <= G.((Wr.cycle/T.anim_wait)%G.size)
-      | B = blit_item_from_tile X Y Z T
+      | B = make_blit_item X*32 Y*32 Z*8 64 64 T.height*8 T
       | B.gfx <= G
       | B.sx <= BX
       | B.sy <= BY-G.h-ZZ
@@ -252,35 +242,6 @@ render_unexplored Me Wr X Y BX BY FB =
 | less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
 /*| Key = (((max X Y))</24) + ((X*128+Y)</10)
 | FB.blit{BX BY-$zunit-Unexplored.h Unexplored.z{Key}}*/
-
-
-
-/*
-draw_bounding_box_front Color FB B =
-| ZD = B.z2-B.z
-| P = ScreenXY
-| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
-| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
-| P4 = to_iso{B.x B.y B.z} - [0 ZD] + P
-| P5 = to_iso{B.x2 B.y B.z} + P
-| P6 = to_iso{B.x B.y2 B.z} + P
-| P7 = to_iso{B.x B.y B.z} + P
-| for A,B [P2,P4 P4,P3 P3,P6 P6,P7 P7,P5 P5,P2 P4,P7]
-  | FB.line{Color A B}
-
-
-draw_bounding_box_back Color FB B =
-| ZD = B.z2-B.z
-| P = ScreenXY
-| P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + P
-| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
-| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
-| P5 = to_iso{B.x2 B.y B.z} + P
-| P6 = to_iso{B.x B.y2 B.z} + P
-| P8 = to_iso{B.x2 B.y2 B.z} + P
-| for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
-  | FB.line{Color A B}
-*/
 
 view.render_iso =
 | Wr = $world
