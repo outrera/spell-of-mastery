@@ -25,26 +25,6 @@ make_blit_item X Y Z XD YD ZD Object =
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
-
-/*
-draw_bounding_box Color FB B =
-| ZD = B.z2-B.z
-| P = ScreenXY
-| P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + P
-| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
-| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
-| P4 = to_iso{B.x B.y B.z} - [0 ZD] + P
-| P5 = to_iso{B.x2 B.y B.z} + P
-| P6 = to_iso{B.x B.y2 B.z} + P
-| P7 = to_iso{B.x B.y B.z} + P
-| P8 = to_iso{B.x2 B.y2 B.z} + P
-| for A,B [P5,P7 P6,P7 P5,P8 P6,P8
-           P5,P2 P6,P3 P8,P1 P7,P4
-           P2,P4 P3,P4 P2,P1 P3,P1]
-  | FB.line{Color A B}
-*/
-
-
 draw_bounding_box_front Color FB B =
 | ZD = B.z2-B.z
 | P = ScreenXY
@@ -176,7 +156,7 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 | Fog = Explored><1
 | Br = @int -([CurX CurY]-[X Y]).abs
 | !Br*BrightFactor
-| LXY = (to_iso{X*16 Y*16 0}-to_iso{CurX*16 CurY*16 0}){?float}
+| LXY = (to_iso{X*8 Y*8 0}-to_iso{CurX*8 CurY*8 0}){?float}
 | LXY = LXY{?int} ///(LXY*256.0/LXY.abs){?int}
 | LX,LY = LXY
 | LX = LX.clip{-127 127}
