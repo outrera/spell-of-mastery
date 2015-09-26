@@ -17,6 +17,7 @@ type blit_item{object x y z x2 y2 z2}
   sx sy // screen x,y
   flags
   brighten
+  lx ly
 
 make_blit_item X Y Z XD YD ZD Object =
 | blit_item Object X Y Z X-XD/2 Y-YD/2 Z+ZD
@@ -96,6 +97,7 @@ unit.draw FB B =
 | XX = X+32-G.w/2
 | YY = Y-16-G.h+$slope*16
 | when $mirror: G.flop
+| G.light{B.lx B.ly}
 | when $sprite.shadow:
   | S = $world.shadow
   | ZZ = $xyz.2-$fix_z
@@ -135,6 +137,7 @@ tile.draw FB BlitItem =
 | B = BlitItem
 | G = B.data
 | when B.flags^^#40: G.dither{1}
+| G.light{B.lx B.ly}
 | FB.blit{B.sx B.sy G}
 
 type gfx_item
@@ -151,34 +154,6 @@ special_blit.draw FB BlitItem =
 | if $what >< box_front then draw_bounding_box_front #00FF00 FB BlitItem
   else if $what >< box_back then draw_bounding_box_back #FF0000 FB BlitItem
   else
-
-/*
-cursor_draw_back Me FB X Y Z Height =
-| Bar = $main.img{mark_cell_red_bar}
-| Corner = $main.img{mark_cell_red_corner}
-| !Y-2
-| !Y+($zunit*2)
-| FB.blit{X Y-16 Corner.z{Z}}
-| !Y-(Height*$zunit)
-| FB.blit{X Y-16 Corner.z{Z}}
-| for I Height:
-  | YY = Y+I*$zunit
-  | FB.blit{X+32 YY-16 Bar.z{Z}}
-
-cursor_draw_front Me FB X Y Z Height =
-| Bar = $main.img{mark_cell_green_bar}
-| Corner = $main.img{mark_cell_green_corner}
-| !Y+($zunit*2)
-| !Y-2
-| FB.blit{X Y Corner.z{Z}}
-| !Y-(Height*$zunit)
-| FB.blit{X Y Corner.z{Z}}
-| for I Height:
-  | YY = Y+I*$zunit
-  | FB.blit{X YY Bar.z{Z}}
-  | FB.blit{X+64 YY Bar.z{Z}}
-  | FB.blit{X+32 YY+16 Bar.z{Z}}
-*/
 
 Folded = 0
 BlitItems = 0
@@ -202,6 +177,11 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 | Fog = Explored><1
 | Br = @int -([CurX CurY]-[X Y]).abs
 | !Br*BrightFactor
+| LXY = (to_iso{X*16 Y*16 0}-to_iso{CurX*16 CurY*16 0}){?float}
+| LXY = LXY{?int} ///(LXY*256.0/LXY.abs){?int}
+| LX,LY = LXY
+| LX = LX.clip{-127 127}
+| LY = LY.clip{-127 127}
 | for G Gs
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
@@ -229,6 +209,8 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
       | B.data <= G
       | B.sx <= BX
       | B.sy <= BY-G.h-ZZ
+      | B.lx <= LX
+      | B.ly <= LY
       | B.brighten <= Br
       | when Fog: B.flags <= #40
       | push B BlitItems
@@ -265,6 +247,8 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
     | B = blit_item_from_unit U
     | B.sx <= BX
     | B.sy <= BY-$zunit*Z
+    | B.lx <= LX
+    | B.ly <= LY
     | B.brighten <= Br
     | push B BlitItems
 
