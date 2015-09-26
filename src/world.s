@@ -417,7 +417,8 @@ world.updPilarGfxes P =
 | PrevGs = $gfxes.Y.X
 | if PrevGs.size >< Gs.size then PrevGs.init{Gs}
   else if PrevGs.size > Gs.size
-    then PrevGs.init{[@Gs @(dup PrevGs.size-Gs.size 0)]}
+    then | Dummy = $nil.sprite.frames.0
+         | PrevGs.init{[@Gs @(dup PrevGs.size-Gs.size Dummy)]}
   else $gfxes.Y.X <= Gs
 | for U $column_units_at{X Y}: U.environment_updated
 

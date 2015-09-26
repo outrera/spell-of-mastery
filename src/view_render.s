@@ -173,7 +173,6 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 | Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
-| Key = (((max X Y))</24) + ((X*128+Y)</10)
 | Fog = Explored><1
 | Br = @int -([CurX CurY]-[X Y]).abs
 | !Br*BrightFactor
@@ -186,7 +185,6 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
   | ZZ = Z*$zunit
-  | Key = Key + (Z</4)
   | DrawCursor = Cursor and Z < CursorZ
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | when DrawCursor:
@@ -212,21 +210,8 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
       | B.lx <= LX
       | B.ly <= LY
       | B.brighten <= Br
-      | when Fog: B.flags <= #40
+      | when Fog: B.flags <= #40 //dither
       | push B BlitItems
-    /*| if AboveCursor or TZ << CutZ then
-        | when G.is_list:
-          | G <= G.((Wr.cycle/T.anim_wait)%G.size)
-        | when Fog: G.dither{1}
-        | when Br: G.brighten{Br}
-        | FB.blit{BX BY-G.h-ZZ G.z{Key}}
-      else less DrawnFold:
-        | DrawnFold <= 1
-        | G = Folded
-        | when Fog: G.dither{1}
-        | when Br: G.brighten{Br}
-        | FB.blit{BX BY-G.h-ZZ G.z{Key}}
-        | FB.blit{BX BY-G.h-ZZ G.z{Key}}*/
   | when DrawCursor:
     | B = make_blit_item X*32 Y*32 Z*8+2 64 64 T.height*8
           special_blit{box_front}
