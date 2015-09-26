@@ -77,7 +77,7 @@ unit.draw FB B =
 | XX = X+32-G.w/2
 | YY = Y-16-G.h+$slope*16
 | when $mirror: G.flop
-| G.light{B.lx B.ly}
+//| G.light{B.lx B.ly}
 | when $sprite.shadow:
   | S = $world.shadow
   | ZZ = $xyz.2-$fix_z
@@ -114,10 +114,11 @@ unit.draw FB B =
       | !XX+16
 
 tile.draw FB BlitItem =
+//| leave
 | B = BlitItem
 | G = B.data
 | when B.flags^^#40: G.dither{1}
-| G.light{B.lx B.ly}
+//| G.light{B.lx B.ly}
 | FB.blit{B.sx B.sy G}
 
 type gfx_item
@@ -161,6 +162,7 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 | LX,LY = LXY
 | LX = LX.clip{-127 127}
 | LY = LY.clip{-127 127}
+| SkipZ = -1//if $mode<>play then -1 else 0
 | for G Gs
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
@@ -182,7 +184,7 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
         | DrawnFold <= 1
         | G <= Folded
       else G <= 0
-    | when G
+    | when G and Z>SkipZ:
       | B = make_blit_item X*32 Y*32 Z*8 64 64 T.height*8 T
       | B.data <= G
       | B.sx <= BX
@@ -333,7 +335,7 @@ view.render_frame =
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
-| $infoText.draw{$fb 4 ($h-10)}
+| $infoText.render.draw{$fb 200 ($h-10)}
 | $infoText.value <= ''
 
 // calculates current framerate and adjusts sleeping accordingly
