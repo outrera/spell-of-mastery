@@ -59,7 +59,7 @@ blit_item_from_unit U =
 | !X*32
 | !Y*32
 | !Z*8
-| DX,DY = U.xy
+| DX,DY = U.xy + U.box_xy
 | DDX = (DX+2*DY)/2
 | DDY = 2*DY-DDX
 | !X+DDX
@@ -83,14 +83,13 @@ unit.draw FB B =
   | ZZ = $xyz.2-$fix_z
   | I = min (ZZ/4).abs S.size-1
   | SGfx = S.I
-  | ShadowDO = $draw_order-(ZZ</4)
-  | FB.blit{X+8 Y-38+ZZ*8 SGfx.z{ShadowDO}}
+  | FB.blit{X+8 Y-38+ZZ*8 SGfx}
 | when $flyer
   | !YY-16
   | !Y-16
 | G.brighten{$brighten}
 | G.alpha{$alpha}
-| FB.blit{XX YY G.z{$draw_order}}
+| FB.blit{XX YY G}
 | when $picked and $world.player.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
@@ -99,7 +98,7 @@ unit.draw FB B =
   | PH <= PH + Mark.h + Wave
   | XX = X+32-Mark.w/2
   | YY = Y-PH
-  | FB.blit{XX YY Mark.z{$draw_order}}
+  | FB.blit{XX YY Mark}
   | Icons = []
   | when $shell: push 2 Icons
   | when $poison: push 4 Icons
@@ -110,7 +109,7 @@ unit.draw FB B =
     | Fs = $main.effect.frames
     | for I Icons
       | F = Fs.I
-      | FB.blit{XX YY F.z{$draw_order}}
+      | FB.blit{XX YY F}
       | !XX+16
 
 tile.draw FB BlitItem =

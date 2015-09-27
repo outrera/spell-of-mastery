@@ -1,2 +1,2 @@
-class: empty,1,draw_order,6,height,4
+class: empty,1,box_xy,(1 1),height,4
 xy: 0,8

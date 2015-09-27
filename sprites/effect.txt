@@ -1,5 +1,5 @@
 class: empty,1
-      ,draw_order,9
+      ,box_xy,(2 2)
       ,starts,still
       ,height,4
       ,passable,0
