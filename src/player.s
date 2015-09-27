@@ -28,7 +28,7 @@ type player{id world}
    research/(t) //research and latency
    picked //picked unit
    sight // fog of war
-| $name <= if $id >< 0 then "Independent" else "Player[$id]"
+| $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $color <= PlayerColors.$id
 | $params <= t
 | $sight <= dup 132: 132.bytes

@@ -130,6 +130,7 @@ world.process_events =
 | EventActions <= EventActions.flip.join
 
 world.update =
+| $main.music{playlist_advance}
 | when EventActions.end: $process_events
 | when not $picked or $picked.idle: less $waiting: till EventActions.end
   | Effect = EventActions^pop

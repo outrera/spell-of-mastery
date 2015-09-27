@@ -84,12 +84,16 @@ ui.init =
   | PlayerWidget.picked <= Player.id
 | $world.on_update <= =>
   | when $world.player.human: InputBlocker.show <= 0
-  | when got $world.params.winner
+  | Winner = $world.params.winner
+  | when got Winner:
     | NextWorld = $world.params.next_world
     | less got NextWorld:
       | pause
-      | sound_play: sound_load "[$data]/music/victory.ogg" music/1
-      | Tabs.pick{victory}
+      | if $world.players.Winner.human
+        then | $main.music{"victory.ogg"}
+             | Tabs.pick{victory}
+        else | $main.music{"defeat.ogg"}
+             | Tabs.pick{defeat}
     | when got NextWorld:
       | $load{"[MapsFolder][NextWorld].txt"}
       | $world.new_game
@@ -110,7 +114,6 @@ ui.init =
     else | ItemList.data <= $main.classes_banks.BankName
          | ItemList.pick{0}
 | PickedUnit = 0
-//| sound_play: sound_load "[$data]/music/thaxted.ogg" music/1
 | ActClick = Icon =>
   | $world.act <= 0
   | $main.sound{ui_click}
@@ -201,9 +204,12 @@ ui.init =
   | pause
   | LoadWorldDlg.show <= 1 
   //| $load{"[MapsFolder][$world.filename].txt"}
-| ExitIcon = icon data/pick $img{icons_exit} click: Icon =>
-  | pause
+| play_title_music = $main.music{"title.ogg"}
+| pick_main_menu pause/1 =
+  | when Pause: pause
+  | play_title_music
   | Tabs.pick{main_menu}
+| ExitIcon = icon data/pick $img{icons_exit} click: Icon => pick_main_menu
 | EditorIcons = hidden: layV s/8
     BrushIcon,spacer{8 0},PickIcon,spacer{8 0},PlayIcon,spacer{8 0},
     WorldIcon,spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
@@ -229,7 +235,8 @@ ui.init =
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
   |  0   0| $message_box
-| begin_ingame Editor = 
+| begin_ingame Editor =
+  | less Editor: $main.music{playlist}
   | EditorIcons.show <= Editor
   | EndTurnIcon.show <= Editor
   | GearsIcon.show <= not Editor
@@ -271,6 +278,7 @@ ui.init =
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
   |  ScreenW-80 ScreenH-20
      | button 'Credits' skin/small_medium: =>
+       | $main.music{"credits.ogg"}
        | CreditsRoll.reset
        | Tabs.pick{credits}
 | GameMenu = dlg: mtx
@@ -280,7 +288,7 @@ ui.init =
   | X 360 | button 'RESUME GAME' skin/scroll: =>
             | unpause
             | Tabs.pick{ingame}
-  | X 500 | button 'EXIT TO MENU' skin/scroll: => Tabs.pick{main_menu}
+  | X 500 | button 'EXIT TO MENU' skin/scroll: => pick_main_menu pause/0
 | VictoryBG = $img{ui_victory_bg}
 | Victory = dlg: mtx
   |   0   0 | VictoryBG
@@ -289,8 +297,16 @@ ui.init =
               | Type = $world.params.victory_type.replace{_ ' '}
               | "[Player.name] has won!\n[Type]"
   | ScreenW-360 ScreenH-100
-        | button 'EXIT TO MENU' skin/scroll: =>
-          | Tabs.pick{main_menu}
+        | button 'EXIT TO MENU' skin/scroll: => pick_main_menu pause/0
+| DefeatBG = $img{ui_defeat_bg}
+| Defeat = dlg: mtx
+  |   0   0 | DefeatBG
+  | 140 100 | txt medium: =>
+              | Player = $world.human
+              | Type = $world.params.victory_type.replace{_ ' '}
+              | "[Player.name] has been defeated!\n"
+  | ScreenW-360 ScreenH-100
+        | button 'EXIT TO MENU' skin/scroll: =>  pick_main_menu pause/0
 | SaveMenu = dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
@@ -308,8 +324,7 @@ ui.init =
   | X 270 | LoadButtons.b
   | X 340 | LoadButtons.c
   | X 410 | LoadButtons.d
-  | X 500 | button 'CANCEL' skin/scroll: =>
-            | Tabs.pick{main_menu}
+  | X 500 | button 'CANCEL' skin/scroll: => Tabs.pick{main_menu}
 | Ingame = input_split Ingame: Base In =>
   | Handled = 0
   | when $view.mode >< play: less $view.paused: case In [key z 0]
@@ -320,7 +335,7 @@ ui.init =
   |  0   0 | $img{ui_stars}
   |  0   0 | CreditsRoll
   |  ScreenW-80 ScreenH-20
-     | button 'Exit' skin/small_medium: => Tabs.pick{main_menu}
+     | button 'Exit' skin/small_medium: => pick_main_menu pause/0
 | IsDebug = $main.params.world.release<>1
 | InitTab = if IsDebug then \ingame else \main_menu
 | Tabs <= tabs InitTab: t
@@ -330,6 +345,7 @@ ui.init =
           load_menu(LoadMenu)
           ingame(Ingame)
           victory(Victory)
+          defeat(Defeat)
           scenario(ScenarioMenu)
           credits(Credits)
 | BankList.pick{0}

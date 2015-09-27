@@ -1,3 +1,0 @@
-author: `Gustav Holst`,`Kevin MacLeod (incompetech.com)`
-copyright: `Kevin MacLeod`
-license: `CC3-BY-SA`

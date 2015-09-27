@@ -146,19 +146,24 @@ unit.animate Anim =
 | $pick_facing{$facing}
 | $anim_wait <= $anim_seq.$anim_step.1
 
+player_lost_leader Me Leader =
+| Leaders = []
+| RemainingUnits = []
+| for U $world.active.list: when U.id <> Leader.id:
+  | when U.leader><1: push U Leaders
+  | when U.owner.id >< $id: push U RemainingUnits
+| case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
+  | $world.params.winner <= L.owner.id
+  | $world.params.victory_type <= 'Victory by defeating other leaders.'
+| when Leader.owner.human: less Leaders.any{?owner.human}:
+  | $world.params.winner <= 0
+  | $world.params.victory_type <= 'Defeat by losing your leader.'
+| when RemainingUnits.any{?leader}: for U RemainingUnits: U.free
+
 unit.free =
 | when $id >< $world.waiting: $world.waiting <= 0
 | when $owner: $owner.lost_unit{Me}
-| when $leader><1 and $hits >> $health:
-  | O = $owner
-  | Leaders = []
-  | for U $world.active.list:
-    | if U.owner.id >< O.id
-      then when U.id <> $id: U.free
-      else when U.leader><1: push U Leaders
-  | case Leaders [L]
-    | $world.params.winner <= L.owner.id
-    | $world.params.victory_type <= 'Victory by defeating other leaders.'
+| when $leader><1 and $hits >> $health: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
 | $world.free_unit{Me}
 
