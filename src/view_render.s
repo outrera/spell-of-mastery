@@ -138,6 +138,32 @@ special_blit.draw FB BlitItem =
 Folded = 0
 BlitItems = 0
 
+render_cursor Me Wr BX BY CursorXYZ =
+| X,Y,CurZ = CursorXYZ
+| Gs = Wr.gfxes.Y.X
+| Z = 0
+| UnitZ = 0
+| for G Gs
+  | T = Wr.tid_map.(Wr.get{X Y Z})
+  | TH = T.height
+  | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
+  | UnitZ <= Z + TH
+  | TH = T.height
+  | ZZ = Z*$zunit
+  | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 TH*8
+                       special_blit{box_back}
+  | B.sx <= BX
+  | B.sy <= BY-G.h-ZZ
+  | push B BlitItems
+  | B = make_blit_item X*32 Y*32 Z*8+2 64 64 TH*8
+                       special_blit{box_front}
+  | B.sx <= BX
+  | B.sy <= BY-G.h-ZZ
+  | push B BlitItems
+  | Z <= UnitZ
+  | when Z>>CurZ: _goto for_break
+| _label for_break
+
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
 | less Folded: Folded <= Wr.main.img{ui_folded}
@@ -150,7 +176,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | AboveCursor = CurH >> XY2
 | CurHH = YDiv*(XY2-CurH-2)+3
 | CutZ = max CursorZ CurHH
-| Cursor = same X CurX and Y >< CurY
 | Z = 0
 | UnitZ = 0
 | Fog = Explored><1
@@ -166,14 +191,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
   | T = Wr.tid_map.(Wr.get{X Y Z})
   | TH = T.height
   | ZZ = Z*$zunit
-  | DrawCursor = Cursor and Z < CursorZ
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
-  | when DrawCursor:
-    | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 T.height*8
-                        special_blit{box_back}
-    | B.sx <= BX
-    | B.sy <= BY-G.h-ZZ
-    | push B BlitItems
   | UnitZ <= Z + TH
   | TZ = UnitZ - 4
   | less T.invisible
@@ -193,12 +211,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       | B.brighten <= Br
       | when Fog: B.flags <= #40 //dither
       | push B BlitItems
-  | when DrawCursor:
-    | B = make_blit_item X*32 Y*32 Z*8+2 64 64 T.height*8
-          special_blit{box_front}
-    | B.sx <= BX
-    | B.sy <= BY-G.h-ZZ
-    | push B BlitItems
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
@@ -235,6 +247,7 @@ view.render_iso =
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
+| CurX,CurY,CurZ = $cursor
 | YDiv <= $yunit/$zunit
 | TX,TY = $blit_origin+[0 Z]%YDiv*$zunit + [0 32]
 | VX,VY = $view_origin-[Z Z]/YDiv
@@ -254,6 +267,9 @@ view.render_iso =
       | E = Explored.Y.X
       | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY
+| BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
+| BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
+| render_cursor Me Wr BX BY $cursor
 | less BlitItems.end
   | DrawBoundingBox = $main.params.world.bounding_boxes
   | BL = BlitItems.list
