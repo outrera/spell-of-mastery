@@ -138,7 +138,7 @@ special_blit.draw FB BlitItem =
 Folded = 0
 BlitItems = 0
 
-render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
+render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
 | less Folded: Folded <= Wr.main.img{ui_folded}
 | Gs = Wr.gfxes.Y.X
@@ -220,10 +220,13 @@ render_pilar Me Wr X Y BX BY FB CursorXYZ RoofZ Explored =
 
 Unexplored = 0
 
-render_unexplored Me Wr X Y BX BY FB =
+render_unexplored Me Wr X Y BX BY =
 | less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
-/*| Key = (((max X Y))</24) + ((X*128+Y)</10)
-| FB.blit{BX BY-$zunit-Unexplored.h Unexplored.z{Key}}*/
+| B = make_blit_item X*32 Y*32 0 64 64 4*8 gfx_item{}
+| B.data <= Unexplored
+| B.sx <= BX
+| B.sy <= BY-$zunit-Unexplored.h
+| push B BlitItems
 
 view.render_iso =
 | Wr = $world
@@ -249,8 +252,8 @@ view.render_iso =
       | BX = TX + XX*XUnit2 - YY*XUnit2
       | BY = TY + XX*YUnit2 + YY*YUnit2
       | E = Explored.Y.X
-      | if E then render_pilar Me Wr X Y BX BY FB $cursor RoofZ E
-        else render_unexplored Me Wr X Y BX BY FB
+      | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
+        else render_unexplored Me Wr X Y BX BY
 | less BlitItems.end
   | DrawBoundingBox = $main.params.world.bounding_boxes
   | BL = BlitItems.list
