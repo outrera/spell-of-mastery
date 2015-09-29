@@ -1,4 +1,4 @@
-use util effect_
+use util effect_ macros
 
 Effects = t
 
@@ -12,7 +12,7 @@ set_act_enabled Me State Players ActNames =
   | Act = Acts.ActName
   | less got Act: bad "missing act [ActName]"
   | Es = Act.enabled
-  | for Id Players: Es <= Es.set{Id State}
+  | for Id Players: Es <= Es^set_bit{Id State}
   | Act.enabled <= Es
 
 effect enable State Players ActNames:

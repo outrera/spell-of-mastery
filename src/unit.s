@@ -42,26 +42,26 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
 
-unit.attacker = $flags.get{0}
-unit.`!attacker` State = $flags <= $flags.set{0 State}
+unit.attacker = $flags^get_bit{0}
+unit.`!attacker` State = $flags <= $flags^set_bit{0 State}
 
-unit.handled = $flags.get{1}
-unit.`!handled` State = $flags <= $flags.set{1 State}
+unit.handled = $flags^get_bit{1}
+unit.`!handled` State = $flags <= $flags^set_bit{1 State}
 
-unit.summoned = $flags.get{2}
-unit.`!summoned` State = $flags <= $flags.set{2 State}
+unit.summoned = $flags^get_bit{2}
+unit.`!summoned` State = $flags <= $flags^set_bit{2 State}
 
-unit.haste = $flags.get{3}
-unit.`!haste` State = $flags <= $flags.set{3 State}
+unit.haste = $flags^get_bit{3}
+unit.`!haste` State = $flags <= $flags^set_bit{3 State}
 
-unit.shell = $flags.get{4}
-unit.`!shell` State = $flags <= $flags.set{4 State}
+unit.shell = $flags^get_bit{4}
+unit.`!shell` State = $flags <= $flags^set_bit{4 State}
 
-unit.flyer = $flags.get{5}
-unit.`!flyer` State = $flags <= $flags.set{5 State}
+unit.flyer = $flags^get_bit{5}
+unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
-unit.poison = $flags.get{6}
-unit.`!poison` State = $flags <= $flags.set{6 State}
+unit.poison = $flags^get_bit{6}
+unit.`!poison` State = $flags <= $flags^set_bit{6 State}
 
 unit.alive = $hits < $health
 

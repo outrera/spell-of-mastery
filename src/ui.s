@@ -1,4 +1,4 @@
-use gui widgets view icon ui_widgets
+use gui widgets view icon ui_widgets macros
 
 ScreenW = No
 ScreenH = No
@@ -163,7 +163,7 @@ ui.init =
   | for Icon ActIcons: Icon.show <= 0
   //| when nit.moved < $world.turn:
   | As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
-  | for I,Act As: when Act.enabled.get{Unit.owner.id}:
+  | for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
     | Active = 1
     | when Act.act >< summon and not Unit.owner.pentagram:
       | Active <= 0

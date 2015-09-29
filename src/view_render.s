@@ -52,7 +52,7 @@ draw_bounding_box_back Color FB B =
 
 
 
-unit.size = [37 37 70]
+unit.size = if $height then [37 37 70] else [37 37 0]
 
 blit_item_from_unit U =
 | X,Y,Z = U.xyz
