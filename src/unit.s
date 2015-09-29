@@ -292,22 +292,26 @@ unit.list_moves XYZ =
   | Xs = Ms.Y
   | when Xs.X
     | Xs.X <= 0
-    | push XYZ StackSrc 
+    | push XYZ StackSrc
     | push N StackDst
+| BX,BY,BZ = XYZ
 | till StackDst.end
   | Src = pop StackSrc
   | DX,DY = pop StackDst
   | V = OMs.DY.DX
-  | Dst = [XYZ.0+DX-O XYZ.1+DY-O Src.2]
+  | X = BX+DX-O
+  | Y = BY+DY-O
+  | Z = Src.2
   | Move = 0
-  | less $world.fast_at{Dst}.empty:
+  | less $world.at{X Y Z}.empty:
     | I = 0
-    | till I><4 or $world.fast_at{Dst}.empty:
-      | !Dst.2 + $world.fast_at{Dst}.height
+    | till I><4 or $world.at{X Y Z}.empty:
+      | !Z + $world.at{X Y Z}.height
       | !I+1
-  | !Dst.2 - 1
-  | while $world.fast_at{Dst}.empty: !Dst.2 - 1
-  | !Dst.2 + 1
+  | !Z - 1
+  | while $world.at{X Y Z}.empty: !Z - 1
+  | !Z + 1
+  | Dst = [X Y Z]
   | Blocked = not $can_move{Src Dst}
   | B = $world.block_at{Dst}
   | when got B:

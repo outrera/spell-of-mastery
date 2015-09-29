@@ -72,7 +72,7 @@ view.update_brush =
   [tile Type]
     | while 1
       | Z <= $cursor.2
-      | less Z << $anchor.2 and $world.fast_at{X,Y,Z}.empty: leave
+      | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
       | Tile = $main.tiles.Type
       | less Tile.empty
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}

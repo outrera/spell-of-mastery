@@ -173,11 +173,6 @@ world.at X Y Z =
 | if T.is_int then $tilemap.at{X Y Z-T}
   else T
 
-world.fast_at X,Y,Z = //obsolete function
-| T = $tilemap.at{X Y Z}
-| if T.is_int then $tilemap.at{X Y Z-T}
-  else T
-
 world.set_ X Y Z V = $tilemap.set{X Y Z V}
 
 world.clear_tile_ XYZ Filler =
