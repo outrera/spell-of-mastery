@@ -168,18 +168,15 @@ world.free_unit U =
 world.picked = $player.picked
 world.`!picked` U = $player.picked <= U
 
-world.at X Y Z =
-| T = $tilemap.at{X Y Z}
-| if T.is_int then $tilemap.at{X Y Z-T}
-  else T
+world.at X Y Z = $tilemap.at{X Y Z}
 
 world.set_ X Y Z V = $tilemap.set{X Y Z V}
 
 world.clear_tile_ XYZ Filler =
 | X,Y,Z = XYZ
 | Tile = $tilemap.at{X Y Z}
-| when Tile.is_int
-  | !Z-Tile
+| when Tile.parts.is_int
+  | !Z-Tile.parts
   | Tile <= $tilemap.at{X Y Z}
 | less Tile.id: leave
 | times I Tile.height
@@ -224,8 +221,9 @@ world.clear_passage X Y Z =
 world.dirty_set X Y Z Tile =
 | H = Tile.height
 | times I H: $clear_tile_{X,Y,Z+I $void}
+| Ps = Tile.parts
 | H = H-1
-| times I H: $set_{X Y Z+I I-H} // push padding
+| times I H: $set_{X Y Z+I Ps.I} // push padding
 | $set_{X Y Z+H Tile}
 
 world.set X Y Z Tile =
@@ -401,7 +399,7 @@ world.updPilarGfxes P =
 | while C.id
   | NextZ = Z + C.height
   | Above = Column.NextZ
-  | when Above.is_int: Above <= Column.(NextZ-Above)
+  | when Above.parts.is_int: Above <= Column.(NextZ-Above.parts)
   // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
   | push C.render{X Y NextZ-1 Below Above Seed} Gs
   | Below <= C
@@ -426,7 +424,8 @@ world.height X Y = $tilemap.height{X Y}
 world.push_ X Y Tile =
 | Z = $height{X Y}
 | H = Tile.height-1
-| times I H: $set_{X Y Z+I I-H} // push padding
+| Ps = Tile.parts
+| times I H: $set_{X Y Z+I Ps.I} // push padding
 | $set_{X Y Z+H Tile}
 
 

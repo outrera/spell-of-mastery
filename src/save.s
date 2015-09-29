@@ -22,7 +22,7 @@ world.save =
     units | Units
     tilemap | map X $w: map Y $h:
               | Ts = $tilemap.getPilar{X+1 Y+1}.drop{1}
-              | map T Ts: if T.is_int then T else T.id
+              | map T Ts: if T.parts.is_int then T.parts else T.id
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
     actions_enabled | map Name,Act $main.params.acts: Name,Act.enabled
@@ -33,7 +33,10 @@ remap_tids Me LookupTable Xs =
 | TidMap = $tid_map
 | for Ys Xs: for Zs Ys: for I Zs.size
   | Id = Zs.I
-  | when Id >> 0: Zs.I <= TidMap.(LookupTable.Id)
+  | if Id < 0
+    then | T = TidMap.(LookupTable.(Zs.(I-Id)))
+         | Zs.I <= T.parts.(T.height-1+Id)
+    else Zs.I <= TidMap.(LookupTable.Id)
 | Xs
 
 world.load Saved =

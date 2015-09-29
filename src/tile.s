@@ -1,8 +1,9 @@
 use gfx util
 
-type tile{Main Type Role Id Lineup Base Middle Top Trns Plain
+type tile{As Main Type Role Id Lineup Base Middle Top Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
-          match/same stairs/0 anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0}
+          match/same stairs/0 anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
+          parts/0}
      id/Id
      main/Main
      bank/Bank
@@ -28,6 +29,11 @@ type tile{Main Type Role Id Lineup Base Middle Top Trns Plain
      unit/Unit //used for units that act as platforms
      heavy/Heavy
      clear/Clear
+     parts/Parts
+| less $parts: when $height>1:
+  | $parts <= @flip: map I $height-1
+    | tile As Main Type Role Id Lineup Base Middle Top Trns Plain
+           @[parts -(I+1) @As]
 
 TrnsCache = t
 
@@ -139,7 +145,8 @@ main.load_tiles =
   | Id = if K >< void then 0
          else | !$last_tid + 1
               | $last_tid
-  | $tiles.K <= tile Me K V.role^~{K} Id Lineup Base Middle Top Trns Plain
-                     @V.list.join
+  | As = V.list.join
+  | $tiles.K <=
+    | tile As Me K V.role^~{K} Id Lineup Base Middle Top Trns Plain @As
 
 export tile
