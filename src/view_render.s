@@ -144,7 +144,7 @@ render_cursor Me Wr BX BY CursorXYZ =
 | Z = 0
 | UnitZ = 0
 | for G Gs
-  | T = Wr.tid_map.(Wr.get{X Y Z})
+  | T = Wr.at{X Y Z}
   | TH = T.height
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
@@ -188,7 +188,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LY = LY.clip{-127 127}
 | SkipZ = -1//if $mode<>play then -1 else 0
 | for G Gs
-  | T = Wr.tid_map.(Wr.get{X Y Z})
+  | T = Wr.at{X Y Z}
   | TH = T.height
   | ZZ = Z*$zunit
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
@@ -339,7 +339,7 @@ view.draw_indicators =
   | !C+16
 | Font = font small
 | Font.draw{$fb IX+246 IY+1 "[X],[Y],[Z]"}
-| Font.draw{$fb IX+246 IY+9 "[$world.at{X,Y,Z-1}.type]"}
+| Font.draw{$fb IX+246 IY+9 "[$world.at{X Y Z-1}.type]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1

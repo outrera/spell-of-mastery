@@ -46,10 +46,11 @@ genTransition Mask From To =
 
 DummyGfx = gfx 1 1
 
-tile.render P Z Below Above Seed =
+tile.render X Y Z Below Above Seed =
+| P = X,Y
 | World = $main.world
 | when $invisible
-  | World.set_slope_at{@P,Z #@1111}
+  | World.set_slope_at{X Y Z #@1111}
   | leave DummyGfx
 | BE = Below.empty
 | BR = Below.role
@@ -59,7 +60,7 @@ tile.render P Z Below Above Seed =
 | NeibElevs = #@0000
 | T = Me
 | Water = $water
-| when Water and got World.neibs{P.0 P.1 Z-$height+1}.find{?type><water}:
+| when Water and got World.neibs{X Y Z-$height+1}.find{?type><water}:
   | T <= $main.tiles.Water
 | Gs = if BR <> $role then T.base
        else if AR <> $role and not AFiller then T.top
@@ -80,7 +81,7 @@ tile.render P Z Below Above Seed =
              | NeibElevs <= #@1111
              | R <= Gs.NeibElevs
            | R
-| World.set_slope_at{@P,Z if $tiling >< side then #@1111 else NeibElevs}
+| World.set_slope_at{X Y Z if $tiling >< side then #@1111 else NeibElevs}
 | less $anim_wait: G <= G.(Seed%G.size)
 | when when $anim_wait or not $trn or NeibElevs <> #@1111: leave G
 | Cs = World.getCornersTrns{P Z $role}.digits{2}

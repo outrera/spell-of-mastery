@@ -37,7 +37,7 @@ type world{main}
    gfxes
    seed
    tid_map/Main.tid_map
-   filler
+   void
    shadow
    cycle // counts calls to world.update
    serial
@@ -75,17 +75,17 @@ world.init =
 | $xunit <= WParam.x_unit
 | $yunit <= WParam.y_unit
 | $zunit <= WParam.z_unit
-| $tilemap <= zmap MaxSize
-| $unit_map <= zmap MaxSize
-| $slope_map <= zmap MaxSize
-| $move_map <= zmap MaxSize
+| $void <= $main.tiles.void
+| $tilemap <= zmap MaxSize $void
+| $unit_map <= zmap MaxSize 0
+| $slope_map <= zmap MaxSize 0
+| $move_map <= zmap MaxSize 0
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
 | $free_proxies <= stack $proxies.flip
 | $active <= stack MaxActiveUnits
 | $shadow <= $main.sprites.system_shadow.frames
-| $filler <= $main.tiles.base_
 | SS = MaxSize*MaxSize
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
@@ -99,7 +99,8 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
-| for Y $h: when Y: for X $w: when X: $push_{X Y $filler}
+| Filler = $main.tiles.base_
+| for Y $h: when Y: for X $w: when X: $push_{X Y Filler}
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X,Y}
 | for Y $h: when Y: for X $w: when X: $update_move_map{X,Y}
 | !$w-1
@@ -117,7 +118,7 @@ world.create_borders =
 world.clear =
 | $act <= 0
 | for U $units: less U.removed: U.free
-| $tilemap.clear{0}
+| $tilemap.clear{$void}
 | $move_map.clear{0}
 | for P $players: P.clear
 | $player <= $players.0
@@ -167,35 +168,32 @@ world.free_unit U =
 world.picked = $player.picked
 world.`!picked` U = $player.picked <= U
 
-world.get X Y Z =
-| Id = $tilemap.at{[X Y Z]}
-| if Id < 0 then $tilemap.at{[X Y Z-Id]}
-  else Id
+world.at X Y Z =
+| T = $tilemap.at{X Y Z}
+| if T.is_int then $tilemap.at{X Y Z-T}
+  else T
 
-world.at XYZ =
-| X,Y,Z = XYZ
-| $tid_map.| if X < 0 or Y < 0 then 0 else $get{X Y Z}
+world.fast_at X,Y,Z = //obsolete function
+| T = $tilemap.at{X Y Z}
+| if T.is_int then $tilemap.at{X Y Z-T}
+  else T
 
-world.fast_at XYZ =
-| Id = $tilemap.at{XYZ}
-| when Id < 0: Id <= $tilemap.at{[XYZ.0 XYZ.1 XYZ.2-Id]}
-| $tid_map.Id
-
-world.set_ X Y Z V = $tilemap.set{[X Y Z] V}
+world.set_ X Y Z V = $tilemap.set{X Y Z V}
 
 world.clear_tile_ XYZ Filler =
-| Id = $tilemap.at{XYZ}
-| less Id: leave
 | X,Y,Z = XYZ
-| when Id<0: !Z-Id
-| Tile = $tid_map.($tilemap.at{X,Y,Z})
+| Tile = $tilemap.at{X Y Z}
+| when Tile.is_int
+  | !Z-Tile
+  | Tile <= $tilemap.at{X Y Z}
+| less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
-  | $set_slope_at{X,Y,(Z-I) #@0000}
+  | $set_slope_at{X Y (Z-I) #@0000}
 | $updElev{X,Y}
 
 world.clear_tile XYZ Filler =
-| $clear_tile_{XYZ 0}
+| $clear_tile_{XYZ Filler}
 | XY = XYZ.take{2}
 | $update_move_map{XY}
 | for D Dirs: $update_move_map{XY+D}
@@ -230,10 +228,10 @@ world.clear_passage X Y Z =
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =
 | H = Tile.height
-| times I H: $clear_tile_{X,Y,Z+I 0}
+| times I H: $clear_tile_{X,Y,Z+I $void}
 | H = H-1
 | times I H: $set_{X Y Z+I I-H} // push padding
-| $set_{X Y Z+H Tile.id}
+| $set_{X Y Z+H Tile}
 
 world.set X Y Z Tile =
 | $dirty_set{X Y Z Tile}
@@ -241,35 +239,35 @@ world.set X Y Z Tile =
 
 world.fix_z XYZ =
 | X,Y,Z = XYZ
-| till $fast_at{X,Y,Z}.empty: !Z+1
+| till $at{X Y Z}.empty: !Z+1
 | !Z-1
-| while $fast_at{X,Y,Z}.empty: !Z-1
+| while $at{X Y Z}.empty: !Z-1
 | !Z+1
 | Z
 
 world.fix_z_void XYZ =
 | X,Y,Z = XYZ
-| while $fast_at{X,Y,Z}.id: !Z+1
+| while $at{X Y Z}.id: !Z+1
 | !Z-1
-| till $fast_at{X,Y,Z}.id: !Z-1
+| till $at{X Y Z}.id: !Z-1
 | !Z+1
 | Z
 
 world.roof XYZ =
 | X,Y,Z = XYZ
-| while $fast_at{X,Y,Z}.empty and Z < 63: !Z+1
+| while $at{X Y Z}.empty and Z < 63: !Z+1
 | Z
 
-world.slope_at XYZ = $slope_map.at{XYZ}
+world.slope_at X Y Z = $slope_map.at{X Y Z}
 
-world.set_slope_at XYZ Slope = $slope_map.set{XYZ Slope}
+world.set_slope_at X Y Z Slope = $slope_map.set{X Y Z Slope}
 
-world.proxies_at XYZ =
-| when!it $unit_map.at{XYZ}: leave $proxies.it^uncons{next}
+world.proxies_at X,Y,Z =
+| when!it $unit_map.at{X Y Z}: leave $proxies.it^uncons{next}
 | []
 
 world.column_proxies_at X Y =
-| when!it $unit_map.at{X,Y,0}: leave $proxies.it^uncons{column_next}
+| when!it $unit_map.at{X Y 0}: leave $proxies.it^uncons{column_next}
 | []
 
 world.units_at XYZ = $proxies_at{XYZ}{?unit_}
@@ -286,14 +284,15 @@ world.place_unitS UU =
 | U = $free_proxies.pop
 | U.init{UU}
 | XYZ = U.xyz
+| X,Y,Z = XYZ
 | Us = U,@$proxies_at{XYZ}
 | Consed = Us^cons{next}
 | Id = if Consed then Consed.id else 0
-| $unit_map.set{XYZ Id}
-| Us = U,@$column_proxies_at{XYZ.0 XYZ.1}.skip{?id >< U.id}
+| $unit_map.set{X Y Z Id}
+| Us = U,@$column_proxies_at{X Y}.skip{?id >< U.id}
 | Consed = Us^cons{column_next}
 | Id = if Consed then Consed.id else 0
-| $unit_map.set{XYZ.0,XYZ.1,0 Id}
+| $unit_map.set{X Y 0 Id}
 
 unit.explore V =
 | Sight = $sight
@@ -329,11 +328,12 @@ world.remove_unitS U =
   else push P Us
 | Consed = Us^cons{next}
 | Id = if Consed then Consed.id else 0
-| $unit_map.set{XYZ Id}
-| Us = $column_proxies_at{XYZ.0 XYZ.1}.skip{?.unit_.id >< U.id}
+| X,Y,Z = XYZ
+| $unit_map.set{X Y Z Id}
+| Us = $column_proxies_at{X Y}.skip{?.unit_.id >< U.id}
 | Consed = Us^cons{column_next}
 | Id = if Consed then Consed.id else 0
-| $unit_map.set{XYZ.0,XYZ.1,0 Id}
+| $unit_map.set{X Y 0 Id}
 
 world.remove_unit U =
 | XYZ = U.xyz.copy
@@ -352,12 +352,12 @@ world.effect X,Y,Z What =
 | E
 
 world.neibs X Y Z =
-  [$at{X,Y-1,Z} $at{X+1,Y,Z} $at{X,Y+1,Z} $at{X-1,Y,Z}
-   $at{X+1,Y-1,Z} $at{X+1,Y+1,Z} $at{X-1,Y+1,Z} $at{X-1,Y-1,Z}]
+  [$at{X Y-1 Z} $at{X+1 Y Z} $at{X Y+1 Z} $at{X-1 Y Z}
+   $at{X+1 Y-1 Z} $at{X+1 Y+1 Z} $at{X-1 Y+1 Z} $at{X-1 Y-1 Z}]
 
 world.filled X,Y Z =
 | when X < 0 or Y < 0: leave 1
-| $tid_map.($get{X Y Z}).filler
+| $at{X Y Z}.filler
 
 world.getCorners P Z = `[]`
   [$filled{P+[-1 -1] Z} $filled{P+[0 -1] Z} $filled{P+[-1 0] Z}].all{1}
@@ -371,7 +371,7 @@ world.getSides P Z = `[]`
 
 world.role X,Y Z =
 | when X < 0 or Y < 0: leave 0
-| $tid_map.($get{X Y Z}).role
+| $at{X Y Z}.role
 
 world.getCornersSame P Z Role = `[]`
   [$role{P+[-1 -1] Z} $role{P+[0 -1] Z} $role{P+[-1 0] Z}].all{Role}
@@ -385,7 +385,7 @@ world.getSidesSame P Z Role = `[]`
 
 world.getTrn X,Y Z =
 | when X < 0 or Y < 0: leave 0
-| Tile = $tid_map.($get{X Y Z})
+| Tile = $at{X Y Z}
 | if Tile.trn then Tile.role else 0
 
 world.getCornersTrns P Z Role = `[]`
@@ -402,14 +402,13 @@ world.updPilarGfxes P =
 | Z = 0
 | Column = $tilemap.data.X.Y
 | Below = $tid_map.0
-| C = $tid_map.(Column.0)
+| C = Column.0
 | while C.id
   | NextZ = Z + C.height
-  | TileId = Column.NextZ
-  | when TileId < 0: TileId <= Column.(NextZ-TileId)
-  | Above = $tid_map.TileId
+  | Above = Column.NextZ
+  | when Above.is_int: Above <= Column.(NextZ-Above)
   // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
-  | push C.render{P NextZ-1 Below Above Seed} Gs
+  | push C.render{X Y NextZ-1 Below Above Seed} Gs
   | Below <= C
   | C <= Above
   | Z <= NextZ
@@ -433,7 +432,7 @@ world.push_ X Y Tile =
 | Z = $height{X Y}
 | H = Tile.height-1
 | times I H: $set_{X Y Z+I I-H} // push padding
-| $set_{X Y Z+H Tile.id}
+| $set_{X Y Z+H Tile}
 
 
 // push Tile on top of pilar at X,Y
@@ -445,9 +444,9 @@ world.pop_ X,Y =
 | H = $height{X Y}
 | less H: leave
 | Z = H-1
-| $set_slope_at{X,Y,Z #@0000}
-| T = $tid_map.($get{X Y Z})
-| times I T.height: $set_{X Y Z-I 0}
+| $set_slope_at{X Y Z #@0000}
+| T = $at{X Y Z}
+| times I T.height: $set_{X Y Z-I $void}
 
 // pop top tile of pilar at X,Y
 world.pop XY =

@@ -81,7 +81,7 @@ view.update_brush =
       | $cursor.2 <= $fix_z{$cursor}
 | when $mice_click><right:
   | Brush = $brush
-  | T = $world.at{X,Y,Z-1}
+  | T = $world.at{X Y Z-1}
   | when T.unit: Brush <= [obj dummy]
   | case Brush
     [obj Type]
@@ -98,9 +98,9 @@ view.update_brush =
         | Z <= $cursor.2
         | less Z >> $anchor.2 and Z > 1: leave
         | less Z > 1: leave
-        | Tile = $world.at{X,Y,Z-1}
+        | Tile = $world.at{X Y Z-1}
         | less Tile.height: leave
-        | $world.clear_tile{X,Y,Z-1 0}
+        | $world.clear_tile{X,Y,Z-1 $world.void}
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
         | $cursor.2 <= $fix_z{$cursor}
 

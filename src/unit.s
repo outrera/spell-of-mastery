@@ -169,7 +169,7 @@ unit.free =
 
 unit.remove =
 | when $xyz.2 <> -1:
-  | when $passable and $block: $world.clear_tile{$xyz 0}
+  | when $passable and $block: $world.clear_tile{$xyz $world.void}
   | $move_in{0}
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
@@ -219,7 +219,7 @@ unit.seen = $world.seen{$xyz.0 $xyz.1}
 
 unit.environment_updated =
 | [UX UY UZ] = $xyz
-| $slope <= $world.slope_at{UX,UY,UZ-1}^|$1 #@1111 => 0
+| $slope <= $world.slope_at{UX UY UZ-1}^|$1 #@1111 => 0
 
 unit.face XYZ =
 | XY = (XYZ-$xyz).take{2}{?sign}
@@ -228,20 +228,17 @@ unit.face XYZ =
 
 world.can_move Src Dst =
 | when Dst.2 < 1: leave 0
-| less $fast_at{Src}.empty and $fast_at{Dst}.empty: leave 0
-| SZ = Src.2
+| SX,SY,SZ = Src
+| less $at{SX SY SZ}.empty: leave 0
 | DX,DY,DZ = Dst
+| less $at{DX DY DZ}.empty: leave 0
 | Height = DZ-SZ
 | HeightAbs = Height.abs
-| BelowDst = DX,DY,DZ-1
-| when HeightAbs < 4: leave: $slope_at{BelowDst}><#@1111
-                             or $fast_at{BelowDst}.stairs
-| BelowDstTile = $fast_at{BelowDst}
+| when HeightAbs < 4:
+  | leave: $slope_at{DX DY DZ-1}><#@1111 or $at{DX DY DZ-1}.stairs
+| BelowDstTile = $at{DX DY DZ-1}
 | when BelowDstTile.stairs: leave HeightAbs << 4
-| SX = Src.0
-| SY = Src.1
-| BelowSrc = SX,SY,SZ-1
-| BelowSrcTile = $fast_at{BelowSrc}
+| BelowSrcTile = $at{SX SY SZ-1}
 | when BelowSrcTile.stairs and Height<0: leave HeightAbs << 4
 | 0
 
@@ -266,11 +263,12 @@ world.update_move_map P =
       | when $can_move{Src Src+[X Y Z]}
         | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
         | M <= M ++ (1</F)
-  | $move_map.set{Src M}
+  | $move_map.set{SX SY SZ M}
 
 unit.can_move Src Dst =
-| when $flyer: leave $world.fast_at{Dst}.empty // FIXME: check for roof
-| M = $world.move_map.at{Src}
+| DX,DY,DZ = Dst
+| when $flyer: leave $world.at{DX DY DZ}.empty // FIXME: check for roof
+| M = $world.move_map.at{Src.0 Src.1 Src.2}
 | X,Y,Z = Dst-Src
 | when Z.abs > 4: leave 0
 | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 

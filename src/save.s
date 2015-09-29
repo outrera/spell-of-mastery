@@ -21,17 +21,19 @@ world.save =
     player | $player.id
     units | Units
     tilemap | map X $w: map Y $h:
-              | $tilemap.getPilar{X+1 Y+1}.drop{1}
+              | Ts = $tilemap.getPilar{X+1 Y+1}.drop{1}
+              | map T Ts: if T.is_int then T else T.id
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
     actions_enabled | map Name,Act $main.params.acts: Name,Act.enabled
 
 main.save Path = Path.set{[version(0.1) @$world.save].as_text}
 
-remap_tids LookupTable Xs =
+remap_tids Me LookupTable Xs =
+| TidMap = $tid_map
 | for Ys Xs: for Zs Ys: for I Zs.size
   | Id = Zs.I
-  | when Id >> 0: Zs.I <= LookupTable.Id
+  | when Id >> 0: Zs.I <= TidMap.(LookupTable.Id)
 | Xs
 
 world.load Saved =
@@ -46,9 +48,9 @@ world.load Saved =
 | when got!it Saved.params: for [K V] it: $params.K <= V
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}
-| Tilemap = remap_tids LookupTable Saved.tilemap
-| BaseId = TypeTids.base_
-| for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 [BaseId@Tilemap.X.Y]}
+| Tilemap = remap_tids Me LookupTable Saved.tilemap
+| Base = $main.tiles.base_
+| for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 [Base@Tilemap.X.Y]}
 | $create_borders
 | for P points{1 1 $w+1 $h+1}: $updPilarGfxes{P}
 | for P points{1 1 $w+1 $h+1}: $update_move_map{P}
