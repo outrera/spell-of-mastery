@@ -1,4 +1,4 @@
 author: `Artem Belov`
 copyright: `Nikita Sadkov`
-height: 2
-xy: 0,8
+class: empty,0,height,4,movable,1
+xy: 0,16

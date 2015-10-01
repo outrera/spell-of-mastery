@@ -1,0 +1,8 @@
+affects: land
+before: sound{summon}
+after: impact{pickup},push{target},sound{blob_hit}
+icon: spell_push
+range: 1
+fix_z: caster
+//research: 5000
+//cost: 300

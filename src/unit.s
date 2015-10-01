@@ -209,7 +209,10 @@ unit.move XYZ =
 | $fix_z <= $world.fix_z{XYZ}
 | $xy.init{0,0}
 | $world.place_unit{Me}
-| when $passable and $block: $world.set{@$xyz $block}
+| when $passable and $block:
+  | $world.set{@$xyz $block}
+  | XY = $xyz.take{2}
+  | $world.update_move_map{XY}
 | $environment_updated
 | $move_in{1}
 | Me
@@ -250,7 +253,7 @@ MoveMapDirMap =
     | !I+1
 | T
 
-world.update_move_map P =
+world.update_move_map_ P =
 | SX,SY = P
 | when SX < 1 or SY < 1: leave 0
 | for SZ $height{SX SY}

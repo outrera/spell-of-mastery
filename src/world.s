@@ -102,7 +102,7 @@ world.create W H =
 | Filler = $main.tiles.base_
 | for Y $h: when Y: for X $w: when X: $push_{X Y Filler}
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X,Y}
-| for Y $h: when Y: for X $w: when X: $update_move_map{X,Y}
+| for Y $h: when Y: for X $w: when X: $update_move_map_{X,Y}
 | !$w-1
 | !$h-1
 | $create_borders
@@ -188,7 +188,10 @@ world.clear_tile XYZ Filler =
 | $clear_tile_{XYZ Filler}
 | XY = XYZ.take{2}
 | $update_move_map{XY}
-| for D Dirs: $update_move_map{XY+D}
+
+world.update_move_map XY =
+| $update_move_map_{XY}
+| for D Dirs: $update_move_map_{XY+D}
 
 world.clear_passage X Y Z =
 | HH = $fix_z{X,Y,Z}
@@ -214,7 +217,6 @@ world.clear_passage X Y Z =
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y
 | $update_move_map{XY}
-| for D Dirs: $update_move_map{XY+D}
 
 
 // FIXME: remove overlapping tiles above setted tile
@@ -417,7 +419,7 @@ world.updPilarGfxes P =
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
-| $update_move_map{P}
+| $update_move_map_{P}
 
 world.height X Y = $tilemap.height{X Y}
 
