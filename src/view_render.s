@@ -77,17 +77,19 @@ unit.draw FB B =
 | XX = X+32-G.w/2
 | YY = Y-16-G.h+$slope*16
 | when $mirror: G.flop
-//| G.light{B.lx B.ly}
 | when $sprite.shadow:
   | S = $world.shadow
   | ZZ = $xyz.2-$fix_z
   | I = min (ZZ/4).abs S.size-1
   | SGfx = S.I
+  | SGfx.brighten{B.brighten}
+//  | SGfx.light{B.lx B.ly}
   | FB.blit{X+8 Y-38+ZZ*8 SGfx}
 | when $flyer
   | !YY-16
   | !Y-16
-| G.brighten{$brighten}
+| G.brighten{B.brighten}
+//| G.light{B.lx B.ly}
 | G.alpha{$alpha}
 | FB.blit{XX YY G}
 | when $picked and $world.player.id >< $owner.id:
@@ -117,6 +119,7 @@ tile.draw FB BlitItem =
 | B = BlitItem
 | G = B.data
 | when B.flags^^#40: G.dither{1}
+| G.brighten{B.brighten}
 //| G.light{B.lx B.ly}
 | FB.blit{B.sx B.sy G}
 

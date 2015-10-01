@@ -1,4 +1,4 @@
-use gfx gui util widgets
+use gui util widgets
 
 type view.widget{M W H}
   main/M
@@ -30,7 +30,6 @@ type view.widget{M W H}
   xunit
   yunit
   zunit
-| $zbuffer <= ffi_alloc W*H*4
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
 | $param <= $main.params.ui

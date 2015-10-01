@@ -62,10 +62,10 @@ icon.draw G PX PY =
 | when $picked: G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
-  |  G.blit{X Y DisabledIconOverlay}
+  | G.blit{X Y DisabledIconOverlay}
 | when $research:
   | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
-  |  G.blit{X+26 Y+18 ResearchIconOverlay}
+  | G.blit{X+26 Y+18 ResearchIconOverlay}
 | when got $number
   | Font = font small
   | Font.draw{G X Y "[$number]"}

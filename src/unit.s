@@ -31,7 +31,6 @@ type unit.$class{Id World}
   hits // how damaged is this unit
   turn // turn it was created
   flags
-  brighten
   alpha //how transparent is this unit
   delta //change of transparency per cycle
 | $action <= action Me
