@@ -3,6 +3,6 @@ icon: unit_wizard
 
 sounds: //attack,()
        //,impact,()
-       hit,(grunt2)
+       hit,(grunt4)
        ,die,(orbit)
        ,move,(step)

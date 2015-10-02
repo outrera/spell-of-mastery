@@ -48,7 +48,15 @@ world.end_turn =
     | $effect{U.xyz explosion_blood}
     | U.harm{$nil 1}
   | for V $units_at{U.xyz}: when V.trigger:
-    | V.effect{V.trigger U U.xyz}
+    | Trigger = V.trigger
+    | Flag = 1
+    | case Trigger
+      [[when Cs] @Ts]
+        | Trigger <= Ts
+        | for C Cs: case C
+          unmoved | less V.moved < $turn: Flag <= 0
+          harmed | less V.hits: Flag <= 0
+    | when Flag: V.effect{Trigger U U.xyz}
 | ResearchIncome = P.income-P.upkeep
 | when ResearchIncome > 0: P.reasearch_boost{0 ResearchIncome}
 | PResearch = P.research

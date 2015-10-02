@@ -171,6 +171,10 @@ update_rmb Me Player =
 
 view.update_play =
 | Player = $world.player
+| when $keys.q><1:
+  | $keys.q <= 0
+  | Player.human <= not Player.human 
+  | leave $update_play
 | if not $world.picked.idle or $world.waiting then
   else if not Player.human then Player.ai.update
   else

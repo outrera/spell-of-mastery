@@ -298,6 +298,7 @@ ai.script =
 
 ai_update Me =
 | Player = $player
+| Player.mana <= 100000
 | PID = Player.id
 | Pentagram = Player.pentagram
 | Params = $main.params

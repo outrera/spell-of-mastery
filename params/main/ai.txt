@@ -4,6 +4,11 @@ default:
   attack{(ratman)},
   attack{(ratman goblin ratman)},
   wait{5},
+  attack{(goblin elf ratman)},
+  attack{(goblin elf goblin)},
+  attack{(orc)},
+  attack{(orc goblin)},
+  attack{(orc elf orc)},
   goto{default_cycle}
 
 default_cycle:

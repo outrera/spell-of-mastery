@@ -3,4 +3,5 @@ sight: 1
 ttl: 6
 trigger: harm{1},effect{fire_ring}
 ai: avoid
+height: 4
 box_xy: (1 1)

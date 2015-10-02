@@ -1,2 +1,3 @@
 author: `Nikita Sadkov`
 xy: 0,32
+class: empty,1,aux,1,passable,0,box_xy,(1 1),height,0

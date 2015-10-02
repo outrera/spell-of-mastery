@@ -1,8 +1,8 @@
 sprite: unit_dragon
 tier: 4
-health: 12
-attack: 3
-defense: 1
+health: 22
+attack: 2
+defense: 0
 flyer: 1
 income: -40
 moves: matrix.move2

@@ -1,3 +1,5 @@
 sprite: special_node
 income: 25
 ai: hold
+height: 4
+box_xy: (-1 -1)

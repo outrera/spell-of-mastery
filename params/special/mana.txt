@@ -1,3 +1,5 @@
 sprite: item_mana
 item: mana{500},notify{`Gained 500 mana.`}
 ai: hold
+height: 4
+box_xy: (-1 -1)

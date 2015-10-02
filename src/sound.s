@@ -18,14 +18,14 @@ main.load_sounds =
 | PlayList <= PlayList.sort
 
 main.sound Name =
-| S = $sounds.Name
+/*| S = $sounds.Name
 | when no S: bad "missing sound ([Name])"
-| sound_play S
+| sound_play S*/
 
 Channel = 0
 
 main.music Name =
-| when Name><playlist_advance:
+/*| when Name><playlist_advance:
   | less PlayList.size: leave
   | when sound_playing Channel: leave
   | PlayListIndex <= (PlayListIndex+1)%PlayList.size
@@ -35,3 +35,4 @@ main.music Name =
   | less PlayList.size: leave
   | Name <= PlayList.PlayListIndex
 | Channel <= sound_play: sound_load "[$data]/music/[Name]" music/1
+*/

@@ -1,8 +1,8 @@
 sprite: unit_golem
 tier: 4
-health: 10
+health: 11
 attack: 3
-defense: 2
+defense: 1
 //speed: -2
 income: -40
 
