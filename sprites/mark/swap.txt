@@ -1,2 +1,2 @@
-author: `Natalya Bugrova`
+author: `Nikita Sadkov`
 xy: 0,-16

@@ -195,6 +195,12 @@ unit.guess_order_at_mark Mark =
   mark_swap
     | Target = Us.skip{?empty}.0
     | $order.init{type/swap target/Target at/XYZ path/Path}
+  mark_push
+    | D = XYZ-$xyz
+    | D.2 <= 0
+    | TargetXYZ = $xyz+D
+    | Target = $world.block_at{TargetXYZ}
+    | $order.init{type/push target/Target at/TargetXYZ path/Path}
   Else | leave 0
 | 1
 
@@ -320,8 +326,11 @@ unit.list_moves XYZ =
     | less Blocked:
       | Blocked <= $owner.id <> B.owner.id
       | if Blocked
-        then | when B.hits < B.health and B.defense < $attack and V < 3:
-               | Move <= move attack Src Dst
+        then | if B.hits < B.health then
+                 | when B.defense < $attack and V < 3:
+                   | Move <= move attack Src Dst
+               else when can_push Me B:
+                 | Move <= move push Src [Dst.0 Dst.1 Dst.2+B.height]
         else | when B.moves.size and B.can_move{Dst Src} and V <> 2:
                | Move <= move swap Src Dst
   | less Blocked

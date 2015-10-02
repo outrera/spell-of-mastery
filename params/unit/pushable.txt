@@ -1,0 +1,6 @@
+sprite: system_dummy
+aux: 1
+starts: 0
+health: 0
+height: 4
+movable: 1

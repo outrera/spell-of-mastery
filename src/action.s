@@ -120,7 +120,6 @@ dact swap.valid
 | Turn = U.world.turn
 | U.owner.id >< T.owner.id and U.moved < Turn and T.moved < Turn
 
-
 dact swap.start
 | U = $unit
 | $cycles <= max 1 U.sprite.speed
@@ -130,6 +129,46 @@ dact swap.start
 dact swap.update | move_update Me
 
 dact swap.finish | move_finish Me
+
+
+can_push Me U =
+| less U.movable: leave 0
+| D = U.xyz-$xyz
+| MoveXYZ = U.xyz+D
+| B = $world.block_at{MoveXYZ}
+| when got B and not B.empty: leave 0
+| less $world.at{@MoveXYZ}.empty: leave 0
+| MoveXYZ.2 <= $world.fix_z{MoveXYZ}
+| B = $world.block_at{MoveXYZ}
+| when got B and not B.empty: leave 0
+| less $world.at{@MoveXYZ}.empty: leave 0
+| 1
+
+dact push.valid
+| less can_push $unit $target: leave 0
+
+dact push.start
+| U = $unit
+| Wr = U.world
+| T = $target
+| D = T.xyz-U.xyz
+| TXYZ = T.xyz+D
+| TXYZ.2 <= Wr.fix_z{TXYZ}
+| D.2 <= TXYZ.2-T.xyz.2
+| Bs = []
+| X,Y,Z = T.xyz
+| while Wr.units_at{X,Y,Z}.size
+  | Ks = Wr.units_at{X,Y,Z}
+  | for K Ks: push K Bs
+  | !Z + (max 1 Ks{?height}.max)
+| for B Bs.flip: B.move{B.xyz+D}
+| $cycles <= max 1 U.sprite.speed
+| move_start Me
+
+dact push.update | move_update Me
+
+dact push.finish | move_finish Me
+
 
 dact teleport.start | $unit.move{$xyz}
 
@@ -232,4 +271,4 @@ action.finish =
 | when $path: $path^uncons{path}{?free}
 
 
-export action
+export action can_push

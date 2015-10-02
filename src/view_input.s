@@ -183,6 +183,25 @@ view.update_play =
 | $on_unit_pick{}{Picked}
 | $main.update
 
+
+install_pushables Me XYZ =
+| Ps = []
+| Ms = []
+| for D Dirs:
+  | B = $block_at{XYZ+[@D 0]}
+  | when got B and B.movable:
+    | P = B.xyz.deep_copy
+    | B.remove
+    | M = $alloc_unit{"unit_pushable" owner/$players.0}
+    | M.move{P}
+    | push [P B] Ps
+    | push M Ms
+| [Ps Ms]
+
+uninstall_pushables Me Ps,Ms =
+| for M Ms: M.free
+| for [P B] Ps: B.move{P}
+
 world.update_picked = 
 | SanitizedPicked = $picked^uncons{picked}.skip{?removed}
 | $picked <= [$nil @SanitizedPicked]^cons{picked}
@@ -192,6 +211,7 @@ world.update_picked =
 | less Picked and Picked.moves and Picked.moved<$turn:
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.type >< idle:
+  | Saved = install_pushables Me Picked.xyz
   | Marks = if $act and $act.range <> any
     then | Ms,Path = action_list_moves{Me Picked $act}
          | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
@@ -206,6 +226,7 @@ world.update_picked =
            | Mark
          | [@As @Bs]
     else Picked.mark_moves
+  | uninstall_pushables Me Saved
   | $marks <= [$nil @Marks]^cons{mark}
 
 world.update_cursor CXYZ Brush Mirror =

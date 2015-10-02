@@ -52,20 +52,6 @@ effect impact Impact: $world.effect{TargetXYZ Impact}
 
 effect effect Effect: $world.effect{$xyz Effect}
 
-effect push What:
-| D = TargetXYZ-$xyz
-| U = $world.block_at{TargetXYZ}
-| when no U or not U.movable: leave
-| MoveXYZ = U.xyz+D
-| B = $world.block_at{MoveXYZ}
-| when got B and not B.empty: leave
-| less $world.at{@MoveXYZ}.empty: leave
-| MoveXYZ.2 <= $world.fix_z{MoveXYZ}
-| B = $world.block_at{MoveXYZ}
-| when got B and not B.empty: leave
-| less $world.at{@MoveXYZ}.empty: leave
-| U.move{U.xyz+D}
-
 SoundPlayedCycle = 0
 SoundPlayedTurn = 0
 effect sound Sound:
