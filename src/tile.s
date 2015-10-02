@@ -30,10 +30,12 @@ type tile{As Main Type Role Id Lineup Base Middle Top Trns Plain
      heavy/Heavy
      clear/Clear
      parts/Parts
-| less $parts: when $height>1:
-  | $parts <= @flip: map I $height-1
-    | tile As Main Type Role Id Lineup Base Middle Top Trns Plain
-           @[parts -(I+1) @As]
+| less $parts:
+  | if $height>1
+    then | $parts <= @flip: map I $height-1
+           | tile As Main Type Role Id Lineup Base Middle Top Trns Plain
+                 @[parts -(I+1) @As]
+    else $parts <= []
 
 TrnsCache = t
 
