@@ -1,9 +1,11 @@
 sprite: unit_wraith
-level: 3
+tier: 2
 health: 2
-attack: 3
-defense: 2
-income: -20
+attack: 2
+defense: 1
+flyer: 1
+income: -10
+trigger: when{unmoved harmed},harm{-1},effect{explosion_blood}
 
 sounds: attack,(attack2)
        //,impact,()

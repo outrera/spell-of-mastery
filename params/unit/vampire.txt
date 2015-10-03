@@ -2,7 +2,8 @@ sprite: unit_vampire
 tier: 3
 health: 3
 attack: 2
-defense: 1
+defense: 0
 ranged: 1
-income: -20
-moves: matrix.ranged1
+income: -15
+moves: matrix.skirmish1
+impact: harm{-1,self},impact{explosion_blood}

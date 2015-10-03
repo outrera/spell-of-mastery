@@ -1,7 +1,7 @@
 sprite: unit_knight
 tier: 2
 health: 3
-attack: 3
+attack: 2
 defense: 1
 speed: -2
 income: -14

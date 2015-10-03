@@ -62,7 +62,11 @@ effect sound Sound:
   | SoundPlayedCycle <= $world.cycle
   | SoundPlayedTurn <= $world.turn
 
-effect harm Damage: Target.harm{Me Damage}
+effect harm Damage @As:
+| Whom = \target
+| when As.size: Whom <= As.0
+| T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
+| T.harm{Me Damage}
 
 effect paralyze Time: Target.moved <= $world.turn+Time
 

@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_wraith}
 icon: unit_wraith
-research: 10000
-cost: 5000
+research: 1500
+cost: 900

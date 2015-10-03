@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_baphomet}
 icon: unit_baphomet
-research: 10000
-cost: 5000
+research: 4000
+cost: 2000

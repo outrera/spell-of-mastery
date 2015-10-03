@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_elf}
 icon: unit_elf
-research: 1400
+research: 1700
 cost: 700
