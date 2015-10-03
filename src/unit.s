@@ -333,6 +333,7 @@ unit.list_moves XYZ =
                  | Move <= move push Src [Dst.0 Dst.1 Dst.2+B.height]
         else | when B.moves.size and B.can_move{Dst Src} and V <> 2:
                | Move <= move swap Src Dst
+             | Blocked <= not $ranged
   | less Blocked
     | less Move: Move <= if V><2 then move node Src Dst else move move Src Dst
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:

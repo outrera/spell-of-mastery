@@ -3,7 +3,7 @@ tier: 1
 health: 2
 attack: 1
 defense: 0
-income: -10
+income: -8
 ranged: 1
 moves: matrix.skirmish1
 

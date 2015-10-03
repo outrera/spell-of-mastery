@@ -4,8 +4,10 @@ health: 22
 attack: 2
 defense: 0
 flyer: 1
-income: -40
+income: -30
 moves: matrix.move2
+impact: impact{fire_ring}
+
 sounds: attack,(dragon_hit)
 //       ,impact,()
        ,hit,(dragon_hit)

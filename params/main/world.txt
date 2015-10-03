@@ -16,5 +16,3 @@ base_income: 50
 node_income: 25
 defeat_threshold: -5000 //negative mana forcing player defeat
 bounding_boxes: 0
-tier4_rcost: 10000
-tier4_scost: 5000
