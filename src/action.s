@@ -90,7 +90,7 @@ dact attack.update
   | when $data >< 0:
     | Target = $target
     | U.world.effect{Target.xyz blood}
-    | Damage = max 0 U.attack-Target.defense
+    | Damage = max 1 U.attack-Target.defense
     | when U.impact: U.effect{U.impact Target Target.xyz}
     | Target.harm{U Damage}
     | U.animate{idle}

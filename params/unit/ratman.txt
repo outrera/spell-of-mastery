@@ -1,7 +1,7 @@
 sprite: unit_ratman
 tier: 1
-health: 3
-attack: 1
+health: 5
+attack: 2
 defense: 0
 income: -7
 sounds: attack,(attack2)

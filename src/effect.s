@@ -62,9 +62,13 @@ effect sound Sound:
   | SoundPlayedCycle <= $world.cycle
   | SoundPlayedTurn <= $world.turn
 
-effect harm Damage @As:
+effect harm As:
+| Damage = 1
 | Whom = \target
-| when As.size: Whom <= As.0
+| case As
+  [D W] | Damage <= D
+        | Whom <= W
+  D | Damage <= D
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
@@ -100,6 +104,7 @@ effect set @Args:
 | Name = No
 | Value = 1
 | Players = 0
+| Inc = 1
 | case Args
   [A B C] | What <= A
           | Name <= B
@@ -125,6 +130,9 @@ effect set @Args:
          | Params.Name.init{Value}
     else Params.Name <= Value
   | when Player and Name >< mana: Player.mana <= Value
+
+effect inc_mana Value:
+| !$owner.mana + Value
 
 effect swap Arg:
 | XYZ = $xyz.copy
@@ -179,9 +187,14 @@ effect victory Player Reason:
 
 unit.effect Effect Target TargetXYZ =
 | case Effect [when,When @Es]
-  | when When><ally: when $owner.is_enemy{Target.owner}: leave
-  | when When><enemy: less $owner.is_enemy{Target.owner}: leave
-  | when When><confirmed: less $main.dialog_result><yes: leave
+  | Cs = if When.is_list then When else [When]
+  | for C Cs: case C
+    ally | when $owner.is_enemy{Target.owner}: leave
+    enemy | less $owner.is_enemy{Target.owner}: leave
+    confirmed | less $main.dialog_result><yes: leave
+    unmoved | less $moved < $world.turn: leave
+    harmed | less $hits: leave
+    [has_mana A] | less $owner.mana>>A: leave
   | Effect <= Es
 | case Effect [target,alive @Effect]
   | for U $world.active: when U.alive: $effect{Effect U U.xyz}

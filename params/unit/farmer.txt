@@ -1,9 +1,9 @@
 sprite: unit_farmer
 tier: 1
-health: 2
+health: 1
 attack: 1
 defense: 0
-income: -5
+income: -2
 
 sounds: attack,(attack2)
        //,impact,()

@@ -1,9 +1,9 @@
 sprite: unit_goblin
 tier: 1
-health: 2
+health: 3
 attack: 1
 defense: 0
-income: -8
+income: -7
 ranged: 1
 moves: matrix.skirmish1
 

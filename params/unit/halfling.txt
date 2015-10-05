@@ -1,9 +1,9 @@
 sprite: unit_halfling
 tier: 1
 health: 2
-attack: 2
+attack: 5
 defense: 0
-income: -5
+income: -7
 
 sounds: attack,(attack2)
        //,impact,()

@@ -18,9 +18,9 @@ main.load_sounds =
 | PlayList <= PlayList.sort
 
 main.sound Name =
-/*| S = $sounds.Name
+| S = $sounds.Name
 | when no S: bad "missing sound ([Name])"
-| sound_play S*/
+| sound_play S
 
 Channel = 0
 
