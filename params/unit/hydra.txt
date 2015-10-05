@@ -1,8 +1,8 @@
 sprite: unit_hydra
 tier: 4
-health: 15
-attack: 3
-defense: 0
+health: 6
+attack: 5
+defense: 2
 income: -20
 
 trigger: misc.regen

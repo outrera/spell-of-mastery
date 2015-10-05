@@ -4,7 +4,6 @@ health: 5
 attack: 5
 defense: 1
 income: -15
-moves: matrix.move2
 impact: sound{attack3}
 
 sounds: //attack,(attack3)

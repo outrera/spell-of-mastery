@@ -3,7 +3,7 @@ tier: 3
 health: 17
 attack: 3
 defense: 0
-income: -40
+income: -15
 trigger: when{unmoved harmed},harm{-1},effect{explosion_blood}
 
 sounds: attack,(attack1)

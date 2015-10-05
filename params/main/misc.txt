@@ -1,10 +1,10 @@
 summon: impact{teleport},sound{summon}
-regen: when{harmed,(has_mana 110)},poison{0},harm{-1},inc_mana{-110},effect{explosion_blood}
-tier1_rcost: 1000
-tier1_scost: 600
-tier2_rcost: 2500
-tier2_scost: 1200
-tier3_rcost: 5000
-tier3_scost: 2500
-tier4_rcost: 10000
-tier4_scost: 5000
+regen: when{harmed/*,(has_mana 110)*/},poison{0},harm{-1},inc_mana{-110},effect{explosion_blood}
+tier1_rcost: 800
+tier1_scost: 400
+tier2_rcost: 1600
+tier2_scost: 600
+tier3_rcost: 3200
+tier3_scost: 900
+tier4_rcost: 6400
+tier4_scost: 1500

@@ -2,7 +2,7 @@ sprite: unit_dwarf
 tier: 2
 health: 5
 attack: 2
-defense: 4
+defense: 3
 income: -10
 sounds: attack,(attack2)
        //,impact,()
