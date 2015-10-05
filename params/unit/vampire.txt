@@ -1,8 +1,8 @@
 sprite: unit_vampire
 tier: 3
-health: 3
+health: 5
 attack: 2
-defense: 0
+defense: 1
 ranged: 1
 income: -15
 moves: matrix.skirmish1

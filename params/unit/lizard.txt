@@ -1,7 +1,7 @@
 sprite: unit_lizard
 tier: 2
 health: 5
-attack: 2
+attack: 3
 defense: 0
 income: -10
 moves: matrix.move2
