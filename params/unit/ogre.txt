@@ -4,6 +4,9 @@ health: 6
 attack: 7
 defense: 0
 income: -20
+ranged: 1
+
+moves: matrix.skirmish0
 
 sounds: attack,(ogre_club)
        //,impact,()
