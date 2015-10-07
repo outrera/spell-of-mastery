@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_dwarf}
 icon: unit_dwarf
-research: 1500
-cost: 700
+research: misc.tier2_rcost
+cost: misc.tier2_scost

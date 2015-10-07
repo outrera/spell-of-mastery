@@ -33,6 +33,7 @@ type unit.$class{Id World}
   flags
   alpha //how transparent is this unit
   delta //change of transparency per cycle
+  kills
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -100,6 +101,7 @@ unit.init Class =
 | $flags <= 0
 | $alpha <= 0
 | $delta <= 0
+| $kills <= 0
 | when $class.flyer: $flyer <= 1
 | $from.init{0,0,-1}
 | when $starts
@@ -399,6 +401,7 @@ unit.harm Attacker Damage =
          | $animate{hit}
     else when $hits << 0: $hits <= 0
   | leave
+| when Attacker: !Attacker.kills+1
 | $die
 | $action.cycles <= 1
 

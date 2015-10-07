@@ -1,10 +1,10 @@
 sprite: unit_baphomet
 tier: 3
-health: 17
-attack: 3
-defense: 0
+health: 5
+attack: 1
+defense: 3
 income: -15
-trigger: when{unmoved harmed},harm{-1},effect{explosion_blood}
+impact: when{sinner},harm{30},impact{explosion_blood}
 
 sounds: attack,(attack1)
        //,impact,()

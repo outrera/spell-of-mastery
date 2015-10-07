@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_vampire}
 icon: unit_vampire
-research: 4000
-cost: 2000
+research: misc.tier3_rcost
+cost: misc.tier3_scost

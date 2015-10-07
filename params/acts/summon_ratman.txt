@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_ratman}
 icon: unit_ratman
-research: 500
-cost: 400
+research: misc.tier1_rcost
+cost: misc.tier1_scost

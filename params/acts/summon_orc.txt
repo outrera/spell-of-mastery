@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_orc}
 icon: unit_orc
-research: 1500
-cost: 800
+research: misc.tier3_rcost
+cost: misc.tier3_scost

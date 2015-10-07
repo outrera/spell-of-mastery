@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_beetle}
 icon: unit_beetle
-research: 0
-cost: 500
+research: misc.tier1_rcost
+cost: misc.tier1_scost

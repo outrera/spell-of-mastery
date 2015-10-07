@@ -1,8 +1,8 @@
 sprite: unit_griffin
 tier: 3
-health: 4
-attack: 4
-defense: 1
+health: 6
+attack: 3
+defense: 0
 flyer: 1
 income: -15
 moves: matrix.move_l

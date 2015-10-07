@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_skeleton}
 icon: unit_skeleton
-research: 1000
-cost: 600
+research: misc.tier1_rcost
+cost: misc.tier1_scost

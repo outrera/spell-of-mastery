@@ -195,6 +195,7 @@ unit.effect Effect Target TargetXYZ =
     unmoved | less $moved < $world.turn: leave
     harmed | less $hits: leave
     [has_mana A] | less $owner.mana>>A: leave
+    sinner | less Target.kills>0: leave
   | Effect <= Es
 | case Effect [target,alive @Effect]
   | for U $world.active: when U.alive: $effect{Effect U U.xyz}
