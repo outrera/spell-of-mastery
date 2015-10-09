@@ -1,0 +1,13 @@
+sprite: unit_ifrit
+tier: 3
+health: 5
+attack: 5
+defense: 1
+flyer: 1
+income: -15
+
+sounds: attack,(fire1)
+       //,impact,()
+       ,hit,(minotaur_hit)
+       ,die,(minotaur_die)
+       ,move,(ifrit_move)
