@@ -1,9 +1,9 @@
 sprite: unit_ifrit
 tier: 3
-health: 5
+health: 3
 attack: 3
-defense: 0
-counter: harm{3},impact{fire_ring}
+defense: 3
+counter: harm{piercing.2},impact{fire_ring}
 flyer: 1
 income: -15
 

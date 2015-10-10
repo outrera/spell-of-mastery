@@ -90,13 +90,13 @@ dact attack.update
   | when $data >< 0:
     | Target = $target
     | U.world.effect{Target.xyz blood}
-    | Damage = max 1 U.attack-Target.defense
     | when U.impact: U.effect{U.impact Target Target.xyz}
-    | Target.harm{U Damage}
+    | when Target.harm{U U.attack}
     | U.animate{idle}
     | when Target.hits < Target.health:
       | $data <= 2
       | $cycles <= 0
+      | when Target.counter: Target.effect{Target.counter U U.xyz}
       | leave
     | $data <= 1
     | $cycles <= 90000

@@ -388,6 +388,10 @@ unit.die =
 | $forced_order{type/die}
 
 unit.harm Attacker Damage =
+| less $hits < $health: leave
+| case Damage
+  [_ piercing D] | Damage <= D
+  Else | when Damage > 0: Damage <= max 1 Damage-$defense
 | when $shell and Damage > 0:
   | $shell <= 0
   | $world.effect{$xyz shell}
@@ -400,8 +404,6 @@ unit.harm Attacker Damage =
     then | $sound{hit}
          | $animate{hit}
     else when $hits << 0: $hits <= 0
-  | when $counter and Damage>0 and Attacker and Attacker.alive:
-    | when Attacker.xyz.2>0: $effect{$counter Attacker Attacker.xyz}
   | leave
 | when Attacker: !Attacker.kills+1
 | $die
