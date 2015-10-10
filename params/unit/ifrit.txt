@@ -1,13 +1,14 @@
 sprite: unit_ifrit
 tier: 3
 health: 5
-attack: 5
-defense: 1
+attack: 3
+defense: 0
+counter: harm{3},impact{fire_ring}
 flyer: 1
 income: -15
 
 sounds: attack,(fire1)
        //,impact,()
-       ,hit,(minotaur_hit)
-       ,die,(minotaur_die)
+       ,hit,(grunt2)
+       ,die,(ifrit_death)
        ,move,(ifrit_move)

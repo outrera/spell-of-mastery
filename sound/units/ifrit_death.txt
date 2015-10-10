@@ -1,0 +1,3 @@
+author: `EMR (http://EamonnMR.com)`
+license: `CC-BY-SA`
+origin: `http://opengameart.org/content/random-low-quality-sfx`

@@ -400,6 +400,8 @@ unit.harm Attacker Damage =
     then | $sound{hit}
          | $animate{hit}
     else when $hits << 0: $hits <= 0
+  | when $counter and Damage>0 and Attacker and Attacker.alive:
+    | when Attacker.xyz.2>0: $effect{$counter Attacker Attacker.xyz}
   | leave
 | when Attacker: !Attacker.kills+1
 | $die
