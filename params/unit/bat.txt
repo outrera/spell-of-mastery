@@ -1,0 +1,14 @@
+sprite: unit_bat
+tier: 1
+health: 1
+attack: 1
+defense: 0
+flyer: 1
+income: -7
+moves: matrix.move_l
+
+sounds: attack,(bat_attack)
+       //,impact,()
+       ,hit,(bat_die)
+       ,die,(bat_die)
+       ,move,(wings)

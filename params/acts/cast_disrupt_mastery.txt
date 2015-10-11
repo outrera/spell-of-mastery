@@ -2,5 +2,5 @@ affects: any
 before: misc.summon
 after: set{all spell_of_mastery No}
 icon: spell_disrupt_mastery
-research: 1000
-cost: 1000
+research: misc.tier1_rcost
+cost: 500

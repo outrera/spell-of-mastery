@@ -9,7 +9,7 @@ starts: still // initial animation
 trigger: when{enemy},effect{pickup},remove{self}
 ai: pentagram
 
-acts: summon_oculus, summon_blob, summon_ratman, summon_goblin,
-      summon_lizard, summon_orc, summon_skeleton, summon_elf, summon_dwarf,
-      summon_griffin, summon_minotaur, summon_baphomet, summon_vampire, summon_wraith,
-      summon_hydra, summon_observer, summon_golem, summon_dragon
+acts: summon_bat, summon_blob, summon_ratman, summon_goblin, summon_skeleton,
+      summon_oculus, summon_lizard, summon_orc, summon_elf, summon_dwarf, summon_wraith,
+      summon_baphomet, summon_griffin, summon_ifrit, summon_minotaur, summon_vampire,
+      summon_dragon, summon_hydra, summon_observer, summon_golem

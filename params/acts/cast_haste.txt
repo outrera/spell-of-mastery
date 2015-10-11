@@ -2,5 +2,5 @@ affects: unit
 before: haste{target},impact{explosion_blood},sound{hasted}
 icon: spell_haste
 range: 2
-research: 2000
+research: misc.tier2_rcost
 cost: 100

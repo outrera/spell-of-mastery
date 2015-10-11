@@ -4,5 +4,5 @@ after: impact{explosion6},clear_passage{target},sound{stone_hit}
 icon: spell_excavate
 range: 1
 fix_z: caster
-//research: 5000
-//cost: 300
+research: misc.tier1_rcost
+cost: 200

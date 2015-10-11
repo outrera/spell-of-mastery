@@ -1,6 +1,6 @@
 sprite: unit_farmer
 tier: 1
-health: 2
+health: 3
 attack: 1
 defense: 0
 income: -2

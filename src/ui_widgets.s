@@ -114,7 +114,10 @@ info_line.render =
 | case $ui.act_icons.keep{(?.show and ?.over)} [Icon@_]
   | Act = $ui.params.acts.(Icon.data)
   | Info = Act.title
-  | when got Icon.number: Info <= "research [Info] ([Icon.number] TURNS)"
+  | when got Icon.number:
+    | Inc = $ui.world.player.income
+    | Turns = if Inc > 0 then max 1 Icon.number/Inc else 'infinite'
+    | Info <= "research [Info] ([Turns] TURNS)"
   | less got Icon.number:
     | Cost = if got Act.cost then Act.cost else 0
     | Info <= "[Info] ([Act.cost] MANA)"

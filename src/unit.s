@@ -329,7 +329,7 @@ unit.list_moves XYZ =
       | Blocked <= $owner.id <> B.owner.id
       | if Blocked
         then | if B.hits < B.health then
-                 | when V < 3:
+                 | when V < 3 and $attack>0:
                    | Move <= move attack Src Dst
                else when can_push Me B:
                  | Move <= move push Src [Dst.0 Dst.1 Dst.2+B.height]
