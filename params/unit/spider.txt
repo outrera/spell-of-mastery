@@ -3,7 +3,7 @@ tier: 3
 health: 5
 attack: 2
 defense: 1
-income: -10
+income: misc.tier3_upkeep
 impact: poison{1},impact{explosion_blood}
 
 sounds: attack,(spider_attack)

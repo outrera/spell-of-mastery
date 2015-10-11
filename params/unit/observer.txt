@@ -4,7 +4,7 @@ health: 4
 attack: 4
 defense: 2
 flyer: 1
-income: -20
+income: misc.tier4_upkeep
 ranged: 1
 moves: matrix.ranged1
 

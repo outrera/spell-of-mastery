@@ -4,7 +4,7 @@ health: 3
 attack: 3
 defense: 0
 ranged: 1
-income: -10
+income: misc.tier2_upkeep
 moves: matrix.ranged1
 
 sounds: attack,(arrow_hit)

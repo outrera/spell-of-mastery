@@ -4,7 +4,7 @@ health: 6
 attack: 3
 defense: 0
 flyer: 1
-income: -15
+income: misc.tier3_upkeep
 moves: matrix.move_l
 
 sounds: attack,(attack2)

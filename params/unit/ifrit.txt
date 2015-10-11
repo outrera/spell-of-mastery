@@ -5,7 +5,7 @@ attack: 3
 defense: 3
 counter: harm{piercing.2},impact{fire_ring}
 flyer: 1
-income: -15
+income: misc.tier3_upkeep
 
 sounds: attack,(fire1)
        //,impact,()

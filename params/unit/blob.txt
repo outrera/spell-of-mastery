@@ -4,7 +4,7 @@ health: 5
 attack: 1
 defense: 0
 //speed: -2
-income: -5
+income: misc.tier1_upkeep
 
 sounds: attack,(blob_attack)
        //,impact,()

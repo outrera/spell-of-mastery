@@ -3,7 +3,7 @@ tier: 1
 health: 3
 attack: 1
 defense: 0
-income: -7
+income: misc.tier1_upkeep
 ranged: 1
 moves: matrix.skirmish1
 

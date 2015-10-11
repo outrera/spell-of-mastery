@@ -3,4 +3,4 @@ tier: 2
 health: 4
 attack: 1
 defense: 6
-income: -10
+income: misc.tier2_upkeep

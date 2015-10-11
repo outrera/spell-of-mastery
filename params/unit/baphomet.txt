@@ -3,7 +3,7 @@ tier: 3
 health: 5
 attack: 1
 defense: 3
-income: -15
+income: misc.tier3_upkeep
 impact: when{sinner},harm{30},impact{explosion_blood}
 
 sounds: attack,(attack1)

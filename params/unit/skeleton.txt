@@ -3,7 +3,7 @@ tier: 1
 health: 4
 attack: 1
 defense: 1
-income: -7
+income: misc.tier1_upkeep
 
 trigger: misc.regen
 

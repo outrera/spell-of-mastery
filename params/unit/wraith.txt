@@ -4,7 +4,7 @@ health: 4
 attack: 2
 defense: 2
 flyer: 1
-income: -10
+income: misc.tier2_upkeep
 
 trigger: misc.regen
 

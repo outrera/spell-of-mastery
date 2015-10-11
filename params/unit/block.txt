@@ -1,6 +1,7 @@
 sprite: system_dummy
-health: 999
+health: 0
 attack: 0
+aux: 1
 defense: 999
 show: 0
 moves: ()
