@@ -31,12 +31,16 @@ main.save Path = Path.set{[version(0.1) @$world.save].as_text}
 
 remap_tids Me LookupTable Xs =
 | TidMap = $tid_map
-| for Ys Xs: for Zs Ys: for I Zs.size
-  | Id = Zs.I
-  | if Id < 0
-    then | T = TidMap.(LookupTable.(Zs.(I-Id)))
-         | Zs.I <= T.parts.(T.height-1+Id)
-    else Zs.I <= TidMap.(LookupTable.Id)
+| LookupTable = LookupTable{TidMap.?}
+| for Ys Xs: for Zs Ys: times Z Zs.size
+  | Id = Zs.Z
+  | when Id >> 0:
+    | T = LookupTable.Id
+    | Zs.Z <= T
+    | H = T.height-1
+    | Ps = T.parts
+    | Z = Z-H
+    | times I H: Zs.(Z+I) <= Ps.I
 | Xs
 
 world.load Saved =

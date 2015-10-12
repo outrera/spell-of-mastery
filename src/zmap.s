@@ -16,7 +16,7 @@ zmap.getPilar X Y = $data.X.Y.take{$height{X Y}}
 zmap.setPilar X Y Zs =
 | Vs = $data.X.Y
 | Vs.clear{$init}
-| for I Zs.size: Vs.I <= Zs.I
+| times I Zs.size: Vs.I <= Zs.I
 
 zmap.height X Y =
 | Vs = $data.X.Y
