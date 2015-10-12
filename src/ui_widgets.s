@@ -1,4 +1,4 @@
-use gui widgets icon
+use gui widgets ui_icon
 
 DialogResult = 0
 
@@ -114,7 +114,9 @@ info_line.render =
 | case $ui.act_icons.keep{(?.show and ?.over)} [Icon@_]
   | Act = $ui.params.acts.(Icon.data)
   | Info = Act.title
-  | when got Icon.number:
+  | when got Icon.number and Icon.number<0:
+        | Info <= "research [Info] ([-Icon.number] TURNS TO RECHARGE)"
+  | when got Icon.number and Icon.number>0:
     | Inc = $ui.world.player.income
     | Turns = if Inc > 0 then max 1 Icon.number/Inc else 'infinite'
     | Info <= "research [Info] ([Turns] TURNS)"

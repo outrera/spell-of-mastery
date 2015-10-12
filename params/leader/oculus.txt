@@ -1,5 +1,5 @@
 sprite: unit_oculus
-tier: 1
+tier: 2
 health: 3
 flyer: 1
 income: -6

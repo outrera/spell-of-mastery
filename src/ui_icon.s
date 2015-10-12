@@ -66,7 +66,7 @@ icon.draw G PX PY =
 | when $research:
   | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
   | G.blit{X+26 Y+18 ResearchIconOverlay}
-| when got $number
+| when got $number:
   | Font = font small
   | Font.draw{G X Y "[$number]"}
 icon.input In =

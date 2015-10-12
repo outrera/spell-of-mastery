@@ -1,4 +1,4 @@
-use gui widgets view icon ui_widgets macros
+use gui widgets view ui_icon ui_widgets macros
 
 ScreenW = No
 ScreenH = No
