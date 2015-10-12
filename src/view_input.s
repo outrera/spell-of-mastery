@@ -176,15 +176,17 @@ view.update_play =
   | Player.human <= not Player.human 
   | leave $update_play
 | if not $world.picked.idle or $world.waiting then
-  else if not Player.human then Player.ai.update
+  else if not Player.human then
+    | $on_unit_pick{}{$world.nil}
+    | Player.ai.update
   else
   | case $mice_click
     left | update_lmb Me Player
     right | update_rmb Me Player
   | $mice_click <= 0
-| Picked = $world.picked
-| less Picked: Picked <= $world.nil
-| $on_unit_pick{}{Picked}
+  | Picked = $world.picked
+  | less Picked: Picked <= $world.nil
+  | $on_unit_pick{}{Picked}
 | $main.update
 
 

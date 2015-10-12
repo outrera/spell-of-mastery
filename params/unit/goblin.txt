@@ -1,6 +1,6 @@
 sprite: unit_goblin
 tier: 1
-health: 3
+health: 2
 attack: 1
 defense: 0
 income: misc.tier1_upkeep

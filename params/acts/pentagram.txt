@@ -4,5 +4,4 @@ before: impact{pentagram_appearance},sound{pentagram}
 after: summon{nopick,special_pentagram}
 icon: spell_pentagram
 cost: misc.tier1_scost
-speed: 50
 hint: pentagram
