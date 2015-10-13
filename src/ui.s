@@ -35,6 +35,21 @@ ui.create W H =
 | $world.create{W H}
 | $view.clear
 
+action_init type/idle name/0 at/0 affects/0 target/0
+            cost/0 before/0 after/0 path/0 speed/-1 range/No =
+| say Type
+
+research_act Me Unit Act =
+| O = Unit.owner
+| Needs = $world.player.lore-Act.research
+| when Needs < 0:
+  | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
+  | leave
+//| O.notify{"Began researching [Act.title]"}
+| O.researching <= Act.name
+| Research = $main.params.acts.research
+| Unit.order.init{target Unit @Research.list.join}
+
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
@@ -125,8 +140,7 @@ ui.init =
   | less got Remain: Remain <= 0
   | O = PickedUnit.owner
   | if Remain > 0 then
-      | O.notify{"Began researching [Act.title]"}
-      | O.researching <= Act.name
+      | research_act Me PickedUnit Act
     else if Remain < 0 then
       | O.notify{"[Act.title] needs [-Remain] turns to recharge."}
     else | if Act.range >< 0
@@ -173,8 +187,7 @@ ui.init =
     | Icon.data <= Act.name
     | Icon.fg <= Act.icon_gfx
     | Icon.number <= if ResearchRemain <> 0 then ResearchRemain else No
-    | Icon.research <= Unit.owner.researching >< Act.name
-                       and ResearchRemain <> 0
+    | Icon.research <= ResearchRemain <> 0
     | Icon.frame <= 0
     | Icon.w <= Icon.fg.w
     | Icon.h <= Icon.fg.h
@@ -221,16 +234,12 @@ ui.init =
 | HourglassIcon = hidden: button 'HOURGLASS' skin/hourglass: =>
   | InputBlocker.show <= 1
   | $world.end_turn
-| ResearchIcon = research_icon Me: Icon =>
-  | say 'Research clicked!'
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
   |  0   0| ViewUI
   |  ScreenW-54 4| EditorIcons
   |  ScreenW-111 0| GearsIcon
   |  ScreenW-73 110| HourglassIcon
-  | ScreenW-220 0 | ResearchIcon
-  //| 240 36| ResearchIcon
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg

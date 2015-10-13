@@ -116,10 +116,10 @@ info_line.render =
   | Info = Act.title
   | when got Icon.number and Icon.number<0:
         | Info <= "research [Info] ([-Icon.number] TURNS TO RECHARGE)"
-  | when got Icon.number and Icon.number>0:
-    | Inc = $ui.world.player.income
-    | Turns = if Inc > 0 then max 1 Icon.number/Inc else 'infinite'
-    | Info <= "research [Info] ([Turns] TURNS)"
+  | when got Icon.number and Icon.number>0 and not Icon.research:
+    | Info <= "cast [Info] ([Icon.number] MANA)"
+  | when got Icon.number and Icon.number>0 and Icon.research:
+    | Info <= "research [Info] ([Icon.number] LORE)"
   | less got Icon.number:
     | Cost = if got Act.cost then Act.cost else 0
     | Info <= "[Info] ([Act.cost] MANA)"
@@ -143,30 +143,6 @@ type load_world_dlg.$base{world folder cancelCB loadCB}
   |  15 305 | LoadButton
   | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
 
-
-type research_icon.$base{ui OnClick} base text icon world acts
-| Icon = icon data/research 0 click/OnClick
-| Icon.fg <= 0 //$ui.img{icons_unit_orc}
-| Icon.frame <= 0
-| Icon.research <= 1
-| $world <= $ui.main.world
-| $acts <= $ui.main.params.acts
-| $icon <= Icon
-| $text <= txt medium "Researching: "
-| $base <= hidden: layV s/4 $text,Icon
-
-research_icon.render =
-| Player = $world.player
-| $base.show <= 0
-| Researching = Player.researching
-| when Researching and Player.human:
-  | $base.show <= 1
-  | Icon = $icon
-  | Act = $acts.Researching
-  | Icon.fg <= $ui.img{"icons_[Act.icon]"}
-  | Icon.number <= Player.research_remain{Act}
-| $base.render
-
 type credits_roll.widget{ui text} cycle txt
 | $txt <= txt medium $text
 
@@ -177,5 +153,4 @@ credits_roll.draw G PX PY =
 
 credits_roll.reset = $cycle <= 0
 
-export message_box unit_panel world_props info_line load_world_dlg research_icon
-       credits_roll
+export message_box unit_panel world_props info_line load_world_dlg credits_roll

@@ -355,7 +355,10 @@ unit.harm Attacker Damage =
          | $animate{hit}
     else when $hits << 0: $hits <= 0
   | leave
-| when Attacker: !Attacker.kills+1
+| when Attacker:
+  | AO = Attacker.owner
+  | when $owner.id <> AO.id: !AO.lore+$tier
+  | !Attacker.kills+1
 | $die
 | $action.cycles <= 1
 

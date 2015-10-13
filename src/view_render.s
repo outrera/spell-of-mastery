@@ -25,6 +25,21 @@ make_blit_item X Y Z XD YD ZD Object =
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
+/* Bounding Box Format:
+           1    
+         /   \      
+       /       \ 
+     2           3 
+     | \   8   / |
+     |   \   /   |
+     |     4     |
+     | /   |   \ |
+     5     |     6
+       \   |   /
+         \ | /    
+           7
+*/
+
 draw_bounding_box_front Color FB B =
 | ZD = B.z2-B.z
 | P = ScreenXY
@@ -297,21 +312,6 @@ view.render_iso =
 | BlitItems <= 0
 
 
-/* Bounding Box Format:
-           1    
-         /   \      
-       /       \ 
-     2           3 
-     | \   8   / |
-     |   \   /   |
-     |     4     |
-     | /   |   \ |
-     5     |     6
-       \   |   /
-         \ | /    
-           7
-*/
-
 
 Indicators = 0
 
@@ -341,6 +341,7 @@ view.draw_indicators =
 | Font = font small
 | Font.draw{$fb IX+246 IY+1 "[X],[Y],[Z]"}
 | Font.draw{$fb IX+246 IY+9 "[$world.at{X Y Z-1}.type]"}
+| Font.draw{$fb IX+360 IY+1 "[P.lore]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1

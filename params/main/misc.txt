@@ -1,14 +1,14 @@
 summon: impact{teleport},sound{summon}
 regen: when{harmed/*,(has_mana 110)*/},poison{0},harm{-1},inc_mana{-110},effect{explosion_blood}
-tier1_rcost: 600
+tier1_rcost: 8
 tier1_scost: 400
-tier2_rcost: 1600
+tier2_rcost: 16
 tier2_scost: 600
-tier3_rcost: 3200
-tier3_scost: 900
-tier4_rcost: 6400
-tier4_scost: 1500
+tier3_rcost: 32
+tier3_scost: 800
+tier4_rcost: 64
+tier4_scost: 1000
 tier1_upkeep: -7
 tier2_upkeep: -10
-tier3_upkeep: -15
-tier4_upkeep: -20
+tier3_upkeep: -13
+tier4_upkeep: -16

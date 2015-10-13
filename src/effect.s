@@ -35,7 +35,7 @@ effect gain @Args:
     | $main.show_message{'Knowledge Gained'
        "The secret knowledge of [Title] has been revealed"}
   | set_act_enabled $main 1 Player.id ActName
-  | Player.reasearch_boost{ActName 99999999}
+  | Player.reasearch_item{ActName}
 
 effect latency Time:
 | ActName = $action.name
@@ -176,8 +176,15 @@ effect summon What:
 
 effect teleport Arg: $forced_order{type/teleport at/TargetXYZ}
 
-effect research Amount:
-| !Target.owner.mana + Target.owner.reasearch_boost{0 Amount}
+effect research Arg:
+| O = Target.owner
+| What = O.researching
+| O.research_item{What}
+| Act = $main.params.acts.What
+| !O.lore - Act.research
+
+effect lore Amount:
+| !Target.owner.lore + Amount
 
 effect victory Player Reason:
 | WP = $world.params

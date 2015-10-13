@@ -10,7 +10,7 @@ type main{Data}
      classes_banks
      bank_names
      tiles 
-     acts
+     acts //obsolete?
      editor_types
      last_tid
      tid_map

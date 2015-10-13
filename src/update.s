@@ -21,6 +21,7 @@ world.new_game =
 | $end_turn // hack to begin turns from 1
 | if $params.explored then $explore{1} else $explore{0}
 | for P $players:
+  | P.lore <= 16
   | for U P.units: U.moved <= 0
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it
@@ -48,11 +49,9 @@ world.end_turn =
     | $effect{U.xyz explosion_blood}
     | U.harm{$nil 1}
   | for V $units_at{U.xyz}: when V.trigger: V.effect{V.trigger U U.xyz}
-| ResearchIncome = P.income-P.upkeep
-| when ResearchIncome > 0: P.reasearch_boost{0 ResearchIncome}
 | PResearch = P.research
 | for Type,Act $main.params.acts: when PResearch.Type > Act.research:
-  | !PResearch.Type-1
+  | !PResearch.Type-1 //cooldown
 | P.params.view.init{$view.center}
 | P.params.cursor.init{$view.cursor}
 | NextPlayer = P.id+1

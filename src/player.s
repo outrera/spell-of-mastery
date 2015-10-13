@@ -46,6 +46,9 @@ player.main = $world.main
 player.researching = $params.researching
 player.`!researching` R = $params.researching <= R
 
+player.lore = $params.lore
+player.`!lore` R = $params.lore <= R
+
 player.explore State =
 | when State
   | for S $sight: S.clear{3}
@@ -67,6 +70,7 @@ player.clear =
 | $mana <= 0
 | $income <= 0
 | $upkeep <= 0
+| $lore <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 
@@ -96,18 +100,10 @@ player.recalc =
   | $got_income{U.income}
   | U.move_in{1}
 
-player.reasearch_boost What Amount =
-| less What: What <= $researching
-| less What: leave Amount
-| !$research.What + Amount
+player.research_item What =
 | Act = $main.params.acts.What
-| Remain = $research_remain{Act}
-| when Remain < 0: !$research.What + Remain
-| when What >< $researching: less Remain > 0:
-  | $notify{"Done researching [Act.title]"}
-  | $researching <= 0
-  | leave -Remain
-| 0
+| !$research.What + Act.research
+| $notify{"Acquired [Act.title]"}
 
 player.research_remain Act =
 | ResearchSpent = $research.(Act.name)
