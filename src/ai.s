@@ -121,6 +121,7 @@ world.pathfind Closest U Check =
 | StartCost = PFCount*#1000000
 | PFMap.X.Y.Z <= StartCost
 | PFQueue.push{[0 U.xyz StartCost]}
+//| StartTime = clock
 | till PFQueue.end
   | Node = PFQueue.pop
   | [Prev XYZ Cost] = Node
@@ -141,7 +142,7 @@ world.pathfind Closest U Check =
         | MXY.Z <= NextCost
         | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end
-| EndTime = get_gui{}.ticks{}
+//| EndTime = clock
 //| say EndTime-StartTime
 | less Targets.size: leave 0
 | PFQueue.clear

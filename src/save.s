@@ -32,16 +32,18 @@ main.save Path = Path.set{[version(0.1) @$world.save].as_text}
 remap_tids Me LookupTable Xs =
 | TidMap = $tid_map
 | LookupTable = LookupTable{TidMap.?}
-| for Ys Xs: for Zs Ys: times Z Zs.size
-  | Id = Zs.Z
-  | when Id >> 0:
-    | T = LookupTable.Id
-    | Zs.Z <= T
-    | H = T.height-1
-    | Ps = T.parts
-    | Z = Z-H
-    | times I H: Zs.(Z+I) <= Ps.I
-| Xs
+| map Ys Xs: map Zs Ys:
+  | Rs = dup Zs.size
+  | times Z Zs.size:
+    | Id = Zs.Z
+    | when Id >> 0:
+      | T = LookupTable.Id
+      | Rs.Z <= T
+      | H = T.height-1
+      | Ps = T.parts
+      | Z = Z-H
+      | times I H: Rs.(Z+I) <= Ps.I
+  | Rs
 
 world.load Saved =
 | $clear
@@ -60,7 +62,10 @@ world.load Saved =
 | for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 [Base@Tilemap.X.Y]}
 | $create_borders
 | for P points{1 1 $w+1 $h+1}: $updPilarGfxes{P}
-| for P points{1 1 $w+1 $h+1}: $update_move_map{P}
+| StartTime = clock
+| for P points{1 1 $w+1 $h+1}: $update_move_map_{P}
+| EndTime = clock
+| say "world.load: update_move_map_ took [EndTime-StartTime]"
 | $cycle <= Saved.cycle
 | $turn <= Saved.turn
 | IdMap = t

@@ -252,27 +252,30 @@ world.can_move Src Dst =
 | when BelowSrcTile.stairs and Height<0: leave HeightAbs << 4
 | 0
 
+MoveMapZs = [-4 -3 -2 -1 0 1 2 3 4]
+MoveMapXYs = [[1 0] [-1 0] [0 1] [0 -1]]
+MoveMapXYZs = @join: map Z MoveMapZs: map X,Y MoveMapXYs: [X Y Z]
+
 MoveMapDirMap =
 | T = dup 4: dup 4: dup 10: 0
 | I = 0
-| for Z [-4 -3 -2 -1 0 1 2 3 4]:
-  | for X,Y [[1 0] [-1 0] [0 1] [0 -1]]
-    | T.(X+1).(Y+1).(Z+4) <= I
-    | !I+1
+| for X,Y,Z MoveMapXYZs:
+  | T.(X+1).(Y+1).(Z+4) <= I
+  | !I+1
 | T
 
 world.update_move_map_ P =
 | SX,SY = P
-| when SX < 1 or SY < 1: leave 0
-| for SZ $height{SX SY}
+| when SX < 1 or SY < 1: leave
+| times SZ $height{SX SY}
   | SZ = SZ+1
   | Src = SX,SY,SZ
   | M = 0
-  | for Z [-4 -3 -2 -1 0 1 2 3 4]:
-    | for X,Y [[1 0] [-1 0] [0 1] [0 -1]]:
-      | when $can_move{Src Src+[X Y Z]}
-        | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
-        | M <= M ++ (1</F)
+  | for XYZ MoveMapXYZs:
+    | when $can_move{Src Src+XYZ}
+      | X,Y,Z = XYZ
+      | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
+      | M <= M ++ (1</F)
   | $move_map.set{SX SY SZ M}
 
 unit.can_move Src Dst =
