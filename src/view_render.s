@@ -171,14 +171,12 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
 | less Folded: Folded <= Wr.main.img{ui_folded}
 | Gs = Wr.gfxes.Y.X
-| CurX = CursorXYZ.0
-| CurY = CursorXYZ.1
-| CursorZ = CursorXYZ.2
+| CurX,CurY,CurZ = CursorXYZ
 | CurH = (CurX+CurY)/2
 | XY2 = (X+Y)/2
 | AboveCursor = CurH >> XY2
 | CurHH = YDiv*(XY2-CurH-2)+3
-| CutZ = max CursorZ CurHH
+| ZCut = max CurZ CurHH
 | Z = 0
 | UnitZ = 0
 | Fog = Explored><1
@@ -199,7 +197,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
   | TZ = UnitZ - 4
   | less T.invisible
     | G = G
-    | if AboveCursor or TZ << CutZ then
+    | if AboveCursor or TZ << ZCut then
       else if not DrawnFold then
         | DrawnFold <= 1
         | G <= Folded
@@ -224,7 +222,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
   | TZ = Z-4
-  | when TZ < RoofZ and (AboveCursor or TZ << CutZ) and UX><X and UY><Y:
+  | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
     | B = blit_item_from_unit U
     | B.sx <= BX
     | B.sy <= BY-$zunit*Z

@@ -108,7 +108,7 @@ pf_reset_count =
 node_to_path Node =
 | Path = []
 | while Node
-  | [Prev XYZ Cost] = Node
+  | Prev,XYZ,Cost = Node
   | push XYZ Path
   | Node <= Prev
 | Path.tail.list
@@ -124,7 +124,7 @@ world.pathfind Closest U Check =
 //| StartTime = clock
 | till PFQueue.end
   | Node = PFQueue.pop
-  | [Prev XYZ Cost] = Node
+  | Prev,XYZ,Cost = Node
   | X,Y,Z = XYZ
   | NextCost = Cost+1
   | for Dst U.list_moves{XYZ}:

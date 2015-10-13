@@ -228,7 +228,7 @@ unit.move XYZ =
 unit.seen = $world.seen{$xyz.0 $xyz.1}
 
 unit.environment_updated =
-| [UX UY UZ] = $xyz
+| UX,UY,UZ = $xyz
 | $slope <= $world.slope_at{UX UY UZ-1}^|$1 #@1111 => 0
 
 unit.face XYZ =

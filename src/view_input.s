@@ -1,13 +1,13 @@
 use util action
 
 view.worldToView P =
-| [X Y] = P - $view_origin
+| X,Y = P - $view_origin
 | RX = (X*$xunit - Y*$xunit)/2
 | RY = (X*$yunit + Y*$yunit)/2
 | [RX RY] + $blit_origin
 
 view.viewToWorld P =
-| [X Y] = P - $blit_origin - [0 $main.params.world.z_unit*4]
+| X,Y = P - $blit_origin - [0 $main.params.world.z_unit*4]
 | !X - 32
 | WH = $xunit*$yunit
 | RX = (Y*$xunit + X*$yunit)/WH
@@ -16,8 +16,8 @@ view.viewToWorld P =
 | [RX.clip{1 $world.w} RY.clip{1 $world.h}]
 
 view.mice_rect =
-| [AX AY] = if $anchor then $anchor else $mice_xy
-| [BX BY] = $mice_xy
+| AX,AY = if $anchor then $anchor else $mice_xy
+| BX,BY = $mice_xy
 | X = min AX BX
 | Y = min AY BY
 | U = max AX BX

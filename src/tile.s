@@ -141,8 +141,8 @@ main.load_tiles =
 | Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
 | for K,V Tiles
-  | [Base Middle Top] = if got V.stack then V.stack{}{Tiles.?.gfxes}
-                        else | T = V.gfxes; [T T T]
+  | Base,Middle,Top = if got V.stack then V.stack{}{Tiles.?.gfxes}
+                      else | T = V.gfxes; [T T T]
   | Lineup = V.no_lineup^~{0}^not
   | Id = if K >< void then 0
          else | !$last_tid + 1
