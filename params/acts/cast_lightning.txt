@@ -1,6 +1,6 @@
 affects: unit
-before: harm{piercing.2},impact{lightning},sound{lightning}
+before: harm{piercing.3},impact{lightning},sound{lightning},latency{3}
 icon: spell_lightning
 range: 2
 research: misc.tier3_rcost
-cost: 200
+cost: 300
