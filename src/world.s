@@ -127,6 +127,7 @@ world.clear =
 | $marks <= $nil
 | $waiting <= 0
 | $params <= t
+| for U $active.list: U.active <= 0
 | $active.clear
 
 world.notify Text =

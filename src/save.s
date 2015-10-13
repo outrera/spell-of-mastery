@@ -62,10 +62,9 @@ world.load Saved =
 | for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 [Base@Tilemap.X.Y]}
 | $create_borders
 | for P points{1 1 $w+1 $h+1}: $updPilarGfxes{P}
-| StartTime = clock
+//| StartTime = clock
 | for P points{1 1 $w+1 $h+1}: $update_move_map_{P}
-| EndTime = clock
-| say "world.load: update_move_map_ took [EndTime-StartTime]"
+//| say "world.load: update_move_map_ took [clock{}-StartTime]"
 | $cycle <= Saved.cycle
 | $turn <= Saved.turn
 | IdMap = t
