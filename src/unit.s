@@ -235,59 +235,6 @@ unit.face XYZ =
 | XY = (XYZ-$xyz).take{2}{?sign}
 | less XY >< [0 0]: $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
-
-world.can_move Src Dst =
-| when Dst.2 < 1: leave 0
-| SX,SY,SZ = Src
-| less $at{SX SY SZ}.empty: leave 0
-| DX,DY,DZ = Dst
-| less $at{DX DY DZ}.empty: leave 0
-| Height = DZ-SZ
-| HeightAbs = Height.abs
-| when HeightAbs < 4:
-  | leave: $slope_at{DX DY DZ-1}><#@1111 or $at{DX DY DZ-1}.stairs
-| BelowDstTile = $at{DX DY DZ-1}
-| when BelowDstTile.stairs: leave HeightAbs << 4
-| BelowSrcTile = $at{SX SY SZ-1}
-| when BelowSrcTile.stairs and Height<0: leave HeightAbs << 4
-| 0
-
-MoveMapZs = [-4 -3 -2 -1 0 1 2 3 4]
-MoveMapXYs = [[1 0] [-1 0] [0 1] [0 -1]]
-MoveMapXYZs = @join: map Z MoveMapZs: map X,Y MoveMapXYs: [X Y Z]
-
-MoveMapDirMap =
-| T = dup 4: dup 4: dup 10: 0
-| I = 0
-| for X,Y,Z MoveMapXYZs:
-  | T.(X+1).(Y+1).(Z+4) <= I
-  | !I+1
-| T
-
-world.update_move_map_ P =
-| SX,SY = P
-| when SX < 1 or SY < 1: leave
-| times SZ $height{SX SY}
-  | SZ = SZ+1
-  | Src = SX,SY,SZ
-  | M = 0
-  | for XYZ MoveMapXYZs:
-    | when $can_move{Src Src+XYZ}
-      | X,Y,Z = XYZ
-      | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
-      | M <= M ++ (1</F)
-  | $move_map.set{SX SY SZ M}
-
-unit.can_move Src Dst =
-| DX,DY,DZ = Dst
-| when $flyer: leave $world.at{DX DY DZ}.empty // FIXME: check for roof
-| M = $world.move_map.at{Src.0 Src.1 Src.2}
-| X,Y,Z = Dst-Src
-| when Z.abs > 4: leave 0
-| F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
-| M^^(1</F)
-
-
 type move{type src xyz}
 move.as_text = "#move{[$type] [$src] [$xyz]}"
 

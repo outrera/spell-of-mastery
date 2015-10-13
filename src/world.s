@@ -189,9 +189,58 @@ world.clear_tile XYZ Filler =
 | XY = XYZ.take{2}
 | $update_move_map{XY}
 
+can_move Me SX SY SZ DX DY DZ =
+| Height = DZ-SZ
+| HeightAbs = Height.abs
+| when HeightAbs < 4:
+  | leave: $slope_at{DX DY DZ-1}><#@1111 or $at{DX DY DZ-1}.stairs
+| BelowDstTile = $at{DX DY DZ-1}
+| when BelowDstTile.stairs: leave 1
+| BelowSrcTile = $at{SX SY SZ-1}
+| when BelowSrcTile.stairs and Height<0: leave 1
+| 0
+
+MoveMapZs = [-4 -3 -2 -1 0 1 2 3 4]
+MoveMapXYs = [[1 0] [-1 0] [0 1] [0 -1]]
+MoveMapXYZs = @join: map Z MoveMapZs: map X,Y MoveMapXYs: [X Y Z]
+
+MoveMapDirMap =
+| T = dup 4: dup 4: dup 10: 0
+| I = 0
+| for X,Y,Z MoveMapXYZs:
+  | T.(X+1).(Y+1).(Z+4) <= I
+  | !I+1
+| T
+
+world.update_move_map_ P =
+| SX,SY = P
+| when SX < 1 or SY < 1: leave
+| times SZ $height{SX SY}
+  | SZ = SZ+1
+  | M = 0
+  | when $at{SX SY SZ}.empty: for X,Y,Z MoveMapXYZs:
+    | DX = SX+X
+    | DY = SY+Y
+    | DZ = SZ+Z
+    | Empty = DZ > 0 and $at{DX DY DZ}.empty
+    | when Empty and can_move{Me SX SY SZ DX DY DZ}:
+      | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
+      | M <= M ++ (1</F)
+  | $move_map.set{SX SY SZ M}
+
 world.update_move_map XY =
 | $update_move_map_{XY}
 | for D Dirs: $update_move_map_{XY+D}
+
+unit.can_move Src Dst =
+| DX,DY,DZ = Dst
+| when $flyer: leave $world.at{DX DY DZ}.empty // FIXME: check for roof
+| M = $world.move_map.at{Src.0 Src.1 Src.2}
+| X,Y,Z = Dst-Src
+| when Z.abs > 4: leave 0
+| F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
+| M^^(1</F)
+
 
 world.clear_passage X Y Z =
 | HH = $fix_z{X,Y,Z}
