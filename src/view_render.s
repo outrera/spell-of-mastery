@@ -328,8 +328,9 @@ view.draw_indicators =
 | X,Y,Z = $cursor
 | $fb.blit{IX IY Indicators}
 | Font.draw{$fb IX+28 IY+1 "[P.mana]+[P.income-P.upkeep]-[-P.upkeep]"}
-| Font.draw{$fb IX+148 IY+1 "[$world.turn]:[P.id]"}
-| Font.draw{$fb IX+148 IY+16 "[P.name]"}
+| Font.draw{$fb IX+156 IY+1 "[P.lore]"}
+| Font.draw{$fb IX+220 IY+1 "[$world.turn]:[P.id]"}
+| Font.draw{$fb IX+210 IY+16 "[P.name]"}
 | Debug = $world.params.debug
 | when got Debug: Font.draw{$fb IX+148 IY+32 "[Debug]"}
 | C = 32
@@ -339,9 +340,8 @@ view.draw_indicators =
   | Font.draw{$fb IX-16 IY+C "* [Chars.text]"}
   | !C+16
 | Font = font small
-| Font.draw{$fb IX+246 IY+1 "[X],[Y],[Z]"}
-| Font.draw{$fb IX+246 IY+9 "[$world.at{X Y Z-1}.type]"}
-| Font.draw{$fb IX+360 IY+1 "[P.lore]"}
+| Font.draw{$fb IX+294 IY+1 "[X],[Y],[Z]"}
+| Font.draw{$fb IX+294 IY+9 "[$world.at{X Y Z-1}.type]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1
