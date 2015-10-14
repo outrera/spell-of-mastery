@@ -1,6 +1,6 @@
 affects: self
 before: effect{teleport},sound{summon}
-after: research{200}
+after: lore{1}
 icon: spell_knowledge
-research: misc.tier1_rcost
-cost: 200
+//research: misc.tier1_rcost
+cost: 1000

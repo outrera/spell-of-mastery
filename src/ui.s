@@ -35,17 +35,14 @@ ui.create W H =
 | $world.create{W H}
 | $view.clear
 
-action_init type/idle name/0 at/0 affects/0 target/0
-            cost/0 before/0 after/0 path/0 speed/-1 range/No =
-| say Type
-
 research_act Me Unit Act =
 | O = Unit.owner
 | Needs = $world.player.lore-Act.research
 | when Needs < 0:
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
-//| O.notify{"Began researching [Act.title]"}
+| $main.show_message{'Research?' buttons/[yes,'Yes' no,'No']
+                     'Are you sure want to spent lore on this?'}
 | O.researching <= Act.name
 | Research = $main.params.acts.research
 | Unit.order.init{target Unit @Research.list.join}
