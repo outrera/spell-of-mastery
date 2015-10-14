@@ -2,5 +2,5 @@ affects: any
 before: sound{pentagram},summon{nopick,unit_telekinesis}
 icon: spell_telekinesis
 range: 5
-research: misc.tier2_rcost
-cost: 200
+research: misc.tier1_rcost
+cost: 100

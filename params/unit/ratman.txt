@@ -1,6 +1,6 @@
 sprite: unit_ratman
 tier: 1
-health: 5
+health: 4
 attack: 2
 defense: 0
 income: misc.tier1_upkeep

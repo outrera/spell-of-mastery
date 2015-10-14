@@ -37,7 +37,7 @@ effect gain @Args:
   | set_act_enabled $main 1 Player.id ActName
   | Player.reasearch_item{ActName}
 
-effect latency Time:
+effect cooldown Time:
 | ActName = $action.name
 | !$owner.research.ActName + Time
 

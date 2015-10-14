@@ -2,5 +2,5 @@ affects: unit
 before: shell{target},impact{shell},sound{shell}
 icon: spell_shell
 range: 2
-research: misc.tier1_rcost
-cost: 200
+research: misc.tier2_rcost
+cost: 150

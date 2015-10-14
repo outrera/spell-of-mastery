@@ -1,7 +1,7 @@
 sprite: unit_orc
 tier: 2
-health: 7
-attack: 4
+health: 6
+attack: 3
 defense: 0
 income: misc.tier2_upkeep
 

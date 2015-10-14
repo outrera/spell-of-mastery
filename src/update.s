@@ -21,7 +21,7 @@ world.new_game =
 | $end_turn // hack to begin turns from 1
 | if $params.explored then $explore{1} else $explore{0}
 | for P $players:
-  | P.lore <= 16
+  | P.lore <= 10
   | for U P.units: U.moved <= 0
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it

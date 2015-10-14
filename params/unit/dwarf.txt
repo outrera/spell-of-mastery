@@ -1,6 +1,6 @@
 sprite: unit_dwarf
 tier: 2
-health: 5
+health: 4
 attack: 2
 defense: 3
 income: misc.tier2_upkeep
