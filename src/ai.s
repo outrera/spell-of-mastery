@@ -66,7 +66,8 @@ ai.remove_blocker Blocker =
 //  | when Turn-Pentagram.moved>6: leave $cast_pentagram
 
 ai.update_research =
-| Pentagram = $player.pentagram
+| P = $player
+| Pentagram = P.pentagram
 | less Pentagram: leave 0
 | Summons = Pentagram.acts.keep{?after_table.summon^got}
 | less Summons.size: leave 0
@@ -74,8 +75,9 @@ ai.update_research =
 | less got Missing: leave
 | for Type Missing:
   | S = Summons.find{?after_table.summon >< Type}
-  | when got S and $player.research_remain{S} > 0:
-    | $player.researching <= S.name
+  | when got S and P.research_remain{S} > 0 and S.research<<P.lore:
+    | !P.lore-S.research
+    | P.research_item{S.name}
     | leave 1
 | 0
 
@@ -300,6 +302,7 @@ ai.script =
 ai_update Me =
 | Player = $player
 | Player.mana <= 100000
+| Player.lore <= 9000
 | PID = Player.id
 | Pentagram = Player.pentagram
 | Params = $main.params

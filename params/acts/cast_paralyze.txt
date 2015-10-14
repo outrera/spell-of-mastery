@@ -1,6 +1,6 @@
 affects: unit
-before: paralyze{2},impact{electrical},sound{slowed}
-icon: spell_shock
+before: paralyze{2},impact{cold_ring},sound{slowed}
+icon: spell_paralyze
 range: 2
 research: misc.tier2_rcost
 cost: 500

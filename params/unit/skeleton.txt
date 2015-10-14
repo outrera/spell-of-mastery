@@ -1,6 +1,6 @@
 sprite: unit_skeleton
 tier: 1
-health: 4
+health: 3
 attack: 1
 defense: 1
 income: misc.tier1_upkeep
