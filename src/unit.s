@@ -358,6 +358,7 @@ unit.harm Attacker Damage =
 | when Attacker:
   | AO = Attacker.owner
   | when $owner.id <> AO.id: !AO.lore+$tier
+  | !$owner.params.lossage+$tier
   | !Attacker.kills+1
 | $die
 | $action.cycles <= 1

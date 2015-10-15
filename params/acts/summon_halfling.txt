@@ -1,0 +1,5 @@
+proto: summon__proto
+after: summon{unit_halfling}
+icon: unit_halfling
+research: misc.tier1_rcost
+cost: misc.tier1_scost

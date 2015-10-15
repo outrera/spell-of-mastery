@@ -1,19 +1,55 @@
-nop_loop: wait{5}
+nop_loop: | wait 5
 
+/*
 default:
-  attack{(ratman)},
-  attack{(ratman goblin ratman)},
-  wait{5},
-  attack{(goblin elf ratman)},
-  attack{(goblin elf goblin)},
-  attack{(orc)},
-  attack{(orc goblin)},
-  attack{(orc elf orc)},
-  goto{default_cycle}
+  | attack ratman
+  | attack ratman goblin ratman
+  | wait 5
+  | attack goblin elf ratman
+  | attack goblin elf goblin
+  | attack orc
+  | attack orc goblin
+  | attack orc elf orc
+  | goto default_cycle
 
 default_cycle:
-  attack{(goblin elf goblin)}
+  | attack goblin elf goblin
+*/
+
+default:
+  | goto tier0
 
 
-l2: attack{(ratman goblin ratman)},
-    wait{20}
+tier0:
+  | attack ratman
+  | attack ratman ratman
+  | goto tier2 when lossage >> 2
+  //give player a break for the amount of time equivalent to the difficulty
+
+tier1:
+  | attack ratman ratman goblin
+  | attack skeleton
+  | attack ratman ratman goblin
+  | goto tier2 when lossage >> 20
+
+tier2:
+  | attack dwarf dwarf elf
+  | attack orc orc
+  | attack wraith
+  | attack orc dwarf orc
+
+tier3:
+  | attack minotaur vampire
+  | attack baphomet
+  | attack spider griffin ifrit
+
+tier4:
+  | attack dragon
+  | attack observer
+  | attack golem
+  | attack ogre
+  | attack hydra
+
+
+l2: | attack ratman goblin ratman
+    | wait 20

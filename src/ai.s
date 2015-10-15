@@ -75,6 +75,7 @@ ai.update_research =
 | less got Missing: leave
 | for Type Missing:
   | S = Summons.find{?after_table.summon >< Type}
+  | less got S: $world.notify{"AI: missing summon `[Type]`"}
   | when got S and P.research_remain{S} > 0 and S.research<<P.lore:
     | !P.lore-S.research
     | P.research_item{S.name}
@@ -281,22 +282,30 @@ ai.script =
 | AIStep = PParams.aiStep
 | AISteps = Params.main.ai.AIType
 | less got AISteps
-  | $world.notify{"Missing AI type: [AIType]"}
+  | $world.notify{"AI: missing type `[AIType]`"}
   | leave 0
+| AISteps = AISteps.tail
 | less AIStep<AISteps.size:
   | AIStep <= 0
   | PParams.aiStep <= 0
 | Command = AISteps.AIStep
 | case Command
-  [attack Types]
+  [attack @Types]
     | less $group_attack{Types{"unit_[?]"}}: leave 0
     | !PParams.aiStep+1
   [wait Turns]
     | PParams.aiWait <= Turns
     | !PParams.aiStep+1
+  [goto NewAIType when @Condition]
+    | if case Condition [[`>>` lossage X]] Player.params.lossage>>X
+      then | PParams.aiType <= NewAIType
+           | PParams.aiStep <= 0
+      else | !PParams.aiStep+1
   [goto NewAIType]
     | PParams.aiType <= NewAIType
     | PParams.aiStep <= 0
+  Else
+    | bad 'invalid AI command: [Command]'
 | leave 1
 
 ai_update Me =

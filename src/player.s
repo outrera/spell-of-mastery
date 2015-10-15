@@ -71,6 +71,7 @@ player.clear =
 | $income <= 0
 | $upkeep <= 0
 | $lore <= 0
+| $params.lossage <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 
