@@ -20,10 +20,14 @@ world.new_game =
 | $turn <= 0
 | $end_turn // hack to begin turns from 1
 | if $params.explored then $explore{1} else $explore{0}
+| ActNames = $main.params.acts{}{?0}
 | for P $players:
   | P.lore <= 10
   | P.mana <= 400
-  | for U P.units: U.moved <= 0
+  | Us = P.units
+  | for U Us: U.moved <= 0
+  | less P.human: when Us.size:
+    | for ActName ActNames: P.research_item{ActName}
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it
 

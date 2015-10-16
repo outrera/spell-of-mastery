@@ -35,7 +35,7 @@ effect gain @Args:
     | $main.show_message{'Knowledge Gained'
        "The secret knowledge of [Title] has been revealed"}
   | set_act_enabled $main 1 Player.id ActName
-  | Player.reasearch_item{ActName}
+  | Player.research_item{ActName}
 
 effect cooldown Time:
 | ActName = $action.name

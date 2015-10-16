@@ -113,33 +113,6 @@ view.update_pick =
   // FIXME: following line is outdated
 | $main.update //ensures deleted units get updated
 
-action_list_moves Me Picked Act =
-| A = action Picked
-| A.init{@Act.list.join}
-| Affects = Act.affects
-| Path = []
-| Moves = []
-| R = Act.range
-| less got R: leave Moves
-| PXYZ = Picked.xyz
-| Points = if R.is_int then points_in_circle R else points_in_matrix R.tail
-| for X,Y Points
-  | XYZ = PXYZ+[X Y 0]
-  | X = XYZ.0
-  | Y = XYZ.1
-  | when X>0 and X<<$w and Y>0 and Y<<$h:
-    | XYZ.2 <= $fix_z{XYZ}
-    | Target = $block_at{XYZ}^~{No 0}
-    | Valid = 1
-    | when Target and Affects >< empty: Valid <= 0
-    | when not Target and Affects >< unit: Valid <= 0
-    | A.xyz.init{XYZ}
-    | A.target <= Target
-    | if Valid and A.valid
-      then push XYZ Moves
-      else push XYZ Path
-| [Moves Path]
-
 update_lmb Me Player =
 | less $world.act:
   | $select_unit{$cursor}
@@ -151,7 +124,7 @@ update_lmb Me Player =
 | less $world.seen{@$cursor.take{2}}: leave
 | Act = $world.act.deep_copy
 | less Act.range >< any
-  | Ms = action_list_moves{$world Picked Act}.0
+  | Ms = action_list_moves{Picked Act}.0
   | when no Ms.find{$cursor}: leave
 | Act.target <= if Act.affects><land then 0
                 else $world.block_at{$cursor}^~{No 0}
@@ -219,7 +192,7 @@ world.update_picked =
 | when Picked and Picked.picked and Picked.action.type >< idle:
   | Saved = install_pushables Me Picked.xyz
   | Marks = if $act and $act.range <> any
-    then | Ms,Path = action_list_moves{Me Picked $act}
+    then | Ms,Path = action_list_moves{Picked $act}
          | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
          | Path = Path.keep{X,Y,Z=>$seen{X Y}}
          | As = map XYZ Ms

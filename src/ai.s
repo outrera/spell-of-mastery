@@ -1,4 +1,4 @@
-use gui queue
+use gui queue action
 
 HarmMap = dup 256: dup 256: 0
 
@@ -8,9 +8,9 @@ ai.end_turn =
 | $world.update_pick{[]}
 | $world.end_turn
 
-ai.order_act U Act =
+ai.order_act U Act target/0 =
 | $world.update_pick{[U]}
-| U.order_act{Act}
+| U.order_act{Act target/Target}
 
 ai.marked_order U Move =
 | Ms = U.mark_moves
@@ -28,17 +28,32 @@ ai.cast_pentagram =
   | leave 1
 | leave 0
 
+// difficulty should determine number of turns to wait between casts
+cast_spell Me U =
+| PP = $player.params
+| Turn = $world.turn
+| when PP.aiSpellWait>Turn: leave 0
+| AT = $player.params.aiType
+| OSpellName = $player.params.aiOffensiveSpell
+| Act = $main.params.acts.OSpellName
+| when no Act: bad "AI: cant find aiOffensiveSpell `[OSpellName]`"
+| Targets,Path = action_list_moves U Act
+| Ts = Targets{XYZ=>$world.block_at{XYZ}}.skip{No}.keep{?owner.id<>$player.id}
+| less Ts.size: leave 0
+| Target = Ts.($world.turn%Ts.size)
+| $order_act{U Act target/Target}
+| PP.aiSpellWait <= Turn+1+PP.difficulty
+| leave 1
+
 // recasts pentagram, when it doesnt exist or occupied by enemy
 ai.update_leader =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
+| less Leader: leave
 | Turn = $world.turn
 | when Leader and Leader.moved >> Turn: Leader <= 0
+| when cast_spell Me Leader: leave 1
 | less Pentagram: leave $cast_pentagram
-| Blocker = $world.block_at{Pentagram.xyz}
-| when got Blocker:
-  | EnemyBlocker = Blocker.owner.id <> $player.id
-  | when EnemyBlocker: leave $cast_pentagram
 | 0
 
 ai.remove_blocker Blocker =
@@ -308,6 +323,9 @@ ai.script =
   [goto NewAIType]
     | PParams.aiType <= NewAIType
     | PParams.aiStep <= 0
+  [set Var Value]
+    | PParams.Var <= Value
+    | !PParams.aiStep+1
   Else
     | bad 'invalid AI command: [Command]'
 | leave 1

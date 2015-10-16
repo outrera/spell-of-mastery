@@ -179,7 +179,9 @@ unit.removed = $xyz.2 >< -1
 
 unit.order = $ordered
 
-unit.order_act Act = $order.init{target Me @Act.list.join}
+unit.order_act Act target/0 =
+| less Target: Target <= Me
+| $order.init{target Target @Act.list.join}
 
 unit.guess_order_at_mark Mark =
 | XYZ = Mark.xyz
