@@ -21,26 +21,33 @@ default:
 
 
 tier0:
+  | wait difficulty*2
   | attack ratman
+  | wait difficulty*4
   | attack ratman ratman
-  | goto tier2 when lossage >> 2
-  //give player a break for the amount of time equivalent to the difficulty
 
 tier1:
+  | wait difficulty*4
   | attack ratman ratman goblin
-  | attack skeleton
-  | attack ratman ratman goblin
-  | goto tier2 when lossage >> 20
+  | attack ratman goblin goblin
+  | goto tier2 when lossage >> 16
 
 tier2:
+  | wait difficulty*4
   | attack dwarf dwarf elf
+  | wait difficulty*4
   | attack orc orc
+  | wait difficulty*4
   | attack wraith
+  | wait difficulty*4
   | attack orc dwarf orc
 
 tier3:
+  | wait difficulty*4
   | attack minotaur vampire
+  | wait difficulty*4
   | attack baphomet
+  | wait difficulty*4
   | attack spider griffin ifrit
 
 tier4:
@@ -52,4 +59,4 @@ tier4:
 
 
 l2: | attack ratman goblin ratman
-    | wait 20
+    | wait difficulty*6

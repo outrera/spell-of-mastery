@@ -294,6 +294,10 @@ ai.script =
     | less $group_attack{Types{"unit_[?]"}}: leave 0
     | !PParams.aiStep+1
   [wait Turns]
+    | less Turns.is_int
+      | case Turns
+        [`*` difficulty N] | Turns <= Player.params.difficulty*N
+        Else | bad "AI: wrong arg for `wait`: [Turns]"
     | PParams.aiWait <= Turns
     | !PParams.aiStep+1
   [goto NewAIType when @Condition]

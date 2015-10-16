@@ -22,6 +22,7 @@ world.new_game =
 | if $params.explored then $explore{1} else $explore{0}
 | for P $players:
   | P.lore <= 10
+  | P.mana <= 400
   | for U P.units: U.moved <= 0
 | $human <= $players.1
 | when got!it $players.find{?human}: $human <= it
