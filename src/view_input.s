@@ -181,10 +181,11 @@ uninstall_pushables Me Ps,Ms =
 | for M Ms: M.free
 | for [P B] Ps: B.move{P}
 
-world.update_picked = 
-| SanitizedPicked = $picked^uncons{picked}.skip{?removed}
-| $picked <= [$nil @SanitizedPicked]^cons{picked}
+world.update_picked =
 | for M $marks^uncons{mark}: M.free
+| SanitizedPicked = $picked^uncons{picked}
+| SanitizedPicked = SanitizedPicked.skip{?removed}
+| $picked <= [$nil @SanitizedPicked]^cons{picked}
 | $marks <= $nil
 | Picked = $picked
 | less Picked and Picked.moves and Picked.moved<$turn:

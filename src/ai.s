@@ -28,12 +28,7 @@ ai.cast_pentagram =
   | leave 1
 | leave 0
 
-// difficulty should determine number of turns to wait between casts
-cast_spell Me U =
-| PP = $player.params
-| Turn = $world.turn
-| when PP.aiSpellWait>Turn: leave 0
-| AT = $player.params.aiType
+cast_offensive_spell Me U =
 | OSpellName = $player.params.aiOffensiveSpell
 | Act = $main.params.acts.OSpellName
 | when no Act: bad "AI: cant find aiOffensiveSpell `[OSpellName]`"
@@ -42,8 +37,30 @@ cast_spell Me U =
 | less Ts.size: leave 0
 | Target = Ts.($world.turn%Ts.size)
 | $order_act{U Act target/Target}
-| PP.aiSpellWait <= Turn+1+PP.difficulty
-| leave 1
+| 1
+
+cast_defensive_spell Me U =
+| Pentagram = U.owner.pentagram
+| less Pentagram: leave 0
+| when Pentagram.xyz >< U.xyz: leave 0
+| OSpellName = if not U.shell then \cast_shell
+               else leave 0
+| Act = $main.params.acts.OSpellName
+| when no Act: bad "AI: cant find defensive spell `[OSpellName]`"
+| Target = U
+| $order_act{U Act target/Target}
+| 1
+
+cast_spell Me U =
+| PP = $player.params
+| Turn = $world.turn
+| when PP.aiSpellWait>>Turn: leave 0
+| AT = $player.params.aiType
+| when cast_offensive_spell{Me U} or cast_defensive_spell{Me U}:
+  | D = max 0 PP.difficulty-2
+  | PP.aiSpellWait <= Turn+D
+  | leave 1
+| 0
 
 // recasts pentagram, when it doesnt exist or occupied by enemy
 ai.update_leader =
