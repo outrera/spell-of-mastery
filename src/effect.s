@@ -107,7 +107,10 @@ effect set @Args:
 | Name = No
 | Value = 1
 | Players = 0
-| Inc = 1
+| Inc = 0
+| case Args [inc @As]:
+  | Inc <= 1
+  | Args <= As
 | case Args
   [A B C] | What <= A
           | Name <= B
@@ -131,11 +134,11 @@ effect set @Args:
   | if Value.is_list
     then | when no Params.Name: Params.Name <= dup Value.size
          | Params.Name.init{Value}
-    else Params.Name <= Value
-  | when Player and Name >< mana: Player.mana <= Value
-
-effect inc_mana Value:
-| !$owner.mana + Value
+    else | if Inc then !Params.Name + Value
+           else Params.Name <= Value
+  | when Player and Name >< mana:
+    | if Inc then !Player.mana + Value
+      else Player.mana <= Value
 
 effect swap Arg:
 | XYZ = $xyz.copy

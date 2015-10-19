@@ -95,6 +95,32 @@ world.end_turn =
 
 EventActions = []
 
+check_event_condition Me When =
+| case When
+  [N<eq+atleast Var Value]
+    | V = case Var
+        [`.` Player Var]
+          | P = $players.Player
+          | if Var >< mana then P.mana else P.params.Var
+        Else | $params.Var
+    | if got V then if N><eq then V >< Value else V >> Value
+      else 0
+  [always] | 1
+  [turn N] | N><$turn
+  [got_unit Player UnitType]
+    | Units = $players.Player.units
+    | got Units.find{?type><UnitType}
+  [researched Player ActName]
+    | Act = $main.params.acts.ActName
+    | less got ActName: "World events references unknown act [ActName]"
+    | ResearchSpent = $players.Player.research.(Act.name)
+    | ResearchRemain = Act.research - ResearchSpent
+    | ResearchRemain << 0
+  [`not` X] | not: check_event_condition Me X
+  [`and` A B] | check_event_condition Me A and check_event_condition Me B
+  [`or` A B] | check_event_condition Me A or check_event_condition Me B
+  Else | bad "unexpected event condition [When]"
+
 world.process_events =
 | DisabledEvents = have $params.disabled_events []
 | for [Id [When @Actions]] $events: when no DisabledEvents.find{Id}:
@@ -102,31 +128,7 @@ world.process_events =
   | case When [repeat @RealWhen]
     | When <= RealWhen
     | Repeat <= 1
-  | Negate = 0
-  | case When [not @RealWhen]
-    | When <= RealWhen
-    | Negate <= 1
-  | True = case When
-    [N<eq+atleast Var Value]
-      | V = case Var
-          [`.` Player Var]
-            | P = $players.Player
-            | if Var >< mana then P.mana else P.params.Var
-          Else | $params.Var
-      | if got V then if N><eq then V >< Value else V >> Value
-        else 0
-    [always] | 1
-    [turn N] | N><$turn
-    [got_unit Player UnitType]
-      | Units = $players.Player.units
-      | got Units.find{?type><UnitType}
-    [researched Player ActName]
-      | Act = $main.params.acts.ActName
-      | less got ActName: "World events references unknown act [ActName]"
-      | ResearchSpent = $players.Player.research.(Act.name)
-      | ResearchRemain = Act.research - ResearchSpent
-      | ResearchRemain << 0
-  | when Negate: True <= not True
+  | True = check_event_condition Me When
   | less True: Repeat <= 1
   | less Repeat: push Id $params.disabled_events
   | when True: push Actions EventActions

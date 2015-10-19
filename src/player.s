@@ -74,6 +74,7 @@ player.clear =
 | $upkeep <= 0
 | $lore <= 0
 | $params.lossage <= 0
+| $params.mana <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 
