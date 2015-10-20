@@ -106,7 +106,7 @@ player.recalc =
 
 player.research_item What =
 | Act = $main.params.acts.What
-| !$research.What + Act.research
+| $research.What <= Act.research
 | $notify{"Acquired [Act.title]"}
 
 player.research_remain Act =

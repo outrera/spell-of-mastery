@@ -30,6 +30,7 @@ ai.cast_pentagram =
 
 cast_offensive_spell Me U =
 | OSpellName = $player.params.aiOffensiveSpell
+| when no OSpellName: leave 0
 | Act = $main.params.acts.OSpellName
 | when no Act: bad "AI: cant find aiOffensiveSpell `[OSpellName]`"
 | Targets,Path = action_list_moves U Act
@@ -51,12 +52,34 @@ cast_defensive_spell Me U =
 | $order_act{U Act target/Target}
 | 1
 
+cast_spell_sub Me U Offensive =
+| less Offensive:
+  | Pentagram = U.owner.pentagram
+  | less Pentagram: leave 0
+  | when Pentagram.xyz >< U.xyz: leave 0
+| SpellType = if Offensive then \aiOffensiveSpell else \aiDefensiveSpell
+| SpellName = $player.params.SpellType
+| when no SpellName: leave 0
+| Act = $main.params.acts.SpellName
+| when no Act: bad "AI: cant find SpellType `[SpellName]`"
+| Targets,Path = action_list_moves U Act
+| Ts = Targets{XYZ=>$world.block_at{XYZ}}.skip{No}
+| if Offensive
+  then Ts <= Ts.keep{?owner.id<>$player.id}
+  else Ts <= Ts.keep{?owner.id><$player.id}
+| case SpellName //FIXME: spells actions should have `can do` method
+  cast_shell | Ts <= Ts.skip{?.shell}
+| less Ts.size: leave 0
+| Target = Ts.($world.turn%Ts.size)
+| $order_act{U Act target/Target}
+| 1
+
 cast_spell Me U =
 | PP = $player.params
 | Turn = $world.turn
 | when PP.aiSpellWait>>Turn: leave 0
 | AT = $player.params.aiType
-| when cast_offensive_spell{Me U} or cast_defensive_spell{Me U}:
+| when cast_spell_sub{Me U 1} or cast_spell_sub{Me U 0}:
   | D = max 0 PP.difficulty-2
   | PP.aiSpellWait <= Turn+D
   | leave 1

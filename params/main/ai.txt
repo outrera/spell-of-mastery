@@ -35,6 +35,7 @@ tier1:
 
 tier2:
   | set aiOffensiveSpell cast_lightning
+  | set aiDefensiveSpell cast_shell
   | wait difficulty*4
   | attack dwarf dwarf elf
   | wait difficulty*4
@@ -62,5 +63,7 @@ tier4:
   | attack hydra
 
 
-l2: | attack ratman goblin ratman
-    | wait difficulty*6
+l2:
+ | set aiDefensiveSpell cast_shell
+ | attack ratman ratman goblin
+ | wait difficulty*6

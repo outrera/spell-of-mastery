@@ -1,6 +1,6 @@
 affects: unit
-//before: harm{piercing.1},impact{fire_ring},sound{fire1}//,cooldown{5}
-before: harm{piercing.10},impact{fire_ring},sound{fire1}//,cooldown{5}
+before: harm{piercing.1},impact{fire_ring},sound{fire1}//,cooldown{5}
+//before: harm{piercing.10},impact{fire_ring},sound{fire1}//,cooldown{5}
 icon: spell_fireball
 range: 2
 //research: misc.tier1_rcost
