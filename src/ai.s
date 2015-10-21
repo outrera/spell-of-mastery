@@ -28,30 +28,6 @@ ai.cast_pentagram =
   | leave 1
 | leave 0
 
-cast_offensive_spell Me U =
-| OSpellName = $player.params.aiOffensiveSpell
-| when no OSpellName: leave 0
-| Act = $main.params.acts.OSpellName
-| when no Act: bad "AI: cant find aiOffensiveSpell `[OSpellName]`"
-| Targets,Path = action_list_moves U Act
-| Ts = Targets{XYZ=>$world.block_at{XYZ}}.skip{No}.keep{?owner.id<>$player.id}
-| less Ts.size: leave 0
-| Target = Ts.($world.turn%Ts.size)
-| $order_act{U Act target/Target}
-| 1
-
-cast_defensive_spell Me U =
-| Pentagram = U.owner.pentagram
-| less Pentagram: leave 0
-| when Pentagram.xyz >< U.xyz: leave 0
-| OSpellName = if not U.shell then \cast_shell
-               else leave 0
-| Act = $main.params.acts.OSpellName
-| when no Act: bad "AI: cant find defensive spell `[OSpellName]`"
-| Target = U
-| $order_act{U Act target/Target}
-| 1
-
 cast_spell_sub Me U Offensive =
 | less Offensive:
   | Pentagram = U.owner.pentagram

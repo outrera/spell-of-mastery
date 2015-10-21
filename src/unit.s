@@ -289,7 +289,7 @@ unit.list_moves XYZ =
                | Move <= move swap Src Dst
              | Blocked <= not $ranged
   | less Blocked
-    | less Move: Move <= if V><2 then move node Src Dst else move move Src Dst
+    | less Move: when V<>2: Move <= move move Src Dst
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
       | X,Y = N
       | Xs = Ms.Y

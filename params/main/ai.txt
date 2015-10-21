@@ -26,12 +26,13 @@ tier0:
   | attack ratman
   | wait difficulty*4
   | attack ratman ratman
+  | goto tier1
 
 tier1:
   | wait difficulty*4
   | attack ratman ratman goblin
   | attack ratman goblin goblin
-  | goto tier2 when lossage >> 16
+  | goto tier2 when lossage >> 14
 
 tier2:
   | set aiOffensiveSpell cast_lightning
@@ -47,6 +48,7 @@ tier2:
   | goto tier3 when lossage >> 32
 
 tier3:
+  | set aiOffensiveSpell cast_suicide
   | wait difficulty*4
   | attack minotaur vampire
   | wait difficulty*4
