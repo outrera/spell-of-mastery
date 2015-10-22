@@ -88,6 +88,7 @@ world.end_turn =
   | $main.show_message{'Wizard has Lost Too Much Mana'
        "[P.name] is too exhausted and cannot continue his life."}
   | Leader.harm{Leader 1000}
+  | Leader.harm{Leader 1000}
   | $effect{Leader.xyz electrical}
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
