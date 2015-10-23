@@ -60,7 +60,6 @@ ui.init =
 | $message_box <= message_box Me
 | Tabs = No
 | Ingame = No
-| ScenarioMenu = No
 | MainMenu = No
 | InputBlocker = hidden: spacer ScreenW ScreenH
 | pause = | InputBlocker.show <= 1; $view.pause
@@ -269,12 +268,21 @@ ui.init =
 | LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
 | CreditsRoll = credits_roll Me $main.credits
+| ScenarioMenu = No
+| loadScenarioBack = Tabs.pick{main_menu}
+| LoadScenarioDlg = load_world_dlg $world MapsFolder &loadScenarioBack: X =>
+  | say "load scenario [X]"
+| LoadScenarioDlg.folder <= MapsFolder
+| ScenarioMenu <= dlg: mtx
+  |   0   0 | MenuBG
+  |  100 100 | LoadScenarioDlg
+  |  16 ScreenH-16 | txt small CopyrightLine
 | NewGameMenu = No
 | NewGameMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
   | X 220 | button 'CAMPAIGN' skin/scroll: => load 1 "[MapsFolder]default.txt"
-  | X 290 | button 'SCENARIO' skin/scroll: =>
+  | X 290 | button 'SCENARIO' skin/scroll:  => Tabs.pick{scenario_menu}
   | X 360 | button 'MULTIPLAYER' skin/scroll: => 
   | X 500 | button 'BACK' skin/scroll: => Tabs.pick{main_menu}
 | MainMenu <= dlg: mtx
@@ -355,6 +363,7 @@ ui.init =
 | Tabs <= tabs InitTab: t
           main_menu(MainMenu)
           new_game_menu(NewGameMenu)
+          scenario_menu(ScenarioMenu)
           game_menu(GameMenu)
           save_menu(SaveMenu)
           load_menu(LoadMenu)
