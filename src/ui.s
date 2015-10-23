@@ -269,10 +269,18 @@ ui.init =
 | LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
 | CreditsRoll = credits_roll Me $main.credits
+| NewGameMenu = No
+| NewGameMenu <= dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 220 | button 'CAMPAIGN' skin/scroll: => load 1 "[MapsFolder]default.txt"
+  | X 290 | button 'SCENARIO' skin/scroll: =>
+  | X 360 | button 'MULTIPLAYER' skin/scroll: => 
+  | X 500 | button 'BACK' skin/scroll: => Tabs.pick{main_menu}
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
-  | X 220 | button 'NEW GAME' skin/scroll: => load 1 "[MapsFolder]default.txt"
+  | X 220 | button 'NEW GAME' skin/scroll: => Tabs.pick{new_game_menu}
   | X 290 | button 'LOAD GAME' skin/scroll: =>
             | for N,B LoadButtons: B.show <= "[SavesFolder][N].txt".exists
             | Tabs.pick{load_menu}
@@ -346,6 +354,7 @@ ui.init =
 | InitTab = if IsDebug then \ingame else \main_menu
 | Tabs <= tabs InitTab: t
           main_menu(MainMenu)
+          new_game_menu(NewGameMenu)
           game_menu(GameMenu)
           save_menu(SaveMenu)
           load_menu(LoadMenu)
