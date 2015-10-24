@@ -269,19 +269,19 @@ ui.init =
 | CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
 | CreditsRoll = credits_roll Me $main.credits
 | ScenarioMenu = No
-| loadScenarioBack = Tabs.pick{main_menu}
+| loadScenarioBack = Tabs.pick{new_game_menu}
 | LoadScenarioDlg = load_world_dlg $world MapsFolder &loadScenarioBack: X =>
-  | say "load scenario [X]"
+  | load 1 X
 | LoadScenarioDlg.folder <= MapsFolder
 | ScenarioMenu <= dlg: mtx
   |   0   0 | MenuBG
-  |  100 100 | LoadScenarioDlg
+  |  220 200 | LoadScenarioDlg
   |  16 ScreenH-16 | txt small CopyrightLine
 | NewGameMenu = No
 | NewGameMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
-  | X 220 | button 'CAMPAIGN' skin/scroll: => load 1 "[MapsFolder]default.txt"
+  | X 220 | button 'CAMPAIGN' skin/scroll: => load 1 "[MapsFolder]level0.txt"
   | X 290 | button 'SCENARIO' skin/scroll:  => Tabs.pick{scenario_menu}
   | X 360 | button 'MULTIPLAYER' skin/scroll: => 
   | X 500 | button 'BACK' skin/scroll: => Tabs.pick{main_menu}
