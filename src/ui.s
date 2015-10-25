@@ -230,7 +230,6 @@ create_credits_dlg Me =
      | button 'Exit' skin/small_medium: => pick_main_menu Me pause/0
 
 
-
 create_bank_list Me =
 | TileBanks = $main.params.world.tile_banks
 | BankName =
@@ -399,21 +398,8 @@ ui_on_view_unit_pick Me Unit =
   | ActIcons.I.show <= Active
 | UnitPanel.set_unit{Unit}
 
-ui.init =
-| MapsFolder <= "[$data][MapsFolder]"
-| SavesFolder <= "[$data][SavesFolder]"
-| $view <= view $main ScreenW ScreenH
-//| StartTime = clock
-| $create{8 8}
-//| EndTime = clock
-//| say EndTime-StartTime
-//| halt
-| $message_box <= message_box Me
-| InputBlocker <= hidden: spacer ScreenW ScreenH
-| WorldProperties <= create_world_props Me
-| LoadWorldDlg <= create_load_world_dlg Me
-| $world.on_update <= => ui_on_world_update Me
-| ActClick = Icon =>
+create_act_icons Me =
+| actClick Icon =
   | $world.act <= 0
   | $main.sound{ui_click}
   | when ActIcon: ActIcon.picked <= 0
@@ -431,20 +417,34 @@ ui.init =
            then when O.id >< $world.player.id:
                 | PickedUnit.order.init{target PickedUnit @Act.list.join}
            else $world.act <= Act
-| ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick
-| $view.on_unit_pick <= Unit => ui_on_view_unit_pick Me Unit
-| EditorIcons <= create_editor_icons Me
+| map I MaxActIcons: hidden: icon 0 click/&actClick
+
+create_ingame_icons Me =
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
 | HourglassIcon <= hidden: button 'HOURGLASS' skin/hourglass: =>
   | InputBlocker.show <= 1
   | $world.end_turn
-| MenuBG <= $img{ui_menu_bg}
+
+ui.init =
+| MapsFolder <= "[$data][MapsFolder]"
+| SavesFolder <= "[$data][SavesFolder]"
+| $view <= view $main ScreenW ScreenH
+| $create{8 8}
 | MenuButtonsX <= ScreenW/2 - 162
 | X = MenuButtonsX
+| MenuBG <= $img{ui_menu_bg}
+| $message_box <= message_box Me
+| InputBlocker <= hidden: spacer ScreenW ScreenH
+| WorldProperties <= create_world_props Me
+| LoadWorldDlg <= create_load_world_dlg Me
+| $world.on_update <= => ui_on_world_update Me
+| $view.on_unit_pick <= Unit => ui_on_view_unit_pick Me Unit
+| ActIcons <= create_act_icons Me
+| EditorIcons <= create_editor_icons Me
+| create_ingame_icons Me
 | $tabs <= create_dialog_tabs Me
 | BankList.pick{0}
 | begin_ingame Me 1
-//| $pause
 
 main.run =
 | set_main Me
