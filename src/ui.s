@@ -203,6 +203,35 @@ create_world_props Me =
   | $unpause
   | WorldProperties.show <= 0
 
+create_load_world_dlg Me =
+| LoadWorldDlg = No
+| hideLoadWorldDlg = 
+  | LoadWorldDlg.show <= 0
+  | $unpause
+| LoadWorldDlgW = load_world_dlg $world MapsFolder &hideLoadWorldDlg: X =>
+  | $load{X}
+  | $world.explore{1}
+  | hideLoadWorldDlg
+| LoadWorldDlgW.folder <= MapsFolder
+| LoadWorldDlg <= hidden: LoadWorldDlgW
+| LoadWorldDlg
+
+ui_on_world_update Me =
+| when $world.player.human: InputBlocker.show <= 0
+| Winner = $world.params.winner
+| when got Winner:
+  | NextWorld = $world.params.next_world
+  | less got NextWorld:
+    | $pause
+    | if $world.players.Winner.human
+      then | $main.music{"victory.ogg"}
+           | $pick{victory}
+      else | $main.music{"defeat.ogg"}
+           | $pick{defeat}
+  | when got NextWorld:
+    | $load{"[MapsFolder][NextWorld].txt"}
+    | $world.new_game
+
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
@@ -219,35 +248,12 @@ ui.init =
 | InputBlocker <= hidden: spacer ScreenW ScreenH
 | InfoText = info_line Me
 | WorldProperties <= create_world_props Me
-| LoadWorldDlg = No
-| hideLoadWorldDlg = 
-  | LoadWorldDlg.show <= 0
-  | $unpause
-| LoadWorldDlgW = load_world_dlg $world MapsFolder &hideLoadWorldDlg: X =>
-  | $load{X}
-  | $world.explore{1}
-  | hideLoadWorldDlg
-| LoadWorldDlgW.folder <= MapsFolder
-| LoadWorldDlg <= hidden: LoadWorldDlgW
+| LoadWorldDlg = create_load_world_dlg Me
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
 | $world.on_player_change <= Player =>
   | PlayerWidget.picked <= Player.id
-| $world.on_update <= =>
-  | when $world.player.human: InputBlocker.show <= 0
-  | Winner = $world.params.winner
-  | when got Winner:
-    | NextWorld = $world.params.next_world
-    | less got NextWorld:
-      | $pause
-      | if $world.players.Winner.human
-        then | $main.music{"victory.ogg"}
-             | $pick{victory}
-        else | $main.music{"defeat.ogg"}
-             | $pick{defeat}
-    | when got NextWorld:
-      | $load{"[MapsFolder][NextWorld].txt"}
-      | $world.new_game
+| $world.on_update <= => ui_on_world_update Me
 | TileBanks = $main.params.world.tile_banks
 | BankName =
 | BankNames = [@TileBanks unit leader @$main.bank_names.skip{unit}.skip{leader}]
