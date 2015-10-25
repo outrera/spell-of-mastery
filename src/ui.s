@@ -2,6 +2,7 @@ use gui widgets view ui_icon ui_widgets macros
 
 ScreenW = No
 ScreenH = No
+PanelW = 200 //FIXME: hardcoded stuff is bad
 
 CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
 MapsFolder = 'work/worlds/'
@@ -11,12 +12,17 @@ MaxActIcons = 24
 ActIcons = []
 ActIcon = 0
 
+PickedUnit = 0
+
 MenuButtonsX = 0
 
 InputBlocker =
 WorldProperties = No
 LoadWorldDlg =
 CreditsRoll =
+GameUnitUI =
+UnitPanel =
+BankList =
 
 MenuBG =
 
@@ -168,7 +174,6 @@ create_main_menu_dlg Me =
        | CreditsRoll.reset
        | $pick{credits}
 
-
 EditorIcons =
 EndTurnIcon =
 GearsIcon =
@@ -224,7 +229,52 @@ create_credits_dlg Me =
   |  ScreenW-80 ScreenH-20
      | button 'Exit' skin/small_medium: => pick_main_menu Me pause/0
 
+
+
+create_bank_list Me =
+| TileBanks = $main.params.world.tile_banks
+| BankName =
+| BankNames = [@TileBanks unit leader @$main.bank_names.skip{unit}.skip{leader}]
+| ItemList = litems w/(PanelW-80) lines/40 [] f: N =>
+  | Brush = if got TileBanks.find{BankName}
+            then [tile N]
+            else [obj BankName,N]
+  | $view.set_brush{Brush}
+| BankList <= litems w/80 lines/40 BankNames f: N =>
+  | BankName <= N
+  | if got TileBanks.find{BankName}
+    then | ItemList.data <= $main.tile_names{BankName}
+         | ItemList.pick{0}
+         //| ItemList.pick{TileNames.locate{plain}}
+    else | ItemList.data <= $main.classes_banks.BankName
+         | ItemList.pick{0}
+| BankList,ItemList
+
+create_view_ui Me =
+| PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
+  | when got!it $world.players.find{?name >< Name}: $world.player <= it
+| $world.on_player_change <= Player => | PlayerWidget.picked <= Player.id
+| BankList,ItemList = create_bank_list Me
+| for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
+| UnitPanel <= unit_panel Me
+| GameUnitUI <= hidden: dlg: mtx
+  |  0   0| UnitPanel
+| EndTurnIcon <= hidden: icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
+| GameUI = dlg: mtx
+  |  0   0| $view
+  |  0   0| GameUnitUI
+  |  4 ScreenH-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
+  |  4 ScreenH-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
+  |  4 ScreenH-10 | info_line Me
+  | ScreenW-54 ScreenH-64 | EndTurnIcon
+| BrushUI = dlg: mtx
+  | 0 0 | $view
+  | 0 0 | layH: BankList,ItemList
+  | PanelW 0 | PlayerWidget
+| tabs brush: t brush(BrushUI) pick(GameUI) play(GameUI)
+
 create_ingame_dlg Me =
+| ViewUI <= create_view_ui Me
 | Ingame = dlg w/ScreenW h/ScreenH: mtx
   |  0   0| spacer ScreenW ScreenH
   |  0   0| ViewUI
@@ -325,10 +375,33 @@ ui_on_world_update Me =
     | $load{"[MapsFolder][NextWorld].txt"}
     | $world.new_game
 
+ui_on_view_unit_pick Me Unit =
+| PickedUnit <= Unit
+| NonNil = Unit.type <> unit_nil
+| GameUnitUI.show <= NonNil
+| for Icon ActIcons: Icon.show <= 0
+//| when nit.moved < $world.turn:
+| As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
+| for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
+  | Active = 1
+  | when Act.act >< summon and not Unit.owner.pentagram:
+    | Active <= 0
+  | Icon = ActIcons.I.widget
+  | Player = Unit.owner
+  | ResearchRemain = Player.research_remain{Act}
+  | Icon.data <= Act.name
+  | Icon.fg <= Act.icon_gfx
+  | Icon.number <= if ResearchRemain <> 0 then ResearchRemain else No
+  | Icon.research <= ResearchRemain <> 0
+  | Icon.frame <= 0
+  | Icon.w <= Icon.fg.w
+  | Icon.h <= Icon.fg.h
+  | ActIcons.I.show <= Active
+| UnitPanel.set_unit{Unit}
+
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
-| PanelW = 200
 | $view <= view $main ScreenW ScreenH
 //| StartTime = clock
 | $create{8 8}
@@ -337,31 +410,9 @@ ui.init =
 //| halt
 | $message_box <= message_box Me
 | InputBlocker <= hidden: spacer ScreenW ScreenH
-| InfoText = info_line Me
 | WorldProperties <= create_world_props Me
 | LoadWorldDlg <= create_load_world_dlg Me
-| PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
-  | when got!it $world.players.find{?name >< Name}: $world.player <= it
-| $world.on_player_change <= Player =>
-  | PlayerWidget.picked <= Player.id
 | $world.on_update <= => ui_on_world_update Me
-| TileBanks = $main.params.world.tile_banks
-| BankName =
-| BankNames = [@TileBanks unit leader @$main.bank_names.skip{unit}.skip{leader}]
-| ItemList = litems w/(PanelW-80) lines/40 [] f: N =>
-  | Brush = if got TileBanks.find{BankName}
-            then [tile N]
-            else [obj BankName,N]
-  | $view.set_brush{Brush}
-| BankList = litems w/80 lines/40 BankNames f: N =>
-  | BankName <= N
-  | if got TileBanks.find{BankName}
-    then | ItemList.data <= $main.tile_names{BankName}
-         | ItemList.pick{0}
-         //| ItemList.pick{TileNames.locate{plain}}
-    else | ItemList.data <= $main.classes_banks.BankName
-         | ItemList.pick{0}
-| PickedUnit = 0
 | ActClick = Icon =>
   | $world.act <= 0
   | $main.sound{ui_click}
@@ -381,51 +432,7 @@ ui.init =
                 | PickedUnit.order.init{target PickedUnit @Act.list.join}
            else $world.act <= Act
 | ActIcons <= map I MaxActIcons: hidden: icon 0 click/ActClick
-| for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
-| PickedUnitTitle = txt medium ''
-| PickedUnitOwner = txt medium 'unknown'
-| PickedUnitLevel = txt medium 'unknown'
-| PickedUnitMoved = txt medium 'unknown'
-| UnitPanel = unit_panel Me
-| GameUnitUI = hidden: dlg: mtx
-  |  0   0| UnitPanel
-| EndTurnIcon <= hidden: icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
-| GameUI = dlg: mtx
-  |  0   0| $view
-  |  0   0| GameUnitUI
-  |  4 ScreenH-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
-  |  4 ScreenH-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
-  |  4 ScreenH-10 | InfoText
-  | ScreenW-54 ScreenH-64 | EndTurnIcon
-| BrushUI = dlg: mtx
-  | 0 0 | $view
-  | 0 0 | layH: BankList,ItemList
-  | PanelW 0 | PlayerWidget
-| PickUI = GameUI
-| ViewUI <= tabs brush: t brush(BrushUI) pick(PickUI) play(GameUI)
-| $view.on_unit_pick <= Unit =>
-  | PickedUnit <= Unit
-  | NonNil = Unit.type <> unit_nil
-  | GameUnitUI.show <= NonNil
-  | for Icon ActIcons: Icon.show <= 0
-  //| when nit.moved < $world.turn:
-  | As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
-  | for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
-    | Active = 1
-    | when Act.act >< summon and not Unit.owner.pentagram:
-      | Active <= 0
-    | Icon = ActIcons.I.widget
-    | Player = Unit.owner
-    | ResearchRemain = Player.research_remain{Act}
-    | Icon.data <= Act.name
-    | Icon.fg <= Act.icon_gfx
-    | Icon.number <= if ResearchRemain <> 0 then ResearchRemain else No
-    | Icon.research <= ResearchRemain <> 0
-    | Icon.frame <= 0
-    | Icon.w <= Icon.fg.w
-    | Icon.h <= Icon.fg.h
-    | ActIcons.I.show <= Active
-  | UnitPanel.set_unit{Unit}
+| $view.on_unit_pick <= Unit => ui_on_view_unit_pick Me Unit
 | EditorIcons <= create_editor_icons Me
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
 | HourglassIcon <= hidden: button 'HOURGLASS' skin/hourglass: =>
