@@ -3,6 +3,7 @@ use gui widgets view ui_icon ui_widgets macros
 ScreenW = No
 ScreenH = No
 
+CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
 MapsFolder = 'work/worlds/'
 SavesFolder = 'work/saves/'
 
@@ -10,8 +11,11 @@ MaxActIcons = 24
 ActIcons = []
 ActIcon = 0
 
+MenuButtonsX = 0
+
 InputBlocker =
 
+MenuBG =
 
 type ui.$tabs{main} tabs width height world message_box view
 | $world <= $main.world
@@ -75,6 +79,91 @@ create_defeat_dlg Me =
               | "[Player.name] has been defeated!\n"
   | ScreenW-360 ScreenH-100
         | button 'EXIT TO MENU' skin/scroll: => pick_main_menu Me pause/0
+
+create_new_game_dlg Me =
+| X = MenuButtonsX
+| dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 220 | button 'CAMPAIGN' skin/scroll: =>
+            | load_game Me 1 "[MapsFolder]level0.txt"
+  | X 290 | button 'SCENARIO' skin/scroll: => $pick{scenario_menu}
+  | X 360 | button 'MULTIPLAYER' skin/scroll: => 
+  | X 500 | button 'BACK' skin/scroll: => $pick{main_menu}
+
+create_game_menu_dlg Me =
+| X = MenuButtonsX
+| dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 290 | button 'SAVE GAME' skin/scroll: => $pick{save_menu}
+  | X 360 | button 'RESUME GAME' skin/scroll: =>
+            | $unpause
+            | $pick{ingame}
+  | X 500 | button 'EXIT TO MENU' skin/scroll: => pick_main_menu Me pause/0
+
+
+create_scenario_menu Me =
+| loadScenarioBack = $pick{new_game_menu}
+| LoadScenarioDlg = load_world_dlg $world MapsFolder &loadScenarioBack: X =>
+  | load_game Me 1 X
+| LoadScenarioDlg.folder <= MapsFolder
+| dlg: mtx
+  |   0   0 | MenuBG
+  |  220 200 | LoadScenarioDlg
+  |  16 ScreenH-16 | txt small CopyrightLine
+
+LoadButtons =
+
+create_load_menu_dlg Me =
+| X = MenuButtonsX
+| dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 200 | LoadButtons.a
+  | X 270 | LoadButtons.b
+  | X 340 | LoadButtons.c
+  | X 410 | LoadButtons.d
+  | X 500 | button 'CANCEL' skin/scroll: => $pick{main_menu}
+
+create_save_menu_dlg Me =
+| X = MenuButtonsX
+| save_slot Name = 
+  | $save{"[SavesFolder][Name].txt"}
+  | $unpause
+  | $pick{ingame}
+  //| $main.show_message{'Saved' 'Your game is saved!'}
+| dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 200 | button 'SLOT A' skin/scroll: => save_slot a
+  | X 270 | button 'SLOT B' skin/scroll: => save_slot b
+  | X 340 | button 'SLOT C' skin/scroll: => save_slot c
+  | X 410 | button 'SLOT D' skin/scroll: => save_slot d
+  | X 500 | button 'CANCEL' skin/scroll: =>
+            | $unpause
+            | $pick{ingame}
+
+EditorIcons =
+EndTurnIcon =
+GearsIcon =
+HourglassIcon =
+begin_ingame Me Editor =
+| less Editor: $main.music{playlist}
+| EditorIcons.show <= Editor
+| EndTurnIcon.show <= Editor
+| GearsIcon.show <= not Editor
+| HourglassIcon.show <= not Editor
+| $view.mode <= [play brush].Editor
+
+ViewUI =
+load_game Me NewGame Path =
+| begin_ingame Me 0
+| $load{Path}
+| ViewUI.pick{play}
+| when NewGame: $world.new_game
+| $unpause
+| $pick{ingame}
 
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
@@ -176,7 +265,7 @@ ui.init =
 | UnitPanel = unit_panel Me
 | GameUnitUI = hidden: dlg: mtx
   |  0   0| UnitPanel
-| EndTurnIcon = hidden: icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
+| EndTurnIcon <= hidden: icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
 | GameUI = dlg: mtx
   |  0   0| $view
   |  0   0| GameUnitUI
@@ -189,7 +278,7 @@ ui.init =
   | 0 0 | layH: BankList,ItemList
   | PanelW 0 | PlayerWidget
 | PickUI = GameUI
-| ViewUI = tabs brush: t brush(BrushUI) pick(PickUI) play(GameUI)
+| ViewUI <= tabs brush: t brush(BrushUI) pick(PickUI) play(GameUI)
 | $view.on_unit_pick <= Unit =>
   | PickedUnit <= Unit
   | NonNil = Unit.type <> unit_nil
@@ -238,13 +327,13 @@ ui.init =
   | LoadWorldDlg.show <= 1 
   //| $load{"[MapsFolder][$world.filename].txt"}
 | ExitIcon = icon data/pick $img{icons_exit} click: Icon => pick_main_menu Me
-| EditorIcons = hidden: layV s/8
+| EditorIcons <= hidden: layV s/8
     BrushIcon,spacer{8 0},PickIcon,spacer{8 0},PlayIcon,spacer{8 0},
     WorldIcon,spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
-| GearsIcon = hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
-| HourglassIcon = hidden: button 'HOURGLASS' skin/hourglass: =>
+| GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
+| HourglassIcon <= hidden: button 'HOURGLASS' skin/hourglass: =>
   | InputBlocker.show <= 1
   | $world.end_turn
 | Ingame <= dlg w/ScreenW h/ScreenH: mtx
@@ -257,51 +346,17 @@ ui.init =
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
   |  0   0| $message_box
-| begin_ingame Editor =
-  | less Editor: $main.music{playlist}
-  | EditorIcons.show <= Editor
-  | EndTurnIcon.show <= Editor
-  | GearsIcon.show <= not Editor
-  | HourglassIcon.show <= not Editor
-  | $view.mode <= [play brush].Editor
-| MenuBG = $img{ui_menu_bg}
-| X = ScreenW/2 - 162
-| load NewGame Path =
-  | begin_ingame 0
-  | $load{Path}
-  | ViewUI.pick{play}
-  | when NewGame: $world.new_game
-  | $unpause
-  | $pick{ingame}
-| save_slot Name = 
-  | $save{"[SavesFolder][Name].txt"}
-  | $unpause
-  | $pick{ingame}
-  //| $main.show_message{'Saved' 'Your game is saved!'}
+| MenuBG <= $img{ui_menu_bg}
+| MenuButtonsX <= ScreenW/2 - 162
+| X = MenuButtonsX
 | load_slot Name = 
-  | load 0 "[SavesFolder][Name].txt"
+  | load_game Me 0 "[SavesFolder][Name].txt"
   //| $main.show_message{'Loaded' 'Your game is loaded!'}
 | new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
-| LoadButtons = @table: map N [a b c d]: N,(hidden: new_load_button N)
-| CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
+| LoadButtons <= @table: map N [a b c d]: N,(hidden: new_load_button N)
 | CreditsRoll = credits_roll Me $main.credits
-| ScenarioMenu = No
-| loadScenarioBack = $pick{new_game_menu}
-| LoadScenarioDlg = load_world_dlg $world MapsFolder &loadScenarioBack: X =>
-  | load 1 X
-| LoadScenarioDlg.folder <= MapsFolder
-| ScenarioMenu <= dlg: mtx
-  |   0   0 | MenuBG
-  |  220 200 | LoadScenarioDlg
-  |  16 ScreenH-16 | txt small CopyrightLine
-| NewGameMenu = No
-| NewGameMenu <= dlg: mtx
-  |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
-  | X 220 | button 'CAMPAIGN' skin/scroll: => load 1 "[MapsFolder]level0.txt"
-  | X 290 | button 'SCENARIO' skin/scroll: => $pick{scenario_menu}
-  | X 360 | button 'MULTIPLAYER' skin/scroll: => 
-  | X 500 | button 'BACK' skin/scroll: => $pick{main_menu}
+| ScenarioMenu = create_scenario_menu Me
+| NewGameMenu = create_new_game_dlg Me
 | MainMenu <= dlg: mtx
   |   0   0 | MenuBG
   |  16 ScreenH-16 | txt small CopyrightLine
@@ -311,7 +366,7 @@ ui.init =
             | $pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $create{8 8}
-            | begin_ingame 1
+            | begin_ingame Me 1
             | $unpause
             | $pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
@@ -320,34 +375,11 @@ ui.init =
        | $main.music{"credits.ogg"}
        | CreditsRoll.reset
        | $pick{credits}
-| GameMenu = dlg: mtx
-  |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
-  | X 290 | button 'SAVE GAME' skin/scroll: => $pick{save_menu}
-  | X 360 | button 'RESUME GAME' skin/scroll: =>
-            | $unpause
-            | $pick{ingame}
-  | X 500 | button 'EXIT TO MENU' skin/scroll: => pick_main_menu Me pause/0
+| GameMenu = create_game_menu_dlg Me
 | Victory = create_victory_dlg Me
 | Defeat = create_defeat_dlg Me
-| SaveMenu = dlg: mtx
-  |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
-  | X 200 | button 'SLOT A' skin/scroll: => save_slot a
-  | X 270 | button 'SLOT B' skin/scroll: => save_slot b
-  | X 340 | button 'SLOT C' skin/scroll: => save_slot c
-  | X 410 | button 'SLOT D' skin/scroll: => save_slot d
-  | X 500 | button 'CANCEL' skin/scroll: =>
-            | $unpause
-            | $pick{ingame}
-| LoadMenu = dlg: mtx
-  |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
-  | X 200 | LoadButtons.a
-  | X 270 | LoadButtons.b
-  | X 340 | LoadButtons.c
-  | X 410 | LoadButtons.d
-  | X 500 | button 'CANCEL' skin/scroll: => $pick{main_menu}
+| SaveMenu = create_save_menu_dlg Me
+| LoadMenu = create_load_menu_dlg Me
 | Ingame = input_split Ingame: Base In =>
   | Handled = 0
   | when $view.mode >< play: less $view.paused: case In [key z 0]
@@ -374,7 +406,7 @@ ui.init =
           scenario(ScenarioMenu)
           credits(Credits)
 | BankList.pick{0}
-| begin_ingame 1
+| begin_ingame Me 1
 //| $pause
 
 main.run =
