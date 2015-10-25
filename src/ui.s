@@ -1,12 +1,10 @@
 use gui widgets view ui_icon ui_widgets macros
 
-ScreenW = No
-ScreenH = No
-PanelW = 200 //FIXME: hardcoded stuff is bad
-
 CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
 MapsFolder = 'work/worlds/'
 SavesFolder = 'work/saves/'
+
+PanelW = 200 //FIXME: hardcoded stuff is bad
 
 MaxActIcons = 24
 ActIcons = []
@@ -30,8 +28,6 @@ type ui.$tabs{main} tabs width height world message_box view
 | $world <= $main.world
 | $width <= $params.ui.width
 | $height <= $params.ui.height
-| ScreenW <= $width
-| ScreenH <= $height
 
 ui.data = $main.data
 ui.load File =
@@ -76,7 +72,7 @@ create_victory_dlg Me =
               | Player = $world.players.($world.params.winner)
               | Type = $world.params.victory_type.replace{_ ' '}
               | "[Player.name] has won!\n[Type]"
-  | ScreenW-360 ScreenH-100
+  | $width-360 $height-100
         | button 'EXIT TO MENU' skin/scroll: => pick_main_menu Me pause/0
 
 create_defeat_dlg Me = 
@@ -86,14 +82,14 @@ create_defeat_dlg Me =
               | Player = $world.human
               | Type = $world.params.victory_type.replace{_ ' '}
               | "[Player.name] has been defeated!\n"
-  | ScreenW-360 ScreenH-100
+  | $width-360 $height-100
         | button 'EXIT TO MENU' skin/scroll: => pick_main_menu Me pause/0
 
 create_new_game_dlg Me =
 | X = MenuButtonsX
 | dlg: mtx
   |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
+  |  16 $height-16 | txt small CopyrightLine
   | X 220 | button 'CAMPAIGN' skin/scroll: =>
             | load_game Me 1 "[MapsFolder]level0.txt"
   | X 290 | button 'SCENARIO' skin/scroll: => $pick{scenario_menu}
@@ -104,7 +100,7 @@ create_game_menu_dlg Me =
 | X = MenuButtonsX
 | dlg: mtx
   |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
+  |  16 $height-16 | txt small CopyrightLine
   | X 290 | button 'SAVE GAME' skin/scroll: => $pick{save_menu}
   | X 360 | button 'RESUME GAME' skin/scroll: =>
             | $unpause
@@ -120,7 +116,7 @@ create_scenario_menu Me =
 | dlg: mtx
   |   0   0 | MenuBG
   |  220 200 | LoadScenarioDlg
-  |  16 ScreenH-16 | txt small CopyrightLine
+  |  16 $height-16 | txt small CopyrightLine
 
 LoadButtons =
 
@@ -128,7 +124,7 @@ create_load_menu_dlg Me =
 | X = MenuButtonsX
 | dlg: mtx
   |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
+  |  16 $height-16 | txt small CopyrightLine
   | X 200 | LoadButtons.a
   | X 270 | LoadButtons.b
   | X 340 | LoadButtons.c
@@ -144,7 +140,7 @@ create_save_menu_dlg Me =
   //| $main.show_message{'Saved' 'Your game is saved!'}
 | dlg: mtx
   |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
+  |  16 $height-16 | txt small CopyrightLine
   | X 200 | button 'SLOT A' skin/scroll: => save_slot a
   | X 270 | button 'SLOT B' skin/scroll: => save_slot b
   | X 340 | button 'SLOT C' skin/scroll: => save_slot c
@@ -157,7 +153,7 @@ create_main_menu_dlg Me =
 | X = MenuButtonsX
 | dlg: mtx
   |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
+  |  16 $height-16 | txt small CopyrightLine
   | X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
   | X 290 | button 'LOAD GAME' skin/scroll: =>
             | for N,B LoadButtons: B.show <= "[SavesFolder][N].txt".exists
@@ -168,7 +164,7 @@ create_main_menu_dlg Me =
             | $unpause
             | $pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
-  |  ScreenW-80 ScreenH-20
+  |  $width-80 $height-20
      | button 'Credits' skin/small_medium: =>
        | $main.music{"credits.ogg"}
        | CreditsRoll.reset
@@ -226,7 +222,7 @@ create_credits_dlg Me =
 | dlg: mtx
   |  0   0 | $img{ui_stars}
   |  0   0 | CreditsRoll
-  |  ScreenW-80 ScreenH-20
+  |  $width-80 $height-20
      | button 'Exit' skin/small_medium: => pick_main_menu Me pause/0
 
 
@@ -262,10 +258,10 @@ create_view_ui Me =
 | GameUI = dlg: mtx
   |  0   0| $view
   |  0   0| GameUnitUI
-  |  4 ScreenH-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
-  |  4 ScreenH-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
-  |  4 ScreenH-10 | info_line Me
-  | ScreenW-54 ScreenH-64 | EndTurnIcon
+  |  4 $height-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
+  |  4 $height-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
+  |  4 $height-10 | info_line Me
+  | $width-54 $height-64 | EndTurnIcon
 | BrushUI = dlg: mtx
   | 0 0 | $view
   | 0 0 | layH: BankList,ItemList
@@ -274,12 +270,12 @@ create_view_ui Me =
 
 create_ingame_dlg Me =
 | ViewUI <= create_view_ui Me
-| Ingame = dlg w/ScreenW h/ScreenH: mtx
-  |  0   0| spacer ScreenW ScreenH
+| Ingame = dlg w/$width h/$height: mtx
+  |  0   0| spacer $width $height
   |  0   0| ViewUI
-  |  ScreenW-54 4| EditorIcons
-  |  ScreenW-111 0| GearsIcon
-  |  ScreenW-73 110| HourglassIcon
+  |  $width-54 4| EditorIcons
+  |  $width-111 0| GearsIcon
+  |  $width-73 110| HourglassIcon
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
@@ -428,13 +424,13 @@ create_ingame_icons Me =
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
-| $view <= view $main ScreenW ScreenH
+| $view <= view $main $width $height
 | $create{8 8}
-| MenuButtonsX <= ScreenW/2 - 162
+| MenuButtonsX <= $width/2 - 162
 | X = MenuButtonsX
 | MenuBG <= $img{ui_menu_bg}
 | $message_box <= message_box Me
-| InputBlocker <= hidden: spacer ScreenW ScreenH
+| InputBlocker <= hidden: spacer $width $height
 | WorldProperties <= create_world_props Me
 | LoadWorldDlg <= create_load_world_dlg Me
 | $world.on_update <= => ui_on_world_update Me
