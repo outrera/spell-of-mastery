@@ -14,6 +14,8 @@ ActIcon = 0
 MenuButtonsX = 0
 
 InputBlocker =
+WorldProperties = No
+CreditsRoll =
 
 MenuBG =
 
@@ -144,6 +146,28 @@ create_save_menu_dlg Me =
             | $unpause
             | $pick{ingame}
 
+create_main_menu_dlg Me =
+| X = MenuButtonsX
+| dlg: mtx
+  |   0   0 | MenuBG
+  |  16 ScreenH-16 | txt small CopyrightLine
+  | X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
+  | X 290 | button 'LOAD GAME' skin/scroll: =>
+            | for N,B LoadButtons: B.show <= "[SavesFolder][N].txt".exists
+            | $pick{load_menu}
+  | X 360 | button 'WORLD EDITOR' skin/scroll: =>
+            | $create{8 8}
+            | begin_ingame Me 1
+            | $unpause
+            | $pick{ingame}
+  | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
+  |  ScreenW-80 ScreenH-20
+     | button 'Credits' skin/small_medium: =>
+       | $main.music{"credits.ogg"}
+       | CreditsRoll.reset
+       | $pick{credits}
+
+
 EditorIcons =
 EndTurnIcon =
 GearsIcon =
@@ -165,6 +189,20 @@ load_game Me NewGame Path =
 | $unpause
 | $pick{ingame}
 
+parse_int_normalized Default Text =
+| if Text.size>0 and Text.all{?is_digit} then Text.int else Default
+
+create_world_props Me = 
+| hidden: world_props $world: P =>
+  | W = parse_int_normalized{$world.w P.width.value}.clip{4 240}
+  | H = parse_int_normalized{$world.h P.height.value}.clip{4 240}
+  | when W <> $world.w or H <> $world.h: $create{W H}
+  | $world.filename <= P.filename.value
+  | $world.name <= P.name.value
+  | $world.description <= P.description.value
+  | $unpause
+  | WorldProperties.show <= 0
+
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
@@ -180,18 +218,7 @@ ui.init =
 | MainMenu = No
 | InputBlocker <= hidden: spacer ScreenW ScreenH
 | InfoText = info_line Me
-| WorldProperties = No
-| parse_int_normalized Default Text =
-  | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
-| WorldProperties <= hidden: world_props $world: P =>
-  | W = parse_int_normalized{$world.w P.width.value}.clip{4 240}
-  | H = parse_int_normalized{$world.h P.height.value}.clip{4 240}
-  | when W <> $world.w or H <> $world.h: $create{W H}
-  | $world.filename <= P.filename.value
-  | $world.name <= P.name.value
-  | $world.description <= P.description.value
-  | $unpause
-  | WorldProperties.show <= 0
+| WorldProperties <= create_world_props Me
 | LoadWorldDlg = No
 | hideLoadWorldDlg = 
   | LoadWorldDlg.show <= 0
@@ -354,27 +381,10 @@ ui.init =
   //| $main.show_message{'Loaded' 'Your game is loaded!'}
 | new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
 | LoadButtons <= @table: map N [a b c d]: N,(hidden: new_load_button N)
-| CreditsRoll = credits_roll Me $main.credits
+| CreditsRoll <= credits_roll Me $main.credits
 | ScenarioMenu = create_scenario_menu Me
 | NewGameMenu = create_new_game_dlg Me
-| MainMenu <= dlg: mtx
-  |   0   0 | MenuBG
-  |  16 ScreenH-16 | txt small CopyrightLine
-  | X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
-  | X 290 | button 'LOAD GAME' skin/scroll: =>
-            | for N,B LoadButtons: B.show <= "[SavesFolder][N].txt".exists
-            | $pick{load_menu}
-  | X 360 | button 'WORLD EDITOR' skin/scroll: =>
-            | $create{8 8}
-            | begin_ingame Me 1
-            | $unpause
-            | $pick{ingame}
-  | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
-  |  ScreenW-80 ScreenH-20
-     | button 'Credits' skin/small_medium: =>
-       | $main.music{"credits.ogg"}
-       | CreditsRoll.reset
-       | $pick{credits}
+| MainMenu <= create_main_menu_dlg Me
 | GameMenu = create_game_menu_dlg Me
 | Victory = create_victory_dlg Me
 | Defeat = create_defeat_dlg Me
