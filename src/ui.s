@@ -15,6 +15,7 @@ MenuButtonsX = 0
 
 InputBlocker =
 WorldProperties = No
+LoadWorldDlg =
 CreditsRoll =
 
 MenuBG =
@@ -216,6 +217,98 @@ create_load_world_dlg Me =
 | LoadWorldDlg <= hidden: LoadWorldDlgW
 | LoadWorldDlg
 
+create_credits_dlg Me =
+| dlg: mtx
+  |  0   0 | $img{ui_stars}
+  |  0   0 | CreditsRoll
+  |  ScreenW-80 ScreenH-20
+     | button 'Exit' skin/small_medium: => pick_main_menu Me pause/0
+
+create_ingame_dlg Me =
+| Ingame = dlg w/ScreenW h/ScreenH: mtx
+  |  0   0| spacer ScreenW ScreenH
+  |  0   0| ViewUI
+  |  ScreenW-54 4| EditorIcons
+  |  ScreenW-111 0| GearsIcon
+  |  ScreenW-73 110| HourglassIcon
+  |  0   0| InputBlocker
+  |170 100| WorldProperties
+  |170 100| LoadWorldDlg
+  |  0   0| $message_box
+| input_split Ingame: Base In =>
+  | Handled = 0
+  | when $view.mode >< play: less $view.paused: case In [key z 0]
+    | when $world.player.human: $world.end_turn
+    | Handled <= 1
+  | less Handled: Base.input{In}
+
+create_editor_icons Me =
+| ModeIcon = No
+| EditorModeIconClick = Icon =>
+  | ModeIcon.picked <= 0
+  | Icon.picked <= 1
+  | ModeIcon <= Icon
+  | Mode = Icon.data
+  | $view.mode <= Mode
+  | EndTurnIcon.show <= Mode >< play
+  | ViewUI.pick{Mode}
+  | if Mode >< play then $world.new_game else $world.explore{1}
+| BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
+| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
+| PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
+| WorldIcon = icon $img{icons_world} click: Icon =>
+  | $pause
+  | WorldProperties.show <= 1
+  | WorldProperties.update
+| SaveIcon = icon data/pick $img{icons_save} click: Icon =>
+  | $save{"[MapsFolder][$world.filename].txt"}
+  //| $main.show_message{'Saved' 'Your map is saved!'}
+| LoadIcon = icon data/pick $img{icons_load} click: Icon =>
+  | $pause
+  | LoadWorldDlg.show <= 1 
+  //| $load{"[MapsFolder][$world.filename].txt"}
+| ExitIcon = icon data/pick $img{icons_exit} click: Icon => pick_main_menu Me
+| ModeIcon <= BrushIcon
+| BrushIcon.picked <= 1
+| hidden: layV s/8
+    BrushIcon,spacer{8 0},PickIcon,spacer{8 0},PlayIcon,spacer{8 0},
+    WorldIcon,spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
+
+create_load_buttons Me =
+| load_slot Name = 
+  | load_game Me 0 "[SavesFolder][Name].txt"
+  //| $main.show_message{'Loaded' 'Your game is loaded!'}
+| new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
+| @table: map N [a b c d]: N,(hidden: new_load_button N)
+
+create_dialog_tabs Me =
+| LoadButtons <= create_load_buttons Me
+| CreditsRoll <= credits_roll Me $main.credits
+| ScenarioMenu = create_scenario_menu Me
+| NewGameMenu = create_new_game_dlg Me
+| MainMenu = create_main_menu_dlg Me
+| GameMenu = create_game_menu_dlg Me
+| Victory = create_victory_dlg Me
+| Defeat = create_defeat_dlg Me
+| SaveMenu = create_save_menu_dlg Me
+| LoadMenu = create_load_menu_dlg Me
+| Credits = create_credits_dlg Me
+| Ingame = create_ingame_dlg Me
+| IsDebug = $main.params.world.release<>1
+| InitTab = if IsDebug then \ingame else \main_menu
+| tabs InitTab: t
+          main_menu(MainMenu)
+          new_game_menu(NewGameMenu)
+          scenario_menu(ScenarioMenu)
+          game_menu(GameMenu)
+          save_menu(SaveMenu)
+          load_menu(LoadMenu)
+          ingame(Ingame)
+          victory(Victory)
+          defeat(Defeat)
+          scenario(ScenarioMenu)
+          credits(Credits)
+
 ui_on_world_update Me =
 | when $world.player.human: InputBlocker.show <= 0
 | Winner = $world.params.winner
@@ -243,12 +336,10 @@ ui.init =
 //| say EndTime-StartTime
 //| halt
 | $message_box <= message_box Me
-| Ingame = No
-| MainMenu = No
 | InputBlocker <= hidden: spacer ScreenW ScreenH
 | InfoText = info_line Me
 | WorldProperties <= create_world_props Me
-| LoadWorldDlg = create_load_world_dlg Me
+| LoadWorldDlg <= create_load_world_dlg Me
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
 | $world.on_player_change <= Player =>
@@ -335,92 +426,15 @@ ui.init =
     | Icon.h <= Icon.fg.h
     | ActIcons.I.show <= Active
   | UnitPanel.set_unit{Unit}
-| ModeIcon = No
-| EditorModeIconClick = Icon =>
-  | ModeIcon.picked <= 0
-  | Icon.picked <= 1
-  | ModeIcon <= Icon
-  | Mode = Icon.data
-  | $view.mode <= Mode
-  | EndTurnIcon.show <= Mode >< play
-  | ViewUI.pick{Mode}
-  | if Mode >< play then $world.new_game else $world.explore{1}
-| BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
-| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
-| PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
-| WorldIcon = icon $img{icons_world} click: Icon =>
-  | $pause
-  | WorldProperties.show <= 1
-  | WorldProperties.update
-| SaveIcon = icon data/pick $img{icons_save} click: Icon =>
-  | $save{"[MapsFolder][$world.filename].txt"}
-  //| $main.show_message{'Saved' 'Your map is saved!'}
-| LoadIcon = icon data/pick $img{icons_load} click: Icon =>
-  | $pause
-  | LoadWorldDlg.show <= 1 
-  //| $load{"[MapsFolder][$world.filename].txt"}
-| ExitIcon = icon data/pick $img{icons_exit} click: Icon => pick_main_menu Me
-| EditorIcons <= hidden: layV s/8
-    BrushIcon,spacer{8 0},PickIcon,spacer{8 0},PlayIcon,spacer{8 0},
-    WorldIcon,spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
-| ModeIcon <= BrushIcon
-| BrushIcon.picked <= 1
+| EditorIcons <= create_editor_icons Me
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
 | HourglassIcon <= hidden: button 'HOURGLASS' skin/hourglass: =>
   | InputBlocker.show <= 1
   | $world.end_turn
-| Ingame <= dlg w/ScreenW h/ScreenH: mtx
-  |  0   0| spacer ScreenW ScreenH
-  |  0   0| ViewUI
-  |  ScreenW-54 4| EditorIcons
-  |  ScreenW-111 0| GearsIcon
-  |  ScreenW-73 110| HourglassIcon
-  |  0   0| InputBlocker
-  |170 100| WorldProperties
-  |170 100| LoadWorldDlg
-  |  0   0| $message_box
 | MenuBG <= $img{ui_menu_bg}
 | MenuButtonsX <= ScreenW/2 - 162
 | X = MenuButtonsX
-| load_slot Name = 
-  | load_game Me 0 "[SavesFolder][Name].txt"
-  //| $main.show_message{'Loaded' 'Your game is loaded!'}
-| new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
-| LoadButtons <= @table: map N [a b c d]: N,(hidden: new_load_button N)
-| CreditsRoll <= credits_roll Me $main.credits
-| ScenarioMenu = create_scenario_menu Me
-| NewGameMenu = create_new_game_dlg Me
-| MainMenu <= create_main_menu_dlg Me
-| GameMenu = create_game_menu_dlg Me
-| Victory = create_victory_dlg Me
-| Defeat = create_defeat_dlg Me
-| SaveMenu = create_save_menu_dlg Me
-| LoadMenu = create_load_menu_dlg Me
-| Ingame = input_split Ingame: Base In =>
-  | Handled = 0
-  | when $view.mode >< play: less $view.paused: case In [key z 0]
-    | when $world.player.human: $world.end_turn
-    | Handled <= 1
-  | less Handled: Base.input{In}
-| Credits = dlg: mtx
-  |  0   0 | $img{ui_stars}
-  |  0   0 | CreditsRoll
-  |  ScreenW-80 ScreenH-20
-     | button 'Exit' skin/small_medium: => pick_main_menu Me pause/0
-| IsDebug = $main.params.world.release<>1
-| InitTab = if IsDebug then \ingame else \main_menu
-| $tabs <= tabs InitTab: t
-          main_menu(MainMenu)
-          new_game_menu(NewGameMenu)
-          scenario_menu(ScenarioMenu)
-          game_menu(GameMenu)
-          save_menu(SaveMenu)
-          load_menu(LoadMenu)
-          ingame(Ingame)
-          victory(Victory)
-          defeat(Defeat)
-          scenario(ScenarioMenu)
-          credits(Credits)
+| $tabs <= create_dialog_tabs Me
 | BankList.pick{0}
 | begin_ingame Me 1
 //| $pause
