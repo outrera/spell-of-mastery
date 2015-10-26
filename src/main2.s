@@ -1,4 +1,42 @@
-use world
+use world gfx
+
+dump_sprite Me DstPath Name =
+| S = Me.sprites.Name
+| Rs = []
+| for F S.frames:
+    | AnimName = F.0
+    | G0 = F.1.3
+    | G1 = F.1.6
+    | for Dir,G [3,G0 6,G1]: when G:
+      | X,Y,W,H = G.margins
+      | R = G.cut{X Y W H}
+      | GX,GY = G.xy
+      | push [R AnimName Dir [GX-G.w/2 GY-G.h]+[X Y]+[W/2 H]] Rs
+| N = Rs.size
+| Order = [idle move attack death hit]
+| WW = 128
+| HH = 128
+| W = Order.size*2*HH
+| H = 8*WW
+| G = gfx W H
+| G.clear{#FF000000} // transparent
+| Col = 0
+| Ls = []
+| for O Order: for D 3,6:
+  | Xs = Rs.keep{?2><D}
+  | Xs = Xs.keep{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}
+  | Xs = Xs.sort{?1<??1}
+  | for Row,[R AnimName Dir XX,YY] Xs.i:
+    | X = Col*WW
+    | Y = Row*HH
+    | G.blit{X Y R}
+    | push ["[Dir]-[AnimName]+[XX]+[YY]" [X Y R.w R.h]] Ls
+  | !Col+1
+//| say Ls.flip
+| G.save{"[DstPath]/[Name].png"}
+| "[DstPath]/[Name].txt".set{Ls.flip.as_text}
+//| for [R AnimName Dir XY] Rs:
+  //| R.save{"[DstPath]/[Dir]-[AnimName].png"}
 
 type main{Data}
      world
@@ -43,6 +81,7 @@ type main{Data}
                "\n\n\nTHANKS TO:\n"
                "  Matthew Ostil\n"
               ]
+| dump_sprite Me "/Users/nikita/Downloads/1" unit_elf
 | world Me
 
 export main
