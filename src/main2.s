@@ -43,7 +43,7 @@ type main{Data}
                "\n\n\nTHANKS TO:\n"
                "  Matthew Ostil\n"
               ]
-| sprite_dump Me "/Users/nikita/Downloads/1" unit_orc
+| sprite_dump Me "/Users/nikita/Downloads/1" unit_goblin
 | world Me
 
 export main
