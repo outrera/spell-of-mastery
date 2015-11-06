@@ -1,3 +1,0 @@
-author: `Tom Prante`
-license: `CC3-BY-SA`
-http: `http://tomprante.deviantart.com/`

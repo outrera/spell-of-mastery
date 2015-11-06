@@ -1,3 +1,0 @@
-author: `Yana Nevodnichek`
-copyright: `Nikita Sadkov`
-xy: 2,4

@@ -1,2 +1,0 @@
-author: `Henrique Lazarini '7Soul' 'Ails'`
-xy: 0,0

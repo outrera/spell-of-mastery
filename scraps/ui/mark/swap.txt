@@ -1,3 +1,0 @@
-author: `Nikita Sadkov`
-license: `CC3-BY-SA`
-xy: 0,-16

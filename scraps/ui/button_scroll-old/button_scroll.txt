@@ -1,3 +1,0 @@
-author: `N.C.Wyeth`, `Nikita Sadkov`
-font: 12,0, runic,runic,runic, 3,3
-frames: folder

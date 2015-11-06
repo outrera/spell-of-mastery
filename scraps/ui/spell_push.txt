@@ -1,3 +1,0 @@
-author: `Marcus (http://www.naalaa.com/)`
-license: `Public Domain`
-origin: http://opengameart.org/content/breakout-graphics-no-shadow
