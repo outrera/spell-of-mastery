@@ -89,9 +89,12 @@ unit.draw FB B =
 | G = $frame
 | !X + $xy.0
 | !Y + $xy.1
-| XX = X+32-G.w/2
+| GW = G.w
+| XX = X+32-GW/2
 | YY = Y-16-G.h+$slope*16
-| when $mirror: G.flop
+| when $mirror:
+  | !XX - GW%2
+  | G.flop
 | when $sprite.shadow:
   | S = $world.shadow
   | ZZ = $xyz.2-$fix_z
