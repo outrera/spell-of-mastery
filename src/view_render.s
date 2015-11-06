@@ -236,18 +236,21 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | Us = Wr.column_units_at{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?health or ?bank><effect)}
 //| draw_text FB BX+32 BY-$zunit*Z-20 "[Explored]"
-| for U Us: when U.frame.w > 1:
-  | XYZ = U.xyz
-  | UX,UY,Z = XYZ
-  | TZ = Z-4
-  | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
-    | B = blit_item_from_unit U
-    | B.sx <= BX
-    | B.sy <= BY-$zunit*Z
-    | B.lx <= LX
-    | B.ly <= LY
-    | B.brighten <= Br
-    | push B BlitItems
+| for U Us:
+  | when no U.frame:
+    | say U.type
+  | when U.frame.w > 1:
+    | XYZ = U.xyz
+    | UX,UY,Z = XYZ
+    | TZ = Z-4
+    | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
+      | B = blit_item_from_unit U
+      | B.sx <= BX
+      | B.sy <= BY-$zunit*Z
+      | B.lx <= LX
+      | B.ly <= LY
+      | B.brighten <= Br
+      | push B BlitItems
 
 Unexplored = 0
 

@@ -124,12 +124,17 @@ unit.idle = not $ordered.type and
 //FIXME: move these into sprite loading code
 AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]
 
+missing_frame Me =
+| Index = $anim_seq.$anim_step.0
+| bad "[$type] is missing frame `[Index]` of `[$anim]` at angle [$facing]"
+
 unit.pick_facing F =
 | $facing <= F
 | FrameIndex = $anim_seq.$anim_step.0
 | Frame = $sprite.frames.FrameIndex
 | less Frame.is_list
   | $frame <= Frame
+  | when no $frame: missing_frame Me
   | when $facing <> 3: $mirror <= 1
   | leave
 | $mirror <= 0
@@ -138,11 +143,14 @@ unit.pick_facing F =
   | $mirror <= AngleReplacements.Angle.1
   | Angle <= AngleReplacements.Angle.0
 | $frame <= Frame.Angle
+| when no $frame: missing_frame Me
 
 unit.animate Anim =
 | $anim <= Anim
 | $anim_seq <= $sprite.anims.$anim
-| less got $anim_seq: $anim_seq <= $sprite.anims.idle
+| when no $anim_seq:
+  | $anim_seq <= $sprite.anims.idle
+  | less got $anim_seq: bad "unit [$type] is missing `idle` anim"
 | $anim_step <= 0
 | $pick_facing{$facing}
 | $anim_wait <= $anim_seq.$anim_step.1
