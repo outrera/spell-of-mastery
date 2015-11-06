@@ -356,12 +356,13 @@ create_dialog_tabs Me =
 
 ui_on_world_update Me =
 | when $world.player.human: InputBlocker.show <= 0
-| Winner = $world.params.winner
-| when got Winner:
-  | NextWorld = $world.params.next_world
+| WinnerId = $world.params.winner
+| when got WinnerId:
+  | Winner = $world.players.WinnerId
+  | NextWorld = when Winner.human: $world.params.next_world
   | less got NextWorld:
     | $pause
-    | if $world.players.Winner.human
+    | if Winner.human
       then | $main.music{"victory.ogg"}
            | $pick{victory}
       else | $main.music{"defeat.ogg"}
