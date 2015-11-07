@@ -58,10 +58,15 @@ tier3:
   | goto tier4 when lossage >> 64
 
 tier4:
+  | wait difficulty*4
   | attack dragon
+  | wait difficulty*4
   | attack observer
+  | wait difficulty*4
   | attack golem
+  | wait difficulty*4
   | attack ogre
+  | wait difficulty*4
   | attack hydra
 
 

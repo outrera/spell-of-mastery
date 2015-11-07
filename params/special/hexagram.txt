@@ -11,8 +11,9 @@ health: 1
 pickable: 1
 sight: 1
 starts: still // initial animation
-moves: matrix.turret
+//moves: matrix.turret
+leader: 2
 trigger: when{enemy},effect{pickup},remove{self}
 ai: turret
 
-acts: (cast_call)
+acts: (cast_fireball cast_lightning cast_call)

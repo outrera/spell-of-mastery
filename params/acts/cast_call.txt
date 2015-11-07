@@ -4,4 +4,4 @@ after: ()
 icon: spell_call
 range: any
 //research: 2
-//cost: misc.tier1_scost
+cost: 100

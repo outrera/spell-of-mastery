@@ -1,0 +1,5 @@
+proto: summon__proto
+after: summon{unit_ogre}
+icon: unit_ogre
+research: misc.tier4_rcost
+cost: misc.tier4_scost
