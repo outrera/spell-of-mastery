@@ -1,0 +1,5 @@
+proto: summon__proto
+after: summon{unit_spider}
+icon: unit_spider
+research: misc.tier3_rcost
+cost: misc.tier3_scost

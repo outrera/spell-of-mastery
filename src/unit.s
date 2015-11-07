@@ -332,7 +332,10 @@ unit.mark_moves @As =
   | Src = Move.src
   | Mark.path <= if Src >< XYZ then 0 else Move.src
   | Mark
-| for M Marks: when M.path: for N Marks: when M.path >< N.xyz: M.path <= N
+| for M Marks: when M.path:
+  | Src = M.path
+  | M.path <= 0
+  | for N Marks: when M.path >< N.xyz: M.path <= N
 | Marks
 
 // order taking over any other order

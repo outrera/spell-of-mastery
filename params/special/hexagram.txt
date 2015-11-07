@@ -1,12 +1,16 @@
+title: `Hexagram`
 sprite: special_hexagram
+icon: spell_hexagram
 tier: 2
-health: 1
 attack: 1
 defense: 0
 ranged: 1
 income: 0
 empty: 1
+health: 1
+pickable: 1
 sight: 1
+starts: still // initial animation
 moves: matrix.turret
-trigger: when{enemy},remove{self},effect{pickup}
+trigger: when{enemy},effect{pickup},remove{self}
 ai: turret
