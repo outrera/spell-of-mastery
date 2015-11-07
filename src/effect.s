@@ -146,6 +146,12 @@ effect swap Arg:
 | $move{TargetXYZ}
 | Target.move{XYZ}
 
+effect call Arg:
+| XYZ = $xyz.copy
+| when got $world.block_at{XYZ}: leave
+| Target.remove
+| Target.move{XYZ}
+
 effect remove Whom: case Whom
   target | Target.free
   self | Me.free

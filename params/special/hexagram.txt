@@ -5,7 +5,7 @@ tier: 2
 attack: 1
 defense: 0
 ranged: 1
-income: 0
+income: -2
 empty: 1
 health: 1
 pickable: 1
@@ -14,3 +14,5 @@ starts: still // initial animation
 moves: matrix.turret
 trigger: when{enemy},effect{pickup},remove{self}
 ai: turret
+
+acts: (cast_call)
