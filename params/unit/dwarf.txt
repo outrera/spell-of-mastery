@@ -4,6 +4,7 @@ health: 4
 attack: 2
 defense: 3
 income: misc.tier2_upkeep
+
 sounds: attack,(attack2)
        //,impact,()
        ,hit,(dwarf_hit)

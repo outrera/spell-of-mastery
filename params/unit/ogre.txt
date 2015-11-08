@@ -4,7 +4,6 @@ health: 7
 attack: 6
 defense: 0
 income: misc.tier4_upkeep
-moves: matrix.move2
 
 sounds: attack,(ogre_club)
        //,impact,()

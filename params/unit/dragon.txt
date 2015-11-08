@@ -5,7 +5,7 @@ attack: 5
 defense: 3
 flyer: 1
 income: misc.tier4_upkeep
-moves: matrix.move2
+moves: matrix.move4
 impact: impact{fire_ring}
 
 sounds: attack,(dragon_hit)

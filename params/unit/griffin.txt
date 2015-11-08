@@ -5,7 +5,7 @@ attack: 3
 defense: 0
 flyer: 1
 income: misc.tier3_upkeep
-moves: matrix.move_l
+moves: matrix.move4
 
 sounds: attack,(attack2)
        //,impact,()

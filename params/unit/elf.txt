@@ -5,7 +5,7 @@ attack: 1
 defense: 0
 ranged: 1
 income: misc.tier2_upkeep
-moves: matrix.skirmish2
+moves: matrix.skirmish3
 
 sounds: attack,(arrow_hit)
        //,impact,()

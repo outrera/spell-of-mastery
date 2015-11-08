@@ -4,4 +4,4 @@ health: 5
 attack: 2
 defense: 0
 income: misc.tier2_upkeep
-moves: matrix.move2
+moves: matrix.move3
