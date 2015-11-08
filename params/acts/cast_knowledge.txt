@@ -3,4 +3,4 @@ before: effect{teleport},sound{summon}
 after: lore{1}
 icon: spell_knowledge
 //research: misc.tier1_rcost
-cost: 1000
+cost: misc.tier1_scost

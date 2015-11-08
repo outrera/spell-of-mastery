@@ -1,12 +1,10 @@
 sprite: unit_ogre
 tier: 4
-health: 6
-attack: 7
+health: 7
+attack: 6
 defense: 0
 income: misc.tier4_upkeep
-ranged: 1
-
-moves: matrix.skirmish0
+moves: matrix.move2
 
 sounds: attack,(ogre_club)
        //,impact,()
