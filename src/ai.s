@@ -189,6 +189,14 @@ ai.roam_with Radius U =
 | World = $world
 | Owner = U.owner
 | OId = Owner.id
+| when U.ranged:
+  | allows_attack M = M.type >< move
+                      and U.list_moves{M.xyz}.keep{?type><attack}.size
+  | Ms = U.list_moves{U.xyz}.keep{&allows_attack}
+  | when Ms.size:
+    | Dst = Ms{M=>[(M.xyz-U.xyz).abs M]}.sort{?0<??0}.0.1
+    | $marked_order{U Dst}
+    | leave 1
 | Blockers = []
 | block XYZ =
   | B = World.alloc_unit{unit_block owner/U.owner}
