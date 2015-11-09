@@ -298,9 +298,10 @@ unit.list_moves XYZ =
                    | Move <= move attack Src Dst
                else when can_push Me B:
                  | Move <= move push Src [Dst.0 Dst.1 Dst.2+B.height]
-        else | when B.moves.size and B.can_move{Dst Src} and V <> 2:
+        else when Blocked>>0:
+             | when B.moves.size and B.can_move{Dst Src} and V <> 2:
                | Move <= move swap Src Dst
-             | when Blocked>>0: Blocked <= if $ranged then -1 else 1
+             | Blocked <= if $ranged then -1 else 1
   | when Blocked < 1:
     | less Move: when V<>2: less Blocked: Move <= move move Src Dst
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
