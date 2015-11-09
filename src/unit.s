@@ -266,7 +266,11 @@ unit.list_moves XYZ =
     | push N StackDst
 | BX,BY,BZ = XYZ
 | till StackDst.end
+  | Blocked = 0
   | Src = pop StackSrc
+  | when Src.is_move //hack to propagate blocked=-1 through path
+    | Src <= Src.src
+    | Blocked <= -1
   | DX,DY = pop StackDst
   | V = OMs.DY.DX
   | X = BX+DX-O
@@ -282,28 +286,30 @@ unit.list_moves XYZ =
   | while $world.at{X Y Z}.empty: !Z - 1
   | !Z + 1
   | Dst = [X Y Z]
-  | Blocked = not $can_move{Src Dst}
+  | less Blocked: Blocked <= not $can_move{Src Dst}
   | B = $world.block_at{Dst}
   | when got B:
-    | less Blocked:
-      | Blocked <= $owner.id <> B.owner.id
-      | if Blocked
-        then | if B.hits < B.health then
+    | when Blocked < 1:
+      | EnemyBlocker = $owner.id <> B.owner.id
+      | if EnemyBlocker
+        then | Blocked <= EnemyBlocker
+             | if B.hits < B.health then
                  | when V < 3 and $attack>0:
                    | Move <= move attack Src Dst
                else when can_push Me B:
                  | Move <= move push Src [Dst.0 Dst.1 Dst.2+B.height]
         else | when B.moves.size and B.can_move{Dst Src} and V <> 2:
                | Move <= move swap Src Dst
-             | Blocked <= not $ranged
-  | less Blocked
-    | less Move: when V<>2: Move <= move move Src Dst
+             | when Blocked>>0: Blocked <= if $ranged then -1 else 1
+  | when Blocked < 1:
+    | less Move: when V<>2: less Blocked: Move <= move move Src Dst
     | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
       | X,Y = N
       | Xs = Ms.Y
       | when Xs.X
         | Xs.X <= 0
-        | push Dst StackSrc
+        | D = if Blocked < 0 then move 0 Dst 0 else Dst
+        | push D StackSrc
         | push N StackDst
   | when Move: push Move Moves
 | Moves.list
