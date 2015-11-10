@@ -294,7 +294,7 @@ unit.list_moves XYZ =
       | if EnemyBlocker
         then | Blocked <= EnemyBlocker
              | if B.hits < B.health then
-                 | when V < 3 and $attack>0:
+                 | when V < 3 and $attack>0 and B.can_move{Dst Src}:
                    | Move <= move attack Src Dst
                else when can_push Me B:
                  | Move <= move push Src [Dst.0 Dst.1 Dst.2+B.height]
