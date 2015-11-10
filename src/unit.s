@@ -286,7 +286,7 @@ unit.list_moves XYZ =
   | while $world.at{X Y Z}.empty: !Z - 1
   | !Z + 1
   | Dst = [X Y Z]
-  | less Blocked: Blocked <= not $can_move{Src Dst}
+  | less $can_move{Src Dst}: Blocked <= 1 
   | B = $world.block_at{Dst}
   | when got B:
     | when Blocked < 1:
