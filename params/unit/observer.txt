@@ -10,6 +10,6 @@ moves: matrix.skirmish1
 
 sounds: attack,(observer_attack)
        //,impact,()
-       //,hit,(observer_die)
+       ,hit,(observer_hit)
        ,die,(observer_die)
-       ,move,(wings)
+       ,move,(observer_move)

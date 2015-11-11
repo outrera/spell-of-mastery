@@ -357,6 +357,10 @@ unit.die =
 | $forced_order{type/die}
 
 unit.harm Attacker Damage =
+| when Attacker and $leader><1 and Me.owner.id<>0:
+  | when not $owner.human and Attacker.owner.id><0:
+    | Attacker.harm{Me 1000}
+    | leave
 | less $hits < $health: leave
 | case Damage
   [_ piercing D] | Damage <= D
