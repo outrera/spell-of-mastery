@@ -43,7 +43,7 @@ type main{Data}
                "\n\n\nTHANKS TO:\n"
                "  Matthew Ostil\n"
               ]
-//| sprite_dump Me "/Users/nikita/Downloads/1" staticFrame/128 sheet/1 unit_wizard
+//| sprite_dump Me "/Users/nikita/Downloads/1" staticFrame/256 sheet/0 unit_dragon
 | world Me
 
 export main

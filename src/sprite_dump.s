@@ -1,7 +1,7 @@
 use gfx
 
 
-sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 =
+sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 uniform/0 =
 | S = Me.sprites.Name
 | Rs = []
 | WW = 1
@@ -49,8 +49,14 @@ sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 =
 //| say Ls.flip
 | "[DstPath]/[Name].txt".set{Ls.flip.as_text}
 | when Sheet: G.save{"[DstPath]/[Name].png"}
+| FB = gfx WW HH
 | less Sheet: for [R AnimName Dir XX,YY] Rs:
-  | R.save{"[DstPath]/[Dir]-[AnimName]+[XX]+[YY].png"}
+  | when StaticFrame
+    | FB.clear{#FF000000}
+    | FB.blit{FB.w/2-R.w/2+XX FB.h-32-R.h+YY R}
+    | FB.save{"[DstPath]/[Dir]-[AnimName].png"}
+  | less StaticFrame
+    | R.save{"[DstPath]/[Dir]-[AnimName]+[XX]+[YY].png"}
 
 
 export sprite_dump
