@@ -362,8 +362,13 @@ ai_update Me =
 | Params = $main.params
 | while $script><1:
 | Units = Player.active
-| for U Units: // check if we can attack someone 
-  | case U.list_moves{U.xyz}.keep{?type >< attack} [A@_]
+| target_priority U X =
+  | B = $world.block_at{X.xyz}
+  | B.health - B.hits - max{1 U.attack-B.defense}
+| for U Units: // check if we can attack someone
+  | Ms = U.list_moves{U.xyz}.keep{?type >< attack}
+  | Ms = Ms.sort{A B => target_priority{U A}<target_priority{U B}}
+  | case Ms [A@_]
     | U.attacker <= 1
     | $marked_order{U A}
     | leave
