@@ -22,15 +22,16 @@ default:
 
 
 tier0:
-  | wait difficulty*2
+  | wait difficulty*1
   | attack ratman
-  | wait difficulty*4
+  | wait difficulty*2
   | attack ratman ratman
   | goto tier1
 
 tier1:
   | wait difficulty*4
   | attack ratman ratman goblin
+  | wait difficulty*2
   | attack ratman goblin goblin
   | goto tier2 when lossage >> 14
 
@@ -73,4 +74,4 @@ tier4:
 l2:
  | set aiDefensiveSpell cast_shell
  | attack ratman ratman goblin
- | wait difficulty*6
+ | wait difficulty*4

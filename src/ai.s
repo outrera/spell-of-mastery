@@ -53,7 +53,7 @@ cast_spell_sub Me U Offensive =
 cast_spell Me U =
 | PP = $player.params
 | Turn = $world.turn
-| when PP.aiSpellWait>>Turn: leave 0
+| when PP.aiSpellWait>>Turn and Turn>48: leave 0
 | AT = $player.params.aiType
 | when cast_spell_sub{Me U 1} or cast_spell_sub{Me U 0}:
   | D = max 0 PP.difficulty-2

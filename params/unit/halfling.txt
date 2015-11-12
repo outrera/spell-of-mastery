@@ -1,7 +1,7 @@
 sprite: unit_halfling
 tier: 1
 health: 2
-attack: 5
+attack: 3
 defense: 0
 income: misc.tier1_upkeep
 
