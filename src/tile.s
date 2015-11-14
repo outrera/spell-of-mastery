@@ -67,9 +67,10 @@ tile.render X Y Z Below Above Seed =
 | AFiller = AR >< filler
 | NeibElevs = #@0000
 | T = Me
-| Water = $water
-| when Water and got World.neibs{X Y Z-$height+1}.find{?type><water}:
-  | T <= $main.tiles.Water
+| when $water:
+  | Neib,Water = $water
+  | when got World.neibs{X Y Z-$height+1}.find{?type><Neib}:
+    | T <= $main.tiles.Water
 | Gs = if BR <> $role then T.base
        else if AR <> $role and not AFiller then T.top
        else T.middle

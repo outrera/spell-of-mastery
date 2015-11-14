@@ -42,7 +42,7 @@ remap_tids Me LookupTable Xs =
       | H = T.height-1
       | Ps = T.parts
       | Z = Z-H
-      | times I H: Rs.(Z+I) <= Ps.I
+      | when H>0: times I H: Rs.(Z+I) <= Ps.I
   | Rs
 
 world.load Saved =
