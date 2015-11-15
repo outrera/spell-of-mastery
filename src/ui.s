@@ -377,22 +377,25 @@ ui_on_view_unit_pick Me Unit =
 | GameUnitUI.show <= NonNil
 | for Icon ActIcons: Icon.show <= 0
 //| when nit.moved < $world.turn:
+| Acts = $main.params.acts
+| Player = Unit.owner
 | As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
 | for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
-  | Active = 1
-  | when Act.act >< summon and not Unit.owner.pentagram:
-    | Active <= 0
-  | Icon = ActIcons.I.widget
-  | Player = Unit.owner
-  | ResearchRemain = Player.research_remain{Act}
-  | Icon.data <= Act.name
-  | Icon.fg <= Act.icon_gfx
-  | Icon.number <= if ResearchRemain <> 0 then ResearchRemain else No
-  | Icon.research <= ResearchRemain <> 0
-  | Icon.frame <= 0
-  | Icon.w <= Icon.fg.w
-  | Icon.h <= Icon.fg.h
-  | ActIcons.I.show <= Active
+  | Preqs = Act.needs.all{N=>Player.research_remain{Acts.N}<<0}
+  | when Preqs:
+    | Active = 1
+    | when Act.act >< summon and not Unit.owner.pentagram:
+      | Active <= 0
+    | Icon = ActIcons.I.widget
+    | ResearchRemain = Player.research_remain{Act}
+    | Icon.data <= Act.name
+    | Icon.fg <= Act.icon_gfx
+    | Icon.number <= if ResearchRemain <> 0 then ResearchRemain else No
+    | Icon.research <= ResearchRemain <> 0
+    | Icon.frame <= 0
+    | Icon.w <= Icon.fg.w
+    | Icon.h <= Icon.fg.h
+    | ActIcons.I.show <= Active
 | UnitPanel.set_unit{Unit}
 
 create_act_icons Me =

@@ -5,3 +5,4 @@ range: 0
 before: ()
 after: ()
 latency: 1
+needs: ()
