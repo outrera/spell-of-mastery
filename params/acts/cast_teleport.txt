@@ -3,5 +3,6 @@ before: effect{teleport},sound{summon},set{self alpha 0},set{self delta 10}
 after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}
 icon: spell_teleport
 range: 2
-research: misc.tier3_rcost
-cost: misc.tier1_scost
+needs: (cast_telekinesis cast_excavate)
+research: misc.tier1_rcost
+cost: 200

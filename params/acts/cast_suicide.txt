@@ -2,5 +2,6 @@ affects: unit
 before: suicide{1},impact{explosion_blood},sound{fire1}//,cooldown{5}
 icon: spell_suicide
 range: 2
-research: misc.tier3_rcost
-cost: 200
+needs: (cast_lightning)
+research: misc.tier1_rcost
+cost: 400

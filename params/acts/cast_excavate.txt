@@ -5,4 +5,4 @@ icon: spell_excavate
 range: 1
 fix_z: caster
 research: misc.tier1_rcost
-cost: 200
+cost: 100

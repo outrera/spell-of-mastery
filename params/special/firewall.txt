@@ -1,6 +1,6 @@
 sprite: effect_firewall
 sight: 1
-ttl: 8
+ttl: 9
 trigger: harm{piercing.1},effect{fire_ring}
 //ai: avoid
 height: 4

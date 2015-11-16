@@ -1,7 +1,7 @@
 affects: unit
-before: harm{piercing.2},impact{lightning},sound{lightning}//,cooldown{5}
+before: harm{4},impact{lightning},sound{lightning}//,cooldown{5}
 icon: spell_lightning
 range: 2
-research: misc.tier2_rcost
 needs: (cast_fireball)
-cost: 150
+research: 10
+cost: 400
