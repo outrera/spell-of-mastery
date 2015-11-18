@@ -1,4 +1,4 @@
-use gfx gui util widgets action macros isort_
+use gfx gui util widgets action macros isort_ unit_flags
 
 ScreenXY = [0 0]
 BrightFactor = 0
@@ -120,9 +120,7 @@ unit.draw FB B =
   | YY = Y-PH
   | FB.blit{XX YY Mark}
   | Icons = []
-  | when $shell: push 2 Icons
-  | when $poison: push 4 Icons
-  | when $haste: push 5 Icons
+  | for [_ Flag Icon] UnitFlags: when $flags^get_bit{Flag}: push Icon Icons
   | when Icons.size
     | XX <= XX - Icons.size*8 + Mark.w/2
     | !YY-16

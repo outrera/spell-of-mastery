@@ -1,4 +1,4 @@
-use util action macros
+use util action macros dynamize unit_flags
 
 type unit.$class{Id World}
   id/Id
@@ -33,7 +33,8 @@ type unit.$class{Id World}
   flags
   alpha //how transparent is this unit
   delta //change of transparency per cycle
-  kills
+  kills //how many enemies this unit has killed
+  effects/[] //active effects
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -62,6 +63,9 @@ unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
 unit.poison = $flags^get_bit{6}
 unit.`!poison` State = $flags <= $flags^set_bit{6 State}
+
+unit.fireaura = $flags^get_bit{7}
+unit.`!fireaura` State = $flags <= $flags^set_bit{7 State}
 
 unit.alive = $hits < $health
 
@@ -112,6 +116,15 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
+  | for [Name [When Params]] $start_effects
+    | $add_effect{When Name -1 [inborn @Params]}
+
+unit.add_effect When Name Duration Params =
+| Es = @dynamize [[When Name Duration Params] @$effects]
+| $effects.dynafree
+| $effects <= Es
+| Flag = UnitFlagsTable.Name
+| when got Flag: $flags <= $flags^set_bit{Flag 1}
 
 unit.change_owner NewOwner =
 | $owner.lost_unit{Me}
@@ -174,6 +187,8 @@ unit.free =
 | when $owner: $owner.lost_unit{Me}
 | when $leader><1 and $hits >> $health: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
+| $effects.dynafree
+| $effects <= []
 | $world.free_unit{Me}
 
 unit.remove =

@@ -96,7 +96,13 @@ dact attack.update
     | when Target.hits < Target.health:
       | $data <= 2
       | $cycles <= 0
-      | when Target.counter: Target.effect{Target.counter U U.xyz}
+      | less U.ranged:
+        | for [When Name Duration Params] Target.effects: when When><counter:
+          | Effect = Target.main.params.effect.Name
+          | when no Effect:
+            | Target.world.notfy{"attack.start: missing effect [Name]"}
+          | when got Effect:
+            | Target.effect{Effect U U.xyz}
       | leave
     | $data <= 1
     | $cycles <= 90000

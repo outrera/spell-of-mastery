@@ -1,0 +1,1 @@
+fireaura: harm{piercing.2},impact{fire_ring}

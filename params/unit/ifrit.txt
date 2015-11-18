@@ -3,7 +3,7 @@ tier: 3
 health: 3
 attack: 3
 defense: 3
-counter: harm{piercing.2},impact{fire_ring}
+start_effects: fireaura{counter,(no_dispel)}
 flyer: 1
 income: misc.tier3_upkeep
 
