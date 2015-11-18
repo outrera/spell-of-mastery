@@ -6,8 +6,9 @@ _.dynafree =
 type sexp.list{head tail}
 sexp.end = 0
 sexp.as_text = "[$list]"
+sexp.is_list = 1
 
-MAXConses = 4000
+MAXConses = 8000
 
 SEXPConses = stack: dup MAXConses: sexp 0 []
 

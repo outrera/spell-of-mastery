@@ -5,9 +5,13 @@ world.save =
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
   | XYZ = if U.from.2>0 then [U.xyz U.from] else U.xyz
+  | TurnAndEffects = U.turn
+  | less U.effects.end:
+    | Es = U.effects.skip{E => case E.3 [inborn@_]}
+    | when Es.size: TurnAndEffects <= [TurnAndEffects Es]
   | list U.id U.serial U.type XYZ U.xy
          U.anim U.anim_step U.facing
-         U.owner.id U.moved U.turn U.flags U.hits
+         U.owner.id U.moved TurnAndEffects U.flags U.hits
 | list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
     filename | $filename
     name | $name
@@ -81,6 +85,10 @@ world.load Saved =
 | for X Saved.units
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Turn Flags @Hits]
         = X
+  | Effects = []
+  | when Turn.is_list:
+    | Effects <= Turn.1
+    | Turn <= Turn.0
   | U = $alloc_unit{Type owner/$players.Owner}
   | less U.health or U.ai >< pentagram:
     | U.change_owner{$players.0}
@@ -97,6 +105,7 @@ world.load Saved =
   | U.turn <= Turn
   | U.flags <= Flags
   | U.hits <= if Hits.size then Hits.0 else 0
+  | less Effects.end: U.effects <= @dynamize [@Effects @U.effects.list]
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
