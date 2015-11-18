@@ -116,10 +116,18 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
-  | for [Name [When Params]] $start_effects
-    | $add_effect{When Name -1 [inborn @Params]}
+  | for Name $start_effects: $add_effect{Name -1 [inborn]}
 
-unit.add_effect When Name Duration Params =
+unit.add_effect Name Duration Params =
+| Effect = $main.params.effect.Name
+| when no Effect:
+  | $world.notify{"unit.add_effect: missing effect [Name]"}
+  | leave
+| On = Effect.0
+| when On.0 <> `on`:
+  | $world.notify{"unit.add_effect: missing `on{When}` for effect [Name]"}
+  | leave
+| When = On.1
 | Es = @dynamize [[When Name Duration Params] @$effects]
 | $effects.dynafree
 | $effects <= Es

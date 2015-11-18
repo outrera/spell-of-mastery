@@ -20,6 +20,8 @@ effect enable State Players ActNames:
 | when Players >< target_owner: Players <= [Target.owner.id]
 | set_act_enabled $main State Players ActNames
 
+effect on When: No
+
 effect gain @Args:
 | ActNames = []
 | Player = 0

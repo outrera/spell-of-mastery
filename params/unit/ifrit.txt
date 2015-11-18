@@ -3,7 +3,7 @@ tier: 3
 health: 3
 attack: 3
 defense: 3
-start_effects: fireaura{counter,(no_dispel)}
+start_effects: (fireaura)
 flyer: 1
 income: misc.tier3_upkeep
 

@@ -1,1 +1,2 @@
-fireaura: harm{piercing.2},impact{fire_ring}
+fireaura: on{counter},harm{piercing.2},impact{fire_ring}
+poison: on{each.1},harm{piercing.1},impact{explosion_blood}
