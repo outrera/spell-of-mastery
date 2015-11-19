@@ -1,4 +1,4 @@
 fireaura: on{counter},harm{piercing.2},impact{fire_ring}
-poison: on{each.1},harm{piercing.1},impact{explosion_blood}
+poison: on{endturn.1},when{has_health.2},harm{piercing.1},impact{explosion_blood}
 shell: on{attacked},block_attack{1},sound{shell},impact{shell}//,strip{shell}
-haste: on{each.1},add_moves{1}
+haste: on{newturn.1},add_moves{1}

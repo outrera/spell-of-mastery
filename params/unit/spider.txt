@@ -4,7 +4,7 @@ health: 5
 attack: 2
 defense: 1
 income: misc.tier3_upkeep
-impact: poison{1},impact{explosion_blood}
+impact: add_effect{poison,10,(dispel)},impact{explosion_blood}
 
 sounds: attack,(spider_attack)
        //,impact,()

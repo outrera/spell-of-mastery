@@ -1,6 +1,6 @@
 affects: unit
-before: haste{target},impact{explosion_blood},sound{hasted}
+before: add_effect{haste,3,(dispel)},add_moves{1},impact{explosion_blood},sound{hasted}
 icon: spell_haste
 range: 2
-research: misc.tier2_rcost
-cost: 100
+//research: misc.tier2_rcost
+//cost: 400

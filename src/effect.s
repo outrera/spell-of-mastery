@@ -22,6 +22,17 @@ effect enable State Players ActNames:
 
 effect on When: No
 
+effect add_effect Name Duration Params: Target.add_effect{Name Duration Params}
+
+effect add_moves N:
+| Turn = $world.turn
+| T = Target
+| if T.moved > Turn then T.moved <= -1
+  else if T.moved>>0 and T.moved < Turn then T.moved <= -1
+  else if T.moved>0 then T.moved <= 0
+  else T.moved <= 0
+| !T.moved - N
+
 effect gain @Args:
 | ActNames = []
 | Player = 0
@@ -79,13 +90,6 @@ effect suicide As:
 
 effect paralyze Time: Target.moved <= $world.turn+Time
 
-effect haste Whom:
-| if Target.moved>>$world.turn
-  then Target.moved <= $world.turn-1
-  else Target.haste <= 1
-
-effect shell Whom: Target.shell <= 1
-
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
@@ -93,8 +97,6 @@ effect msg Title @Body: $main.show_message{Title Body.text{' '}}
 effect mana Amount: !Target.owner.mana+Amount
 
 effect flyer State: Target.flyer <= State
-
-effect poison State: Target.poison <= State
 
 type unit_setter{unit}
 
@@ -207,15 +209,17 @@ effect victory Player Reason:
 | WP.victory_type <= Reason
 
 unit.effect Effect Target TargetXYZ =
+| case Effect [on,When @Es]: Effect <= Es
 | case Effect [when,When @Es]
-  | Cs = if When.is_list then When else [When]
+  | Cs = if When.is_list and not When.end and When.0<>`.` then When else [When]
   | for C Cs: case C
     ally | when $owner.is_enemy{Target.owner}: leave
     enemy | less $owner.is_enemy{Target.owner}: leave
     confirmed | less $main.dialog_result><yes: leave
     unmoved | less $moved < $world.turn: leave
     harmed | less $hits: leave
-    [has_mana A] | less $owner.mana>>A: leave
+    [`.` has_health A] | less $health-$hits>>A: leave
+    [`.` has_mana A] | less $owner.mana>>A: leave
     sinner | less Target.kills>0: leave
   | Effect <= Es
 | case Effect [target,alive @Effect]

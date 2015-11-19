@@ -1,5 +1,5 @@
 affects: unit
-before: harm{-1},poison{0},impact{explosion_blood},sound{summon}
+before: harm{-1}/*,strip{poison}*/,impact{explosion_blood},sound{summon}
 //after: cooldown{3}
 icon: spell_heal
 range: 2

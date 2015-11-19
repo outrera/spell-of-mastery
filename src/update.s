@@ -49,11 +49,17 @@ update_spell_of_mastery Me P =
 world.end_turn =
 | P = $player
 | less P.human: free_ai_blockers Me
-| for U P.units: when U.health>0:
-  | when U.poison and U.health-U.hits>1:
-    | $effect{U.xyz explosion_blood}
-    | U.harm{$nil 1}
-  | for V $units_at{U.xyz}: when V.trigger: V.effect{V.trigger U U.xyz}
+| for U P.units: 
+  | when U.health>0: for V $units_at{U.xyz}:
+    | when V.trigger: V.effect{V.trigger U U.xyz}
+  | less U.effects.end:
+    | U.run_effects{(X=>case X [`.`endturn@_] 1) U U.xyz}
+    | Remove = []
+    | for E U.effects: case E [When Name Duration Params]: when Duration>>0:
+      | !Duration-1
+      | less Duration > 0: push Name Remove
+      | E.2 <= Duration
+    | for E Remove: U.strip_effect{E}
 | PResearch = P.research
 | for Type,Act $main.params.acts: when PResearch.Type > Act.research:
   | !PResearch.Type-1 //cooldown
@@ -88,10 +94,12 @@ world.end_turn =
   | $main.show_message{'Wizard has Lost Too Much Mana'
        "[P.name] is too exhausted and cannot continue his life."}
   | Leader.harm{Leader 1000}
-  | Leader.harm{Leader 1000}
+  | Leader.harm{Leader 1000} //in case leade has shell
   | $effect{Leader.xyz electrical}
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
+| for U Units:
+  | less U.effects.end: U.run_effects{(X=>case X [`.`newturn@_] 1) U U.xyz}
 
 
 EventActions = []
@@ -209,8 +217,8 @@ unit.update =
     then | less Path:
            | !$owner.mana-$next_action.cost
            | when Speed:
-             | if $haste then
-                 | $haste <= 0
+             | if $moved < -1 then
+                 | !$moved + 1
                  | $handled <= 0
                else 
                  | $moved <= $world.turn-Speed-1

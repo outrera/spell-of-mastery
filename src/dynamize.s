@@ -27,6 +27,10 @@ sexp.dynafree =
   | Me <= T
   | when H.is_sexp: H.dynafree
 
+sexp.`!` K V =
+| times I K: Me <= $tail
+| $head <= V
+
 list.dynamize =
 | Ys = []
 | for X Me.flip: Ys <= sexp_cons X.dynamize Ys
