@@ -50,8 +50,8 @@ world.end_turn =
 | P = $player
 | less P.human: free_ai_blockers Me
 | for U P.units: 
-  | when U.health>0: for V $units_at{U.xyz}:
-    | when V.trigger: V.effect{V.trigger U U.xyz}
+  | when U.health>0: for V $units_at{U.xyz}: less V.effects.end:
+    | V.run_effects{?><tenant_endturn U U.xyz}
   | less U.effects.end:
     | U.run_effects{(X=>case X [`.`endturn@_] 1) U U.xyz}
     | Remove = []

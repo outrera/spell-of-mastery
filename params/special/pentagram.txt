@@ -6,8 +6,8 @@ entity: 1
 pickable: 1
 sight: 1
 starts: still // initial animation
-trigger: when{enemy},effect{pickup},remove{self}
 ai: pentagram
+inborn: (enemy_removes)
 
 acts: summon_bat, summon_blob, summon_ratman, summon_goblin,
       summon_skeleton, summon_halfling,

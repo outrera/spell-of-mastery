@@ -3,9 +3,9 @@ tier: 3
 health: 3
 attack: 3
 defense: 3
-start_effects: (fireaura)
 flyer: 1
 income: misc.tier3_upkeep
+inborn: (fireaura)
 
 sounds: attack,(fire1)
        //,impact,()

@@ -13,7 +13,7 @@ sight: 1
 starts: still // initial animation
 //moves: matrix.turret
 leader: 2
-trigger: when{enemy},effect{pickup},remove{self}
 ai: turret
+inborn: (enemy_removes)
 
 acts: (cast_fireball cast_lightning cast_call)

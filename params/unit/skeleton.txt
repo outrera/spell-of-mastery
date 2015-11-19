@@ -4,8 +4,7 @@ health: 3
 attack: 1
 defense: 1
 income: misc.tier1_upkeep
-
-trigger: misc.regen
+inborn: (regen)
 
 sounds: attack,(attack2)
        //,impact,()

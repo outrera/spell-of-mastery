@@ -4,8 +4,7 @@ health: 6
 attack: 5
 defense: 2
 income: misc.tier4_upkeep
-
-trigger: misc.regen
+inborn: (regen)
 
 sounds: attack,(hydra_attack)
        //,impact,()

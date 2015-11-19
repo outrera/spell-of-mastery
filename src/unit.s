@@ -116,7 +116,7 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
-  | for Name $start_effects: $add_effect{Name -1 [inborn]}
+  | for Name $inborn: $add_effect{Name -1 [inborn]}
 
 unit.add_effect Name Duration Params =
 | Effect = $main.params.effect.Name

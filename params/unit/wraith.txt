@@ -5,8 +5,7 @@ attack: 2
 defense: 1
 flyer: 1
 income: misc.tier2_upkeep
-
-trigger: misc.regen
+inborn: (regen)
 
 sounds: attack,(attack2)
        //,impact,()

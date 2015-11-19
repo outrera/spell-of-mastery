@@ -1,5 +1,4 @@
 summon: impact{teleport},sound{summon}
-regen: when{harmed,has_mana.100}/*,strip{poison}*/,harm{-1},set{inc,owner,mana,-100},effect{explosion_blood}
 tier1_rcost: 5
 tier1_scost: 400
 tier2_rcost: 14
