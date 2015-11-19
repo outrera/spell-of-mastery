@@ -1,5 +1,5 @@
 affects: unit
-before: add_effect{shell,-1,(dispel)},impact{shell},sound{shell}
+before: add_effect{shell,0,(dispel)},impact{shell},sound{shell}
 icon: spell_shell
 range: 2
 research: misc.tier2_rcost

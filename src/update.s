@@ -55,7 +55,7 @@ world.end_turn =
   | less U.effects.end:
     | U.run_effects{(X=>case X [`.`endturn@_] 1) U U.xyz}
     | Remove = []
-    | for E U.effects: case E [When Name Duration Params]: when Duration>>0:
+    | for E U.effects: case E [When Name Duration Params]: when Duration>0:
       | !Duration-1
       | less Duration > 0: push Name Remove
       | E.2 <= Duration

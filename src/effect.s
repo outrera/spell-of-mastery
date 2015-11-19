@@ -26,6 +26,8 @@ effect add_effect Name Duration Params: Target.add_effect{Name Duration Params}
 
 effect strip Name: Target.strip_effect{Name}
 
+effect add_item Amount Name: Target.add_item{Amount Name}
+
 effect mod Arg: Target.mod <= Arg
 
 effect add_moves N:

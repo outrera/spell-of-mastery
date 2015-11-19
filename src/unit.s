@@ -105,7 +105,7 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
-  | for Name $inborn: $add_effect{Name -1 [inborn]}
+  | for Name $inborn: $add_effect{Name 0 [inborn]}
 
 unit.add_effect Name Duration Params =
 | Effect = $main.params.effect.Name
@@ -129,6 +129,18 @@ unit.strip_effect Name =
 | $effects <= Es
 | Flag = UnitFlagsTable.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 0}
+
+unit.add_item Amount Name =
+| when Amount > 0:
+  | $add_effect{Name -Amount []}
+  | leave
+| for E $effects: case E [When EName Duration Params]: when EName><Name:
+  | !Duration-Amount
+  | when Duration >> -1:
+    | $strip_effect{Name}
+    | leave
+  | E.2 <= Duration
+  | leave
 
 unit.run_effects Selector Target TargetXYZ =
 | Es = []
