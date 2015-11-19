@@ -35,6 +35,7 @@ type unit.$class{Id World}
   delta //change of transparency per cycle
   kills //how many enemies this unit has killed
   effects/[] //active effects
+  mod //set by various effects to modify some contextual behavior
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -52,20 +53,8 @@ unit.`!handled` State = $flags <= $flags^set_bit{1 State}
 unit.summoned = $flags^get_bit{2}
 unit.`!summoned` State = $flags <= $flags^set_bit{2 State}
 
-unit.haste = $flags^get_bit{3}
-unit.`!haste` State = $flags <= $flags^set_bit{3 State}
-
-unit.shell = $flags^get_bit{4}
-unit.`!shell` State = $flags <= $flags^set_bit{4 State}
-
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
-
-unit.poison = $flags^get_bit{6}
-unit.`!poison` State = $flags <= $flags^set_bit{6 State}
-
-unit.fireaura = $flags^get_bit{7}
-unit.`!fireaura` State = $flags <= $flags^set_bit{7 State}
 
 unit.alive = $hits < $health
 
@@ -397,16 +386,15 @@ unit.harm Attacker Damage =
 | when Attacker and $leader><1 and Me.owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}
-    | leave
+    | leave //roaming neutral units wont harm AI wizard
 | less $hits < $health: leave
 | case Damage
   [_ piercing D] | Damage <= D
   Else | when Damage > 0: Damage <= max 1 Damage-$defense
-| when $shell and Damage > 0:
-  | $shell <= 0
-  | $world.effect{$xyz shell}
-  | $main.sound{shell}
-  | leave
+| $run_effects{?><attacked Me $xyz}
+| Mod = $mod
+| $mod <= 0
+| when Mod >< block: leave
 | !$hits + Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hits < $health:

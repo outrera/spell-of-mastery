@@ -26,6 +26,8 @@ effect add_effect Name Duration Params: Target.add_effect{Name Duration Params}
 
 effect strip Name: Target.strip_effect{Name}
 
+effect mod Arg: Target.mod <= Arg
+
 effect add_moves N:
 | Turn = $world.turn
 | T = Target
