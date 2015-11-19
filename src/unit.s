@@ -21,7 +21,7 @@ type unit.$class{Id World}
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
   sprite
-  moved // last turn, this unit moved
+  moved // last turn, this unit moved, number of move points (when negative)
   mirror // true, if drawing code should mirror the sprite
   picked // cons of the next unit in the selection
   mark // next mark in the map marks chain
@@ -133,6 +133,20 @@ unit.add_effect Name Duration Params =
 | $effects <= Es
 | Flag = UnitFlagsTable.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 1}
+
+unit.strip_effect Name =
+| Es = @dynamize $effects.skip{?1><Name}
+| $effects.dynafree
+| $effects <= Es
+| Flag = UnitFlagsTable.Name
+| when got Flag: $flags <= $flags^set_bit{Flag 0}
+
+unit.run_effects Selector Target TargetXYZ =
+| Es = []
+| for [When Name Duration Params] $effects: when Selector When:
+  | Effect = Target.main.params.effect.Name
+  | push Effect Es //because invoking effect here may clobber $effects
+| for Effect Es: $effect{Effect Target TargetXYZ}
 
 unit.change_owner NewOwner =
 | $owner.lost_unit{Me}

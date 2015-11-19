@@ -216,7 +216,7 @@ unit.update =
                  | $moved <= $world.turn-Speed-1
                  | when $leader and $next_action.type><custom:
                    | for U $owner.active:
-                     | when U.leader: U.moved  <= $moved
+                     | when U.leader: U.moved <= $moved
          | less $owner.human: when $seen:
            | $world.view.center_at{$xyz cursor/1}
     else

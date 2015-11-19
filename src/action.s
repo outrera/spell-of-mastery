@@ -96,10 +96,7 @@ dact attack.update
     | when Target.hits < Target.health:
       | $data <= 2
       | $cycles <= 0
-      | less U.ranged:
-        | for [When Name Duration Params] Target.effects: when When><counter:
-          | Effect = Target.main.params.effect.Name
-          | Target.effect{Effect U U.xyz}
+      | less U.ranged: Target.run_effects{?><counter U U.xyz}
       | leave
     | $data <= 1
     | $cycles <= 90000
