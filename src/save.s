@@ -6,9 +6,7 @@ world.save =
   | ActivePlayers.(U.owner.id) <= 1
   | XYZ = if U.from.2>0 then [U.xyz U.from] else U.xyz
   | TurnAndEffects = U.turn
-  | less U.effects.end:
-    | Es = U.effects.skip{E => case E.3 [inborn@_]}
-    | when Es.size: TurnAndEffects <= [TurnAndEffects Es]
+  | less U.effects.end: TurnAndEffects <= [TurnAndEffects U.effects]
   | list U.id U.serial U.type XYZ U.xy
          U.anim U.anim_step U.facing
          U.owner.id U.moved TurnAndEffects U.flags U.hits
@@ -105,7 +103,9 @@ world.load Saved =
   | U.turn <= Turn
   | U.flags <= Flags
   | U.hits <= if Hits.size then Hits.0 else 0
-  | less Effects.end: U.effects <= @dynamize [@Effects @U.effects.list]
+  | U.effects.dynafree
+  | U.effects <= []
+  | less Effects.end: U.effects <= @dynamize Effects
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U

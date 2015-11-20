@@ -4,7 +4,7 @@ health: 4
 attack: 2
 defense: 0
 income: misc.tier1_upkeep
-inborn: (shell)
+
 sounds: attack,(attack2)
        //,impact,()
        ,hit,(rat_death)

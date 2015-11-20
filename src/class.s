@@ -3,7 +3,7 @@ use gfx util param
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 shadow/0 moves/[] speed/-1 sight/No
            starts/0 flyer/0 ranged/0 leader/0
-           health/0 attack/0 defense/0 ttl/100000000
+           health/0 attack/0 defense/0
            acts/[] sounds/[] icon/0 title/0 income/0 item/0
            ai/0 show/1 height/0
            passable/1 impact/0 movable/0 counter/0 tier/0
@@ -27,7 +27,6 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   health/Health
   attack/Attack
   defense/Defense
-  ttl/Ttl
   acts/Acts
   sounds/Sounds.group{2}.table
   icon/Icon

@@ -6,3 +6,4 @@ regen: on{endturn.1},when{harmed,has_mana.100}/*,strip{poison}*/
       ,harm{-1},set{inc,owner,mana,-100},effect{explosion_blood}
 burning: on{tenant_endturn},harm{piercing.1},effect{fire_ring}
 enemy_removes: on{tenant_endturn},when{enemy},effect{pickup},remove{self}
+ttl: on{timeout},remove{self}

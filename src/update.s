@@ -55,11 +55,17 @@ world.end_turn =
   | less U.effects.end:
     | U.run_effects{(X=>case X [`.`endturn@_] 1) U U.xyz}
     | Remove = []
+    | RunEs = []
     | for E U.effects: case E [When Name Duration Params]: when Duration>0:
       | !Duration-1
-      | less Duration > 0: push Name Remove
+      | less Duration > 0:
+        | when When >< timeout: push Name RunEs
+        | push Name Remove
       | E.2 <= Duration
-    | for E Remove: U.strip_effect{E}
+    | for Name Remove: U.strip_effect{Name}
+    | for Name RunEs:
+      | Effect = $main.params.effect.Name
+      | U.effect{Effect U U.xyz}
 | PResearch = P.research
 | for Type,Act $main.params.acts: when PResearch.Type > Act.research:
   | !PResearch.Type-1 //cooldown
@@ -170,8 +176,6 @@ unit.update =
 | when $removed or $active<>1:
   | $active <= 0
   | leave
-| when $turn and ($world.turn - $turn) >> $ttl and $action.type <> die:
-  | $die
 | !$anim_wait - 1
 | less $anim_wait > 0
   | when $anim >< attack and $anim_step+1 >< $anim_seq.size:

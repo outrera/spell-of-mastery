@@ -170,6 +170,10 @@ effect remove Whom: case Whom
   Serial | U = $world.units.find{?serial><Serial}
          | when got U and U.xyz.2<>-1: U.free
 
+effect die Whom:
+| T = if Whom >< self then Me else Target
+| when T.action.type <> die: T.die
+
 effect clear What:
 | X,Y,Z = case What
   target | TargetXYZ.deep_copy

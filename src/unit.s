@@ -105,7 +105,9 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
-  | for Name $inborn: $add_effect{Name 0 [inborn]}
+  | for E $inborn: case E
+      [`{}` Name Duration @Args] | $add_effect{Name Duration [inborn @Args]}
+      Else | $add_effect{E 0 [inborn]}
 
 unit.add_effect Name Duration Params =
 | Effect = $main.params.effect.Name
@@ -117,7 +119,7 @@ unit.add_effect Name Duration Params =
   | $world.notify{"unit.add_effect: missing `on{When}` for effect [Name]"}
   | leave
 | When = On.1
-| Es = @dynamize [[When Name Duration Params] @$effects]
+| Es = @dynamize [[When Name Duration Params] @$effects.list]
 | $effects.dynafree
 | $effects <= Es
 | Flag = UnitFlagsTable.Name
