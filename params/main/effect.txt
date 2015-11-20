@@ -2,7 +2,7 @@ fireaura: on{counter},harm{piercing.2},impact{fire_ring}
 poison: on{endturn.1},when{has_health.2},harm{piercing.1},impact{explosion_blood}
 shell: on{attacked},mod{block},sound{shell},impact{shell},strip{shell}
 haste: on{newturn.1},add_moves{1}
-regen: on{endturn.1},when{harmed,has_mana.100}/*,strip{poison}*/
+regen: on{endturn.2},when{harmed,has_mana.100}/*,strip{poison}*/
       ,harm{-1},set{inc,owner,mana,-100},effect{explosion_blood}
 burning: on{tenant_endturn},harm{piercing.1},effect{fire_ring}
 enemy_removes: on{tenant_endturn},when{enemy},effect{pickup},remove{self}

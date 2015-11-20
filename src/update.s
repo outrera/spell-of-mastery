@@ -49,11 +49,12 @@ update_spell_of_mastery Me P =
 world.end_turn =
 | P = $player
 | less P.human: free_ai_blockers Me
+| Turn = $turn
 | for U P.units: 
   | when U.health>0: for V $units_at{U.xyz}: less V.effects.end:
     | V.run_effects{?><tenant_endturn U U.xyz}
   | less U.effects.end:
-    | U.run_effects{(X=>case X [`.`endturn@_] 1) U U.xyz}
+    | U.run_effects{(X=>case X [`.`endturn N] Turn%N><0) U U.xyz}
     | Remove = []
     | RunEs = []
     | for E U.effects: case E [When Name Duration Params]: when Duration>0:
@@ -104,8 +105,9 @@ world.end_turn =
   | $effect{Leader.xyz electrical}
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
+| Turn=$turn
 | for U Units:
-  | less U.effects.end: U.run_effects{(X=>case X [`.`newturn@_] 1) U U.xyz}
+  | less U.effects.end: U.run_effects{(X=>case X [`.`newturn N] Turn%N><0) U U.xyz}
 
 
 EventActions = []
