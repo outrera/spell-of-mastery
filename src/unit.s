@@ -95,7 +95,6 @@ unit.init Class =
 | $alpha <= 0
 | $delta <= 0
 | $kills <= 0
-| when $class.flyer: $flyer <= 1
 | $from.init{0,0,-1}
 | when $starts
   | less $active
@@ -122,14 +121,14 @@ unit.add_effect Name Duration Params =
 | Es = @dynamize [[When Name Duration Params] @$effects.list]
 | $effects.dynafree
 | $effects <= Es
-| Flag = UnitFlagsTable.Name
+| Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 1}
 
 unit.strip_effect Name =
 | Es = @dynamize $effects.skip{?1><Name}
 | $effects.dynafree
 | $effects <= Es
-| Flag = UnitFlagsTable.Name
+| Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 0}
 
 unit.add_item Amount Name =

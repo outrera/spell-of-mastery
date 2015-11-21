@@ -3,10 +3,10 @@ tier: 4
 health: 5
 attack: 4
 defense: 2
-flyer: 1
 income: misc.tier4_upkeep
 ranged: 1
 moves: matrix.skirmish1
+inborn: (flyer)
 
 sounds: attack,(observer_attack)
        //,impact,()

@@ -102,8 +102,6 @@ effect msg Title @Body: $main.show_message{Title Body.text{' '}}
 
 effect mana Amount: !Target.owner.mana+Amount
 
-effect flyer State: Target.flyer <= State
-
 type unit_setter{unit}
 
 unit_setter.`!` K V =

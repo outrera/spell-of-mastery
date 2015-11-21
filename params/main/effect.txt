@@ -1,3 +1,6 @@
+flags: haste{3,5},shell{4,2},flyer{5,-1},poison{6,4},fireaura{7,0}
+
+flyer: on{static}
 fireaura: on{counter},harm{piercing.2},impact{fire_ring}
 poison: on{endturn.1},when{has_health.2},harm{piercing.1},impact{explosion_blood}
 shell: on{attacked},mod{block},sound{shell},impact{shell},strip{shell}

@@ -1,5 +1,5 @@
 affects: unit
-before: flyer{1},impact{explosion_blood},sound{wings}
+before: add_effect{flyer,0,(dispel)},impact{explosion_blood},sound{wings}
 icon: spell_flight
 range: 2
 research: misc.tier2_rcost

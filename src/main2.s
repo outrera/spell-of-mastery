@@ -1,4 +1,4 @@
-use world gfx sprite_dump
+use world gfx sprite_dump unit_flags
 
 type main{Data}
      world
@@ -44,6 +44,7 @@ type main{Data}
                "  Matthew Ostil\n"
               ]
 //| sprite_dump Me "/Users/nikita/Downloads/1" staticFrame/256 sheet/0 unit_dragon
+| init_unit_flags Me
 | world Me
 
 export main

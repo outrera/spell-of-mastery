@@ -120,7 +120,8 @@ unit.draw FB B =
   | YY = Y-PH
   | FB.blit{XX YY Mark}
   | Icons = []
-  | for [_ Flag Icon] UnitFlags: when $flags^get_bit{Flag}: push Icon Icons
+  | for [_ Flag Icon] getUnitFlags{}: when Icon>>0:
+    | when $flags^get_bit{Flag}: push Icon Icons
   | when Icons.size
     | XX <= XX - Icons.size*8 + Mark.w/2
     | !YY-16
