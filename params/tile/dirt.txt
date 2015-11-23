@@ -1,6 +1,6 @@
 sprite: tiles_dirt
 clear: 1
-trn: 1
+//trn: 1
 1111: 16
 0000: 18
 1000: 0

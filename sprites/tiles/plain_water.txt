@@ -1,1 +1,2 @@
-frames: 64*64
+author: Yar,`Nikita Sadkov`
+frames: 64*72
