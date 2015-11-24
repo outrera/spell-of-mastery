@@ -3,7 +3,7 @@ use gfx util
 type tile{As Main Type Role Id Lineup Base Middle Top Trns Plain
           height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
           match/same stairs/0 anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
-          parts/0}
+          parts/0 box/[64 64 h]}
      id/Id
      main/Main
      bank/Bank
@@ -30,6 +30,8 @@ type tile{As Main Type Role Id Lineup Base Middle Top Trns Plain
      heavy/Heavy
      clear/Clear
      parts/Parts
+     box/Box
+| when $box.2><h: $box.2 <= $height*8
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1

@@ -220,7 +220,8 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | G <= Folded
       else G <= 0
     | when G and Z>SkipZ:
-      | B = make_blit_item X*32 Y*32 Z*8 64 64 T.height*8 T
+      | Box = T.box
+      | B = make_blit_item X*32 Y*32 Z*8 Box.0 Box.1 Box.2 T
       | B.data <= G
       | B.sx <= BX
       | B.sy <= BY-G.h-ZZ
