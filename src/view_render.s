@@ -81,7 +81,7 @@ blit_item_from_unit U =
 | !Y+DDY
 | XD,YD,ZD = U.size
 | when U.mirror: swap XD YD
-| make_blit_item X Y Z XD YD ZD U
+| make_blit_item X Y Z+7 XD YD ZD U //Z+7 is a hack to avoid cursor cluttering
 
 unit.draw FB B =
 | X = B.sx
