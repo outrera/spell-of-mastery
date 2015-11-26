@@ -1,6 +1,3 @@
-author: `Artem Belov`
+author: `Nikita Sadkov`
 copyright: `Nikita Sadkov`
-xy: 0,8
-//frames: folder
-frames: 57*57
-anims: | idle  time-6 0 1 2 3 4 5
+xy: 0,14
