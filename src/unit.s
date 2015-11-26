@@ -167,7 +167,8 @@ missing_frame Me =
 
 unit.pick_facing F =
 | $facing <= F
-| FrameIndex = $anim_seq.$anim_step.0
+| AS = $anim_seq
+| FrameIndex = AS.($anim_step%AS.size).0
 | Frame = $sprite.frames.FrameIndex
 | less Frame.is_list
   | $frame <= Frame
