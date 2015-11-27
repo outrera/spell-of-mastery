@@ -1,4 +1,5 @@
 sprite: tiles_dirt
+stairs: 1
 clear: 1
 //trn: 1
 1111: 16

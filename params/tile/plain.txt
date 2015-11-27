@@ -2,6 +2,7 @@ sprite: tiles_plain
 //trn: 1
 water: water,plain_water
 clear: 1
+stairs: 1
 box: (64 64 39)
 1111: 16,17,16,17,16,17,19
 0000: 18

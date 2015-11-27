@@ -191,15 +191,14 @@ world.clear_tile XYZ Filler =
 | $update_move_map{XY}
 
 can_move Me SX SY SZ DX DY DZ =
-| Height = DZ-SZ
-| HeightAbs = Height.abs
-| when HeightAbs < 4:
-  | leave: $slope_at{DX DY DZ-1}><#@1111 or $at{DX DY DZ-1}.stairs
-| BelowDstTile = $at{DX DY DZ-1}
-| when BelowDstTile.stairs: leave 1
-| BelowSrcTile = $at{SX SY SZ-1}
-| when BelowSrcTile.stairs and Height<0: leave 1
-| 0
+| H = DZ-SZ
+| if H < 0
+  then | when H < -4: leave 0
+       | when H > -4: leave 1
+       | $at{SX SY SZ-1}.stairs
+  else | when H > 4: leave 0
+       | when H < 4: leave 1
+       | $at{DX DY DZ-1}.stairs
 
 MoveMapZs = [-4 -3 -2 -1 0 1 2 3 4]
 MoveMapXYs = [[1 0] [-1 0] [0 1] [0 -1]]
