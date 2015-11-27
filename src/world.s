@@ -195,7 +195,7 @@ can_move Me SX SY SZ DX DY DZ =
 | if H < 0
   then | when H < -4: leave 0
        | when H > -4: leave 1
-       | $at{SX SY SZ-1}.stairs
+       | $at{SX SY SZ-1}.stairs and $at{DX DY DZ}.type <> water
   else | when H > 4: leave 0
        | when H < 4: leave 1
        | $at{DX DY DZ-1}.stairs
