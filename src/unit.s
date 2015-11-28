@@ -210,7 +210,23 @@ player_lost_leader Me Leader =
 unit.free =
 | when $id >< $world.waiting: $world.waiting <= 0
 | when $owner: $owner.lost_unit{Me}
-| when $leader><1 and $hits >> $health: player_lost_leader $owner Me
+| when $leader><1 and $hits >> $health:
+  | P = $owner.pentagram
+  | Lost = 1
+  | when P and $owner.mana > 0 and no $world.block_at{P.xyz}:
+    | Cost = $main.params.world.death_cost
+    | !$owner.mana - Cost
+    | $owner.notify{"death cost you [Cost] mana"}
+    | S = $world.alloc_unit{$type owner/$owner}
+    | S.summoned <= 1
+    | S.alpha <= 255
+    | S.delta <= -25
+    | S.move{P.xyz}
+    | S.world.update_pick{[S]}
+    | S.main.ui.view.center_at{P.xyz}
+    | $world.effect{P.xyz teleport}
+    | Lost <= 0
+  | when Lost: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
 | $effects.dynafree
 | $effects <= []

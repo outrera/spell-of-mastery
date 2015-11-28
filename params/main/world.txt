@@ -15,4 +15,5 @@ release: 0 //set to 1 for releases build
 base_income: 50
 node_income: 25
 defeat_threshold: -1000 //negative mana forcing player defeat
+death_cost: 500 //mana lost when leader dies
 bounding_boxes: 0
