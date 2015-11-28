@@ -1,3 +1,2 @@
-author: `DeadKir`, `Nikita Sadkov`
+author: `Nikita Sadkov`
 license: `CC-BY 3.0`
-origin: `http://opengameart.org/content/pixelart-skills-icons`
