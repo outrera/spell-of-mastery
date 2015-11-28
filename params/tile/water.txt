@@ -1,6 +1,6 @@
 sprite: tiles_water
 height: 2
-empty: 1
+empty: 0
 filler: 0
 no_lineup: 1
 //anim_wait: 8

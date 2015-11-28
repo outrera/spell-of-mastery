@@ -1,6 +1,5 @@
 sprite: tiles_stairs
 role: wall
-stairs: 1
 1111: 0
 //1111: 16,17
 1000: 0

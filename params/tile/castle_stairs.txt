@@ -1,7 +1,6 @@
 sprite: tiles_castle
 height: 2
 role: wall
-stairs: 1
 1111: 1
 1000: 1
 1100: 1

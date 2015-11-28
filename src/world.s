@@ -194,8 +194,7 @@ can_move Me SX SY SZ DX DY DZ =
 | H = DZ-SZ
 | if H < 0
   then | when H < -4: leave 0
-       | when H > -4: leave 1
-       | $at{DX DY DZ}.type <> water
+       | $at{DX DY DZ-1}.type <> water
   else | H<<4
 
 MoveMapZs = [-4 -3 -2 -1 0 1 2 3 4]
