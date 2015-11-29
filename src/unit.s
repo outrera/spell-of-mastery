@@ -207,26 +207,28 @@ player_lost_leader Me Leader =
   | $world.params.victory_type <= 'Defeat by losing your leader.'
 | when RemainingUnits.any{?leader}: for U RemainingUnits: U.free
 
+respawn_leader Me XYZ =
+| when $owner.mana << 0 or got $world.block_at{XYZ}: leave 0
+| Cost = $main.params.world.death_cost
+| !$owner.mana - Cost
+| $owner.notify{"death cost you [Cost] mana"}
+| S = $world.alloc_unit{$type owner/$owner}
+| S.summoned <= 1
+| S.alpha <= 255
+| S.delta <= -25
+| S.move{XYZ}
+| S.world.update_pick{[S]}
+| S.main.ui.view.center_at{XYZ}
+| S.owner.leader <= S
+| $world.effect{XYZ teleport}
+| 1
+
 unit.free =
 | when $id >< $world.waiting: $world.waiting <= 0
 | when $owner: $owner.lost_unit{Me}
 | when $leader><1 and $hits >> $health:
   | P = $owner.pentagram
-  | Lost = 1
-  | when P and $owner.mana > 0 and no $world.block_at{P.xyz}:
-    | Cost = $main.params.world.death_cost
-    | !$owner.mana - Cost
-    | $owner.notify{"death cost you [Cost] mana"}
-    | S = $world.alloc_unit{$type owner/$owner}
-    | S.summoned <= 1
-    | S.alpha <= 255
-    | S.delta <= -25
-    | S.move{P.xyz}
-    | S.world.update_pick{[S]}
-    | S.main.ui.view.center_at{P.xyz}
-    | $world.effect{P.xyz teleport}
-    | Lost <= 0
-  | when Lost: player_lost_leader $owner Me
+  | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
 | $effects.dynafree
 | $effects <= []
