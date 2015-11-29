@@ -196,7 +196,8 @@ effect summon What:
 | S.alpha <= 255
 | S.delta <= -25
 | S.move{TargetXYZ}
-| less NoPick: S.world.update_pick{[S]}
+| when S.owner.human: S.attacker <= 1
+//| less NoPick: S.world.update_pick{[S]}
 
 effect teleport Arg: $forced_order{type/teleport at/TargetXYZ}
 

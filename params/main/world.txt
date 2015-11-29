@@ -16,4 +16,6 @@ base_income: 50
 node_income: 25
 defeat_threshold: -1000 //negative mana forcing player defeat
 death_cost: 500 //mana lost when leader dies
+start_mana: 1000 //400
+fastpaced: 1
 bounding_boxes: 0

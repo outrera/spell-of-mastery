@@ -355,13 +355,15 @@ ai.script =
 
 ai_update Me =
 | Player = $player
-| Player.mana <= 100000
-| Player.lore <= 9000
 | PID = Player.id
 | Pentagram = Player.pentagram
 | Params = $main.params
-| while $script><1:
 | Units = Player.active
+| if Player.human then Units <= Units.skip{?leader}
+  else
+    | Player.mana <= 100000
+    | Player.lore <= 9000
+    | while $script><1:
 | target_priority U X =
   | B = $world.block_at{X.xyz}
   | B.health - B.hits - max{1 U.attack-B.defense}
@@ -395,7 +397,7 @@ ai_update Me =
     | UH.move{U.xyz}
 | Quit = $update_units{Units}
 | when Quit: leave
-| $update_research
+| less Player.human: $update_research
 | for U Units
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
@@ -405,7 +407,8 @@ ai_update Me =
     | when SafeMoves.size //avoid harm
       | $marked_order{U SafeMoves.(($world.turn+U.id)%SafeMoves.size)}
       | leave // using SafeMoves.rand will complicate debug
-| $end_turn
+| $params.aiLastTurn <= $world.turn
+| less Player.human: $end_turn
 
 ai.update =
 | PerCycle <= t

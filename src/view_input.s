@@ -118,7 +118,8 @@ update_lmb Me Player =
   | $select_unit{$cursor}
   | leave
 | Picked = $world.picked
-| less Picked.id and Picked.owner.id >< Player.id:
+| FP = not Picked.leader and $main.params.world.fastpaced
+| less Picked.id and Picked.owner.id >< Player.id: less FP
   | $world.act <= 0
   | leave
 | less $world.seen{@$cursor.take{2}}: leave
@@ -139,8 +140,24 @@ update_rmb Me Player =
   | leave
 | less $world.seen{@$cursor.take{2}}: leave
 | Picked = $world.picked
-| when Picked.id and Picked.owner.id >< Player.id:
+| FP = not Picked.leader and $main.params.world.fastpaced
+| when Picked.id and Picked.owner.id >< Player.id: less FP:
   | $world.picked.guess_order_at{$cursor}
+
+player.every_cycle =
+| Turn = $world.turn
+| when not $world.picked.idle or $world.waiting:
+  | leave 0
+| FP = $main.params.world.fastpaced
+| when $human:
+  | when $leader and $leader.moved <> $world.turn:
+    | leave 1
+  | when not $leader: 1
+| when $params.aiLastTurn <> $world.turn:
+  | when FP or not $human: $ai.update
+  | leave 0
+| when FP: $world.end_turn
+| 0
 
 view.update_play =
 | Player = $world.player
@@ -148,11 +165,8 @@ view.update_play =
   | $keys.q <= 0
   | Player.human <= not Player.human 
   | leave $update_play
-| if not $world.picked.idle or $world.waiting then
-  else if not Player.human then
-    | $on_unit_pick{}{$world.nil}
-    | Player.ai.update
-  else
+| less Player.human: $on_unit_pick{}{$world.nil}
+| when Player.every_cycle
   | case $mice_click
     left | update_lmb Me Player
     right | update_rmb Me Player

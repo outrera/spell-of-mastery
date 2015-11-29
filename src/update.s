@@ -21,9 +21,10 @@ world.new_game =
 | $end_turn // hack to begin turns from 1
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
+| StartMana = $main.params.world.start_mana
 | for P $players:
   | P.lore <= 10
-  | P.mana <= 400
+  | P.mana <= StartMana
   | Us = P.units
   | for U Us: U.moved <= 0
   | less P.human: when Us.size:
@@ -105,6 +106,12 @@ world.end_turn =
   | $effect{Leader.xyz electrical}
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
+| FP = $main.params.world.fastpaced
+| when P.human and FP:
+  | L = P.leader
+  | when L
+    | $update_pick{[L]}
+    | $view.center_at{L.xyz}
 | Turn=$turn
 | for U Units:
   | less U.effects.end: U.run_effects{(X=>case X [`.`newturn N] Turn%N><0) U U.xyz}

@@ -29,6 +29,7 @@ type ui.$tabs{main} tabs width height world message_box view
 | $width <= $params.ui.width
 | $height <= $params.ui.height
 
+ui.player = $world.player
 ui.data = $main.data
 ui.load File =
 | $main.load{File}
@@ -245,6 +246,11 @@ create_bank_list Me =
          | ItemList.pick{0}
 | BankList,ItemList
 
+end_turn Me =
+| if $main.params.world.fastpaced and $player.leader
+  then $player.leader.moved <= $world.turn
+  else $world.end_turn
+
 create_view_ui Me =
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
@@ -254,7 +260,7 @@ create_view_ui Me =
 | UnitPanel <= unit_panel Me
 | GameUnitUI <= hidden: dlg: mtx
   |  0   0| UnitPanel
-| EndTurnIcon <= hidden: icon $img{"icons_hourglass"} click/(Icon => $world.end_turn)
+| EndTurnIcon <= hidden: icon $img{"icons_hourglass"} click/(Icon => end_turn Me)
 | GameUI = dlg: mtx
   |  0   0| $view
   |  0   0| GameUnitUI
@@ -283,7 +289,7 @@ create_ingame_dlg Me =
 | input_split Ingame: Base In =>
   | Handled = 0
   | when $view.mode >< play: less $view.paused: case In [key z 0]
-    | when $world.player.human: $world.end_turn
+    | when $world.player.human: end_turn Me
     | Handled <= 1
   | less Handled: Base.input{In}
 
@@ -423,7 +429,7 @@ create_ingame_icons Me =
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
 | HourglassIcon <= hidden: button 'HOURGLASS' skin/hourglass: =>
   | InputBlocker.show <= 1
-  | $world.end_turn
+  | end_turn Me
 
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"

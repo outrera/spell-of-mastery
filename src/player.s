@@ -17,6 +17,7 @@ ai.clear =
 | $params.aiStep <= 0
 | $params.aiWait <= 0
 | $params.aiSpellWait <= 0 //hack to stop AI from spamming spells
+| $params.aiLastTurn <= -1
 | $params.difficulty <= 6 // 5 is normal, 0 is impossible, 10 is very easy
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
