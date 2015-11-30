@@ -150,9 +150,8 @@ player.every_cycle =
   | leave 0
 | FP = $main.params.world.fastpaced
 | when $human:
-  | when $leader and $leader.moved <> $world.turn:
-    | leave 1
-  | when not $leader: 1
+  | when not FP: leave 1
+  | when $leader and $leader.moved <> $world.turn: leave 1
 | when $params.aiLastTurn <> $world.turn:
   | when FP or not $human: $ai.update
   | leave 0

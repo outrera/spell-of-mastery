@@ -1,4 +1,4 @@
-use gui queue action
+use gui queue action macros unit_flags
 
 HarmMap = dup 256: dup 256: 0
 
@@ -44,7 +44,9 @@ cast_spell_sub Me U Offensive =
   then Ts <= Ts.keep{?owner.id<>$player.id}
   else Ts <= Ts.keep{?owner.id><$player.id}
 | case SpellName //FIXME: spells actions should have `can do` method
-  cast_shell | Ts <= Ts.skip{?.shell}
+  cast_shell
+    | FlagN = getUnitFlagsTable{}.shell
+    | Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
 | less Ts.size: leave 0
 | Target = Ts.($world.turn%Ts.size)
 | $order_act{U Act target/Target}

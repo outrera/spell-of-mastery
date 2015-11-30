@@ -199,6 +199,13 @@ effect summon What:
 | when S.owner.human: S.attacker <= 1
 //| less NoPick: S.world.update_pick{[S]}
 
+effect caster Who:
+| Leader = $owner.leader
+| less Who >< leader and Leader: leave
+| Leader.animate{attack}
+| Leader.face{TargetXYZ}
+| Leader.moved <= $world.turn
+
 effect teleport Arg: $forced_order{type/teleport at/TargetXYZ}
 
 effect research Arg:
