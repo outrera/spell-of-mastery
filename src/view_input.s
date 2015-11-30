@@ -142,7 +142,8 @@ update_rmb Me Player =
 | Picked = $world.picked
 | FP = not Picked.leader and $main.params.world.fastpaced
 | when Picked.id and Picked.owner.id >< Player.id: less FP:
-  | $world.picked.guess_order_at{$cursor}
+  | say "path is [Picked.path_to{$cursor}]"
+  | Picked.guess_order_at{$cursor}
 
 player.every_cycle =
 | Turn = $world.turn
