@@ -12,9 +12,9 @@ ai.order_act U Act target/0 =
 | $world.update_pick{[U]}
 | U.order_act{Act target/Target}
 
-ai.marked_order U Move =
+ai.marked_order U XYZ =
 | Ms = U.mark_moves
-| Mark = Ms.find{?xyz><Move.xyz}
+| Mark = Ms.find{?xyz><XYZ}
 | $world.update_pick{[U]}
 | U.guess_order_at_mark{Mark}
 | for M Ms: M.free
@@ -85,7 +85,7 @@ ai.remove_blocker Blocker =
   | (Harm^^#FF) and (Harm^^#FF00)<A
 | Ms <= Ms.skip{&harmCheck} // avoid harm when enemies near pentagram
 | when Ms.size
-  | $marked_order{Blocker Ms.(Turn%Ms.size)} //move out of the way
+  | $marked_order{Blocker Ms.(Turn%Ms.size).xyz} //move out of the way
   | leave 1
 | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><swap}
 | for M Ms
@@ -93,7 +93,7 @@ ai.remove_blocker Blocker =
   | when B.leader
     | Ms = B.list_moves{B.xyz}.keep{?type><move}
     | when Ms.size
-      | $marked_order{B Ms.(Turn%Ms.size)} //move out of the way
+      | $marked_order{B Ms.(Turn%Ms.size).xyz} //move out of the way
       | leave 1
 //| when Leader: less Blocker.id >< Leader.id:
 //  | when Turn-Pentagram.moved>6: leave $cast_pentagram
@@ -142,7 +142,7 @@ ai.roam_with Radius U =
 | Ms = U.list_moves{U.xyz}.keep{&allows_attack}
 | when Ms.size:
   | Dst = Ms{M=>[(M.xyz-U.xyz).abs M]}.sort{?0<??0}.0.1
-  | $marked_order{U Dst}
+  | $marked_order{U Dst.xyz}
   | leave 1
 | Blockers = []
 | block XYZ =
@@ -195,11 +195,11 @@ ai.roam_with Radius U =
 | when EnemyTarget and (XYZ-Target.from).all{?abs << 1}:
   | M = Ms.find{?xyz >< Target.from}
   | when got M:
-    | $marked_order{U M}
+    | $marked_order{U M.xyz}
     | leave 1
 | M = Ms.find{?xyz >< XYZ}
 | less got M: leave 0
-| $marked_order{U M}
+| $marked_order{U M.xyz}
 | leave 1
 
 ai.update_units Units =
@@ -224,17 +224,25 @@ ai.update_units Units =
     | U.attacker <= 1
     | Os = Os.skip{?ai><attack}
     | AttackTrigger.free
+  | Path = U.path
+  | when Path
+    | XYZ = Path.head.unheap
+    | Path <= Path.heapfree1
+    | U.path <= if Path.end then 0 else Path
+    | $marked_order{U XYZ}
+    | leave 1
   | Attacker = U.attack and U.attacker
-  | when Attacker:
-    | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
-      | when $roam_with{0 U}: leave 1
-  | less Attacker:
-    | when U.id >< LeaderID: when $update_leader: leave 1
-    | when U.id >< PentID: when $update_pentagram: leave 1
-    | when U.summoned:
-      | when $roam_with{4 U}: leave 1
-  | when U.xyz >< PentXYZ and U.id <> PentID:
-    | when $remove_blocker{U}: leave 1
+  | less Player.human
+    | when Attacker:
+      | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
+        | when $roam_with{0 U}: leave 1
+    | less Attacker:
+      | when U.id >< LeaderID: when $update_leader: leave 1
+      | when U.id >< PentID: when $update_pentagram: leave 1
+      | when U.summoned:
+        | when $roam_with{4 U}: leave 1
+    | when U.xyz >< PentXYZ and U.id <> PentID:
+      | when $remove_blocker{U}: leave 1
 | leave 0
 
 ai.harm Attacker Victim =
@@ -307,11 +315,10 @@ ai_update Me =
 | Pentagram = Player.pentagram
 | Params = $main.params
 | Units = Player.active
-| if Player.human then Units <= Units.skip{?leader}
-  else
-    | Player.mana <= 100000
-    | Player.lore <= 9000
-    | while $script><1:
+| less Player.human
+  | Player.mana <= 100000
+  | Player.lore <= 9000
+  | while $script><1:
 | target_priority U X =
   | B = $world.block_at{X.xyz}
   | B.health - B.hits - max{1 U.attack-B.defense}
@@ -320,7 +327,7 @@ ai_update Me =
   | Ms = Ms.sort{A B => target_priority{U A}<target_priority{U B}}
   | case Ms [A@_]
     | U.attacker <= 1
-    | $marked_order{U A}
+    | $marked_order{U A.xyz}
     | leave
 | for Xs HarmMap: for I Xs.size: Xs.I <= 0
 | for U Units{U=>U.list_attack_moves{U.xyz}}.join:
@@ -346,14 +353,14 @@ ai_update Me =
 | Quit = $update_units{Units}
 | when Quit: leave
 | less Player.human: $update_research
-| for U Units
+| less Player.human: for U Units
   | X,Y,Z = U.xyz
   | Harm = HarmMap.X.Y
   | when Harm^^#FF:
     | Moves = U.list_moves{U.xyz}.keep{?type><move}
     | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
     | when SafeMoves.size //avoid harm
-      | $marked_order{U SafeMoves.(($world.turn+U.id)%SafeMoves.size)}
+      | $marked_order{U SafeMoves.(($world.turn+U.id)%SafeMoves.size).xyz}
       | leave // using SafeMoves.rand will complicate debug
 | $params.aiLastTurn <= $world.turn
 | less Player.human: $end_turn

@@ -140,10 +140,8 @@ update_rmb Me Player =
   | leave
 | less $world.seen{@$cursor.take{2}}: leave
 | Picked = $world.picked
-| FP = not Picked.leader and $main.params.world.fastpaced
-| when Picked.id and Picked.owner.id >< Player.id: less FP:
-  | say "path is [Picked.path_to{$cursor}]"
-  | Picked.guess_order_at{$cursor}
+| when Picked.id and Picked.owner.id >< Player.id:
+  | Picked.path <= Picked.path_to{$cursor}.enheap
 
 player.every_cycle =
 | Turn = $world.turn
@@ -152,7 +150,7 @@ player.every_cycle =
 | FP = $main.params.world.fastpaced
 | when $human:
   | when not FP: leave 1
-  | when $leader and $leader.moved <> $world.turn: leave 1
+  | when $leader and $params.aiNextTurn <> $world.turn: leave 1
 | when $params.aiLastTurn <> $world.turn:
   | when FP or not $human: $ai.update
   | leave 0
@@ -176,25 +174,6 @@ view.update_play =
   | $on_unit_pick{}{Picked}
 | $main.update
 
-
-install_pushables Me XYZ =
-| Ps = []
-| Ms = []
-| for D Dirs:
-  | B = $block_at{XYZ+[@D 0]}
-  | when got B and B.movable:
-    | P = B.xyz.deep_copy
-    | B.remove
-    | M = $alloc_unit{"unit_pushable" owner/$players.0}
-    | M.move{P}
-    | push [P B] Ps
-    | push M Ms
-| [Ps Ms]
-
-uninstall_pushables Me Ps,Ms =
-| for M Ms: M.free
-| for [P B] Ps: B.move{P}
-
 world.update_picked =
 | for M $marks^uncons{mark}: M.free
 | SanitizedPicked = $picked^uncons{picked}
@@ -205,22 +184,32 @@ world.update_picked =
 | less Picked and Picked.moves and Picked.moved<$turn:
   | Picked <= 0
 | when Picked and Picked.picked and Picked.action.type >< idle:
-  | Saved = install_pushables Me Picked.xyz
-  | Marks = if $act and $act.range <> any
-    then | Ms,Path = action_list_moves{Picked $act}
-         | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
-         | Path = Path.keep{X,Y,Z=>$seen{X Y}}
-         | As = map XYZ Ms
-           | Mark = $alloc_unit{"mark_magic_hit"}
-           | Mark.move{XYZ}
-           | Mark
-         | Bs = map XYZ Path
-           | Mark = $alloc_unit{"mark_magic"}
-           | Mark.move{XYZ}
-           | Mark
-         | [@As @Bs]
-    else Picked.mark_moves
-  | uninstall_pushables Me Saved
+  | Marks =
+    if $act and $act.range <> any then
+      | Ms,Path = action_list_moves{Picked $act}
+      | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
+      | Path = Path.keep{X,Y,Z=>$seen{X Y}}
+      | As = map XYZ Ms
+        | Mark = $alloc_unit{"mark_magic_hit"}
+        | Mark.move{XYZ}
+        | Mark
+      | Bs = map XYZ Path
+        | Mark = $alloc_unit{"mark_magic"}
+        | Mark.move{XYZ}
+        | Mark
+      | [@As @Bs]
+    else if Picked.path then
+      | map XYZ Picked.path{}{?unheap}
+        | MarkType = \move
+        | B = $block_at{XYZ}
+        | when got B:
+          | MarkType <= if B.owner.is_enemy{Picked.owner}
+                        then \attack
+                        else \swap
+        | Mark = $alloc_unit{"mark_[MarkType]" owner/Picked.owner}
+        | Mark.move{XYZ}
+        | Mark
+    else []
   | $marks <= [$nil @Marks]^cons{mark}
 
 world.update_cursor CXYZ Brush Mirror =

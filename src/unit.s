@@ -1,4 +1,4 @@
-use util action macros dynamize unit_flags
+use util action macros unit_flags
 
 type unit.$class{Id World}
   id/Id
@@ -27,7 +27,8 @@ type unit.$class{Id World}
   mark // next mark in the map marks chain
   active // true if this unit resides in the list of active units
   slope // unit is standing on a sloped terrain
-  path // next unit in path
+  path // path to goal
+  goal
   hits // how damaged is this unit
   turn // turn it was created
   flags
@@ -58,6 +59,11 @@ unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
 unit.alive = $hits < $health
 
+/*
+unit.moves =
+| when $moved < 0: leave -$moved
+| when $moved < $world.turn: leave 1 //$class.moves
+*/
 
 world.income_at XYZ =
 | for U $units_at{XYZ}:
@@ -118,15 +124,15 @@ unit.add_effect Name Duration Params =
   | $world.notify{"unit.add_effect: missing `on{When}` for effect [Name]"}
   | leave
 | When = On.1
-| Es = @dynamize [[When Name Duration Params] @$effects.list]
-| $effects.dynafree
+| Es = @enheap [[When Name Duration Params] @$effects.list]
+| $effects.heapfree
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 1}
 
 unit.strip_effect Name =
-| Es = @dynamize $effects.skip{?1><Name}
-| $effects.dynafree
+| Es = @enheap $effects.skip{?1><Name}
+| $effects.heapfree
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 0}
@@ -230,7 +236,9 @@ unit.free =
   | P = $owner.pentagram
   | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
-| $effects.dynafree
+| $path.heapfree
+| $path <= 0
+| $effects.heapfree
 | $effects <= []
 | $world.free_unit{Me}
 

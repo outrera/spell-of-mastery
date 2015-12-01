@@ -1,7 +1,7 @@
 use stack
 
-_.dynamize = Me
-_.dynafree =
+_.enheap = Me
+_.heapfree =
 
 type sexp.list{head tail}
 sexp.end = 0
@@ -18,20 +18,32 @@ sexp_cons Head Tail =
 | C.tail <= Tail
 | C
 
-sexp.dynafree =
+sexp.heapfree =
 | while Me.is_sexp
   | H = Me.head
   | Me.head <= 0
-  | T = Me.tail.dynafree
+  | T = Me.tail.heapfree
   | SEXPConses.push{Me}
   | Me <= T
-  | when H.is_sexp: H.dynafree
+  | when H.is_sexp: H.heapfree
 
 sexp.`!` K V =
 | times I K: Me <= $tail
 | $head <= V
 
-list.dynamize =
+list.enheap =
 | Ys = []
-| for X Me.flip: Ys <= sexp_cons X.dynamize Ys
+| for X Me.flip: Ys <= sexp_cons X.enheap Ys
 | Ys
+
+_.unheap = Me
+sexp.unheap = map X Me: X.unheap
+
+sexp.heapfree1 =
+| H = Me.head
+| T = Me.tail
+| Me.head <= 0
+| Me.tail <= 0
+| H.heapfree
+| SEXPConses.push{Me}
+| T

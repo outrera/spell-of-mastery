@@ -67,39 +67,18 @@ dact attack.start
 | U.sound{attack}
 dact attack.update
 | U = $unit
-| when $cycles > 9000 // if target is dying, wait till it is dead
-  | when U.world.waiting: leave
-  | $target <= 0
-  | when $unit.ranged:
-    | $cycles <= 1
-    | leave
-  | less $unit.ranged: 
-    | $cycles <= max 1 U.sprite.speed/2
-    | move_start Me
-  | leave
 | when $data > 0: move_update Me
 | when $cycles >< 1 and $data < 2:
-  | when $data >< 1:
-    | leave
-    | less $unit.ranged: leave
-    | move_finish Me
-    | $xyz.init{$fromXYZ}
-    | $cycles <= max 1 $unit.sprite.speed*2/3
-    | move_start Me
-    | $data <= 2
   | when $data >< 0:
     | Target = $target
     | U.world.effect{Target.xyz blood}
     | when U.impact: U.effect{U.impact Target Target.xyz}
     | when Target.harm{U U.attack}
     | U.animate{idle}
-    | when Target.hits < Target.health:
-      | $data <= 2
-      | $cycles <= 0
-      | less U.ranged: Target.run_effects{?><counter U U.xyz}
-      | leave
-    | $data <= 1
-    | $cycles <= 90000
+    | $data <= 2
+    | $cycles <= 0
+    | less U.ranged: Target.run_effects{?><counter U U.xyz}
+    | leave
 
 dact attack.finish | move_finish Me
 

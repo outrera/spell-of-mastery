@@ -248,7 +248,7 @@ create_bank_list Me =
 
 end_turn Me =
 | if $main.params.world.fastpaced and $player.leader
-  then $player.leader.moved <= $world.turn
+  then $player.params.aiNextTurn <= $world.turn
   else $world.end_turn
 
 create_view_ui Me =

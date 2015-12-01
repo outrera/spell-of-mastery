@@ -103,9 +103,9 @@ world.load Saved =
   | U.turn <= Turn
   | U.flags <= Flags
   | U.hits <= if Hits.size then Hits.0 else 0
-  | U.effects.dynafree
+  | U.effects.heapfree
   | U.effects <= []
-  | less Effects.end: U.effects <= @dynamize Effects
+  | less Effects.end: U.effects <= @enheap Effects
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
