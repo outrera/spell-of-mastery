@@ -4,7 +4,10 @@ use action_ util
 Acts = t
 
 
-dact idle.start | when $cycles >< -1: $cycles <= 4
+dact idle.start
+| U = $unit
+| less U.anim >< idle: U.animate{idle}
+| when $cycles >< -1: $cycles <= 4
 
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
@@ -15,7 +18,7 @@ move_start Me =
 | $fromXYZ.init{U.xyz}
 | U.move{$xyz}
 | U.facing <= Dirs.locate{X,Y}
-| U.animate{move}
+| when U.anim<>move: U.animate{move}
 | $start_cycles <= $cycles
 | U.sound{move}
 

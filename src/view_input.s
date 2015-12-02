@@ -143,7 +143,7 @@ update_rmb Me Player =
   | Picked.path <= Picked.path_to{$cursor}.enheap
 
 player.every_cycle =
-| when not $world.picked.idle or $world.waiting: leave 0
+| when $world.waiting: leave 0
 | when $human and $params.aiNextTurn <> $world.turn: leave 1
 | when $params.aiLastTurn <> $world.turn:
   | $ai.update
@@ -176,7 +176,7 @@ world.update_picked =
 | $marks <= $nil
 | Picked = $picked
 | less Picked and Picked.moves: Picked <= 0
-| when Picked and Picked.picked and Picked.action.type >< idle:
+| when Picked and Picked.picked:
   | Marks =
     if $act and $act.range <> any then
       | Ms,Path = action_list_moves{Picked $act}

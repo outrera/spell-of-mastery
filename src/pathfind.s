@@ -57,7 +57,7 @@ unit.pathfind Closest Check = $world.pathfind{Closest Me Check}
 //FIXME: AI version should setup unit_block
 unit.path_to XYZ =
 | TargetNode = $pathfind{1 | Dst=>Dst.xyz><XYZ}
-| less TargetNode: leave 0
+| less TargetNode: leave []
 | TargetNode^node_to_path
 
 export node_to_path

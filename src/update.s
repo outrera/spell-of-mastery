@@ -173,17 +173,7 @@ world.update =
   | !$cycle + 1
   | ($on_update){}
 
-unit.update_path =
-| Path = $path
-| when Path.end: leave
-| XYZ = Path.head.unheap
-| $path <= Path.heapfree1
-| $guess_order_at{XYZ}
-
-unit.update =
-| when $removed or $active<>1:
-  | $active <= 0
-  | leave
+update_anim Me =
 | !$anim_wait - 1
 | less $anim_wait > 0
   | when $anim >< attack and $anim_step+1 >< $anim_seq.size:
@@ -191,45 +181,67 @@ unit.update =
   | $anim_step <= ($anim_step+1)%$anim_seq.size
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
-| when $idle: $update_path
+
+update_path Me =
+| Path = $path
+| when Path.end: leave
+| XYZ = Path.head.unheap
+| $path <= Path.heapfree1
+| $guess_order_at{XYZ}
+
+update_order Me =
 | when $ordered.type
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
   | $ordered.type <= 0
-| when $delta:
-  | !$alpha+$delta
-  | when $alpha > 255:
-    | $alpha <= 255
-    | $delta <= 0
-  | when $alpha < 0:
-    | $alpha <= 0
-    | $delta <= 0
+
+update_fade Me =
+| less $delta: leave
+| !$alpha+$delta
+| when $alpha > 255:
+  | $alpha <= 255
+  | $delta <= 0
+| when $alpha < 0:
+  | $alpha <= 0
+
+update_next_action Me =
+| less $next_action.type: less $path.end:
+  | update_path Me
+  | update_order Me
+| Cost = $next_action.cost
+| if     $next_action.type and $next_action.valid
+     and (not $next_action.speed or (not Cost or $owner.mana>>Cost))
+  then | !$owner.mana-$next_action.cost
+  else
+  | if not $next_action.type
+      then
+    else if Cost and not $owner.mana>>Cost
+      then $owner.notify{'Not enough mana.'}
+    else if not $next_action.valid
+      then $owner.notify{'Cant perform action.'}
+    else
+  | $next_action.init{type/idle at/$xyz}
+| swap $action $next_action
+| $next_action.type <= 0
+| $next_action.priority <= 0
+| $action.start
+
+update_action Me =
 | till $action.cycles > 0 // action is done?
   | when $anim<>idle and $anim<>move and
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
-    | leave 1
+    | leave // ensure animation finishes
   | $action.finish
-  | less $anim >< idle: $animate{idle}
-  | MoveAction = $next_action.type >< move
-  | Speed = if MoveAction then $speed else $next_action.speed
-  | Cost = $next_action.cost
-  | if     $next_action.type and $next_action.valid
-       and (not $next_action.speed or (not Cost or $owner.mana>>Cost))
-    then | !$owner.mana-$next_action.cost
-         | less $owner.human: when $seen:
-           | $world.view.center_at{$xyz cursor/1}
-    else
-    | if not $next_action.type
-        then
-      else if Cost and not $owner.mana>>Cost
-        then $owner.notify{'Not enough mana.'}
-      else if not $next_action.valid
-        then $owner.notify{'Cant perform action.'}
-      else
-    | $next_action.init{type/idle at/$xyz}
-  | swap $action $next_action
-  | $next_action.type <= 0
-  | $next_action.priority <= 0
-  | $action.start
+  | update_next_action Me
 | $action.update
-| 1
+
+unit.update =
+| when $removed or $active<>1:
+  | $active <= 0
+  | leave
+| update_anim Me
+| when $idle: update_path Me
+| update_order Me
+| update_fade Me
+| update_action Me
+| 1 // 1 means we are still alive
