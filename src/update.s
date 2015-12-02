@@ -193,8 +193,7 @@ unit.update =
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
 | when $ordered.type
-  | when ($ordered.path or $ordered.valid)
-         and $ordered.priority >> $next_action.priority:
+  | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
   | $ordered.type <= 0
 | when $delta:
@@ -210,16 +209,6 @@ unit.update =
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave 1
   | $action.finish
-  | Path = $next_action.path
-  | when $ranged and $next_action.type >< attack:
-    | Path^uncons{path}{?free}
-    | Path <= 0
-    | $next_action.path <= 0
-  | when Path
-    | swap $ordered $next_action
-    | $ordered.path <= Path.path
-    | $next_action.init{type/move at/Path.xyz}
-    | Path.free
   | less $anim >< idle: $animate{idle}
   | MoveAction = $next_action.type >< move
   | Speed = if MoveAction then $speed else $next_action.speed
@@ -227,17 +216,16 @@ unit.update =
   | if     $next_action.type and $next_action.valid
        and (not $next_action.speed
             or ($moved < $world.turn and (not Cost or $owner.mana>>Cost)))
-    then | less Path:
-           | !$owner.mana-$next_action.cost
-           | when Speed:
-             | if $moved < -1 then
-                 | !$moved + 1
-                 | $handled <= 0
-               else 
-                 | $moved <= $world.turn-Speed-1
-                 | when $leader and $next_action.type><custom:
-                   | for U $owner.active:
-                     | when U.leader: U.moved <= $moved
+    then | !$owner.mana-$next_action.cost
+         | when Speed:
+           | if $moved < -1 then
+               | !$moved + 1
+               | $handled <= 0
+             else 
+               | $moved <= $world.turn-Speed-1
+               | when $leader and $next_action.type><custom:
+                 | for U $owner.active:
+                   | when U.leader: U.moved <= $moved
          | less $owner.human: when $seen:
            | $world.view.center_at{$xyz cursor/1}
     else
@@ -254,10 +242,6 @@ unit.update =
   | swap $action $next_action
   | $next_action.type <= 0
   | $next_action.priority <= 0
-  | when Path
-    | swap $ordered $next_action
-    | $ordered.type <= 0
-    | $next_action.priority <= 1000
   | $action.start
 | $action.update
 | 1

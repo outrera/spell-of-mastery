@@ -160,7 +160,6 @@ type action{unit}
    before
    after
    range
-   path
    act_init/&default_init
    act_valid/&default_valid
    act_start/&default_start
@@ -170,7 +169,7 @@ type action{unit}
 action.as_text = "#action{[$type] [$priority] [$target]}"
 
 action.init type/idle name/0 at/0 affects/0 target/0
-            cost/0 before/0 after/0 path/0 speed/-1 range/No =
+            cost/0 before/0 after/0 speed/-1 range/No =
 | when Target: At <= Target.xyz
 | less At: At <= $unit.xyz
 | $xyz.init{At}
@@ -192,7 +191,6 @@ action.init type/idle name/0 at/0 affects/0 target/0
 | $speed <= Speed
 | $before <= Before
 | $after <= After
-| $path <= Path
 | $act_init{}{Me}
 | Me
 
@@ -208,7 +206,6 @@ action.update =
 
 action.finish =
 | $act_finish{}{Me}
-| when $path: $path^uncons{path}{?free}
 
 action_list_moves Picked Act =
 | Me = Picked.world

@@ -251,34 +251,18 @@ unit.order_act Act target/0 =
 | less Target: Target <= Me
 | $order.init{target Target @Act.list.join}
 
-unit.guess_order_at_mark Mark =
-| XYZ = Mark.xyz
-| Us = $world.units_at{XYZ}
-| Path = cons path: map M Mark^uncons{path}.lead.flip
-  | Node = $world.alloc_unit{mark_node owner/$owner}
-  | Node.move{M.xyz}
-  | Node
-| case Mark.type
-  mark_move
-    | $order.init{type/move at/XYZ path/Path}
-  mark_attack
-    | Target = Us.skip{?empty}.0
-    | $order.init{type/attack target/Target at/XYZ path/Path}
-  mark_swap
-    | Target = Us.skip{?empty}.0
-    | $order.init{type/swap target/Target at/XYZ path/Path}
-  mark_push
-    | D = XYZ-$xyz
-    | D.2 <= 0
-    | TargetXYZ = $xyz+D
-    | Target = $world.block_at{TargetXYZ}
-    | $order.init{type/push target/Target at/TargetXYZ path/Path}
-  Else | leave 0
-| 1
-
 unit.guess_order_at XYZ =
-| Marks = $world.units_at{XYZ}.keep{?mark}
-| for Mark Marks: when $guess_order_at_mark{Mark}: leave
+| Ms = $list_moves{$xyz}.keep{?xyz><XYZ}
+| when Ms.end: leave 0
+| M = Ms.0
+| Us = $world.units_at{XYZ}.skip{?empty}
+| Target = if Us.end then 0 else Us.0
+| case M.type
+  move | $order.init{type/move at/XYZ}
+  attack | $order.init{type/attack target/Target at/XYZ}
+  swap | $order.init{type/swap target/Target at/XYZ}
+  Else | leave 0
+| M
 
 unit.move XYZ =
 | $from.init{$xyz}
@@ -306,7 +290,7 @@ unit.face XYZ =
 | less XY >< [0 0]: $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
 type move{type xyz}
-move.as_text = "#move{[$type] [$src] [$xyz]}"
+move.as_text = "#move{[$type] [$xyz]}"
 
 Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
 
