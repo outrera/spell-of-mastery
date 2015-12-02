@@ -21,7 +21,6 @@ ai.cast_pentagram =
 | when Leader: case Leader.acts.keep{?hint >< pentagram} [Act@_]
   | when $player.mana < Act.cost: leave 0
   | $order_act{Leader Act}
-  | Leader.handled <= 0
   | leave 1
 | leave 0
 
@@ -66,14 +65,14 @@ ai.update_leader =
 | Leader = $player.leader
 | less Leader: leave
 | Turn = $world.turn
-| when Leader and Leader.moved >> Turn: Leader <= 0
+| less Leader and Leader.idle: leave 0
 | when cast_spell Me Leader: leave 1
 | less Pentagram: leave $cast_pentagram
 | 0
 
 ai.remove_blocker Blocker =
 | Turn = $world.turn
-| when Blocker.moved>>Turn: leave 0
+| less Blocker.idle: leave 0
 | Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
 | A = if Blocker.attack then #200 else #100
 | harmCheck M = 
@@ -92,8 +91,6 @@ ai.remove_blocker Blocker =
     | when Ms.size
       | $order_at_xyz{B Ms.(Turn%Ms.size).xyz} //move out of the way
       | leave 1
-//| when Leader: less Blocker.id >< Leader.id:
-//  | when Turn-Pentagram.moved>6: leave $cast_pentagram
 
 ai.update_research =
 | P = $player
@@ -125,7 +122,7 @@ ai.update_pentagram =
   | S = Summons.find{?after_table.summon >< Type}
   | Turn = $world.turn
   | when got S and $player.research_remain{S} >< 0:
-    | when Pentagram.moved < Turn and S.cost<<$player.mana:
+    | when Pentagram.idle and S.cost<<$player.mana:
       | $order_act{Pentagram S}
       | leave 1
 | 0
@@ -213,8 +210,7 @@ ai.update_units Units =
 | when Player.params.attack_with_guards >< 1:
   | for U Units: U.attacker <= 1
   | Player.params.attack_with_guards <= 0
-| for U Units: less U.handled:
-  | U.handled <= 1
+| for U Units: when U.idle: less U.path:
   | Os = $world.units_at{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}
   | when got AttackTrigger and U.ai<>attack:
@@ -222,10 +218,9 @@ ai.update_units Units =
     | Os = Os.skip{?ai><attack}
     | AttackTrigger.free
   | Path = U.path
-  | when Path
+  | less Path.end
     | XYZ = Path.head.unheap
-    | Path <= Path.heapfree1
-    | U.path <= if Path.end then 0 else Path
+    | U.path <= Path.heapfree1
     | $order_at_xyz{U XYZ}
     | leave 1
   | Attacker = U.attack and U.attacker

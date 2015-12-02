@@ -73,8 +73,6 @@ unit_panel.draw G PX PY =
 | times I Health: G.blit{X+I*8 Y $health_icon}
 | times I $unit.attack: G.blit{X+I*8 Y+32 $attack_icon}
 | times I $unit.defense: G.blit{X+I*8 Y+48 $defense_icon}
-| Moved = $unit.moved-$unit.world.turn+1
-| when Moved > 0: times I Moved: G.blit{X+I*8 Y+64 $moved}
 
 type world_props.$base{world callback}
      filename name description width height base

@@ -27,7 +27,7 @@ type unit.$class{Id World}
   mark // next mark in the map marks chain
   active // true if this unit resides in the list of active units
   slope // unit is standing on a sloped terrain
-  path // path to goal
+  path/[] // path to goal
   goal
   hits // how damaged is this unit
   turn // turn it was created
@@ -47,9 +47,6 @@ unit.main = $world.main
 
 unit.attacker = $flags^get_bit{0}
 unit.`!attacker` State = $flags <= $flags^set_bit{0 State}
-
-unit.handled = $flags^get_bit{1}
-unit.`!handled` State = $flags <= $flags^set_bit{1 State}
 
 unit.summoned = $flags^get_bit{2}
 unit.`!summoned` State = $flags <= $flags^set_bit{2 State}
@@ -87,7 +84,6 @@ unit.init Class =
 | $animate{idle}
 | $picked <= 0
 | $mark <= 0
-| $path <= 0
 | $hits <= 0
 | $moved <= 0
 | $turn <= $world.turn
@@ -231,7 +227,7 @@ unit.free =
   | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
 | $path.heapfree
-| $path <= 0
+| $path <= []
 | $effects.heapfree
 | $effects <= []
 | $world.free_unit{Me}

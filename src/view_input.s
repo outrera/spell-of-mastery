@@ -175,8 +175,7 @@ world.update_picked =
 | $picked <= [$nil @SanitizedPicked]^cons{picked}
 | $marks <= $nil
 | Picked = $picked
-| less Picked and Picked.moves and Picked.moved<$turn:
-  | Picked <= 0
+| less Picked and Picked.moves: Picked <= 0
 | when Picked and Picked.picked and Picked.action.type >< idle:
   | Marks =
     if $act and $act.range <> any then

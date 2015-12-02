@@ -379,7 +379,6 @@ ui_on_view_unit_pick Me Unit =
 | NonNil = Unit.type <> unit_nil
 | GameUnitUI.show <= NonNil
 | for Icon ActIcons: Icon.show <= 0
-//| when nit.moved < $world.turn:
 | Acts = $main.params.acts
 | Player = Unit.owner
 | As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}

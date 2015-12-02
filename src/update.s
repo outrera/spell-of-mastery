@@ -26,7 +26,6 @@ world.new_game =
   | P.lore <= 10
   | P.mana <= StartMana
   | Us = P.units
-  | for U Us: U.moved <= 0
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
 | $human <= $players.1
@@ -94,7 +93,6 @@ world.end_turn =
   | $end_turn
   | EndTurnDepth <= 0
   | leave
-| for U P.units: U.handled <= 0
 | P.recalc
 | less $turn><1: !P.mana+$player.income
 | Leader = P.leader
@@ -155,7 +153,7 @@ world.process_events =
 world.update =
 | $main.music{playlist_advance}
 | when EventActions.end: $process_events
-| when not $picked or $picked.idle: less $waiting: till EventActions.end
+| till EventActions.end
   | Effect = EventActions^pop
   | case Effect
     [`{}` EffectName Args @Rest]
@@ -175,6 +173,13 @@ world.update =
   | !$cycle + 1
   | ($on_update){}
 
+unit.update_path =
+| Path = $path
+| when Path.end: leave
+| XYZ = Path.head.unheap
+| $path <= Path.heapfree1
+| $guess_order_at{XYZ}
+
 unit.update =
 | when $removed or $active<>1:
   | $active <= 0
@@ -186,6 +191,7 @@ unit.update =
   | $anim_step <= ($anim_step+1)%$anim_seq.size
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
+| when $idle: $update_path
 | when $ordered.type
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
@@ -208,25 +214,13 @@ unit.update =
   | Speed = if MoveAction then $speed else $next_action.speed
   | Cost = $next_action.cost
   | if     $next_action.type and $next_action.valid
-       and (not $next_action.speed
-            or ($moved < $world.turn and (not Cost or $owner.mana>>Cost)))
+       and (not $next_action.speed or (not Cost or $owner.mana>>Cost))
     then | !$owner.mana-$next_action.cost
-         | when Speed:
-           | if $moved < -1 then
-               | !$moved + 1
-               | $handled <= 0
-             else 
-               | $moved <= $world.turn-Speed-1
-               | when $leader and $next_action.type><custom:
-                 | for U $owner.active:
-                   | when U.leader: U.moved <= $moved
          | less $owner.human: when $seen:
            | $world.view.center_at{$xyz cursor/1}
     else
     | if not $next_action.type
         then
-      else if not $moved < $world.turn
-        then $owner.notify{'Unit is not ready to move.'}
       else if Cost and not $owner.mana>>Cost
         then $owner.notify{'Not enough mana.'}
       else if not $next_action.valid

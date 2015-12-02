@@ -30,14 +30,7 @@ effect add_item Amount Name: Target.add_item{Amount Name}
 
 effect mod Arg: Target.mod <= Arg
 
-effect add_moves N:
-| Turn = $world.turn
-| T = Target
-| if T.moved > Turn then T.moved <= -1
-  else if T.moved>>0 and T.moved < Turn then T.moved <= -1
-  else if T.moved>0 then T.moved <= 0
-  else T.moved <= 0
-| !T.moved - N
+effect add_moves N: bad "effect.s: add_moves is obsolete"
 
 effect gain @Args:
 | ActNames = []
@@ -94,7 +87,7 @@ effect harm As:
 effect suicide As:
 | Target.harm{Me Target.attack}
 
-effect paralyze Time: Target.moved <= $world.turn+Time
+effect paralyze Time: bad "effect.s: paralyze is obsolete"
 
 effect notify Text: Target.owner.notify{Text}
 
@@ -204,7 +197,6 @@ effect caster Who:
 | less Who >< leader and Leader: leave
 | Leader.animate{attack}
 | Leader.face{TargetXYZ}
-| Leader.moved <= $world.turn
 
 effect teleport Arg: $forced_order{type/teleport at/TargetXYZ}
 
@@ -232,7 +224,6 @@ unit.effect Effect Target TargetXYZ =
     ally | when $owner.is_enemy{Target.owner}: leave
     enemy | less $owner.is_enemy{Target.owner}: leave
     confirmed | less $main.dialog_result><yes: leave
-    unmoved | less $moved < $world.turn: leave
     harmed | less $hits: leave
     [`.` has_health A] | less $health-$hits>>A: leave
     [`.` has_mana A] | less $owner.mana>>A: leave
