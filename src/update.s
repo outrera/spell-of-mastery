@@ -106,12 +106,6 @@ world.end_turn =
   | $effect{Leader.xyz electrical}
 | when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
 | $on_player_change P
-| FP = $main.params.world.fastpaced
-| when P.human and FP:
-  | L = P.leader
-  | when L
-    | $update_pick{[L]}
-    | $view.center_at{L.xyz}
 | Turn=$turn
 | for U Units:
   | less U.effects.end: U.run_effects{(X=>case X [`.`newturn N] Turn%N><0) U U.xyz}

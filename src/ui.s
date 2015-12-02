@@ -246,10 +246,7 @@ create_bank_list Me =
          | ItemList.pick{0}
 | BankList,ItemList
 
-end_turn Me =
-| if $main.params.world.fastpaced and $player.leader
-  then $player.params.aiNextTurn <= $world.turn
-  else $world.end_turn
+end_turn Me = $player.params.aiNextTurn <= $world.turn
 
 create_view_ui Me =
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>

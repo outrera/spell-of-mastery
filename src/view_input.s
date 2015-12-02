@@ -118,8 +118,7 @@ update_lmb Me Player =
   | $select_unit{$cursor}
   | leave
 | Picked = $world.picked
-| FP = not Picked.leader and $main.params.world.fastpaced
-| less Picked.id and Picked.owner.id >< Player.id: less FP
+| less Picked.id and Picked.owner.id >< Player.id:
   | $world.act <= 0
   | leave
 | less $world.seen{@$cursor.take{2}}: leave
@@ -144,17 +143,12 @@ update_rmb Me Player =
   | Picked.path <= Picked.path_to{$cursor}.enheap
 
 player.every_cycle =
-| Turn = $world.turn
-| when not $world.picked.idle or $world.waiting:
-  | leave 0
-| FP = $main.params.world.fastpaced
-| when $human:
-  | when not FP: leave 1
-  | when $leader and $params.aiNextTurn <> $world.turn: leave 1
+| when not $world.picked.idle or $world.waiting: leave 0
+| when $human and $params.aiNextTurn <> $world.turn: leave 1
 | when $params.aiLastTurn <> $world.turn:
-  | when FP or not $human: $ai.update
+  | $ai.update
   | leave 0
-| when FP: $world.end_turn
+| $world.end_turn
 | 0
 
 view.update_play =
