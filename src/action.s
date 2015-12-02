@@ -110,45 +110,6 @@ dact swap.update | move_update Me
 dact swap.finish | move_finish Me
 
 
-can_push Me U =
-| less U.movable: leave 0
-| D = U.xyz-$xyz
-| MoveXYZ = U.xyz+D
-| B = $world.block_at{MoveXYZ}
-| when got B and not B.empty: leave 0
-| less $world.at{@MoveXYZ}.empty: leave 0
-| MoveXYZ.2 <= $world.fix_z{MoveXYZ}
-| B = $world.block_at{MoveXYZ}
-| when got B and not B.empty: leave 0
-| less $world.at{@MoveXYZ}.empty: leave 0
-| 1
-
-dact push.valid
-| less can_push $unit $target: leave 0
-
-dact push.start
-| U = $unit
-| Wr = U.world
-| T = $target
-| D = T.xyz-U.xyz
-| TXYZ = T.xyz+D
-| TXYZ.2 <= Wr.fix_z{TXYZ}
-| D.2 <= TXYZ.2-T.xyz.2
-| Bs = []
-| X,Y,Z = T.xyz
-| while Wr.units_at{X,Y,Z}.size
-  | Ks = Wr.units_at{X,Y,Z}
-  | for K Ks: push K Bs
-  | !Z + (max 1 Ks{?height}.max)
-| for B Bs.flip: B.move{B.xyz+D}
-| $cycles <= max 1 U.sprite.speed
-| move_start Me
-
-dact push.update | move_update Me
-
-dact push.finish | move_finish Me
-
-
 dact teleport.start | $unit.move{$xyz}
 
 dact custom.valid
@@ -259,7 +220,7 @@ action_list_moves Picked Act =
 | R = Act.range
 | less got R: leave Moves
 | PXYZ = Picked.xyz
-| Points = if R.is_int then points_in_circle R else points_in_matrix R.tail
+| Points = points_in_circle R
 | for X,Y Points
   | XYZ = PXYZ+[X Y 0]
   | X = XYZ.0
@@ -277,4 +238,4 @@ action_list_moves Picked Act =
       else push XYZ Path
 | [Moves Path]
 
-export action can_push action_list_moves
+export action action_list_moves

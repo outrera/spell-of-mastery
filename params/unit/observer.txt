@@ -4,8 +4,8 @@ health: 5
 attack: 4
 defense: 2
 income: misc.tier4_upkeep
-ranged: 1
-moves: matrix.skirmish1
+ranged: 2
+moves: 2
 inborn: (flyer)
 
 sounds: attack,(observer_attack)

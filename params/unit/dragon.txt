@@ -4,7 +4,7 @@ health: 6
 attack: 5
 defense: 3
 income: misc.tier4_upkeep
-moves: matrix.move4
+moves: 4
 impact: impact{fire_ring}
 inborn: (flyer)
 

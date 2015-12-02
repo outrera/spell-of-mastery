@@ -5,5 +5,5 @@ health: 999
 attack: 0
 defense: 999
 show: 0
-moves: ()
+moves: 0
 inborn: (ttl{1})

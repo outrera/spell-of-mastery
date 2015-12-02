@@ -1,12 +1,13 @@
 use gfx util param
 
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
-           unit/0 box_xy/[0 0] aux/0 shadow/0 moves/[] speed/-1 sight/No
+           unit/0 box_xy/[0 0] aux/0 shadow/0 speed/-1 sight/No
            starts/0 ranged/0 leader/0
            health/0 attack/0 defense/0
            acts/[] sounds/[] icon/0 title/0 income/0 item/0
            ai/0 show/1 height/0
            passable/1 impact/0 movable/0 counter/0 tier/0
+           moves/1
            inborn/[]}
   type/"[Bank]_[Class_name]"
   block/0
@@ -17,7 +18,6 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   box_xy/Box_xy // bounding box x,y correction
   aux/Aux
   shadow/Shadow // unit casts shadow in air
-  moves/Moves // movement pattern
   speed/Speed // number of turns it has to wait, before moving again
   sight/Sight
   starts/Starts // non-zero if unit starts active
@@ -40,13 +40,11 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   movable/Movable
   counter/Counter //counterattack
   tier/Tier
+  moves/Moves
   inborn/Inborn
 | less $empty
   | Block = Main.tiles."h[$height]_"
   | when got Block: $block <= Block
-| less $moves.is_list: bad "wrong `moves` field for [$type]"
-| less $moves.size: leave Me
-| $moves <= add_border_to_matrix $moves.tail 0
 
 class.form = $default_sprite.form
 

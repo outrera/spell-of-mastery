@@ -59,12 +59,6 @@ unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
 unit.alive = $hits < $health
 
-/*
-unit.moves =
-| when $moved < 0: leave -$moved
-| when $moved < $world.turn: leave 1 //$class.moves
-*/
-
 world.income_at XYZ =
 | for U $units_at{XYZ}:
   | when U.empty and U.income and U.owner.id >< 0:
@@ -311,38 +305,19 @@ unit.face XYZ =
 | XY = (XYZ-$xyz).take{2}{?sign}
 | less XY >< [0 0]: $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
-type move{type src xyz}
+type move{type xyz}
 move.as_text = "#move{[$type] [$src] [$xyz]}"
 
-unit.list_moves XYZ =
-| less $moves.size: leave []
-| Moves = []
-| I = 0
-| OMs = $moves
-| Ms = OMs.deep_copy
-| O = Ms.size/2
-| StackSrc = []
-| StackDst = []
-| for N [[O O-1] [O+1 O] [O O+1] [O-1 O]]:
-  | X,Y = N
-  | Xs = Ms.Y
-  | when Xs.X
-    | Xs.X <= 0
-    | push XYZ StackSrc
-    | push N StackDst
-| BX,BY,BZ = XYZ
-| till StackDst.end
-  | Blocked = 0
-  | Src = pop StackSrc
-  | when Src.is_move //hack to propagate blocked=-1 through path
-    | Src <= Src.src
-    | Blocked <= -1
-  | DX,DY = pop StackDst
-  | V = OMs.DY.DX
-  | X = BX+DX-O
-  | Y = BY+DY-O
-  | Z = Src.2
-  | Move = 0
+Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
+
+unit.list_moves Src =
+| less $moves: leave []
+| Ms = []
+| SX,SY,SZ = Src
+| for DX,DY Dir4
+  | X = SX+DX
+  | Y = SY+DY
+  | Z = SZ
   | less $world.at{X Y Z}.empty:
     | I = 0
     | till I><4 or $world.at{X Y Z}.empty:
@@ -352,63 +327,19 @@ unit.list_moves XYZ =
   | while $world.at{X Y Z}.empty: !Z - 1
   | !Z + 1
   | Dst = [X Y Z]
-  | less $can_move{Src Dst}: Blocked <= 1 
   | B = $world.block_at{Dst}
-  | when got B:
-    | when Blocked < 1:
-      | EnemyBlocker = $owner.id <> B.owner.id
-      | if EnemyBlocker
-        then | Blocked <= EnemyBlocker
-             | if B.hits < B.health then
-                 | when V < 3 and $attack>0 and B.can_move{Dst Src}:
-                   | Move <= move attack Src Dst
-               else when can_push Me B:
-                 | Move <= move push Src [Dst.0 Dst.1 Dst.2+B.height]
-        else when Blocked>>0:
-             | when B.moves.size and B.can_move{Dst Src} and V <> 2:
-               | Move <= move swap Src Dst
-             | Blocked <= if $ranged then -1 else 1
-  | when Blocked < 1:
-    | less Move: when V<>2: less Blocked: Move <= move move Src Dst
-    | for N [[DX DY-1] [DX+1 DY] [DX DY+1] [DX-1 DY]]:
-      | X,Y = N
-      | Xs = Ms.Y
-      | when Xs.X
-        | Xs.X <= 0
-        | D = if Blocked < 0 then move 0 Dst 0 else Dst
-        | push D StackSrc
-        | push N StackDst
-  | when Move: push Move Moves
-| Moves.list
+  | if got B then
+      | if $owner.id <> B.owner.id
+        then when B.hits < B.health and $attack>0 and (SZ-Z).abs<<4:
+             | push move{attack Dst} Ms
+        else when B.moves and $can_move{Src Dst} and B.can_move{Dst Src}:
+             | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
+    else when $can_move{Src Dst}: push move{move Dst} Ms
+| Ms
 
 unit.list_attack_moves XYZ =
 | less $attack: leave []
-| Map = $moves
-| $moves <= Map.deep_copy
-| for Xs $moves: for I Xs.size: when Xs.I >< 2: Xs.I <= 1
-| Ms = $list_moves{XYZ}
-| $moves <= Map
-| O =  Map.size/2
-| OO = [O O 0]
-| Map = $moves
-| Ms.keep{M => 
-          | X,Y,Z = OO+M.xyz-XYZ
-          | V = Map.Y.X
-          | V >< 1 or V >< 2}
-
-unit.mark_moves @As =
-| XYZ = if As.size then As.0 else $xyz
-| Moves = $list_moves{XYZ}
-| Marks = map Move Moves
-  | Mark = $world.alloc_unit{"mark_[Move.type]" owner/$owner}
-  | Mark.move{Move.xyz}
-  | Src = Move.src
-  | Mark.path <= if Src >< XYZ then 0 else Move.src
-  | Mark
-| for M Marks: when M.path:
-  | for N Marks: when M.path >< N.xyz: M.path <= N
-| for M Marks: when M.path.is_list: M.path <= 0
-| Marks
+| $list_moves{XYZ}.keep{?type><attack}
 
 // order taking over any other order
 unit.forced_order @As =

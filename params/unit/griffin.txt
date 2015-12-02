@@ -4,7 +4,7 @@ health: 6
 attack: 3
 defense: 0
 income: misc.tier3_upkeep
-moves: matrix.move4
+moves: 4
 inborn: (flyer)
 
 sounds: attack,(attack2)
