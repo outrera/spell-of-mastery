@@ -163,7 +163,7 @@ world.update =
       | $nil.effect{[EffectName,Args] $nil [0 0 0]}
       | when EffectName >< msg: leave //hack to show message before victory
     Else | bad "bad event effect ([Effect])"
-| times I 2
+| times I 1
   | NextActive = []
   | for U $active.list: U.update
   | while $active.used
