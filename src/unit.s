@@ -257,11 +257,7 @@ unit.guess_order_at XYZ =
 | M = Ms.0
 | Us = $world.units_at{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
-| case M.type
-  move | $order.init{type/move at/XYZ}
-  attack | $order.init{type/attack target/Target at/XYZ}
-  swap | $order.init{type/swap target/Target at/XYZ}
-  Else | leave 0
+| $order.init{type/M.type at/XYZ target/Target}
 | M
 
 unit.move XYZ =
