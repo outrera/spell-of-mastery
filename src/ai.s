@@ -4,17 +4,9 @@ HarmMap = dup 256: dup 256: 0
 
 PerCycle = 0
 
-ai.end_turn =
-| $world.update_pick{[]}
-| $world.end_turn
-
-ai.order_act U Act target/0 =
-| $world.update_pick{[U]}
-| U.order_act{Act target/Target}
-
-ai.order_at_xyz U XYZ =
-| $world.update_pick{[U]}
-| U.guess_order_at{XYZ}
+ai.end_turn = $world.end_turn
+ai.order_act U Act target/0 = U.order_act{Act target/Target}
+ai.order_at_xyz U XYZ = U.guess_order_at{XYZ}
 
 ai.cast_pentagram =
 | Leader = $player.leader

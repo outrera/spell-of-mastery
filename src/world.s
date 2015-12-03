@@ -32,7 +32,7 @@ type world{main}
    proxies
    free_proxies
    players
-   player // currently moving player
+   player // player currently being updated
    human // human player hosting this session
    gfxes
    seed
@@ -167,7 +167,7 @@ world.free_unit U =
   | $free_units.push{U}
 
 world.picked = $player.picked
-world.`!picked` U = $player.picked <= U
+world.`!picked` Us = $player.picked <= Us
 
 world.at X Y Z = $tilemap.at{X Y Z}
 

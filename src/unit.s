@@ -23,7 +23,6 @@ type unit.$class{Id World}
   sprite
   moved // last turn, this unit moved, number of move points (when negative)
   mirror // true, if drawing code should mirror the sprite
-  picked // cons of the next unit in the selection
   mark // next mark in the map marks chain
   active // true if this unit resides in the list of active units
   slope // unit is standing on a sloped terrain
@@ -41,12 +40,18 @@ type unit.$class{Id World}
 | $next_action <= action Me
 | $ordered <= action Me
 
+unit.enheap = Me
+unit.unheap = Me
+
 unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
 
 unit.attacker = $flags^get_bit{0}
 unit.`!attacker` State = $flags <= $flags^set_bit{0 State}
+
+unit.picked = $flags^get_bit{1}
+unit.`!picked` State = $flags <= $flags^set_bit{1 State}
 
 unit.summoned = $flags^get_bit{2}
 unit.`!summoned` State = $flags <= $flags^set_bit{2 State}
@@ -82,7 +87,6 @@ unit.init Class =
 | $serial <= $world.serial
 | !$world.serial + 1
 | $animate{idle}
-| $picked <= 0
 | $mark <= 0
 | $hits <= 0
 | $moved <= 0
@@ -213,13 +217,13 @@ respawn_leader Me XYZ =
 | S.alpha <= 255
 | S.delta <= -25
 | S.move{XYZ}
-| S.world.update_pick{[S]}
 | S.main.ui.view.center_at{XYZ}
 | S.owner.leader <= S
 | $world.effect{XYZ teleport}
 | 1
 
 unit.free =
+| when $picked: $owner.picked <= $owner.picked.skip{?id><$id}
 | when $id >< $world.waiting: $world.waiting <= 0
 | when $owner: $owner.lost_unit{Me}
 | when $leader><1 and $hits >> $health:

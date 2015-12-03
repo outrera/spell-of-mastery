@@ -9,7 +9,8 @@ type ai{player} world
 ai.main = $player.main
 ai.params = $player.params
 
-ai.picked = $world.picked
+ai.picked = $player.picked
+ai.`!picked` V = $player.picked <= V
 
 ai.clear =
 | $params.aiSwapXYZ.init{[0 0 0]}
@@ -29,7 +30,7 @@ type player{id world}
    pentagram
    params
    research/(t) //research and latency
-   picked //picked unit
+   picked_ //picked units
    sight // fog of war
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $color <= PlayerColors.$id
@@ -37,6 +38,14 @@ type player{id world}
 | $sight <= dup 132: 132.bytes
 | $ai <= ai Me
 | $clear
+
+player.picked = $picked_.unheap
+player.`!picked` Us =
+| for U $picked_: U.picked <= 0
+| for U Us: U.picked <= 1
+| Us = Us.enheap
+| $picked_.heapfree
+| $picked_ <= Us
 
 player.is_enemy P = $id <> P.id
 
@@ -66,7 +75,7 @@ player.explored X,Y,Z = $sight.Y.X
 player.clear =
 | for Xs $sight: Xs.clear{3}
 | $ai.clear
-| $picked <= $world.nil
+| $picked <= []
 | $leader <= 0
 | $pentagram <= 0
 | $researching <= 0

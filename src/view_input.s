@@ -24,21 +24,17 @@ view.mice_rect =
 | V = max AY BY
 | [X Y U-X V-Y]
 
-world.update_pick Units =
-| for U $picked^uncons{picked}: U.picked <= 0
-| $picked <= Units^cons{picked}
-
 view.select_unit XYZ = 
 | less $world.seen{XYZ.0 XYZ.1}: leave 0
 | Picked = []
 | X,Y,Z = XYZ
 | Us = $world.column_units_at{X Y}.skip{?bank><mark}.keep{?fix_z><Z}
 | when $mode >< play: Us <= Us.keep{?pickable}
-| when not $world.picked or $world.picked.xyz <> XYZ: $pick_count <= 0
+| when $picked.size<>1 or $picked.0.xyz <> XYZ: $pick_count <= 0
 | when Us.size
   | !$pick_count+1
   | Picked <= [Us.($pick_count%Us.size)]
-| $world.update_pick{Picked}
+| $picked <= Picked
 
 view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
 
@@ -107,9 +103,7 @@ view.update_brush =
 view.update_pick =
 | when $mice_click >< left: $select_unit{$cursor}
 | $mice_click <= 0
-| Picked = $world.picked
-| less Picked: Picked <= $world.nil
-| $on_unit_pick{}{Picked}
+| $on_unit_pick{}{$picked}
   // FIXME: following line is outdated
 | $main.update //ensures deleted units get updated
 
@@ -117,12 +111,13 @@ update_lmb Me Player =
 | less $world.act:
   | $select_unit{$cursor}
   | leave
-| Picked = $world.picked
-| less Picked.id and Picked.owner.id >< Player.id:
-  | $world.act <= 0
-  | leave
-| less $world.seen{@$cursor.take{2}}: leave
 | Act = $world.act.deep_copy
+| $world.act <= 0
+| Picked = $picked
+| less Picked.size><1: leave
+| U = Picked.0
+| less U.owner.id >< Player.id: leave
+| less $world.seen{@$cursor.take{2}}: leave
 | less Act.range >< any
   | Ms = action_list_moves{Picked Act}.0
   | when no Ms.find{$cursor}: leave
@@ -131,16 +126,14 @@ update_lmb Me Player =
 | when Act.fix_z><caster: $cursor.2 <= Picked.xyz.2
 | Act.at <= $cursor
 | Picked.order.init{@Act.list.join}
-| $world.act <= 0
 
 update_rmb Me Player =
 | when $world.act:
   | $world.act <= 0
   | leave
 | less $world.seen{@$cursor.take{2}}: leave
-| Picked = $world.picked
-| when Picked.id and Picked.owner.id >< Player.id:
-  | Picked.path <= Picked.path_to{$cursor}.enheap
+| for U $picked: when U.owner.id >< Player.id:
+  | U.path <= U.path_to{$cursor}.enheap
 
 player.every_cycle =
 | when $world.waiting: leave 0
@@ -163,47 +156,42 @@ view.update_play =
     left | update_lmb Me Player
     right | update_rmb Me Player
   | $mice_click <= 0
-  | Picked = $world.picked
-  | less Picked: Picked <= $world.nil
-  | $on_unit_pick{}{Picked}
+  | $on_unit_pick{}{$picked}
 | $main.update
 
 world.update_picked =
 | for M $marks^uncons{mark}: M.free
-| SanitizedPicked = $picked^uncons{picked}
-| SanitizedPicked = SanitizedPicked.skip{?removed}
-| $picked <= [$nil @SanitizedPicked]^cons{picked}
 | $marks <= $nil
-| Picked = $picked
-| less Picked and Picked.moves: Picked <= 0
-| when Picked and Picked.picked:
-  | Marks =
-    if $act and $act.range <> any then
-      | Ms,Path = action_list_moves{Picked $act}
-      | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
-      | Path = Path.keep{X,Y,Z=>$seen{X Y}}
-      | As = map XYZ Ms
-        | Mark = $alloc_unit{"mark_magic_hit"}
-        | Mark.move{XYZ}
-        | Mark
-      | Bs = map XYZ Path
-        | Mark = $alloc_unit{"mark_magic"}
-        | Mark.move{XYZ}
-        | Mark
-      | [@As @Bs]
-    else if Picked.path then
-      | map XYZ Picked.path{}{?unheap}
-        | MarkType = \move
-        | B = $block_at{XYZ}
-        | when got B:
-          | MarkType <= if B.owner.is_enemy{Picked.owner}
-                        then \attack
-                        else \swap
-        | Mark = $alloc_unit{"mark_[MarkType]" owner/Picked.owner}
-        | Mark.move{XYZ}
-        | Mark
-    else []
-  | $marks <= [$nil @Marks]^cons{mark}
+| Picked = $human.picked
+| when Picked.size <> 1: leave
+| U = Picked.0
+| Marks =
+  if $act and $act.range <> any then
+    | Ms,Path = action_list_moves{U $act}
+    | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
+    | Path = Path.keep{X,Y,Z=>$seen{X Y}}
+    | As = map XYZ Ms
+      | Mark = $alloc_unit{"mark_magic_hit"}
+      | Mark.move{XYZ}
+      | Mark
+    | Bs = map XYZ Path
+      | Mark = $alloc_unit{"mark_magic"}
+      | Mark.move{XYZ}
+      | Mark
+    | [@As @Bs]
+  else if U.path then
+    | map XYZ U.path{}{?unheap}
+      | MarkType = \move
+      | B = $block_at{XYZ}
+      | when got B:
+        | MarkType <= if B.owner.is_enemy{U.owner}
+                      then \attack
+                      else \swap
+      | Mark = $alloc_unit{"mark_[MarkType]" owner/U.owner}
+      | Mark.move{XYZ}
+      | Mark
+  else []
+| $marks <= [$nil @Marks]^cons{mark}
 
 world.update_cursor CXYZ Brush Mirror =
 | Marks = $marks^uncons{mark}.flip

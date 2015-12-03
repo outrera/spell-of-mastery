@@ -43,6 +43,11 @@ type view.widget{M W H}
 view.mode = $world.mode
 view.`!mode` V = $world.mode <= V
 
+view.player = $world.human
+
+view.picked = $player.picked
+view.`!picked` Us = $player.picked <= Us
+
 view.clear =
 | $zfix <= 1
 | $center_at{[0 0 0]}

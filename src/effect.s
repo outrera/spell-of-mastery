@@ -190,7 +190,6 @@ effect summon What:
 | S.delta <= -25
 | S.move{TargetXYZ}
 | when S.owner.human: S.attacker <= 1
-//| less NoPick: S.world.update_pick{[S]}
 
 effect caster Who:
 | Leader = $owner.leader

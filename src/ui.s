@@ -374,11 +374,15 @@ ui_on_world_update Me =
     | $load{"[MapsFolder][NextWorld].txt"}
     | $world.new_game
 
-ui_on_view_unit_pick Me Unit =
-| PickedUnit <= Unit
-| NonNil = Unit.type <> unit_nil
-| GameUnitUI.show <= NonNil
+ui_on_view_unit_pick Me Units =
 | for Icon ActIcons: Icon.show <= 0
+| when Units.size<>1
+  | GameUnitUI.show <= 0
+  | UnitPanel.set_unit{0}
+  | leave
+| Unit = Units.0
+| PickedUnit <= Unit
+| GameUnitUI.show <= 1
 | Acts = $main.params.acts
 | Player = Unit.owner
 | As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
