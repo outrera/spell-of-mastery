@@ -294,23 +294,17 @@ unit.list_moves Src =
   | X = SX+DX
   | Y = SY+DY
   | Z = SZ
-  | less $world.at{X Y Z}.empty:
-    | I = 0
-    | till I><4 or $world.at{X Y Z}.empty:
-      | !Z + $world.at{X Y Z}.height
-      | !I+1
-  | !Z - 1
-  | while $world.at{X Y Z}.empty: !Z - 1
-  | !Z + 1
-  | Dst = [X Y Z]
-  | B = $world.block_at{Dst}
-  | if got B then
-      | if $owner.id <> B.owner.id
-        then when B.hits < B.health and $attack>0 and (SZ-Z).abs<<4:
-             | push move{attack Dst} Ms
-        else when B.moves and $can_move{Src Dst} and B.can_move{Dst Src}:
-             | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
-    else when $can_move{Src Dst}: push move{move Dst} Ms
+  | less $world.at{X Y Z}.type >< border:
+    | Z <= $world.fix_z{X,Y,Z}
+    | Dst = [X Y Z]
+    | B = $world.block_at{Dst}
+    | if got B then
+        | if $owner.id <> B.owner.id
+          then when B.hits < B.health and $attack>0 and (SZ-Z).abs<<4:
+               | push move{attack Dst} Ms
+          else when B.moves and $can_move{Src Dst} and B.can_move{Dst Src}:
+               | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
+      else when $can_move{Src Dst}: push move{move Dst} Ms
 | Ms
 
 unit.list_attack_moves XYZ =
