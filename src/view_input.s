@@ -132,8 +132,7 @@ update_rmb Me Player =
   | $world.act <= 0
   | leave
 | less $world.seen{@$cursor.take{2}}: leave
-| for U $picked: when U.owner.id >< Player.id:
-  | U.path <= U.path_to{$cursor}.enheap
+| for U $picked: when U.owner.id >< Player.id: U.order_at{$cursor}
 
 player.every_cycle =
 | when $world.waiting: leave 0

@@ -182,12 +182,32 @@ update_anim Me =
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
 
+
+update_path_move Me XYZ =
+| Ms = $list_moves{$xyz}.keep{?xyz><XYZ}
+| when Ms.end: leave 0
+| M = Ms.0
+| Us = $world.units_at{XYZ}.skip{?empty}
+| Target = if Us.end then 0 else Us.0
+| $order.init{type/M.type at/XYZ target/Target}
+
 update_path Me =
+| when not $goal or $goal.serial <> $goal_serial or $goal.removed:
+  | $goal <= 0
+  | $path.heapfree
+  | $path <= []
+  | leave
+| Path = $path
+| when Path.end:
+  | when $xyz >< $goal.xyz:
+    | $goal <= 0
+    | leave
+  | $path <= $path_to{$goal.xyz}.enheap
 | Path = $path
 | when Path.end: leave
 | XYZ = Path.head.unheap
 | $path <= Path.heapfree1
-| $guess_order_at{XYZ}
+| update_path_move Me XYZ
 
 update_order Me =
 | when $ordered.type

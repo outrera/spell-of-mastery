@@ -1,5 +1,10 @@
 use util action macros unit_flags
 
+type unit_goal xyz/[0 0 0] serial
+
+unit_goal.type = \goal
+unit_goal.removed = 0
+
 type unit.$class{Id World}
   id/Id
   world/World
@@ -28,6 +33,8 @@ type unit.$class{Id World}
   slope // unit is standing on a sloped terrain
   path/[] // path to goal
   goal
+  goal_serial
+  unit_goal/unit_goal{}
   hits // how damaged is this unit
   turn // turn it was created
   flags
@@ -104,6 +111,7 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
+  | $unit_goal.serial <= $serial
   | for E $inborn: case E
       [`{}` Name Duration @Args] | $add_effect{Name Duration [inborn @Args]}
       Else | $add_effect{E 0 [inborn]}
@@ -232,6 +240,8 @@ unit.free =
 | when $active: $active <= 2 //request removal from active list
 | $path.heapfree
 | $path <= []
+| $goal <= 0
+| $goal_serial <= 0
 | $effects.heapfree
 | $effects <= []
 | $world.free_unit{Me}
@@ -251,14 +261,12 @@ unit.order_act Act target/0 =
 | less Target: Target <= Me
 | $order.init{target Target @Act.list.join}
 
-unit.guess_order_at XYZ =
-| Ms = $list_moves{$xyz}.keep{?xyz><XYZ}
-| when Ms.end: leave 0
-| M = Ms.0
-| Us = $world.units_at{XYZ}.skip{?empty}
-| Target = if Us.end then 0 else Us.0
-| $order.init{type/M.type at/XYZ target/Target}
-| M
+unit.order_at XYZ =
+| $path.heapfree
+| $path <= $path_to{XYZ}.enheap
+| $goal <= $unit_goal
+| $goal_serial <= $goal.serial
+| $goal.xyz.init{XYZ}
 
 unit.move XYZ =
 | $from.init{$xyz}
