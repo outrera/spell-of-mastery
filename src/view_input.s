@@ -119,13 +119,13 @@ update_lmb Me Player =
 | less U.owner.id >< Player.id: leave
 | less $world.seen{@$cursor.take{2}}: leave
 | less Act.range >< any
-  | Ms = action_list_moves{Picked Act}.0
+  | Ms = action_list_moves{U Act}.0
   | when no Ms.find{$cursor}: leave
 | Act.target <= if Act.affects><land then 0
                 else $world.block_at{$cursor}^~{No 0}
-| when Act.fix_z><caster: $cursor.2 <= Picked.xyz.2
+| when Act.fix_z><caster: $cursor.2 <= U.xyz.2
 | Act.at <= $cursor
-| Picked.order.init{@Act.list.join}
+| U.order.init{@Act.list.join}
 
 update_rmb Me Player =
 | when $world.act:
@@ -137,7 +137,6 @@ update_rmb Me Player =
   | U.order_at{$cursor}
 
 player.every_cycle =
-| when $world.waiting: leave 0
 | when $human and $params.aiNextTurn <> $world.turn: leave 1
 | when $params.aiLastTurn <> $world.turn:
   | $ai.update
@@ -151,7 +150,6 @@ view.update_play =
   | $keys.q <= 0
   | Player.human <= not Player.human 
   | leave $update_play
-| less Player.human: $on_unit_pick{}{$world.nil}
 | when Player.every_cycle
   | case $mice_click
     left | update_lmb Me Player

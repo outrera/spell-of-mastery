@@ -8,7 +8,7 @@ health: 1 // hit points - number of hits, before this unit is dead
 attack: 0 // amount of damage this unit deals
 defence: 0 // amount of damage this unit can absorb, without losing health
 sight: 2
-moves: 2 // move points
+speed: 1 // actions per unit of time
 pickable: 1
 passable: 0
 flyer: 0 // can it fly

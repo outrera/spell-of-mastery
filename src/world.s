@@ -53,7 +53,6 @@ type world{main}
    on_update
    marks
    params
-   waiting // true if wating for action to complete
    events
    view
    act
@@ -125,7 +124,6 @@ world.clear =
 | $players.1.human <= 1
 | $human <= $players.1
 | $marks <= $nil
-| $waiting <= 0
 | $params <= t
 | for U $active.list: U.active <= 0
 | $active.clear

@@ -3,7 +3,6 @@ icon: unit_oculus
 tier: 2
 health: 3
 income: -6
-moves: matrix.move2
 leader: 2
 inborn: (flyer)
 

@@ -233,7 +233,6 @@ respawn_leader Me XYZ =
 
 unit.free =
 | when $picked: $owner.picked <= $owner.picked.skip{?id><$id}
-| when $id >< $world.waiting: $world.waiting <= 0
 | when $owner: $owner.lost_unit{Me}
 | when $leader><1 and $hits >> $health:
   | P = $owner.pentagram
@@ -302,7 +301,7 @@ move.as_text = "#move{[$type] [$xyz]}"
 Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
 
 unit.list_moves Src =
-| less $moves: leave []
+| less $speed: leave []
 | Ms = []
 | SX,SY,SZ = Src
 | for DX,DY Dir4
@@ -317,7 +316,7 @@ unit.list_moves Src =
         | if $owner.id <> B.owner.id
           then when B.hits < B.health and $attack>0 and (SZ-Z).abs<<4:
                | push move{attack Dst} Ms
-          else when B.moves and $can_move{Src Dst} and B.can_move{Dst Src}:
+          else when B.speed and $can_move{Src Dst} and B.can_move{Dst Src}:
                | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
       else when $can_move{Src Dst}: push move{move Dst} Ms
 | Ms
@@ -335,7 +334,6 @@ unit.forced_order @As =
 
 unit.die =
 | $sound{die}
-| $world.waiting <= $id
 | $forced_order{type/die}
 
 unit.harm Attacker Damage =

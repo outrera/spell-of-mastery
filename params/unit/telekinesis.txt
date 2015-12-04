@@ -1,9 +1,10 @@
 sprite: system_dummy
 empty: 1
 aux: 1
-health: 999
+health: 0
 attack: 0
-defense: 999
+defense: 0
 show: 0
-moves: 0
+speed: 0
+pickable: 0
 inborn: (ttl{1})
