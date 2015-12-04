@@ -308,7 +308,7 @@ unit.list_moves Src =
   | X = SX+DX
   | Y = SY+DY
   | Z = SZ
-  | less $world.at{X Y Z}.type >< border:
+  | less $world.at{X Y Z}.type >< border_:
     | Z <= $world.fix_z{X,Y,Z}
     | Dst = [X Y Z]
     | B = $world.block_at{Dst}

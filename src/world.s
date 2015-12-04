@@ -1,4 +1,4 @@
-use stack heap zmap util unit player
+use stack heap zmap util line_points unit player
 
 MaxSize = No
 MaxUnits = No
@@ -296,6 +296,43 @@ world.roof XYZ =
 | X,Y,Z = XYZ
 | while $at{X Y Z}.empty and Z < 63: !Z+1
 | Z
+
+/*
+world.seen_from A B =
+| X,Y,Z = A
+| BX,BY,BZ = B
+| while X<>BX or Y<>BY or Z<>BZ:
+  | if X < BX then !X+1
+    else when X > BX: !X-1
+  | if Y < BY then !Y+1
+    else when Y > BY: !Y-1
+  | if Z < BZ then
+      | less $at{X Y Z}.empty: leave 0
+      | !Z+1
+    else when Z > BZ;
+      | less $at{X Y Z}.empty: leave 0
+      | when Z > BX: !Z-1
+  | less $at{X Y Z}.empty: leave 0
+| 1
+*/
+
+world.seen_from A B =
+| AX,AY,AZ = A
+| BX,BY,BZ = B
+| Z = AZ
+| PX = AX
+| PY = AY
+| for X,Y [@line_points{AX AY BX BY} [BX BY]]
+  | FZ = $fix_z{X,Y,Z}
+  | when Z-FZ>>8 and Z-AZ>4: leave 0
+  | DX = X-PX
+  | DY = Y-PY
+  | when DX*DX><1 and DY*DY><1:
+    | less $at{PX+DX PY FZ}.empty or $at{PX PY+DY FZ}.empty: leave 0
+  | Z <= FZ
+  | PX <= X
+  | PY <= Y
+| 1
 
 world.slope_at X Y Z = $slope_map.at{X Y Z}
 

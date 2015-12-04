@@ -198,9 +198,10 @@ update_path Me =
   | $path <= []
   | leave
 | when $goal.is_unit and $goal.owner.is_enemy{$owner}:
-  | when ($goal.xyz.take{2}-Me.xyz.take{2}).abs<<Me.range.float:
-    | $order.init{type/attack at/$goal.xyz target/$goal}
-    | leave
+  | when ($goal.xyz.take{2}-$xyz.take{2}).abs<<$range.float:
+    | when $world.seen_from{$xyz $goal.xyz}:
+      | $order.init{type/attack at/$goal.xyz target/$goal}
+      | leave
 | Path = $path
 | when Path.end:
   | when $xyz >< $goal.xyz:
