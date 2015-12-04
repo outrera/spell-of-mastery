@@ -182,7 +182,6 @@ update_anim Me =
   | $pick_facing{$facing}
   | $anim_wait <= $anim_seq.$anim_step.1
 
-
 update_path_move Me XYZ =
 | Ms = $list_moves{$xyz}.keep{?xyz><XYZ}
 | when Ms.end: leave 0
@@ -192,11 +191,16 @@ update_path_move Me XYZ =
 | $order.init{type/M.type at/XYZ target/Target}
 
 update_path Me =
-| when not $goal or $goal.serial <> $goal_serial or $goal.removed:
+| when not $goal or $goal.serial <> $goal_serial or $goal.removed
+       or not $goal.alive:
   | $goal <= 0
   | $path.heapfree
   | $path <= []
   | leave
+| when $goal.is_unit and $goal.owner.is_enemy{$owner}:
+  | when and ($goal.xyz-Me.xyz).abs<<Me.range.float:
+    | $order.init{type/attack at/$goal.xyz target/$goal}
+    | leave
 | Path = $path
 | when Path.end:
   | when $xyz >< $goal.xyz:
@@ -247,6 +251,8 @@ update_next_action Me =
 | $action.start
 
 update_action Me =
+| T = $action.target
+| when T and (T.removed or not T.alive): $action.cycles <= 0
 | till $action.cycles > 0 // action is done?
   | when $anim<>idle and $anim<>move and
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):

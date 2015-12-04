@@ -55,10 +55,8 @@ dact move.finish | move_finish Me
 
 dact attack.valid
 | T = $target
-| when T.is_list or T.removed or T.empty or not T.health: leave 0
-| U = $unit
-//| when U.skirmisher: leave (T.xyz - U.xyz).all{?.abs<<1}
-| if U.ranged then 1 else U.can_move{U.xyz T.xyz}
+| when T.is_list or T.removed or T.empty or not T.alive: leave 0
+| 1
 
 dact attack.init | $data <= 0
 
@@ -74,13 +72,12 @@ dact attack.update
 | when $cycles >< 1 and $data < 2:
   | when $data >< 0:
     | Target = $target
-    | U.world.effect{Target.xyz blood}
     | when U.impact: U.effect{U.impact Target Target.xyz}
     | when Target.harm{U U.attack}
     | U.animate{idle}
     | $data <= 2
     | $cycles <= 0
-    | less U.ranged: Target.run_effects{?><counter U U.xyz}
+    | less U.range: Target.run_effects{?><counter U U.xyz}
     | leave
 
 dact attack.finish | move_finish Me

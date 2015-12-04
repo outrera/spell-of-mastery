@@ -4,6 +4,7 @@ type unit_goal xyz/[0 0 0] serial
 
 unit_goal.type = \goal
 unit_goal.removed = 0
+unit_goal.alive = 1
 
 type unit.$class{Id World}
   id/Id
@@ -263,12 +264,12 @@ unit.order_act Act target/0 =
 
 unit.order_at XYZ =
 | $path.heapfree
-| $path <= $path_to{XYZ}.enheap
 | $goal <= $world.block_at{XYZ}
 | when no $goal:
   | $goal <= $unit_goal
   | $goal.xyz.init{XYZ}
 | $goal_serial <= $goal.serial
+| $path <= $path_to{$goal.xyz}.enheap
 
 unit.move XYZ =
 | $from.init{$xyz}
@@ -351,6 +352,7 @@ unit.harm Attacker Damage =
 | $mod <= 0
 | when Mod >< block: leave
 | !$hits + Damage
+| when Damage > 0: $world.effect{$xyz blood}
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hits < $health:
   | if Damage >> 0

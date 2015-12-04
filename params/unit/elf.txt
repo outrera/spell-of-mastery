@@ -3,7 +3,7 @@ tier: 2
 health: 4
 attack: 1
 defense: 0
-ranged: 3
+range: 3
 income: misc.tier2_upkeep
 
 sounds: attack,(arrow_hit)

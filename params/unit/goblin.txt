@@ -4,7 +4,7 @@ health: 3
 attack: 1
 defense: 0
 income: misc.tier1_upkeep
-ranged: 2
+range: 2
 
 sounds: attack,(attack2)
        //,impact,()

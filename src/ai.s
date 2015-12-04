@@ -324,7 +324,7 @@ ai_update Me =
   | XYZ = T.xyz
   | X,Y,Z = XYZ
   | O = U.owner
-  | if U.ranged then HarmMap.X.Y <= #1
+  | if U.range then HarmMap.X.Y <= #1
     else !HarmMap.X.Y + #1
 | Ts <= Ts{?1}
 | for U Units: when U.attack:

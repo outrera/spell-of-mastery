@@ -12,7 +12,7 @@ moves: 2 // move points
 pickable: 1
 passable: 0
 flyer: 0 // can it fly
-ranger: 0 // does it move into the cell of defeated unit
+range: 0 // does it move into the cell of defeated unit
 income: 0
 ai: unit
 item: pickup

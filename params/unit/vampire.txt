@@ -3,7 +3,7 @@ tier: 3
 health: 4
 attack: 2
 defense: 1
-ranged: 2
+range: 2
 income: misc.tier3_upkeep
 moves: 2
 impact: harm{-1,self},impact{explosion_blood}

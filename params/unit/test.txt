@@ -3,7 +3,7 @@ tier: 2
 health: 3
 attack: 3
 defense: 0
-ranged: 2
+range: 2
 income: misc.tier2_upkeep
 moves: 1
 
