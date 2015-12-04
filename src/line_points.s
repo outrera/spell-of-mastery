@@ -1,4 +1,4 @@
-hline X Y L F =
+/*hline X Y L F =
 | E = X+L
 | D = if X<E then 1 else -1
 | while X<>E:
@@ -57,6 +57,35 @@ line_points_sub SX SY DX DY F =
   | F{X Y}
   | !X + Incr
   | !Y + 1
+*/
+
+line_points_sub AX AY BX BY F =
+| DX = BX - AX
+| DY = BY - AY
+| DXA = DX.abs
+| DYA = DY.abs
+| SX = DX.sign
+| SY = DY.sign
+| X = AX
+| Y = AY
+| when DXA > DYA:
+  | T = DYA*2 - DXA
+  | while X<>BX or Y<>BY:
+    | when T >> 0
+      | !Y + SY
+      | !T - DXA*2
+    | !X + SX
+    | !T + DYA*2
+    | F{X Y}
+  | leave
+| T = DXA*2 - DYA
+| while X<>BX or Y<>BY: 
+  | when T >> 0:
+    | !X + SX
+    | !T - DYA*2
+  | !Y + SY
+  | !T + DXA*2
+  | F{X Y}
 
 line_points SX SY DX DY =
 | Ps = []
@@ -66,4 +95,34 @@ line_points SX SY DX DY =
 | when Ps.head <> [SX SY]: Ps <= Ps.flip
 | Ps
 
-export line_points
+
+line_calls AX AY BX BY F =
+| DX = BX - AX
+| DY = BY - AY
+| DXA = DX.abs
+| DYA = DY.abs
+| SX = DX.sign
+| SY = DY.sign
+| X = AX
+| Y = AY
+| when DXA > DYA:
+  | T = DYA*2 - DXA
+  | while X<>BX or Y<>BY:
+    | when T >> 0
+      | !Y + SY
+      | !T - DXA*2
+    | !X + SX
+    | !T + DYA*2
+    | less F{X Y}: leave 0
+  | leave 1
+| T = DXA*2 - DYA
+| while X<>BX or Y<>BY: 
+  | when T >> 0:
+    | !X + SX
+    | !T - DYA*2
+  | !Y + SY
+  | !T + DXA*2
+  | less F{X Y}: leave 0
+| 1
+
+export line_points line_calls
