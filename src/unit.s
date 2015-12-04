@@ -264,9 +264,11 @@ unit.order_act Act target/0 =
 unit.order_at XYZ =
 | $path.heapfree
 | $path <= $path_to{XYZ}.enheap
-| $goal <= $unit_goal
+| $goal <= $world.block_at{XYZ}
+| when no $goal:
+  | $goal <= $unit_goal
+  | $goal.xyz.init{XYZ}
 | $goal_serial <= $goal.serial
-| $goal.xyz.init{XYZ}
 
 unit.move XYZ =
 | $from.init{$xyz}
