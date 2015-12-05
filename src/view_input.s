@@ -136,26 +136,14 @@ update_rmb Me Player =
   | $world.effect{$cursor ack}
   | U.order_at{$cursor}
 
-player.every_cycle =
-| when $human and $params.aiNextTurn <> $world.turn: leave 1
-| when $params.aiLastTurn <> $world.turn:
-  | $ai.update
-  | leave 0
-| $world.end_turn
-| 0
-
 view.update_play =
 | Player = $world.player
-| when $keys.q><1:
-  | $keys.q <= 0
-  | Player.human <= not Player.human 
-  | leave $update_play
-| when Player.every_cycle
-  | case $mice_click
-    left | update_lmb Me Player
-    right | update_rmb Me Player
-  | $mice_click <= 0
-  | $on_unit_pick{}{$picked}
+| case $mice_click
+  left | update_lmb Me Player
+  right | update_rmb Me Player
+| $mice_click <= 0
+| $on_unit_pick{}{$picked}
+| Player.update
 | $main.update
 
 world.update_picked =

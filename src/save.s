@@ -5,12 +5,11 @@ world.save =
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
   | XYZ = if U.from.2>0 then [U.xyz U.from] else U.xyz
-  | TurnAndEffects = U.turn
-  | less U.effects.end: TurnAndEffects <= [TurnAndEffects U.effects]
+  | Effects = if U.effects.end then 0 else U.effects
   | list U.id U.serial U.type XYZ U.xy
          U.anim U.anim_step U.facing
-         U.owner.id U.moved TurnAndEffects U.flags U.hits
-| list w($w) h($h) serial($serial) cycle($cycle) turn($turn)
+         U.owner.id U.moved Effects U.flags U.hits
+| list w($w) h($h) serial($serial) cycle($cycle) turn(0)
     filename | $filename
     name | $name
     description | $description
@@ -68,7 +67,6 @@ world.load Saved =
 | for P points{1 1 $w+1 $h+1}: $update_move_map_{P}
 //| say "world.load: update_move_map_ took [clock{}-StartTime]"
 | $cycle <= Saved.cycle
-| $turn <= Saved.turn
 | IdMap = t
 | for X Saved.players
   | [Id Name Human Color Power Moves Params Research Mana] = X
@@ -81,12 +79,7 @@ world.load Saved =
   | for N,R Research: P.research.N <= R
 | $player <= $players.(Saved.player)
 | for X Saved.units
-  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Turn Flags @Hits]
-        = X
-  | Effects = []
-  | when Turn.is_list:
-    | Effects <= Turn.1
-    | Turn <= Turn.0
+  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Efx Flags @Hits]=X
   | U = $alloc_unit{Type owner/$players.Owner}
   | less U.health or U.ai >< pentagram:
     | U.change_owner{$players.0}
@@ -100,12 +93,10 @@ world.load Saved =
   | U.pick_facing{Facing}
   | U.move{XYZ}
   | U.moved <= Moved
-  | U.turn <= Turn
   | U.flags <= Flags
   | U.hits <= if Hits.size then Hits.0 else 0
   | U.effects.heapfree
-  | U.effects <= []
-  | less Effects.end: U.effects <= @enheap Effects
+  | U.effects <= if Efx.is_list and not Efx.end then @enheap Efx else []
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U

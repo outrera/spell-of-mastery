@@ -134,5 +134,9 @@ player.units =
 | Turn = $world.turn
 | $world.active.list.keep{(?owner.id >< PID and not ?removed)}
 
+player.update =
+//| $ai.update
+
+
 
 export player

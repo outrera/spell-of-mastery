@@ -98,7 +98,6 @@ unit.init Class =
 | $mark <= 0
 | $hits <= 0
 | $moved <= 0
-| $turn <= $world.turn
 | $flags <= 0
 | $alpha <= 0
 | $delta <= 0

@@ -41,7 +41,6 @@ type world{main}
    shadow
    cycle // counts calls to world.update
    serial
-   turn // turn in terms of game logic
    nil // null unit with id >< 0
    owners // unit owners
    active // active units
@@ -59,6 +58,9 @@ type world{main}
    notes
    mode/brush
 | $init
+
+world.second = $cycle/24
+world.turn = $second/10
 
 world.init =
 | $main.world <= Me

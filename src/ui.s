@@ -172,15 +172,11 @@ create_main_menu_dlg Me =
        | $pick{credits}
 
 EditorIcons =
-EndTurnIcon =
 GearsIcon =
-HourglassIcon =
 begin_ingame Me Editor =
 | less Editor: $main.music{playlist}
 | EditorIcons.show <= Editor
-| EndTurnIcon.show <= Editor
 | GearsIcon.show <= not Editor
-| HourglassIcon.show <= not Editor
 | $view.mode <= [play brush].Editor
 
 ViewUI =
@@ -246,8 +242,6 @@ create_bank_list Me =
          | ItemList.pick{0}
 | BankList,ItemList
 
-end_turn Me = $player.params.aiNextTurn <= $world.turn
-
 create_view_ui Me =
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
@@ -257,14 +251,12 @@ create_view_ui Me =
 | UnitPanel <= unit_panel Me
 | GameUnitUI <= hidden: dlg: mtx
   |  0   0| UnitPanel
-| EndTurnIcon <= hidden: icon $img{"icons_hourglass"} click/(Icon => end_turn Me)
 | GameUI = dlg: mtx
   |  0   0| $view
   |  0   0| GameUnitUI
   |  4 $height-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
   |  4 $height-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 $height-10 | info_line Me
-  | $width-54 $height-64 | EndTurnIcon
 | BrushUI = dlg: mtx
   | 0 0 | $view
   | 0 0 | layH: BankList,ItemList
@@ -278,17 +270,11 @@ create_ingame_dlg Me =
   |  0   0| ViewUI
   |  $width-54 4| EditorIcons
   |  $width-111 0| GearsIcon
-  |  $width-73 110| HourglassIcon
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
   |  0   0| $message_box
-| input_split Ingame: Base In =>
-  | Handled = 0
-  | when $view.mode >< play: less $view.paused: case In [key z 0]
-    | when $world.player.human: end_turn Me
-    | Handled <= 1
-  | less Handled: Base.input{In}
+| input_split Ingame: Base In => Base.input{In}
 
 create_editor_icons Me =
 | ModeIcon = No
@@ -298,7 +284,6 @@ create_editor_icons Me =
   | ModeIcon <= Icon
   | Mode = Icon.data
   | $view.mode <= Mode
-  | EndTurnIcon.show <= Mode >< play
   | ViewUI.pick{Mode}
   | if Mode >< play then $world.new_game else $world.explore{1}
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
@@ -427,9 +412,6 @@ create_act_icons Me =
 
 create_ingame_icons Me =
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
-| HourglassIcon <= hidden: button 'HOURGLASS' skin/hourglass: =>
-  | InputBlocker.show <= 1
-  | end_turn Me
 
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"

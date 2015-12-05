@@ -16,9 +16,9 @@ free_ai_blockers Me =
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
-| $player <= $players.($players.size-1)
-| $turn <= 0
-| $end_turn // hack to begin turns from 1
+| $player <= $players.1
+| $human <= $players.1
+| $cycle <= 0
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana
@@ -28,7 +28,6 @@ world.new_game =
   | Us = P.units
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
-| $human <= $players.1
 | when got!it $players.find{?human}: $human <= it
 
 EndTurnDepth = 0
@@ -46,6 +45,7 @@ update_spell_of_mastery Me P =
   | S = Q.params.spell_of_mastery
   | when got S: P.notify{"[Q.name] will finish Spell of Mastery in [S] turns"}
 
+/*
 world.end_turn =
 | P = $player
 | less P.human: free_ai_blockers Me
@@ -107,7 +107,7 @@ world.end_turn =
 | Turn=$turn
 | for U Units:
   | less U.effects.end: U.run_effects{(X=>case X [`.`newturn N] Turn%N><0) U U.xyz}
-
+*/
 
 EventActions = []
 

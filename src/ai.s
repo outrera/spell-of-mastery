@@ -4,7 +4,6 @@ HarmMap = dup 256: dup 256: 0
 
 PerCycle = 0
 
-ai.end_turn = $world.end_turn
 ai.order_act U Act target/0 = U.order_act{Act target/Target}
 ai.order_at_xyz U XYZ = U.order_at{XYZ}
 
@@ -347,7 +346,6 @@ ai_update Me =
       | U.order_at{SafeMoves.(($world.turn+U.id)%SafeMoves.size).xyz}
       | leave // using SafeMoves.rand will complicate debug
 | $params.aiLastTurn <= $world.turn
-| less Player.human: $end_turn
 
 ai.update =
 | PerCycle <= t
