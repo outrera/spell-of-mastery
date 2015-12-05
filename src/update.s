@@ -3,16 +3,6 @@
 main.update =
 | $world.update
 
-
-alloc_ai_blockers Me =
-| for U $units: less U.removed: when U.ai >< avoid:
-  | B = $alloc_unit{unit_block owner/U.owner}
-  | B.move{U.xyz}
-
-free_ai_blockers Me =
-| for U $units: less U.removed: when U.type >< unit_block:
-  | U.free
-
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
@@ -30,85 +20,6 @@ world.new_game =
     | for ActName ActNames: P.research_item{ActName}
 | when got!it $players.find{?human}: $human <= it
 
-EndTurnDepth = 0
-
-update_spell_of_mastery Me P =
-| SOM = P.params.spell_of_mastery
-| when got SOM:
-  | !SOM-1
-  | less SOM > 0:
-    | $params.winner <= P.id
-    | $params.victory_type <= 'Victory by casting the Spell of Mastery'
-    | leave
-  | P.params.spell_of_mastery <= SOM
-| when P.human: for Q $players:
-  | S = Q.params.spell_of_mastery
-  | when got S: P.notify{"[Q.name] will finish Spell of Mastery in [S] turns"}
-
-/*
-world.end_turn =
-| P = $player
-| less P.human: free_ai_blockers Me
-| Turn = $turn
-| for U P.units: 
-  | when U.health>0: for V $units_at{U.xyz}: less V.effects.end:
-    | V.run_effects{?><tenant_endturn U U.xyz}
-  | less U.effects.end:
-    | U.run_effects{(X=>case X [`.`endturn N] Turn%N><0) U U.xyz}
-    | Remove = []
-    | RunEs = []
-    | for E U.effects: case E [When Name Duration Params]: when Duration>0:
-      | !Duration-1
-      | less Duration > 0:
-        | when When >< timeout: push Name RunEs
-        | push Name Remove
-      | E.2 <= Duration
-    | for Name Remove: U.strip_effect{Name}
-    | for Name RunEs:
-      | Effect = $main.params.effect.Name
-      | U.effect{Effect U U.xyz}
-| PResearch = P.research
-| for Type,Act $main.params.acts: when PResearch.Type > Act.research:
-  | !PResearch.Type-1 //cooldown
-| P.params.view.init{$view.center}
-| P.params.cursor.init{$view.cursor}
-| NextPlayer = P.id+1
-| less NextPlayer < $players.size
-  | NextPlayer <= 0
-  | !$turn + 1
-| P = $players.NextPlayer
-| $player <= P
-| less P.human: alloc_ai_blockers Me
-| update_spell_of_mastery Me P
-| when P.human
-  | $view.center_at{$player.params.view}
-  | $view.cursor.init{$player.params.cursor}
-| PID = P.id
-| Units = $player.active
-| less Units.size /*or $player.human*/:
-  | when EndTurnDepth>16
-    | EndTurnDepth<=0
-    | leave
-  | !EndTurnDepth+1
-  | $end_turn
-  | EndTurnDepth <= 0
-  | leave
-| P.recalc
-| less $turn><1: !P.mana+$player.income
-| Leader = P.leader
-| when P.mana < $params.defeat_threshold and Leader and Units.size:
-  | $main.show_message{'Wizard has Lost Too Much Mana'
-       "[P.name] is too exhausted and cannot continue his life."}
-  | Leader.harm{Leader 1000}
-  | Leader.harm{Leader 1000} //in case leade has shell
-  | $effect{Leader.xyz electrical}
-| when $turn><1 and P.leader and P.human: $view.center_at{P.leader.xyz cursor/1}
-| $on_player_change P
-| Turn=$turn
-| for U Units:
-  | less U.effects.end: U.run_effects{(X=>case X [`.`newturn N] Turn%N><0) U U.xyz}
-*/
-
 EventActions = []
 
 check_event_condition Me When =
@@ -122,7 +33,7 @@ check_event_condition Me When =
     | if got V then if N><eq then V >< Value else V >> Value
       else 0
   [always] | 1
-  [turn N] | N><$turn
+  [turn N] | N><$turn and $new_turn
   [got_unit Player UnitType]
     | Units = $players.Player.units
     | got Units.find{?type><UnitType}
@@ -163,15 +74,14 @@ world.update =
       | $nil.effect{[EffectName,Args] $nil [0 0 0]}
       | when EffectName >< msg: leave //hack to show message before victory
     Else | bad "bad event effect ([Effect])"
-| times I 1
-  | NextActive = []
-  | for U $active.list: U.update
-  | while $active.used
-    | U = $active.pop
-    | when U.active: push U NextActive
-  | for U NextActive: $active.push{U}
-  | !$cycle + 1
-  | ($on_update){}
+| NextActive = []
+| for U $active.list: U.update
+| while $active.used
+  | U = $active.pop
+  | when U.active: push U NextActive
+| for U NextActive: $active.push{U}
+| !$cycle + 1
+| ($on_update){}
 
 update_anim Me =
 | !$anim_wait - 1

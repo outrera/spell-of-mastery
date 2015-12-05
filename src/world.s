@@ -48,7 +48,6 @@ type world{main}
    xunit
    yunit
    zunit
-   on_player_change
    on_update
    marks
    params
@@ -61,6 +60,7 @@ type world{main}
 
 world.second = $cycle/24
 world.turn = $second/10
+world.new_turn = $cycle%(24*10)><0
 
 world.init =
 | $main.world <= Me

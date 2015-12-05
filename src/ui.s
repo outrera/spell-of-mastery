@@ -245,7 +245,6 @@ create_bank_list Me =
 create_view_ui Me =
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
   | when got!it $world.players.find{?name >< Name}: $world.player <= it
-| $world.on_player_change <= Player => | PlayerWidget.picked <= Player.id
 | BankList,ItemList = create_bank_list Me
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
