@@ -301,11 +301,13 @@ world.roof XYZ =
 world.seen_from A B =
 | AX,AY,AZ = A
 | BX,BY,BZ = B
+| DZ = (BZ-AZ)
 | PX = AX
 | PY = AY
 | PZ = AZ
 | BottomClear = 1
-| when (AZ-BZ).abs>4:
+| when DZ.abs>16: leave 0 //z-difference is too large
+| when DZ > 4:
   | BAX = BX + (AX-BX).sign
   | BAY = BY + (AY-BY).sign
   | BottomClear <= $at{BAX BAY BZ}.empty and $at{BAX BAY BZ-1}.empty
@@ -318,7 +320,9 @@ world.seen_from A B =
   | PX <= X
   | PY <= Y
   | PZ <= Z
-  | R <= $at{X Y Z}.empty or (BottomClear and X><BX and Y><BY)
+  | R <= $at{X Y Z}.empty
+         or (X><AX and Y><AY)
+         or (BottomClear and X><BX and Y><BY)
   | _label end
   | R
 
