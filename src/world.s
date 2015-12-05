@@ -297,26 +297,28 @@ world.roof XYZ =
 | while $at{X Y Z}.empty and Z < 63: !Z+1
 | Z
 
+
 world.seen_from A B =
 | AX,AY,AZ = A
 | BX,BY,BZ = B
-| Z = AZ
 | PX = AX
 | PY = AY
-| DX = 0
-| DY = 0
-| line_calls AX AY BX BY: X Y =>
-  | FZ = $fix_z{X,Y,Z}
+| PZ = AZ
+| BottomClear = 1
+| when (AZ-BZ).abs>4:
+  | BAX = BX + (AX-BX).sign
+  | BAY = BY + (AY-BY).sign
+  | BottomClear <= $at{BAX BAY BZ}.empty and $at{BAX BAY BZ-1}.empty
+| line_calls3d AX AY AZ BX BY BZ: X Y Z =>
   | R = 0
-  | when Z-FZ>>8 and Z-AZ>4: _goto end
-  | DX <= X-PX
-  | DY <= Y-PY
+  | DX = X-PX
+  | DY = Y-PY
   | when DX*DX><1 and DY*DY><1:
-    | less $at{PX+DX PY FZ}.empty or $at{PX PY+DY FZ}.empty: _goto end
-  | Z <= FZ
+    | less $at{PX+DX PY Z}.empty or $at{PX PY+DY Z}.empty: _goto end
   | PX <= X
   | PY <= Y
-  | R <= 1
+  | PZ <= Z
+  | R <= $at{X Y Z}.empty or (BottomClear and X><BX and Y><BY)
   | _label end
   | R
 

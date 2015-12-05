@@ -87,42 +87,104 @@ line_points_sub AX AY BX BY F =
   | !T + DXA*2
   | F{X Y}
 
+line_calls AX AY BX BY F =
+| DX = BX - AX
+| DY = BY - AY
+| SX = DX.sign
+| SY = DY.sign
+| DX = DX.abs
+| DY = DY.abs
+| DX2 = DX*2
+| DY2 = DY*2
+| X = AX
+| Y = AY
+| when DX > DY:
+  | TY = DY2 - DX
+  | while X<>BX:
+    | when TY >> 0
+      | !Y + SY
+      | !TY - DX2
+    | !X + SX
+    | !TY + DY2
+    | less F{X Y}: leave 0
+  | leave 1
+| TX = DX2 - DY
+| while Y<>BY: 
+  | when TX >> 0:
+    | !X + SX
+    | !TX - DY2
+  | !Y + SY
+  | !TX + DX2
+  | less F{X Y}: leave 0
+| 1
+
+line_calls3d AX AY AZ BX BY BZ F =
+| DX = BX - AX
+| DY = BY - AY
+| DZ = BZ - AZ
+| SX = DX.sign
+| SY = DY.sign
+| SZ = DZ.sign
+| DX = DX.abs
+| DY = DY.abs
+| DZ = DZ.abs
+| DX2 = DX*2
+| DY2 = DY*2
+| DZ2 = DZ*2
+| X = AX
+| Y = AY
+| Z = AZ
+| when DX >> DY and DX >> DZ:
+  | TY = DY2 - DX
+  | TZ = DZ2 - DX
+  | while X<>BX:
+    | when TY >> 0: //should it be `>`?
+      | !Y + SY
+      | !TY - DX2
+    | when TZ >> 0:
+      | !Z + SZ
+      | !TZ - DX2
+    | !X + SX
+    | !TY + DY2
+    | !TZ + DZ2
+    | less F{X Y Z}: leave 0
+  | leave 1
+| when DY >> DX and DY >> DZ:
+  | TX = DX2 - DY
+  | TZ = DZ2 - DY
+  | while Y<>BY: 
+    | when TX >> 0:
+      | !X + SX
+      | !TX - DY2
+    | when TZ >> 0:
+      | !Z + SZ
+      | !TZ - DY2
+    | !TX + DX2
+    | !Y + SY
+    | !TZ + DZ2
+    | less F{X Y Z}: leave 0
+  | leave 1
+| TX = DX2 - DZ
+| TY = DY2 - DZ
+| while Z<>BZ: 
+  | when TX >> 0:
+    | !X + SX
+    | !TX - DZ2
+  | when TY >> 0:
+    | !Y + SY
+    | !TY - DZ2
+  | !TX + DX2
+  | !TY + DY2
+  | !Z + SZ
+  | less F{X Y Z}: leave 0
+| 1
+
 line_points SX SY DX DY =
 | Ps = []
-| line_points_sub SX SY DX DY: X Y => push X,Y Ps
+| line_calls SX SY DX DY: X Y => | push X,Y Ps; 1
 | when Ps.end: leave []
 | Ps = Ps.list
 | when Ps.head <> [SX SY]: Ps <= Ps.flip
 | Ps
 
-
-line_calls AX AY BX BY F =
-| DX = BX - AX
-| DY = BY - AY
-| DXA = DX.abs
-| DYA = DY.abs
-| SX = DX.sign
-| SY = DY.sign
-| X = AX
-| Y = AY
-| when DXA > DYA:
-  | T = DYA*2 - DXA
-  | while X<>BX or Y<>BY:
-    | when T >> 0
-      | !Y + SY
-      | !T - DXA*2
-    | !X + SX
-    | !T + DYA*2
-    | less F{X Y}: leave 0
-  | leave 1
-| T = DXA*2 - DYA
-| while X<>BX or Y<>BY: 
-  | when T >> 0:
-    | !X + SX
-    | !T - DYA*2
-  | !Y + SY
-  | !T + DXA*2
-  | less F{X Y}: leave 0
-| 1
-
-export line_points line_calls
+export line_points line_calls line_calls3d
