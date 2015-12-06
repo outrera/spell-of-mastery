@@ -56,7 +56,7 @@ view.clear =
 | $cursor.init{[1 1 1]}
 | $anchor.init{[1 1 1]}
 | $pick_count <= 0
-| Leader = $world.player.units.find{?leader}
+| Leader = $player.units.find{?leader}
 | when got Leader: $center_at{Leader.xyz}
 
 view.center_at XYZ cursor/0 =

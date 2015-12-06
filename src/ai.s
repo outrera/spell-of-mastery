@@ -131,7 +131,7 @@ ai.roam_with Radius U =
   | leave 1
 | Blockers = []
 | block XYZ =
-  | B = World.alloc_unit{unit_block owner/U.owner}
+  | B = U.owner.alloc_unit{unit_block}
   | B.move{XYZ}
   | push B Blockers
 | free_blockers = for B Blockers: B.free
@@ -331,7 +331,7 @@ ai_update Me =
   | Harm = HarmMap.X.Y
   | when Harm^^#FF and no $world.units_at{U.xyz}.find{?ai><unhold}:
     | U.attacker <= 1
-    | UH = $world.alloc_unit{trigger_unhold}
+    | UH = U.owner.alloc_unit{trigger_unhold}
     | UH.move{U.xyz}
 | Quit = $update_units{Units}
 | when Quit: leave

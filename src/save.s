@@ -19,7 +19,7 @@ world.save =
     players | map P $players
               | [P.id P.name P.human P.color 0 0
                  P.params.list P.research.list.keep{?1} P.mana]
-    player | $player.id
+    player | $human.id
     units | Units
     tilemap | map X $w: map Y $h:
               | Ts = $tilemap.getPilar{X+1 Y+1}.drop{1}
@@ -77,10 +77,10 @@ world.load Saved =
   | P.mana <= Mana
   | for K,V Params: P.params.K <= V
   | for N,R Research: P.research.N <= R
-| $player <= $players.(Saved.player)
+| $human <= $players.(Saved.player)
 | for X Saved.units
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Efx Flags @Hits]=X
-  | U = $alloc_unit{Type owner/$players.Owner}
+  | U = $players.Owner.alloc_unit{Type}
   | less U.health or U.ai >< pentagram:
     | U.change_owner{$players.0}
   | U.serial <= Serial

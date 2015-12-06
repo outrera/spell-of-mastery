@@ -32,8 +32,7 @@ type world{main}
    proxies
    free_proxies
    players
-   player // player currently being updated
-   human // human player hosting this session
+   human // human controlled player
    gfxes
    seed
    tid_map/Main.tid_map
@@ -72,7 +71,6 @@ world.init =
 | $notes <= dup WParam.max_notes
   | [0.0 (dup NoteSize ``)]
 | $players <= map Id WParam.max_players: player Id Me
-| $player <= $players.0
 | $xunit <= WParam.x_unit
 | $yunit <= WParam.y_unit
 | $zunit <= WParam.z_unit
@@ -90,7 +88,7 @@ world.init =
 | SS = MaxSize*MaxSize
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
-| $nil <= $alloc_unit{unit_nil owner/$players.0}
+| $nil <= $players.0.alloc_unit{unit_nil}
 | $main.params.unit_setters_ <=
   | ($nil)^methods_.keep{?0.0 >< '!'}{[?0.tail ?1]}.table
 
@@ -122,9 +120,8 @@ world.clear =
 | $tilemap.clear{$void}
 | $move_map.clear{0}
 | for P $players: P.clear
-| $player <= $players.0
-| $players.1.human <= 1
 | $human <= $players.1
+| $human.human <= 1
 | $marks <= $nil
 | $params <= t
 | for U $active.list: U.active <= 0
@@ -142,13 +139,12 @@ world.notify Text =
 | for I Text.size: Chars.I <= Text.I
 | $notes.init{[@Used @Free]}
 
-world.alloc_unit ClassName owner/0 =
+world.alloc_unit ClassName Owner =
 | Class = $main.classes.ClassName
 | less got Class:
   | $notify{"Missing class `[ClassName]`"}
   | Class <= $main.classes.trigger_missing
 | U = $free_units.pop
-| less Owner: Owner <= $player
 | when Class.ai >< pentagram
   | Pentagram = Owner.pentagram
   | when Pentagram
@@ -160,6 +156,9 @@ world.alloc_unit ClassName owner/0 =
 | U.owner <= Owner
 | U.owner.got_unit{U}
 | U
+
+player.alloc_unit ClassName = $world.alloc_unit{ClassName Me}
+
 
 world.free_unit U =
 | when U.id
@@ -414,9 +413,8 @@ world.remove_unit U =
   | $remove_unitS{U}
 | U.xyz.init{XYZ}
 
-
 world.effect X,Y,Z What =
-| E = $alloc_unit{"effect_[What]" owner/$players.0}
+| E = $players.0.alloc_unit{"effect_[What]"}
 | E.move{X,Y,Z}
 | E.die
 | E

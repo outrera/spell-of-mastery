@@ -58,7 +58,7 @@ view.update_brush =
                  else if $keys.r >< 1 then Us.end
                  else not Us.any{?class^address >< Class^address}
     | when Place
-      | U = $world.alloc_unit{ClassName}
+      | U = $player.alloc_unit{ClassName}
       | Facing = if Mirror then 5 else 3
       | Reverse = $keys.n >< 1
       | when Reverse: Facing <= if Mirror then 1 else 6
@@ -137,7 +137,7 @@ update_rmb Me Player =
   | U.order_at{$cursor}
 
 view.update_play =
-| Player = $world.player
+| Player = $player
 | case $mice_click
   left | update_lmb Me Player
   right | update_rmb Me Player
@@ -158,11 +158,11 @@ world.update_picked =
     | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
     | Path = Path.keep{X,Y,Z=>$seen{X Y}}
     | As = map XYZ Ms
-      | Mark = $alloc_unit{"mark_magic_hit"}
+      | Mark = $human.alloc_unit{"mark_magic_hit"}
       | Mark.move{XYZ}
       | Mark
     | Bs = map XYZ Path
-      | Mark = $alloc_unit{"mark_magic"}
+      | Mark = $human.alloc_unit{"mark_magic"}
       | Mark.move{XYZ}
       | Mark
     | [@As @Bs]
@@ -174,7 +174,7 @@ world.update_picked =
         | MarkType <= if B.owner.is_enemy{U.owner}
                       then \attack
                       else \swap
-      | Mark = $alloc_unit{"mark_[MarkType]" owner/U.owner}
+      | Mark = $human.alloc_unit{"mark_[MarkType]"}
       | Mark.move{XYZ}
       | Mark
   else []
@@ -182,10 +182,11 @@ world.update_picked =
 
 world.update_cursor CXYZ Brush Mirror =
 | Marks = $marks^uncons{mark}.flip
+| P = $human
 | if $act
-  then | push $alloc_unit{mark_cursor_target}.move{CXYZ} Marks
-  else | push $alloc_unit{mark_cursor0}.move{CXYZ} Marks
-       | push $alloc_unit{mark_cursor1}.move{CXYZ} Marks
+  then | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
+  else | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
+       | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks
 | case Brush
   [obj Bank,Type]
     | ClassName = "[Bank]_[Type]"
@@ -196,7 +197,7 @@ world.update_cursor CXYZ Brush Mirror =
       | Place = if not Us then 0
                 else if Class.unit then not Us.any{?unit}
                 else not Us.any{?class^address >< Class^address}
-      | when Place: push $alloc_unit{mark_cube}.move{XYZ} Marks
+      | when Place: push P.alloc_unit{mark_cube}.move{XYZ} Marks
 | $marks <= Marks.flip^cons{mark}
 
 view.update =

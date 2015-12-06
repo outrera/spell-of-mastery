@@ -29,7 +29,7 @@ type ui.$tabs{main} tabs width height world message_box view
 | $width <= $params.ui.width
 | $height <= $params.ui.height
 
-ui.player = $world.player
+ui.player = $world.human
 ui.data = $main.data
 ui.load File =
 | $main.load{File}
@@ -56,7 +56,7 @@ pick_main_menu Me pause/1 =
 
 research_act Me Unit Act =
 | O = Unit.owner
-| Needs = $world.player.lore-Act.research
+| Needs = $player.lore-Act.research
 | when Needs < 0:
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
@@ -244,7 +244,7 @@ create_bank_list Me =
 
 create_view_ui Me =
 | PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
-  | when got!it $world.players.find{?name >< Name}: $world.player <= it
+  | when got!it $world.players.find{?name >< Name}: $world.human <= it
 | BankList,ItemList = create_bank_list Me
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
@@ -342,7 +342,7 @@ create_dialog_tabs Me =
           credits(Credits)
 
 ui_on_world_update Me =
-| when $world.player.human: InputBlocker.show <= 0
+| InputBlocker.show <= 0
 | WinnerId = $world.params.winner
 | when got WinnerId:
   | Winner = $world.players.WinnerId
@@ -404,7 +404,7 @@ create_act_icons Me =
     else if Remain < 0 then
       | O.notify{"[Act.title] needs [-Remain] turns to recharge."}
     else | if Act.range >< 0
-           then when O.id >< $world.player.id:
+           then when O.id >< $player.id:
                 | PickedUnit.order.init{target PickedUnit @Act.list.join}
            else $world.act <= Act
 | map I MaxActIcons: hidden: icon 0 click/&actClick

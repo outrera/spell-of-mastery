@@ -220,8 +220,8 @@ respawn_leader Me XYZ =
 | Cost = $main.params.world.death_cost
 | !$owner.mana - Cost
 | $owner.notify{"death cost you [Cost] mana"}
-| S = $world.alloc_unit{$type owner/$owner}
-| S.summoned <= 1
+| S = $owner.alloc_unit{$type}
+| S.summoned <= 0
 | S.alpha <= 255
 | S.delta <= -25
 | S.move{XYZ}

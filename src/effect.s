@@ -184,12 +184,11 @@ effect summon What:
 | case What nopick,W:
   | NoPick <= 1
   | What <= W
-| S = $world.alloc_unit{What owner/$owner}
+| S = $owner.alloc_unit{What}
 | S.summoned <= 1
 | S.alpha <= 255
 | S.delta <= -25
 | S.move{TargetXYZ}
-| when S.owner.human: S.attacker <= 1
 
 effect caster Who:
 | Leader = $owner.leader

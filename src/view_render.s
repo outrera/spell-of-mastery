@@ -110,7 +110,7 @@ unit.draw FB B =
 //| G.light{B.lx B.ly}
 | G.alpha{$alpha}
 | FB.blit{XX YY G}
-| when $picked and $world.player.id >< $owner.id:
+| when $picked and $world.human.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
   | PH = $sprite.pick_height
@@ -325,7 +325,7 @@ view.draw_indicators =
 | less Indicators: Indicators <= $main.img{ui_indicators}
 | IX = ($w-Indicators.w)/2
 | IY = 0
-| P = $world.player
+| P = $player
 | Font = font medium
 | when $mode <> play: !IX + 80
 | less P.human or $mode <> play:

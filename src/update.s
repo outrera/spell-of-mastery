@@ -6,8 +6,8 @@ main.update =
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
-| $player <= $players.1
 | $human <= $players.1
+| $human.human <= 1
 | $cycle <= 0
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}

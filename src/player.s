@@ -159,7 +159,7 @@ update_units Me =
 
 alloc_ai_blockers Me =
 | for U $units: less U.removed: when U.ai >< avoid:
-  | B = $alloc_unit{unit_block owner/U.owner}
+  | B = U.owner.alloc_unit{unit_block}
   | B.move{U.xyz}
 
 free_ai_blockers Me =
