@@ -174,6 +174,7 @@ update_next_action Me =
 | $next_action.type <= 0
 | $next_action.priority <= 0
 | $action.start
+| when $anim><move: $pick_facing{$facing}
 
 update_action Me =
 | T = $action.target
