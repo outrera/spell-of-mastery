@@ -3,6 +3,18 @@
 main.update =
 | $world.update
 
+// force reset of all unit effects and health
+reinit_units Us =
+| for U Us:
+  | Type = U.type
+  | Owner = U.owner
+  | Facing = U.facing
+  | XYZ = U.xyz.deep_copy
+  | U.free
+  | U = Owner.alloc_unit{Type}
+  | U.move{XYZ}
+  | U.pick_facing{Facing}
+
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
@@ -12,6 +24,7 @@ world.new_game =
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana
+| reinit_units $active
 | for P $players:
   | P.lore <= 10
   | P.mana <= StartMana

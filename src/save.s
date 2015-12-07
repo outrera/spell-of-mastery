@@ -81,8 +81,7 @@ world.load Saved =
 | for X Saved.units
   | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Efx Flags @Hits]=X
   | U = $players.Owner.alloc_unit{Type}
-  | less U.health or U.ai >< pentagram:
-    | U.change_owner{$players.0}
+  | less U.health or U.ai >< pentagram: U.change_owner{$players.0}
   | U.serial <= Serial
   | case XYZ A,B:
     | XYZ <= A
