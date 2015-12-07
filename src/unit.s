@@ -223,10 +223,11 @@ respawn_leader Me XYZ =
 unit.free =
 | when $picked: $owner.picked <= $owner.picked.skip{?id><$id}
 | when $owner: $owner.lost_unit{Me}
-| when $leader><1 and $hits >> $health:
-  | $leader <= 0
-  | P = $owner.pentagram
-  | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
+| when $leader><1:
+  | $owner.leader <= 0
+  | when $hits >> $health:
+    | P = $owner.pentagram
+    | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
 | $path.heapfree
 | $path <= []
