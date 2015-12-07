@@ -141,6 +141,7 @@ update_order Me =
 | when $ordered.type
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
+  | when $ordered.type<>idle: $moved <= $world.cycle
   | $ordered.type <= 0
 
 update_fade Me =

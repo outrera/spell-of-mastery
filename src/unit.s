@@ -27,7 +27,7 @@ type unit.$class{Id World}
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
   sprite
-  moved // last turn, this unit moved, number of move points (when negative)
+  moved // last cycle, this unit moved
   mirror // true, if drawing code should mirror the sprite
   mark // next mark in the map marks chain
   active // true if this unit resides in the list of active units
@@ -252,10 +252,12 @@ unit.order_act Act target/0 =
 
 unit.order_at XYZ =
 | $path.heapfree
+| $path <= []
+| when $xyz >< XYZ: leave
+| $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
-| when no $goal:
+| when no $goal or not $owner.is_enemy{$goal.owner}:
   | $goal <= $unit_goal
-  | $goal.xyz.init{XYZ}
 | $goal_serial <= $goal.serial
 | $path <= $path_to{$goal.xyz}.enheap
 
