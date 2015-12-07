@@ -90,15 +90,6 @@ player.got_unit U =
 player.lost_unit U =
 | when U.ai >< pentagram: $pentagram <= 0
 
-
-player.recalc =
-| $pentagram <= 0
-| $leader <= 0
-| for U $units
-  | when U.ai >< pentagram: $pentagram <= U
-  | when U.leader: $leader <= U
-  | U.move_in{1}
-
 player.research_item What =
 | Act = $main.params.acts.What
 | $research.What <= Act.research

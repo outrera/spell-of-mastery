@@ -145,6 +145,9 @@ world.alloc_unit ClassName Owner =
   | $notify{"Missing class `[ClassName]`"}
   | Class <= $main.classes.trigger_missing
 | U = $free_units.pop
+| when Class.leader and Class.leader><1:
+  | when Owner.leader: Owner.leader.free
+  | Owner.leader <= U
 | when Class.ai >< pentagram
   | Pentagram = Owner.pentagram
   | when Pentagram

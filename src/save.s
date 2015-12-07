@@ -99,7 +99,6 @@ world.load Saved =
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
-| for [Id@_] Saved.players: $players.Id.recalc
 | Explored = Saved.explored
 | when got Explored:
   | for PID,Sight Explored
