@@ -3,7 +3,6 @@ tier: 4
 health: 6
 attack: 5
 defense: 3
-moves: 4
 impact: impact{fire_ring}
 inborn: (upkeep4)
 

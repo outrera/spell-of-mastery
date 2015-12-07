@@ -4,7 +4,6 @@ health: 3
 attack: 3
 defense: 0
 range: 2
-moves: 1
 inborn: (upkeep2)
 
 sounds: attack,(arrow_hit)

@@ -4,7 +4,6 @@ health: 5
 attack: 4
 defense: 2
 range: 2
-moves: 2
 inborn: (upkeep4 flyer)
 
 sounds: attack,(observer_attack)

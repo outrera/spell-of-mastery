@@ -3,7 +3,6 @@ tier: 1
 health: 1
 attack: 1
 defense: 0
-moves: 4
 inborn: (upkeep1 flyer)
 
 sounds: attack,(bat_attack)

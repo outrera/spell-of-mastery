@@ -4,7 +4,6 @@ health: 4
 attack: 2
 defense: 1
 range: 2
-moves: 2
 impact: harm{-1,self},impact{explosion_blood}
 inborn: (upkeep3)
 

@@ -3,5 +3,4 @@ tier: 2
 health: 5
 attack: 2
 defense: 0
-moves: 3
 inborn: (upkeep2)
