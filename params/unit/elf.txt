@@ -4,7 +4,7 @@ health: 4
 attack: 1
 defense: 0
 range: 4
-income: misc.tier2_upkeep
+inborn: (upkeep2)
 
 sounds: attack,(arrow_hit)
        //,impact,()

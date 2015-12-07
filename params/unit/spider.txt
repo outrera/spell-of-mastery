@@ -3,8 +3,8 @@ tier: 3
 health: 5
 attack: 2
 defense: 1
-income: misc.tier3_upkeep
 impact: add_effect{poison,10,(dispel)},impact{explosion_blood}
+inborn: (upkeep3)
 
 sounds: attack,(spider_attack)
        //,impact,()

@@ -3,5 +3,5 @@ tier: 2
 health: 5
 attack: 2
 defense: 0
-income: misc.tier2_upkeep
 moves: 3
+inborn: (upkeep2)

@@ -2,9 +2,8 @@ sprite: unit_oculus
 icon: unit_oculus
 tier: 2
 health: 3
-income: -6
 leader: 2
-inborn: (flyer)
+inborn: (upkeep1 flyer)
 
 sounds: //attack,()
        //,impact,()

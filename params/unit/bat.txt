@@ -3,9 +3,8 @@ tier: 1
 health: 1
 attack: 1
 defense: 0
-income: misc.tier1_upkeep
 moves: 4
-inborn: (flyer)
+inborn: (upkeep1 flyer)
 
 sounds: attack,(bat_attack)
        //,impact,()

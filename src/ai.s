@@ -232,7 +232,7 @@ ai.harm Attacker Victim =
 | Victim.attacker <= 1 //have to be aggressive
 
 ai.group_attack Types =
-| Units = $player.active
+| Units = $player.units
 | UTs = Units.keep{U => not U.attacker and U.summoned}.div{?type}
 | As = []
 | Missing = []
@@ -297,7 +297,7 @@ ai_update Me =
 | PID = Player.id
 | Pentagram = Player.pentagram
 | Params = $main.params
-| Units = Player.active
+| Units = Player.units
 | less Player.human
   | Player.mana <= 100000
   | Player.lore <= 9000

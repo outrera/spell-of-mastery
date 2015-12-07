@@ -9,7 +9,7 @@ world.save =
   | list U.id U.serial U.type XYZ U.xy
          U.anim U.anim_step U.facing
          U.owner.id U.moved Effects U.flags U.hits
-| list w($w) h($h) serial($serial) cycle($cycle) turn(0)
+| list w($w) h($h) serial($serial) cycle($cycle)
     filename | $filename
     name | $name
     description | $description

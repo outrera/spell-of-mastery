@@ -3,8 +3,7 @@ tier: 2
 health: 4
 attack: 2
 defense: 1
-income: misc.tier2_upkeep
-inborn: (regen flyer)
+inborn: (upkeep2 regen flyer)
 
 sounds: attack,(attack2)
        //,impact,()

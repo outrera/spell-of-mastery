@@ -123,6 +123,7 @@ effect set @Args:
 | Ps = if What >< world then [0,$world.params]
        else if What.is_int then Players <= [$world.players.What]
        else if What >< owner then Players <= [$owner]
+       else if What >< towner then Players <= [Target.owner]
        else if What >< all then Players <= $world.players
        else if What >< target then [0,(unit_setter Target)]
        else if What >< self then [0,(unit_setter Me)]

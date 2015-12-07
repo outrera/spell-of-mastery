@@ -24,7 +24,7 @@ ai.clear =
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
 type player{id world}
-   name ai human color mana income upkeep
+   name ai human color mana
    moves //use to be number for creatues movable per turn; currently obsolete
    leader
    pentagram
@@ -80,38 +80,23 @@ player.clear =
 | $pentagram <= 0
 | $researching <= 0
 | $mana <= 0
-| $income <= 0
-| $upkeep <= 0
 | $lore <= 0
 | $params.lossage <= 0
 | $params.mana <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
-
-player.got_income A =
-| !$income + A
-| when A < 0: !$upkeep + A
-
-player.lost_income A =
-| !$income - A
-| when A < 0: !$upkeep - A
-
 player.got_unit U =
-| $got_income{U.income}
 
 player.lost_unit U =
 | when U.ai >< pentagram: $pentagram <= 0
-| $lost_income{U.income}
+
 
 player.recalc =
-| $income <= 0
-| $upkeep <= 0
 | $pentagram <= 0
 | $leader <= 0
 | for U $units
   | when U.ai >< pentagram: $pentagram <= U
   | when U.leader: $leader <= U
-  | $got_income{U.income}
   | U.move_in{1}
 
 player.research_item What =
@@ -124,26 +109,18 @@ player.research_remain Act =
 | ResearchRemain = Act.research - ResearchSpent
 | ResearchRemain
 
-player.active =
-| PID = $id
-| Turn = $world.turn
-| $world.active.list.keep{(?owner.id >< PID and ?moved < Turn
-                           and not ?removed)}
 player.units =
 | PID = $id
 | Turn = $world.turn
 | $world.active.list.keep{(?owner.id >< PID and not ?removed)}
 
 update_units Me =
-| Turn = $world.turn
-| NewTurn = $world.new_turn
+| Cycle = $world.cycle
 | for U $units: 
   | when U.health>0: for V $world.units_at{U.xyz}: less V.effects.end:
-    | when NewTurn: V.run_effects{?><tenant_endturn U U.xyz}
+    | V.run_effects{(X=>case X [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
   | less U.effects.end:
-    | when NewTurn:
-      | U.run_effects{(X=>case X [`.`newturn N] Turn%N><0) U U.xyz}
-      | U.run_effects{(X=>case X [`.`endturn N] Turn%N><0) U U.xyz}
+    | U.run_effects{(X=>case X [`.`cycle N] Cycle%N><0) U U.xyz}
     | Remove = []
     | RunEs = []
     | for E U.effects: case E [When Name Duration Params]: when Duration>0:
@@ -179,8 +156,10 @@ update_spell_of_mastery Me P =
   | S = Q.params.spell_of_mastery
   | when got S: P.notify{"[Q.name] will finish Spell of Mastery in [S] turns"}
 
+//FIXME:calculate income per second here
 update_income Me =
-| !$mana+$income
+| IC = $main.params.world.income_cycle
+| when $world.cycle%IC><0: !$mana + 1
 | Leader = $leader
 | when $mana < $main.params.world.defeat_threshold and Leader:
   | $main.show_message{'Wizard has Lost Too Much Mana'

@@ -3,7 +3,7 @@ tier: 1
 health: 4
 attack: 2
 defense: 0
-income: misc.tier1_upkeep
+inborn: (upkeep1)
 
 sounds: attack,(attack2)
        //,impact,()

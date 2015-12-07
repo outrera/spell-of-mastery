@@ -3,10 +3,9 @@ tier: 4
 health: 5
 attack: 4
 defense: 2
-income: misc.tier4_upkeep
 range: 2
 moves: 2
-inborn: (flyer)
+inborn: (upkeep4 flyer)
 
 sounds: attack,(observer_attack)
        //,impact,()

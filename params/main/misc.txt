@@ -7,7 +7,3 @@ tier3_rcost: 30
 tier3_scost: 800
 tier4_rcost: 64
 tier4_scost: 1000
-tier1_upkeep: -7
-tier2_upkeep: -10
-tier3_upkeep: -13
-tier4_upkeep: -16

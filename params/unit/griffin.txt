@@ -3,9 +3,8 @@ tier: 3
 health: 6
 attack: 3
 defense: 0
-income: misc.tier3_upkeep
 moves: 4
-inborn: (flyer)
+inborn: (upkeep3 flyer)
 
 sounds: attack,(attack2)
        //,impact,()

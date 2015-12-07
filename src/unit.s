@@ -37,7 +37,6 @@ type unit.$class{Id World}
   goal_serial
   unit_goal/unit_goal{}
   hits // how damaged is this unit
-  turn // turn it was created
   flags
   alpha //how transparent is this unit
   delta //change of transparency per cycle
@@ -69,17 +68,8 @@ unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
 unit.alive = $hits < $health
 
-world.income_at XYZ =
-| for U $units_at{XYZ}:
-  | when U.empty and U.income and U.owner.id >< 0:
-    | leave U.income
-| 0
-
-// extort income from the territory occupied by the unit
 unit.move_in State =
 | when $item <> pickup: leave
-| Income = $world.income_at{$xyz}
-| if State then $owner.got_income{Income} else $owner.lost_income{Income}
 | for U $world.units_at{$xyz}: when U.item and U.item <> pickup:
   | Add = if U.show then [effect,pickup sound,pickup remove,self] else []
   | U.effect{[@Add @U.item] Me Me.xyz}

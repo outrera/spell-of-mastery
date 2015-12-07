@@ -12,8 +12,7 @@ tile_banks: tile//,deco
 class_banks: unit,leader,special,trigger
 explored: 1 //all maps are explored from the beginning
 release: 0 //set to 1 for releases build
-base_income: 50
-node_income: 25
+income_cycle: 4
 defeat_threshold: -1000 //negative mana forcing player defeat
 death_cost: 500 //mana lost when leader dies
 start_mana: 1000 //400

@@ -333,7 +333,7 @@ view.draw_indicators =
   | leave
 | X,Y,Z = $cursor
 | $fb.blit{IX IY Indicators}
-| Font.draw{$fb IX+28 IY+1 "[P.mana]+[P.income-P.upkeep]-[-P.upkeep]"}
+| Font.draw{$fb IX+28 IY+1 "[P.mana]"}
 | Font.draw{$fb IX+156 IY+1 "[P.lore]"}
 | Font.draw{$fb IX+220 IY+1 "[$world.turn]:[P.id]"}
 | Font.draw{$fb IX+210 IY+16 "[P.name]"}

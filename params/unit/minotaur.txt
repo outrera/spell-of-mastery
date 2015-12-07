@@ -3,8 +3,8 @@ tier: 3
 health: 5
 attack: 5
 defense: 1
-income: misc.tier3_upkeep
 impact: sound{attack3}
+inborn: (upkeep3)
 
 sounds: //attack,(attack3)
        //,impact,()
