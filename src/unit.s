@@ -40,6 +40,7 @@ type unit.$class{Id World}
   flags
   alpha //how transparent is this unit
   delta //change of transparency per cycle
+  cooldown
   kills //how many enemies this unit has killed
   effects/[] //active effects
   mod //set by various effects to modify some contextual behavior
@@ -92,6 +93,7 @@ unit.init Class =
 | $alpha <= 0
 | $delta <= 0
 | $kills <= 0
+| $cooldown <= 0
 | $from.init{0,0,-1}
 | when $starts
   | less $active

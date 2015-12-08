@@ -7,6 +7,7 @@ tier: 5
 health: 6 // hit points - number of hits, before this unit is dead
 attack: 0 // amount of damage this unit deals
 defence: 0 // amount of damage this unit can absorb, without losing health
+cooldown: 24
 sight: 2
 speed: 1
 pickable: 1

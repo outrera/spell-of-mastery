@@ -6,7 +6,7 @@ main.update =
 
 // force reset of all unit effects and health
 reinit_units Us =
-| for U Us:
+| for U Us: less U.removed
   | Type = U.type
   | Owner = U.owner
   | Facing = U.facing
@@ -180,11 +180,16 @@ update_action Me =
 | T = $action.target
 | when T and (T.removed or not T.alive): $action.cycles <= 0
 | till $action.cycles > 0 // action is done?
+  | when $cooldown>0:
+    | !$cooldown-1
+    | leave
   | when $anim<>idle and $anim<>move and
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave // ensure animation finishes
   | $action.finish
   | update_next_action Me
+  | when $action.type<>move and $action.type<>idle:
+    | $cooldown <= $class.cooldown
 | $action.update
 
 attack_nearby_enemy Me =
