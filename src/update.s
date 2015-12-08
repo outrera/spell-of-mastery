@@ -1,4 +1,5 @@
 // game world update routines
+use pathfind
 
 main.update =
 | $world.update
@@ -117,8 +118,7 @@ update_path Me =
 | when not $goal or $goal.serial <> $goal_serial or $goal.removed
        or not $goal.alive:
   | $goal <= 0
-  | $path.heapfree
-  | $path <= []
+  | $set_path{[]}
   | leave
 | when $goal.is_unit and $goal.owner.is_enemy{$owner}:
   | when ($goal.xyz.take{2}-$xyz.take{2}).abs<<$range.float:
@@ -130,7 +130,7 @@ update_path Me =
   | when $xyz >< $goal.xyz:
     | $goal <= 0
     | leave
-  | $path <= $path_to{$goal.xyz}.enheap
+  | $set_path{$path_to{$goal.xyz}}
 | Path = $path
 | when Path.end: leave
 | XYZ = Path.head.unheap
@@ -187,6 +187,15 @@ update_action Me =
   | update_next_action Me
 | $action.update
 
+attack_nearby_enemy Me =
+| O = $owner
+| SightF = $sight.float
+| check Dst =
+  | B = $world.block_at{Dst.xyz}
+  | got B and O.is_enemy{B.owner} and ($xyz-Dst.xyz).abs<SightF
+| Found = $pathfind{$sight-1 &check}
+| when Found: $order_at{Found.1}
+
 unit.update =
 | when $removed or $active<>1:
   | $active <= 0
@@ -196,4 +205,6 @@ unit.update =
 | update_order Me
 | update_fade Me
 | update_action Me
+| when $removed: leave //unit can be removed as a result of an action
+| when $attack and $action.type><idle: attack_nearby_enemy Me
 | 1 // 1 means we are still alive

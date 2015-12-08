@@ -166,7 +166,7 @@ ai.roam_with Radius U =
         else
   | _label end
   | MoveIn
-| TargetNode = U.pathfind{1 Check}
+| TargetNode = U.pathfind{1000 Check}
 | less TargetNode:
   | free_blockers
   | leave 0

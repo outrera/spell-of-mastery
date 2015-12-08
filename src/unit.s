@@ -229,8 +229,7 @@ unit.free =
     | P = $owner.pentagram
     | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
-| $path.heapfree
-| $path <= []
+| less $path.end: $set_path{[]}
 | $goal <= 0
 | $goal_serial <= 0
 | $effects.heapfree
@@ -252,16 +251,21 @@ unit.order_act Act target/0 =
 | less Target: Target <= Me
 | $order.init{target Target @Act.list.join}
 
-unit.order_at XYZ =
+unit.set_path Path =
+| P = Path.enheap
 | $path.heapfree
-| $path <= []
-| when $xyz >< XYZ: leave
+| $path <= P
+
+unit.order_at XYZ =
+| when $xyz >< XYZ:
+  | $set_path{[]}
+  | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
 | when no $goal or not $owner.is_enemy{$goal.owner}:
   | $goal <= $unit_goal
 | $goal_serial <= $goal.serial
-| $path <= $path_to{$goal.xyz}.enheap
+| $set_path{$path_to{$goal.xyz}}
 
 unit.move XYZ =
 | $from.init{$xyz}
