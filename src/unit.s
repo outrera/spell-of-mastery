@@ -67,6 +67,9 @@ unit.`!summoned` State = $flags <= $flags^set_bit{2 State}
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
+unit.impact = $flags^get_bit{8}
+unit.`!impact` State = $flags <= $flags^set_bit{8 State}
+
 unit.alive = $hits < $health
 
 unit.move_in State =
@@ -253,6 +256,18 @@ unit.order_act Act target/0 =
 | less Target: Target <= Me
 | $order.init{target Target @Act.list.join}
 
+// order taking over any other order
+unit.forced_order @As =
+| O = $order.init{@As}
+| O.priority <= 1000
+| O.speed <= 0
+| O
+
+unit.die =
+| $sound{die}
+| $forced_order{type/die}
+| $cooldown <= 0
+
 unit.set_path Path =
 | P = Path.enheap
 | $path.heapfree
@@ -268,6 +283,36 @@ unit.order_at XYZ =
   | $goal <= $unit_goal
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
+
+unit.harm Attacker Damage =
+| when Attacker and $leader><1 and Me.owner.id<>0:
+  | when not $owner.human and Attacker.owner.id><0:
+    | Attacker.harm{Me 1000}
+    | leave //roaming neutral units wont harm AI wizard
+| less $hits < $health: leave
+| case Damage
+  [_ piercing D] | Damage <= D
+  Else | when Damage > 0: Damage <= max 1 Damage-$defense
+| $run_effects{?><attacked Me $xyz}
+| Mod = $mod
+| $mod <= 0
+| when Mod >< block: leave
+| !$hits + Damage
+| when Damage > 0: $world.effect{$xyz blood}
+| less $owner.human: $owner.ai.harm{Attacker Me}
+| when $hits < $health:
+  | if Damage >> 0
+    then | $sound{hit}
+         | when ($anim><idle or $anim><move) and $anim<>hit: $animate{hit}
+    else when $hits << 0: $hits <= 0
+  | leave
+| when Attacker:
+  | AO = Attacker.owner
+  | when $owner.id <> AO.id: !AO.lore+$tier
+  | !$owner.params.lossage+$tier
+  | !Attacker.kills+1
+| $die
+| $action.cycles <= 1
 
 unit.move XYZ =
 | $from.init{$xyz}
@@ -323,47 +368,6 @@ unit.list_moves Src =
 unit.list_attack_moves XYZ =
 | less $attack: leave []
 | $list_moves{XYZ}.keep{?type><attack}
-
-// order taking over any other order
-unit.forced_order @As =
-| O = $order.init{@As}
-| O.priority <= 1000
-| O.speed <= 0
-| O
-
-unit.die =
-| $sound{die}
-| $forced_order{type/die}
-
-unit.harm Attacker Damage =
-| when Attacker and $leader><1 and Me.owner.id<>0:
-  | when not $owner.human and Attacker.owner.id><0:
-    | Attacker.harm{Me 1000}
-    | leave //roaming neutral units wont harm AI wizard
-| less $hits < $health: leave
-| case Damage
-  [_ piercing D] | Damage <= D
-  Else | when Damage > 0: Damage <= max 1 Damage-$defense
-| $run_effects{?><attacked Me $xyz}
-| Mod = $mod
-| $mod <= 0
-| when Mod >< block: leave
-| !$hits + Damage
-| when Damage > 0: $world.effect{$xyz blood}
-| less $owner.human: $owner.ai.harm{Attacker Me}
-| when $hits < $health:
-  | if Damage >> 0
-    then | $sound{hit}
-         | $animate{hit}
-    else when $hits << 0: $hits <= 0
-  | leave
-| when Attacker:
-  | AO = Attacker.owner
-  | when $owner.id <> AO.id: !AO.lore+$tier
-  | !$owner.params.lossage+$tier
-  | !Attacker.kills+1
-| $die
-| $action.cycles <= 1
 
 unit.sound Type =
 | less $world.human.explored{$xyz}>1: leave

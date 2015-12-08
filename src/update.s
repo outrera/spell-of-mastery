@@ -75,9 +75,7 @@ world.process_events =
   | when True: push Actions EventActions
 | EventActions <= EventActions.flip.join
 
-world.update =
-| $main.music{playlist_advance}
-| when EventActions.end: $process_events
+update_events Me =
 | till EventActions.end
   | Effect = EventActions^pop
   | case Effect
@@ -86,25 +84,41 @@ world.update =
         else case Args [`,` @_]
              | Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
       | $nil.effect{[EffectName,Args] $nil [0 0 0]}
-      | when EffectName >< msg: leave //hack to show message before victory
+      | when EffectName >< msg: leave 1 //hack to show message before victory
     Else | bad "bad event effect ([Effect])"
+| 0
+
+update_units Me =
 | NextActive = []
 | for U $active.list: U.update
 | while $active.used
   | U = $active.pop
   | when U.active: push U NextActive
 | for U NextActive: $active.push{U}
+
+world.update =
+| $main.music{playlist_advance}
+| when EventActions.end: $process_events
+| when update_events Me: leave
+| update_units Me
 | !$cycle + 1
 | ($on_update){}
 
 update_anim Me =
 | !$anim_wait - 1
-| less $anim_wait > 0
-  | when $anim >< attack and $anim_step+1 >< $anim_seq.size:
-    | $animate{idle}
+| less $anim_wait > 0:
+  | when $anim_step+1 >< $anim_seq.size:
+    | when $anim >< death: leave
+    | when $anim >< attack:
+      | $animate{idle}
   | $anim_step <= ($anim_step+1)%$anim_seq.size
+  | Step = $anim_seq.$anim_step
+  | when Step.0><impact:
+    | when $action.type><attack: $impact <= 1
+    | update_anim Me
+    | leave
   | $pick_facing{$facing}
-  | $anim_wait <= $anim_seq.$anim_step.1
+  | $anim_wait <= Step.1
 
 update_path_move Me XYZ =
 | Ms = $list_moves{$xyz}.keep{?xyz><XYZ}
@@ -159,7 +173,7 @@ update_next_action Me =
   | update_order Me
 | Cost = $next_action.cost
 | if     $next_action.type and $next_action.valid
-     and (not $next_action.speed or (not Cost or $owner.mana>>Cost))
+     and (not Cost or $owner.mana>>Cost)
   then | !$owner.mana-$next_action.cost
   else
   | if not $next_action.type
@@ -183,12 +197,13 @@ update_action Me =
   | when $cooldown>0:
     | !$cooldown-1
     | leave
-  | when $anim<>idle and $anim<>move and
+  | when $anim<>idle and $anim<>move and $next_action.type <> die and
+         and $anim<>hit and
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave // ensure animation finishes
   | $action.finish
   | update_next_action Me
-  | when $action.type<>move and $action.type<>idle:
+  | when $action.type><attack:
     | $cooldown <= $class.cooldown
 | $action.update
 

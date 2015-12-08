@@ -26,6 +26,14 @@ type sprite{Bank Name xy/[0 0]
   | [Name Frames]
 | when got $anims.death and no $anims.hit:
   | $anims.hit <= [[$anims.idle.0.0 24]] //supply default hit anim
+| Attack = $anims.attack
+| when no Attack:
+  | Attack <= $anims.idle
+  | $anims.attack <= Attack
+| when no Attack.find{?0><impact}:
+  | $anims.attack <= if Attack.size>1
+                     then [@Attack.lead [impact 0] Attack.last]
+                     else [[impact 0] Attack.head]
 
 sprite.anim_speed AnimName =
 | Anim = $anims.AnimName

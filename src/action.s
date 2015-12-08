@@ -68,17 +68,15 @@ dact attack.start
 | U.sound{attack}
 dact attack.update
 | U = $unit
-| when $data > 0: move_update Me
-| when $cycles >< 1 and $data < 2:
-  | when $data >< 0:
-    | Target = $target
-    | when U.impact: U.effect{U.impact Target Target.xyz}
-    | when Target.harm{U U.attack}
-    | U.animate{idle}
-    | $data <= 2
-    | $cycles <= 0
-    | less U.range: Target.run_effects{?><counter U U.xyz}
-    | leave
+| when U.impact:
+  | U.impact <= 0
+  | Target = $target
+  | when U.impact: U.effect{U.impact Target Target.xyz}
+  | when Target.harm{U U.attack}
+  | U.animate{idle}
+  | $cycles <= 0
+  | less U.range: Target.run_effects{?><counter U U.xyz}
+  | leave
 
 dact attack.finish | move_finish Me
 
