@@ -120,12 +120,42 @@ update_anim Me =
   | $pick_facing{$facing}
   | $anim_wait <= Step.1
 
+
+find_path_around_busy_units Me XYZ =
+| OID = $owner.id
+| check Dst =
+  | DXYZ = Dst.xyz
+  | if DXYZ><XYZ then 1
+    else | Us = $world.units_at{DXYZ}.skip{?empty}
+         | when Us.size
+           | U = Us.0
+           | when U.owner.id><OID:
+             | when not U.path.end or U.action.type><attack:
+               | Dst.type <= 0
+         | 0
+| Found = $pathfind{10 &check}
+| if Found
+  then | Path = Found^node_to_path
+       | $set_path{Path}
+       | $path_life <= Path.size
+  else | $set_path{[]}
+       | $path_life <= 0
+
+UpdatePathHangTrap = 0
+
 update_path_move Me XYZ =
 | Ms = $list_moves{$xyz}.keep{?xyz><XYZ}
 | when Ms.end: leave 0
 | M = Ms.0
 | Us = $world.units_at{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
+| when Target and Target.owner.id >< $owner.id:
+  | when UpdatePathHangTrap>0: leave
+  | find_path_around_busy_units Me $goal.xyz
+  | less $path.end:
+    | !UpdatePathHangTrap+1
+    | update_path Me
+  | leave
 | $order.init{type/M.type at/XYZ target/Target}
 
 update_path Me =
@@ -135,12 +165,13 @@ update_path Me =
   | $set_path{[]}
   | leave
 | when $goal.is_unit and $goal.owner.is_enemy{$owner}:
-  | when ($goal.xyz.take{2}-$xyz.take{2}).abs<<$range.float:
+  | when $range and ($goal.xyz.take{2}-$xyz.take{2}).abs<<$range.float:
     | when $world.seen_from{$xyz $goal.xyz}:
       | $order.init{type/attack at/$goal.xyz target/$goal}
       | leave
 | Path = $path
-| when Path.end:
+| !$path_life-1
+| when $path_life<<0 or Path.end:
   | when $xyz >< $goal.xyz:
     | $goal <= 0
     | leave
@@ -221,7 +252,9 @@ unit.update =
   | $active <= 0
   | leave
 | update_anim Me
-| when $idle: update_path Me
+| when $idle:
+  | UpdatePathHangTrap <= 0
+  | update_path Me
 | update_order Me
 | update_fade Me
 | update_action Me

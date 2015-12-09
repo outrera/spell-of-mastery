@@ -33,6 +33,7 @@ type unit.$class{Id World}
   active // true if this unit resides in the list of active units
   slope // unit is standing on a sloped terrain
   path/[] // path to goal
+  path_life
   goal
   goal_serial
   unit_goal/unit_goal{}
@@ -107,6 +108,7 @@ unit.init Class =
   | $action.init{idle 0,0,0}
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
+  | $path_life <= 0
   | for E $inborn: case E
       [`{}` Name Duration @Args] | $add_effect{Name Duration [inborn @Args]}
       Else | $add_effect{E 0 [inborn]}
@@ -269,6 +271,7 @@ unit.die =
 | $cooldown <= 0
 
 unit.set_path Path =
+| $path_life <= Path.size/4
 | P = Path.enheap
 | $path.heapfree
 | $path <= P
