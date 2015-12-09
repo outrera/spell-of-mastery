@@ -149,13 +149,14 @@ update_path_move Me XYZ =
 | M = Ms.0
 | Us = $world.units_at{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
-| when Target and Target.owner.id >< $owner.id and Target.xyz<>$goal.xyz:
-  | when UpdatePathHangTrap>0: leave
-  | find_path_around_busy_units Me $goal.xyz
-  | less $path.end:
-    | !UpdatePathHangTrap+1
-    | update_path Me
-  | leave
+| when Target and Target.owner.id >< $owner.id and Target.goal:
+  | when Target.xyz<>$goal.xyz:
+    | when UpdatePathHangTrap>0: leave
+    | find_path_around_busy_units Me $goal.xyz
+    | less $path.end:
+      | !UpdatePathHangTrap+1
+      | update_path Me
+    | leave
 | $order.init{type/M.type at/XYZ target/Target}
 
 update_path Me =
