@@ -3,11 +3,11 @@ tier: 4
 health: 6
 attack: 5
 defense: 3
-impact: impact{fire_ring}
+impact: impact{fire_ring}, sound{fire1}
 inborn: (upkeep4)
 
-sounds: attack,(dragon_hit)
+sounds: //attack,(dragon_hit)
 //       ,impact,()
-       ,hit,(dragon_hit)
+       hit,(dragon_hit)
        ,die,(dragon_death)
        ,move,(dragon_move)

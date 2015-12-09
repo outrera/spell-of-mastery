@@ -3,7 +3,7 @@ tier: 4
 health: 5
 attack: 4
 defense: 2
-range: 2
+range: 4
 inborn: (upkeep4 flyer)
 
 sounds: attack,(observer_attack)

@@ -3,10 +3,11 @@ tier: 1
 health: 4
 attack: 2
 defense: 0
+impact: sound{attack2}
 inborn: (upkeep1)
 
-sounds: attack,(attack2)
+sounds: //attack,(attack2)
        //,impact,()
-       ,hit,(rat_death)
+       hit,(rat_death)
        ,die,(rat_death)
        ,move,(step)
