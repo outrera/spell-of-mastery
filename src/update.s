@@ -114,7 +114,7 @@ update_anim Me =
   | $anim_step <= ($anim_step+1)%$anim_seq.size
   | Step = $anim_seq.$anim_step
   | when Step.0><impact:
-    | when $action.type><attack: $impact <= 1
+    | when $action.type><attack: $anim_hit <= 1
     | update_anim Me
     | leave
   | $pick_facing{$facing}

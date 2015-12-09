@@ -34,6 +34,8 @@ view.select_unit XYZ =
 | when Us.size
   | !$pick_count+1
   | Picked <= [Us.($pick_count%Us.size)]
+| when $keys.lshift><1 or $keys.rshift><1:
+  | Picked <= [@Picked @$picked.list]
 | $picked <= Picked
 
 view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}

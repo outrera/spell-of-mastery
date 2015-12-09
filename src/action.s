@@ -68,8 +68,8 @@ dact attack.start
 | U.sound{attack}
 dact attack.update
 | U = $unit
-| when U.impact:
-  | U.impact <= 0
+| when U.anim_hit:
+  | U.anim_hit <= 0
   | Target = $target
   | when U.impact: U.effect{U.impact Target Target.xyz}
   | when Target.harm{U U.attack}
