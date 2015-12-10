@@ -3,7 +3,7 @@ tier: 2
 health: 4
 attack: 1
 defense: 0
-range: 4
+range: 8//4
 inborn: (upkeep2)
 
 sounds: attack,(arrow_hit)

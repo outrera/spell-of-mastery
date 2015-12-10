@@ -1,1 +1,1 @@
-author: `Seth Galbraith`,`Nikita Sadkov`
+author: `Nikita Sadkov`
