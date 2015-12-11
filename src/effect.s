@@ -32,6 +32,13 @@ effect mod Arg: Target.mod <= Arg
 
 effect add_moves N: bad "effect.s: add_moves is obsolete"
 
+effect btrack XYZ:
+| less $idle: leave
+| when $xyz><XYZ: $strip_effect{btrack}
+| B = $world.block_at{XYZ}
+| when got B and not B.idle: leave
+| $order_at{XYZ}
+
 effect gain @Args:
 | ActNames = []
 | Player = 0

@@ -113,11 +113,19 @@ unit.init Class =
       [`{}` Name Duration @Args] | $add_effect{Name Duration [inborn @Args]}
       Else | $add_effect{E 0 [inborn]}
 
-unit.add_effect Name Duration Params =
+get_named_effect Me Name Params =
 | Effect = $main.params.effect.Name
 | when no Effect:
-  | $world.notify{"unit.add_effect: missing effect [Name]"}
-  | leave
+  | E = Params.find{P => case P [effect @_] 1}
+  | when no E:
+    | $world.notify{"effect_for_name: missing effect [Name]"}
+    | leave 0
+  | Effect <= E.tail
+| Effect
+
+unit.add_effect Name Duration Params =
+| Effect = get_named_effect Me Name Params
+| less Effect: leave
 | On = Effect.0
 | when On.0 <> `on`:
   | $world.notify{"unit.add_effect: missing `on{When}` for effect [Name]"}
@@ -136,6 +144,8 @@ unit.strip_effect Name =
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 0}
 
+unit.has Name = got $effects.find{?1><Name}
+
 unit.add_item Amount Name =
 | when Amount > 0:
   | $add_effect{Name -Amount []}
@@ -151,8 +161,9 @@ unit.add_item Amount Name =
 unit.run_effects Selector Target TargetXYZ =
 | Es = []
 | for [When Name Duration Params] $effects: when Selector When:
-  | Effect = Target.main.params.effect.Name
-  | push Effect Es //because invoking effect here may clobber $effects
+  | Effect = get_named_effect Target Name Params
+  | when Effect:
+    | push Effect Es //cuz invoking it here may clobber $effects
 | for Effect Es: $effect{Effect Target TargetXYZ}
 
 unit.change_owner NewOwner =
@@ -287,8 +298,26 @@ unit.order_at XYZ =
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
 
+in_range Me XYZ =
+| less (XYZ.take{2}-$xyz.take{2}).abs<<$range.float: leave 0
+| $world.seen_from{$xyz $goal.xyz}
+
+retaliate Me Enemy =
+| when $ordered.type: leave
+| less $attack: leave
+| when $action.type><idle: $order_at{Enemy.xyz}
+| less $action.type><attack: leave
+| less $range:
+  | when (Enemy.xyz-Me.xyz){?abs}.sum><1:
+    | when $goal and ($goal.xyz-Me.xyz){?abs}.sum><1: leave
+    | $order.init{type/attack at/Enemy.xyz target/Enemy}
+    | leave
+| when $range and in_range Me Enemy.xyz:
+  | $order.init{type/attack at/Enemy.xyz target/Enemy}
+  | leave
+
 unit.harm Attacker Damage =
-| when Attacker and $leader><1 and Me.owner.id<>0:
+| when Attacker and $leader><1 and $owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}
     | leave //roaming neutral units wont harm AI wizard
@@ -308,6 +337,8 @@ unit.harm Attacker Damage =
     then | $sound{hit}
          | when ($anim><idle or $anim><move) and $anim<>hit: $animate{hit}
     else when $hits << 0: $hits <= 0
+  | when Attacker and $owner.is_enemy{Attacker.owner}:
+    | retaliate Me Attacker
   | leave
 | when Attacker:
   | AO = Attacker.owner

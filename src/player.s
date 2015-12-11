@@ -112,6 +112,7 @@ update_units Me =
     | V.run_effects{(X=>case X [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
   | less U.effects.end:
     | U.run_effects{(X=>case X [`.`cycle N] Cycle%N><0) U U.xyz}
+    | when U.idle: U.run_effects{(X=>case X [`.`idle N] Cycle%N><0) U U.xyz}
     | Remove = []
     | RunEs = []
     | for E U.effects: case E [When Name Duration Params]: when Duration>0:
