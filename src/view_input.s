@@ -136,6 +136,7 @@ update_rmb Me Player =
 | less $world.seen{@$cursor.take{2}}: leave
 | for U $picked: when U.owner.id >< Player.id:
   | $world.effect{$cursor ack}
+  | U.strip_effect{btrack}
   | U.order_at{$cursor}
 
 view.update_play =

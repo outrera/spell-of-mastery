@@ -137,14 +137,16 @@ unit.add_effect Name Duration Params =
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 1}
 
+unit.has Name = got $effects.find{?1><Name}
+
 unit.strip_effect Name =
+| less $has{Name}: leave
 | Es = @enheap $effects.skip{?1><Name}
 | $effects.heapfree
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 0}
 
-unit.has Name = got $effects.find{?1><Name}
 
 unit.add_item Amount Name =
 | when Amount > 0:
