@@ -97,9 +97,6 @@ dact swap.valid
 | Turn = U.world.turn
 | U.owner.id >< T.owner.id and T.idle
 
-set_backtrack U XYZ =
-| U.add_effect{btrack 0 [inborn [effect [on [`.` cycle 24]] [btrack XYZ]]]}
-
 dact swap.start
 | U = $unit
 | $cycles <= max 1 U.sprite.speed
@@ -108,7 +105,9 @@ dact swap.start
 | O = T.order
 | O.init{type/move at/$fromXYZ}
 | O.priority <= 100
-| less T.has{btrack}: set_backtrack T T.xyz
+| less T.has{btrack}:
+  | less U.goal and U.goal.xyz >< T.xyz:
+    | T.backtrack <= T.xyz
 
 dact swap.update | move_update Me
 

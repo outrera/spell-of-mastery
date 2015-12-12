@@ -106,25 +106,6 @@ player.units =
 | $world.active.list.keep{(?owner.id >< PID and not ?removed)}
 
 update_units Me =
-| Cycle = $world.cycle
-| for U $units: 
-  | when U.health>0: for V $world.units_at{U.xyz}: less V.effects.end:
-    | V.run_effects{(X=>case X [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
-  | less U.effects.end:
-    | U.run_effects{(X=>case X [`.`cycle N] Cycle%N><0) U U.xyz}
-    | when U.idle: U.run_effects{(X=>case X [`.`idle N] Cycle%N><0) U U.xyz}
-    | Remove = []
-    | RunEs = []
-    | for E U.effects: case E [When Name Duration Params]: when Duration>0:
-      | !Duration-1
-      | less Duration > 0:
-        | when When >< timeout: push Name RunEs
-        | push Name Remove
-      | E.2 <= Duration
-    | for Name Remove: U.strip_effect{Name}
-    | for Name RunEs:
-      | Effect = $world.main.params.effect.Name
-      | U.effect{Effect U U.xyz}
 
 alloc_ai_blockers Me =
 | for U $units: less U.removed: when U.ai >< avoid:

@@ -88,9 +88,32 @@ update_events Me =
     Else | bad "bad event effect ([Effect])"
 | 0
 
+update_units_effects Me Units =
+| Cycle = $cycle
+| for U Units: less U.removed:
+  | when U.health>0: for V $units_at{U.xyz}: less V.effects.end:
+    | V.run_effects{(X=>case X [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
+  | less U.effects.end:
+    | U.run_effects{(X=>case X [`.`cycle N] Cycle%N><0) U U.xyz}
+    | when U.idle: U.run_effects{(X=>case X [`.`idle N] Cycle%N><0) U U.xyz}
+    | Remove = []
+    | RunEs = []
+    | for E U.effects: case E [When Name Duration Params]: when Duration>0:
+      | !Duration-1
+      | less Duration > 0:
+        | when When >< timeout: push Name RunEs
+        | push Name Remove
+      | E.2 <= Duration
+    | for Name Remove: U.strip_effect{Name}
+    | for Name RunEs:
+      | Effect = $main.params.effect.Name
+      | U.effect{Effect U U.xyz}
+
 update_units Me =
+| ActiveList = $active.list
+| update_units_effects Me ActiveList
 | NextActive = []
-| for U $active.list: U.update
+| for U ActiveList: U.update
 | while $active.used
   | U = $active.pop
   | when U.active: push U NextActive
@@ -246,7 +269,9 @@ attack_nearby_enemy Me =
   | B = $world.block_at{Dst.xyz}
   | got B and O.is_enemy{B.owner} and ($xyz-Dst.xyz).abs<SightF
 | Found = $pathfind{$sight-1 &check}
-| when Found: $order_at{Found.1}
+| less Found: leave
+| $order_at{Found.1}
+| $backtrack <= $xyz
 
 unit.update =
 | when $removed or $active<>1:
@@ -260,5 +285,5 @@ unit.update =
 | update_fade Me
 | update_action Me
 | when $removed: leave //unit can be removed as a result of an action
-| when $attack and $action.type><idle: attack_nearby_enemy Me
+| when $attack and $action.type><idle and not $goal: attack_nearby_enemy Me
 | 1 // 1 means we are still alive

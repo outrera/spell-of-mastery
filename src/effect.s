@@ -34,7 +34,9 @@ effect add_moves N: bad "effect.s: add_moves is obsolete"
 
 effect btrack XYZ:
 | less $idle: leave
-| when $xyz><XYZ: $strip_effect{btrack}
+| when $xyz><XYZ:
+  | $backtrack <= 0
+  | leave
 | B = $world.block_at{XYZ}
 | when got B and not B.idle: leave
 | $order_at{XYZ}

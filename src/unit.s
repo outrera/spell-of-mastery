@@ -147,7 +147,6 @@ unit.strip_effect Name =
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag: $flags <= $flags^set_bit{Flag 0}
 
-
 unit.add_item Amount Name =
 | when Amount > 0:
   | $add_effect{Name -Amount []}
@@ -167,6 +166,13 @@ unit.run_effects Selector Target TargetXYZ =
   | when Effect:
     | push Effect Es //cuz invoking it here may clobber $effects
 | for Effect Es: $effect{Effect Target TargetXYZ}
+
+unit.`!backtrack` XYZ =
+| less XYZ:
+  | $strip_effect{btrack}
+  | leave
+| when $has{btrack}: leave
+| $add_effect{btrack 0 [inborn [effect [on [`.` cycle 24]] [btrack XYZ]]]}
 
 unit.change_owner NewOwner =
 | $owner.lost_unit{Me}
@@ -307,7 +313,10 @@ in_range Me XYZ =
 retaliate Me Enemy =
 | when $ordered.type: leave
 | less $attack: leave
-| when $action.type><idle: $order_at{Enemy.xyz}
+| when $action.type><idle:
+  | $order_at{Enemy.xyz}
+  | $backtrack <= $xyz
+  | leave
 | less $action.type><attack: leave
 | less $range:
   | when (Enemy.xyz-Me.xyz){?abs}.sum><1:
