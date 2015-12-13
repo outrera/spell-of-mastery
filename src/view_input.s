@@ -80,16 +80,16 @@ view.update_brush =
 | when $mice_click><right:
   | Brush = $brush
   | T = $world.at{X Y Z-1}
-  | when T.unit: Brush <= [obj dummy]
+  | Us = $units_at{X,Y,Z}
+  | when T.unit and not Us.size:
+    | ZZ = Z - T.height
+    | BelowUs = $units_at{X,Y,ZZ}
+    | when BelowUs.size:
+      | $mice_click <= 0
+      | for U BelowUs: U.free
+      | leave
   | case Brush
     [obj Type]
-      | Us = $units_at{X,Y,Z}
-      | BelowUs = []
-      | when T.unit:
-        | !Z-T.height
-        | BelowUs <= $units_at{X,Y,Z}
-        | when BelowUs.size: $mice_click <= 0
-      | less Us.size: Us <= BelowUs
       | for U Us: U.free
     [tile Type]
       | while 1
