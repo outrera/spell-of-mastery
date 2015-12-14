@@ -424,7 +424,7 @@ ui.init =
 | InputBlocker <= hidden: spacer $width $height
 | WorldProperties <= create_world_props Me
 | LoadWorldDlg <= create_load_world_dlg Me
-| $world.on_update <= => ui_on_world_update Me
+| $world.update_ui <= => ui_on_world_update Me
 | $view.on_unit_pick <= Unit => ui_on_view_unit_pick Me Unit
 | ActIcons <= create_act_icons Me
 | EditorIcons <= create_editor_icons Me

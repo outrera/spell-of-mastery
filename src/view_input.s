@@ -106,8 +106,6 @@ view.update_pick =
 | when $mice_click >< left: $select_unit{$cursor}
 | $mice_click <= 0
 | $on_unit_pick{}{$picked}
-  // FIXME: following line is outdated
-| $main.update //ensures deleted units get updated
 
 update_lmb Me Player =
 | less $world.act:
@@ -146,6 +144,9 @@ view.update_play =
   right | update_rmb Me Player
 | $mice_click <= 0
 | $on_unit_pick{}{$picked}
+| when $keys.a><1:
+  | for U $picked: when U.owner.id >< Player.id and U.xyz <> $cursor:
+    | when U.attack: U.order_at{$cursor act/attack}
 | Player.update
 | $main.update
 

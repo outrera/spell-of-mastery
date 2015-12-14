@@ -36,6 +36,7 @@ type unit.$class{Id World}
   path_life
   goal
   goal_serial
+  goal_act
   unit_goal/unit_goal{}
   hits // how damaged is this unit
   flags
@@ -257,7 +258,6 @@ unit.free =
 | when $active: $active <= 2 //request removal from active list
 | less $path.end: $set_path{[]}
 | $goal <= 0
-| $goal_serial <= 0
 | $effects.heapfree
 | $effects <= []
 | $world.free_unit{Me}
@@ -295,14 +295,15 @@ unit.set_path Path =
 | $path.heapfree
 | $path <= P
 
-unit.order_at XYZ =
+unit.order_at XYZ act/0 =
 | when $xyz >< XYZ:
   | $set_path{[]}
   | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
-| when no $goal or not $owner.is_enemy{$goal.owner}:
+| when no $goal or not (Act or $owner.is_enemy{$goal.owner}):
   | $goal <= $unit_goal
+| $goal_act <= Act
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
 

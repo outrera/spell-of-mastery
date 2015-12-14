@@ -125,7 +125,7 @@ world.update =
 | when update_events Me: leave
 | update_units Me
 | !$cycle + 1
-| ($on_update){}
+| ($update_ui){}
 
 update_anim Me =
 | !$anim_wait - 1
@@ -180,7 +180,9 @@ update_path_move Me XYZ =
       | !UpdatePathHangTrap+1
       | update_path Me
     | leave
-| $order.init{type/M.type at/XYZ target/Target}
+| Type = M.type
+| when Target and Target.xyz><$goal.xyz: Type <= $goal_act
+| $order.init{type/Type at/XYZ target/Target}
 
 update_path Me =
 | when not $goal or $goal.serial <> $goal_serial or $goal.removed

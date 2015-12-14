@@ -47,7 +47,7 @@ type world{main}
    xunit
    yunit
    zunit
-   on_update
+   update_ui
    marks
    params
    events
