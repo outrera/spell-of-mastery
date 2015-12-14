@@ -32,8 +32,14 @@ effect mod Arg: Target.mod <= Arg
 
 effect add_moves N: bad "effect.s: add_moves is obsolete"
 
+metric A B = (B-A).take{2}.abs
+
 effect btrack XYZ:
-| less $idle: leave
+| less $idle:
+  | LA = metric $goal.xyz XYZ
+  | less LA>16.0: leave
+  | LB = metric $xyz XYZ
+  | less LA>10.0: leave
 | when $xyz><XYZ:
   | $backtrack <= 0
   | leave
