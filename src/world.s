@@ -454,17 +454,6 @@ world.getSidesSame P Z Role = `[]`
   $role{P+[0 -1] Z}><Role $role{P+[ 1 0] Z}><Role
   $role{P+[0  1] Z}><Role $role{P+[-1 0] Z}><Role
 
-world.getTrn X,Y Z =
-| when X < 0 or Y < 0: leave 0
-| Tile = $at{X Y Z}
-| if Tile.trn then Tile.role else 0
-
-world.getCornersTrns P Z Role = `[]`
- [$getTrn{P+[-1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
- [$getTrn{P+[ 1 -1] Z} $getTrn{P+[0 -1] Z} $getTrn{P+[ 1 0] Z}].all{is{&Role+0}}
- [$getTrn{P+[ 1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[ 1 0] Z}].all{is{&Role+0}}
- [$getTrn{P+[-1  1] Z} $getTrn{P+[0  1] Z} $getTrn{P+[-1 0] Z}].all{is{&Role+0}}
-
 world.updPilarGfxes P =
 | X,Y = P
 | when X < 0 or Y < 0: leave 0

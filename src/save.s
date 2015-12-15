@@ -57,7 +57,7 @@ world.load Saved =
 | $serial <= Saved.serial
 | when got!it Saved.params: for [K V] it: $params.K <= V
 | TypeTids = $main.tid_map{}{?type,?id}.table
-| LookupTable = Saved.tids{}{TypeTids.?}
+| LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
 | Tilemap = remap_tids Me LookupTable Saved.tilemap
 | Base = $main.tiles.base_
 | for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 [Base@Tilemap.X.Y]}

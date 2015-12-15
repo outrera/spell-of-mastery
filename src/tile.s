@@ -1,7 +1,7 @@
 use gfx util
 
-type tile{As Main Type Role Id Lineup Base Middle Top Trns Plain
-          height/1 trn/0 empty/0 filler/1 invisible/0 tiling/corner shadow/0
+type tile{As Main Type Role Id Lineup Base Middle Top Plain
+          height/1 empty/0 filler/1 invisible/0 tiling/corner shadow/0
           match/same anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
           parts/0 box/[64 64 h]}
      id/Id
@@ -13,10 +13,8 @@ type tile{As Main Type Role Id Lineup Base Middle Top Trns Plain
      base/Base // column base
      middle/Middle // column segment
      top/Top // column top
-     trns/Trns
      plain/Plain
      height/Height
-     trn/Trn
      empty/Empty
      filler/Filler //true if tile fills space, matching with other tiles
      invisible/Invisible
@@ -34,24 +32,14 @@ type tile{As Main Type Role Id Lineup Base Middle Top Trns Plain
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1
-           | tile As Main Type Role Id Lineup Base Middle Top Trns Plain
+           | tile As Main Type Role Id Lineup Base Middle Top Plain
                  @[parts -(I+1) @As]
     else $parts <= []
-
-TrnsCache = t
-
 
 transparentize Base Alpha =
 | Empty = 255
 | as R Base.copy
   | for [X Y] points{0 0 64 64}: when X^^1 >< Y^^1: R.set{X Y Empty}
-
-genTransition Mask From To =
-| Empty = 255
-| as R To.copy
-  | for [X Y] points{0 0 64 32}
-    | less Mask.get{X Y}^^#FF000000:
-      | R.set{X Y From.get{X Y}}
 
 DummyGfx = gfx 1 1
 
@@ -93,14 +81,7 @@ tile.render X Y Z Below Above Seed =
            | R
 | World.set_slope_at{X Y Z if $tiling >< side then #@1111 else NeibElevs}
 | less $anim_wait: G <= G.(Seed%G.size)
-| when when $anim_wait or not $trn or NeibElevs <> #@1111: leave G
-| Cs = World.getCornersTrns{P Z $role}.digits{2}
-| when Cs >< #@1111: leave G
-| Index = [Cs G^address $plain^address]
-| as R TrnsCache.Index: less got R
-  | R <= genTransition $trns.Cs.0 G $plain
-  | TrnsCache.Index <= R
-  | leave R
+| leave G
 
 main.tile_names Bank =
 | $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort
@@ -139,7 +120,6 @@ main.load_tiles =
            | Frames.I
     | when got!a Tile.alpha: Gs <= Gs{(transparentize ? a)}
     | when Gs.size: Tile.gfxes.E <= Gs
-| Trns = Tiles.trns.gfxes
 | Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
 | for K,V Tiles
@@ -151,6 +131,6 @@ main.load_tiles =
               | $last_tid
   | As = V.list.join
   | $tiles.K <=
-    | tile As Me K V.role^~{K} Id Lineup Base Middle Top Trns Plain @As
+    | tile As Me K V.role^~{K} Id Lineup Base Middle Top Plain @As
 
 export tile
