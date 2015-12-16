@@ -69,7 +69,7 @@ unit_panel.draw G PX PY =
 | Font = font medium
 | Font.draw{G PX+85 PY+10 "[$unit.title or $unit.class_name.title]"}
 | Font.draw{G PX+85 PY+48 "[$unit.owner.name]"}
-| Health = max 0 $unit.hp%$unit.class.hp
+| Health = max 0 $unit.health
 | times I Health: G.blit{X+I*8 Y $health_icon}
 | times I $unit.attack: G.blit{X+I*8 Y+32 $attack_icon}
 | times I $unit.defense: G.blit{X+I*8 Y+48 $defense_icon}

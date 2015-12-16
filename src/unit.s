@@ -73,6 +73,15 @@ unit.anim_hit = $flags^get_bit{8}
 unit.`!anim_hit` State = $flags <= $flags^set_bit{8 State}
 
 unit.alive = $hp > 0
+unit.health =
+| CHP = $class.hp
+| less CHP: leave 0
+| UHP = $hp
+| when UHP << 0: leave 0 
+| R = UHP%CHP
+| less R: R <= CHP
+| R
+
 
 unit.move_in State =
 | when $item <> pickup: leave
@@ -330,8 +339,7 @@ retaliate Me Enemy =
 
 heal_unit Me Amount =
 | less $class.hp: leave
-| Limit = $hp - $hp%$class.hp
-| !$hp + (min Amount Limit)
+| !$hp + | min Amount $class.hp-$health
 
 unit.harm Attacker Damage =
 | when Attacker and $leader><1 and $owner.id<>0:

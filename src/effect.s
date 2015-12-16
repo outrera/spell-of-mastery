@@ -238,8 +238,8 @@ unit.effect Effect Target TargetXYZ =
     ally | when $owner.is_enemy{Target.owner}: leave
     enemy | less $owner.is_enemy{Target.owner}: leave
     confirmed | less $main.dialog_result><yes: leave
-    harmed | less $hp%$class.hp>0: leave
-    [`.` has_health A] | less $hp%$class.hp>>A: leave
+    harmed | less $health<>$class.hp: leave
+    [`.` has_health A] | less $health>>A: leave
     [`.` has_mana A] | less $owner.mana>>A: leave
     sinner | less Target.kills>0: leave
   | Effect <= Es
