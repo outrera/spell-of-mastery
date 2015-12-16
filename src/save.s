@@ -8,7 +8,7 @@ world.save =
   | Effects = if U.effects.end then 0 else U.effects
   | list U.id U.serial U.type XYZ U.xy
          U.anim U.anim_step U.facing
-         U.owner.id U.moved Effects U.flags U.hits
+         U.owner.id U.moved Effects U.flags U.hp
 | list w($w) h($h) serial($serial) cycle($cycle)
     filename | $filename
     name | $name
@@ -79,9 +79,9 @@ world.load Saved =
   | for N,R Research: P.research.N <= R
 | $human <= $players.(Saved.player)
 | for X Saved.units
-  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Efx Flags @Hits]=X
+  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Efx Flags @HP]=X
   | U = $players.Owner.alloc_unit{Type}
-  | less U.health or U.ai >< pentagram: U.change_owner{$players.0}
+  | less U.class.hp or U.ai >< pentagram: U.change_owner{$players.0}
   | U.serial <= Serial
   | case XYZ A,B:
     | XYZ <= A
@@ -93,7 +93,7 @@ world.load Saved =
   | U.move{XYZ}
   | U.moved <= Moved
   | U.flags <= Flags
-  | U.hits <= if Hits.size then Hits.0 else 0
+  | U.hp <= if HP.size then HP.0 else 0
   | U.effects.heapfree
   | U.effects <= if Efx.is_list and not Efx.end then @enheap Efx else []
   | when U.leader: U.owner.leader <= U

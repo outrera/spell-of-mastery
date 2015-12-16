@@ -83,7 +83,7 @@ dact attack.finish | move_finish Me
 dact die.start
 | U = $unit
 | U.animate{death}
-| less not U.hits or got U.sprite.anims.death:
+| less not (U.class.hp-U.hp)>0 or got U.sprite.anims.death:
   | U.free
   | $cycles <= 1000
 

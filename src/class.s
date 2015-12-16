@@ -22,7 +22,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   starts/Starts // non-zero if unit starts active
   range/Range
   leader/Leader
-  health/Health
+  hp/Health
   attack/Attack
   defense/Defense
   cooldown/Cooldown
@@ -60,7 +60,7 @@ main.load_classes =
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
 | for K,V $classes:
-  | when V.health and V.leader<>1: V.acts <= [@V.acts disband]
+  | when V.hp and V.leader<>1: V.acts <= [@V.acts disband]
 | for K,V $classes: V.acts <= map ActName V.acts
   | Act = $params.acts.ActName
   | less got Act: bad "[K] references undefined act [ActName]"

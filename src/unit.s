@@ -38,7 +38,7 @@ type unit.$class{Id World}
   goal_serial
   goal_act
   unit_goal/unit_goal{}
-  hits // how damaged is this unit
+  hp // hit points
   flags
   alpha //how transparent is this unit
   delta //change of transparency per cycle
@@ -72,7 +72,7 @@ unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 unit.anim_hit = $flags^get_bit{8}
 unit.`!anim_hit` State = $flags <= $flags^set_bit{8 State}
 
-unit.alive = $hits < $health
+unit.alive = $hp > 0
 
 unit.move_in State =
 | when $item <> pickup: leave
@@ -92,7 +92,7 @@ unit.init Class =
 | !$world.serial + 1
 | $animate{idle}
 | $mark <= 0
-| $hits <= 0
+| $hp <= $class.hp
 | $moved <= 0
 | $flags <= 0
 | $alpha <= 0
@@ -252,7 +252,7 @@ unit.free =
 | when $owner: $owner.lost_unit{Me}
 | when $leader><1:
   | $owner.leader <= 0
-  | when $hits >> $health:
+  | when $hp << 0:
     | P = $owner.pentagram
     | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
@@ -328,27 +328,35 @@ retaliate Me Enemy =
   | $order.init{type/attack at/Enemy.xyz target/Enemy}
   | leave
 
+heal_unit Me Amount =
+| less $class.hp: leave
+| Limit = $hp - $hp%$class.hp
+| !$hp + (min Amount Limit)
+
 unit.harm Attacker Damage =
 | when Attacker and $leader><1 and $owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}
     | leave //roaming neutral units wont harm AI wizard
-| less $hits < $health: leave
-| case Damage
-  [_ piercing D] | Damage <= D
-  Else | when Damage > 0: Damage <= max 1 Damage-$defense
+| less $alive: leave
+| Piercing = 0
+| case Damage [_ piercing D]
+  | Damage <= D
+  | Piercing <= 1
 | $run_effects{?><attacked Me $xyz}
 | Mod = $mod
 | $mod <= 0
+| when Damage << 0:
+  | heal_unit Me -Damage
+  | leave
+| less Piercing: Damage <= max 1 Damage-$defense
 | when Mod >< block: leave
-| !$hits + Damage
-| when Damage > 0: $world.effect{$xyz blood}
+| !$hp - Damage
+| $world.effect{$xyz blood}
 | less $owner.human: $owner.ai.harm{Attacker Me}
-| when $hits < $health:
-  | if Damage >> 0
-    then | $sound{hit}
-         | when ($anim><idle or $anim><move) and $anim<>hit: $animate{hit}
-    else when $hits << 0: $hits <= 0
+| when $hp > 0:
+  | $sound{hit}
+  | when ($anim><idle or $anim><move) and $anim<>hit: $animate{hit}
   | when Attacker and $owner.is_enemy{Attacker.owner}:
     | retaliate Me Attacker
   | leave
@@ -404,7 +412,7 @@ unit.list_moves Src =
     | B = $world.block_at{Dst}
     | if got B then
         | if $owner.id <> B.owner.id
-          then when B.hits < B.health and $attack>0 and (SZ-Z).abs<<4:
+          then when B.alive and $attack>0 and (SZ-Z).abs<<4:
                | push move{attack Dst} Ms
           else when B.speed and $can_move{Src Dst} and B.can_move{Dst Src}:
                | push move{swap Dst} Ms //when B cant move to Src, ask B to move back

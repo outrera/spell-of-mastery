@@ -234,7 +234,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
   | when Z >> RoofZ: _goto for_break
 | _label for_break
 | Us = Wr.column_units_at{X Y}
-| when Fog: Us <= Us.skip{(?owner.id or ?health or ?bank><effect)}
+| when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
 //| draw_text FB BX+32 BY-$zunit*Z-20 "[Explored]"
 | for U Us:
   | when no U.frame:

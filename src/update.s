@@ -11,6 +11,7 @@ reinit_units Us =
   | Owner = U.owner
   | Facing = U.facing
   | XYZ = U.xyz.deep_copy
+  | when U.leader: U.hp <= U.class.hp
   | U.free
   | U = Owner.alloc_unit{Type}
   | U.move{XYZ}
@@ -91,7 +92,7 @@ update_events Me =
 update_units_effects Me Units =
 | Cycle = $cycle
 | for U Units: less U.removed:
-  | when U.health>0: for V $units_at{U.xyz}: less V.effects.end:
+  | when U.class.hp>0: for V $units_at{U.xyz}: less V.effects.end:
     | V.run_effects{(X=>case X [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
   | less U.effects.end:
     | U.run_effects{(X=>case X [`.`cycle N] Cycle%N><0) U U.xyz}

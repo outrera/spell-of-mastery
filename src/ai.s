@@ -304,7 +304,7 @@ ai_update Me =
   | while $script><1:
 | target_priority U X =
   | B = $world.block_at{X.xyz}
-  | B.health - B.hits - max{1 U.attack-B.defense}
+  | B.hp*max{1 U.attack-B.defense}
 | for U Units: // check if we can attack someone
   | Ms = U.list_moves{U.xyz}.keep{?type >< attack}
   | Ms = Ms.sort{A B => target_priority{U A}<target_priority{U B}}
@@ -316,7 +316,7 @@ ai_update Me =
 | for U Units{U=>U.list_attack_moves{U.xyz}}.join:
   | XYZ = U.xyz
   | !HarmMap.(XYZ.0).(XYZ.1) + #100 // mark where allies can attack
-| isEnemy U = U.owner.id <> PID and U.health and not U.removed
+| isEnemy U = U.owner.id <> PID and U.alive and not U.removed
 | Es = $world.active.list.keep{&isEnemy}
 | Ts = Es{U=>U.list_attack_moves{U.xyz}{[U ?]}}.join //threatened map cells
 | for U,T Ts
