@@ -182,7 +182,7 @@ update_path_move Me XYZ =
       | update_path Me
     | leave
 | Type = M.type
-| when Target and Target.xyz><$goal.xyz: Type <= $goal_act
+| when $goal_act and Target and Target.xyz><$goal.xyz: Type <= $goal_act
 | $order.init{type/Type at/XYZ target/Target}
 
 update_path Me =
