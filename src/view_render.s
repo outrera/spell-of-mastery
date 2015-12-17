@@ -1,4 +1,4 @@
-use gfx gui util widgets action macros isort_ unit_flags
+use gfx gui util widgets action macros isort_ unit_flags stack
 
 ScreenXY = [0 0]
 BrightFactor = 0
@@ -83,6 +83,8 @@ blit_item_from_unit U =
 | when U.mirror: swap XD YD
 | make_blit_item X Y Z+7 XD YD ZD U //Z+7 is a hack to avoid cursor cluttering
 
+UnitRects = 0
+
 unit.draw FB B =
 | X = B.sx
 | Y = B.sy
@@ -110,6 +112,15 @@ unit.draw FB B =
 //| G.light{B.lx B.ly}
 | G.alpha{$alpha}
 | FB.blit{XX YY G}
+| when $hp:
+  | RW,RH,RY = $sprite.rect
+  | XX = X+32 - RW/2
+  | YY = Y+RY
+  | UnitRects.push{[XX YY RW RH]}
+  | FB.line{#FFFFFF [XX YY] [XX+RW YY]}
+  | FB.line{#FFFFFF [XX YY] [XX YY-RH]}
+  | FB.line{#FFFFFF [XX YY-RH] [XX+RW YY-RH]}
+  | FB.line{#FFFFFF [XX+RW YY] [XX+RW YY-RH]}
 | when $picked and $world.human.id >< $owner.id:
   | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
   | Mark = $main.img{ui_picked_mark}
@@ -265,6 +276,7 @@ render_unexplored Me Wr X Y BX BY =
 view.render_iso =
 | Wr = $world
 | BlitItems <= []
+| UnitRects <= stack 1024
 | Explored = Wr.human.sight
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
@@ -316,6 +328,7 @@ view.render_iso =
       | draw_bounding_box_front Color FB B
   | isort_free_result
 | BlitItems <= 0
+| UnitRects <= 0
 
 
 

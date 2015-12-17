@@ -36,6 +36,7 @@ metric A B = (B-A).take{2}.abs
 
 effect btrack XYZ:
 | less $idle:
+  | less $goal: leave
   | LA = metric $goal.xyz XYZ
   | less LA>16.0: leave
   | LB = metric $xyz XYZ

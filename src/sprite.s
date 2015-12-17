@@ -3,7 +3,7 @@ use gfx util param
 type sprite{Bank Name xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
             class/0 margins/0 pick_height/0 speed/24
-            font/Font icon/0 shadow/0 form/[`|` [4]]}
+            font/Font icon/0 shadow/0 form/[`|` [4]] rect/[40 80 0]}
   bank/Bank
   name/Name
   frames/Frames
@@ -18,6 +18,7 @@ type sprite{Bank Name xy/[0 0]
   icon/Icon
   shadow/Shadow
   form
+  rect/Rect
 | XYs = []
 | for Y,Hs Form.tail.i: for X,H Hs.i: when H: push [-X Y 0] XYs
 | $form <= XYs.list
