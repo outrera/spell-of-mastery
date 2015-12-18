@@ -84,6 +84,7 @@ blit_item_from_unit U =
 | make_blit_item X Y Z+7 XD YD ZD U //Z+7 is a hack to avoid cursor cluttering
 
 UnitRects = 0
+PickedRects = 0
 
 unit.draw FB B =
 | X = B.sx
@@ -91,9 +92,10 @@ unit.draw FB B =
 | G = $frame
 | !X + $xy.0
 | !Y + $xy.1
+| Slope = $slope*16
 | GW = G.w
 | XX = X+32-GW/2
-| YY = Y-16-G.h+$slope*16
+| YY = Y-16-G.h+Slope
 | when $mirror:
   | !XX - GW%2
   | G.flop
@@ -112,30 +114,32 @@ unit.draw FB B =
 //| G.light{B.lx B.ly}
 | G.alpha{$alpha}
 | FB.blit{XX YY G}
-| when $hp:
-  | RW,RH,RY = $sprite.rect
-  | XX = X+32 - RW/2
-  | YY = Y+RY
-  | UnitRects.push{[XX YY RW RH]}
-  | FB.line{#FFFFFF [XX YY] [XX+RW YY]}
-  | FB.line{#FFFFFF [XX YY] [XX YY-RH]}
-  | FB.line{#FFFFFF [XX YY-RH] [XX+RW YY-RH]}
-  | FB.line{#FFFFFF [XX+RW YY] [XX+RW YY-RH]}
-| when $picked and $world.human.id >< $owner.id:
-  | Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
-  | Mark = $main.img{ui_picked_mark}
-  | PH = $sprite.pick_height
-  | less PH: PH <= $height*8+16
-  | PH <= PH + Mark.h + Wave
-  | XX = X+32-Mark.w/2
-  | YY = Y-PH
-  | FB.blit{XX YY Mark}
+| less $pickable: leave
+| RW,RH,RY = $sprite.rect
+| RX = X+32 - RW/2
+| RY = Y+RY-RH+Slope
+| when UnitRects: UnitRects.push{[RX RY RW RH],Me}
+| less $picked: leave
+| PickedRects.push{[RX RY RW RH],Me}
+//FIXME: reuse the mark for quest objective
+/*| Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
+| Mark = $main.img{ui_picked_mark}
+| PH = $sprite.pick_height
+| less PH: PH <= $height*8+16
+| PH <= PH + Mark.h + Wave
+| XX = X+32-Mark.w/2
+| YY = Y-PH
+| FB.blit{XX YY Mark}*/
+
+draw_picked_rects FB PickedRects =
+| for [RX RY RW RH],Me PickedRects
+  | FB.rectangle{#FFFFFF 0 RX RY RW RH}
   | Icons = []
   | for [_ Flag Icon] getUnitFlags{}: when Icon>>0:
     | when $flags^get_bit{Flag}: push Icon Icons
   | when Icons.size
-    | XX <= XX - Icons.size*8 + Mark.w/2
-    | !YY-16
+    | XX = RX + RW/2 - Icons.size*8
+    | YY = RY - 16
     | Fs = $main.effect.frames
     | for I Icons
       | F = Fs.I
@@ -273,10 +277,54 @@ render_unexplored Me Wr X Y BX BY =
 | B.sy <= BY-$zunit-Unexplored.h
 | push B BlitItems
 
+
+/*view.select_unit XYZ = 
+| less $world.seen{XYZ.0 XYZ.1}: leave 0
+| Picked = []
+| X,Y,Z = XYZ
+| Us = $world.column_units_at{X Y}.skip{?bank><mark}.keep{?fix_z><Z}
+| when $mode >< play: Us <= Us.keep{?pickable}
+| when $picked.size<>1 or $picked.0.xyz <> XYZ: $pick_count <= 0
+| when Us.size
+  | !$pick_count+1
+  | Picked <= [Us.($pick_count%Us.size)]
+| when $keys.lshift><1 or $keys.rshift><1:
+  | Picked <= [@Picked @$picked.list]
+| $picked <= Picked*/
+
+point_in_rect [RX RY RW RH] [X Y] = RX<<X and X<RX+RW and RY<<Y and Y<RY+RH
+rects_intersect [AX AY AW AH] [BX BY BW BH] =
+| AX<BX+BW and AY<BY+BH and BX<AX+AW and BY<AY+AH
+
+handle_picking Me UnitRects =
+| MR = $mice_rect
+| RX,RY,RW,RH = MR
+| LargeEnough = RW>4 or RH>4
+| Shift = $keys.lshift><1 or $keys.rshift><1
+| Picked = if Shift then $picked.list else []
+| when $mice_click >< left:
+  | when LargeEnough: $fb.rectangle{#00FF00 0 RX RY RW RH}
+  | leave
+| when $mice_click >< pick:
+  | $mice_click <= 0
+  | less LargeEnough:
+    | MXY = $mice_xy
+    | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
+      | $picked <= [Unit @Picked]
+      | leave
+    | $picked <= Picked
+    | leave
+  | NewPicked = []
+  | for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
+    | when Unit.owner.id><$player.id: push Unit NewPicked
+  | $picked <= [@NewPicked @Picked]
+  | leave
+
 view.render_iso =
 | Wr = $world
 | BlitItems <= []
-| UnitRects <= stack 1024
+| PickedRects <= stack 256
+| when $mice_click><pick: UnitRects <= stack 1024
 | Explored = Wr.human.sight
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
@@ -303,7 +351,8 @@ view.render_iso =
         else render_unexplored Me Wr X Y BX BY
 | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
 | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
-| render_cursor Me Wr BX BY $cursor
+| when $mice_click<>left or $mode<>play:
+  | render_cursor Me Wr BX BY $cursor
 | less BlitItems.end
   | DrawBoundingBox = $main.params.world.bounding_boxes
   | BL = BlitItems.list
@@ -327,6 +376,8 @@ view.render_iso =
       | O.draw{FB B}
       | draw_bounding_box_front Color FB B
   | isort_free_result
+| draw_picked_rects FB PickedRects.list.flip
+| when $mode><play: handle_picking Me UnitRects.list.flip
 | BlitItems <= 0
 | UnitRects <= 0
 

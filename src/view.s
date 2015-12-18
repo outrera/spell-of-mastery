@@ -12,9 +12,11 @@ type view.widget{M W H}
   blit_origin/[W/2 -170]
   mice_click
   mice_xy/[0 0]
+  mice_xy_anchor/[0 0]
   cursor/[1 1 1]
   anchor/[1 1 1]
   brush/[0 0]
+  pick
   pick_count // used to pick different units from the same cell
   infoText/txt{small info}
   fps/1
@@ -53,8 +55,10 @@ view.clear =
 | $center_at{[0 0 0]}
 | $blit_origin.init{[$w/2 -170]}
 | $mice_xy.init{[0 0]}
+| $mice_xy_anchor.init{[0 0]}
 | $cursor.init{[1 1 1]}
 | $anchor.init{[1 1 1]}
+| $mice_click <= 0
 | $pick_count <= 0
 | Leader = $player.units.find{?leader}
 | when got Leader: $center_at{Leader.xyz}

@@ -7,8 +7,7 @@ view.worldToView P =
 | [RX RY] + $blit_origin
 
 view.viewToWorld P =
-| X,Y = P - $blit_origin - [0 $main.params.world.z_unit*4]
-| !X - 32
+| X,Y = P - $blit_origin - [32 -32+$main.params.world.z_unit*4]
 | WH = $xunit*$yunit
 | RX = (Y*$xunit + X*$yunit)/WH
 | RY = (Y*$xunit - X*$yunit)/WH
@@ -16,27 +15,13 @@ view.viewToWorld P =
 | [RX.clip{1 $world.w} RY.clip{1 $world.h}]
 
 view.mice_rect =
-| AX,AY = if $anchor then $anchor else $mice_xy
-| BX,BY = $mice_xy
-| X = min AX BX
-| Y = min AY BY
-| U = max AX BX
-| V = max AY BY
+| AX,AY = $mice_xy_anchor
+| MX,MY = $mice_xy
+| X = min AX MX
+| Y = min AY MY
+| U = max AX MX
+| V = max AY MY
 | [X Y U-X V-Y]
-
-view.select_unit XYZ = 
-| less $world.seen{XYZ.0 XYZ.1}: leave 0
-| Picked = []
-| X,Y,Z = XYZ
-| Us = $world.column_units_at{X Y}.skip{?bank><mark}.keep{?fix_z><Z}
-| when $mode >< play: Us <= Us.keep{?pickable}
-| when $picked.size<>1 or $picked.0.xyz <> XYZ: $pick_count <= 0
-| when Us.size
-  | !$pick_count+1
-  | Picked <= [Us.($pick_count%Us.size)]
-| when $keys.lshift><1 or $keys.rshift><1:
-  | Picked <= [@Picked @$picked.list]
-| $picked <= Picked
 
 view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
 
@@ -102,14 +87,11 @@ view.update_brush =
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
         | $cursor.2 <= $fix_z{$cursor}
 
-view.update_pick =
-| when $mice_click >< left: $select_unit{$cursor}
-| $mice_click <= 0
-| $on_unit_pick{}{$picked}
+view.update_pick = //FIXME
 
 update_lmb Me Player =
 | less $world.act:
-  | $select_unit{$cursor}
+  //| $select_unit{$cursor}
   | leave
 | Act = $world.act.deep_copy
 | $world.act <= 0
@@ -140,9 +122,10 @@ update_rmb Me Player =
 view.update_play =
 | Player = $player
 | case $mice_click
-  left | update_lmb Me Player
+  leftup | update_lmb Me Player
+         | $mice_click <= \pick
   right | update_rmb Me Player
-| $mice_click <= 0
+        | $mice_click <= 0
 | $on_unit_pick{}{$picked}
 | when $keys.a><1:
   | for U $picked: when U.owner.id >< Player.id and U.xyz <> $cursor:
@@ -189,7 +172,8 @@ world.update_cursor CXYZ Brush Mirror =
 | P = $human
 | if $act
   then | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
-  else | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
+  else when $view.mode<>play:
+       | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
        | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks
 | case Brush
   [obj Bank,Type]
@@ -243,7 +227,6 @@ view.input In =
 //| when $paused: leave
 | case In
   [mice_move _ XY]
-    | !XY+[0 32]
     | $mice_xy.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
     | when $mode <> play or $world.human.sight.CY.CX:
@@ -251,8 +234,9 @@ view.input In =
       | $cursor.2 <= $fix_z{$cursor}
   [mice left State XY]
     | $zfix <= 1
-    | $mice_click <= if State then \left else 0
+    | $mice_click <= if State then \left else \leftup
     | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
+    | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
     | $zfix <= 1
     | $mice_click <= if State then \right else 0
