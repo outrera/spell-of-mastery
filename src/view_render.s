@@ -118,7 +118,7 @@ unit.draw FB B =
 | RW,RH,RY = $sprite.rect
 | RX = X+32 - RW/2
 | RY = Y+RY-RH+Slope
-| when UnitRects: UnitRects.push{[RX RY RW RH],Me}
+| UnitRects.push{[RX RY RW RH],Me}
 | less $picked: leave
 | PickedRects.push{[RX RY RW RH],Me}
 //FIXME: reuse the mark for quest objective
@@ -315,6 +315,12 @@ handle_picking Me UnitRects =
 | when $mice_click >< left:
   | when LargeEnough: $fb.rectangle{#00FF00 0 RX RY RW RH}
   | leave
+| less $mice_click
+  | MXY = $mice_xy
+  | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
+    | get_gui{}.cursor <= $main.img{ui_cursor_glass}
+    | leave
+| get_gui{}.cursor <= $main.img{ui_cursor_point}
 | when $mice_click >< pick:
   | $mice_click <= 0
   | less LargeEnough:
@@ -334,7 +340,7 @@ view.render_iso =
 | Wr = $world
 | BlitItems <= []
 | PickedRects <= stack 256
-| when $mice_click><pick: UnitRects <= stack 1024
+| UnitRects <= stack 1024
 | Explored = Wr.human.sight
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2

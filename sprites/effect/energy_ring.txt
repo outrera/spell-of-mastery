@@ -1,7 +1,5 @@
-author: `Akimasa Shimobayashi`
-copyright: `Akimasa Shimobayashi`
-license: `CC3-BY-SA`
-origin: `http://www.shimobayashi.name/`
+author: `Blasphemer Team (https://code.google.com/archive/p/blasphemer/)`
+license: `BSD`
 frames: 53*54
 xy: 0,8
 anims: | idle time-6 0  1  2  3  4  5
