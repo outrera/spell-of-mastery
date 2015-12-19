@@ -126,7 +126,6 @@ view.update_play =
          | $mice_click <= \pick
   right | update_rmb Me Player
         | $mice_click <= 0
-| $on_unit_pick{}{$picked}
 | when $keys.a><1:
   | for U $picked: when U.owner.id >< Player.id and U.xyz <> $cursor:
     | when U.attack: U.order_at{$cursor act/attack}

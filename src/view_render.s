@@ -312,14 +312,21 @@ handle_picking Me UnitRects =
 | LargeEnough = RW>4 or RH>4
 | Shift = $keys.lshift><1 or $keys.rshift><1
 | Picked = if Shift then $picked.list else []
+| $on_unit_pick{}{$picked}
 | when $mice_click >< left:
-  | when LargeEnough: $fb.rectangle{#00FF00 0 RX RY RW RH}
+  | when LargeEnough: 
+    | $on_unit_pick{}{[]}
+    | $fb.rectangle{#00FF00 0 RX RY RW RH}
+    | leave
+  | $on_unit_pick{}{$picked}
   | leave
 | less $mice_click
   | MXY = $mice_xy
   | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
     | get_gui{}.cursor <= $main.img{ui_cursor_glass}
+    | $on_unit_pick{}{[Unit]}
     | leave
+| $on_unit_pick{}{$picked}
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | when $mice_click >< pick:
   | $mice_click <= 0
