@@ -131,9 +131,19 @@ unit.draw FB B =
 | YY = Y-PH
 | FB.blit{XX YY Mark}*/
 
+PickCorner = 0
+
 draw_picked_rects FB PickedRects =
 | for [RX RY RW RH],Me PickedRects
-  | FB.rectangle{#FFFFFF 0 RX RY RW RH}
+  //| FB.rectangle{#FFFFFF 0 RX RY RW RH}
+  | less PickCorner:
+    | PickCorner <= $main.img{ui_picked_corner}
+  | PW = PickCorner.w
+  | PH = PickCorner.h
+  | FB.blit{RX RY PickCorner}
+  | FB.blit{RX+RW-PW RY PickCorner.flop}
+  | FB.blit{RX RY+RH-PW PickCorner.flip}
+  | FB.blit{RX+RW-PW RY+RH-PW PickCorner.flip.flop}
   | Icons = []
   | for [_ Flag Icon] getUnitFlags{}: when Icon>>0:
     | when $flags^get_bit{Flag}: push Icon Icons
