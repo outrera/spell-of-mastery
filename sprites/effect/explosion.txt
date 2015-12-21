@@ -3,4 +3,4 @@ copyright: `Marc Russell`
 license: `CC-BY-SA`
 origin: `www.spicypixel.net`
 frames: 64*64
-anims: | idle time-5 0  1  2  3  4  5  6  7
+anims: | idle time-3 0  1  2  3  4  5  6  7
