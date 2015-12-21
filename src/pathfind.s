@@ -16,14 +16,14 @@ node_to_path Node =
   | Node <= Prev
 | Path.tail.list
 
-world.pathfind MaxCost U Check =
-| X,Y,Z = U.xyz
+world.pathfind MaxCost U XYZ Check =
+| X,Y,Z = XYZ
 | !PFCount-1
 | less PFCount: pf_reset_count
 | StartCost = PFCount*#1000000
 | !MaxCost+StartCost
 | PFMap.X.Y.Z <= StartCost
-| PFQueue.push{[0 U.xyz StartCost]}
+| PFQueue.push{[0 XYZ StartCost]}
 | R = 0
 //| StartTime = clock
 | till PFQueue.end
@@ -49,7 +49,7 @@ world.pathfind MaxCost U Check =
 | PFQueue.clear
 | R
 
-unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me Check}
+unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $xyz Check}
 
 //FIXME: AI version should setup unit_block
 unit.path_to XYZ =

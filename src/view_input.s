@@ -113,11 +113,22 @@ update_rmb Me Player =
 | when $world.act:
   | $world.act <= 0
   | leave
-| less $world.seen{@$cursor.take{2}}: leave
-| for U $picked: when U.owner.id >< Player.id:
-  | $world.effect{$cursor ack}
+| XYZ = $cursor
+| less $world.seen{@XYZ.take{2}}: leave
+| Us = $picked.keep{U => U.owner.id >< Player.id}
+| when Us.size: $world.effect{XYZ ack}
+| Us = Us{U=>[(XYZ-U.xyz).abs U]}.sort{?0<??0}{?1}
+| Used = []
+| Target = $world.block_at{XYZ}
+| less got Target and Target.owner.is_enemy{Player}: Target <= 0
+| for U Us:
+  | P = XYZ
+  | less Target: less Used.end:
+    | Found = $world.pathfind{1000 U XYZ | Dst => no Used.find{Dst.xyz}}
+    | when Found: P <= Found.1
   | U.backtrack <= 0
-  | U.order_at{$cursor}
+  | U.order_at{P}
+  | push P Used
 
 view.update_play =
 | Player = $player
