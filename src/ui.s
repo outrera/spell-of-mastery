@@ -253,7 +253,7 @@ create_view_ui Me =
 | GameUI = dlg: mtx
   |  0   0| $view
   |  0   0| GameUnitUI
-  |  4 $height-100| layH{s/4 ActIcons.drop{ActIcons.size/2}}
+  |  4 $height-112| layH{s/4 ActIcons.drop{ActIcons.size/2}}
   |  4 $height-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 $height-10 | info_line Me
 | BrushUI = dlg: mtx
@@ -380,9 +380,10 @@ ui_on_view_unit_pick Me Units =
     | ResearchRemain = Player.research_remain{Act}
     | Icon.data <= Act.name
     | Icon.fg <= Act.icon_gfx
-    | Icon.number <= if ResearchRemain <> 0 then ResearchRemain else No
-    | Icon.research <= ResearchRemain <> 0
-    | Icon.frame <= 0
+    | Number = if ResearchRemain <> 0 then ResearchRemain else No
+    | Icon.text.init{[0 0 Number]}
+    | Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'
+    | Icon.frame.init{[3 3 Frame]}
     | Icon.w <= Icon.fg.w
     | Icon.h <= Icon.fg.h
     | ActIcons.I.show <= Active
@@ -396,7 +397,7 @@ create_act_icons Me =
   | Icon.picked <= 1
   | ActIcon <= Icon
   | Act = $params.acts.(Icon.data)
-  | Remain = Icon.number
+  | Remain = Icon.text.2
   | less got Remain: Remain <= 0
   | O = PickedUnit.owner
   | if Remain > 0 then

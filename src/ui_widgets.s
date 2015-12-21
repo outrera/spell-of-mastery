@@ -102,13 +102,14 @@ info_line.render =
 | case $ui.act_icons.keep{(?.show and ?.over)} [Icon@_]
   | Act = $ui.params.acts.(Icon.data)
   | Info = Act.title
-  | when got Icon.number and Icon.number<0:
-        | Info <= "research [Info] ([-Icon.number] TURNS TO RECHARGE)"
-  | when got Icon.number and Icon.number>0 and not Icon.research:
-    | Info <= "cast [Info] ([Icon.number] MANA)"
-  | when got Icon.number and Icon.number>0 and Icon.research:
-    | Info <= "research [Info] ([Icon.number] LORE)"
-  | less got Icon.number:
+  | Number = Icon.text.2
+  | when got Number and Number<0:
+    | Info <= "research [Info] ([-Number] TURNS TO RECHARGE)"
+  | when got Number and Number>0 and Icon.text<>icon_fancy0:
+    | Info <= "cast [Info] ([Number] MANA)"
+  | when got Number and Number>0 and Icon.text><icon_fancy0:
+    | Info <= "research [Info] ([Number] LORE)"
+  | less got Number:
     | Cost = if got Act.cost then Act.cost else 0
     | Info <= "[Info] ([Act.cost] MANA)"
   | $info_text.value <= Info.upcase

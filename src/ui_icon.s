@@ -29,9 +29,7 @@ icon_popup.render =
 | for X $info.items: X.pick{$enabled}
 | $info.render*/
 
-IconFrame = 0
 DisabledIconOverlay = 0
-ResearchIconOverlay = 0
 
 type icon.widget{fg data/0 click/(Icon=>)}
    w/50
@@ -40,9 +38,8 @@ type icon.widget{fg data/0 click/(Icon=>)}
    over
    picked
    disabled
-   research
-   number/No
-   frame/1
+   text/[0 0 No]
+   frame/[2 2 icon_frame]
    data/Data
    on_click/Click
    //popup/icon_popup{}
@@ -53,22 +50,17 @@ icon.draw G PX PY =
 | when $pressed:
   | !X+1
   | !Y+1
-| when $frame
-  | less IconFrame: IconFrame <= skin{'icon_frame'}
-  | G.blit{X Y IconFrame}
-  | !X+2
-  | !Y+2
+| when $frame.2
+  | IconFrame = skin{$frame.2}
+  | G.blit{X-$frame.0 Y-$frame.1 IconFrame}
 | G.blit{X Y $fg}
 | when $picked: G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
   | G.blit{X Y DisabledIconOverlay}
-| when $research:
-  | less ResearchIconOverlay: ResearchIconOverlay <= skin{'icon_research'}
-  | G.blit{X+26 Y+18 ResearchIconOverlay}
-| when got $number:
+| when got $text.2:
   | Font = font small
-  | Font.draw{G X Y "[$number]"}
+  | Font.draw{G X+$text.0 Y+$text.1 "[$text.2]"}
 icon.input In =
 | when $disabled: leave
 | case In
