@@ -42,37 +42,27 @@ main.show_message Title Text buttons/[ok,'Ok'] =
 
 main.dialog_result = DialogResult
 
-type unit_panel.widget{ui}
-     w/0 h/0 unit laurels moved health_icon attack_icon defense_icon
-| $laurels <= $ui.img{ui_laurels}
-| $moved <= $ui.img{ui_unit_moved}
-| $health_icon <= $ui.img{stats_health}
-| $attack_icon <= $ui.img{stats_attack}
-| $defense_icon <= $ui.img{stats_defense}
+type unit_panel.widget{ui} w/0 h/0 unit bg
+| $bg <= $ui.img{ui_unit_panel}
 unit_panel.set_unit Unit =
 | $unit <= Unit
 | if $unit
-  then | $w <= $laurels.w
-       | $h <= $laurels.h
+  then | $w <= $bg.w
+       | $h <= $bg.h
   else | $w <= 0
        | $h <= 0
 
-unit_panel.draw G PX PY =
+unit_panel.draw G X Y =
 | less $unit: leave
-| IconX = PX+18
-| IconY = PY+16
 | Icon = $unit.main.sprites."icons_[$unit.icon or $unit.type]"
-| when got Icon: G.blit{IconX IconY Icon.frames.0}
-| G.blit{PX+9 PY+8 $laurels}
-| X = PX+4
-| Y = PY+$laurels.h+16
+| when got Icon: G.blit{X+3 Y+15 Icon.frames.0}
+| G.blit{X Y $bg}
 | Font = font medium
-| Font.draw{G PX+85 PY+10 "[$unit.title or $unit.class_name.title]"}
-| Font.draw{G PX+85 PY+48 "[$unit.owner.name]"}
-| Health = max 0 $unit.health
-| times I Health: G.blit{X+I*8 Y $health_icon}
-| times I $unit.attack: G.blit{X+I*8 Y+32 $attack_icon}
-| times I $unit.defense: G.blit{X+I*8 Y+48 $defense_icon}
+//| Font.draw{G X+85 Y+48 "[$unit.owner.name]"}
+| Font.draw{G X+4 Y "[$unit.title or $unit.class_name.title]"}
+| Font.draw{G X+23 Y+74"[max 0 $unit.health]"}
+| Font.draw{G X+70 Y+28"[$unit.attack]"}
+| Font.draw{G X+60 Y+64"[$unit.defense]"}
 
 type world_props.$base{world callback}
      filename name description width height base

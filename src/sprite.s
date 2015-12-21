@@ -103,7 +103,7 @@ main.load_sprites =
 | $credits.graphics <= extract_params_authors Params
 | $sprites <= join_banks Params
 | init_sprites Me
-| $effect <= $spr{stats_effect}
+| $effect <= $spr{ui_unit_effects}
 
 main.img Name =
 | S = $sprites."[Name]"

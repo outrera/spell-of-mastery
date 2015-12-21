@@ -3,10 +3,11 @@ tier: 1
 health: 2
 attack: 3
 defense: 0
+impact: sound{attack2}
 inborn: (upkeep1)
 
-sounds: attack,(attack2)
+sounds: //attack,(attack2)
        //,impact,()
-       ,hit,(halfling_hit)
+       hit,(halfling_hit)
        ,die,(halfling_die)
        ,move,(step)

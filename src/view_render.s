@@ -415,26 +415,20 @@ view.draw_indicators =
 | P = $player
 | Font = font medium
 | when $mode <> play: !IX + 80
-| less P.human or $mode <> play:
-  | Font.draw{$fb IX+148 IY+16 "[P.name]"}
-  | leave
 | X,Y,Z = $cursor
 | $fb.blit{IX IY Indicators}
-| Font.draw{$fb IX+28 IY+1 "[P.mana]"}
-| Font.draw{$fb IX+156 IY+1 "[P.lore]"}
-| Font.draw{$fb IX+220 IY+1 "[$world.turn]:[P.id]"}
-| Font.draw{$fb IX+210 IY+16 "[P.name]"}
+| Font.draw{$fb IX+36 IY+2 "[P.mana]"}
+| Font.draw{$fb IX+148 IY+2 "[P.lore]"}
 | Debug = $world.params.debug
 | when got Debug: Font.draw{$fb IX+148 IY+32 "[Debug]"}
-| C = 32
+| C = 34
 | Notes = $world.notes
 | Clock = clock
 | for [Expires Chars] $world.notes: when Clock < Expires:
   | Font.draw{$fb IX-16 IY+C "* [Chars.text]"}
   | !C+16
 | Font = font small
-| Font.draw{$fb IX+294 IY+1 "[X],[Y],[Z]"}
-| Font.draw{$fb IX+294 IY+9 "[$world.at{X Y Z-1}.type]"}
+| Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[$world.at{X Y Z-1}.type]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1
