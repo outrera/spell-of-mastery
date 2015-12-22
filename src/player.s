@@ -32,6 +32,8 @@ type player{id world}
    research/(t) //research and latency
    picked_ //picked units
    sight // fog of war
+   unit_counts // count unit be type
+| $unit_counts <= dup 300
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $color <= PlayerColors.$id
 | $params <= t
@@ -74,6 +76,7 @@ player.explored X,Y,Z = $sight.Y.X
 
 player.clear =
 | for Xs $sight: Xs.clear{3}
+| $unit_counts.clear{0}
 | $ai.clear
 | $picked <= []
 | $leader <= 0
@@ -86,8 +89,12 @@ player.clear =
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 player.got_unit U =
+| CID = U.class.id
+| when CID: !$unit_counts.CID+1
 
 player.lost_unit U =
+| CID = U.class.id
+| when CID: !$unit_counts.CID-1
 | when U.ai >< pentagram: $pentagram <= 0
 
 player.research_item What =

@@ -1,5 +1,7 @@
 use gfx util param
 
+ClassIdCounter = 1
+
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 shadow/0 speed/0 sight/No
            starts/0 range/0 leader/0
@@ -8,6 +10,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            ai/0 show/1 height/0
            passable/1 impact/0 movable/0 counter/0 tier/0
            inborn/[]}
+  id
   type/"[Bank]_[Class_name]"
   block/0
   pickable/Pickable
@@ -40,6 +43,9 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   counter/Counter //counterattack
   tier/Tier
   inborn/Inborn
+| when $starts:
+  | $id <= ClassIdCounter
+  | !ClassIdCounter+1
 | less $empty
   | Block = Main.tiles."h[$height]_"
   | when got Block: $block <= Block
