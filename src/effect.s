@@ -204,7 +204,7 @@ effect summon What:
 | S = $owner.alloc_unit{What}
 | S.summoned <= 1
 | S.alpha <= 255
-| S.delta <= -25
+| S.delta <= -50
 | S.move{TargetXYZ}
 
 effect caster Who:
@@ -223,7 +223,7 @@ effect research Arg:
 | when Needs < 0:
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
-| Needs = $player.mana-Act.lore.1
+| Needs = O.mana-Act.lore.1
 | when Needs < 0:
   | O.notify{"Not enough mana for `[Act.title]` (collect [-Needs])"}
   | leave
