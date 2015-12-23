@@ -1,3 +1,1 @@
-author: `Wesnoth Team`
-license: `GPL2`
-origin: `http://wesnoth.org`
+author: `Nikita Sadkov`
