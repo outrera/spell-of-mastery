@@ -218,9 +218,18 @@ effect teleport Arg: $forced_order{type/teleport at/TargetXYZ}
 effect research Arg:
 | O = Target.owner
 | What = O.researching
-| O.research_item{What}
 | Act = $main.params.acts.What
-| !O.lore - Act.research
+| Needs = O.lore-Act.lore.0
+| when Needs < 0:
+  | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
+  | leave
+| Needs = $player.mana-Act.lore.1
+| when Needs < 0:
+  | O.notify{"Not enough mana for `[Act.title]` (collect [-Needs])"}
+  | leave
+| !O.lore - Act.lore.0
+| !O.mana - Act.lore.1
+| O.research_item{What}
 
 effect lore Amount:
 | !Target.owner.lore + Amount

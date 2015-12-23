@@ -2,5 +2,5 @@ affects: any
 before: misc.summon
 after: set{owner spell_of_mastery 10}
 icon: spell_of_mastery
-research: misc.tier4_rcost
+lore: misc.tier4_lcost
 cost: 8000

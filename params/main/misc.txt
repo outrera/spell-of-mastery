@@ -1,9 +1,9 @@
 summon: impact{teleport},sound{summon},caster{leader}
-tier1_rcost: 5
+tier1_lcost: (5 400)
 tier1_scost: 400
-tier2_rcost: 14
+tier2_lcost: (14 600)
 tier2_scost: 600
-tier3_rcost: 30
+tier3_lcost: (30 800)
 tier3_scost: 800
-tier4_rcost: 64
+tier4_lcost: (64 1000)
 tier4_scost: 1000

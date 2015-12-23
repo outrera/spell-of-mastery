@@ -3,5 +3,5 @@ before: effect{teleport},sound{summon},impact{teleport},swap{self}//,remove{self
 after: ()
 icon: spell_swap
 range: any
-research: 2000
+lore: (2 800)
 cost: 1000

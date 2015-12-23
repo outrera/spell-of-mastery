@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{leader_oculus}
 icon: unit_oculus
-research: misc.tier1_rcost
+lore: misc.tier1_lcost
 cost: misc.tier2_scost

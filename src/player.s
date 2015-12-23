@@ -99,12 +99,12 @@ player.lost_unit U =
 
 player.research_item What =
 | Act = $main.params.acts.What
-| $research.What <= Act.research
+| $research.What <= Act.lore.1
 | $notify{"Acquired [Act.title]"}
 
 player.research_remain Act =
 | ResearchSpent = $research.(Act.name)
-| ResearchRemain = Act.research - ResearchSpent
+| ResearchRemain = Act.lore.1 - ResearchSpent
 | ResearchRemain
 
 player.units =
@@ -154,7 +154,7 @@ player.update =
 | update_units Me
 | update_income Me
 | PResearch = $research
-| for Type,Act $main.params.acts: when PResearch.Type > Act.research:
+| for Type,Act $main.params.acts: when PResearch.Type > Act.lore.1:
   | !PResearch.Type-1 //cooldown
 | update_spell_of_mastery $world Me
 //|less $human: alloc_ai_blockers $world

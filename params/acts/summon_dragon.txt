@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_dragon}
 icon: unit_dragon
-research: misc.tier4_rcost
+lore: misc.tier4_lcost
 cost: misc.tier4_scost

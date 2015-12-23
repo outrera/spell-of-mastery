@@ -3,5 +3,5 @@ before: suicide{1},impact{explosion_blood},sound{fire1}//,cooldown{5}
 icon: spell_suicide
 range: 2
 needs: (cast_lightning)
-research: misc.tier1_rcost
+lore: misc.tier1_lcost
 cost: 400

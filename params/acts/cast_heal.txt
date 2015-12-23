@@ -3,5 +3,5 @@ before: harm{-1},strip{poison},impact{explosion_blood},sound{summon}
 //after: cooldown{3}
 icon: spell_heal
 range: 2
-research: misc.tier1_rcost
+lore: misc.tier1_lcost
 cost: 100

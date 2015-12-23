@@ -2,5 +2,5 @@ affects: self
 before: effect{teleport},sound{summon}
 after: lore{1}
 icon: spell_knowledge
-//research: misc.tier1_rcost
+//lore: misc.tier1_lcost
 cost: misc.tier1_scost

@@ -2,5 +2,5 @@ affects: unit
 before: add_effect{flyer,0,(dispel)},impact{explosion_blood},sound{wings}
 icon: spell_flight
 range: 2
-research: misc.tier2_rcost
+lore: misc.tier2_lcost
 cost: 400

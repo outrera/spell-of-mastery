@@ -3,5 +3,5 @@ before: harm{4},impact{lightning},sound{lightning}//,cooldown{5}
 icon: spell_lightning
 range: 2
 needs: (cast_fireball)
-research: 10
+lore: (10 200)
 cost: 400

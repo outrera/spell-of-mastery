@@ -104,11 +104,11 @@ info_line.render =
   | Info = Act.title
   | Number = Icon.text.2
   | when got Number and Number<0:
-    | Info <= "research [Info] ([-Number] TURNS TO RECHARGE)"
-  | when got Number and Number>0 and Icon.text<>icon_fancy0:
-    | Info <= "cast [Info] ([Number] MANA)"
+    | Info <= "[Info] ([-Number] TURNS TO RECHARGE)"
   | when got Number and Number>0 and Icon.text><icon_fancy0:
-    | Info <= "research [Info] ([Number] LORE)"
+    | Info <= "cast [Info] ([Act.cost] MANA)"
+  | when got Number and Number>0 and Icon.text<>icon_fancy0:
+    | Info <= "research [Info] ([Act.lore.0] LORE, [Act.lore.1] MANA)"
   | less got Number:
     | Cost = if got Act.cost then Act.cost else 0
     | Info <= "[Info] ([Act.cost] MANA)"

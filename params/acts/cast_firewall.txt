@@ -3,5 +3,5 @@ before: impact{fire_ring},sound{summon},summon{nopick,special_firewall}
 icon: spell_firewall
 range: 2
 needs: (cast_fireball)
-research: misc.tier1_rcost
+lore: misc.tier1_lcost
 cost: 200

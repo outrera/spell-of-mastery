@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_baphomet}
 icon: unit_baphomet
-research: misc.tier3_rcost
+lore: misc.tier3_lcost
 cost: misc.tier3_scost

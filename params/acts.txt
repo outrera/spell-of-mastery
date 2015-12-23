@@ -1,5 +1,5 @@
 type: custom
-research: 0
+lore: (0 0)
 cost: 0
 range: 0
 before: ()

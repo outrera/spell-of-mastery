@@ -1,5 +1,5 @@
 affects: self
 before: harm{-2},poison{0},impact{explosion_blood},sound{summon}
 icon: spell_heal
-//research: 200
+//lore: (8 200)
 //cost: 100

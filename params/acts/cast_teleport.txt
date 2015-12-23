@@ -4,5 +4,5 @@ after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}
 icon: spell_teleport
 range: 2
 needs: (cast_telekinesis cast_excavate)
-research: misc.tier1_rcost
+lore: misc.tier1_lcost
 cost: 200

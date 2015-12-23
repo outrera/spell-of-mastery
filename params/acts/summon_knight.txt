@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_knight}
 icon: unit_knight
-research: misc.tier2_rcost
+lore: misc.tier2_lcost
 cost: misc.tier3_scost

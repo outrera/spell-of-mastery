@@ -4,5 +4,5 @@ before: impact{pentagram_appearance},sound{pentagram}
 after: summon{nopick,special_hexagram}
 icon: spell_hexagram
 cost: misc.tier1_scost
-research: 2
+lore: (2 400)
 hint: pentagram

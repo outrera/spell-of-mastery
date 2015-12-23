@@ -1,5 +1,5 @@
 proto: summon__proto
 after: summon{unit_wraith}
 icon: unit_wraith
-research: misc.tier2_rcost
+lore: misc.tier2_lcost
 cost: misc.tier2_scost
