@@ -55,7 +55,9 @@ unit_panel.set_unit Unit =
 unit_panel.draw G X Y =
 | less $unit: leave
 | Icon = $unit.main.sprites."icons_[$unit.icon or $unit.type]"
-| when got Icon: G.blit{X+3 Y+15 Icon.frames.0}
+| IconBg = $unit.main.sprites.ui_icon_bg
+| G.blit{X+3 Y+20 IconBg.frames.0}
+| when got Icon: G.blit{X+3 Y+20 Icon.frames.0}
 | G.blit{X Y $bg}
 | Font = font medium
 //| Font.draw{G X+85 Y+48 "[$unit.owner.name]"}
