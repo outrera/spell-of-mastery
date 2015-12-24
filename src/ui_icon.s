@@ -58,7 +58,9 @@ icon.draw G PX PY =
 | when $picked: G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
 | when $disabled:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
-  | G.blit{X Y DisabledIconOverlay}
+  | Ov = DisabledIconOverlay
+  | P = Ov.h*$disabled/100
+  | G.blit{X Y+Ov.h-P Ov.rect{0 0 Ov.w P}}
 | when got $text.2:
   | Font = font small
   | Font.draw{G X+$text.0 Y+$text.1 "[$text.2]"}

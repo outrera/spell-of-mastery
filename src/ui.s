@@ -382,9 +382,14 @@ ui_on_view_unit_pick Me Units =
       | Active <= 0
     | Icon = ActIcons.I.widget
     | ResearchRemain = Player.research_remain{Act}
-    | Icon.data <= Act.name
+    | ActName = Act.name
+    | Icon.data <= ActName
     | Icon.unit <= Unit
     | Icon.fg <= Act.icon_gfx
+    | Icon.disabled <= 0
+    | Cool = Unit.cooldown_of{ActName}
+    | when Cool and Cool.0:
+      | Icon.disabled <= 100-((Cool.1-Cool.0)*100+Cool.1-1)/Cool.1
     | Number = if ResearchRemain <> 0 then ResearchRemain else No
     | Icon.text.init{[0 0 Number]}
     | Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'
@@ -420,30 +425,6 @@ create_act_icons Me =
                 | PickedUnit.order.init{target PickedUnit @Act.list.join}
            else $world.act <= Act
 | map I MaxActIcons: hidden: icon 0 click/&actClick
-
-/*create_act_icons Me =
-| actClick Icon =
-  | $world.act <= 0
-  | $main.sound{ui_click}
-  | when ActIcon: ActIcon.picked <= 0
-  | Icon.picked <= 1
-  | ActIcon <= Icon
-  | ActName = Icon.data
-  | Act = $params.acts.ActName
-  | Remain = Icon.text.2
-  | less got Remain: Remain <= 0
-  | Cool = Unit.cooldown_of{ActName}
-  | O = PickedUnit.owner
-  | if Remain > 0 then
-      | research_act Me PickedUnit Act
-    else if Remain < 0 then
-      | O.notify{"[Act.title] needs [-Remain] turns to recharge."}
-    else | if Act.range >< 0
-           then when O.id >< $player.id:
-                | PickedUnit.order.init{target PickedUnit @Act.list.join}
-           else $world.act <= Act
-| map I MaxActIcons: hidden: icon 0 click/&actClick
-*/
 
 create_ingame_icons Me =
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
