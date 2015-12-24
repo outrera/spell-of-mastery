@@ -425,7 +425,7 @@ view.draw_indicators =
 | Notes = $world.notes
 | Clock = clock
 | for [Expires Chars] $world.notes: when Clock < Expires:
-  | Font.draw{$fb IX-16 IY+C "* [Chars.text]"}
+  | Font.draw{$fb 150 IY+C "* [Chars.text]"}
   | !C+16
 | Font = font small
 | Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[$world.at{X Y Z-1}.type]"}

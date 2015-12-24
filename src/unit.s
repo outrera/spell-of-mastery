@@ -127,9 +127,7 @@ get_named_effect Me Name Params =
 | Effect = $main.params.effect.Name
 | when no Effect:
   | E = Params.find{P => case P [effect @_] 1}
-  | when no E:
-    | $world.notify{"effect_for_name: missing effect [Name]"}
-    | leave 0
+  | when no E: E <= [effect [on never]] // supply dummy
   | Effect <= E.tail
 | Effect
 
@@ -148,6 +146,10 @@ unit.add_effect Name Duration Params =
 | when got Flag: $flags <= $flags^set_bit{Flag 1}
 
 unit.has Name = got $effects.find{?1><Name}
+
+unit.cooldown_of ActName =
+| E = $effects.find{E => E.1><cool and E.3.1.1.0><ActName}
+| if got E then [E.2 E.3.1.1.1] else 0
 
 unit.strip_effect Name =
 | less $has{Name}: leave

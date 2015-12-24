@@ -100,18 +100,20 @@ type info_line.widget{ui} info_text/txt{small ''}
 info_line.render =
 | $info_text.value <= ""
 | case $ui.act_icons.keep{(?.show and ?.over)} [Icon@_]
-  | Act = $ui.params.acts.(Icon.data)
+  | ActName = Icon.data
+  | Unit = Icon.unit
+  | Act = $ui.params.acts.ActName
   | Info = Act.title
   | Number = Icon.text.2
-  | when got Number and Number<0:
-    | Info <= "[Info] ([-Number] TURNS TO RECHARGE)"
-  | when got Number and Number>0 and Icon.text><icon_fancy0:
-    | Info <= "cast [Info] ([Act.cost] MANA)"
-  | when got Number and Number>0 and Icon.text<>icon_fancy0:
-    | Info <= "research [Info] ([Act.lore.0] LORE, [Act.lore.1] MANA)"
-  | less got Number:
-    | Cost = if got Act.cost then Act.cost else 0
-    | Info <= "[Info] ([Act.cost] MANA)"
+  | Cool = Unit.cooldown_of{ActName}
+  | ResearchRemain = Unit.owner.research_remain{Act}
+  | Cost = Act.cost
+  | if Cool then
+      | Info <= "[Info] ([Cool.0/24] SECONDS TO RECHARGE)"
+    else if ResearchRemain then
+      | Info <= "research [Info] ([Act.lore.0] LORE, [Act.lore.1] MANA)"
+    else when got Cost:
+      | Info <= "cast [Info] ([Cost] MANA)"
   | $info_text.value <= Info.upcase
 | $info_text.render
 

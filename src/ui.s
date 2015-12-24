@@ -383,6 +383,7 @@ ui_on_view_unit_pick Me Units =
     | Icon = ActIcons.I.widget
     | ResearchRemain = Player.research_remain{Act}
     | Icon.data <= Act.name
+    | Icon.unit <= Unit
     | Icon.fg <= Act.icon_gfx
     | Number = if ResearchRemain <> 0 then ResearchRemain else No
     | Icon.text.init{[0 0 Number]}
@@ -393,16 +394,45 @@ ui_on_view_unit_pick Me Units =
     | ActIcons.I.show <= Active
 | UnitPanel.set_unit{Unit}
 
+
 create_act_icons Me =
+| actClick Icon =
+  | $world.act <= 0
+  | $main.sound{ui_click}
+  | when ActIcon: ActIcon.picked <= 0
+  //| Icon.picked <= 1
+  | Unit = Icon.unit
+  | ActIcon <= Icon
+  | ActName = Icon.data
+  | Act = $params.acts.ActName
+  | Cost = Act.cost
+  | ResearchRemain = Unit.owner.research_remain{Act}
+  | Cool = Unit.cooldown_of{ActName}
+  | O = Unit.owner
+  | if Cool then
+      | O.notify{"[Act.title] needs [Cool.0/24] seconds to recharge"}
+    else if ResearchRemain then
+      | research_act Me Unit Act
+    else if got Cost and Cost>O.mana then
+      | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
+    else | if Act.range >< 0
+           then when O.id >< $player.id:
+                | PickedUnit.order.init{target PickedUnit @Act.list.join}
+           else $world.act <= Act
+| map I MaxActIcons: hidden: icon 0 click/&actClick
+
+/*create_act_icons Me =
 | actClick Icon =
   | $world.act <= 0
   | $main.sound{ui_click}
   | when ActIcon: ActIcon.picked <= 0
   | Icon.picked <= 1
   | ActIcon <= Icon
-  | Act = $params.acts.(Icon.data)
+  | ActName = Icon.data
+  | Act = $params.acts.ActName
   | Remain = Icon.text.2
   | less got Remain: Remain <= 0
+  | Cool = Unit.cooldown_of{ActName}
   | O = PickedUnit.owner
   | if Remain > 0 then
       | research_act Me PickedUnit Act
@@ -413,6 +443,7 @@ create_act_icons Me =
                 | PickedUnit.order.init{target PickedUnit @Act.list.join}
            else $world.act <= Act
 | map I MaxActIcons: hidden: icon 0 click/&actClick
+*/
 
 create_ingame_icons Me =
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}

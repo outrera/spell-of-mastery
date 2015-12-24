@@ -1,5 +1,5 @@
 proto: summon__proto
-after: summon{unit_ratman}
+after: summon{unit_ratman},cooldown{1000}
 icon: unit_ratman
-lore: misc.tier1_lcost
+//lore: misc.tier1_lcost
 cost: misc.tier1_scost

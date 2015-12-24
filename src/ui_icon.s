@@ -41,6 +41,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    text/[0 0 No]
    frame/[2 2 icon_frame]
    data/Data
+   unit/0
    on_click/Click
    //popup/icon_popup{}
 icon.draw G PX PY =
