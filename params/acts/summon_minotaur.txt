@@ -3,3 +3,4 @@ after: summon{unit_minotaur}
 icon: unit_minotaur
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
+cool: misc.tier3_cool

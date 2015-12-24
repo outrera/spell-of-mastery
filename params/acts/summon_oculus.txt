@@ -3,3 +3,4 @@ after: summon{leader_oculus}
 icon: unit_oculus
 lore: misc.tier1_lcost
 cost: misc.tier2_scost
+cool: misc.tier3_cool

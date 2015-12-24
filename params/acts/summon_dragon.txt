@@ -3,3 +3,4 @@ after: summon{unit_dragon}
 icon: unit_dragon
 lore: misc.tier4_lcost
 cost: misc.tier4_scost
+cool: misc.tier4_cool

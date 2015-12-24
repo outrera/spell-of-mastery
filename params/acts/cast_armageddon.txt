@@ -5,3 +5,4 @@ icon: spell_armageddon
 needs: (cast_suicide)
 lore: misc.tier2_lcost
 cost: 400
+cool: misc.tier4_cool

@@ -3,3 +3,4 @@ after: summon{unit_blob}
 icon: unit_blob
 lore: misc.tier1_lcost
 cost: misc.tier1_scost
+cool: misc.tier1_cool

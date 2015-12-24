@@ -3,3 +3,4 @@ after: summon{unit_orc}
 icon: unit_orc
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
+cool: misc.tier2_cool

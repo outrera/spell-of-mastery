@@ -38,6 +38,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    over
    picked
    disabled
+   grayed
    text/[0 0 No]
    frame/[2 2 icon_frame]
    data/Data
@@ -56,10 +57,10 @@ icon.draw G PX PY =
   | G.blit{X-$frame.0 Y-$frame.1 IconFrame}
 | G.blit{X Y $fg}
 | when $picked: G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
-| when $disabled:
+| when $grayed:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
   | Ov = DisabledIconOverlay
-  | P = Ov.h*$disabled/100
+  | P = Ov.h*$grayed/100
   | G.blit{X Y+Ov.h-P Ov.rect{0 0 Ov.w P}}
 | when got $text.2:
   | Font = font small

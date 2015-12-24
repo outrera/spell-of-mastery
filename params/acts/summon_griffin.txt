@@ -3,3 +3,4 @@ after: summon{unit_griffin}
 icon: unit_griffin
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
+cool: misc.tier3_cool

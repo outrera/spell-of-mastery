@@ -65,7 +65,7 @@ effect gain @Args:
   | set_act_enabled $main 1 Player.id ActName
   | Player.research_item{ActName}
 
-effect cooldown Time: $add_effect{cool Time [inborn [cool [$action.name Time]]]}
+effect cool Time: $add_effect{cool Time [inborn [cool [$action.name Time]]]}
 
 effect explore Player State: $world.explore{State}
 

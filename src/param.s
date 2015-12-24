@@ -81,6 +81,8 @@ params_handle_acts Me =
   | Act.enabled <= #FFFFFF
   | Act.before_table <= Act.before.table
   | Act.after_table <= Act.after.table
+  | C = Act.cool
+  | when got C: Act.before <= [@Act.before [cool C]]
   | when no Act.title: Act.title <= ActName.replace{_ ' '}
 
 main.load_params =

@@ -386,10 +386,10 @@ ui_on_view_unit_pick Me Units =
     | Icon.data <= ActName
     | Icon.unit <= Unit
     | Icon.fg <= Act.icon_gfx
-    | Icon.disabled <= 0
+    | Icon.grayed <= 0
     | Cool = Unit.cooldown_of{ActName}
     | when Cool and Cool.0:
-      | Icon.disabled <= 100-((Cool.1-Cool.0)*100+Cool.1-1)/Cool.1
+      | Icon.grayed <= 100-((Cool.1-Cool.0)*100+Cool.1-1)/Cool.1
     | Number = if ResearchRemain <> 0 then ResearchRemain else No
     | Icon.text.init{[0 0 Number]}
     | Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'

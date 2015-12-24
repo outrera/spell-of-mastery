@@ -3,4 +3,5 @@ before: harm{2},impact{fire_ring},sound{fire1}//,cooldown{5}
 icon: spell_fireball
 range: 2
 lore: misc.tier1_lcost
-cost: 200
+cost: 100
+cool: 24
