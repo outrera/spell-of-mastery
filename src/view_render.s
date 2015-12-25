@@ -306,6 +306,8 @@ point_in_rect [RX RY RW RH] [X Y] = RX<<X and X<RX+RW and RY<<Y and Y<RY+RH
 rects_intersect [AX AY AW AH] [BX BY BW BH] =
 | AX<BX+BW and AY<BY+BH and BX<AX+AW and BY<AY+AH
 
+PickCount = 0
+
 handle_picking Me UnitRects =
 | MR = $mice_rect
 | RX,RY,RW,RH = MR
@@ -330,16 +332,19 @@ handle_picking Me UnitRects =
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | when $mice_click >< pick:
   | $mice_click <= 0
+  | NewPicked = []
   | less LargeEnough:
     | MXY = $mice_xy
     | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
-      | $picked <= [Unit @Picked]
-      | leave
-    | $picked <= Picked
+      | push Unit NewPicked
+    | when NewPicked.size>1:
+      | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
+      | !PickCount+1
+    | $picked <= [@NewPicked @Picked]
     | leave
-  | NewPicked = []
   | for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
-    | when Unit.owner.id><$player.id: push Unit NewPicked
+    | when Unit.speed>0 and Unit.owner.id><$player.id:
+      | push Unit NewPicked
   | $picked <= [@NewPicked @Picked]
   | leave
 
