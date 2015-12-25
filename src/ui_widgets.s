@@ -114,7 +114,7 @@ info_line.render =
       | Info <= "[Info] ([Cool.0/24] SECONDS TO RECHARGE)"
     else if ResearchRemain then
       | Info <= "research [Info] ([Act.lore.0] LORE, [Act.lore.1] MANA)"
-    else when got Cost:
+    else when got Cost and Cost:
       | Info <= "cast [Info] ([Cost] MANA)"
   | $info_text.value <= Info.upcase
 | $info_text.render

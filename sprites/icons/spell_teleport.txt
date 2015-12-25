@@ -1,4 +1,3 @@
-author: `Marc Russell`
-copyright: `Marc Russell`
-license: `CC-BY-SA`
-origin: `www.spicypixel.net`
+author: `Daniel Stephens 'Scribe'`
+license: `CC0`
+origin: `http://opengameart.org/content/spell-set`
