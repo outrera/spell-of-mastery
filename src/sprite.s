@@ -3,7 +3,7 @@ use gfx util param
 type sprite{Bank Name xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]]
             class/0 margins/0 pick_height/0 speed/24
-            font/Font icon/0 shadow/0 form/[`|` [4]] rect/[40 80 0]}
+            font/Font icon/0 shadow/0 form/[`|` [4]] rect/[40 76 -4]}
   bank/Bank
   name/Name
   frames/Frames

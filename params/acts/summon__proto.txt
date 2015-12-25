@@ -1,4 +1,4 @@
-affects: empty
+affects: any
 before: misc.summon
 after: ()
 icon: unit_baphomet
