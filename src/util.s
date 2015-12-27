@@ -1,5 +1,8 @@
 use macros
 
+// take up to N elements
+list.upto N = $take{|min $size N}
+
 points X Y W H = dup I W*H [X+I%W Y+I/W]
 
 list.overlaps [BX BY BW BH] =

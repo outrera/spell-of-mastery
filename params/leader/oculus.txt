@@ -4,6 +4,13 @@ tier: 2
 health: 3
 leader: 2
 inborn: (upkeep1 flyer)
+acts: (cast_hexagram cast_knowledge
+       cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
+       cast_heal cast_shell
+       cast_telekinesis cast_excavate cast_teleport
+       cast_paralyze cast_haste
+       cast_flight
+       spell_of_mastery cast_disrupt_mastery)
 
 sounds: //attack,()
        //,impact,()
