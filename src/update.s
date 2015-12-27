@@ -122,6 +122,7 @@ update_units Me =
 
 world.update =
 | $main.music{playlist_advance}
+| for Player $players: when Player.total_units: Player.update
 | when EventActions.end: $process_events
 | when update_events Me: leave
 | update_units Me
@@ -282,6 +283,12 @@ unit.update =
   | leave
 | update_anim Me
 | when $idle:
+  | less $empty:
+    | B = $world.units_at{$xyz}.skip{U => U.empty or U.id><$id}
+    | less B.end: when B.0.idle:
+      | Found = $world.pathfind{100 Me $xyz
+                               | Dst => no $world.block_at{Dst.xyz}}
+      | when Found: $order_at{Found.1}
   | UpdatePathHangTrap <= 0
   | update_path Me
 | update_order Me

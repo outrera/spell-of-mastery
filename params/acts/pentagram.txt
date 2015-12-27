@@ -5,4 +5,5 @@ after: summon{nopick,special_pentagram}
 icon: special_pentagram
 cost: misc.tier1_scost
 //lore: misc.tier1_lcost
+cool: 240
 hint: pentagram

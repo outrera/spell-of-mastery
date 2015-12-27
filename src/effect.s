@@ -199,10 +199,6 @@ effect summon What:
 | case What nopick,W:
   | NoPick <= 1
   | What <= W
-| B = $world.block_at{TargetXYZ}
-| when got B and B.speed:
-  | Found = $world.pathfind{100 B B.xyz | Dst => no $world.block_at{Dst.xyz}}
-  | when Found: B.order_at{Found.1}
 | S = $owner.alloc_unit{What}
 | S.summoned <= 1
 | S.alpha <= 255

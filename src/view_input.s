@@ -140,7 +140,6 @@ view.update_play =
 | when $keys.a><1:
   | for U $picked: when U.owner.id >< Player.id and U.xyz <> $cursor:
     | when U.attack: U.order_at{$cursor act/attack}
-| Player.update
 | $main.update
 
 world.update_picked =

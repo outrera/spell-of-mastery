@@ -18,7 +18,6 @@ ai.clear =
 | $params.aiStep <= 0
 | $params.aiWait <= 0
 | $params.aiSpellWait <= 0 //hack to stop AI from spamming spells
-| $params.aiLastTurn <= -1
 | $params.difficulty <= 6 // 5 is normal, 0 is impossible, 10 is very easy
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
@@ -32,6 +31,7 @@ type player{id world}
    research/(t) //research and latency
    picked_ //picked units
    sight // fog of war
+   total_units
    unit_counts // count unit be type
 | $unit_counts <= dup 300
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
@@ -76,6 +76,7 @@ player.explored X,Y,Z = $sight.Y.X
 
 player.clear =
 | for Xs $sight: Xs.clear{3}
+| $total_units <= 0
 | $unit_counts.clear{0}
 | $ai.clear
 | $picked <= []
@@ -90,11 +91,15 @@ player.clear =
 
 player.got_unit U =
 | CID = U.class.id
-| when CID: !$unit_counts.CID+1
+| when CID:
+  | !$unit_counts.CID+1
+  | !$total_units+1
 
 player.lost_unit U =
 | CID = U.class.id
-| when CID: !$unit_counts.CID-1
+| when CID:
+  | !$unit_counts.CID-1
+  | !$total_units-1
 | when U.ai >< pentagram: $pentagram <= 0
 
 player.research_item What =
@@ -149,17 +154,16 @@ update_income Me =
   | $world.effect{Leader.xyz electrical}
 
 player.update =
-| when $world.cycle><0 and $human and $leader:
+| Cycle = $world.cycle
+| when Cycle><0 and $human and $leader:
   | $world.view.center_at{$leader.xyz cursor/1}
 | update_units Me
 | update_income Me
-| PResearch = $research
-| for Type,Act $main.params.acts: when PResearch.Type > Act.lore.1:
-  | !PResearch.Type-1 //cooldown
 | update_spell_of_mastery $world Me
-//|less $human: alloc_ai_blockers $world
-//| $ai.update
-//|less $human: free_ai_blockers $world
+| less $human: when Cycle%10><$id:
+  //|alloc_ai_blockers $world
+  | $ai.update
+  //|free_ai_blockers $world
 
 
 export player

@@ -1,19 +1,6 @@
 use action macros unit_flags pathfind
 
-HarmMap = dup 256: dup 256: 0
-
 PerCycle = 0
-
-ai.order_act U Act target/0 = U.order_act{Act target/Target}
-ai.order_at_xyz U XYZ = U.order_at{XYZ}
-
-ai.cast_pentagram =
-| Leader = $player.leader
-| when Leader: case Leader.acts.keep{?hint >< pentagram} [Act@_]
-  | when $player.mana < Act.cost: leave 0
-  | $order_act{Leader Act}
-  | leave 1
-| leave 0
 
 cast_spell_sub Me U Offensive =
 | less Offensive:
@@ -36,7 +23,7 @@ cast_spell_sub Me U Offensive =
     | Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
 | less Ts.size: leave 0
 | Target = Ts.($world.turn%Ts.size)
-| $order_act{U Act target/Target}
+| U.order_act{Act target/Target}
 | 1
 
 cast_spell Me U =
@@ -50,38 +37,27 @@ cast_spell Me U =
   | leave 1
 | 0
 
-// recasts pentagram, when it doesnt exist or occupied by enemy
-ai.update_leader =
-| Pentagram = $player.pentagram
-| Leader = $player.leader
-| less Leader: leave
-| Turn = $world.turn
-| less Leader and Leader.idle: leave 0
-| when cast_spell Me Leader: leave 1
-| less Pentagram: leave $cast_pentagram
-| 0
+unit.can_do Act =
+| when $owner.research_remain{Act}: leave 0
+| when $owner.mana < Act.cost: leave 0
+| when $cooldown_of{Act.name}: leave 0
+| 1
 
-ai.remove_blocker Blocker =
-| Turn = $world.turn
-| less Blocker.idle: leave 0
-| Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><move}
-| A = if Blocker.attack then #200 else #100
-| harmCheck M = 
-  | X,Y,Z = M.xyz
-  | Harm = HarmMap.X.Y
-  | (Harm^^#FF) and (Harm^^#FF00)<A
-| Ms <= Ms.skip{&harmCheck} // avoid harm when enemies near pentagram
-| when Ms.size
-  | Blocker.order_at{Ms.(Turn%Ms.size).xyz} //move out of the way
+cast_pentagram Me =
+| case $acts.keep{?hint >< pentagram} [Act@_]
+  | less $can_do{Act}: leave 0
+  | $order_act{Act}
   | leave 1
-| Ms = Blocker.list_moves{Blocker.xyz}.keep{?type><swap}
-| for M Ms
-  | B = $world.block_at{M.xyz}
-  | when B.leader
-    | Ms = B.list_moves{B.xyz}.keep{?type><move}
-    | when Ms.size
-      | B.order_at{Ms.(Turn%Ms.size).xyz} //move out of the way
-      | leave 1
+| leave 0
+
+// recasts pentagram, when it doesnt exist or occupied by enemy
+update_leader Me =
+| less $idle: leave
+| Pentagram = $owner.pentagram
+| less Pentagram: // if enemies are near, attacking them could do better results
+  | when cast_pentagram Me: leave
+//| when cast_spell $owner Me: leave
+
 
 ai.update_research =
 | P = $player
@@ -114,7 +90,7 @@ ai.update_pentagram =
   | Turn = $world.turn
   | when got S and $player.research_remain{S} >< 0:
     | when Pentagram.idle and S.cost<<$player.mana:
-      | $order_act{Pentagram S}
+      | Pentagram.order_act{S}
       | leave 1
 | 0
 
@@ -191,41 +167,26 @@ ai.update_units Units =
 | Player = $player
 | Pentagram = Player.pentagram
 | Leader = Player.leader
-| PentID = 0
-| PentXYZ = [-1 -1 -1]
-| LeaderID = 0
-| when Leader: LeaderID <= Leader.id
-| when Pentagram:
-  | PentID <= Pentagram.id
-  | PentXYZ <= Pentagram.xyz
+| LeaderID = if Leader then Leader.id else 0
+| PentID = if Pentagram then Pentagram.id else 0
 | when Player.params.attack_with_guards >< 1:
   | for U Units: U.attacker <= 1
   | Player.params.attack_with_guards <= 0
-| for U Units: when U.idle: less U.path:
+| for U Units: when U.idle and U.path.end:
   | Os = $world.units_at{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}
   | when got AttackTrigger and U.ai<>attack:
     | U.attacker <= 1
     | Os = Os.skip{?ai><attack}
     | AttackTrigger.free
-  | Path = U.path
-  | less Path.end
-    | XYZ = Path.head.unheap
-    | U.path <= Path.heapfree1
-    | U.order_at{XYZ}
-    | leave 1
   | Attacker = U.attack and U.attacker
-  | less Player.human
-    | when Attacker:
-      | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
-        | when $roam_with{0 U}: leave 1
-    | less Attacker:
-      | when U.id >< LeaderID: when $update_leader: leave 1
-      | when U.id >< PentID: when $update_pentagram: leave 1
-      | when U.summoned:
-        | when $roam_with{4 U}: leave 1
-    | when U.xyz >< PentXYZ and U.id <> PentID:
-      | when $remove_blocker{U}: leave 1
+  //| when Attacker:
+  //  | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
+  //    | when $roam_with{0 U}: leave 1
+  | less Attacker:
+    | when U.id >< LeaderID: update_leader U
+    //| when U.id >< PentID: $update_pentagram
+    //| when U.summoned: $roam_with{4 U}
 | leave 0
 
 ai.harm Attacker Victim =
@@ -294,58 +255,12 @@ ai.script =
 
 ai_update Me =
 | Player = $player
-| PID = Player.id
-| Pentagram = Player.pentagram
-| Params = $main.params
-| Units = Player.units
-| less Player.human
-  | Player.mana <= 100000
-  | Player.lore <= 9000
-  | while $script><1:
-| target_priority U X =
-  | B = $world.block_at{X.xyz}
-  | B.hp*max{1 U.attack-B.defense}
-| for U Units: // check if we can attack someone
-  | Ms = U.list_moves{U.xyz}.keep{?type >< attack}
-  | Ms = Ms.sort{A B => target_priority{U A}<target_priority{U B}}
-  | case Ms [A@_]
-    | U.attacker <= 1
-    | U.order_at{A.xyz}
-    | leave
-| for Xs HarmMap: for I Xs.size: Xs.I <= 0
-| for U Units{U=>U.list_attack_moves{U.xyz}}.join:
-  | XYZ = U.xyz
-  | !HarmMap.(XYZ.0).(XYZ.1) + #100 // mark where allies can attack
-| isEnemy U = U.owner.id <> PID and U.alive and not U.removed
-| Es = $world.active.list.keep{&isEnemy}
-| Ts = Es{U=>U.list_attack_moves{U.xyz}{[U ?]}}.join //threatened map cells
-| for U,T Ts
-  | XYZ = T.xyz
-  | X,Y,Z = XYZ
-  | O = U.owner
-  | if U.range then HarmMap.X.Y <= #1
-    else !HarmMap.X.Y + #1
-| Ts <= Ts{?1}
-| for U Units: when U.attack:
-  | X,Y,Z = U.xyz
-  | Harm = HarmMap.X.Y
-  | when Harm^^#FF and no $world.units_at{U.xyz}.find{?ai><unhold}:
-    | U.attacker <= 1
-    | UH = U.owner.alloc_unit{trigger_unhold}
-    | UH.move{U.xyz}
-| Quit = $update_units{Units}
+| Player.mana <= 100000
+| Player.lore <= 9000
+//| while $script><1:
+| Quit = $update_units{Player.units}
 | when Quit: leave
-| less Player.human: $update_research
-| less Player.human: for U Units
-  | X,Y,Z = U.xyz
-  | Harm = HarmMap.X.Y
-  | when Harm^^#FF:
-    | Moves = U.list_moves{U.xyz}.keep{?type><move}
-    | SafeMoves = Moves.skip{M=>| XYZ = M.xyz; Ts.any{?xyz><XYZ}}
-    | when SafeMoves.size //avoid harm
-      | U.order_at{SafeMoves.(($world.turn+U.id)%SafeMoves.size).xyz}
-      | leave // using SafeMoves.rand will complicate debug
-| $params.aiLastTurn <= $world.turn
+//| $update_research
 
 ai.update =
 | PerCycle <= t
