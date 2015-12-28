@@ -1,8 +1,8 @@
 sprite: unit_dwarf
 tier: 2
-health: 30
+health: 34
 attack: 4
-defense: 20
+defense: 8
 inborn: (upkeep2)
 
 sounds: attack,(attack2)

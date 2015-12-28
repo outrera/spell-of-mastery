@@ -1,9 +1,9 @@
 sprite: unit_goblin
 tier: 1
-health: 3
-attack: 1
+health: 30
+attack: 4
 defense: 0
-range: 2
+range: 3
 inborn: (upkeep1)
 
 sounds: attack,(attack2)

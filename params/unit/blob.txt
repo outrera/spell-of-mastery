@@ -1,9 +1,10 @@
 sprite: unit_blob
 tier: 1
-health: 5
+health: 100
 attack: 1
-defense: 0
-//speed: -2
+defense: 3
+range: 2
+speed: 1
 inborn: (upkeep1)
 
 sounds: attack,(blob_attack)

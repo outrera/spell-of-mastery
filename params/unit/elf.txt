@@ -1,7 +1,7 @@
 sprite: unit_elf
 tier: 2
-health: 4
-attack: 1
+health: 30
+attack: 5
 defense: 0
 range: 4
 inborn: (upkeep2)

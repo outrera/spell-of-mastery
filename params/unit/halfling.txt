@@ -1,7 +1,7 @@
 sprite: unit_halfling
 tier: 1
-health: 2
-attack: 3
+health: 22
+attack: 12
 defense: 0
 impact: sound{attack2}
 inborn: (upkeep1)

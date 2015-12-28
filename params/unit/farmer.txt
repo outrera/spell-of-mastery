@@ -1,7 +1,7 @@
 sprite: unit_farmer
 tier: 1
-health: 3
-attack: 1
+health: 30
+attack: 3
 defense: 0
 inborn: (income1)
 

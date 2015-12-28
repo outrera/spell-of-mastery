@@ -368,7 +368,7 @@ unit.harm Attacker Damage =
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
   | $sound{hit}
-  | when ($anim><idle or $anim><move) and $anim<>hit: $animate{hit}
+  | when $anim><idle or $anim><move: $animate{hit}
   | when Attacker and $owner.is_enemy{Attacker.owner}:
     | retaliate Me Attacker
   | leave

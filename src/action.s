@@ -73,7 +73,6 @@ dact attack.update
   | Target = $target
   | when U.impact: U.effect{U.impact Target Target.xyz}
   | when Target.harm{U U.attack}
-  | U.animate{idle}
   | $cycles <= 0
   | less U.range: Target.run_effects{?><counter U U.xyz}
   | leave

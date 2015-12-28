@@ -1,12 +1,12 @@
 sprite: unit_bat
 tier: 1
-health: 1
-attack: 1
-defense: 0
+health: 10
+attack: 3
+defense: 2
 inborn: (upkeep1 flyer)
 
-sounds: attack,(bat_attack)
+sounds: attack,(bat_move)
        //,impact,()
-       ,hit,(bat_die)
+       ,hit,(bat_hit)
        ,die,(bat_die)
-       ,move,(wings)
+       ,move,(bat_move)

@@ -1,8 +1,8 @@
 sprite: unit_dragon
 tier: 4
-health: 120
-attack: 20
-defense: 5
+health: 200
+attack: 10
+defense: 2
 impact: impact{fire_ring}, sound{fire1}
 inborn: (upkeep4)
 

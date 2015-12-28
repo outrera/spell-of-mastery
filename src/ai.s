@@ -159,7 +159,6 @@ ai.update_units Units =
 | leave 0
 
 ai.harm Attacker Victim =
-| Victim.attacker <= 1 //have to be aggressive
 
 ai.group_attack Types =
 | Units = $player.units
