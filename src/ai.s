@@ -76,62 +76,43 @@ ai.update_research =
     | leave 1
 | 0
 
-ai.update_pentagram =
+ai_update_build Me =
 | Pentagram = $player.pentagram
 | less Pentagram: leave 0
-| Blocker = $world.block_at{Pentagram.xyz}
-| when got Blocker: leave 0
 | Summons = Pentagram.acts.keep{?after_table.summon^got}
 | less Summons.size: leave 0
 | Missing = PerCycle.missing
 | less got Missing: leave
 | for Type Missing:
   | S = Summons.find{?after_table.summon >< Type}
-  | Turn = $world.turn
-  | when got S and $player.research_remain{S} >< 0:
-    | when Pentagram.idle and S.cost<<$player.mana:
-      | Pentagram.order_act{S}
-      | leave 1
+  | when got S and Pentagram.can_do{S}:
+    | Pentagram.order_act{S}
+    | leave 1
 | 0
 
-ai.roam_with Radius U =
+roam Me =
 | World = $world
-| Owner = U.owner
+| Owner = $owner
 | OId = Owner.id
-| allows_attack M = M.type >< move
-                    and U.list_moves{M.xyz}.keep{?type><attack}.size
-| Ms = U.list_moves{U.xyz}.keep{&allows_attack}
-| when Ms.size:
-  | Dst = Ms{M=>[(M.xyz-U.xyz).abs M]}.sort{?0<??0}.0.1
-  | U.order_at{Dst.xyz}
-  | leave 1
 | Blockers = []
 | block XYZ =
-  | B = U.owner.alloc_unit{unit_block}
+  | B = Owner.alloc_unit{unit_block}
   | B.move{XYZ}
   | push B Blockers
 | free_blockers = for B Blockers: B.free
-| Player = $player
-| PentXYZ = if Player.pentagram then Player.pentagram.xyz else [-100 -100 -100]
-| when Radius: less (PentXYZ-U.xyz).all{?abs<Radius}: leave 0
 | Check = Dst =>
   | MoveIn = 0
   | Vs = World.units_at{Dst.xyz}
   | for V Vs
     | AI = V.ai
     | when AI:
-      | Blocked = World.block_at{Dst.xyz}
-      | Enemy = Owner.is_enemy{V.owner}
-      | if AI><unit and Enemy then MoveIn <= 1
-        else if AI><hold and no Blocked and no Vs.find{?ai><unhold}
+      | Block = World.block_at{Dst.xyz}
+      | if AI><unit and  Owner.is_enemy{Block.owner} then MoveIn <= 1
+        else if AI><hold and no Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
-        else if Dst.type><swap and V.summoned and (U.xyz-Dst.xyz).take{2}.all{?.abs<2}
-           then
-           | block Dst.xyz
-           | Dst.type <= 0
-        else if AI><turret and no Blocked then MoveIn <= 1
-        else if AI><pentagram and Enemy then MoveIn <= 1
-        else if AI><avoid and no Blocked then
+        else if AI><turret and no Block then MoveIn <= 1
+        else if AI><pentagram and Owner.is_enemy{V.owner} then MoveIn <= 1
+        else if AI><avoid and no Block then
            | block Dst.xyz
            | Dst.type <= 0
            | MoveIn <= 0
@@ -142,25 +123,12 @@ ai.roam_with Radius U =
         else
   | _label end
   | MoveIn
-| TargetNode = U.pathfind{1000 Check}
+| TargetNode = $pathfind{1000 Check}
 | less TargetNode:
   | free_blockers
   | leave 0
 | TargetXYZ = TargetNode.1
-| Target = $world.block_at{TargetXYZ}
-| EnemyTarget = got Target and Target.owner.id <> OId
-| XYZ = TargetNode^node_to_path.0
-| Turn = $world.turn
-| Ms = U.list_moves{U.xyz}
-| free_blockers
-| when EnemyTarget and (XYZ-Target.from).all{?abs << 1}:
-  | M = Ms.find{?xyz >< Target.from}
-  | when got M:
-    | U.order_at{M.xyz}
-    | leave 1
-| M = Ms.find{?xyz >< XYZ}
-| less got M: leave 0
-| U.order_at{M.xyz}
+| $order_at{TargetXYZ}
 | leave 1
 
 ai.update_units Units =
@@ -173,6 +141,7 @@ ai.update_units Units =
   | for U Units: U.attacker <= 1
   | Player.params.attack_with_guards <= 0
 | for U Units: when U.idle and U.path.end:
+  | Handled = 0
   | Os = $world.units_at{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}
   | when got AttackTrigger and U.ai<>attack:
@@ -180,13 +149,13 @@ ai.update_units Units =
     | Os = Os.skip{?ai><attack}
     | AttackTrigger.free
   | Attacker = U.attack and U.attacker
-  //| when Attacker:
-  //  | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
-  //    | when $roam_with{0 U}: leave 1
-  | less Attacker:
+  | when Attacker:
+    | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
+      | Handled <= roam U
+  | less Handled:
     | when U.id >< LeaderID: update_leader U
-    //| when U.id >< PentID: $update_pentagram
-    //| when U.summoned: $roam_with{4 U}
+    | when U.id >< PentID: ai_update_build Me
+    //| when U.summoned: roam U radius/4
 | leave 0
 
 ai.harm Attacker Victim =
@@ -210,12 +179,8 @@ ai.group_attack Types =
 ai.script =
 | Player = $player
 | PParams = Player.params
-| when PParams.aiLastWait >< $world.turn: leave 0
 | Params = $main.params
-| when PParams.aiWait > 0:
-  | PParams.aiLastWait <= $world.turn
-  | !PParams.aiWait-1
-  | leave 0
+| when $world.cycle < PParams.aiWait: leave 0
 | AIType = PParams.aiType
 | AIStep = PParams.aiStep
 | AISteps = Params.main.ai.AIType
@@ -231,12 +196,12 @@ ai.script =
   [attack @Types]
     | less $group_attack{Types{"unit_[?]"}}: leave 0
     | !PParams.aiStep+1
-  [wait Turns]
-    | less Turns.is_int
-      | case Turns
-        [`*` difficulty N] | Turns <= Player.params.difficulty*N
-        Else | bad "AI: wrong arg for `wait`: [Turns]"
-    | PParams.aiWait <= Turns
+  [wait Cycles]
+    | less Cycles.is_int
+      | case Cycles
+        [`*` difficulty N] | Cycles <= Player.params.difficulty*N
+        Else | bad "AI: wrong arg for `wait`: [Cycles]"
+    | PParams.aiWait <= $world.cycle+Cycles
     | !PParams.aiStep+1
   [goto NewAIType when @Condition]
     | if case Condition [[`>>` lossage X]] Player.params.lossage>>X
@@ -257,7 +222,7 @@ ai_update Me =
 | Player = $player
 | Player.mana <= 100000
 | Player.lore <= 9000
-//| while $script><1:
+| when Player.id: while $script><1:
 | Quit = $update_units{Player.units}
 | when Quit: leave
 //| $update_research
