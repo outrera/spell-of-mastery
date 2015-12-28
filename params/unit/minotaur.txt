@@ -1,8 +1,8 @@
 sprite: unit_minotaur
 tier: 3
-health: 5
-attack: 5
-defense: 1
+health: 100
+attack: 18
+defense: 0
 impact: sound{attack3}
 inborn: (upkeep3)
 

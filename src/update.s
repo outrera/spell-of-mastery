@@ -134,7 +134,7 @@ update_anim Me =
 | less $anim_wait > 0:
   | when $anim_step+1 >< $anim_seq.size:
     | when $anim >< death: leave
-    | when $anim >< attack:
+    | when $anim >< attack or $anim><hit:
       | $animate{idle}
   | $anim_step <= ($anim_step+1)%$anim_seq.size
   | Step = $anim_seq.$anim_step

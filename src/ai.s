@@ -107,7 +107,7 @@ roam Me =
     | AI = V.ai
     | when AI:
       | Block = World.block_at{Dst.xyz}
-      | if AI><unit and  Owner.is_enemy{Block.owner} then MoveIn <= 1
+      | if AI><unit and Owner.is_enemy{Block.owner} then MoveIn <= 1
         else if AI><hold and no Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
         else if AI><turret and no Block then MoveIn <= 1
@@ -140,7 +140,7 @@ ai.update_units Units =
 | when Player.params.attack_with_guards >< 1:
   | for U Units: U.attacker <= 1
   | Player.params.attack_with_guards <= 0
-| for U Units: when U.idle and U.path.end:
+| for U Units: when U.idle and not U.goal:
   | Handled = 0
   | Os = $world.units_at{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}

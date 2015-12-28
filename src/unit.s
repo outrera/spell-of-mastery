@@ -323,7 +323,9 @@ in_range Me XYZ =
 | $world.seen_from{$xyz $goal.xyz}
 
 retaliate Me Enemy =
-| when $ordered.type: leave
+| less $idle: leave
+| when $goal and ($goal.xyz-Me.xyz).abs << (Enemy.xyz-Me.xyz).abs:
+  | leave
 | less $attack: leave
 | when $action.type><idle:
   | $order_at{Enemy.xyz}

@@ -1,7 +1,7 @@
 sprite: unit_oculus
 icon: unit_oculus
 tier: 2
-health: 3
+health: 30
 leader: 2
 inborn: (upkeep1 flyer)
 acts: (cast_hexagram cast_knowledge

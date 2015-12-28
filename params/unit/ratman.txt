@@ -1,7 +1,7 @@
 sprite: unit_ratman
 tier: 1
-health: 4
-attack: 2
+health: 60
+attack: 6
 defense: 0
 impact: sound{attack2}
 inborn: (upkeep1)

@@ -35,7 +35,7 @@ effect add_moves N: bad "effect.s: add_moves is obsolete"
 metric A B = (B-A).take{2}.abs
 
 effect btrack XYZ:
-| less $idle:
+| when not $idle or $goal:
   | less $goal: leave
   | LA = metric $goal.xyz XYZ
   | less LA>16.0: leave
