@@ -9,7 +9,7 @@ attack: 0 // amount of damage this unit deals
 defence: 0 // amount of damage this unit can absorb, without losing health
 cooldown: 24
 sight: 2
-speed: 1
+speed: 28
 pickable: 1
 passable: 0
 flyer: 0 // can it fly

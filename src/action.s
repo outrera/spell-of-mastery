@@ -19,6 +19,7 @@ move_start Me =
 | U.move{$xyz}
 | U.facing <= Dirs.locate{X,Y}
 | when U.anim<>move: U.animate{move}
+| when $cycles >< -1: $cycles <= U.speed
 | $start_cycles <= $cycles
 | U.sound{move}
 
@@ -42,13 +43,7 @@ dact move.valid
 | U.world.no_block_at{$xyz} and U.can_move{U.xyz $xyz}
 
 dact move.start
-| U = $unit
-| when $cycles >< -1: $cycles <=  U.sprite.speed
 | move_start Me
-| X,Y,Z = U.xyz
-| less U.seen
-  | $cycles <= 0
-  | move_finish Me
 
 dact move.update | move_update Me
 dact move.finish | move_finish Me
@@ -98,7 +93,6 @@ dact swap.valid
 
 dact swap.start
 | U = $unit
-| $cycles <= max 1 U.sprite.speed
 | move_start Me
 | T = $target
 | O = T.order
@@ -135,7 +129,7 @@ dact custom.finish
 
 default_init Me =
 default_valid Me = 1
-default_start Me = $cycles <= $unit.sprite.speed
+default_start Me = $cycles <= $unit.speed
 default_update Me =
 default_finish Me =
 

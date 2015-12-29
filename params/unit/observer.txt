@@ -1,9 +1,11 @@
 sprite: unit_observer
 tier: 4
-health: 5
-attack: 4
-defense: 2
+health: 90
+attack: 12
+defense: 0
+cooldown: 4
 range: 4
+speed: 28
 inborn: (upkeep4 flyer)
 
 sounds: attack,(observer_attack)

@@ -3,5 +3,5 @@ tier: 2
 health: 60
 attack: 10
 defense: 0
-speed: 10
+speed: 18
 inborn: (upkeep2)
