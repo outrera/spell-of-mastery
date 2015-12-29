@@ -1,7 +1,7 @@
 sprite: unit_baphomet
 tier: 3
 health: 60
-attack: 2
+damage: 2
 armor: 10
 impact: when{sinner},harm{50},impact{explosion_blood}
 inborn: (upkeep3 organic)

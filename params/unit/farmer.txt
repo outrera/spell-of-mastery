@@ -1,7 +1,7 @@
 sprite: unit_farmer
 tier: 1
 health: 30
-attack: 3
+damage: 3
 armor: 0
 inborn: (income1 organic)
 

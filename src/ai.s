@@ -148,7 +148,7 @@ ai.update_units Units =
     | U.attacker <= 1
     | Os = Os.skip{?ai><attack}
     | AttackTrigger.free
-  | Attacker = U.attack and U.attacker
+  | Attacker = U.damage and U.attacker
   | when Attacker:
     | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
       | Handled <= roam U

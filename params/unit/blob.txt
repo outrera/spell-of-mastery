@@ -1,7 +1,7 @@
 sprite: unit_blob
 tier: 1
 health: 100
-attack: 1
+damage: 1
 armor: 3
 range: 2
 speed: 48

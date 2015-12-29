@@ -1,7 +1,7 @@
 sprite: unit_skeleton
 tier: 1
 health: 50
-attack: 4
+damage: 4
 armor: 2
 speed: 28
 inborn: (upkeep1 regen)

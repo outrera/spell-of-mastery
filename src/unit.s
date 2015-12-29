@@ -326,7 +326,7 @@ retaliate Me Enemy =
 | less $idle: leave
 | when $goal and ($goal.xyz-Me.xyz).abs << (Enemy.xyz-Me.xyz).abs:
   | leave
-| less $attack: leave
+| less $damage: leave
 | when $action.type><idle:
   | $order_at{Enemy.xyz}
   | $backtrack <= $xyz
@@ -424,7 +424,7 @@ unit.list_moves Src =
     | B = $world.block_at{Dst}
     | if got B then
         | if $owner.id <> B.owner.id
-          then when B.alive and $attack>0 and (SZ-Z).abs<<4:
+          then when B.alive and $damage and (SZ-Z).abs<<4:
                | push move{attack Dst} Ms
           else when B.speed and $can_move{Src Dst} and B.can_move{Dst Src}:
                | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
@@ -432,7 +432,7 @@ unit.list_moves Src =
 | Ms
 
 unit.list_attack_moves XYZ =
-| less $attack: leave []
+| less $damage: leave []
 | $list_moves{XYZ}.keep{?type><attack}
 
 unit.sound Type =

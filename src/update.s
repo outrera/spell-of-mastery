@@ -295,5 +295,5 @@ unit.update =
 | update_fade Me
 | update_action Me
 | when $removed: leave //unit can be removed as a result of an action
-| when $attack and $action.type><idle and not $goal: attack_nearby_enemy Me
+| when $damage and $action.type><idle and not $goal: attack_nearby_enemy Me
 | 1 // 1 means we are still alive

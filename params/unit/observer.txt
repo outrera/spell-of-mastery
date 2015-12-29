@@ -1,7 +1,7 @@
 sprite: unit_observer
 tier: 4
 health: 90
-attack: 12
+damage: 12
 armor: 0
 cooldown: 4
 range: 4

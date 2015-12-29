@@ -63,7 +63,7 @@ unit_panel.draw G X Y =
 //| Font.draw{G X+85 Y+48 "[$unit.owner.name]"}
 | Font.draw{G X+4 Y "[$unit.title or $unit.class_name.title]"}
 | Font.draw{G X+23 Y+74"[max 0 $unit.health]"}
-| Font.draw{G X+70 Y+28"[$unit.attack]"}
+| Font.draw{G X+70 Y+28"[$unit.damage]"}
 | Font.draw{G X+60 Y+64"[$unit.armor]"}
 
 type world_props.$base{world callback}

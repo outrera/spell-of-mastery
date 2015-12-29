@@ -1,6 +1,6 @@
 sprite: system_dummy
 health: 0
-attack: 0
+damage: 0
 aux: 1
 armor: 999
 show: 0

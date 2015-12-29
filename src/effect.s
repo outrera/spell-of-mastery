@@ -99,7 +99,7 @@ effect harm As:
 | T.harm{Me Damage}
 
 effect suicide As:
-| Target.harm{Me Target.attack}
+| Target.harm{Me Target.damage}
 
 effect paralyze Time: bad "effect.s: paralyze is obsolete"
 

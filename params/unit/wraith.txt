@@ -1,7 +1,7 @@
 sprite: unit_wraith
 tier: 2
 health: 90
-attack: 4
+damage: 4
 armor: 2
 speed: 28
 inborn: (upkeep2 regen flyer)

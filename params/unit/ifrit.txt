@@ -1,7 +1,7 @@
 sprite: unit_ifrit
 tier: 3
 health: 90
-attack: 5
+damage: 5
 armor: 2
 speed: 22
 inborn: (upkeep3 fireaura flyer)
