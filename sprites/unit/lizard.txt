@@ -6,5 +6,5 @@ frames: list,((`3-idle0+-5+11` (10 10 57 66)) (`3-idle1+-6+11` (10 110 59 64)) (
 anims: | idle (idle0 9) (idle1 9) (idle2 9) (idle3 9)
        | move (move1 6) (move2 6) (move3 6) (move4 6)
        | death (death1 6) (death2 6) (death3 6) (death4 6) (death5 24)
-       | attack (attack1 6) (attack2 6) (attack3 6) (attack4 6) (attack5 6) (attack6 6)
+       | attack (attack1 3) (attack2 3) (attack3 3) (attack4 3) (attack5 3) (attack6 3)
        | hit (death2 24)

@@ -1,8 +1,8 @@
 sprite: unit_golem
 tier: 4
-health: 130
+health: 200
 attack: 10
-defense: 4
+defense: 3
 inborn: (upkeep4)
 impact: sound{stone_hit}
 

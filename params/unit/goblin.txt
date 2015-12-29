@@ -1,7 +1,7 @@
 sprite: unit_goblin
 tier: 1
 health: 30
-attack: 4
+attack: 5
 defense: 0
 range: 3
 inborn: (upkeep1)

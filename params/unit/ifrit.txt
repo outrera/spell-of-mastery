@@ -1,8 +1,8 @@
 sprite: unit_ifrit
 tier: 3
-health: 3
-attack: 3
-defense: 3
+health: 90
+attack: 5
+defense: 2
 inborn: (upkeep3 fireaura flyer)
 
 sounds: attack,(fire1)

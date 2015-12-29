@@ -1,6 +1,6 @@
 sprite: unit_knight
 tier: 2
-health: 4
-attack: 1
-defense: 6
+health: 30
+attack: 6
+defense: 10
 inborn: (upkeep2)

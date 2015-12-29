@@ -1,6 +1,6 @@
 sprite: unit_halfling
 tier: 1
-health: 22
+health: 30
 attack: 12
 defense: 0
 impact: sound{attack2}

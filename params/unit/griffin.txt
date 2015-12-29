@@ -1,7 +1,7 @@
 sprite: unit_griffin
 tier: 3
-health: 6
-attack: 3
+health: 100
+attack: 10
 defense: 0
 inborn: (upkeep3 flyer)
 

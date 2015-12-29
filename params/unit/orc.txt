@@ -2,7 +2,7 @@ sprite: unit_orc
 tier: 2
 health: 90
 attack: 8
-defense: 1
+defense: 0
 inborn: (upkeep2)
 
 sounds: attack,(attack2)
