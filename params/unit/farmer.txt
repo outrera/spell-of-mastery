@@ -2,7 +2,7 @@ sprite: unit_farmer
 tier: 1
 health: 30
 attack: 3
-defense: 0
+armor: 0
 inborn: (income1 organic)
 
 sounds: attack,(attack2)

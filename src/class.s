@@ -5,7 +5,7 @@ ClassIdCounter = 1
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 shadow/0 speed/0 sight/No
            starts/0 range/0 leader/0
-           health/0 attack/0 defense/0 cooldown/24
+           health/0 attack/0 armor/0 cooldown/24
            acts/[] sounds/[] icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 impact/0 movable/0 counter/0 tier/0
@@ -27,7 +27,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   leader/Leader
   hp/Health
   attack/Attack
-  defense/Defense
+  armor/Armor
   cooldown/Cooldown
   acts/Acts
   sounds/Sounds.group{2}.table

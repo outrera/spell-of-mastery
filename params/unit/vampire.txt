@@ -2,7 +2,7 @@ sprite: unit_vampire
 tier: 3
 health: 60
 attack: 5
-defense: 2
+armor: 2
 range: 3
 cool: 10
 impact: harm{-7,self},impact{explosion_blood}

@@ -2,7 +2,7 @@ sprite: unit_halfling
 tier: 1
 health: 30
 attack: 12
-defense: 0
+armor: 0
 impact: sound{attack2}
 inborn: (upkeep1 organic)
 

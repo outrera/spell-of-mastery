@@ -2,7 +2,7 @@ sprite: unit_elf
 tier: 2
 health: 30
 attack: 6
-defense: 0
+armor: 0
 range: 4
 inborn: (upkeep2 organic)
 

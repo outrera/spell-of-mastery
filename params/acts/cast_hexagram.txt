@@ -1,7 +1,7 @@
 title: `Hexagram`
 affects: any
 before: impact{pentagram_appearance},sound{pentagram}
-after: summon{nopick,special_hexagram}
+after: summon{special_hexagram}
 icon: spell_hexagram
 cost: misc.tier1_scost
 lore: (2 400)

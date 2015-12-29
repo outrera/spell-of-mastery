@@ -2,7 +2,7 @@ sprite: unit_spider
 tier: 3
 health: 60
 attack: 2
-defense: 0
+armor: 0
 speed: 20
 //poison,7000 means 110 points of damage, 1 point per 60 cycles
 impact: when{target_has.organic},add_effect{poison,7000,(dispel)},impact{explosion_blood}

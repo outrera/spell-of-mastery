@@ -2,7 +2,7 @@ sprite: unit_dwarf
 tier: 2
 health: 60
 attack: 3
-defense: 4
+armor: 4
 speed: 28
 inborn: (upkeep2 organic)
 

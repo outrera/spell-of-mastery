@@ -2,7 +2,7 @@ sprite: unit_dragon
 tier: 4
 health: 160
 attack: 12
-defense: 2
+armor: 2
 cooldown: 4
 impact: impact{fire_ring}, sound{fire1}
 inborn: (upkeep4 organic)

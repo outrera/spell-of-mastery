@@ -1,5 +1,5 @@
 affects: any
-before: sound{pentagram},summon{nopick,unit_telekinesis}
+before: sound{pentagram},summon{unit_telekinesis}
 icon: spell_telekinesis
 range: 5
 lore: misc.tier1_lcost

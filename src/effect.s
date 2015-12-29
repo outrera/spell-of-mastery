@@ -195,10 +195,6 @@ effect clear_passage What:
 | $world.clear_passage{X Y Z}
 
 effect summon What:
-| NoPick = 0
-| case What nopick,W:
-  | NoPick <= 1
-  | What <= W
 | S = $owner.alloc_unit{What}
 | S.summoned <= 1
 | S.alpha <= 255

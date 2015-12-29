@@ -3,7 +3,7 @@ empty: 1
 aux: 1
 health: 0
 attack: 0
-defense: 0
+armor: 0
 show: 0
 speed: 0
 pickable: 0

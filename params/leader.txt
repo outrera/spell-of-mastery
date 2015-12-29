@@ -6,7 +6,7 @@ height: 8
 tier: 5
 health: 80 // hit points - number of hits, before this unit is dead
 attack: 0 // amount of damage this unit deals
-defence: 0 // amount of damage this unit can absorb, without losing health
+armor: 0 // amount of damage this unit can absorb, without losing health
 cooldown: 24
 sight: 2
 speed: 28

@@ -2,7 +2,7 @@ sprite: unit_bat
 tier: 1
 health: 10
 attack: 3
-defense: 2
+armor: 2
 speed: 20
 inborn: (upkeep1 flyer organic)
 

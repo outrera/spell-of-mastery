@@ -2,6 +2,6 @@ sprite: unit_knight
 tier: 2
 health: 30
 attack: 6
-defense: 10
+armor: 10
 speed: 30
 inborn: (upkeep2 organic)

@@ -2,7 +2,7 @@ sprite: unit_golem
 tier: 4
 health: 200
 attack: 10
-defense: 3
+armor: 3
 speed: 34
 inborn: (upkeep4)
 impact: sound{stone_hit}
