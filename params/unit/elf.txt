@@ -4,7 +4,7 @@ health: 30
 attack: 6
 defense: 0
 range: 4
-inborn: (upkeep2)
+inborn: (upkeep2 organic)
 
 sounds: attack,(arrow_hit)
        //,impact,()

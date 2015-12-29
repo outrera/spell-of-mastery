@@ -4,7 +4,7 @@ health: 120
 attack: 10
 defense: 0
 impact: sound{attack3}
-inborn: (upkeep3)
+inborn: (upkeep3 organic)
 
 sounds: //attack,(attack3)
        //,impact,()

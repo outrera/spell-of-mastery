@@ -3,7 +3,7 @@ tier: 3
 health: 100
 attack: 10
 defense: 0
-inborn: (upkeep3 flyer)
+inborn: (upkeep3 organic flyer)
 
 sounds: attack,(attack2)
        //,impact,()

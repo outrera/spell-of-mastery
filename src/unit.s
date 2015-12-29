@@ -128,7 +128,7 @@ get_named_effect Me Name Params =
 | when no Effect:
   | E = Params.find{P => case P [effect @_] 1}
   | when no E: E <= [effect [on never]] // supply dummy
-  | Effect <= E.tail
+  | Effect <= E.tail.unheap //do unheap because Params could reside on heap
 | Effect
 
 unit.add_effect Name Duration Params =

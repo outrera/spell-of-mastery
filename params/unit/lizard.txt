@@ -4,4 +4,4 @@ health: 60
 attack: 10
 defense: 0
 speed: 18
-inborn: (upkeep2)
+inborn: (upkeep2 organic)

@@ -5,7 +5,7 @@ attack: 12
 defense: 2
 cooldown: 4
 impact: impact{fire_ring}, sound{fire1}
-inborn: (upkeep4)
+inborn: (upkeep4 organic)
 
 sounds: //attack,(dragon_hit)
 //       ,impact,()

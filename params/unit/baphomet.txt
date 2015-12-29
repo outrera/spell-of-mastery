@@ -4,7 +4,7 @@ health: 60
 attack: 2
 defense: 10
 impact: when{sinner},harm{50},impact{explosion_blood}
-inborn: (upkeep3)
+inborn: (upkeep3 organic)
 
 sounds: attack,(attack1)
        //,impact,()

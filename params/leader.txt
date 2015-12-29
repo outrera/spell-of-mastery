@@ -15,6 +15,7 @@ passable: 0
 flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
 leader: 1
+inborn: (organic)
 acts: (pentagram cast_hexagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
        cast_heal cast_shell

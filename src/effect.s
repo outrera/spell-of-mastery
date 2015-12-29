@@ -249,6 +249,8 @@ unit.effect Effect Target TargetXYZ =
     harmed | less $health<>$class.hp: leave
     [`.` has_health A] | less $health>>A: leave
     [`.` has_mana A] | less $owner.mana>>A: leave
+    [`.` has Effect] | less $has{Effect}: leave
+    [`.` target_has Effect] | less Target.has{Effect}: leave
     sinner | less Target.kills>0: leave
   | Effect <= Es
 | case Effect [target,alive @Effect]

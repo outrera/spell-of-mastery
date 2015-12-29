@@ -4,7 +4,7 @@ health: 250
 attack: 1
 defense: 1
 speed: 1
-inborn: (upkeep1)
+inborn: (upkeep1 organic)
 
 sounds: attack,(spider_attack)
        //,impact,()

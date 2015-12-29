@@ -4,7 +4,8 @@ health: 60
 attack: 2
 defense: 0
 speed: 20
-impact: add_effect{poison,7000,(dispel)},impact{explosion_blood}
+//poison,7000 means 110 points of damage, 1 point per 60 cycles
+impact: when{target_has.organic},add_effect{poison,7000,(dispel)},impact{explosion_blood}
 inborn: (upkeep3)
 
 sounds: attack,(spider_attack)

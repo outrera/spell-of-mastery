@@ -6,7 +6,7 @@ defense: 0
 cooldown: 4
 range: 4
 speed: 28
-inborn: (upkeep4 flyer)
+inborn: (upkeep4 organic flyer)
 
 sounds: attack,(observer_attack)
        //,impact,()
