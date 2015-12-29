@@ -2,11 +2,10 @@ flags: haste{3,5},shell{4,2},flyer{5,-1},poison{6,4},fireaura{7,0}
 
 flyer: on{static}
 fireaura: on{counter},harm{piercing.5},impact{fire_ring}
-poison: on{cycle.240},when{has_health.2},harm{piercing.1},impact{explosion_blood}
+poison: on{cycle.60},when{has_health.2},harm{piercing.1},impact{explosion_blood}
 shell: on{attacked},mod{block},sound{shell},impact{shell},strip{shell}
 haste: on{cycle.240},add_moves{1}
-regen: on{cycle.240},when{harmed,has_mana.50}/*,strip{poison}*/
-      ,harm{-1},set{inc,owner,mana,-50},effect{explosion_blood}
+regen: on{cycle.60},when{harmed},strip{poison},harm{-1},effect{explosion_blood}
 burning: on{tenant_cycle.120},harm{piercing.1},effect{fire_ring}
 enemy_removes: on{tenant_cycle.12},when{enemy},effect{pickup},remove{self}
 ttl: on{timeout},remove{self}
@@ -16,3 +15,5 @@ upkeep2: on{cycle.50},set{inc,owner,mana,-1}
 upkeep3: on{cycle.40},set{inc,owner,mana,-1}
 upkeep4: on{cycle.30},set{inc,owner,mana,-1}
 income1: on{tenant_cycle.8},set{inc,towner,mana,1}
+
+//when{harmed,has_mana.50}

@@ -1,8 +1,9 @@
 sprite: unit_skeleton
 tier: 1
-health: 3
-attack: 1
-defense: 1
+health: 50
+attack: 4
+defense: 2
+speed: 28
 inborn: (upkeep1 regen)
 
 sounds: attack,(attack2)

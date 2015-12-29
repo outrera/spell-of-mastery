@@ -4,6 +4,7 @@ health: 160
 attack: 12
 defense: 2
 cooldown: 4
+speed: 28
 inborn: (upkeep4 regen)
 
 sounds: attack,(hydra_attack)
