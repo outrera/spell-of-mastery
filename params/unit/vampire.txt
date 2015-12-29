@@ -1,10 +1,11 @@
 sprite: unit_vampire
 tier: 3
-health: 4
-attack: 2
-defense: 1
-range: 2
-impact: harm{-1,self},impact{explosion_blood}
+health: 60
+attack: 5
+defense: 2
+range: 3
+cool: 10
+impact: harm{-7,self},impact{explosion_blood}
 inborn: (upkeep3)
 
 sounds: attack,(orbit2)

@@ -1,7 +1,5 @@
 sprite: unit_ogre
 tier: 4
-health: 7
-attack: 6
 health: 200
 attack: 10
 defense: 0
