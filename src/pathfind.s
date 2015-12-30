@@ -39,10 +39,8 @@ world.pathfind MaxCost U XYZ Check =
       | X,Y,Z = Dst.xyz
       | MXY = PFMap.X.Y
       | when NextCost < MXY.Z and Dst.type:
-        | B = $block_at{Dst.xyz}
-        | when Dst.type><move or (Dst.type >< swap and (not B.attacker or (U.xyz-B.xyz).any{?abs > 2})):
-          | MXY.Z <= NextCost
-          | PFQueue.push{[Node Dst.xyz NextCost]}
+        | MXY.Z <= NextCost
+        | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime
