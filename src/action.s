@@ -110,11 +110,22 @@ dact swap.finish | move_finish Me
 dact teleport.start | $unit.move{$xyz}
 
 dact custom.valid
-| when $affects >< unit: leave $target
-| U = $unit
-| when $affects >< ally: leave: $target and not U.owner.is_enemy{$target.owner}
-| when $affects >< empty: leave U.world.units_at{$xyz}.all{?empty}
-| 1
+| Affects = $affects
+| As = if Affects.is_list then Affects
+       else | when Affects >< any: leave 1
+            | [Affects]
+| for A As:
+  | if A >< unit then
+     | when $target: leave 1
+    else if A >< ally then
+     | when $target and not $unit.owner.is_enemy{$target.owner}: leave 1
+    else if A >< empty then
+     | when no $unit.world.block_at{$xyz}: leave 1
+    else if A >< ally_block then
+     | Block = $unit.world.block_at{$xyz}
+     | when got Block and not $unit.owner.is_enemy{Block.owner}: leave 1
+    else $unit.owner.notify{"custom.valid: bad affects specifier - [A]"}
+| 0
 
 dact custom.start
 | U = $unit

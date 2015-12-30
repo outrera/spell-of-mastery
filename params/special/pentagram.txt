@@ -2,12 +2,13 @@ title: `Pentagram`
 icon: special_pentagram
 sprite: special_pentagram
 empty: 1
+health: 120 // two minutes
 entity: 1
 pickable: 1
 sight: 1
 starts: still // initial animation
 ai: pentagram
-inborn: (enemy_removes)
+inborn: (enemy_damages)
 
 acts: summon_bat, summon_blob, summon_ratman, summon_goblin,
       summon_skeleton, summon_halfling,

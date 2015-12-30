@@ -1,4 +1,4 @@
-affects: any
+affects: ally_block,empty
 before: misc.summon
 after: ()
 icon: unit_baphomet

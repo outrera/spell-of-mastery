@@ -9,6 +9,7 @@ shell: on{attacked},mod{block},sound{shell},impact{shell},strip{shell}
 haste: on{cycle.240},add_moves{1}
 regen: on{cycle.60},when{harmed},strip{poison},harm{-1},effect{explosion_blood}
 burning: on{tenant_cycle.120},harm{piercing.1},effect{fire_ring}
+enemy_damages: on{tenant_cycle.96},when{enemy},effect{pickup},harm{4,self}
 enemy_removes: on{tenant_cycle.12},when{enemy},effect{pickup},remove{self}
 ttl: on{timeout},remove{self}
 upkeep0: on{cycle.160},set{inc,owner,mana,-1}
