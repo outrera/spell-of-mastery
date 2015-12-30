@@ -110,25 +110,6 @@ update_lmb Me Player =
 | U.order.init{@Act.list.join}
 
 update_rmb Me Player =
-| when $world.act:
-  | $world.act <= 0
-  | leave
-| XYZ = $cursor
-| less $world.seen{@XYZ.take{2}}: leave
-| Us = $picked.keep{U => U.owner.id >< Player.id}
-| when Us.size: $world.effect{XYZ ack}
-| Us = Us{U=>[(XYZ-U.xyz).abs U]}.sort{?0<??0}{?1}
-| Used = []
-| Target = $world.block_at{XYZ}
-| less got Target and Target.owner.is_enemy{Player}: Target <= 0
-| for U Us:
-  | P = XYZ
-  | less Target: less Used.end:
-    | Found = $world.pathfind{1000 U XYZ | Dst => no Used.find{Dst.xyz}}
-    | when Found: P <= Found.1
-  | U.backtrack <= 0
-  | U.order_at{P}
-  | push P Used
 
 view.update_play =
 | Player = $player
@@ -136,7 +117,7 @@ view.update_play =
   leftup | update_lmb Me Player
          | $mice_click <= \pick
   right | update_rmb Me Player
-        | $mice_click <= 0
+        | $mice_click <= \order
 | when $keys.a><1:
   | for U $picked: when U.owner.id >< Player.id and U.xyz <> $cursor:
     | when U.damage: U.order_at{$cursor act/attack}
@@ -237,6 +218,7 @@ view.input In =
 | case In
   [mice_move _ XY]
     | $mice_xy.init{XY}
+    | less $mice_click: $mice_xy_anchor.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
     | when $mode <> play or $world.human.sight.CY.CX:
       | $cursor.init{[CX CY $cursor.2]}

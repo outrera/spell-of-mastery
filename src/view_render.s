@@ -308,35 +308,101 @@ rects_intersect [AX AY AW AH] [BX BY BW BH] =
 
 PickCount = 0
 
+order_at Me XYZ Target =
+| Player = $player
+| Us = $picked.keep{U => U.owner.id >< Player.id}
+| when Us.size: $world.effect{XYZ ack}
+| Us = Us{U=>[(XYZ-U.xyz).abs U]}.sort{?0<??0}{?1}
+| Used = []
+| less Target and Target.owner.is_enemy{Player}: Target <= 0
+| for U Us:
+  | P = XYZ
+  | less Target: less Used.end:
+    | Found = $world.pathfind{1000 U XYZ | Dst => no Used.find{Dst.xyz}}
+    | when Found: P <= Found.1
+  | U.backtrack <= 0
+  | U.order_at{P}
+  | push P Used
+
+handle_picked Me Rect Units =
+| get_gui{}.cursor <= $main.img{ui_cursor_point}
+| $on_unit_pick{}{$picked}
+| Units = Units.keep{?seen}
+| less $mice_click:
+  | less Units.end:
+    | get_gui{}.cursor <= $main.img{ui_cursor_glass}
+    | $on_unit_pick{}{[Units.0]}
+  | leave
+| when $mice_click >< left: leave
+| when $mice_click >< order:
+  | $mice_click <= 0
+  | when $world.act:
+    | $world.act <= 0 //cancel targeting
+    | leave
+  | XYZ = $cursor
+  | if Units.end then order_at Me $cursor 0
+    else order_at Me Units.0.xyz Units.0
+  | leave
+| when $mice_click >< pick:
+  | $mice_click <= 0
+  | Shift = $keys.lshift><1 or $keys.rshift><1
+  | Picked = if Shift then $picked.list else []
+  | NewPicked = Units
+  | when Rect:
+    | $picked <= [@NewPicked @Picked]
+    | leave
+  | when NewPicked.size>1:
+    | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
+    | !PickCount+1
+  | $picked <= [@NewPicked @Picked]
+  | leave
+
 handle_picking Me UnitRects =
 | MR = $mice_rect
 | RX,RY,RW,RH = MR
 | LargeEnough = RW>4 or RH>4
-| Shift = $keys.lshift><1 or $keys.rshift><1
-| Picked = if Shift then $picked.list else []
+| when LargeEnough:
+  | $fb.rectangle{#00FF00 0 RX RY RW RH}
+  | Units = []
+  | for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
+    | when Unit.speed>0 and Unit.owner.id><$player.id:
+      | push Unit Units
+  | handle_picked Me 1 Units
+  | leave
+| Units = []
+| MXY = $mice_xy
+| for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
+  | push Unit Units
+| handle_picked Me 0 Units 
+
+/*handle_picking Me UnitRects =
+| MR = $mice_rect
+| RX,RY,RW,RH = MR
+| LargeEnough = RW>4 or RH>4
+| when LargeEnough: $fb.rectangle{#00FF00 0 RX RY RW RH}
 | $on_unit_pick{}{$picked}
 | when $mice_click >< left:
-  | when LargeEnough: 
-    | $on_unit_pick{}{[]}
-    | $fb.rectangle{#00FF00 0 RX RY RW RH}
-    | leave
   | $on_unit_pick{}{$picked}
   | leave
-| less $mice_click
-  | MXY = $mice_xy
-  | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
-    | get_gui{}.cursor <= $main.img{ui_cursor_glass}
-    | $on_unit_pick{}{[Unit]}
-    | leave
+| UnderCursor = []
+| MXY = $mice_xy
+| for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
+  | push Unit UnderCursor
+| less $mice_click: less UnderCursor.end: whem UnderCursor.seen
+  | get_gui{}.cursor <= $main.img{ui_cursor_glass}
+  | $on_unit_pick{}{[UnderCursor.0]}
+  | leave
 | $on_unit_pick{}{$picked}
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
+| when $mice_click >< order:
+  | $mice_click <= 0
 | when $mice_click >< pick:
   | $mice_click <= 0
+  | Shift = $keys.lshift><1 or $keys.rshift><1
+  | Picked = if Shift then $picked.list else []
   | NewPicked = []
   | less LargeEnough:
-    | MXY = $mice_xy
-    | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
-      | push Unit NewPicked
+    | NewPicked <= UnderCursor
     | when NewPicked.size>1:
       | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
       | !PickCount+1
@@ -346,7 +412,7 @@ handle_picking Me UnitRects =
     | when Unit.speed>0 and Unit.owner.id><$player.id:
       | push Unit NewPicked
   | $picked <= [@NewPicked @Picked]
-  | leave
+  | leave*/
 
 view.render_iso =
 | Wr = $world
