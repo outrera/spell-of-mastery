@@ -1,0 +1,7 @@
+author: `Seth A. Robinson`
+copyright: `Seth A. Robinson`
+license: `CC3-BY`
+origin: `http://www.rtsoft.com/pages/dink.php`
+xy: 0,2
+frames: folder
+anims: | idle (idle0 3) (idle1 3) (idle2 3) (idle3 6)

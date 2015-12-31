@@ -23,6 +23,7 @@ acts: (pentagram cast_hexagram cast_knowledge
        cast_paralyze cast_haste
        cast_flight
        spell_of_mastery cast_disrupt_mastery)
+blood: blood
 ai: unit
 item: pickup
 sounds: attack,(attack2)

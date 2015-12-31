@@ -5,6 +5,7 @@ damage: 4
 armor: 2
 speed: 28
 inborn: (upkeep1 regen)
+blood: blood_undead
 
 sounds: attack,(attack2)
        //,impact,()

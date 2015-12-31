@@ -14,6 +14,7 @@ pickable: 1
 passable: 0
 flyer: 0 // can it fly
 range: 0 // does it move into the cell of defeated unit
+blood: blood
 ai: unit
 item: pickup
 sounds: attack,(attack2)

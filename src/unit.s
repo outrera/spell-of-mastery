@@ -364,7 +364,7 @@ unit.harm Attacker Damage =
 | less Piercing: Damage <= max 1 Damage-$armor
 | when Mod >< block: leave
 | !$hp - Damage
-| $world.effect{$xyz blood}
+| when!it $blood: $world.effect{$xyz it}
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
   | $sound{hit}

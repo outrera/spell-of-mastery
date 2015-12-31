@@ -6,6 +6,7 @@ armor: 3
 speed: 34
 inborn: (upkeep4)
 impact: sound{stone_hit}
+blood: blood_undead
 
 sounds: /*attack,()
        ,impact,(stone_hit)
