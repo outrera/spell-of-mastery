@@ -69,19 +69,22 @@ draw_bounding_box_back Color FB B =
 
 unit.size = if $height then [37 37 70] else [37 37 0]
 
-blit_item_from_unit U =
-| X,Y,Z = U.xyz
+blit_item_from_unit Me =
+| when $host and $host.serial >< $host_serial:
+  | $xyz.init{$host.xyz}
+  | $xy.init{$host.xy}
+| X,Y,Z = $xyz
 | !X*32
 | !Y*32
 | !Z*8
-| DX,DY = U.xy + U.box_xy
+| DX,DY = $xy + $box_xy
 | DDX = (DX+2*DY)/2
 | DDY = 2*DY-DDX
 | !X+DDX
 | !Y+DDY
-| XD,YD,ZD = U.size
-| when U.mirror: swap XD YD
-| make_blit_item X Y Z+7 XD YD ZD U //Z+7 is a hack to avoid cursor cluttering
+| XD,YD,ZD = $size
+| when $mirror: swap XD YD
+| make_blit_item X Y Z+7 XD YD ZD Me //Z+7 is a hack to avoid cursor cluttering
 
 UnitRects = 0
 PickedRects = 0
@@ -374,45 +377,6 @@ handle_picking Me UnitRects =
 | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
   | push Unit Units
 | handle_picked Me 0 Units 
-
-/*handle_picking Me UnitRects =
-| MR = $mice_rect
-| RX,RY,RW,RH = MR
-| LargeEnough = RW>4 or RH>4
-| when LargeEnough: $fb.rectangle{#00FF00 0 RX RY RW RH}
-| $on_unit_pick{}{$picked}
-| when $mice_click >< left:
-  | $on_unit_pick{}{$picked}
-  | leave
-| UnderCursor = []
-| MXY = $mice_xy
-| for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
-  | push Unit UnderCursor
-| less $mice_click: less UnderCursor.end: whem UnderCursor.seen
-  | get_gui{}.cursor <= $main.img{ui_cursor_glass}
-  | $on_unit_pick{}{[UnderCursor.0]}
-  | leave
-| $on_unit_pick{}{$picked}
-| get_gui{}.cursor <= $main.img{ui_cursor_point}
-| when $mice_click >< order:
-  | $mice_click <= 0
-| when $mice_click >< pick:
-  | $mice_click <= 0
-  | Shift = $keys.lshift><1 or $keys.rshift><1
-  | Picked = if Shift then $picked.list else []
-  | NewPicked = []
-  | less LargeEnough:
-    | NewPicked <= UnderCursor
-    | when NewPicked.size>1:
-      | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
-      | !PickCount+1
-    | $picked <= [@NewPicked @Picked]
-    | leave
-  | for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
-    | when Unit.speed>0 and Unit.owner.id><$player.id:
-      | push Unit NewPicked
-  | $picked <= [@NewPicked @Picked]
-  | leave*/
 
 view.render_iso =
 | Wr = $world

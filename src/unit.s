@@ -46,6 +46,8 @@ type unit.$class{Id World}
   kills //how many enemies this unit has killed
   effects/[] //active effects
   mod //set by various effects to modify some contextual behavior
+  host //what unit hosts this sprite
+  host_serial
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -269,6 +271,7 @@ unit.free =
 | when $active: $active <= 2 //request removal from active list
 | less $path.end: $set_path{[]}
 | $goal <= 0
+| $host <= 0
 | $effects.heapfree
 | $effects <= []
 | $world.free_unit{Me}
@@ -364,7 +367,9 @@ unit.harm Attacker Damage =
 | less Piercing: Damage <= max 1 Damage-$armor
 | when Mod >< block: leave
 | !$hp - Damage
-| when!it $blood: $world.effect{$xyz it}
+| when!it $blood:
+  | E = $world.effect{$xyz it}
+  | E.xy.init{$xy}
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
   | $sound{hit}
