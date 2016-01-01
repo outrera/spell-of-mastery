@@ -2,38 +2,35 @@ use action macros unit_flags pathfind
 
 PerCycle = 0
 
-cast_spell_sub Me U Offensive =
-| less Offensive:
-  | Pentagram = U.owner.pentagram
-  | less Pentagram: leave 0
-  | when Pentagram.xyz >< U.xyz: leave 0
+cast_spell_sub Me Offensive =
 | SpellType = if Offensive then \aiOffensiveSpell else \aiDefensiveSpell
-| SpellName = $player.params.SpellType
+| SpellName = $owner.params.SpellType
 | when no SpellName: leave 0
 | Act = $main.params.acts.SpellName
 | when no Act: bad "AI: cant find SpellType `[SpellName]`"
-| Targets,Path = action_list_moves U Act
+| Targets,Path = action_list_moves Me Act
 | Ts = Targets{XYZ=>$world.block_at{XYZ}}.skip{No}
 | if Offensive
-  then Ts <= Ts.keep{?owner.id<>$player.id}
-  else Ts <= Ts.keep{?owner.id><$player.id}
+  then Ts <= Ts.keep{?owner.id<>$owner.id}
+  else Ts <= Ts.keep{?owner.id><$owner.id}
+| Ts = Ts.keep{?alive}
 | case SpellName //FIXME: spells actions should have `can do` method
   cast_shell
     | FlagN = getUnitFlagsTable{}.shell
     | Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
 | less Ts.size: leave 0
-| Target = Ts.($world.turn%Ts.size)
-| U.order_act{Act target/Target}
+| Target = Ts.0
+| $order_act{Act target/Target}
 | 1
 
-cast_spell Me U =
-| PP = $player.params
-| Turn = $world.turn
-| when PP.aiSpellWait>>Turn and Turn>48: leave 0
-| AT = $player.params.aiType
-| when cast_spell_sub{Me U 1} or cast_spell_sub{Me U 0}:
-  | D = max 0 PP.difficulty-2
-  | PP.aiSpellWait <= Turn+D
+cast_spell Me =
+| PP = $owner.params
+| Cycle = $world.cycle
+| when PP.aiSpellWait>>Cycle /*and Cycle>10000*/: leave 0
+| AT = $owner.params.aiType
+| when cast_spell_sub{Me 1} or cast_spell_sub{Me 0}:
+  | D = max 1 PP.difficulty-2
+  | PP.aiSpellWait <= Cycle+D*24
   | leave 1
 | 0
 
@@ -56,7 +53,7 @@ update_leader Me =
 | Pentagram = $owner.pentagram
 | less Pentagram: // if enemies are near, attacking them could do better results
   | when cast_pentagram Me: leave
-//| when cast_spell $owner Me: leave
+| when cast_spell Me: leave
 
 
 ai.update_research =
