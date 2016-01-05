@@ -108,7 +108,8 @@ roam Me =
         else if AI><hold and no Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
         else if AI><turret and no Block then MoveIn <= 1
-        else if AI><pentagram and Owner.is_enemy{V.owner} then MoveIn <= 1
+        else if AI><pentagram and Owner.is_enemy{V.owner} then
+           | when no Block or Owner.is_enemy{Block}: MoveIn <= 1
         else if AI><avoid and no Block then
            | block Dst.xyz
            | Dst.type <= 0
