@@ -290,7 +290,7 @@ create_editor_icons Me =
   | ViewUI.pick{Mode}
   | if Mode >< play then $world.new_game else $world.explore{1}
 | BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
-| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
+//| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
 | PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
 | WorldIcon = icon $img{icons_world} click: Icon =>
   | $pause
@@ -307,8 +307,8 @@ create_editor_icons Me =
 | ModeIcon <= BrushIcon
 | BrushIcon.picked <= 1
 | hidden: layV s/8
-    BrushIcon,spacer{8 0},PickIcon,spacer{8 0},PlayIcon,spacer{8 0},
-    WorldIcon,spacer{8 0},SaveIcon,LoadIcon,spacer{8 0},ExitIcon
+    BrushIcon,spacer{8 0}/*,PickIcon,spacer{8 0}*/,PlayIcon,spacer{8 0},
+    WorldIcon,spacer{8 0},SaveIcon,spacer{8 0},LoadIcon,spacer{8 0},ExitIcon
 
 create_load_buttons Me =
 | load_slot Name = 
