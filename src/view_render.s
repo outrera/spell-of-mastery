@@ -117,8 +117,8 @@ unit.draw FB B =
   | when Rs:
     | CM = G.cmap{raw/1}
     | for I 5:
-      | C = Rs.I
-      | _ffi_set uint32_t CM Rs.I Colors.I
+      | R = Rs.I
+      | when got R: _ffi_set uint32_t CM R Colors.I
 | when $flyer
   | !YY-16
   | !Y-16

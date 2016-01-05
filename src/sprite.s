@@ -67,7 +67,7 @@ init_frames S G =
 | when Rs and CM:
   | Rs = map R Rs: CM.locate{R}
   | Default = Rs.find{?<>No}
-  | when got Default: S.colors <= map R Rs: if R<>No then R else Default
+  | when got Default: S.colors <= map R Rs: if R<>No then R else No
   //| say [S.name CM.size S.colors]
 | Frames = case S.frames
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
