@@ -1,7 +1,7 @@
 use gfx util param
 
 type sprite{Bank Name xy/[0 0]
-            frames/0 faces/0 anims/[`|` [idle [0 24]]]
+            frames/0 faces/0 anims/[`|` [idle [0 24]]] recolors/0
             class/0 margins/0 pick_height/0
             font/Font icon/0 shadow/0 form/[`|` [4]] rect/[40 76 -4]}
   bank/Bank
@@ -18,6 +18,8 @@ type sprite{Bank Name xy/[0 0]
   shadow/Shadow
   form
   rect/Rect
+  recolors/Recolors
+  colors/0
 | XYs = []
 | for Y,Hs Form.tail.i: for X,H Hs.i: when H: push [-X Y 0] XYs
 | $form <= XYs.list
@@ -60,6 +62,13 @@ init_frames_from_list S List =
 | S.frames <= Frames
 
 init_frames S G =
+| Rs = S.recolors
+| CM = G.cmap
+| when Rs and CM:
+  | Rs = map R Rs: CM.locate{R}
+  | Default = Rs.find{?<>No}
+  | when got Default: S.colors <= map R Rs: if R<>No then R else Default
+  //| say [S.name CM.size S.colors]
 | Frames = case S.frames
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
   [list Ls]

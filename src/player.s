@@ -33,12 +33,15 @@ type player{id world}
    sight // fog of war
    total_units
    unit_counts // count unit be type
+   colors
 | $unit_counts <= dup 300
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $color <= PlayerColors.$id
 | $params <= t
 | $sight <= dup 132: 132.bytes
 | $ai <= ai Me
+| Cs = $main.img{ui_colors}
+| when $id<Cs.h: $colors <= map I 5: Cs.get{I $id}
 | $clear
 
 player.picked = $picked_.unheap

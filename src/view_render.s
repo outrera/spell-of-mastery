@@ -102,7 +102,8 @@ unit.draw FB B =
 | when $mirror:
   | !XX - GW%2
   | G.flop
-| when $sprite.shadow:
+| S = $sprite
+| when S.shadow:
   | S = $world.shadow
   | ZZ = $xyz.2-$fix_z
   | I = min (ZZ/4).abs S.size-1
@@ -110,6 +111,14 @@ unit.draw FB B =
   | SGfx.brighten{B.brighten}
 //  | SGfx.light{B.lx B.ly}
   | FB.blit{X+8 Y-38+ZZ*8 SGfx}
+| Colors = $colors
+| when Colors:
+  | Rs = S.colors
+  | when Rs:
+    | CM = G.cmap{raw/1}
+    | for I 5:
+      | C = Rs.I
+      | _ffi_set uint32_t CM Rs.I Colors.I
 | when $flyer
   | !YY-16
   | !Y-16

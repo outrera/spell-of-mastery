@@ -157,6 +157,7 @@ world.alloc_unit ClassName Owner =
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
 | U.owner <= Owner
+| U.colors <= Owner.colors
 | U.owner.got_unit{U}
 | U
 

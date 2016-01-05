@@ -125,6 +125,7 @@ roam Me =
   | free_blockers
   | leave 0
 | TargetXYZ = TargetNode.1
+| $backtrack <= 0
 | $order_at{TargetXYZ}
 | leave 1
 

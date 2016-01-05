@@ -48,6 +48,7 @@ type unit.$class{Id World}
   mod //set by various effects to modify some contextual behavior
   host //what unit hosts this sprite
   host_serial
+  colors/0
 | $action <= action Me
 | $next_action <= action Me
 | $ordered <= action Me
@@ -272,6 +273,7 @@ unit.free =
 | less $path.end: $set_path{[]}
 | $goal <= 0
 | $host <= 0
+| $colors <= 0
 | $effects.heapfree
 | $effects <= []
 | $world.free_unit{Me}
