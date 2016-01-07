@@ -1,9 +1,9 @@
 sprite: unit_beetle
 tier: 1
-health: 250
+health: 100
 damage: 1
 armor: 1
-speed: 1
+speed: 48
 inborn: (upkeep1 organic)
 
 sounds: attack,(spider_attack)

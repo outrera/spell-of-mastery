@@ -98,6 +98,9 @@ effect harm As:
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
+effect lifedrain Amount:
+| when Target and Target.has{organic}: Me.harm{Me -Amount}
+
 effect suicide As:
 | Target.harm{Me Target.damage}
 

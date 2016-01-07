@@ -5,7 +5,7 @@ damage: 5
 armor: 2
 range: 3
 cool: 10
-impact: harm{-7,self},impact{explosion_blood}
+impact: lifedrain{7},impact{explosion_blood}
 inborn: (upkeep3)
 blood: blood_undead
 
