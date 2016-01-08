@@ -22,56 +22,39 @@ default:
 
 
 tier0:
-  | wait difficulty*1
   | attack ratman
-  | wait difficulty*2
   | attack ratman ratman
   | goto tier1
 
 tier1:
-  | wait difficulty*4
   | attack ratman ratman goblin
-  | wait difficulty*2
   | attack ratman goblin goblin
   | goto tier2 when lossage >> 14
 
 tier2:
   | set aiOffensiveSpell cast_lightning
   | set aiDefensiveSpell cast_shell
-  | wait difficulty*4
   | attack dwarf dwarf elf
-  | wait difficulty*4
   | attack orc orc
-  | wait difficulty*4
   | attack wraith
-  | wait difficulty*4
   | attack orc dwarf orc
   | goto tier3 when lossage >> 32
 
 tier3:
   | set aiOffensiveSpell cast_suicide
-  | wait difficulty*4
   | attack minotaur vampire
-  | wait difficulty*4
   | attack baphomet
-  | wait difficulty*4
   | attack spider griffin ifrit
   | goto tier4 when lossage >> 64
 
 tier4:
-  | wait difficulty*4
   | attack dragon
-  | wait difficulty*4
   | attack observer
-  | wait difficulty*4
   | attack golem
-  | wait difficulty*4
   | attack ogre
-  | wait difficulty*4
   | attack hydra
 
 
 l2:
  | set aiDefensiveSpell cast_shell
  | attack ratman ratman goblin
- | wait difficulty*4

@@ -20,6 +20,8 @@ cast_spell_sub Me Offensive =
     | Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
 | less Ts.size: leave 0
 | Target = Ts.0
+| Cost = Act.cost
+| !Me.owner.mana+Cost
 | $order_act{Act target/Target}
 | 1
 
@@ -29,7 +31,7 @@ cast_spell Me =
 | when PP.aiSpellWait>>Cycle /*and Cycle>10000*/: leave 0
 | AT = $owner.params.aiType
 | when cast_spell_sub{Me 1} or cast_spell_sub{Me 0}:
-  | D = max 1 PP.difficulty-2
+  | D = max 1 10-PP.difficulty
   | PP.aiSpellWait <= Cycle+D*24
   | leave 1
 | 0
@@ -67,10 +69,12 @@ ai.update_research =
 | for Type Missing:
   | S = Summons.find{?after_table.summon >< Type}
   | less got S: $world.notify{"AI: missing summon `[Type]`"}
-  | when got S and P.research_remain{S} > 0 and S.research<<P.lore:
-    | !P.lore-S.research
-    | P.research_item{S.name}
-    | leave 1
+  | when got S and P.research_remain{S} > 0:
+    | when S.lore.0<<P.lore and S.lore.1 << P.mana:
+      | !P.lore-S.lore.0
+      | !P.mana-S.lore.1
+      | P.research_item{S.name}
+      | leave 1
 | 0
 
 ai_update_build Me =
@@ -195,14 +199,11 @@ ai.script =
     | less $group_attack{Types{"unit_[?]"}}: leave 0
     | !PParams.aiStep+1
   [wait Cycles]
-    | less Cycles.is_int
-      | case Cycles
-        [`*` difficulty N] | Cycles <= Player.params.difficulty*N
-        Else | bad "AI: wrong arg for `wait`: [Cycles]"
     | PParams.aiWait <= $world.cycle+Cycles
     | !PParams.aiStep+1
   [goto NewAIType when @Condition]
-    | if case Condition [[`>>` lossage X]] Player.params.lossage>>X
+    | if case Condition [[`>>` lossage X]]
+              Player.params.lossage+PParams.difficulty*2>>X
       then | PParams.aiType <= NewAIType
            | PParams.aiStep <= 0
       else | !PParams.aiStep+1
@@ -218,7 +219,6 @@ ai.script =
 
 ai_update Me =
 | Player = $player
-| Player.mana <= 100000
 | Player.lore <= 9000
 | when Player.id: while $script><1:
 | Quit = $update_units{Player.units}

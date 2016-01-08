@@ -18,7 +18,7 @@ ai.clear =
 | $params.aiStep <= 0
 | $params.aiWait <= 0
 | $params.aiSpellWait <= 0 //hack to stop AI from spamming spells
-| $params.difficulty <= 6 // 5 is normal, 0 is impossible, 10 is very easy
+| $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
 
 PlayerColors = [white red blue cyan violet orange black yellow magenta]
 
@@ -147,7 +147,9 @@ update_spell_of_mastery Me P =
 //FIXME:calculate income per second here
 update_income Me =
 | IC = $main.params.world.income_cycle
-| when $world.cycle%IC><0: !$mana + 1
+| Cycle = $world.cycle
+| when Cycle%IC><0: !$mana + 1
+| less $human: when Cycle%24><0: !$mana+($params.difficulty-5)
 | Leader = $leader
 | when $mana < $main.params.world.defeat_threshold and Leader:
   | $main.show_message{'Wizard has Lost Too Much Mana'
