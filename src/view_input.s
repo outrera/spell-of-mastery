@@ -234,6 +234,7 @@ view.input In =
     | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
   [key Name S]
     | $keys.Name <= S
+| when $mode <> play: $mice_xy_anchor.init{$mice_xy}
 
 view.pause = $paused <= 1
 view.unpause = $paused <= 0
