@@ -5,9 +5,8 @@ damage: 5
 armor: 0
 range: 3
 inborn: (upkeep1 organic)
-
-sounds: attack,(attack2)
-       //,impact,()
-       ,hit,(goblin_hit)
-       ,die,(goblin_die)
-       ,move,(step)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{goblin_hit}
+death: sound{goblin_die}
+moves: sound{step}

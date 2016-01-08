@@ -5,9 +5,8 @@ damage: 3
 armor: 2
 speed: 20
 inborn: (upkeep1 flyer organic)
-
-sounds: attack,(bat_move)
-       //,impact,()
-       ,hit,(bat_hit)
-       ,die,(bat_die)
-       ,move,(bat_move)
+attack: sound{bat_move}
+//impact: sound{bat_move}
+hit: sound{bat_hit}
+death: sound{bat_die}
+moves: sound{bat_move}

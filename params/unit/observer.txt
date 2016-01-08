@@ -7,9 +7,8 @@ cooldown: 4
 range: 4
 speed: 28
 inborn: (upkeep4 organic flyer)
-
-sounds: attack,(observer_attack)
-       //,impact,()
-       ,hit,(observer_hit)
-       ,die,(observer_die)
-       ,move,(observer_move)
+attack: sound{observer_attack}
+//impact: sound{observer_attack}
+hit: sound{observer_hit}
+death: sound{observer_die}
+moves: sound{observer_move}

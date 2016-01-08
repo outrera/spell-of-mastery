@@ -21,7 +21,8 @@ move_start Me =
 | when U.anim<>move: U.animate{move}
 | when $cycles >< -1: $cycles <= U.speed
 | $start_cycles <= $cycles
-| U.sound{move}
+| Effect = U.class.moves
+| when Effect: U.effect{Effect U U.xyz}
 
 move_update Me =
 | U = $unit
@@ -60,7 +61,8 @@ dact attack.start
 | U.face{$target.xyz}
 | $cycles <= max 1 U.sprite.anim_speed{attack}
 | U.animate{attack}
-| U.sound{attack}
+| Effect = U.class.attack
+| when Effect: U.effect{Effect U U.xyz}
 dact attack.update
 | U = $unit
 | when U.anim_hit:

@@ -4,11 +4,10 @@ health: 90
 damage: 4
 armor: 2
 speed: 28
-inborn: (upkeep2 regen flyer)
 blood: blood_undead
-
-sounds: attack,(attack2)
-       //,impact,()
-       ,hit,(wraith_hit)
-       ,die,(wraith_die)
-       ,move,(wraith_move)
+inborn: (upkeep2 regen flyer)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{wraith_hit}
+death: sound{wraith_die}
+moves: sound{wraith_move}

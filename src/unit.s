@@ -303,7 +303,8 @@ unit.forced_order @As =
 | O
 
 unit.die =
-| $sound{die}
+| Effect = $class.death
+| when Effect: $effect{Effect Me $xyz}
 | $forced_order{type/die}
 | $cooldown <= 0
 
@@ -376,7 +377,8 @@ unit.harm Attacker Damage =
   | E.xy.init{$xy}
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
-  | $sound{hit}
+  | Effect = $class.hit
+  | when Effect: (Attacker or Me).effect{Effect Me $xyz}
   | when $anim><idle or $anim><move: $animate{hit}
   | when Attacker and $owner.is_enemy{Attacker.owner}:
     | retaliate Me Attacker
@@ -443,10 +445,5 @@ unit.list_moves Src =
 unit.list_attack_moves XYZ =
 | less $damage: leave []
 | $list_moves{XYZ}.keep{?type><attack}
-
-unit.sound Type =
-| less $world.human.explored{$xyz}>1: leave
-| when got!it $sounds.Type: $main.sound{it.rand}
-
 
 export unit

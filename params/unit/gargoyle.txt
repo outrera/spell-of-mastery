@@ -4,10 +4,8 @@ health: 50
 damage: 10
 armor: 0
 inborn: (upkeep2 organic flyer)
+//attack: sound{fire1}
 impact: sound{fire1}
-
-sounds: //attack,(fire1)
-//       ,impact,()
-       hit,(baphomet_hit)
-       ,die,(dragon_death)
-       ,move,(dragon_move)
+hit: sound{baphomet_hit}
+death: sound{dragon_death}
+moves: sound{dragon_move}

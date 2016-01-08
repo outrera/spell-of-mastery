@@ -18,6 +18,10 @@ main.load_sounds =
 | PlayList <= PlayList.sort
 
 main.sound Name =
+| Cycle = $world.cycle
+| SCycles = $world.sound_cycles
+| when SCycles.Name><Cycle: leave
+| SCycles.Name <= Cycle
 | S = $sounds.Name
 | when no S: bad "missing sound ([Name])"
 | sound_play S

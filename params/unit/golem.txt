@@ -4,12 +4,10 @@ health: 200
 damage: 10
 armor: 3
 speed: 34
-inborn: (upkeep4)
-impact: sound{stone_hit}
 blood: blood_undead
-
-sounds: /*attack,()
-       ,impact,(stone_hit)
-       ,hit,(ogre_club)
-       ,*/die,(golem_die)
-       ,move,(step)
+inborn: (upkeep4)
+//attack: sound{attack2}
+impact: sound{stone_hit}
+//hit: sound{ogre_club}
+death: sound{golem_die}
+moves: sound{step}

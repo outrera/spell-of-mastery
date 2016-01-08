@@ -6,10 +6,11 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 shadow/0 speed/0 sight/No
            starts/0 range/0 leader/0
            health/0 damage/0 armor/0 cooldown/24
-           acts/[] sounds/[] icon/0 title/0 item/0
+           acts/[] icon/0 title/0 item/0
            ai/0 show/1 height/0
-           passable/1 impact/0 movable/0 counter/0 tier/0
-           inborn/[] blood/0}
+           passable/1 movable/0 counter/0 tier/0
+           inborn/[] blood/0
+           attack/0 impact/0 hit/0 death/0 moves/0}
   id
   type/"[Bank]_[Class_name]"
   block/0
@@ -31,7 +32,6 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   armor/Armor
   cooldown/Cooldown
   acts/Acts
-  sounds/Sounds.group{2}.table
   icon/Icon
   title/Title
   item/Item
@@ -39,11 +39,15 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   show/Show
   height/Height
   passable/Passable
-  impact/Impact
   movable/Movable
   counter/Counter //counterattack
   tier/Tier
   inborn/Inborn
+  attack/Attack
+  impact/Impact
+  hit/Hit
+  death/Death
+  moves/Moves
 | when $starts:
   | $id <= ClassIdCounter
   | !ClassIdCounter+1

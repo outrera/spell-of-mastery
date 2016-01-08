@@ -7,9 +7,8 @@ range: 2
 speed: 48
 inborn: (upkeep1)
 blood: blood_undead
-
-sounds: attack,(blob_attack)
-       //,impact,()
-       ,hit,(blob_hit)
-       ,die,(blob_hit)
-       ,move,(step)
+//attack: sound{blob_attack}
+impact: sound{blob_attack}
+hit: sound{blob_hit}
+death: sound{blob_hit}
+moves: sound{step}

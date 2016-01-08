@@ -4,9 +4,8 @@ health: 90
 damage: 8
 armor: 0
 inborn: (upkeep2 organic)
-
-sounds: attack,(attack2)
-       //,impact,()
-       ,hit,(orc_hit)
-       ,die,(orc_die)
-       ,move,(step)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{orc_hit}
+death: sound{orc_die}
+moves: sound{step}

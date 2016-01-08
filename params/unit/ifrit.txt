@@ -5,9 +5,8 @@ damage: 5
 armor: 2
 speed: 22
 inborn: (upkeep3 fireaura flyer)
-
-sounds: attack,(fire1)
-       //,impact,()
-       ,hit,(grunt2)
-       ,die,(ifrit_death)
-       ,move,(ifrit_move)
+//attack: sound{fire1}
+impact: sound{fire1}
+hit: sound{grunt2}
+death: sound{ifrit_death}
+moves: sound{ifrit_move}

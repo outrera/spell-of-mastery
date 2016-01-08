@@ -17,8 +17,5 @@ range: 0 // does it move into the cell of defeated unit
 blood: blood
 ai: unit
 item: pickup
-sounds: attack,(attack2)
-       //,impact,()
-       //,hit,()
-       //,die,()
-       ,move,(step)
+impact: sound{attack2}
+moves: sound{step}

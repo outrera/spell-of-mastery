@@ -6,9 +6,8 @@ armor: 2
 cooldown: 4
 speed: 28
 inborn: (upkeep4 organic regen)
-
-sounds: attack,(hydra_attack)
-       //,impact,()
-       ,hit,(hydra_hit)
-       ,die,(hydra_hit)
-       ,move,(step)
+attack: sound{hydra_attack}
+//impact: sound{hydra_attack}
+hit: sound{hydra_hit}
+death: sound{hydra_hit}
+moves: sound{step}

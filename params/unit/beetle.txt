@@ -5,9 +5,7 @@ damage: 1
 armor: 1
 speed: 48
 inborn: (upkeep1 organic)
-
-sounds: attack,(spider_attack)
-       //,impact,()
-       ,hit,(spider_hit)
-       ,die,(spider_death)
-       ,move,(step)
+impact: sound{spider_attack}
+hit: sound{spider_hit}
+death: sound{spider_death}
+moves: sound{step}

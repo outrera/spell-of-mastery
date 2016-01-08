@@ -3,11 +3,9 @@ tier: 3
 health: 120
 damage: 10
 armor: 0
-impact: sound{attack3}
 inborn: (upkeep3 organic)
-
-sounds: //attack,(attack3)
-       //,impact,()
-       hit,(minotaur_hit)
-       ,die,(minotaur_die)
-       ,move,(step)
+//attack: sound{attack2}
+impact: sound{attack3}
+hit: sound{minotaur_hit}
+death: sound{minotaur_die}
+moves: sound{step}

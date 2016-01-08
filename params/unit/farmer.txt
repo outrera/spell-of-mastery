@@ -4,9 +4,8 @@ health: 30
 damage: 3
 armor: 0
 inborn: (income1 organic)
-
-sounds: attack,(attack2)
-       //,impact,()
-       ,hit,(halfling_hit)
-       ,die,(halfling_die)
-       ,move,(step)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{halfling_hit}
+death: sound{halfling_die}
+moves: sound{step}

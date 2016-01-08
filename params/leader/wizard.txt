@@ -1,8 +1,5 @@
 sprite: unit_wizard
 icon: unit_wizard
-
-sounds: //attack,()
-       //,impact,()
-       hit,(grunt4)
-       ,die,(orbit)
-       ,move,(step)
+hit: sound{grunt4}
+death: sound{orbit}
+moves: sound{step}

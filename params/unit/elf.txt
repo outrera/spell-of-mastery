@@ -1,13 +1,12 @@
 sprite: unit_elf
 tier: 2
-health: 30
-damage: 6
+health: 50
+damage: 7
 armor: 0
 range: 4
 inborn: (upkeep2 organic)
-
-sounds: attack,(arrow_hit)
-       //,impact,()
-       ,hit,(grunt4)
-       ,die,(grunt_die1)
-       ,move,(step)
+//attack: sound{arrow_hit}
+impact: sound{arrow_hit}
+hit: sound{grunt4}
+death: sound{grunt_die1}
+moves: sound{step}

@@ -5,9 +5,8 @@ damage: 3
 armor: 4
 speed: 28
 inborn: (upkeep2 organic)
-
-sounds: attack,(attack2)
-       //,impact,()
-       ,hit,(dwarf_hit)
-       ,die,(dwarf_die)
-       ,move,(step)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{dwarf_hit}
+death: sound{dwarf_die}
+moves: sound{step}

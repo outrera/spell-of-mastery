@@ -4,6 +4,8 @@ tier: 2
 health: 30
 leader: 2
 inborn: (upkeep1 flyer)
+death: sound{orbit}
+moves: sound{observer_move}
 acts: (cast_hexagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
        cast_heal cast_shell
@@ -11,9 +13,3 @@ acts: (cast_hexagram cast_knowledge
        cast_paralyze cast_haste
        cast_flight
        spell_of_mastery cast_disrupt_mastery)
-
-sounds: //attack,()
-       //,impact,()
-       //,hit,(grunt2)
-       die,(orbit)
-       ,move,(wings)

@@ -4,11 +4,10 @@ health: 50
 damage: 4
 armor: 2
 speed: 28
-inborn: (upkeep1 regen)
 blood: blood_undead
-
-sounds: attack,(attack2)
-       //,impact,()
-       ,hit,(skeleton_hit)
-       ,die,(skeleton_die)
-       ,move,(step)
+inborn: (upkeep1 regen)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{skeleton_hit}
+death: sound{skeleton_die}
+moves: sound{step}

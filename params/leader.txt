@@ -15,7 +15,13 @@ passable: 0
 flyer: 0 // can it fly
 ranger: 0 // does it move into the cell of defeated unit
 leader: 1
+blood: blood
+ai: unit
+item: pickup
 inborn: (organic)
+//attack: sound{wizard_attack}
+impact: sound{attack2}
+moves: sound{step}
 acts: (pentagram cast_hexagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
        cast_heal cast_shell
@@ -23,11 +29,4 @@ acts: (pentagram cast_hexagram cast_knowledge
        cast_paralyze cast_haste
        cast_flight
        spell_of_mastery cast_disrupt_mastery)
-blood: blood
-ai: unit
-item: pickup
-sounds: attack,(attack2)
-       //,impact,()
-       //,hit,()
-       //,die,()
-       ,move,(step)
+

@@ -78,15 +78,9 @@ effect impact Impact: $world.effect{TargetXYZ Impact}
 
 effect effect Effect: $world.effect{$xyz Effect}
 
-SoundPlayedCycle = 0
-SoundPlayedTurn = 0
 effect sound Sound:
-| when SoundPlayedCycle >< $world.cycle and SoundPlayedTurn >< $world.turn:
-  | leave
 | when not $id or (not $removed and $world.human.explored{$xyz}>1):
   | $main.sound{Sound}
-  | SoundPlayedCycle <= $world.cycle
-  | SoundPlayedTurn <= $world.turn
 
 effect harm As:
 | Damage = 1
@@ -237,20 +231,30 @@ effect victory Player Reason:
 | WP.winner <= Player
 | WP.victory_type <= Reason
 
-unit.effect Effect Target TargetXYZ =
+skip_when Me Es Target XYZ =
+| while not Es.end and Es.0<>endwhen: pop Es
+| when Es.end: leave
+| $effect{Es Target XYZ}
+
+check_when Me Target C =
+| case C
+  ally | when $owner.is_enemy{Target.owner}: leave 0
+  enemy | less $owner.is_enemy{Target.owner}: leave 0
+  confirmed | less $main.dialog_result><yes: leave 0
+  harmed | less $health<>$class.hp: leave 0
+  [`.` has_health A] | less $health>>A: leave 0
+  [`.` has_mana A] | less $owner.mana>>A: leave 0
+  [`.` has Effect] | less $has{Effect}: leave 0
+  [`.` target_has Effect] | less Target.has{Effect}: leave 0
+  sinner | less Target.kills>0: leave 0
+| 1
+
+unit.effect Effect Target XYZ =
 | case Effect [on,When @Es]: Effect <= Es
 | case Effect [when,When @Es]
   | Cs = if When.is_list and not When.end and When.0<>`.` then When else [When]
-  | for C Cs: case C
-    ally | when $owner.is_enemy{Target.owner}: leave
-    enemy | less $owner.is_enemy{Target.owner}: leave
-    confirmed | less $main.dialog_result><yes: leave
-    harmed | less $health<>$class.hp: leave
-    [`.` has_health A] | less $health>>A: leave
-    [`.` has_mana A] | less $owner.mana>>A: leave
-    [`.` has Effect] | less $has{Effect}: leave
-    [`.` target_has Effect] | less Target.has{Effect}: leave
-    sinner | less Target.kills>0: leave
+  | for C Cs: less check_when Me Target C:
+    | leave: skip_when Me Es Target XYZ
   | Effect <= Es
 | case Effect [target,alive @Effect]
   | for U $world.active: when U.alive: $effect{Effect U U.xyz}
@@ -258,4 +262,4 @@ unit.effect Effect Target TargetXYZ =
 | for Name,Args Effect
   | F = Effects.Name
   | when no F: bad "no effect handler for [Name]{[Args]}"
-  | F{Me Target TargetXYZ Args}
+  | F{Me Target XYZ Args}

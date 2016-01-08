@@ -3,11 +3,9 @@ tier: 1
 health: 60
 damage: 6
 armor: 0
-impact: sound{attack2}
 inborn: (upkeep1 organic)
-
-sounds: //attack,(attack2)
-       //,impact,()
-       hit,(rat_death)
-       ,die,(rat_death)
-       ,move,(step)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{rat_death}
+death: sound{rat_death}
+moves: sound{step}

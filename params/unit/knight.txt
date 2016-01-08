@@ -5,3 +5,8 @@ damage: 6
 armor: 10
 speed: 30
 inborn: (upkeep2 organic)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{grunt4}
+death: sound{dwarf_die}
+moves: sound{step}
