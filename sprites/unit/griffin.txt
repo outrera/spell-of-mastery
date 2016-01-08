@@ -9,7 +9,7 @@ frames: folder
 anims: | idle (move1 4) (move2 4) (move3 4) (move4 4) (move5 4)
        | death (death1 6) (death2 6) (death3 24)
        | attack (attack1 6) (attack2 6) (attack3 6) (attack4 6)
-       | hit (hit1 24)
+       | hit (hit1 8)
 
 /*anims: | idle (idle0 28) (idle1 24)
        | move (move1 6) (move2 6) (move3 6) (move4 6) (move5 6)

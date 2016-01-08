@@ -1,0 +1,13 @@
+sprite: unit_gargoyle
+tier: 2
+health: 50
+damage: 10
+armor: 0
+inborn: (upkeep2 organic flyer)
+impact: sound{fire1}
+
+sounds: //attack,(fire1)
+//       ,impact,()
+       hit,(baphomet_hit)
+       ,die,(dragon_death)
+       ,move,(dragon_move)

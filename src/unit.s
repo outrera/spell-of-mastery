@@ -244,10 +244,12 @@ player_lost_leader Me Leader =
 | when Leader.owner.human: less Leaders.any{?owner.human}:
   | $world.params.winner <= 0
   | $world.params.victory_type <= 'Defeat by losing your leader.'
-| when RemainingUnits.any{?leader}: for U RemainingUnits: U.free
+| less RemainingUnits.any{?leader><1}: for U RemainingUnits: U.free
 
 respawn_leader Me XYZ =
-| when $owner.mana << 0 or got $world.block_at{XYZ}: leave 0
+| Block = $world.block_at{XYZ}
+| when got Block and $owner.is_enemy{Block.owner}: leave 0
+| when $owner.mana << 0: leave 0
 | Cost = $main.params.world.death_cost
 | !$owner.mana - Cost
 | $owner.notify{"death cost you [Cost] mana"}
@@ -354,7 +356,7 @@ unit.harm Attacker Damage =
 | when Attacker and $leader><1 and $owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}
-    | leave //roaming neutral units wont harm AI wizard
+    | leave //roaming neutral units wont harm AI leader
 | less $alive: leave
 | Piercing = 0
 | case Damage [_ piercing D]
