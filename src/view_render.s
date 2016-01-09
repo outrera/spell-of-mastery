@@ -397,7 +397,7 @@ handle_picked Me Rect Units =
   | when NewPicked.size>1:
     | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
     | !PickCount+1
-  | less NewPicked.end: $main.sound{click}
+  | less NewPicked.end: $main.sound{ui_click}
   | $picked <= [@NewPicked @Picked]
   | leave
 
