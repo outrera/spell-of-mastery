@@ -337,10 +337,11 @@ order_at Me XYZ Target =
   | push P Used
 
 order_act Me Act XYZ Target =
-| R = Act.range
-| when (XYZ-$xyz).abs>R.float: leave
-| $order.init{Act |Target or XYZ}
-
+| $order_at{XYZ}
+| $goal_act <= Act
+| when Target:
+  | $goal <= Target
+  | $goal_serial <= Target.serial
 
 handle_picked Me Rect Units =
 | $on_unit_pick{}{$picked}

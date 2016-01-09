@@ -316,13 +316,17 @@ unit.set_path Path =
 
 unit.order_at XYZ act/0 =
 | when $xyz >< XYZ:
+  | $goal_act <= Act
   | $set_path{[]}
   | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
-| when no $goal or not (Act or $owner.is_enemy{$goal.owner}):
-  | $goal <= $unit_goal
-| $goal_act <= Act
+| if no $goal
+  then | $goal <= $unit_goal
+  else | Enemy = $owner.is_enemy{$goal.owner}
+       | less Act or Enemy: $goal <= $unit_goal
+       | when Enemy: Act <= $main.params.acts.attack
+| $goal_act <= if Act then Act else $main.params.acts.move
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
 

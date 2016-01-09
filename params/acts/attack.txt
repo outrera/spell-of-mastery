@@ -1,6 +1,4 @@
 affects: unit
-before: animate{idle}
-//impact: 
-after: sound{cancel},remove{target}
-speed: 4
+range: user
 icon: spell_suicide
+repeat: 1

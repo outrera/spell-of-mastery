@@ -182,9 +182,13 @@ update_path_move Me XYZ =
       | !UpdatePathHangTrap+1
       | update_path Me
     | leave
-| Type = M.type
-| when $goal_act and Target and Target.xyz><$goal.xyz: Type <= $goal_act
-| $order.init{Type | Target or XYZ}
+| Act = if XYZ<>$goal.xyz
+        then  M.type
+        else | Target = $goal
+             | less $goal_act.repeat >< 1: $goal <= 0
+             | $goal_act
+| $order.init{Act | Target or XYZ}
+
 
 update_path Me =
 | when not $goal or $goal.serial <> $goal_serial or $goal.removed
@@ -192,10 +196,14 @@ update_path Me =
   | $goal <= 0
   | $set_path{[]}
   | leave
-| when $goal.is_unit and $goal.owner.is_enemy{$owner}:
-  | when $range and ($goal.xyz.take{2}-$xyz.take{2}).abs<<$range.float:
+| Act = $goal_act
+| R = $goal_act.range
+| when R:
+  | when R><user: R <= $range
+  | when ($goal.xyz.take{2}-$xyz.take{2}).abs.int<<R:
     | when $world.seen_from{$xyz $goal.xyz}:
-      | $order.init{attack $goal}
+      | $order.init{Act $goal}
+      | less Act.repeat><1: $goal <= 0
       | leave
 | Path = $path
 | !$path_life-1
@@ -268,10 +276,10 @@ update_action Me =
 
 attack_nearby_enemy Me =
 | O = $owner
-| SightF = $sight.float
+| SightF = $sight
 | check Dst =
   | B = $world.block_at{Dst.xyz}
-  | got B and O.is_enemy{B.owner} and ($xyz-Dst.xyz).abs<SightF
+  | got B and O.is_enemy{B.owner} and ($xyz-Dst.xyz).abs.int<SightF
 | Found = $pathfind{$sight-1 &check}
 | less Found: leave
 | $order_at{Found.1}
