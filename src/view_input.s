@@ -89,35 +89,14 @@ view.update_brush =
 
 view.update_pick = //FIXME
 
-update_lmb Me Player =
-| less $world.act:
-  //| $select_unit{$cursor}
-  | leave
-| Act = $world.act.deep_copy
-| $world.act <= 0
-| Picked = $picked
-| less Picked.size><1: leave
-| U = Picked.0
-| less U.owner.id >< Player.id: leave
-| less $world.seen{@$cursor.take{2}}: leave
-| less Act.range >< any
-  | Ms = action_list_moves{U Act}.0
-  | when no Ms.find{$cursor}: leave
-| Target = if Act.affects><land then 0
-           else $world.block_at{$cursor}^~{No 0}
-| when Act.fix_z><caster: $cursor.2 <= U.xyz.2
-| XYZ = $cursor
-| U.order.init{Act |Target or XYZ}
-
-update_rmb Me Player =
-
 view.update_play =
 | Player = $player
 | case $mice_click
-  leftup | update_lmb Me Player
-         | $mice_click <= \pick
-  right | update_rmb Me Player
-        | $mice_click <= \order
+  leftup | $mice_click <= \pick
+  right | $mice_click <= \order
+        | when $world.act:
+          | $world.act <= 0
+          | $mice_click <= 0
 | when $keys.a><1:
   | for U $picked: when U.owner.id >< Player.id and U.xyz <> $cursor:
     | when U.damage: U.order_at{$cursor act/attack}

@@ -336,10 +336,38 @@ order_at Me XYZ Target =
   | U.order_at{P}
   | push P Used
 
+order_act Me Act XYZ Target =
+| R = Act.range
+| when (XYZ-$xyz).abs>R.float: leave
+| $order.init{Act |Target or XYZ}
+
+
 handle_picked Me Rect Units =
-| get_gui{}.cursor <= $main.img{ui_cursor_point}
 | $on_unit_pick{}{$picked}
 | Units = Units.keep{?seen}
+| when $world.act:
+  | when $picked.end:
+    | $world.act <= 0
+    | leave
+  | less $mice_click><pick:
+    | get_gui{}.cursor <= $main.img{ui_cursor_target}
+    | leave
+  | $mice_click <= 0
+  | Act = $world.act
+  | Picked = $picked.skip{?empty}
+  | when Act.affects><unit and Units.end: leave
+  | $world.act <= 0
+  | U = Picked.0
+  | Target = if Units.end then 0 else Units.0
+  | XYZ = if Target then Target.xyz else $cursor
+  | when Act.affects><land:
+    | Target <= 0
+    | when Act.fix_z><caster: $cursor.2 <= U.xyz.2
+    | XYZ <= $cursor
+  | less $world.seen{@XYZ.take{2}}: leave
+  | order_act U Act XYZ Target
+  | leave
+| get_gui{}.cursor <= $main.img{ui_cursor_point}
 | less $mice_click:
   | less Units.end:
     | get_gui{}.cursor <= $main.img{ui_cursor_glass}

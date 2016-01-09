@@ -2,6 +2,6 @@ affects: ally
 before: effect{teleport},sound{summon},impact{teleport},swap{self}//,remove{self}
 after: ()
 icon: spell_swap
-range: any
+range: 9000
 lore: (2 800)
 cost: 1000

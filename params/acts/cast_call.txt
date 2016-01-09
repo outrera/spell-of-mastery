@@ -2,6 +2,6 @@ affects: ally
 before: effect{teleport},sound{summon},impact{teleport},call{self}//,remove{self}
 after: ()
 icon: spell_call
-range: any
+range: 9000
 //lore: (2 100)
 cost: 100
