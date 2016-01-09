@@ -68,7 +68,7 @@ research_act Me Unit Act =
                      'Are you sure want to spent lore on this?'}
 | O.researching <= Act.name
 | Research = $main.params.acts.research
-| Unit.order.init{target Unit @Research.list.join}
+| Unit.order.init{Research Unit}
 
 create_victory_dlg Me =
 | dlg: mtx
