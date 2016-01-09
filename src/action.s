@@ -7,7 +7,6 @@ Acts = t
 dact idle.start
 | U = $unit
 | less U.anim >< idle: U.animate{idle}
-| when $cycles >< -1: $cycles <= 4
 
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
@@ -19,7 +18,7 @@ move_start Me =
 | U.move{$xyz}
 | U.facing <= Dirs.locate{X,Y}
 | when U.anim<>move: U.animate{move}
-| when $cycles >< -1: $cycles <= U.speed
+| $cycles <= U.speed
 | $start_cycles <= $cycles
 | Effect = U.class.moves
 | when Effect: U.effect{Effect U U.xyz}
@@ -53,8 +52,6 @@ dact attack.valid
 | T = $target
 | when T.is_list or T.removed or T.empty or not T.alive: leave 0
 | 1
-
-dact attack.init | $data <= 0
 
 dact attack.start
 | U = $unit
@@ -98,7 +95,7 @@ dact swap.start
 | move_start Me
 | T = $target
 | O = T.order
-| O.init{type/move at/$fromXYZ}
+| O.init{move $fromXYZ}
 | O.priority <= 100
 | less T.has{btrack}:
   | less U.goal and U.goal.xyz >< T.xyz:
@@ -111,16 +108,29 @@ dact swap.finish | move_finish Me
 
 dact teleport.start | $unit.move{$xyz}
 
-dact custom.valid
+
+/*custom_update Me =
+| when U.anim_hit:
+  | U.anim_hit <= 0
+  | Target = $target
+  | when U.impact: U.effect{U.impact Target Target.xyz}
+  | when Target.harm{U U.damage}
+  | $cycles <= 0
+  | less U.range: Target.run_effects{?><counter U U.xyz}
+  | leave*/
+
+custom_init Me =
+custom_valid Me =
 | Affects = $affects
 | As = if Affects.is_list then Affects
        else | when Affects >< any: leave 1
             | [Affects]
+| HasTarget = $target and not $target.removed
 | for A As:
   | if A >< unit then
-     | when $target: leave 1
+     | when HasTarget: leave 1
     else if A >< ally then
-     | when $target and not $unit.owner.is_enemy{$target.owner}: leave 1
+     | when HasTarget and not $unit.owner.is_enemy{$target.owner}: leave 1
     else if A >< empty then
      | when no $unit.world.block_at{$xyz}: leave 1
     else if A >< ally_block then
@@ -129,20 +139,20 @@ dact custom.valid
     else $unit.owner.notify{"custom.valid: bad affects specifier - [A]"}
 | 0
 
-dact custom.start
+custom_start Me =
 | U = $unit
-| when $speed <> -1: $cycles <= $speed
 | U.animate{attack}
 | U.face{$xyz}
 | when $before: U.effect{$before $target $xyz}
-
-dact custom.finish
+custom_update Me =
+custom_finish Me =
 | U = $unit
 | when $after: U.effect{$after $target $xyz}
 
+
 default_init Me =
 default_valid Me = 1
-default_start Me = $cycles <= $unit.speed
+default_start Me =
 default_update Me =
 default_finish Me =
 
@@ -155,20 +165,14 @@ for Name,Act Acts
 
 type action{unit}
    type
-   name
-   affects
-   target // when action targets a unit
-   xyz/[0 0 0] // target x,y,z
+   act
    cycles // cooldown cycles remaining till the action safe-to-change state
-   start_cycles
-   priority // used to check if action can be preempted
+   priority
+   xyz/[0 0 0] // target x,y,z
+   target // when action targets a unit
    fromXYZ/[0 0 0]
    fromXY/[0 0]
-   speed
-   data // data used by action handlers
-   cost
-   before
-   after
+   start_cycles
    range
    act_init/&default_init
    act_valid/&default_valid
@@ -176,31 +180,46 @@ type action{unit}
    act_update/&default_update
    act_finish/&default_finish
 
-action.as_text = "#action{[$type] [$priority] [$target]}"
+action.main = $unit.main
 
-action.init type/idle name/0 at/0 affects/0 target/0
-            cost/0 before/0 after/0 speed/-1 range/No =
-| when Target: At <= Target.xyz
-| less At: At <= $unit.xyz
-| $xyz.init{At}
-| $affects <= Affects
-| $target <= Target
-| $range <= Range
-| $priority <= 50
-| $type <= Type
-| A = Acts.Type
-| less got A: bad "unknown action type [Type]"
-| $act_init <= A.init
-| $act_valid <= A.valid
-| $act_start <= A.start
-| $act_update <= A.update
-| $act_finish <= A.finish
-| $name <= Name
-| $cycles <= -1
-| $cost <= Cost
-| $speed <= Speed
-| $before <= Before
-| $after <= After
+action.cost = if $act then $act.cost else 0
+action.affects = $act.affects
+action.before = $act.before
+action.after = $act.after
+
+action.as_text = "#action{[$type] [$priority] [$target]}"
+action.init Act Target =
+| $type <= if Act.is_text then Act else Act.name
+| XYZ = if Target.is_list then Target
+        else if Target then Target.xyz
+        else $unit.xyz
+| $xyz.init{XYZ}
+| $target <= if Target.is_list then 0 else Target
+| A = Acts.$type
+| if got A then
+    | $act <= 0
+    | $range <= 1
+    | $cycles <= 4
+    | $priority <= 50
+    | $act_init <= A.init
+    | $act_valid <= A.valid
+    | $act_start <= A.start
+    | $act_update <= A.update
+    | $act_finish <= A.finish
+  else
+    | $act <= if Act.is_text then $main.params.acts.$type else Act
+    | less got $act:
+      | bad "unknown action type [$type]"
+      | $init{idle 0}
+      | leave
+    | $range <= $act.range
+    | $cycles <= $act.speed
+    | $priority <= $act.priority
+    | $act_init <= &custom_init
+    | $act_valid <= &custom_valid
+    | $act_start <= &custom_start
+    | $act_update <= &custom_update
+    | $act_finish <= &custom_finish
 | $act_init{}{Me}
 | Me
 
@@ -220,7 +239,7 @@ action.finish =
 action_list_moves Picked Act =
 | Me = Picked.world
 | A = action Picked
-| A.init{@Act.list.join}
+| A.init{Act 0}
 | Affects = Act.affects
 | Path = []
 | Moves = []

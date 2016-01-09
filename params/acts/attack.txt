@@ -1,0 +1,6 @@
+affects: unit
+before: animate{idle}
+//impact: 
+after: sound{cancel},remove{target}
+speed: 4
+icon: spell_suicide

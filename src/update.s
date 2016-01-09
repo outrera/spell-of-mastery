@@ -184,7 +184,7 @@ update_path_move Me XYZ =
     | leave
 | Type = M.type
 | when $goal_act and Target and Target.xyz><$goal.xyz: Type <= $goal_act
-| $order.init{type/Type at/XYZ target/Target}
+| $order.init{Type | Target or XYZ}
 
 update_path Me =
 | when not $goal or $goal.serial <> $goal_serial or $goal.removed
@@ -195,7 +195,7 @@ update_path Me =
 | when $goal.is_unit and $goal.owner.is_enemy{$owner}:
   | when $range and ($goal.xyz.take{2}-$xyz.take{2}).abs<<$range.float:
     | when $world.seen_from{$xyz $goal.xyz}:
-      | $order.init{type/attack at/$goal.xyz target/$goal}
+      | $order.init{attack $goal}
       | leave
 | Path = $path
 | !$path_life-1
@@ -242,7 +242,7 @@ update_next_action Me =
     else if not $next_action.valid
       then $owner.notify{'Cant perform action.'}
     else
-  | $next_action.init{type/idle at/$xyz}
+  | $next_action.init{idle $xyz}
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0

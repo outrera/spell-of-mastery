@@ -65,7 +65,7 @@ effect gain @Args:
   | set_act_enabled $main 1 Player.id ActName
   | Player.research_item{ActName}
 
-effect cool Time: $add_effect{cool Time [inborn [cool [$action.name Time]]]}
+effect cool Time: $add_effect{cool Time [inborn [cool [$action.type Time]]]}
 
 effect explore Player State: $world.explore{State}
 
@@ -204,7 +204,7 @@ effect caster Who:
 | Leader.animate{attack}
 | Leader.face{TargetXYZ}
 
-effect teleport Arg: $forced_order{type/teleport at/TargetXYZ}
+effect teleport Arg: $forced_order{teleport TargetXYZ}
 
 effect research Arg:
 | O = Target.owner

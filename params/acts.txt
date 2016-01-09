@@ -1,8 +1,8 @@
-type: custom
 lore: (0 0)
 cost: 0
+priority: 50
 range: 0
+speed: 4
 before: ()
 after: ()
-latency: 1
 needs: ()

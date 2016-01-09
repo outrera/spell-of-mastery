@@ -103,11 +103,11 @@ update_lmb Me Player =
 | less Act.range >< any
   | Ms = action_list_moves{U Act}.0
   | when no Ms.find{$cursor}: leave
-| Act.target <= if Act.affects><land then 0
-                else $world.block_at{$cursor}^~{No 0}
+| Target = if Act.affects><land then 0
+           else $world.block_at{$cursor}^~{No 0}
 | when Act.fix_z><caster: $cursor.2 <= U.xyz.2
-| Act.at <= $cursor
-| U.order.init{@Act.list.join}
+| XYZ = $cursor
+| U.order.init{Act |Target or XYZ}
 
 update_rmb Me Player =
 

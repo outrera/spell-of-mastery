@@ -422,7 +422,7 @@ create_act_icons Me =
       | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
     else | if Act.range >< 0
            then when O.id >< $player.id:
-                | PickedUnit.order.init{target PickedUnit @Act.list.join}
+                | PickedUnit.order.init{Act PickedUnit}
            else $world.act <= Act
 | map I MaxActIcons: hidden: icon 0 click/&actClick
 

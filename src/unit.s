@@ -296,16 +296,16 @@ unit.order_act Act target/0 =
 | $order.init{target Target @Act.list.join}
 
 // order taking over any other order
-unit.forced_order @As =
-| O = $order.init{@As}
+unit.forced_order Act Target =
+| O = $order.init{Act Target}
 | O.priority <= 1000
-| O.speed <= 0
+| O.cycles <= 0
 | O
 
 unit.die =
 | Effect = $class.death
 | when Effect: $effect{Effect Me $xyz}
-| $forced_order{type/die}
+| $forced_order{die 0}
 | $cooldown <= 0
 
 unit.set_path Path =
@@ -343,10 +343,10 @@ retaliate Me Enemy =
 | less $range:
   | when (Enemy.xyz-Me.xyz){?abs}.sum><1:
     | when $goal and ($goal.xyz-Me.xyz){?abs}.sum><1: leave
-    | $order.init{type/attack at/Enemy.xyz target/Enemy}
+    | $order.init{attack Enemy}
     | leave
 | when $range and in_range Me Enemy.xyz:
-  | $order.init{type/attack at/Enemy.xyz target/Enemy}
+  | $order.init{attack Enemy}
   | leave
 
 heal_unit Me Amount =
