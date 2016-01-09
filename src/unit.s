@@ -293,7 +293,7 @@ unit.order = $ordered
 
 unit.order_act Act target/0 =
 | less Target: Target <= Me
-| $order.init{target Target @Act.list.join}
+| $order.init{Act Target}
 
 // order taking over any other order
 unit.forced_order Act Target =
