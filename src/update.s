@@ -122,6 +122,13 @@ update_units Me =
 
 world.update =
 | $main.music{playlist_advance}
+| when $blink.0>0 and not $cycle%12:
+  | !$blink.0-1
+  | when $blink.1: not !$blink.1.picked
+  | less $blink.0:
+    | $blink.1.picked <= 0
+    | $blink.1<=0
+    | for U $human.picked: U.picked <= 1
 | for Player $players: when Player.total_units: Player.update
 | when EventActions.end: $process_events
 | when update_events Me: leave

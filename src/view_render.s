@@ -346,15 +346,17 @@ order_act Me Act XYZ Target =
 handle_picked Me Rect Units =
 | $on_unit_pick{}{$picked}
 | Units = Units.keep{?seen}
-| when $world.act:
+| Act = $world.act
+| when Act:
   | when $picked.end:
     | $world.act <= 0
     | leave
   | less $mice_click><pick:
-    | get_gui{}.cursor <= $main.img{ui_cursor_target}
+    | when Act.affects><unit:
+      | Cur = if Units.end then \ui_cursor_target else \ui_cursor_target2
+      | get_gui{}.cursor <= $main.img{Cur}
     | leave
   | $mice_click <= 0
-  | Act = $world.act
   | Picked = $picked.skip{?empty}
   | when Act.affects><unit and Units.end: leave
   | $world.act <= 0
@@ -366,6 +368,7 @@ handle_picked Me Rect Units =
     | when Act.fix_z><caster: $cursor.2 <= U.xyz.2
     | XYZ <= $cursor
   | less $world.seen{@XYZ.take{2}}: leave
+  | when Target: $world.blink.init{[4 Target]}
   | order_act U Act XYZ Target
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
@@ -377,12 +380,11 @@ handle_picked Me Rect Units =
 | when $mice_click >< left: leave
 | when $mice_click >< order:
   | $mice_click <= 0
-  | when $world.act:
-    | $world.act <= 0 //cancel targeting
-    | leave
   | XYZ = $cursor
   | if Units.end then order_at Me $cursor 0
-    else order_at Me Units.0.xyz Units.0
+    else | U = Units.0
+         | $world.blink.init{[4 U]}
+         | order_at Me U.xyz U
   | leave
 | when $mice_click >< pick:
   | $mice_click <= 0
@@ -395,6 +397,7 @@ handle_picked Me Rect Units =
   | when NewPicked.size>1:
     | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
     | !PickCount+1
+  | less NewPicked.end: $main.sound{click}
   | $picked <= [@NewPicked @Picked]
   | leave
 

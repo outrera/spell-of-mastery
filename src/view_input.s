@@ -140,7 +140,8 @@ world.update_cursor CXYZ Brush Mirror =
 | Marks = $marks^uncons{mark}.flip
 | P = $human
 | if $act
-  then | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
+  then | when $act.affects<>unit:
+         | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
   else when $view.mode<>play:
        | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
        | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks

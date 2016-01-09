@@ -56,6 +56,7 @@ type world{main}
    notes
    mode/brush
    sound_cycles/(t) //used to avoid playing similar sounds at once
+    blink/[0 0]
 | $init
 
 world.second = $cycle/24
@@ -128,6 +129,7 @@ world.clear =
 | for U $active.list: U.active <= 0
 | $active.clear
 | for [K V] $sound_cycles: $sound_cycles.K <= 0
+| $blink.init{[0 0]}
 
 world.notify Text =
 | Clock = clock
