@@ -1,0 +1,5 @@
+author: `Battle for Mandicor team`
+license: `GPL2`
+origin: `https://sourceforge.net/projects/battle4mandicor/`
+
+//fire-rain1.wav from Battle for Mandicor

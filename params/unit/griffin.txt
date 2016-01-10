@@ -8,4 +8,4 @@ inborn: (upkeep3 organic flyer)
 impact: sound{attack2}
 hit: sound{griffin_hit}
 death: sound{griffin_die}
-moves: sound{wings}
+moves: sound{griffin_move}
