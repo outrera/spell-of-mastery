@@ -1,8 +1,6 @@
-author: `Marc Russell`
-copyright: `Marc Russell`
+author: `Felix Maiwald (http://felixmaiwald.com felix-maiwald@web.de)`
 license: `CC-BY-SA`
-origin: `www.spicypixel.net`
-frames: 64*64
-anims: | idle time-3
-               0  1  2  3  4  5  6  7  8  9 
-              10 11 12 13 14 15 16 17 18
+origin: `http://opengameart.org/content/romans-vs-barbarians-2d-strategy-game-graphics-pack`
+xy: 4,30
+frames: folder
+anims: | idle (idle0 6) (idle1 5) (idle2 4) (idle3 3) (idle4 3) (idle5 3)
