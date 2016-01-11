@@ -404,8 +404,6 @@ unit.move XYZ =
 | $world.place_unit{Me}
 | when $passable and $block:
   | $world.set{@$xyz $block}
-  | XY = $xyz.take{2}
-  | $world.update_move_map{XY}
 | $environment_updated
 | $move_in{1}
 | Me

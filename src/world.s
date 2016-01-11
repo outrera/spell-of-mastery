@@ -103,7 +103,6 @@ world.create W H =
 | Filler = $main.tiles.base_
 | for Y $h: when Y: for X $w: when X: $push_{X Y Filler}
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X,Y}
-| for Y $h: when Y: for X $w: when X: $update_move_map_{X,Y}
 | !$w-1
 | !$h-1
 | $create_borders
@@ -195,56 +194,14 @@ world.clear_tile_ XYZ Filler =
 world.clear_tile XYZ Filler =
 | $clear_tile_{XYZ Filler}
 | XY = XYZ.take{2}
-| $update_move_map{XY}
-
-can_move Me SX SY SZ DX DY DZ =
-| H = DZ-SZ
-| if H < 0
-  then | when H < -4: leave 0
-       | $at{DX DY DZ-1}.type <> water
-  else | H<<4
-
-MoveMapZs = [-4 -3 -2 -1 0 1 2 3 4]
-MoveMapXYs = [[1 0] [-1 0] [0 1] [0 -1]]
-MoveMapXYZs = @join: map Z MoveMapZs: map X,Y MoveMapXYs: [X Y Z]
-
-MoveMapDirMap =
-| T = dup 4: dup 4: dup 10: 0
-| I = 0
-| for X,Y,Z MoveMapXYZs:
-  | T.(X+1).(Y+1).(Z+4) <= I
-  | !I+1
-| T
-
-world.update_move_map_ P =
-| SX,SY = P
-| when SX < 1 or SY < 1: leave
-| times SZ $height{SX SY}
-  | SZ = SZ+1
-  | M = 0
-  | when $at{SX SY SZ}.empty: for X,Y,Z MoveMapXYZs:
-    | DX = SX+X
-    | DY = SY+Y
-    | DZ = SZ+Z
-    | Empty = DZ > 0 and $at{DX DY DZ}.empty
-    | when Empty and can_move{Me SX SY SZ DX DY DZ}:
-      | F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
-      | M <= M ++ (1</F)
-  | $move_map.set{SX SY SZ M}
-
-world.update_move_map XY =
-| $update_move_map_{XY}
-| for D Dirs: $update_move_map_{XY+D}
 
 unit.can_move Src Dst =
 | DX,DY,DZ = Dst
 | when $flyer: leave $world.at{DX DY DZ}.empty // FIXME: check for roof
-| M = $world.move_map.at{Src.0 Src.1 Src.2}
-| X,Y,Z = Dst-Src
+| SZ = Src.2
+| Z = DZ-SZ
 | when Z.abs > 4: leave 0
-| F = MoveMapDirMap.(X+1).(Y+1).(Z+4) 
-| M^^(1</F)
-
+| $world.at{DX DY DZ-1}.type <> water
 
 world.clear_passage X Y Z =
 | HH = $fix_z{X,Y,Z}
@@ -269,7 +226,6 @@ world.clear_passage X Y Z =
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y
-| $update_move_map{XY}
 
 
 // FIXME: remove overlapping tiles above setted tile
@@ -489,7 +445,6 @@ world.updPilarGfxes P =
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
-| $update_move_map_{P}
 
 world.height X Y = $tilemap.height{X Y}
 

@@ -64,7 +64,6 @@ world.load Saved =
 | $create_borders
 | for P points{1 1 $w+1 $h+1}: $updPilarGfxes{P}
 //| StartTime = clock
-| for P points{1 1 $w+1 $h+1}: $update_move_map_{P}
 //| say "world.load: update_move_map_ took [clock{}-StartTime]"
 | $cycle <= Saved.cycle
 | IdMap = t
