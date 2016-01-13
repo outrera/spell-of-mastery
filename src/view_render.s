@@ -70,9 +70,6 @@ draw_bounding_box_back Color FB B =
 unit.size = if $height then [37 37 70] else [37 37 0]
 
 blit_item_from_unit Me =
-| when $host and $host.serial >< $host_serial:
-  | $xyz.init{$host.xyz}
-  | $xy.init{$host.xy}
 | X,Y,Z = $xyz
 | !X*32
 | !Y*32

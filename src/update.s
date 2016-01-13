@@ -296,6 +296,11 @@ unit.update =
 | when $removed or $active<>1:
   | $active <= 0
   | leave
+| when $host:
+  | if $host.serial >< $host_serial
+    then | when $xyz<>$host.xyz: $move{$host.xyz}
+         | $xy.init{$host.xy}
+    else $host.dies 
 | update_anim Me
 | when $idle:
   | less $empty:

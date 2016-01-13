@@ -1,7 +1,8 @@
 affects: unit
-before: harm{30},impact{fire_ring},sound{fire1}//,cooldown{5}
 icon: spell_fireball
 range: 3
 //lore: misc.tier1_lcost
 //cost: 100
 //cool: 24
+before: child{effect_poison ((poison 0 ()) (ttl 7000 ()))}
+//before: harm{30},impact{fire_ring},sound{fire1}//,cooldown{5}

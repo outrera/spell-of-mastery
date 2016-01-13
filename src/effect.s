@@ -198,6 +198,15 @@ effect summon What:
 | S.delta <= -50
 | S.move{TargetXYZ}
 
+effect child What Effects:
+| S = $owner.alloc_unit{What}
+| S.alpha <= 255
+| S.delta <= -50
+| S.move{TargetXYZ}
+| S.host <= Target
+| S.host_serial <= Target.serial
+| for Name,Duration,Params Effects: S.add_effect{Name Duration Params}
+
 effect caster Who:
 | Leader = $owner.leader
 | less Who >< leader and Leader: leave
@@ -231,35 +240,41 @@ effect victory Player Reason:
 | WP.winner <= Player
 | WP.victory_type <= Reason
 
-skip_when Me Es Target XYZ =
-| while not Es.end and Es.0<>endwhen: pop Es
-| when Es.end: leave
-| $effect{Es Target XYZ}
-
 check_when Me Target C =
 | case C
   ally | when $owner.is_enemy{Target.owner}: leave 0
   enemy | less $owner.is_enemy{Target.owner}: leave 0
   confirmed | less $main.dialog_result><yes: leave 0
   harmed | less $health<>$class.hp: leave 0
-  [`.` has_health A] | less $health>>A: leave 0
+  [`.` has_health A] | less Target.health>>A: leave 0
   [`.` has_mana A] | less $owner.mana>>A: leave 0
   [`.` has Effect] | less $has{Effect}: leave 0
-  [`.` target_has Effect] | less Target.has{Effect}: leave 0
+  [`.` hasnt Effect] | less $has{Effect}: leave 0
   sinner | less Target.kills>0: leave 0
 | 1
 
 unit.effect Effect Target XYZ =
 | case Effect [on,When @Es]: Effect <= Es
-| case Effect [when,When @Es]
-  | Cs = if When.is_list and not When.end and When.0<>`.` then When else [When]
-  | for C Cs: less check_when Me Target C:
-    | leave: skip_when Me Es Target XYZ
-  | Effect <= Es
-| case Effect [target,alive @Effect]
-  | for U $world.active: when U.alive: $effect{Effect U U.xyz}
-  | leave
-| for Name,Args Effect
+| T = Target
+| Es = Effect.list
+| till Es.end
+  | E = pop Es
+  | less E.is_list: E <= [E []]
+  | Name,Args = E
   | F = Effects.Name
-  | when no F: bad "no effect handler for [Name]{[Args]}"
-  | F{Me Target XYZ Args}
+  | if got F then F{Me T XYZ Args}
+    else if Name >< when then
+      | When = Args
+      | Cs = if When.is_list and not When.end and When.0<>`.`
+             then When
+             else [When]
+      | less Cs.all{C => check_when Me T C}:
+        | while not Es.end and Es.0<>endwhen: pop Es
+    else if Name >< target then T <= Target
+    else if Name >< host then T <= $host
+    else if Name >< self then T <= Me
+    else if Name >< all_alive then
+      | for U $world.active: when U.alive: $effect{Es U U.xyz}
+      | leave
+    else if Name >< endwhen then
+    else bad "no effect handler for [Name]{[Args]} of [Me]"
