@@ -245,11 +245,19 @@ check_when Me Target C =
   ally | when $owner.is_enemy{Target.owner}: leave 0
   enemy | less $owner.is_enemy{Target.owner}: leave 0
   confirmed | less $main.dialog_result><yes: leave 0
-  harmed | less $health<>$class.hp: leave 0
+  harmed | less Target.health<>Target.class.hp: leave 0
   [`.` has_health A] | less Target.health>>A: leave 0
   [`.` has_mana A] | less $owner.mana>>A: leave 0
-  [`.` has Effect] | less $has{Effect}: leave 0
-  [`.` hasnt Effect] | less $has{Effect}: leave 0
+  [`.` has Effect] | less Target.has{Effect}: leave 0
+  [`.` hasnt Effect] | less Target.has{Effect}: leave 0
+  [`.` got_child Type]
+    | Us = $world.units_at{Target.xyz}
+    | less Us.any{(?type><Type and ?host and ?host.serial><Target.serial)}:
+      | leave 0
+  [`.` no_child Type]
+    | Us = $world.units_at{Target.xyz}
+    | when Us.any{(?type><Type and ?host and ?host.serial><Target.serial)}:
+      | leave 0
   sinner | less Target.kills>0: leave 0
 | 1
 

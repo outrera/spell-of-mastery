@@ -326,7 +326,9 @@ unit.order_at XYZ act/0 =
   else | Enemy = $owner.is_enemy{$goal.owner}
        | less Act or Enemy: $goal <= $unit_goal
        | when Enemy: Act <= $main.params.acts.attack
-| $goal_act <= if Act then Act else $main.params.acts.move
+| $goal_act <= if Act.is_text then $main.params.acts.Act
+               else if Act then Act
+               else $main.params.acts.move
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
 

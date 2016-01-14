@@ -50,6 +50,7 @@ dact move.finish | move_finish Me
 
 dact attack.valid
 | T = $target
+| less T: leave 0
 | when T.is_list or T.removed or T.empty or not T.alive: leave 0
 | 1
 
