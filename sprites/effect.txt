@@ -1,5 +1,5 @@
 class: empty,1
       ,box_xy,(2 2)
-      ,starts,still
+      ,active,1
       ,height,4
       ,passable,0

@@ -193,7 +193,7 @@ effect clear_passage What:
 
 effect spawn What:
 | S = $owner.alloc_unit{What}
-| S.spawned <= 1
+| S.nonguard <= 1
 | S.alpha <= 255
 | S.delta <= -50
 | S.move{TargetXYZ}

@@ -4,7 +4,7 @@ ClassIdCounter = 1
 
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 shadow/0 speed/0 sight/No
-           starts/0 range/0 leader/0
+           active/0 range/0 leader/0
            health/0 damage/0 armor/0 cooldown/24
            acts/[] icon/0 title/0 item/0
            ai/0 show/1 height/0
@@ -24,7 +24,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   shadow/Shadow // unit casts shadow in air
   speed/Speed // number of turns it has to wait, before moving again
   sight/Sight
-  starts/Starts // non-zero if unit starts active
+  active/Active // non-zero if unit should be updated
   range/Range
   leader/Leader
   hp/Health
@@ -48,7 +48,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   hit/Hit
   death/Death
   moves/Moves
-| when $starts:
+| when $active:
   | $id <= ClassIdCounter
   | !ClassIdCounter+1
 | less $empty

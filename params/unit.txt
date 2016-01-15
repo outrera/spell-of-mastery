@@ -1,6 +1,6 @@
 unit: 1
 entity: 1
-starts: still // initial animation
+active: 1
 tier: 1
 draw_order: 4
 height: 8

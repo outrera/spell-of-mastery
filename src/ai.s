@@ -158,14 +158,14 @@ ai.update_units Units =
   | less Handled:
     | when U.id >< LeaderID: update_leader U
     | when U.id >< PentID: ai_update_build Me
-    //| when U.spawned: roam U radius/4
+    //| when U.nonguard: roam U radius/4
 | leave 0
 
 ai.harm Attacker Victim =
 
 ai.group_attack Types =
 | Units = $player.units
-| UTs = Units.keep{U => not U.attacker and U.spawned}.div{?type}
+| UTs = Units.keep{U => not U.attacker and U.nonguard}.div{?type}
 | As = []
 | Missing = []
 | for T Types:

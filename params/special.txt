@@ -1,5 +1,5 @@
 entity: 1
 empty: 1
 height: 0
-starts: still // initial animation
+active: 1
 box_xy: (-1 -1)
