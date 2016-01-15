@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_spider}
+proto: spawn__proto
+after: spawn{unit_spider}
 icon: unit_spider
 lore: misc.tier3_lcost
 cost: misc.tier3_scost

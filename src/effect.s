@@ -191,9 +191,9 @@ effect clear_passage What:
   Else | bad "effect clear: invalid target ([What])"
 | $world.clear_passage{X Y Z}
 
-effect summon What:
+effect spawn What:
 | S = $owner.alloc_unit{What}
-| S.summoned <= 1
+| S.spawned <= 1
 | S.alpha <= 255
 | S.delta <= -50
 | S.move{TargetXYZ}

@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_bat}
+proto: spawn__proto
+after: spawn{unit_bat}
 icon: unit_bat
 lore: misc.tier1_lcost
 cost: misc.tier1_scost

@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_observer}
+proto: spawn__proto
+after: spawn{unit_observer}
 icon: unit_observer
 lore: misc.tier4_lcost
 cost: misc.tier4_scost

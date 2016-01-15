@@ -1,5 +1,5 @@
 affects: ally_block,empty
-before: misc.summon
+before: misc.spawn
 after: ()
 icon: unit_baphomet
 speed: -1

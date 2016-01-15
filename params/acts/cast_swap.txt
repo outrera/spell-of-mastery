@@ -1,5 +1,5 @@
 affects: ally
-before: effect{teleport},sound{summon},impact{teleport},swap{self}//,remove{self}
+before: effect{teleport},sound{spawn},impact{teleport},swap{self}//,remove{self}
 after: ()
 icon: spell_swap
 range: 9000

@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_ifrit}
+proto: spawn__proto
+after: spawn{unit_ifrit}
 icon: unit_ifrit
 lore: misc.tier3_lcost
 cost: misc.tier3_scost

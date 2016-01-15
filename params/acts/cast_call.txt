@@ -1,5 +1,5 @@
 affects: ally
-before: effect{teleport},sound{summon},impact{teleport},call{self}//,remove{self}
+before: effect{teleport},sound{spawn},impact{teleport},call{self}//,remove{self}
 after: ()
 icon: spell_call
 range: 9000

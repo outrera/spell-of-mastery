@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_vampire}
+proto: spawn__proto
+after: spawn{unit_vampire}
 icon: unit_vampire
 lore: misc.tier3_lcost
 cost: misc.tier3_scost

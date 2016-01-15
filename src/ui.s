@@ -378,7 +378,7 @@ ui_on_view_unit_pick Me Units =
   | Preqs = Act.needs.all{N=>Player.research_remain{Acts.N}<<0}
   | when Preqs:
     | Active = 1
-    | when Act.act >< summon and not Unit.owner.pentagram:
+    | when Act.act >< spawn and not Unit.owner.pentagram:
       | Active <= 0
     | Icon = ActIcons.I.widget
     | ResearchRemain = Player.research_remain{Act}

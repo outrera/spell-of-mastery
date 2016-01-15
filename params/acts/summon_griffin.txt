@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_griffin}
+proto: spawn__proto
+after: spawn{unit_griffin}
 icon: unit_griffin
 lore: misc.tier3_lcost
 cost: misc.tier3_scost

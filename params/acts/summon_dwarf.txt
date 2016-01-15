@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_dwarf}
+proto: spawn__proto
+after: spawn{unit_dwarf}
 icon: unit_dwarf
 lore: misc.tier2_lcost
 cost: misc.tier2_scost

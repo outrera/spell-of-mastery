@@ -1,5 +1,5 @@
 affects: land
-before: sound{summon}
+before: sound{spawn}
 after: impact{explosion3},clear_passage{target},sound{stone_hit}
 icon: spell_excavate
 range: 1

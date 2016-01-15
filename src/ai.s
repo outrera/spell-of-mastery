@@ -62,13 +62,13 @@ ai.update_research =
 | P = $player
 | Pentagram = P.pentagram
 | less Pentagram: leave 0
-| Summons = Pentagram.acts.keep{?after_table.summon^got}
-| less Summons.size: leave 0
+| Spawns = Pentagram.acts.keep{?after_table.spawn^got}
+| less Spawns.size: leave 0
 | Missing = PerCycle.missing
 | less got Missing: leave
 | for Type Missing:
-  | S = Summons.find{?after_table.summon >< Type}
-  | less got S: $world.notify{"AI: missing summon `[Type]`"}
+  | S = Spawns.find{?after_table.spawn >< Type}
+  | less got S: $world.notify{"AI: missing spawn `[Type]`"}
   | when got S and P.research_remain{S} > 0:
     | when S.lore.0<<P.lore and S.lore.1 << P.mana:
       | !P.lore-S.lore.0
@@ -80,12 +80,12 @@ ai.update_research =
 ai_update_build Me =
 | Pentagram = $player.pentagram
 | less Pentagram: leave 0
-| Summons = Pentagram.acts.keep{?after_table.summon^got}
-| less Summons.size: leave 0
+| Spawns = Pentagram.acts.keep{?after_table.spanw^got}
+| less Spawns.size: leave 0
 | Missing = PerCycle.missing
 | less got Missing: leave
 | for Type Missing:
-  | S = Summons.find{?after_table.summon >< Type}
+  | S = Spawns.find{?after_table.spawn >< Type}
   | when got S and Pentagram.can_do{S}:
     | Pentagram.order_act{S}
     | leave 1
@@ -158,14 +158,14 @@ ai.update_units Units =
   | less Handled:
     | when U.id >< LeaderID: update_leader U
     | when U.id >< PentID: ai_update_build Me
-    //| when U.summoned: roam U radius/4
+    //| when U.spawned: roam U radius/4
 | leave 0
 
 ai.harm Attacker Victim =
 
 ai.group_attack Types =
 | Units = $player.units
-| UTs = Units.keep{U => not U.attacker and U.summoned}.div{?type}
+| UTs = Units.keep{U => not U.attacker and U.spawned}.div{?type}
 | As = []
 | Missing = []
 | for T Types:

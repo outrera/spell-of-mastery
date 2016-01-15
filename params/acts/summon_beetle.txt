@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_beetle}
+proto: spawn__proto
+after: spawn{unit_beetle}
 icon: unit_beetle
 lore: misc.tier1_lcost
 cost: misc.tier1_scost

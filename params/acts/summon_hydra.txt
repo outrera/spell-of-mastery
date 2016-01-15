@@ -1,5 +1,5 @@
-proto: summon__proto
-after: summon{unit_hydra}
+proto: spawn__proto
+after: spawn{unit_hydra}
 icon: unit_hydra
 lore: misc.tier4_lcost
 cost: misc.tier4_scost

@@ -1,5 +1,5 @@
 affects: any
-before: misc.summon
+before: misc.spawn
 after: set{all spell_of_mastery No}
 icon: spell_disrupt_mastery
 lore: misc.tier2_lcost

@@ -1,5 +1,5 @@
 affects: any
-before: misc.summon
+before: misc.spawn
 after: set{owner spell_of_mastery 10}
 icon: spell_of_mastery
 lore: misc.tier4_lcost

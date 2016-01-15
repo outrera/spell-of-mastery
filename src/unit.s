@@ -66,8 +66,8 @@ unit.`!attacker` State = $flags <= $flags^set_bit{0 State}
 unit.picked = $flags^get_bit{1}
 unit.`!picked` State = $flags <= $flags^set_bit{1 State}
 
-unit.summoned = $flags^get_bit{2}
-unit.`!summoned` State = $flags <= $flags^set_bit{2 State}
+unit.spawned = $flags^get_bit{2}
+unit.`!spawned` State = $flags <= $flags^set_bit{2 State}
 
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
@@ -254,7 +254,7 @@ respawn_leader Me XYZ =
 | !$owner.mana - Cost
 | $owner.notify{"death cost you [Cost] mana"}
 | S = $owner.alloc_unit{$type}
-| S.summoned <= 0
+| S.spawned <= 0
 | S.alpha <= 255
 | S.delta <= -25
 | S.move{XYZ}
