@@ -48,32 +48,6 @@ dact move.start
 dact move.update | move_update Me
 dact move.finish | move_finish Me
 
-dact attack.valid
-| T = $target
-| less T: leave 0
-| when T.is_list or T.removed or T.empty or not T.alive: leave 0
-| 1
-
-dact attack.start
-| U = $unit
-| U.face{$target.xyz}
-| $cycles <= max 1 U.sprite.anim_speed{attack}
-| U.animate{attack}
-| Effect = U.class.attack
-| when Effect: U.effect{Effect U U.xyz}
-dact attack.update
-| U = $unit
-| when U.anim_hit:
-  | U.anim_hit <= 0
-  | Target = $target
-  | when U.impact: U.effect{U.impact Target Target.xyz}
-  | when Target.harm{U U.damage}
-  | $cycles <= 0
-  | less U.range: Target.run_effects{?><counter U U.xyz}
-  | leave
-
-dact attack.finish | move_finish Me
-
 dact die.start
 | U = $unit
 | U.animate{death}
@@ -109,29 +83,19 @@ dact swap.finish | move_finish Me
 
 dact teleport.start | $unit.move{$xyz}
 
-
-/*custom_update Me =
-| when U.anim_hit:
-  | U.anim_hit <= 0
-  | Target = $target
-  | when U.impact: U.effect{U.impact Target Target.xyz}
-  | when Target.harm{U U.damage}
-  | $cycles <= 0
-  | less U.range: Target.run_effects{?><counter U U.xyz}
-  | leave*/
-
 custom_init Me =
 custom_valid Me =
 | Affects = $affects
 | As = if Affects.is_list then Affects
        else | when Affects >< any: leave 1
             | [Affects]
-| HasTarget = $target and not $target.removed
+| T = $target
+| HasTarget = T and not T.removed
 | for A As:
   | if A >< unit then
-     | when HasTarget: leave 1
+     | when HasTarget: leave: not T.empty
     else if A >< ally then
-     | when HasTarget and not $unit.owner.is_enemy{$target.owner}: leave 1
+     | when HasTarget and not $unit.owner.is_enemy{T.owner}: leave 1
     else if A >< empty then
      | when no $unit.world.block_at{$xyz}: leave 1
     else if A >< ally_block then
@@ -146,6 +110,13 @@ custom_start Me =
 | U.face{$xyz}
 | when $before: U.effect{$before $target $xyz}
 custom_update Me =
+| U = $unit
+| when U.anim_hit:
+  | U.anim_hit <= 0
+  | Target = $target
+  | when $impact: U.effect{$impact Target Target.xyz}
+  | when $type><attack: less U.range: Target.run_effects{?><counter U U.xyz}
+  | leave
 custom_finish Me =
 | U = $unit
 | when $after: U.effect{$after $target $xyz}
@@ -186,6 +157,7 @@ action.main = $unit.main
 action.cost = if $act then $act.cost else 0
 action.affects = $act.affects
 action.before = $act.before
+action.impact = $act.impact
 action.after = $act.after
 
 action.as_text = "#action{[$type] [$priority] [$target]}"

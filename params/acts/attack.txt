@@ -1,4 +1,5 @@
 affects: unit
+impact: harm{user},user_impact
 range: user
 icon: spell_suicide
 repeat: 1

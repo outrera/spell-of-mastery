@@ -89,6 +89,7 @@ effect harm As:
   [D W] | Damage <= D
         | Whom <= W
   D | Damage <= D
+| when Damage><user: Damage <= Me.damage
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
@@ -278,11 +279,12 @@ unit.effect Effect Target XYZ =
              else [When]
       | less Cs.all{C => check_when Me T C}:
         | while not Es.end and Es.0<>endwhen: pop Es
+    else if Name >< endwhen then
+    else if Name >< user_impact then $effect{$impact T T.xyz}
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me
     else if Name >< all_alive then
       | for U $world.active: when U.alive: $effect{Es U U.xyz}
       | leave
-    else if Name >< endwhen then
     else bad "no effect handler for [Name]{[Args]} of [Me]"
