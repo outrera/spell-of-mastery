@@ -93,6 +93,9 @@ effect harm As:
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
+effect counter Arg:
+| less $range: Target.run_effects{?><counter Me Me.xyz}
+
 effect lifedrain Amount:
 | when Target and Target.has{organic}: Me.harm{Me -Amount}
 

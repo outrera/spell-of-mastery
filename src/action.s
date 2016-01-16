@@ -115,7 +115,6 @@ custom_update Me =
   | U.anim_hit <= 0
   | Target = $target
   | when $impact: U.effect{$impact Target Target.xyz}
-  | when $type><attack: less U.range: Target.run_effects{?><counter U U.xyz}
   | leave
 custom_finish Me =
 | U = $unit
