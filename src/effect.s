@@ -284,6 +284,11 @@ unit.effect Effect Target XYZ =
         | while not Es.end and Es.0<>endwhen: pop Es
     else if Name >< endwhen then
     else if Name >< user_impact then $effect{$impact T T.xyz}
+    else if Name >< missile then
+      | S = $owner.alloc_unit{Args}
+      | S.move{$xyz}
+      | S.add_effect{missile 0 [payload Es]}
+      | S.order.init{missile |Target or XYZ}
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me

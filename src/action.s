@@ -1,5 +1,5 @@
 // unit controlling related stuff
-use action_ util
+use action_
 
 Acts = t
 
@@ -47,6 +47,34 @@ dact move.start
 
 dact move.update | move_update Me
 dact move.finish | move_finish Me
+
+
+dact missile.start
+| U = $unit
+| X,Y,Z = $xyz - U.xyz
+| $fromXY.init{U.xy}
+| $fromXYZ.init{U.xyz}
+| U.move{$xyz}
+| U.facing <= Dirs.locate{X,Y}
+| when U.anim<>move: U.animate{move}
+| $cycles <= U.speed
+| $start_cycles <= $cycles
+| Effect = U.class.moves
+
+/*dact missile.update
+| U = $unit
+| X,Y,Z = $fromXYZ-U.xyz
+| XUnit = U.world.xunit
+| YUnit = U.world.yunit
+| when not (X and Y)
+  | !XUnit/2
+  | !YUnit/2
+| X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
+| U.xy.init{$fromXY + [X*XUnit Y*YUnit]*$cycles/$start_cycles}*/
+
+
+//dact missile.finish | move_finish Me
+
 
 dact die.start
 | U = $unit
@@ -151,6 +179,8 @@ type action{unit}
    act_update/&default_update
    act_finish/&default_finish
 
+world.action Unit = action Unit
+
 action.main = $unit.main
 
 action.cost = if $act then $act.cost else 0
@@ -207,33 +237,3 @@ action.update =
 
 action.finish =
 | $act_finish{}{Me}
-
-action_list_moves Picked Act =
-| Me = Picked.world
-| A = action Picked
-| A.init{Act 0}
-| Affects = Act.affects
-| Path = []
-| Moves = []
-| R = Act.range
-| less got R: leave Moves
-| PXYZ = Picked.xyz
-| Points = points_in_circle R
-| for X,Y Points
-  | XYZ = PXYZ+[X Y 0]
-  | X = XYZ.0
-  | Y = XYZ.1
-  | when X>0 and X<<$w and Y>0 and Y<<$h:
-    | XYZ.2 <= $fix_z{XYZ}
-    | Target = $block_at{XYZ}^~{No 0}
-    | Valid = 1
-    | when Target and Affects >< empty: Valid <= 0
-    | when not Target and Affects >< unit: Valid <= 0
-    | A.xyz.init{XYZ}
-    | A.target <= Target
-    | if Valid and A.valid
-      then push XYZ Moves
-      else push XYZ Path
-| [Moves Path]
-
-export action action_list_moves

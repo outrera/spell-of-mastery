@@ -1,4 +1,4 @@
-use gfx gui util widgets action macros isort_ unit_flags stack
+use gfx gui util widgets macros isort_ unit_flags stack
 
 ScreenXY = [0 0]
 BrightFactor = 0

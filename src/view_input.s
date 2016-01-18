@@ -1,4 +1,4 @@
-use util action
+use util
 
 view.worldToView P =
 | X,Y = P - $view_origin
@@ -109,19 +109,7 @@ world.update_picked =
 | when Picked.size <> 1: leave
 | U = Picked.0
 | Marks =
-  if $act and $act.range <> any then
-    | Ms,Path = action_list_moves{U $act}
-    | Ms = Ms.keep{X,Y,Z=>$seen{X Y}}
-    | Path = Path.keep{X,Y,Z=>$seen{X Y}}
-    | As = map XYZ Ms
-      | Mark = $human.alloc_unit{"mark_magic_hit"}
-      | Mark.move{XYZ}
-      | Mark
-    | Bs = map XYZ Path
-      | Mark = $human.alloc_unit{"mark_magic"}
-      | Mark.move{XYZ}
-      | Mark
-    | [@As @Bs]
+  if $act and $act.range <> any then []
   else if U.path then
     | map XYZ U.path{}{?unheap}
       | MarkType = \move

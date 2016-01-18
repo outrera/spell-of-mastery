@@ -1,4 +1,4 @@
-use util action macros unit_flags
+use util macros unit_flags
 
 type unit_goal xyz/[0 0 0] serial
 
@@ -49,9 +49,9 @@ type unit.$class{Id World}
   host //what unit hosts this sprite
   host_serial
   colors/0
-| $action <= action Me
-| $next_action <= action Me
-| $ordered <= action Me
+| $action <= $world.action{Me}
+| $next_action <= $world.action{Me}
+| $ordered <= $world.action{Me}
 
 unit.enheap = Me
 unit.unheap = Me
