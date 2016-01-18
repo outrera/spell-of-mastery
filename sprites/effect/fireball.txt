@@ -1,0 +1,7 @@
+author: `dogchicken`
+license: `CC-BY-3.0`
+origin: `http://opengameart.org/users/dogchicken`
+xy: 0,-8
+frames: folder
+anims: | idle (idle0 3) (idle1 3) (idle2 3) (idle3 3)
+

@@ -7,6 +7,6 @@ range: 4
 inborn: (upkeep2 organic)
 //attack: sound{arrow_hit}
 impact: sound{arrow_hit}
-hit: sound{grunt4}
+hit: sound{grunt3}
 death: sound{grunt_die1}
 moves: sound{step}

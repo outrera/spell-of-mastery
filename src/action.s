@@ -46,27 +46,27 @@ dact move.finish | move_finish Me
 
 dact missile.start
 | U = $unit
-| X,Y,Z = $xyz - U.xyz
-| $fromXY.init{U.xy}
-| $fromXYZ.init{U.xyz}
-| U.facing <= Dirs.locate{X,Y}
-| $cycles <= 24*5
+| U.face{$xyz}
+| $fromXYZ.init{U.fxyz}
+| U.move{$xyz}
+| $toXYZ.init{U.fxyz}
+| U.fxyz.init{$fromXYZ}
+| less $cycles: $cycles <= 1
 | $start_cycles <= $cycles
 
 dact missile.update
 | U = $unit
-| X,Y,Z = $xyz-U.xyz
-| XUnit = U.world.xunit
-| YUnit = U.world.yunit
-//| when not (X and Y)
-//  | !XUnit/2
-//  | !YUnit/2
-//| X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
-| U.xy.init{$fromXY + [X*XUnit Y*YUnit]*($start_cycles-$cycles)/$start_cycles}
+| V = $toXYZ-$fromXYZ
+| U.fxyz.init{$fromXYZ + V*($start_cycles-$cycles)/$start_cycles}
 
-
-//dact missile.finish | move_finish Me
-
+dact missile.finish
+| U = $unit
+| for [When Name Duration Params] U.effects: when Name><missile:
+  | _,UId,USerial,Es = Params.0
+  | Source = U.world.units.UId
+  | less Source.serial >< USerial: Source <= $world.nil
+  | Source.effect{Es $target $xyz}
+| U.free
 
 dact die.start
 | U = $unit
@@ -126,13 +126,13 @@ custom_valid Me =
 
 custom_start Me =
 | U = $unit
+| U.anim_hit <= 0
 | U.animate{attack}
 | U.face{$xyz}
 | when $before: U.effect{$before $target $xyz}
 custom_update Me =
 | U = $unit
 | when U.anim_hit:
-  | U.anim_hit <= 0
   | Target = $target
   | when $impact: U.effect{$impact Target Target.xyz}
   | leave

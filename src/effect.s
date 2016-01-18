@@ -285,10 +285,15 @@ unit.effect Effect Target XYZ =
     else if Name >< endwhen then
     else if Name >< user_impact then $effect{$impact T T.xyz}
     else if Name >< missile then
+      | Speed = 2
+      | when Args.is_list
+        | Speed <= Args.1
+        | Args <= Args.0
       | S = $owner.alloc_unit{Args}
       | S.move{$xyz}
-      | S.add_effect{missile 0 [payload Es]}
+      | S.add_effect{missile 0 [[payload $id $serial Es]]}
       | S.order.init{missile |Target or XYZ}
+      | S.order.cycles <= @int Speed.float*(XYZ-$xyz).abs*1.5
       | Es <= []
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
