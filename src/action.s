@@ -54,23 +54,20 @@ dact missile.start
 | X,Y,Z = $xyz - U.xyz
 | $fromXY.init{U.xy}
 | $fromXYZ.init{U.xyz}
-| U.move{$xyz}
 | U.facing <= Dirs.locate{X,Y}
-| when U.anim<>move: U.animate{move}
-| $cycles <= U.speed
+| $cycles <= 24*5
 | $start_cycles <= $cycles
-| Effect = U.class.moves
 
-/*dact missile.update
+dact missile.update
 | U = $unit
-| X,Y,Z = $fromXYZ-U.xyz
+| X,Y,Z = $xyz-U.xyz
 | XUnit = U.world.xunit
 | YUnit = U.world.yunit
-| when not (X and Y)
-  | !XUnit/2
-  | !YUnit/2
-| X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
-| U.xy.init{$fromXY + [X*XUnit Y*YUnit]*$cycles/$start_cycles}*/
+//| when not (X and Y)
+//  | !XUnit/2
+//  | !YUnit/2
+//| X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
+| U.xy.init{$fromXY + [X*XUnit Y*YUnit]*($start_cycles-$cycles)/$start_cycles}
 
 
 //dact missile.finish | move_finish Me

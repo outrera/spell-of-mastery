@@ -289,6 +289,7 @@ unit.effect Effect Target XYZ =
       | S.move{$xyz}
       | S.add_effect{missile 0 [payload Es]}
       | S.order.init{missile |Target or XYZ}
+      | Es <= []
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me
