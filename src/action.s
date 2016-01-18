@@ -13,9 +13,10 @@ Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 move_start Me =
 | U = $unit
 | X,Y,Z = $xyz - U.xyz
-| $fromXY.init{U.xy}
-| $fromXYZ.init{U.xyz}
+| $fromXYZ.init{U.fxyz}
 | U.move{$xyz}
+| $toXYZ.init{U.fxyz}
+| U.fxyz.init{$fromXYZ}
 | U.facing <= Dirs.locate{X,Y}
 | when U.anim<>move: U.animate{move}
 | $cycles <= U.speed
@@ -25,18 +26,12 @@ move_start Me =
 
 move_update Me =
 | U = $unit
-| X,Y,Z = $fromXYZ-U.xyz
-| XUnit = U.world.xunit
-| YUnit = U.world.yunit
-| when not (X and Y)
-  | !XUnit/2
-  | !YUnit/2
-| X,Y = Dirs.((Dirs.locate{X,Y}+1)%Dirs.size)
-| U.xy.init{$fromXY + [X*XUnit Y*YUnit]*$cycles/$start_cycles}
+| V = $toXYZ-$fromXYZ
+| U.fxyz.init{$fromXYZ + V*($start_cycles-$cycles)/$start_cycles}
 
 move_finish Me =
 | U = $unit
-| U.xy.init{$fromXY}
+| U.fxyz.init{$toXYZ}
 
 dact move.valid
 | U = $unit
@@ -95,7 +90,7 @@ dact swap.start
 | move_start Me
 | T = $target
 | O = T.order
-| O.init{move $fromXYZ}
+| O.init{move U.from}
 | O.priority <= 100
 | less T.has{btrack}:
   | less U.goal and U.goal.xyz >< T.xyz:
@@ -166,8 +161,8 @@ type action{unit}
    priority
    xyz/[0 0 0] // target x,y,z
    target // when action targets a unit
+   toXYZ/[0 0 0]
    fromXYZ/[0 0 0]
-   fromXY/[0 0]
    start_cycles
    range
    act_init/&default_init

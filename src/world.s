@@ -20,6 +20,7 @@ proxy.init Unit =
 type world{main}
    w
    h
+   c //cell dimension unit
    filename/`default`
    name/`default map`
    description/`describe the map here`
@@ -44,9 +45,6 @@ type world{main}
    owners // unit owners
    active // active units
    vars/t{} // variables
-   xunit
-   yunit
-   zunit
    update_ui
    marks
    params
@@ -73,9 +71,7 @@ world.init =
 | $notes <= dup WParam.max_notes
   | [0.0 (dup NoteSize ``)]
 | $players <= map Id WParam.max_players: player Id Me
-| $xunit <= WParam.x_unit
-| $yunit <= WParam.y_unit
-| $zunit <= WParam.z_unit
+| $c <= WParam.cell_size
 | $void <= $main.tiles.void
 | $tilemap <= zmap MaxSize $void
 | $unit_map <= zmap MaxSize 0

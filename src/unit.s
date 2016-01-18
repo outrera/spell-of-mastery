@@ -12,10 +12,10 @@ type unit.$class{Id World}
   name
   serial
   class
-  xyz/[0 0 -1] // world coordinates
+  fxyz/[0 0 0] // fine X,Y,Z
+  xyz/[0 0 -1] // world cell X,Y,Z
   fix_z/0
   from/[0 0 0]
-  xy/[0 0] // fine X,Y
   anim // animation id
   anim_step // frame index inside of current animation
   anim_seq // current animation sequence
@@ -380,7 +380,7 @@ unit.harm Attacker Damage =
 | !$hp - Damage
 | when!it $blood:
   | E = $world.effect{$xyz it}
-  | E.xy.init{$xy}
+  | E.fxyz.init{$fxyz}
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
   | Effect = $class.hit
@@ -397,18 +397,25 @@ unit.harm Attacker Damage =
 | $die
 | $action.cycles <= 1
 
-unit.move XYZ =
+unit.fine_move FXYZ =
+| C = $world.c
+| XYZ = [FXYZ.0/C FXYZ.1/C FXYZ.2/8]
 | $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
 | $fix_z <= $world.fix_z{XYZ}
-| $xy.init{0,0}
+| C = $world.c
+| $fxyz.init{FXYZ}
 | $world.place_unit{Me}
 | when $passable and $block:
   | $world.set{@$xyz $block}
 | $environment_updated
 | $move_in{1}
 | Me
+
+unit.move XYZ =
+| C = $world.c
+| $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*8]}
 
 unit.seen = $world.seen{$xyz.0 $xyz.1}
 

@@ -37,9 +37,10 @@ type view.widget{M W H}
 | $param <= $main.params.ui
 | Wr = $world
 | Wr.view <= Me
-| $xunit <= Wr.xunit
-| $yunit <= Wr.yunit
-| $zunit <= Wr.zunit
+| WParam = $main.params.world
+| $xunit <= WParam.tile_w
+| $yunit <= WParam.tile_h
+| $zunit <= WParam.tile_d
 | $fpsT <= clock
 
 view.mode = $world.mode

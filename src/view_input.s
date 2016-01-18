@@ -7,7 +7,7 @@ view.worldToView P =
 | [RX RY] + $blit_origin
 
 view.viewToWorld P =
-| X,Y = P - $blit_origin - [32 -32+$main.params.world.z_unit*4]
+| X,Y = P - $blit_origin - [32 -32+$zunit*4]
 | WH = $xunit*$yunit
 | RX = (Y*$xunit + X*$yunit)/WH
 | RY = (Y*$xunit - X*$yunit)/WH

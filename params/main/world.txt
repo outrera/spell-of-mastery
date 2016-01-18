@@ -5,9 +5,11 @@ note_life: 5.0 // in seconds
 max_size: 132 // max world size (should be a power of 2)
 max_players: 8
 max_units: 4096 // maximum number of objects in world
-x_unit: 64 // width of world tile in pixels
-y_unit: 32 // height of world tile in pixels
-z_unit: 8 // height of world cell in pixels
+//FIXME: following should really correspond to cell dimensions, not tile dimensions
+cell_size: 32 // dimension unit: XYZ size of world cell in pixels
+tile_w: 64 // width of tile in pixels
+tile_h: 32 // height of tile in pixels
+tile_d: 8 // depth of unit tile in pixels
 tile_banks: tile//,deco
 class_banks: unit,leader,special,trigger
 explored: 1 //all maps are explored from the beginning

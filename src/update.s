@@ -299,7 +299,7 @@ unit.update =
 | when $host:
   | if $host.serial >< $host_serial
     then | when $xyz<>$host.xyz: $move{$host.xyz}
-         | $xy.init{$host.xy}
+         | $fxyz.init{$host.fxyz}
     else $host.dies 
 | update_anim Me
 | when $idle:

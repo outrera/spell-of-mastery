@@ -6,7 +6,7 @@ world.save =
   | ActivePlayers.(U.owner.id) <= 1
   | XYZ = if U.from.2>0 then [U.xyz U.from] else U.xyz
   | Effects = if U.effects.end then 0 else U.effects
-  | list U.id U.serial U.type XYZ U.xy
+  | list U.id U.serial U.type XYZ U.fxyz
          U.anim U.anim_step U.facing
          U.owner.id U.moved Effects U.flags U.hp
 | list w($w) h($h) serial($serial) cycle($cycle)
@@ -85,11 +85,11 @@ world.load Saved =
   | case XYZ A,B:
     | XYZ <= A
     | U.from.init{B}
-  | U.xy.init{SXYZ}
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.pick_facing{Facing}
   | U.move{XYZ}
+  | when SXYZ.size><3: U.fxyz.init{SXYZ}
   | U.moved <= Moved
   | U.flags <= Flags
   | U.hp <= if HP.size then HP.0 else 0

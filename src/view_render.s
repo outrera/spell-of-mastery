@@ -70,11 +70,8 @@ draw_bounding_box_back Color FB B =
 unit.size = if $height then [37 37 70] else [37 37 0]
 
 blit_item_from_unit Me =
-| X,Y,Z = $xyz
-| !X*32
-| !Y*32
-| !Z*8
-| DX,DY = $xy + $box_xy
+| X,Y,Z = $fxyz
+| DX,DY = $box_xy
 | DDX = (DX+2*DY)/2
 | DDY = 2*DY-DDX
 | !X+DDX
@@ -90,8 +87,6 @@ unit.draw FB B =
 | X = B.sx
 | Y = B.sy
 | G = $frame
-| !X + $xy.0
-| !Y + $xy.1
 | Slope = $slope*16
 | GW = G.w
 | XX = X+32-GW/2
@@ -218,6 +213,9 @@ render_cursor Me Wr BX BY CursorXYZ =
   | when Z>>CurZ: _goto for_break
 | _label for_break
 
+XUnit2 =
+YUnit2 =
+
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
 | less Folded: Folded <= Wr.main.img{ui_folded}
@@ -279,8 +277,10 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
     | TZ = Z-4
     | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
       | B = blit_item_from_unit U
-      | B.sx <= BX
-      | B.sy <= BY-$zunit*Z
+      | FX,FY,FZ = U.fxyz
+      | BX,BY = ScreenXY + to_iso{FX FY FZ}
+      | B.sx <= BX - 32
+      | B.sy <= BY
       | B.lx <= LX
       | B.ly <= LY
       | B.brighten <= Br
@@ -296,20 +296,6 @@ render_unexplored Me Wr X Y BX BY =
 | B.sy <= BY-$zunit-Unexplored.h
 | push B BlitItems
 
-
-/*view.select_unit XYZ = 
-| less $world.seen{XYZ.0 XYZ.1}: leave 0
-| Picked = []
-| X,Y,Z = XYZ
-| Us = $world.column_units_at{X Y}.skip{?bank><mark}.keep{?fix_z><Z}
-| when $mode >< play: Us <= Us.keep{?pickable}
-| when $picked.size<>1 or $picked.0.xyz <> XYZ: $pick_count <= 0
-| when Us.size
-  | !$pick_count+1
-  | Picked <= [Us.($pick_count%Us.size)]
-| when $keys.lshift><1 or $keys.rshift><1:
-  | Picked <= [@Picked @$picked.list]
-| $picked <= Picked*/
 
 point_in_rect [RX RY RW RH] [X Y] = RX<<X and X<RX+RW and RY<<Y and Y<RY+RH
 rects_intersect [AX AY AW AH] [BX BY BW BH] =
@@ -433,8 +419,8 @@ view.render_iso =
 | WW = Wr.w
 | WH = Wr.h
 | VS = $view_size
-| XUnit2 = $xunit/2
-| YUnit2 = $yunit/2
+| XUnit2 <= $xunit/2
+| YUnit2 <= $yunit/2
 | times YY VS
   | Y = YY + VY
   | when 0<Y and Y<<WH: times XX VS:
