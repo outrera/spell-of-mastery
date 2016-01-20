@@ -1,10 +1,10 @@
 use util macros unit_flags
 
-type unit_goal xyz/[0 0 0] serial
+type cell_goal xyz/[0 0 0] serial
 
-unit_goal.type = \goal
-unit_goal.removed = 0
-unit_goal.alive = 1
+cell_goal.type = \goal
+cell_goal.removed = 0
+cell_goal.alive = 1
 
 type unit.$class{Id World}
   id/Id
@@ -26,8 +26,8 @@ type unit.$class{Id World}
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
+  cooldown
   sprite
-  moved // last cycle, this unit moved
   mirror // true, if drawing code should mirror the sprite
   mark // next mark in the map marks chain
   active // true if this unit resides in the list of active units
@@ -37,12 +37,11 @@ type unit.$class{Id World}
   goal
   goal_serial
   goal_act
-  unit_goal/unit_goal{}
+  unit_goal/cell_goal{}
   hp // hit points
   flags
   alpha //how transparent is this unit
   delta //change of transparency per cycle
-  cooldown
   kills //how many enemies this unit has killed
   effects/[] //active effects
   mod //set by various effects to modify some contextual behavior
@@ -105,7 +104,6 @@ unit.init Class =
 | $animate{idle}
 | $mark <= 0
 | $hp <= $class.hp
-| $moved <= 0
 | $flags <= 0
 | $alpha <= 0
 | $delta <= 0

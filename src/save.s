@@ -1,15 +1,38 @@
 use util rle
 
+action.save =
+| less $type: leave 0
+| list
+   $type
+   $act
+   $cycles
+   $priority
+   $xyz
+   (if $target then $target.id else 0)
+   $toXYZ
+   $fromXYZ
+   $start_cycles
+   $range
+
 world.save =
 | ActivePlayers = dup 32 0
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
-  | XYZ = if U.from.2>0 then [U.xyz U.from] else U.xyz
-  | Effects = if U.effects.end then 0 else U.effects
-  | list U.id U.serial U.type XYZ U.fxyz
-         U.anim U.anim_step U.facing
-         U.owner.id U.moved Effects U.flags U.hp
-| list w($w) h($h) serial($serial) cycle($cycle)
+  | Active = 0
+  | when U.active:
+    | Effects = if U.effects.end then 0 else U.effects
+    | Host = if U.host then U.host.id else 0
+    | G = U.goal
+    | Goal = if not G then 0
+             else if G.type><goal then [G.xyz U.goal_act]
+             else [G.id U.goal_act]
+    | Path = if U.path.end then 0 else [U.path U.path_life]
+    | Active <= list U.from U.anim U.anim_step U.anim_wait
+                     U.kills U.cooldown Effects Host Goal Path
+                     U.action.save U.ordered.save U.next_action.save
+  | list U.type U.id U.serial U.owner.id U.xyz U.fxyz U.facing
+         U.flags U.hp Active
+| list version(0.2) w($w) h($h) serial($serial) cycle($cycle)
     filename | $filename
     name | $name
     description | $description
@@ -28,7 +51,7 @@ world.save =
                | [Id $players.Id.sight{}{X=>rle_encode X}]
     actions_enabled | map Name,Act $main.params.acts: Name,Act.enabled
 
-main.save Path = Path.set{[version(0.1) @$world.save].as_text}
+main.save Path = Path.set{$world.save.as_text}
 
 remap_tids Me LookupTable Xs =
 | TidMap = $tid_map
@@ -54,7 +77,7 @@ world.load Saved =
 | $name <= Saved.name
 | $description <= Saved.description
 | $events <= if got Saved.events then Saved.events.i else []
-| $serial <= Saved.serial
+| $serial <= 0
 | when got!it Saved.params: for [K V] it: $params.K <= V
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
@@ -90,7 +113,6 @@ world.load Saved =
   | U.pick_facing{Facing}
   | U.move{XYZ}
   | when SXYZ.size><3: U.fxyz.init{SXYZ}
-  | U.moved <= Moved
   | U.flags <= Flags
   | U.hp <= if HP.size then HP.0 else 0
   | U.effects.heapfree
@@ -98,6 +120,7 @@ world.load Saved =
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
+| $serial <= Saved.serial
 | Explored = Saved.explored
 | when got Explored:
   | for PID,Sight Explored
