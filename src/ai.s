@@ -2,33 +2,17 @@ use macros unit_flags pathfind util
 
 PerCycle = 0
 
-action_list_moves Picked Act =
-| Me = Picked.world
-| A = $action{Picked}
-| A.init{Act 0}
-| Affects = Act.affects
-| Path = []
-| Moves = []
-| R = Act.range
-| less got R: leave Moves
-| PXYZ = Picked.xyz
+world.targets_in_range Center R =
+| Targets = []
 | Points = points_in_circle R
 | for X,Y Points
-  | XYZ = PXYZ+[X Y 0]
+  | XYZ = Center+[X Y 0]
   | X = XYZ.0
   | Y = XYZ.1
   | when X>0 and X<<$w and Y>0 and Y<<$h:
-    | XYZ.2 <= $fix_z{XYZ}
-    | Target = $block_at{XYZ}^~{No 0}
-    | Valid = 1
-    | when Target and Affects >< empty: Valid <= 0
-    | when not Target and Affects >< unit: Valid <= 0
-    | A.xyz.init{XYZ}
-    | A.target <= Target
-    | if Valid and A.valid
-      then push XYZ Moves
-      else push XYZ Path
-| [Moves Path]
+    | for U $column_units_at{X Y}: when $seen_from{Center U.xyz}:
+      | push U Targets
+| Targets
 
 cast_spell_sub Me Offensive =
 | SpellType = if Offensive then \aiOffensiveSpell else \aiDefensiveSpell
@@ -36,8 +20,8 @@ cast_spell_sub Me Offensive =
 | when no SpellName: leave 0
 | Act = $main.params.acts.SpellName
 | when no Act: bad "AI: cant find SpellType `[SpellName]`"
-| Targets,Path = action_list_moves Me Act
-| Ts = Targets{XYZ=>$world.block_at{XYZ}}.skip{No}
+| Targets = $world.targets_in_range{Me.xyz Act.range}
+| Ts = Targets.skip{?empty}
 | if Offensive
   then Ts <= Ts.keep{?owner.id<>$owner.id}
   else Ts <= Ts.keep{?owner.id><$owner.id}

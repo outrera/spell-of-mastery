@@ -8,6 +8,31 @@ pf_reset_count =
 | for Ys PFMap: for Xs Ys: Xs.init{#FFFFFFFFFFFF}
 | PFCount <= #FFFFFF
 
+type move{type xyz}
+move.as_text = "#move{[$type] [$xyz]}"
+
+Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
+
+list_moves Me Src =
+| Ms = []
+| SX,SY,SZ = Src
+| for DX,DY Dir4
+  | X = SX+DX
+  | Y = SY+DY
+  | Z = SZ
+  | less $world.at{X Y Z}.type >< border_:
+    | Z <= $world.fix_z{X,Y,Z}
+    | Dst = [X Y Z]
+    | B = $world.block_at{Dst}
+    | if got B then
+        | if $owner.id <> B.owner.id
+          then when B.alive and $damage and (SZ-Z).abs<<4:
+               | push move{attack Dst} Ms
+          else when B.speed and $can_move{Src Dst} and B.can_move{Dst Src}:
+               | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
+      else when $can_move{Src Dst}: push move{move Dst} Ms
+| Ms
+
 node_to_path Node =
 | Path = []
 | while Node
@@ -17,6 +42,7 @@ node_to_path Node =
 | Path.tail.list
 
 world.pathfind MaxCost U XYZ Check =
+| less U.speed: leave 0
 | X,Y,Z = XYZ
 | !PFCount-1
 | less PFCount: pf_reset_count
@@ -32,7 +58,7 @@ world.pathfind MaxCost U XYZ Check =
   | when Cost<MaxCost:
     | X,Y,Z = XYZ
     | NextCost = Cost+1
-    | for Dst U.list_moves{XYZ}:
+    | for Dst list_moves{U XYZ}:
       | when Check Dst:
         | R <= [Node Dst.xyz $block_at{Dst.xyz}]
         | _goto end
@@ -48,6 +74,7 @@ world.pathfind MaxCost U XYZ Check =
 | R
 
 world.pathfind_closest MaxCost U XYZ TargetXYZ =
+| less U.speed: leave 0
 | X,Y,Z = XYZ
 | !PFCount-1
 | less PFCount: pf_reset_count
@@ -65,7 +92,7 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
   | when Cost<MaxCost:
     | X,Y,Z = XYZ
     | NextCost = Cost+1
-    | for Dst U.list_moves{XYZ}:
+    | for Dst list_moves{U XYZ}:
       | DXYZ = Dst.xyz
       | NewL = (TargetXY-DXYZ.take{2}).abs
       | when BestL>NewL:

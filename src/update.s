@@ -175,10 +175,22 @@ find_path_around_busy_units Me XYZ =
 
 UpdatePathHangTrap = 0
 
+
+unit_check_move Me Dst =
+| less $speed: leave 0
+| Src = $xyz
+| SX,SY,SZ = Src
+| X,Y,Z = Dst
+| B = $world.block_at{Dst}
+| when no B: leave move
+| if $owner.id <> B.owner.id
+  then when B.alive and $damage: leave attack
+  else when B.speed and B.can_move{Dst Src}: leave swap
+| 0
+
 update_path_move Me XYZ =
-| Ms = $list_moves{$xyz}.keep{?xyz><XYZ}
-| when Ms.end: leave 0
-| M = Ms.0
+| M = unit_check_move Me XYZ
+| less M: leave 0
 | Us = $world.units_at{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
 | when Target and Target.owner.id >< $owner.id and Target.goal:
@@ -190,7 +202,7 @@ update_path_move Me XYZ =
       | update_path Me
     | leave
 | Act = if XYZ<>$goal.xyz
-        then  M.type
+        then  M
         else | Target = $goal
              | less $goal_act.repeat >< 1: $goal <= 0
              | $goal_act

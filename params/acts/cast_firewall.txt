@@ -1,5 +1,5 @@
 affects: any
-before: impact{fire_ring},sound{spawn},spawn{special_firewall}
+before: impact{fire_ring},sound{summon},spawn{special_firewall}
 icon: spell_firewall
 range: 2
 needs: (cast_fireball)
