@@ -2,7 +2,6 @@ use bits
 
 type ai{player} world
 | $world <= $player.world
-| $params.aiSwapXYZ <= [0 0 0]
 | $params.view <= [0 0 0]
 | $params.cursor <= [0 0 1]
 
@@ -13,7 +12,6 @@ ai.picked = $player.picked
 ai.`!picked` V = $player.picked <= V
 
 ai.clear =
-| $params.aiSwapXYZ.init{[0 0 0]}
 | $params.aiType <= 'default'
 | $params.aiStep <= 0
 | $params.aiWait <= 0

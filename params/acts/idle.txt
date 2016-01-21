@@ -1,0 +1,3 @@
+affects: any
+range: 0
+icon: spell_suicide

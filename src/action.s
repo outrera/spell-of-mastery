@@ -12,6 +12,10 @@ Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
 move_start Me =
 | U = $unit
+| when $xyz><U.xyz:
+  | $toXYZ.init{U.fxyz}
+  | $cycles <= 0
+  | leave
 | X,Y,Z = $xyz - U.xyz
 | $fromXYZ.init{U.fxyz}
 | U.move{$xyz}

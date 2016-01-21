@@ -4,7 +4,6 @@ action.save =
 | less $type: leave 0
 | list
    $type
-   $act
    $cycles
    $priority
    $xyz
@@ -12,7 +11,6 @@ action.save =
    $toXYZ
    $fromXYZ
    $start_cycles
-   $range
 
 world.save =
 | ActivePlayers = dup 32 0
@@ -24,8 +22,8 @@ world.save =
     | Host = if U.host then U.host.id else 0
     | G = U.goal
     | Goal = if not G then 0
-             else if G.type><goal then [G.xyz U.goal_act]
-             else [G.id U.goal_act]
+             else if G.type><goal then [G.xyz U.goal_act.name]
+             else [G.id U.goal_act.name]
     | Path = if U.path.end then 0 else [U.path U.path_life]
     | Active <= list U.from U.anim U.anim_step U.anim_wait
                      U.kills U.cooldown Effects Host Goal Path
@@ -40,7 +38,7 @@ world.save =
     events | $events{}{?1}
     tids | $tid_map{}{?type}
     players | map P $players
-              | [P.id P.name P.human P.color 0 0
+              | [P.id P.name P.human P.color P.picked{}{?id} 0
                  P.params.list P.research.list.keep{?1} P.mana]
     player | $human.id
     units | Units
@@ -69,6 +67,18 @@ remap_tids Me LookupTable Xs =
       | when H>0: times I H: Rs.(Z+I) <= Ps.I
   | Rs
 
+
+action.load IdMap Saved =
+| less Saved: leave
+| [Type Cycles Priority XYZ Target To From StartC] = Saved
+| $init{Type |if Target then IdMap.Target else XYZ}
+| $priority <= Priority
+| $cycles <= Cycles
+| $start_cycles <= StartC
+| $xyz.init{XYZ}
+| $toXYZ.init{To}
+| $fromXYZ.init{From}
+
 world.load Saved =
 | $clear
 | $w <= Saved.w
@@ -91,7 +101,7 @@ world.load Saved =
 | $cycle <= Saved.cycle
 | IdMap = t
 | for X Saved.players
-  | [Id Name Human Color Power Moves Params Research Mana] = X
+  | [Id Name Human Color Picked Moves Params Research Mana] = X
   | P = $players.Id
   | P.name <= Name
   | P.human <= Human
@@ -99,35 +109,65 @@ world.load Saved =
   | P.mana <= Mana
   | for K,V Params: P.params.K <= V
   | for N,R Research: P.research.N <= R
+  | P.params.picked <= if Picked then Picked else []
 | $human <= $players.(Saved.player)
 | for X Saved.units
-  | [Id Serial Type XYZ SXYZ Anim AnimStep Facing Owner Moved Efx Flags @HP]=X
+  | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active]=X
   | U = $players.Owner.alloc_unit{Type}
   | less U.class.hp or U.ai >< pentagram: U.change_owner{$players.0}
   | U.serial <= Serial
   | case XYZ A,B:
     | XYZ <= A
     | U.from.init{B}
-  | U.animate{Anim}
-  | U.anim_step <= AnimStep
-  | U.pick_facing{Facing}
+  | U.hp <= HP
   | U.move{XYZ}
-  | when SXYZ.size><3: U.fxyz.init{SXYZ}
+  | U.fxyz.init{FXYZ}
+  | U.pick_facing{Facing}
+  | when Active:
+    | [From Anim AnimStep AnimWait Kills Cool Efx Host Goal Path
+       Action Ordered NextAction @More] = Active
+    | U.from.init{From}
+    | U.animate{Anim}
+    | U.anim_step <= AnimStep
+    | U.anim_wait <= AnimWait
+    | U.kills <= Kills
+    | U.cooldown <= Cool
+    | U.effects.heapfree
+    | U.effects <= if Efx.is_list and not Efx.end then @enheap Efx else []
+    | when Path:
+      | say [U.type Goal]
+      | P = Path.0.enheap
+      | U.path.heapfree
+      | U.path <= P
+      | U.path_life <= Path.1
+    | U.host <= [Host Goal Action Ordered NextAction]
   | U.flags <= Flags
-  | U.hp <= if HP.size then HP.0 else 0
-  | U.effects.heapfree
-  | U.effects <= if Efx.is_list and not Efx.end then @enheap Efx else []
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
+| Acts = $main.params.acts
+| for U $active: when U.host:
+  | [HostId Goal Action Ordered NextAction] = U.host
+  | U.host <= 0
+  | when HostId: U.host <= IdMap.HostId
+  | when Goal:
+    | Target,ActName = Goal
+    | U.goal_act <= Acts.ActName
+    | if Target.is_int
+      then U.goal <= IdMap.Target
+      else | U.goal <= U.unit_goal
+           | U.goal.xyz.init{Target}
+  | U.action.load{IdMap Action}
+  | U.ordered.load{IdMap Ordered}
+  | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
+| for P $players: P.picked <= (P.params.picked){IdMap.?}
 | Explored = Saved.explored
 | when got Explored:
   | for PID,Sight Explored
     | PS = $players.PID.sight
     | for I PS.size PS.I.init{Sight.I^rle_decode}
 | AEs = Saved.actions_enabled
-| Acts = $main.params.acts
 | when got AEs: for Name,Enabled AEs:
   | when got Acts.Name: Acts.Name.enabled <= Enabled
 

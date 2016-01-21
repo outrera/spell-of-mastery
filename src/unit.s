@@ -314,7 +314,8 @@ unit.set_path Path =
 
 unit.order_at XYZ act/0 =
 | when $xyz >< XYZ:
-  | $goal_act <= Act
+  | $goal <= 0
+  | $goal_act <= 0 //if Act then Act else $main.params.acts.idle
   | $set_path{[]}
   | leave
 | $unit_goal.xyz.init{XYZ}
