@@ -146,4 +146,22 @@ credits_roll.draw G PX PY =
 
 credits_roll.reset = $cycle <= 0
 
+
+
+type player_picker.widget{name index color on_click}
+  w/16 h/16 pressed over picked
+
+player_picker.draw G PX PY =
+| G.rectangle{$color 1 PX PY $w $h}
+| when $picked: G.rectangle{#00FF00 0 PX PY $w $h}
+
+player_picker.input In =
+| case In
+  [mice over S P] | $over <= S
+  [mice left 1 P] | less $pressed: $pressed <= 1
+  [mice left 0 P] | when $pressed:
+                    | when $over: $on_click{}{Me}
+                    | $pressed <= 0
+
 export message_box unit_panel world_props info_line load_world_dlg credits_roll
+       player_picker

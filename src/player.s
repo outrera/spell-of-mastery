@@ -18,10 +18,8 @@ ai.clear =
 | $params.aiSpellWait <= 0 //hack to stop AI from spamming spells
 | $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
 
-PlayerColors = [white red blue cyan violet orange black yellow magenta]
-
 type player{id world}
-   name ai human color mana
+   name ai human mana
    moves //use to be number for creatues movable per turn; currently obsolete
    leader
    pentagram
@@ -34,7 +32,6 @@ type player{id world}
    colors
 | $unit_counts <= dup 300
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
-| $color <= PlayerColors.$id
 | $params <= t
 | $sight <= dup 132: 132.bytes
 | $ai <= ai Me

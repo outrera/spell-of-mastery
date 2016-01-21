@@ -50,7 +50,7 @@ world.save =
     events | $events{}{?1}
     tids | $tid_map{}{?type}
     players | map P $players
-              | [P.id P.name P.human P.color P.picked{}{?id} 0
+              | [P.id P.name P.human 0 P.picked{}{?id} 0
                  P.params.list P.research.list.keep{?1} P.mana]
     player | $human.id
     units | Units
@@ -105,7 +105,6 @@ world.load Saved =
   | P = $players.Id
   | P.name <= Name
   | P.human <= Human
-  | P.color <= Color
   | P.mana <= Mana
   | for K,V Params: P.params.K <= V
   | for N,R Research: P.research.N <= R

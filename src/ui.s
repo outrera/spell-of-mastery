@@ -246,9 +246,20 @@ create_bank_list Me =
          | ItemList.pick{0}
 | BankList,ItemList
 
+
+PlayerPicker = 0
+
 create_view_ui Me =
-| PlayerWidget = droplist $world.players{}{?name} w/110 f: Name =>
-  | when got!it $world.players.find{?name >< Name}: $world.human <= it
+| PlayerPickers = map Player $world.players:
+  | player_picker Player.name 0 Player.colors.1: Item =>
+    | PlayerPicker.picked <= 0
+    | Item.picked <= 1
+    | PlayerPicker <= Item
+    | Name = Item.name
+    | when got!it $world.players.find{?name >< Name}: $world.human <= it
+| PlayerPicker <= PlayerPickers.1
+| PlayerPicker.picked <= 1
+| PlayerWidget = layH PlayerPickers
 | BankList,ItemList = create_bank_list Me
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
