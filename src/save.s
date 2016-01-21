@@ -12,6 +12,18 @@ action.save =
    $fromXYZ
    $start_cycles
 
+action.load IdMap Saved =
+| less Saved: leave
+| [Type Cycles Priority XYZ Target To From StartC] = Saved
+| $init{Type |if Target then IdMap.Target else XYZ}
+| $priority <= Priority
+| $cycles <= Cycles
+| $start_cycles <= StartC
+| $xyz.init{XYZ}
+| $toXYZ.init{To}
+| $fromXYZ.init{From}
+
+
 world.save =
 | ActivePlayers = dup 32 0
 | Units = map U $units.skip{(?removed or ?mark)}
@@ -66,18 +78,6 @@ remap_tids Me LookupTable Xs =
       | Z = Z-H
       | when H>0: times I H: Rs.(Z+I) <= Ps.I
   | Rs
-
-
-action.load IdMap Saved =
-| less Saved: leave
-| [Type Cycles Priority XYZ Target To From StartC] = Saved
-| $init{Type |if Target then IdMap.Target else XYZ}
-| $priority <= Priority
-| $cycles <= Cycles
-| $start_cycles <= StartC
-| $xyz.init{XYZ}
-| $toXYZ.init{To}
-| $fromXYZ.init{From}
 
 world.load Saved =
 | $clear
@@ -135,7 +135,6 @@ world.load Saved =
     | U.effects.heapfree
     | U.effects <= if Efx.is_list and not Efx.end then @enheap Efx else []
     | when Path:
-      | say [U.type Goal]
       | P = Path.0.enheap
       | U.path.heapfree
       | U.path <= P
@@ -157,6 +156,7 @@ world.load Saved =
       then U.goal <= IdMap.Target
       else | U.goal <= U.unit_goal
            | U.goal.xyz.init{Target}
+    | U.goal_serial <= U.goal.serial
   | U.action.load{IdMap Action}
   | U.ordered.load{IdMap Ordered}
   | U.next_action.load{IdMap NextAction}
