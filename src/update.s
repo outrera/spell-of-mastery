@@ -180,9 +180,9 @@ unit_check_move Me Dst =
 | less $speed: leave 0
 | Src = $xyz
 | when Src >< Dst: leave 0
-| when (Src-Dst).any{?abs>1}: leave 0
 | SX,SY,SZ = Src
 | X,Y,Z = Dst
+| when (X-SX).abs>1 or (Y-SY).abs>1: leave 0
 | B = $world.block_at{Dst}
 | when no B: leave move
 | if $owner.id <> B.owner.id
