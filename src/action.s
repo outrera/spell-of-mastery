@@ -177,8 +177,9 @@ action.cost = if $act then $act.cost else 0
 action.affects = $act.affects
 action.before = $act.before
 action.impact =
+| less $act: leave //in case it is just an animation
 | Impact = $act.impact
-| when Impact:
+| when got Impact:
   | Target = $target
   | $unit.effect{Impact Target Target.xyz}
 
