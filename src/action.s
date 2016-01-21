@@ -130,16 +130,10 @@ custom_valid Me =
 
 custom_start Me =
 | U = $unit
-| U.anim_hit <= 0
 | U.animate{attack}
 | U.face{$xyz}
 | when $before: U.effect{$before $target $xyz}
 custom_update Me =
-| U = $unit
-| when U.anim_hit:
-  | Target = $target
-  | when $impact: U.effect{$impact Target Target.xyz}
-  | leave
 custom_finish Me =
 | U = $unit
 | when $after: U.effect{$after $target $xyz}
@@ -182,7 +176,12 @@ action.main = $unit.main
 action.cost = if $act then $act.cost else 0
 action.affects = $act.affects
 action.before = $act.before
-action.impact = $act.impact
+action.impact =
+| Impact = $act.impact
+| when Impact:
+  | Target = $target
+  | $unit.effect{Impact Target Target.xyz}
+
 action.after = $act.after
 
 action.as_text = "#action{[$type] [$priority] [$target]}"

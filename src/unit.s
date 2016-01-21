@@ -71,9 +71,6 @@ unit.`!nonguard` State = $flags <= $flags^set_bit{2 State}
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
-unit.anim_hit = $flags^get_bit{9}
-unit.`!anim_hit` State = $flags <= $flags^set_bit{9 State}
-
 unit.alive = $hp > 0
 unit.health =
 | CHP = $class.hp
