@@ -92,7 +92,7 @@ ai.update_research =
 ai_update_build Me =
 | Pentagram = $player.pentagram
 | less Pentagram: leave 0
-| Spawns = Pentagram.acts.keep{?after_table.spanw^got}
+| Spawns = Pentagram.acts.keep{?after_table.spawn^got}
 | less Spawns.size: leave 0
 | Missing = PerCycle.missing
 | less got Missing: leave
