@@ -6,3 +6,4 @@ show_cycle: 0
 show_frame: 0
 game_speed: 1.0 // game cycles (updates) per frame
 scroll_speed: 1
+debug: 1

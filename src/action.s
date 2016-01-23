@@ -94,6 +94,7 @@ dact swap.start
 | move_start Me
 | T = $target
 | O = T.order
+| T.set_path{[T.xyz @T.path]}
 | O.init{move U.from}
 | O.priority <= 100
 | less T.has{btrack}:

@@ -54,8 +54,9 @@ unit_panel.set_unit Unit =
 
 unit_panel.draw G X Y =
 | less $unit: leave
-| Icon = $unit.main.sprites."icons_[$unit.icon or $unit.type]"
-| IconBg = $unit.main.sprites.ui_icon_bg
+| Main = $unit.main
+| Icon = Main.sprites."icons_[$unit.icon or $unit.type]"
+| IconBg = Main.sprites.ui_icon_bg
 | G.blit{X+3 Y+20 IconBg.frames.0}
 | when got Icon: G.blit{X+3 Y+20 Icon.frames.0}
 | G.blit{X Y $bg}
@@ -65,6 +66,8 @@ unit_panel.draw G X Y =
 | Font.draw{G X+23 Y+74"[max 0 $unit.health]"}
 | Font.draw{G X+70 Y+28"[$unit.damage]"}
 | Font.draw{G X+60 Y+64"[$unit.armor]"}
+| when Main.params.ui.debug><1:
+  | Font.draw{G X+2 Y+90 "serial:[max 0 $unit.serial]"}
 
 type world_props.$base{world callback}
      filename name description width height base

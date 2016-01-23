@@ -341,7 +341,7 @@ create_dialog_tabs Me =
 | LoadMenu = create_load_menu_dlg Me
 | Credits = create_credits_dlg Me
 | Ingame = create_ingame_dlg Me
-| IsDebug = $main.params.world.release<>1
+| IsDebug = $main.params.ui.debug><1
 | InitTab = if IsDebug then \ingame else \main_menu
 | tabs InitTab: t
           main_menu(MainMenu)
