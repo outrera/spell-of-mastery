@@ -1,3 +1,0 @@
-author: `Wyrmsun Team`
-license: `GPL2`
-origin: `github.com/andrettin/wyrmsun`
