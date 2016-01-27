@@ -93,6 +93,13 @@ effect harm As:
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
+effect harm_neibs Arg:
+| D = (TargetXYZ-$xyz){?sign}
+| DD = D.1,D.0,D.2
+| for XYZ [TargetXYZ+DD TargetXYZ-DD]
+  | B = $world.block_at{XYZ}
+  | when got B: B.harm{Me Arg}
+
 effect counter Arg:
 | less $range: Target.run_effects{?><counter Me Me.xyz}
 

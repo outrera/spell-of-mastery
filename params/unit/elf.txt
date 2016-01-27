@@ -1,6 +1,6 @@
 sprite: unit_elf
 tier: 2
-health: 50
+health: 40
 damage: 7
 armor: 0
 range: 4

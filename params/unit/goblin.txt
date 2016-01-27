@@ -1,6 +1,6 @@
 sprite: unit_goblin
 tier: 1
-health: 30
+health: 40
 damage: 5
 armor: 0
 range: 3
