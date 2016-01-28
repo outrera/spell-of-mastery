@@ -13,7 +13,7 @@ speed: 24 // cycles required to move between game world cells
 pickable: 1
 passable: 0
 flyer: 0 // can it fly
-range: 0 // does it move into the cell of defeated unit
+range: cross //1
 blood: blood
 ai: unit
 item: pickup

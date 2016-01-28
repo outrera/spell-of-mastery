@@ -1,0 +1,7 @@
+author: `Tim Jonsson`
+copyright: `Nikita Sadkov`
+height: 4
+xy: 2,11
+frames: folder
+anims: | idle (idle0 9)
+       | death (idle0 12)

@@ -195,7 +195,12 @@ update_path_move Me XYZ =
 | less M: leave 0
 | Us = $world.units_at{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
-| when Target and Target.owner.id >< $owner.id and not Target.idle:
+| when Target and Target.owner.id >< $owner.id
+       // good idea would be pusshing ranged unit forward, so other rangers
+       // get a chance to attack too
+       and (not Target.idle
+            or ($range><Target.range
+                and Target.goal and Target.path.end)):
   | when Target.xyz<>$goal.xyz:
     | when UpdatePathHangTrap>0: leave
     | find_path_around_busy_units Me $goal.xyz
@@ -221,11 +226,17 @@ update_path Me =
 | R = $goal_act.range
 | when R:
   | when R><user: R <= $range
-  | when ($goal.xyz.take{2}-$xyz.take{2}).abs.int<<R:
-    | when $world.seen_from{$xyz $goal.xyz}:
-      | $order.init{Act $goal}
-      | less Act.repeat><1: $goal <= 0
-      | leave
+  | GXYZ = $goal.xyz
+  | Reach = if R><cross
+            then (GXYZ.take{2}-$xyz.take{2}){?abs}.sum><1
+                 and (GXYZ.2-$xyz.2).abs<<4
+            else (GXYZ-$xyz.take{2}).abs.int<<R
+                 and $world.seen_from{$xyz $goal.xyz}
+  | when Reach:
+    | $set_path{[]}
+    | $order.init{Act $goal}
+    | less Act.repeat><1: $goal <= 0
+    | leave
 | Path = $path
 | !$path_life-1
 | when $path_life<<0 or Path.end:

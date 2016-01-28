@@ -1,0 +1,14 @@
+sprite: unit_door
+tier: 2
+health: 300
+damage: 0
+armor: 3
+speed: 0
+//empty: 0
+blood: blood_undead
+//inborn: (upkeep2 organic)
+//attack: sound{attack2}
+impact: sound{attack2}
+hit: sound{doorwood_hit}
+death: sound{doorwood_die}
+moves: sound{step}
