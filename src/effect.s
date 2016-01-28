@@ -209,6 +209,11 @@ effect spawn What:
 | S.delta <= -50
 | S.move{TargetXYZ}
 
+effect morph ClassName:
+| Class = $main.classes.ClassName
+| less got Class: bad "morph: Missing class `[ClassName]`"
+| $morph{Class}
+
 effect child What Effects:
 | S = $owner.alloc_unit{What}
 | S.alpha <= 255

@@ -121,6 +121,16 @@ unit.init Class =
       [`{}` Name Duration @Args] | $add_effect{Name Duration [inborn @Args]}
       Else | $add_effect{E 0 [inborn]}
 
+unit.morph Class =
+| $owner.lost_unit{Me}
+| $hp <= Class.hp + $hp - $class.hp
+| $class <= Class
+| $sprite <= if $show or $world.mode <> play
+             then $default_sprite
+             else $world.nil.sprite
+| $animate{idle}
+| $owner.got_unit{Me}
+
 get_named_effect Me Name Params =
 | Effect = $main.params.effect.Name
 | when no Effect:

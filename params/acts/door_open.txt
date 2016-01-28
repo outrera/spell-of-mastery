@@ -1,5 +1,5 @@
 icon: act_switch
 affects: any
-before: sound{door_switch}//,morph{door_open}
+before: sound{door_switch},morph{unit_door_open}
 speed: 4
 
