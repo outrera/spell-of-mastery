@@ -230,7 +230,7 @@ update_path Me =
   | Reach = if R><cross
             then (GXYZ.take{2}-$xyz.take{2}){?abs}.sum><1
                  and (GXYZ.2-$xyz.2).abs<<4
-            else (GXYZ-$xyz.take{2}).abs.int<<R
+            else (GXYZ.take{2}-$xyz.take{2}).abs.int<<R
                  and $world.seen_from{$xyz $goal.xyz}
   | when Reach:
     | $set_path{[]}
