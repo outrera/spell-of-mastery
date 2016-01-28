@@ -35,7 +35,7 @@ type sprite{Bank Name xy/[0 0]
 | when no Attack.find{?0><impact}:
   | $anims.attack <= if Attack.size>1
                      then [@Attack.lead [impact 0] Attack.last]
-                     else [[impact 0] Attack.head]
+                     else [Attack.head [impact 0]]
 
 sprite.anim_speed AnimName =
 | Anim = $anims.AnimName

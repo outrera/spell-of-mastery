@@ -1,0 +1,5 @@
+icon: act_switch
+affects: any
+before: sound{door_switch}//,morph{door_open}
+speed: 4
+
