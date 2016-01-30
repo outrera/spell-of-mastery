@@ -118,8 +118,8 @@ unit.init Class =
   | $unit_goal.serial <= $serial
   | $path_life <= 0
   | for E $inborn: case E
-      [`{}` Name Duration @Args] | $add_effect{Name Duration [inborn @Args]}
-      Else | $add_effect{E 0 [inborn]}
+      [`{}` Name Duration @Args] | $add_effect{Name Duration Args}
+      Else | $add_effect{E 0 []}
 
 unit.morph Class =
 | $owner.lost_unit{Me}
@@ -156,8 +156,10 @@ unit.add_effect Name Duration Params =
 unit.has Name = got $effects.find{?1><Name}
 
 unit.cooldown_of ActName =
-| E = $effects.find{E => E.1><cool and E.3.1.1.0><ActName}
-| if got E then [E.2 E.3.1.1.1] else 0
+| E = $effects.find{E => E.1><cool and E.3.0.1.0><ActName}
+| if got E then [E.2 E.3.0.1.1] else 0
+
+unit.get_effect Name = $effects.find{?1><Name}
 
 unit.strip_effect Name =
 | less $has{Name}: leave
@@ -168,9 +170,7 @@ unit.strip_effect Name =
 | when got Flag: $flags <= $flags^set_bit{Flag 0}
 
 unit.add_item Amount Name =
-| when Amount > 0:
-  | $add_effect{Name -Amount []}
-  | leave
+| less Amount: leave
 | for E $effects: case E [When EName Duration Params]: when EName><Name:
   | !Duration-Amount
   | when Duration >> -1:
@@ -178,6 +178,12 @@ unit.add_item Amount Name =
     | leave
   | E.2 <= Duration
   | leave
+| $add_effect{Name -Amount []}
+
+unit.get_item Name =
+| for E $effects: case E [When EName Duration Params]: when EName><Name:
+  | leave -Duration
+| 0
 
 unit.run_effects Selector Target TargetXYZ =
 | Es = []
@@ -192,7 +198,7 @@ unit.`!backtrack` XYZ =
   | $strip_effect{btrack}
   | leave
 | when $has{btrack}: leave
-| $add_effect{btrack 0 [inborn [effect [on [`.` cycle 24]] [btrack XYZ]]]}
+| $add_effect{btrack 0 [[effect [on [`.` cycle 24]] [btrack XYZ]]]}
 
 unit.change_owner NewOwner =
 | $owner.lost_unit{Me}

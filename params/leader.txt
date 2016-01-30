@@ -13,7 +13,7 @@ speed: 28
 pickable: 1
 passable: 0
 flyer: 0 // can it fly
-ranger: 0 // does it move into the cell of defeated unit
+range: cross // does it move into the cell of defeated unit
 leader: 1
 blood: blood
 ai: unit

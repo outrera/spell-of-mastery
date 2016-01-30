@@ -196,24 +196,35 @@ update_path_move Me XYZ =
 | Us = $world.units_at{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
 | when Target and Target.owner.id >< $owner.id
-       // good idea would be pusshing ranged unit forward, so other rangers
+       // good idea would be pushing ranged unit forward, so other rangers
        // get a chance to attack too
        and (not Target.idle
             or ($range><Target.range
                 and Target.goal and Target.path.end)):
   | when Target.xyz<>$goal.xyz:
     | when UpdatePathHangTrap>0: leave
+    | Stuck = $get_effect{stuck}
+    | Stuck = if got Stuck then Stuck.3 else 0
+    | Cycle = $world.cycle
+    | less Stuck and Stuck.0.list><$xyz and Stuck.1.list><$goal.xyz:
+      | when got Stuck: $strip_effect{stuck}
+      | $add_effect{stuck 0 [$xyz $goal.xyz Cycle 4]}
+      | Stuck <= $get_effect{stuck}.3
+    | [Src Dst Wait Tries] = Stuck
+    | when Tries<<0:
+      | $strip_effect{stuck}
+      | $goal <= 0 //FIXME: let AI know that we can reach goal
+      | $set_path{[]}
+      | leave
+    | when Wait>Cycle: leave
     | find_path_around_busy_units Me $goal.xyz
     | less $path.end:
       | !UpdatePathHangTrap+1
       | update_path Me
+    | $strip_effect{stuck}
+    | $add_effect{stuck 0 [$xyz $goal.xyz Cycle+12 Tries-1]}
     | leave
-| Act = if XYZ<>$goal.xyz
-        then  M
-        else | Target = $goal
-             | less $goal_act.repeat >< 1: $goal <= 0
-             | $goal_act
-| $order.init{Act | Target or XYZ}
+| $order.init{M | Target or XYZ}
 
 
 update_path Me =

@@ -10,7 +10,7 @@ blood: blood_undead
 //inborn: (upkeep2 organic)
 //attack: sound{attack2}
 impact: sound{attack2}
-hit: sound{doorwood_hit}
-death: sound{doorwood_die}
+hit: sound{door_hit}
+death: sound{door_die}
 moves: sound{step}
 acts: (door_open)

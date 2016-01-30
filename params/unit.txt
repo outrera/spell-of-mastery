@@ -2,7 +2,6 @@ unit: 1
 entity: 1
 active: 1
 tier: 1
-draw_order: 4
 height: 8
 health: 1 // hit points - number of hits, before this unit is dead
 damage: 0 // amount of damage this unit deals

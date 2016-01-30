@@ -94,11 +94,11 @@ dact swap.start
 | move_start Me
 | T = $target
 | O = T.order
-| T.set_path{[T.xyz @T.path]}
+| less T.path.end: T.set_path{[T.xyz @T.path.list]}
 | O.init{move U.from}
 | O.priority <= 100
-| less T.has{btrack}:
-  | less U.goal and U.goal.xyz >< T.xyz:
+| less T.goal: less U.goal and U.goal.xyz >< T.xyz:
+  | less T.has{btrack}:
     | T.backtrack <= T.xyz
 
 dact swap.update | move_update Me
