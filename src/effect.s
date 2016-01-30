@@ -32,6 +32,21 @@ effect mod Arg: Target.mod <= Arg
 
 effect add_moves N: bad "effect.s: add_moves is obsolete"
 
+effect tenant_mark Type:
+| Block = $world.block_at{TargetXYZ}
+| S = $world.units_at{TargetXYZ}.find{?type><Type}
+| less got Block:
+  | when got S:
+    | S.delta <= 50
+    | when S.alpha><255
+      | S.die
+  | leave
+| when got S: leave
+| S = $owner.alloc_unit{Type}
+| S.alpha <= 255
+| S.delta <= -50
+| S.move{TargetXYZ}
+
 metric A B = (B-A).take{2}.abs
 
 effect btrack XYZ:

@@ -275,6 +275,7 @@ update_fade Me =
   | $delta <= 0
 | when $alpha < 0:
   | $alpha <= 0
+  | $delta <= 0
 
 update_next_action Me =
 | less $next_action.type: less $path.end:
