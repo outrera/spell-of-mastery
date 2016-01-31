@@ -4,7 +4,7 @@ health: 60
 damage: 3
 armor: 4
 speed: 28
-inborn: (upkeep2 organic)
+inborn: (upkeep2 heals organic)
 //attack: sound{attack2}
 impact: sound{attack2}
 hit: sound{dwarf_hit}

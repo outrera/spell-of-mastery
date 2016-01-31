@@ -5,7 +5,7 @@ damage: 1
 armor: 3
 range: 2
 speed: 48
-inborn: (upkeep1)
+inborn: (upkeep1 heals)
 blood: blood_undead
 //attack: sound{blob_attack}
 impact: sound{blob_attack}

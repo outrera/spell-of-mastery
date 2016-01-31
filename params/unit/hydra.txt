@@ -5,7 +5,7 @@ damage: 12
 armor: 2
 cooldown: 4
 speed: 28
-inborn: (upkeep4 organic regen)
+inborn: (upkeep4 heals organic regen)
 //attack: sound{hydra_attack}
 impact: sound{hydra_attack},harm_neibs{8}
 hit: sound{hydra_hit}

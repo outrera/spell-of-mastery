@@ -4,7 +4,7 @@ health: 90
 damage: 5
 armor: 2
 speed: 22
-inborn: (upkeep3 fireaura flyer)
+inborn: (upkeep3 heals fireaura flyer)
 //attack: sound{fire1}
 impact: sound{fire1}
 hit: sound{grunt2}

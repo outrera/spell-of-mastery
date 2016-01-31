@@ -4,7 +4,7 @@ health: 160
 damage: 12
 armor: 2
 cooldown: 4
-inborn: (upkeep4 organic flyer)
+inborn: (upkeep4 heals organic flyer)
 //attack: sound{dragon_hit}
 impact: impact{fire_ring}, sound{fire1}
 hit: sound{dragon_hit}

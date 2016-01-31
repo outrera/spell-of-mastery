@@ -5,7 +5,7 @@ damage: 4
 armor: 2
 speed: 28
 blood: blood_undead
-inborn: (upkeep2 regen flyer)
+inborn: (upkeep2 heals regen flyer)
 //attack: sound{attack2}
 impact: sound{attack2}
 hit: sound{wraith_hit}

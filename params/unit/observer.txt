@@ -6,7 +6,7 @@ armor: 0
 cooldown: 4
 range: 4
 speed: 28
-inborn: (upkeep4 organic flyer)
+inborn: (upkeep4 heals organic flyer)
 attack: sound{observer_attack}
 //impact: sound{observer_attack}
 hit: sound{observer_hit}

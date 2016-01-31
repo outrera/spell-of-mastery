@@ -3,7 +3,7 @@ tier: 4
 health: 200
 damage: 10
 armor: 0
-inborn: (upkeep4 organic)
+inborn: (upkeep4 heals organic)
 //attack: sound{ogre_club}
 impact: sound{ogre_club}
 hit: sound{ogre_hit}

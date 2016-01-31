@@ -5,7 +5,7 @@ damage: 10
 armor: 3
 speed: 34
 blood: blood_undead
-inborn: (upkeep4)
+inborn: (upkeep4 heals)
 //attack: sound{attack2}
 impact: sound{stone_hit}
 //hit: sound{ogre_club}

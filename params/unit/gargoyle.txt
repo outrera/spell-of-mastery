@@ -3,7 +3,7 @@ tier: 2
 health: 50
 damage: 10
 armor: 0
-inborn: (upkeep2 organic flyer)
+inborn: (upkeep2 heals organic flyer)
 //attack: sound{fire1}
 impact: sound{fire1}
 hit: sound{baphomet_hit}

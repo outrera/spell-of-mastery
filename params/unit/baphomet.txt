@@ -3,7 +3,7 @@ tier: 3
 health: 60
 damage: 2
 armor: 10
-inborn: (upkeep3 organic)
+inborn: (upkeep3 heals organic)
 impact: when{sinner},harm{50},impact{explosion_blood},endwhen,sound{attack1}
 hit: sound{baphomet_hit}
 death: sound{baphomet_hit}

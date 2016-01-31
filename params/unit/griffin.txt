@@ -3,7 +3,7 @@ tier: 3
 health: 100
 damage: 10
 armor: 0
-inborn: (upkeep3 organic flyer)
+inborn: (upkeep3 heals organic flyer)
 //attack: sound{attack2}
 impact: sound{attack2}
 hit: sound{griffin_hit}

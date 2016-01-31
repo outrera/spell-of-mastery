@@ -4,7 +4,7 @@ health: 40
 damage: 7
 armor: 0
 range: 4
-inborn: (upkeep2 organic)
+inborn: (upkeep2 heals organic)
 //attack: sound{arrow_hit}
 impact: sound{arrow_hit}
 hit: sound{grunt3}

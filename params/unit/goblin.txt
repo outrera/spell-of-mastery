@@ -4,7 +4,7 @@ health: 40
 damage: 5
 armor: 0
 range: 3
-inborn: (upkeep1 organic)
+inborn: (upkeep1 heals organic)
 //attack: sound{attack2}
 impact: sound{attack2}
 hit: sound{goblin_hit}

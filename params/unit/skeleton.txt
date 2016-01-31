@@ -5,7 +5,7 @@ damage: 4
 armor: 2
 speed: 28
 blood: blood_undead
-inborn: (upkeep1 regen)
+inborn: (upkeep1 heals regen)
 //attack: sound{attack2}
 impact: sound{attack2}
 hit: sound{skeleton_hit}

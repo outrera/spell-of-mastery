@@ -277,6 +277,7 @@ check_when Me Target C =
   enemy | less $owner.is_enemy{Target.owner}: leave 0
   confirmed | less $main.dialog_result><yes: leave 0
   harmed | less Target.health<>Target.class.hp: leave 0
+  idle | when Target.goal: leave 0
   [`.` has_health A] | less Target.health>>A: leave 0
   [`.` has_mana A] | less $owner.mana>>A: leave 0
   [`.` has Effect] | less Target.has{Effect}: leave 0
