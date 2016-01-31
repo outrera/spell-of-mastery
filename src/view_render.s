@@ -358,7 +358,7 @@ handle_picked Me Rect Units =
 | less $mice_click:
   | less Units.end:
     | get_gui{}.cursor <= $main.img{ui_cursor_glass}
-    | $on_unit_pick{}{[Units.0]}
+    //| $on_unit_pick{}{[Units.0]}
   | leave
 | when $mice_click >< left: leave
 | when $mice_click >< order:
