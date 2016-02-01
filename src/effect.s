@@ -311,6 +311,7 @@ unit.effect Effect Target XYZ =
       | less Cs.all{C => check_when Me T C}:
         | while not Es.end and Es.0<>endwhen: pop Es
     else if Name >< endwhen then
+    else if Name >< user_attack then $effect{$attack T T.xyz}
     else if Name >< user_impact then $effect{$impact T T.xyz}
     else if Name >< missile then
       | Speed = 2

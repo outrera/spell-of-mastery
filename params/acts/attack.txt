@@ -1,4 +1,5 @@
 affects: unit
+before: (user_attack)
 impact: harm{user},counter{1},user_impact
 range: user
 icon: spell_suicide
