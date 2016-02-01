@@ -1,0 +1,6 @@
+sprite: tiles_stairs
+role: stairs
+match: same
+tiling: side
+1111: 8
+0000: 8
