@@ -93,6 +93,12 @@ effect impact Impact: $world.effect{TargetXYZ Impact}
 
 effect effect Effect: $world.effect{$xyz Effect}
 
+effect effect1 Effect:
+| Type = "effect_[Effect]"
+| E = $world.units_at{TargetXYZ}.find{?type><Type}
+| when got E: leave
+| $world.effect{TargetXYZ Effect}
+
 effect sound Sound:
 | when not $id or (not $removed and $world.human.explored{$xyz}>1):
   | $main.sound{Sound}
