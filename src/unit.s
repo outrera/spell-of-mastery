@@ -388,7 +388,8 @@ unit.harm Attacker Damage =
   | heal_unit Me -Damage
   | leave
 | less Piercing: Damage <= max 1 Damage-$armor
-| when Mod >< block: leave
+| case Mod
+  [`.` block N] | when Damage>1: Damage <= max 1 Damage-N
 | !$hp - Damage
 | when!it $blood:
   | E = $world.effect{$xyz it}

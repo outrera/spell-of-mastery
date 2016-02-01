@@ -4,7 +4,7 @@ flyer: on{static}
 organic: on{static}
 fireaura: on{counter},harm{piercing.5},impact{fire_ring}
 poison: on{cycle.60},host,when{has_health.2},harm{piercing.1}
-shell: on{attacked},mod{block},sound{shell},impact{shell},strip{shell}
+shell: on{attacked},mod{block.1},sound{shell},impact{shell}
 haste: on{cycle.240},add_moves{1}
 regen: on{cycle.30},when{harmed},strip{poison},harm{-1},effect{explosion_blood}
 heals: on{cycle.80},when{harmed},when{idle},harm{-1}
