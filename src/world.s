@@ -206,14 +206,14 @@ world.clear_passage X Y Z =
 | ZZ = Z
 | AddCeil = 1
 | while Z<H:
-  | less $at{X,Y,Z}.clear:
+  | less $at{X Y Z}.clear:
     | H<=Z
     | AddCeil <= 0
   | !Z+1
 | Z <= ZZ
 | when H-Z < 5: leave
 | while Z<H:
-  | when Dirs.all{DX,DY=>$at{[X+DX Y+DY Z]}.empty}: H<=Z
+  | when Dirs.all{DX,DY=>$at{X+DX Y+DY Z}.empty}: H<=Z
   | !Z+1
 | Z <= ZZ
 | when H-Z < 5: leave

@@ -348,24 +348,20 @@ in_range Me XYZ =
 | less (XYZ.take{2}-$xyz.take{2}).abs<<$range.float: leave 0
 | $world.seen_from{$xyz $goal.xyz}
 
-retaliate Me Enemy =
+unit.targets_in_range Range = $world.targets_in_range{Me.xyz Range}
+
+retaliate Me Enemy Range =
 | less $idle: leave
+| when Range:
+  | for U $targets_in_range{Range}:
+    | when U.id<>$id and U.damage and U.owner.id><$owner.id:
+      | retaliate U Enemy 0
 | when $goal and ($goal.xyz-Me.xyz).abs << (Enemy.xyz-Me.xyz).abs:
   | leave
 | less $damage: leave
-| when $action.type><idle:
-  | $order_at{Enemy.xyz}
-  | $backtrack <= $xyz
-  | leave
-| less $action.type><attack: leave
-| less $range:
-  | when (Enemy.xyz-Me.xyz){?abs}.sum><1:
-    | when $goal and ($goal.xyz-Me.xyz){?abs}.sum><1: leave
-    | $order.init{attack Enemy}
-    | leave
-| when $range and in_range Me Enemy.xyz:
-  | $order.init{attack Enemy}
-  | leave
+| $order_at{Enemy.xyz}
+| $backtrack <= $xyz
+| leave
 
 heal_unit Me Amount =
 | less $class.hp: leave
@@ -400,7 +396,7 @@ unit.harm Attacker Damage =
   | when Effect: $effect{Effect Me $xyz}
   | when $anim><idle or $anim><move: $animate{hit}
   | when Attacker and $owner.is_enemy{Attacker.owner}:
-    | retaliate Me Attacker
+    | retaliate Me Attacker 5
   | leave
 | when Attacker:
   | AO = Attacker.owner

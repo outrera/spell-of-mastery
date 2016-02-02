@@ -333,6 +333,7 @@ unit.effect Effect Target XYZ =
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me
+    else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
     else if Name >< all_alive then
       | for U $world.active: when U.alive: $effect{Es U U.xyz}
       | leave
