@@ -47,7 +47,8 @@ type unit.$class{Id World}
   mod //set by various effects to modify some contextual behavior
   host //what unit hosts this sprite
   host_serial
-  colors/0
+  colors
+  can_move
 | $action <= $world.action{Me}
 | $next_action <= $world.action{Me}
 | $ordered <= $world.action{Me}
@@ -71,6 +72,8 @@ unit.`!nonguard` State = $flags <= $flags^set_bit{2 State}
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
+unit.digger = $flags^get_bit{9}
+
 unit.alive = $hp > 0
 unit.health =
 | CHP = $class.hp
@@ -81,6 +84,16 @@ unit.health =
 | less R: R <= CHP
 | R
 
+land_can_move Me Src Dst =
+| DX,DY,DZ = Dst
+| SZ = Src.2
+| Z = DZ-SZ
+| when Z.abs > 4: leave 0
+| $world.at{DX DY DZ-1}.type <> water
+
+flyer_can_move Me Src Dst =
+| DX,DY,DZ = Dst
+| $world.at{DX DY DZ}.empty // FIXME: check for roof
 
 unit.move_in State =
 | when $item <> pickup: leave
@@ -120,6 +133,8 @@ unit.init Class =
   | for E $inborn: case E
       [`{}` Name Duration @Args] | $add_effect{Name Duration Args}
       Else | $add_effect{E 0 []}
+  | $can_move <= if $flyer then &flyer_can_move
+                 else &land_can_move
 
 unit.morph Class =
 | $owner.lost_unit{Me}

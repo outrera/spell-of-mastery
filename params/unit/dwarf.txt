@@ -5,7 +5,7 @@ damage: 3
 armor: 4
 speed: 28
 acts: (cast_excavate)
-inborn: (upkeep2 heals organic)
+inborn: (upkeep2 heals organic digger)
 //attack: sound{attack2}
 impact: sound{attack2}
 hit: sound{dwarf_hit}

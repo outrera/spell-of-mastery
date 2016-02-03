@@ -39,7 +39,7 @@ move_finish Me =
 
 dact move.valid
 | U = $unit
-| U.world.no_block_at{$xyz} and U.can_move{U.xyz $xyz}
+| U.world.no_block_at{$xyz} and U.can_move{}{U U.xyz $xyz}
 
 dact move.start
 | move_start Me

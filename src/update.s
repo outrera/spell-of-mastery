@@ -183,11 +183,15 @@ unit_check_move Me Dst =
 | SX,SY,SZ = Src
 | X,Y,Z = Dst
 | when (X-SX).abs>1 or (Y-SY).abs>1: leave 0
+| Tile = $world.at{X Y Z}
+| less Tile.empty
+  | when Tile.clear: leave excavate
+  | leave 0
 | B = $world.block_at{Dst}
 | when no B: leave move
 | if $owner.id <> B.owner.id
   then when B.alive and $damage: leave attack
-  else when B.speed and B.can_move{Dst Src}: leave swap
+  else when B.speed and B.can_move{}{B Dst Src}: leave swap
 | 0
 
 update_path_move Me XYZ =

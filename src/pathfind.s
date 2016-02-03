@@ -1,13 +1,5 @@
 use queue
 
-PFMap = dup 134: dup 134: dup 64: #FFFFFFFFFFFF
-PFQueue = queue 256*256
-PFCount = #FFFFFF
-
-pf_reset_count =
-| for Ys PFMap: for Xs Ys: Xs.init{#FFFFFFFFFFFF}
-| PFCount <= #FFFFFF
-
 type move{type xyz}
 move.as_text = "#move{[$type] [$xyz]}"
 
@@ -16,11 +8,18 @@ Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
 list_moves Me Src =
 | Ms = []
 | SX,SY,SZ = Src
+| Digger = $digger
 | for DX,DY Dir4
   | X = SX+DX
   | Y = SY+DY
   | Z = SZ
-  | less $world.at{X Y Z}.type >< border_:
+  | Tile = $world.at{X Y Z}
+  | if Tile.type >< border_ then
+    else if Digger and Tile.clear and (Z-$world.fix_z{X,Y,Z}).abs>4 then
+     | push move{excavate [X Y Z]} Ms
+    else
+    | when Digger
+      | $world.at{X Y Z}
     | Z <= $world.fix_z{X,Y,Z}
     | Dst = [X Y Z]
     | B = $world.block_at{Dst}
@@ -28,10 +27,11 @@ list_moves Me Src =
         | if $owner.id <> B.owner.id
           then when B.alive and $damage and (SZ-Z).abs<<4:
                | push move{attack Dst} Ms
-          else when B.speed and $can_move{Src Dst} and B.can_move{Dst Src}:
+          else when B.speed and $can_move{}{Me Src Dst} and B.can_move{}{B Dst Src}:
                | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
-      else when $can_move{Src Dst}: push move{move Dst} Ms
+      else when $can_move{}{Me Src Dst}: push move{move Dst} Ms
 | Ms
+
 
 node_to_path Node =
 | Path = []
@@ -40,6 +40,14 @@ node_to_path Node =
   | push XYZ Path
   | Node <= Prev
 | Path.tail.list
+
+PFMap = dup 134: dup 134: dup 64: #FFFFFFFFFFFF
+PFQueue = queue 256*256
+PFCount = #FFFFFF
+
+pf_reset_count =
+| for Ys PFMap: for Xs Ys: Xs.init{#FFFFFFFFFFFF}
+| PFCount <= #FFFFFF
 
 world.pathfind MaxCost U XYZ Check =
 | less U.speed: leave 0

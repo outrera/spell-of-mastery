@@ -191,14 +191,6 @@ world.clear_tile XYZ Filler =
 | $clear_tile_{XYZ Filler}
 | XY = XYZ.take{2}
 
-unit.can_move Src Dst =
-| DX,DY,DZ = Dst
-| when $flyer: leave $world.at{DX DY DZ}.empty // FIXME: check for roof
-| SZ = Src.2
-| Z = DZ-SZ
-| when Z.abs > 4: leave 0
-| $world.at{DX DY DZ-1}.type <> water
-
 world.clear_passage X Y Z =
 | HH = $fix_z{X,Y,Z}
 | H = HH
