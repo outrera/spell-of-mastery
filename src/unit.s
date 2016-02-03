@@ -73,6 +73,8 @@ unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
 unit.digger = $flags^get_bit{9}
+unit.swimmer = $flags^get_bit{10}
+unit.amphibian = $flags^get_bit{11}
 
 unit.alive = $hp > 0
 unit.health =
@@ -91,9 +93,29 @@ land_can_move Me Src Dst =
 | when Z.abs > 4: leave 0
 | $world.at{DX DY DZ-1}.type <> water
 
+amphibian_can_move Me Src Dst =
+| DX,DY,DZ = Dst
+| SZ = Src.2
+| Z = DZ-SZ
+| when Z.abs > 4: leave 0
+
+swimmer_can_move Me Src Dst =
+| DX,DY,DZ = Dst
+| SZ = Src.2
+| Z = DZ-SZ
+| when Z.abs > 4: leave 0
+| $world.at{DX DY DZ-1}.type >< water
+
 flyer_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | $world.at{DX DY DZ}.empty // FIXME: check for roof
+
+unit.update_move_method =
+| $can_move <= if $flyer then &flyer_can_move
+               else if $amphibian then &amphibian_can_move
+               else if $swimmer then &swimmer_can_move
+               else &land_can_move
+
 
 unit.move_in State =
 | when $item <> pickup: leave
@@ -133,8 +155,7 @@ unit.init Class =
   | for E $inborn: case E
       [`{}` Name Duration @Args] | $add_effect{Name Duration Args}
       Else | $add_effect{E 0 []}
-  | $can_move <= if $flyer then &flyer_can_move
-                 else &land_can_move
+  | $update_move_method
 
 unit.morph Class =
 | $owner.lost_unit{Me}
