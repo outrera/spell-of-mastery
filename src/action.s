@@ -182,7 +182,8 @@ action.impact =
 | Impact = $act.impact
 | when got Impact:
   | Target = $target
-  | $unit.effect{Impact Target Target.xyz}
+  | if Target then $unit.effect{Impact Target Target.xyz}
+    else $unit.effect{Impact 0 $xyz}
 
 action.after = $act.after
 

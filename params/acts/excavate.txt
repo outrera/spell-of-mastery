@@ -1,6 +1,6 @@
 affects: any
 before: sound{summon}
-after: same_z,impact{explosion3},clear_passage{target},sound{stone_hit}
+impact: same_z,impact{explosion3},clear_passage{target},sound{stone_hit}
 icon: spell_excavate
 range: 1
 fix_z: caster
