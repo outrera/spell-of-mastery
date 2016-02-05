@@ -343,16 +343,16 @@ handle_picked Me Rect Units =
   | Picked = $picked.skip{?empty}
   | when Act.affects><unit and Units.end: leave
   | $world.act <= 0
-  | U = Picked.0
-  | Target = if Units.end then 0 else Units.0
-  | XYZ = if Target then Target.xyz else $cursor
-  | when Act.affects><land:
-    | Target <= 0
-    | when Act.fix_z><caster: $cursor.2 <= U.xyz.2
-    | XYZ <= $cursor
-  | less $world.seen{@XYZ.take{2}}: leave
-  | when Target: $world.blink.init{[4 Target]}
-  | order_act U Act XYZ Target
+  | for U Picked
+    | Target = if Units.end then 0 else Units.0
+    | XYZ = if Target then Target.xyz else $cursor
+    | when Act.affects><land:
+      | Target <= 0
+      | when Act.fix_z><caster: $cursor.2 <= U.xyz.2
+      | XYZ <= $cursor
+    | when $world.seen{@XYZ.take{2}}:
+      | when Target: $world.blink.init{[4 Target]}
+      | order_act U Act XYZ Target
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | less $mice_click:

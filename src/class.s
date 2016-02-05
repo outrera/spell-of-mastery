@@ -72,7 +72,9 @@ main.load_classes =
   | $classes."[S.bank]_[S.name]" <= C
 | for K,V $classes:
   | when V.hp and not V.empty and V.leader<>1:
-    | V.acts <= [@V.acts disband recall]
+    | PreActs = [recall]
+    | when V.damage: PreActs <= [attack @PreActs]
+    | V.acts <= [@PreActs @V.acts disband]
 | for K,V $classes: V.acts <= map ActName V.acts
   | Act = $params.acts.ActName
   | less got Act: bad "[K] references undefined act [ActName]"
