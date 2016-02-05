@@ -43,6 +43,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    frame/[2 2 icon_frame]
    data/Data
    unit/0
+   hotkey
    on_click/Click
    //popup/icon_popup{}
 icon.draw G PX PY =
@@ -65,6 +66,9 @@ icon.draw G PX PY =
 | when got $text.2:
   | Font = font small
   | Font.draw{G X+$text.0 Y+$text.1 "[$text.2]"}
+| when $hotkey
+  | Font = font small
+  | Font.draw{G X+$fg.w-8 Y+$fg.h-8 "[$hotkey]"}
 icon.input In =
 | when $disabled: leave
 | case In

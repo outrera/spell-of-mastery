@@ -5,6 +5,7 @@ type cell_goal xyz/[0 0 0] serial
 cell_goal.type = \goal
 cell_goal.removed = 0
 cell_goal.alive = 1
+cell_goal.empty = 1
 
 type unit.$class{Id World}
   id/Id

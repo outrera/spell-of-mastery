@@ -408,6 +408,8 @@ ui_on_view_unit_pick Me Units =
     | Icon.frame.init{[3 3 Frame]}
     | Icon.w <= Icon.fg.w
     | Icon.h <= Icon.fg.h
+    | HK = Act.hotkey
+    | Icon.hotkey <= if got HK then HK else 0
     | ActIcons.I.show <= Active
 | UnitPanel.set_unit{Unit}
 
