@@ -10,8 +10,6 @@ MaxActIcons = 24
 ActIcons = []
 ActIcon = 0
 
-PickedUnit = 0
-
 MenuButtonsX = 0
 
 InputBlocker =
@@ -375,16 +373,19 @@ ui_on_world_update Me =
 
 ui_on_view_unit_pick Me Units =
 | for Icon ActIcons: Icon.show <= 0
-| when Units.size<>1
+| NUnits = Units.size
+| when NUnits<1
   | GameUnitUI.show <= 0
   | UnitPanel.set_unit{0}
   | leave
 | Unit = Units.0
-| PickedUnit <= Unit
-| GameUnitUI.show <= 1
+| when NUnits><1: GameUnitUI.show <= 1
 | Acts = $main.params.acts
 | Player = Unit.owner
-| As = Unit.acts.i.take{min{MaxActIcons Unit.acts.size}}
+| T = Unit.acts{}{[?name 1]}.table
+| for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
+| As = Unit.acts.keep{A=>T.(A.name)><NUnits}
+| As = As.i.take{min{MaxActIcons As.size}}
 | for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
   | Preqs = Act.needs.all{N=>Player.research_remain{Acts.N}<<0}
   | when Preqs:
@@ -433,7 +434,7 @@ create_act_icons Me =
       | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
     else when O.id >< $player.id:
          | if Act.range >< 0
-           then PickedUnit.order.init{Act PickedUnit}
+           then for U $main.ui.view.picked: U.order.init{Act U}
            else $world.act <= Act
 | map I MaxActIcons: hidden: icon 0 click/&actClick
 

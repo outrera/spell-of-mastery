@@ -201,6 +201,7 @@ effect recall Where:
   else leave
 | Target.remove
 | Target.move{XYZ}
+| Target.reset_goal
 
 effect remove Whom: case Whom
   target | Target.free

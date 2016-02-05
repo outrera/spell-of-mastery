@@ -331,6 +331,10 @@ unit.free =
 | $effects <= []
 | $world.free_unit{Me}
 
+unit.reset_goal =
+| less $path.end: $set_path{[]}
+| $goal <= 0
+
 unit.remove =
 | when $xyz.2 <> -1:
   | when $passable and $block: $world.clear_tile{$xyz $world.void}
