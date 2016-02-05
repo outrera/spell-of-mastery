@@ -1,7 +1,7 @@
+icon: recall
 affects: ally
-before: effect{teleport},sound{spawn},impact{teleport},call{self}//,remove{self}
+before: effect{teleport},sound{summon},impact{teleport},recall{self}
 after: ()
-icon: spell_call
 range: 9000
-//lore: (2 100)
-cost: 100
+//lore: misc.tier1_lcost
+//cost: 100

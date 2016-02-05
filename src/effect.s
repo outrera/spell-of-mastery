@@ -191,9 +191,14 @@ effect swap Arg:
 | $move{TargetXYZ}
 | Target.move{XYZ}
 
-effect call Arg:
-| XYZ = $xyz.copy
-| when got $world.block_at{XYZ}: leave
+effect recall Where:
+| XYZ = [0 0 0]
+| if Where><pentagram then
+   | P = $owner.pentagram
+   | less P: leave
+   | XYZ.init{P.xyz}
+  else if Where><self then XYZ.init{$xyz}
+  else leave
 | Target.remove
 | Target.move{XYZ}
 
@@ -334,6 +339,11 @@ unit.effect Effect Target XYZ =
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me
     else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
+    else if Name >< pentagram then
+     | P = $owner.pentagram
+     | less P: leave
+     | XYZ.init{P.xyz}
+     | Target <= P
     else if Name >< all_alive then
       | for U $world.active: when U.alive: $effect{Es U U.xyz}
       | leave

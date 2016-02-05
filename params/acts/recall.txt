@@ -1,0 +1,8 @@
+icon: recall
+affects: ally
+before: effect{teleport},sound{summon},impact{teleport},recall{pentagram}
+       ,pentagram,impact{teleport}
+after: ()
+range: 0
+//lore: misc.tier1_lcost
+//cost: 50
