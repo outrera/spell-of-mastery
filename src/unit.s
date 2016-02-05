@@ -187,7 +187,9 @@ unit.add_effect Name Duration Params =
 | $effects.heapfree
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name
-| when got Flag: $flags <= $flags^set_bit{Flag 1}
+| when got Flag:
+  | $flags <= $flags^set_bit{Flag 1}
+  | $update_move_method
 
 unit.has Name = got $effects.find{?1><Name}
 
@@ -203,7 +205,9 @@ unit.strip_effect Name =
 | $effects.heapfree
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name
-| when got Flag: $flags <= $flags^set_bit{Flag 0}
+| when got Flag:
+  | $flags <= $flags^set_bit{Flag 0}
+  | $update_move_method
 
 unit.add_item Amount Name =
 | less Amount: leave
