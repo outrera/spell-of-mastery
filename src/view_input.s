@@ -97,9 +97,6 @@ view.update_play =
         | when $world.act:
           | $world.act <= 0
           | $mice_click <= 0
-| when $keys.a><1:
-  | for U $picked: when U.owner.id >< Player.id and U.xyz <> $cursor:
-    | when U.damage: U.order_at{$cursor act/attack}
 | $main.update
 
 world.update_picked =

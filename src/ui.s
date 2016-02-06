@@ -413,7 +413,6 @@ ui_on_view_unit_pick Me Units =
     | ActIcons.I.show <= Active
 | UnitPanel.set_unit{Unit}
 
-
 create_act_icons Me =
 | actClick Icon =
   | $world.act <= 0
@@ -443,6 +442,14 @@ create_act_icons Me =
 create_ingame_icons Me =
 | GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
 
+
+ui_input Me Base In =
+| Base.input{In}
+| when $view.mode<>play or InputBlocker.show: leave 
+| case In [key Key 1]
+  | for Icon ActIcons: when Icon.show: when Icon.hotkey><Key:
+    | Icon.on_click{}{Icon}
+
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
@@ -460,7 +467,8 @@ ui.init =
 | ActIcons <= create_act_icons Me
 | EditorIcons <= create_editor_icons Me
 | create_ingame_icons Me
-| $tabs <= create_dialog_tabs Me
+| Tabs = create_dialog_tabs Me
+| $tabs <= input_split Tabs: Base In => ui_input Me Base In
 | BankList.pick{0}
 | begin_ingame Me 1
 
