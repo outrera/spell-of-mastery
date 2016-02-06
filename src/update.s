@@ -202,6 +202,7 @@ update_path_move Me XYZ =
 | when Target and Target.owner.id >< $owner.id
        // good idea would be pushing ranged unit forward, so other rangers
        // get a chance to attack too
+       and (not $flyer or Target.flyer) //flyer has precedence over non-flyer
        and (not Target.idle
             or ($range><Target.range
                 and Target.goal and Target.path.end)):
