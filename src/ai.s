@@ -120,7 +120,8 @@ roam Me =
     | AI = V.ai
     | when AI:
       | Block = World.block_at{Dst.xyz}
-      | if AI><unit and Owner.is_enemy{Block.owner} then MoveIn <= 1
+      | if AI><unit and got Block and Owner.is_enemy{Block.owner} then
+           | MoveIn <= 1
         else if AI><hold and no Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
         else if AI><turret and no Block then MoveIn <= 1
@@ -194,7 +195,8 @@ ai.harm Attacker Victim =
       | U.order_at{Attacker.xyz}
     | leave
   | $params.aiLeaderHarmCycle <= Cycle
-  | for U $player.units: when U.id <> Victim.id:
+  | for U $player.units: when U.id <> Victim.id: when U.speed:
+    | U.attacker <= 1
     | U.order_act{recall target/U}
 
 ai.group_attack Types =

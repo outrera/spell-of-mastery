@@ -1,5 +1,4 @@
 unit: 1
-entity: 1
 active: 1
 draw_order: 4
 height: 8
@@ -22,7 +21,7 @@ inborn: (heals organic)
 //attack: sound{wizard_attack}
 impact: sound{attack2}
 moves: sound{step}
-acts: (pentagram cast_hexagram recall cast_knowledge
+acts: (pentagram cast_hexagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
        cast_heal cast_shell
        cast_telekinesis cast_excavate cast_teleport

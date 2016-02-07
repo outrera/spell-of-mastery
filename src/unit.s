@@ -422,7 +422,7 @@ unit.harm Attacker Damage =
 | case Damage [_ piercing D]
   | Damage <= D
   | Piercing <= 1
-| $run_effects{?><attacked Me $xyz}
+| $run_effects{?><harm Me $xyz}
 | Mod = $mod
 | $mod <= 0
 | when Damage << 0:

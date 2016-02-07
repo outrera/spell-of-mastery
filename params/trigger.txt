@@ -1,4 +1,3 @@
-entity: 1
 empty: 1
 editor: 1
 passable: 0

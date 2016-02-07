@@ -71,10 +71,13 @@ main.load_classes =
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
 | for K,V $classes:
-  | when V.hp and not V.empty and V.leader<>1:
-    | PreActs = [recall]
-    | when V.damage: PreActs <= [attack @PreActs]
-    | V.acts <= [@PreActs @V.acts disband]
+  | when V.hp:
+    | As = []
+    | when V.speed: As <= [recall @As]
+    | when V.damage: As <= [attack @As]
+    | As <= [@As @V.acts]
+    | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]
+    | V.acts <= As
 | for K,V $classes: V.acts <= map ActName V.acts
   | Act = $params.acts.ActName
   | less got Act: bad "[K] references undefined act [ActName]"

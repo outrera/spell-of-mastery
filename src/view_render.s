@@ -340,10 +340,9 @@ handle_picked Me Rect Units =
       | get_gui{}.cursor <= $main.img{Cur}
     | leave
   | $mice_click <= 0
-  | Picked = $picked.skip{?empty}
   | when Act.affects><unit and Units.end: leave
   | $world.act <= 0
-  | for U Picked
+  | for U $picked
     | Target = if Units.end then 0 else Units.0
     | XYZ = if Target then Target.xyz else $cursor
     | when Act.affects><land:

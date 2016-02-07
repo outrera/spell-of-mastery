@@ -3,7 +3,6 @@ icon: special_pentagram
 sprite: special_pentagram
 empty: 1
 health: 120 // two minutes
-entity: 1
 pickable: 1
 sight: 1
 starts: still // initial animation

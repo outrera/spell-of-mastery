@@ -2,11 +2,11 @@ title: `Hexagram`
 sprite: special_hexagram
 icon: spell_hexagram
 tier: 2
-attack: 1
-defense: 0
-ranged: 1
+damage: 1
+armor: 0
+range: 3
 empty: 1
-health: 1
+health: 10
 pickable: 1
 sight: 1
 starts: still // initial animation

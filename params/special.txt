@@ -1,4 +1,3 @@
-entity: 1
 empty: 1
 height: 0
 active: 1

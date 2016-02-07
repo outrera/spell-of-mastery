@@ -1,6 +1,7 @@
 affects: unit
 before: add_effect{shell,0,()},impact{shell},sound{shell}
 icon: spell_shell
-range: 2
-lore: misc.tier2_lcost
-cost: 150
+range: 3
+lore: misc.tier1_lcost
+cost: 100
+cool: 240
