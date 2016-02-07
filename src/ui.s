@@ -19,6 +19,7 @@ CreditsRoll =
 GameUnitUI =
 UnitPanel =
 BankList =
+HotKeyInvoke = 0
 
 MenuBG =
 
@@ -415,9 +416,11 @@ ui.on_unit_pick Units =
 
 create_act_icons Me =
 | actClick Icon =
+  | HKI = HotKeyInvoke
+  | HotKeyInvoke <= 0
   | $world.act <= 0
   | $main.sound{ui_click}
-  | when ActIcon: ActIcon.picked <= 0
+  | when ActIcon and ActIcon.show: ActIcon.picked <= 0
   //| Icon.picked <= 1
   | Unit = Icon.unit
   | ActIcon <= Icon
@@ -434,9 +437,10 @@ create_act_icons Me =
     else if got Cost and Cost>O.mana then
       | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
     else when O.id >< $player.id:
-         | if Act.range >< 0
-           then for U $main.ui.view.picked: U.order.init{Act U}
-           else $world.act <= Act
+         | if Act.range >< 0 
+           then | for U $main.ui.view.picked: U.order.init{Act U}
+           else | $world.act <= Act
+                | when HKI: $view.mice_click <= \leftup
 | map I MaxActIcons: hidden: icon 0 click/&actClick
 
 create_ingame_icons Me =
@@ -448,6 +452,7 @@ ui_input Me Base In =
 | when $view.mode<>play or InputBlocker.show: leave 
 | case In [key Key 1]
   | for Icon ActIcons: when Icon.show: when Icon.hotkey><Key:
+    | HotKeyInvoke <= 1
     | Icon.on_click{}{Icon}
 
 ui.init =
