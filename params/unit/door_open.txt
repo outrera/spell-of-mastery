@@ -3,7 +3,7 @@ icon: unit_door
 title: `Door (open)`
 tier: 2
 box_xy: (-8 -8)
-health: 300
+health: 150
 damage: 0
 armor: 3
 speed: 0

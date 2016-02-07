@@ -74,7 +74,9 @@ main.load_classes =
   | when V.hp:
     | As = []
     | when V.speed: As <= [recall @As]
-    | when V.damage: As <= [attack @As]
+    | when V.damage:
+      | when V.damage><impact: V.damage<=0
+      | As <= [attack @As]
     | As <= [@As @V.acts]
     | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]
     | V.acts <= As
