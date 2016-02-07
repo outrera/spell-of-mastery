@@ -173,7 +173,29 @@ ai.update_units Units =
     //| when U.nonguard: roam U radius/4
 | leave 0
 
+//when leader is too far from pentagram, just teleport leader back to it
+// after units get teleported, order them to attack
 ai.harm Attacker Victim =
+| when Victim.leader><1:
+  | Pent = Victim.owner.pentagram
+  | when Pent and (Pent.xyz-Victim.xyz).abs>>5.0:
+    | Victim.order_act{recall target/Victim}
+    | leave
+  | when Attacker:
+    | F = Victim.find{8
+      | D => (D.xyz-Attacker.xyz).abs >> 2.0
+             and (D.xyz-Victim.xyz).abs < 3.0}
+    | when F: Victim.order_at{F}
+  | Cycle = $world.cycle
+  | PParams = $player.params
+  | LHC = $params.aiLeaderHarmCycle
+  | when LHC+24*120>Cycle:
+    | when Attacker: for U $player.units: when U.damage and U.idle:
+      | U.order_at{Attacker.xyz}
+    | leave
+  | $params.aiLeaderHarmCycle <= Cycle
+  | for U $player.units: when U.id <> Victim.id:
+    | U.order_act{recall target/U}
 
 ai.group_attack Types =
 | Units = $player.units

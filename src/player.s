@@ -17,6 +17,7 @@ ai.clear =
 | $params.aiWait <= 0
 | $params.aiSpellWait <= 0 //hack to stop AI from spamming spells
 | $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
+| $params.aiLeaderHarmCycle <= -24*100000
 
 type player{id world}
    name ai human mana

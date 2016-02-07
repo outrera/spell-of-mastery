@@ -18,7 +18,7 @@ leader: 1
 blood: blood
 ai: unit
 item: pickup
-inborn: (organic)
+inborn: (heals organic)
 //attack: sound{wizard_attack}
 impact: sound{attack2}
 moves: sound{step}

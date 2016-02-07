@@ -124,6 +124,10 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
 
 unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $xyz Check}
 
+unit.find MaxCost Check =
+| Found = $world.pathfind{MaxCost Me $xyz Check}
+| if Found then Found.1 else 0
+
 //FIXME: AI version should setup unit_block
 unit.path_to XYZ close/0 =
 | Found = $world.pathfind_closest{1000 Me $xyz XYZ}
