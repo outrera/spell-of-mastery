@@ -134,7 +134,7 @@ world.update =
 | when update_events Me: leave
 | update_units Me
 | !$cycle + 1
-| ($update_ui){}
+| $view.ui.update
 
 update_anim Me =
 | !$anim_wait - 1

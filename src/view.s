@@ -1,8 +1,9 @@
 use gui util widgets
 
-type view.widget{M W H}
+type view.widget{M UI W H}
   main/M
   fb // frame buffer
+  ui/UI
   w/W
   h/H
   frame
@@ -24,7 +25,6 @@ type view.widget{M W H}
   fpsGoal/24 // goal frames per second
   fpsD/30.0
   param
-  on_unit_pick/(Picked=>)
   view_size/32  // render 32x32 world chunk
   center/[0 0 0]
   zfix/1
@@ -78,7 +78,6 @@ view.center_at XYZ cursor/0 =
 view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.world = $main.world
-
 
 
 export view

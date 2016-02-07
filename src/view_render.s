@@ -327,7 +327,7 @@ order_act Me Act XYZ Target =
   | $goal_serial <= Target.serial
 
 handle_picked Me Rect Units =
-| $on_unit_pick{}{$picked}
+| $ui.on_unit_pick{$picked}
 | Units = Units.keep{?seen}
 | Act = $world.act
 | when Act:

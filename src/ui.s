@@ -354,7 +354,7 @@ create_dialog_tabs Me =
           scenario(ScenarioMenu)
           credits(Credits)
 
-ui_on_world_update Me =
+ui.update = //called by world.update each game cycle
 | InputBlocker.show <= 0
 | WinnerId = $world.params.winner
 | when got WinnerId:
@@ -371,7 +371,7 @@ ui_on_world_update Me =
     | $load{"[MapsFolder][NextWorld].txt"}
     | $world.new_game
 
-ui_on_view_unit_pick Me Units =
+ui.on_unit_pick Units =
 | for Icon ActIcons: Icon.show <= 0
 | NUnits = Units.size
 | when NUnits<1
@@ -453,7 +453,7 @@ ui_input Me Base In =
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
-| $view <= view $main $width $height
+| $view <= view $main Me $width $height
 | $create{8 8}
 | MenuButtonsX <= $width/2 - 162
 | X = MenuButtonsX
@@ -462,8 +462,6 @@ ui.init =
 | InputBlocker <= hidden: spacer $width $height
 | WorldProperties <= create_world_props Me
 | LoadWorldDlg <= create_load_world_dlg Me
-| $world.update_ui <= => ui_on_world_update Me
-| $view.on_unit_pick <= Unit => ui_on_view_unit_pick Me Unit
 | ActIcons <= create_act_icons Me
 | EditorIcons <= create_editor_icons Me
 | create_ingame_icons Me

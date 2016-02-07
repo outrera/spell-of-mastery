@@ -45,11 +45,10 @@ type world{main}
    owners // unit owners
    active // active units
    vars/t{} // variables
-   update_ui
    marks
    params
    events
-   view
+   view //viewport, attached rendering this world
    act
    notes
    mode/brush
