@@ -8,7 +8,7 @@ pickable: 1
 sight: 1
 starts: still // initial animation
 ai: pentagram
-inborn: (enemy_damages)
+inborn: (enemy_damages removes_firewall)
 
 acts: summon_bat, summon_blob, summon_ratman, summon_goblin,
       summon_skeleton, summon_halfling,

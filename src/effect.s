@@ -127,8 +127,8 @@ effect counter Arg:
 effect lifedrain Amount:
 | when Target and Target.has{organic}: Me.harm{Me -Amount}
 
-effect suicide As:
-| Target.harm{Me Target.damage}
+effect suicide Multiplier:
+| Target.harm{Me Target.damage*Multiplier}
 
 effect paralyze Time: bad "effect.s: paralyze is obsolete"
 
@@ -208,6 +208,7 @@ effect remove Whom: case Whom
   self | Me.free
   X,Y,Z | U = $world.block_at{X,Y,Z}
         | when got U: U.free
+  neib,Type | for U $world.units_at{$xyz}: when U.type><Type: U.free
   Serial | U = $world.units.find{?serial><Serial}
          | when got U and U.xyz.2<>-1: U.free
 

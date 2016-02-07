@@ -1,7 +1,8 @@
 affects: unit
-before: suicide{1},impact{explosion_blood},sound{fire1}//,cooldown{5}
+before: suicide{10},impact{explosion_blood},sound{fire1}//,cooldown{5}
 icon: spell_suicide
-range: 2
-//needs: (cast_lightning)
-lore: misc.tier1_lcost
+range: 3
+needs: (cast_lightning)
+lore: misc.tier2_lcost
 cost: 400
+cool: 480

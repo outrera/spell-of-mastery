@@ -1,7 +1,8 @@
 affects: unit
-before: harm{4},impact{lightning},sound{lightning}//,cooldown{5}
+before: harm{piercing.60},impact{lightning},sound{lightning}//,cool{5}
 icon: spell_lightning
-range: 2
-//needs: (cast_fireball)
-lore: (10 200)
-cost: 400
+range: 3
+needs: (cast_fireball)
+lore:  misc.tier1_lcost
+cost: 150
+cool: 480

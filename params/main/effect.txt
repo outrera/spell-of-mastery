@@ -13,6 +13,7 @@ haste: on{cycle.240},add_moves{1}
 regen: on{cycle.30},when{harmed},strip{poison},harm{-1},effect{explosion_blood}
 heals: on{cycle.80},when{harmed},when{idle},harm{-1}
 burning: on{tenant_cycle.2},harm{piercing.1},effect1{fire_ring}
+removes_firewall: on{cycle.6},remove{(neib special_firewall)}
 enemy_damages: on{tenant_cycle.96},when{enemy},effect{pickup},harm{4,self}
 enemy_removes: on{tenant_cycle.12},when{enemy},effect{pickup},remove{self}
 node_aura: on{cycle.12},tenant_mark{effect_aura}

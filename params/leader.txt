@@ -4,7 +4,7 @@ active: 1
 draw_order: 4
 height: 8
 tier: 5
-health: 80 // hit points - number of hits, before this unit is dead
+health: 100 // hit points - number of hits, before this unit is dead
 damage: 0 // amount of damage this unit deals
 armor: 0 // amount of damage this unit can absorb, without losing health
 cooldown: 24
