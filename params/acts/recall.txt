@@ -6,4 +6,4 @@ before: effect{teleport},sound{summon},impact{teleport},recall{pentagram}
 after: ()
 range: 0
 //lore: misc.tier1_lcost
-//cost: 50
+cost: 20

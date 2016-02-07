@@ -420,7 +420,7 @@ create_act_icons Me =
   | HotKeyInvoke <= 0
   | $world.act <= 0
   | $main.sound{ui_click}
-  | when ActIcon and ActIcon.show: ActIcon.picked <= 0
+  | when ActIcon.is_icon: ActIcon.picked <= 0
   //| Icon.picked <= 1
   | Unit = Icon.unit
   | ActIcon <= Icon
