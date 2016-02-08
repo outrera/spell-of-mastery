@@ -284,6 +284,14 @@ effect victory Player Reason:
 | WP.winner <= Player
 | WP.victory_type <= Reason
 
+effect align How:
+| less How><door: bad "effect align: cant [How]-align"
+| XYZ = $xyz
+| less $world.get{XYZ-[0 1 0]}.empty or $world.get{XYZ+[0 1 0]}.empty:
+  | $face{$xyz+[1 0 0]}
+  | leave
+| $face{$xyz+[0 1 0]}
+
 check_when Me Target C =
 | case C
   ally | when $owner.is_enemy{Target.owner}: leave 0

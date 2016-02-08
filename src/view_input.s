@@ -52,6 +52,8 @@ view.update_brush =
       | U.pick_facing{Facing}
       | when $keys.t >< 1: U.facing <= 3.rand
       | U.move{X,Y,Z}
+      | U.run_effects{?><place U U.xyz}
+      | U.animate{idle}
   [tile Type]
     | while 1
       | Z <= $cursor.2

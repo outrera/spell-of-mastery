@@ -1,4 +1,5 @@
 icon: act_switch
+hotkey: d
 affects: any
 before: sound{door_switch},morph{unit_door}
 speed: 4

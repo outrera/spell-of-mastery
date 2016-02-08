@@ -171,6 +171,7 @@ world.picked = $player.picked
 world.`!picked` Us = $player.picked <= Us
 
 world.at X Y Z = $tilemap.at{X Y Z}
+world.get XYZ = $tilemap.at{XYZ.0 XYZ.1 XYZ.2}
 
 world.set_ X Y Z V = $tilemap.set{X Y Z V}
 

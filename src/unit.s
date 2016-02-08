@@ -470,6 +470,8 @@ unit.fine_move FXYZ =
 unit.move XYZ =
 | C = $world.c
 | $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*8]}
+| when $class.active: $run_effects{?><move Me $xyz}
+| Me
 
 unit.seen = $world.seen{$xyz.0 $xyz.1}
 
