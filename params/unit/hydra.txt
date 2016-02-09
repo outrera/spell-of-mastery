@@ -7,7 +7,7 @@ cooldown: 4
 speed: 28
 inborn: (upkeep4 heals organic regen amphibian)
 //attack: sound{hydra_attack}
-impact: sound{hydra_attack},harm_neibs{8}
+impact: harm{user},sound{hydra_attack},harm_neibs{8}
 hit: sound{hydra_hit}
 death: sound{hydra_hit}
 moves: sound{step}

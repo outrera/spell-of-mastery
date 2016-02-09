@@ -7,7 +7,7 @@ speed: 28
 blood: blood_undead
 inborn: (upkeep2 heals regen flyer)
 //attack: sound{attack2}
-impact: sound{attack2}
+impact: harm{user},sound{attack2}
 hit: sound{wraith_hit}
 death: sound{wraith_die}
 moves: sound{wraith_move}

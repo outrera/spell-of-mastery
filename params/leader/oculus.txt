@@ -2,6 +2,9 @@ sprite: unit_oculus
 icon: unit_oculus
 tier: 2
 health: 30
+damage: 0
+armor: 0
+range: 0
 leader: 2
 inborn: (upkeep1 flyer)
 death: sound{orbit}

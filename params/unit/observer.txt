@@ -8,7 +8,7 @@ range: 4
 speed: 28
 inborn: (upkeep4 heals organic flyer)
 attack: sound{observer_attack}
-impact: impact{energy_ring},sound{observer_impact}
+impact: harm{user},impact{energy_ring},sound{observer_impact}
 hit: sound{observer_hit}
 death: sound{observer_die}
 moves: sound{observer_move}

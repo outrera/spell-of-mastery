@@ -1,0 +1,5 @@
+author: `Nikita Sadkov`
+copyright: `Nikita Sadkov`
+xy: 0,-8
+frames: 32*32
+anims: | idle time-3 0  1  2  3  4

@@ -5,7 +5,7 @@ damage: 10
 armor: 0
 inborn: (upkeep3 heals organic)
 //attack: sound{attack2}
-impact: sound{attack3}
+impact: harm{user},sound{attack3}
 hit: sound{minotaur_hit}
 death: sound{minotaur_die}
 moves: sound{step}

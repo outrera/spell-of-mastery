@@ -2,6 +2,6 @@ icon: attack
 affects: unit
 hotkey: a
 before: (user_attack)
-impact: harm{user},counter{1},user_impact
+impact: counter{1},user_impact
 range: user
 repeat: 1

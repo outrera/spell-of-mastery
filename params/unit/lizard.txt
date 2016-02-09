@@ -6,7 +6,7 @@ armor: 0
 speed: 18
 inborn: (upkeep2 heals organic)
 //attack: sound{attack2}
-impact: sound{attack2}
+impact: harm{user},sound{attack2}
 hit: sound{baphomet_hit}
 death: sound{baphomet_hit}
 moves: sound{step}

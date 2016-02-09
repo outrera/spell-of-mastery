@@ -5,7 +5,7 @@ damage: 3
 armor: 0
 inborn: (income1 heals organic)
 //attack: sound{attack2}
-impact: sound{attack2}
+impact: harm{user},sound{attack2}
 hit: sound{halfling_hit}
 death: sound{halfling_die}
 moves: sound{step}

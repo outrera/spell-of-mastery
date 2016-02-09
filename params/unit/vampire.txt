@@ -8,7 +8,7 @@ cool: 10
 blood: blood_undead
 inborn: (upkeep3)
 //attack: sound{orbit2}
-impact: lifedrain{7},impact{explosion_blood},sound{orbit2}
+impact: harm{user},lifedrain{7},impact{explosion_blood},sound{orbit2}
 hit: sound{grunt2}
 death: sound{vampire_die}
 moves: sound{step}

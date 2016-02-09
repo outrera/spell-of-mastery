@@ -6,7 +6,7 @@ armor: 2
 speed: 20
 inborn: (upkeep1 heals flyer organic)
 attack: sound{bat_move}
-//impact: sound{bat_move}
+impact: harm{user}
 hit: sound{bat_hit}
 death: sound{bat_die}
 moves: sound{bat_move}

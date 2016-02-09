@@ -7,7 +7,7 @@ speed: 20
 inborn: (upkeep3 heals organic)
 //attack: sound{spider_attack}
 //poison,7000 means 110 points of damage, 1 point per 60 cycles
-impact: when{no_child.effect_poison,has.organic},child{effect_poison ((poison 0 ()) (ttl 7000 ()))},impact{explosion_blood},endwhen,sound{spider_attack}
+impact: harm{user},when{no_child.effect_poison,has.organic},child{effect_poison ((poison 0 ()) (ttl 7000 ()))},impact{explosion_blood},endwhen,sound{spider_attack}
 hit: sound{spider_hit}
 death: sound{spider_death}
 moves: sound{step}
