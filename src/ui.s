@@ -212,7 +212,10 @@ create_load_world_dlg Me =
   | $unpause
 | LoadWorldDlgW = load_world_dlg $world MapsFolder &hideLoadWorldDlg: X =>
   | $load{X}
-  | $world.explore{1}
+  | World = $world
+  | World.human <= World.players.1
+  | World.human.human <= 1
+  | World.explore{1}
   | hideLoadWorldDlg
 | LoadWorldDlgW.folder <= MapsFolder
 | LoadWorldDlg <= hidden: LoadWorldDlgW
