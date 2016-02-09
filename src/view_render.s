@@ -148,6 +148,11 @@ draw_picked_rects FB PickedRects =
   | FB.blit{RX+RW-PW RY PickCorner.flop}
   | FB.blit{RX RY+RH-PW PickCorner.flip}
   | FB.blit{RX+RW-PW RY+RH-PW PickCorner.flip.flop}
+  | HP = $class.hp
+  | Health = $health
+  | HBar = RW*$health/$class.hp
+  | FB.rectangle{#00FF00 1 RX RY+RH HBar 4}
+  | FB.rectangle{#000000 1 RX+HBar RY+RH RW-HBar 4} 
   | Icons = []
   | for [_ Flag Icon] getUnitFlags{}: when Icon>>0:
     | when $flags^get_bit{Flag}: push Icon Icons
