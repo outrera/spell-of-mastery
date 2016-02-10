@@ -28,6 +28,9 @@ view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
 view.update_brush =
 | $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
+| when $mice_click><leftup:
+  | $mice_click <= 0
+  | leave
 | when $mice_click><left: case $brush
   [obj Bank,Type]
     | less Z << $anchor.2: leave
