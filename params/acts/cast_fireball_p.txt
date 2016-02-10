@@ -1,8 +1,9 @@
+// pentagram version
 icon: spell_fireball
 hotkey: f
 affects: unit
+title: `Fireball`
 range: 3
-lore: misc.tier1_lcost
 cost: 100
-cool: 240
+cool: 360
 before: /*cool{5},*/missile{effect_fireball},harm{piercing.30},impact{explosion3},sound{fire1}
