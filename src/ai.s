@@ -183,12 +183,12 @@ ai.harm Attacker Victim =
     | Victim.order_act{recall target/Victim}
     | leave
   | when Attacker:
-    | R = max 2.0 | if Attacker.range.is_int then Attacker.range.float else 1.0  
-    | RMax = R+1.0
-    | F = Victim.find{8
-      | D => (D.xyz-Attacker.xyz).abs >> R
-             and (D.xyz-Victim.xyz).abs < RMax}
-    | when F: Victim.order_at{F}
+    | R = Attacker.range
+    | when R><cross or R><1 or (Attacker.xyz-Victim.xyz).abs<2.0:
+        | F = Victim.find{8
+          | D => (D.xyz-Attacker.xyz).abs >> 2.0
+                 and (D.xyz-Victim.xyz).abs < 3.0}
+        | when F: Victim.order_at{F}
   | Cycle = $world.cycle
   | PParams = $player.params
   | LHC = $params.aiLeaderHarmCycle
