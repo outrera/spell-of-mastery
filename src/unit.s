@@ -413,11 +413,12 @@ heal_unit Me Amount =
 | !$hp + | min Amount $class.hp-$health
 
 unit.harm Attacker Damage =
+| when $removed: leave
+| less $alive: leave
 | when Attacker and $leader><1 and $owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}
     | leave //roaming neutral units wont harm AI leader
-| less $alive: leave
 | Piercing = 0
 | case Damage [_ piercing D]
   | Damage <= D
