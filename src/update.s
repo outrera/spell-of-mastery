@@ -34,11 +34,10 @@ world.new_game =
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
   | L = P.leader
-  | when L: less P.pentagram:
-    | S = P.alloc_unit{special_pentagram}
-    | S.move{L.xyz}
   | C = P.pentagram
-  | when L and C:
+  | when L and not C:
+    | C = P.alloc_unit{special_pentagram}
+    | C.move{L.xyz}
     | L.move{C.xyz}
     | L.alpha <= 255
     | L.delta <= -50
