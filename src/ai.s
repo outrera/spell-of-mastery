@@ -170,7 +170,7 @@ ai.update_units Units =
       | Handled <= roam U
   | less Handled:
     | when U.id >< LeaderID: update_leader U
-    | when U.id >< PentID: ai_update_build Me
+    | when U.id >< PentID and Player.mana>500: ai_update_build Me
     //| when U.nonguard: roam U radius/4
 | leave 0
 
@@ -189,6 +189,9 @@ ai.harm Attacker Victim =
           | D => (D.xyz-Attacker.xyz).abs >> 2.0
                  and (D.xyz-Victim.xyz).abs < 3.0}
         | when F: Victim.order_at{F}
+  | when Pent:
+    | SAct = $main.params.acts.summon_blob
+    | when Pent.can_do{SAct}: Pent.order_act{SAct}
   | Cycle = $world.cycle
   | PParams = $player.params
   | LHC = $params.aiLeaderHarmCycle
