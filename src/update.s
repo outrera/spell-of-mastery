@@ -33,6 +33,19 @@ world.new_game =
   | Us = P.units
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
+  | L = P.leader
+  | when L: less P.pentagram:
+    | S = P.alloc_unit{special_pentagram}
+    | S.move{L.xyz}
+  | C = P.pentagram
+  | when L and C:
+    | L.move{C.xyz}
+    | L.alpha <= 255
+    | L.delta <= -50
+    | $effect{C.xyz teleport}
+    | C.alpha <= 255
+    | C.delta <= -10
+    | $effect{C.xyz pentagram_appearance}
 | when got!it $players.find{?human}: $human <= it
 
 EventActions = []

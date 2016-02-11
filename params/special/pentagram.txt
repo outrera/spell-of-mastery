@@ -9,8 +9,7 @@ starts: still // initial animation
 ai: pentagram
 inborn: (enemy_damages removes_firewall)
 
-acts: cast_fireball_p,
-      summon_bat, summon_blob, summon_ratman, summon_goblin,
+acts: summon_bat, summon_blob, summon_ratman, summon_goblin,
       summon_skeleton, summon_halfling,
       summon_oculus, summon_lizard, summon_orc, summon_elf, summon_dwarf, summon_wraith,
       summon_baphomet, summon_griffin, summon_ifrit, summon_minotaur, summon_vampire,

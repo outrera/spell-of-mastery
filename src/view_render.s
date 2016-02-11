@@ -392,7 +392,7 @@ handle_picking Me UnitRects =
 | MR = $mice_rect
 | RX,RY,RW,RH = MR
 | LargeEnough = RW>4 or RH>4
-| when LargeEnough:
+| when LargeEnough and $mice_click><left:
   | $fb.rectangle{#00FF00 0 RX RY RW RH}
   | Units = []
   | for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
