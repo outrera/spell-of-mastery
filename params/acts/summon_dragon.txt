@@ -1,6 +1,6 @@
 proto: spawn__proto
-after: spawn{unit_dragon}
 icon: unit_dragon
 lore: misc.tier4_lcost
 cost: misc.tier4_scost
 cool: misc.tier4_cool
+after: spawn{unit_dragon}

@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_baphomet
-after: spawn{unit_baphomet}
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
+after: spawn{unit_baphomet}

@@ -1,6 +1,7 @@
 proto: spawn__proto
 icon: unit_bat
-after: spawn{unit_bat}
 lore: misc.tier0_lcost
 cost: misc.tier0_scost
 cool: misc.tier1_cool
+after: spawn{unit_bat}
+

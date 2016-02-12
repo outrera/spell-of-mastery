@@ -1,6 +1,7 @@
 proto: spawn__proto
-after: spawn{unit_vampire}
 icon: unit_vampire
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
+after: spawn{unit_vampire}
+

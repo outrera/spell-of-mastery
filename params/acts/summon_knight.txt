@@ -1,6 +1,6 @@
 proto: spawn__proto
-after: spawn{unit_knight}
 icon: unit_knight
 lore: misc.tier2_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
+after: spawn{unit_knight}

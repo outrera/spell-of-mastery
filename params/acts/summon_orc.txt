@@ -1,7 +1,7 @@
 proto: spawn__proto
 icon: unit_orc
-needs: (summon_ratman)
-after: spawn{unit_orc}
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
+needs: (summon_ratman)
+after: spawn{unit_orc}
