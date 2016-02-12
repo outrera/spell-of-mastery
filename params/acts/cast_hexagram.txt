@@ -1,8 +1,8 @@
-title: `Hexagram`
-affects: any
-before: impact{pentagram_appearance},sound{pentagram}
-after: spawn{special_hexagram}
 icon: spell_hexagram
+title: `Hexagram`
 cost: misc.tier1_scost
 lore: (2 400)
 hint: pentagram
+affects: any
+before: impact{pentagram_appearance},sound{pentagram}
+after: spawn{special_hexagram}

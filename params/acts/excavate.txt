@@ -1,8 +1,8 @@
+icon: spell_excavate
+//lore: misc.tier1_lcost
+//cost: 100
+fix_z: caster
+range: 1
 affects: any
 before: sound{summon}
 impact: same_z,impact{explosion3},clear_passage{target},sound{stone_hit}
-icon: spell_excavate
-range: 1
-fix_z: caster
-//lore: misc.tier1_lcost
-//cost: 100

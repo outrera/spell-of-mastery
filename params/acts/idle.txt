@@ -1,3 +1,4 @@
-affects: any
-range: 0
 icon: spell_suicide
+range: 0
+affects: any
+

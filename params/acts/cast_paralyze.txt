@@ -1,6 +1,6 @@
-affects: unit
-before: paralyze{2},impact{cold_ring},sound{slowed}
 icon: spell_paralyze
-range: 2
 lore: misc.tier2_lcost
 cost: 500
+range: 2
+affects: unit
+before: paralyze{2},impact{cold_ring},sound{slowed}

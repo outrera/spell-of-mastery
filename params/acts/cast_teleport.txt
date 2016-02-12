@@ -1,8 +1,8 @@
-affects: empty
-before: effect{teleport},sound{spawn},set{self alpha 0},set{self delta 10}
-after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}
 icon: spell_teleport
-range: 2
 //needs: (cast_telekinesis cast_excavate)
 lore: misc.tier1_lcost
 cost: 200
+range: 2
+affects: empty
+before: effect{teleport},sound{spawn},set{self alpha 0},set{self delta 10}
+after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}

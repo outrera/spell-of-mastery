@@ -1,8 +1,8 @@
 icon: spell_fireball
 hotkey: f
-affects: unit
-range: 3
 lore: misc.tier1_lcost
 cost: 100
 cool: 240
+affects: unit
+range: 3
 before: /*cool{5},*/missile{effect_fireball},harm{piercing.30},impact{explosion3},sound{fire1}

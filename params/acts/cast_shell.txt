@@ -1,7 +1,7 @@
-affects: unit
-before: add_effect{shell,0,()},impact{shell},sound{shell}
 icon: spell_shell
-range: 3
 lore: misc.tier1_lcost
 cost: 100
 cool: 240
+range: 3
+affects: unit
+before: add_effect{shell,0,()},impact{shell},sound{shell}

@@ -1,6 +1,6 @@
-affects: self
-before: effect{teleport},sound{spawn}
-after: lore{1}
 icon: spell_knowledge
 //lore: misc.tier1_lcost
 cost: misc.tier1_scost
+affects: self
+before: effect{teleport},sound{spawn}
+after: lore{1}

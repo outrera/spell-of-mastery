@@ -1,7 +1,7 @@
-affects: any
-before: impact{fire_ring},sound{summon},spawn{special_firewall}
 icon: spell_firewall
-range: 2
-needs: (cast_fireball)
 lore: misc.tier1_lcost
 cost: 200
+needs: (cast_fireball)
+range: 2
+affects: any
+before: impact{fire_ring},sound{summon},spawn{special_firewall}

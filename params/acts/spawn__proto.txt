@@ -1,7 +1,8 @@
+icon: unit_baphomet
+lore: (0 0)
+cost: 0
+speed: -1
 affects: ally_block,empty
 before: misc.spawn
 after: ()
-icon: unit_baphomet
-speed: -1
-lore: (0 0)
-cost: 0
+

@@ -1,6 +1,6 @@
-affects: unit
-before: add_effect{flyer,0,()},impact{explosion_blood},sound{wings}
 icon: spell_flight
-range: 2
 lore: misc.tier2_lcost
 cost: 400
+range: 3
+affects: unit
+before: add_effect{flyer,0,()},impact{explosion_blood},sound{wings}

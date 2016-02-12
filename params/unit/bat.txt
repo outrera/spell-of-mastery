@@ -1,7 +1,7 @@
 sprite: unit_bat
 tier: 1
 health: 10
-damage: 3
+damage: 2
 armor: 2
 speed: 20
 inborn: (upkeep1 heals flyer organic)

@@ -80,8 +80,12 @@ main.load_classes =
     | As <= [@As @V.acts]
     | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]
     | V.acts <= As
+| Acts = $params.acts
+| for K,Act $params.acts.list:
+  | for NeededAct Act.needs: when no Acts.NeededAct: 
+    | bad "act [K] needs undefined act [NeededAct]"
 | for K,V $classes: V.acts <= map ActName V.acts
-  | Act = $params.acts.ActName
+  | Act = Acts.ActName
   | less got Act: bad "[K] references undefined act [ActName]"
   | Act
 
