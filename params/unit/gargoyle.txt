@@ -1,5 +1,5 @@
 sprite: unit_gargoyle
-tier: 2
+tier: 3
 health: 50
 damage: 10
 armor: 0

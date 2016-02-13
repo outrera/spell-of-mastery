@@ -311,7 +311,7 @@ check_when Me Target C =
     | Us = $world.units_at{Target.xyz}
     | when Us.any{(?type><Type and ?host and ?host.serial><Target.serial)}:
       | leave 0
-  sinner | less Target.kills>0: leave 0
+  [`.` kills N] | less Target.kills>>N: leave 0
 | 1
 
 unit.effect Effect Target XYZ =

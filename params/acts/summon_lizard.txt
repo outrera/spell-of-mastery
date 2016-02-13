@@ -3,4 +3,5 @@ icon: unit_lizard
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
+needs: (summon_halfling)
 after: spawn{unit_lizard}

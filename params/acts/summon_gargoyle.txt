@@ -1,8 +1,8 @@
 proto: spawn__proto
-icon: unit_vampire
+icon: unit_gargoyle
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
 needs: (summon_wraith)
-after: spawn{unit_vampire}
+after: spawn{unit_gargoyle}
 

@@ -82,7 +82,10 @@ main.load_classes =
     | V.acts <= As
 | Acts = $params.acts
 | for K,Act $params.acts.list:
-  | for NeededAct Act.needs: when no Acts.NeededAct: 
+  | less Act.needs.end:
+    | Act.needs <= map N Act.needs:
+      | if N.is_list then N else [N]
+  | for NAs Act.needs: for NeededAct NAs: when no Acts.NeededAct: 
     | bad "act [K] needs undefined act [NeededAct]"
 | for K,V $classes: V.acts <= map ActName V.acts
   | Act = Acts.ActName

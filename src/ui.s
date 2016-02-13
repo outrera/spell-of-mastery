@@ -391,7 +391,7 @@ ui.on_unit_pick Units =
 | As = Unit.acts.keep{A=>T.(A.name)><NUnits}
 | As = As.i.take{min{MaxActIcons As.size}}
 | for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
-  | Preqs = Act.needs.all{N=>Player.research_remain{Acts.N}<<0}
+  | Preqs = Act.needs.all{Ns=>Ns.any{N=>Player.research_remain{Acts.N}<<0}}
   | when Preqs:
     | Active = 1
     | when Act.act >< spawn and not Unit.owner.pentagram:
