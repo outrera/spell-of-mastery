@@ -437,7 +437,7 @@ create_act_icons Me =
       | O.notify{"[Act.title] needs [Cool.0/24] seconds to recharge"}
     else if ResearchRemain then
       | research_act Me Unit Act
-    else if got Cost and Cost>O.mana then
+    else if got Cost and Cost>0 and Cost>O.mana then
       | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
     else when O.id >< $player.id:
          | if Act.range >< 0 
