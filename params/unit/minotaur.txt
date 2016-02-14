@@ -1,7 +1,7 @@
 sprite: unit_minotaur
 tier: 3
 health: 120
-damage: 10
+damage: 12
 armor: 0
 inborn: (upkeep3 heals organic)
 //attack: sound{attack2}

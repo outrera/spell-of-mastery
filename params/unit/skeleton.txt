@@ -1,9 +1,9 @@
 sprite: unit_skeleton
 tier: 1
 health: 50
-damage: 4
-armor: 2
-speed: 28
+damage: 5
+armor: 0
+//speed: 24
 blood: blood_undead
 inborn: (upkeep1 heals regen)
 //attack: sound{attack2}
