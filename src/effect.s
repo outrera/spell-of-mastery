@@ -122,7 +122,8 @@ effect harm_neibs Arg:
   | when got B: B.harm{Me Arg}
 
 effect counter Arg:
-| less $range: Target.run_effects{?><counter Me Me.xyz}
+| when $range><cross or not $range:
+  | Target.run_effects{?><counter Me Me.xyz}
 
 effect lifedrain Amount:
 | when Target and Target.has{organic}: Me.harm{Me -Amount}

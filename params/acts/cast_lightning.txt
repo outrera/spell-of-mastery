@@ -5,4 +5,4 @@ cost: 150
 cool: 480
 range: 3
 affects: unit
-before: harm{piercing.60},impact{lightning},sound{lightning}//,cool{5}
+before: harm{magic.60},impact{lightning},sound{lightning}//,cool{5}

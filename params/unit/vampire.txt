@@ -6,7 +6,7 @@ armor: 2
 range: 3
 cool: 10
 blood: blood_undead
-inborn: (upkeep3)
+inborn: (upkeep3 resist_magic)
 //attack: sound{orbit2}
 impact: harm{user},lifedrain{6},impact{explosion_blood},sound{orbit2}
 hit: sound{grunt2}

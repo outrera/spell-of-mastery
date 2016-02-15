@@ -420,9 +420,15 @@ unit.harm Attacker Damage =
     | Attacker.harm{Me 1000}
     | leave //roaming neutral units wont harm AI leader
 | Piercing = 0
-| case Damage [_ piercing D]
-  | Damage <= D
-  | Piercing <= 1
+| Magic = 0
+| case Damage
+  [_ piercing D]
+    | Damage <= D
+    | Piercing <= 1
+  [_ magic D]
+    | Damage <= D
+    | Piercing <= 1
+    | Magic <= 1
 | $run_effects{?><harm Me $xyz}
 | Mod = $mod
 | $mod <= 0
@@ -431,6 +437,7 @@ unit.harm Attacker Damage =
   | leave
 | less Piercing: Damage <= max 1 Damage-$armor
 | case Mod
+  [`.` resist [magic N]] | when Magic and Damage>1: Damage <= max 1 Damage-N
   [`.` block N] | when Damage>1: Damage <= max 1 Damage-N
 | !$hp - Damage
 | when!it $blood:
