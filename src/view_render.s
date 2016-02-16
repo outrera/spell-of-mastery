@@ -125,15 +125,6 @@ unit.draw FB B =
 | UnitRects.push{[RX RY RW RH],Me}
 | less $picked: leave
 | PickedRects.push{[RX RY RW RH],Me}
-//FIXME: reuse the mark for quest objective
-/*| Wave = @int 20.0*(@sin: ($world.cycle%100).float/100.0*PI)
-| Mark = $main.img{ui_picked_mark}
-| PH = $sprite.pick_height
-| less PH: PH <= $height*8+16
-| PH <= PH + Mark.h + Wave
-| XX = X+32-Mark.w/2
-| YY = Y-PH
-| FB.blit{XX YY Mark}*/
 
 PickCorner = 0
 
