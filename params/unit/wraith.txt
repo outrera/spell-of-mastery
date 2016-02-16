@@ -11,3 +11,4 @@ impact: harm{user},sound{attack2}
 hit: sound{wraith_hit}
 death: sound{wraith_die}
 moves: sound{wraith_move}
+acts: (invisibility)
