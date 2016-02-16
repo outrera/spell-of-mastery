@@ -30,7 +30,7 @@ type unit.$class{Id World}
   cooldown
   sprite
   mirror // true, if drawing code should mirror the sprite
-  mark // next mark in the map marks chain
+  mark // temporary mark, dont save
   active // true if this unit resides in the list of active units
   slope // unit is standing on a sloped terrain
   path/[] // path to goal

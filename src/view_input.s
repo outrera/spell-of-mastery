@@ -1,4 +1,4 @@
-use util
+use macros util
 
 view.worldToView P =
 | X,Y = P - $view_origin
@@ -106,29 +106,22 @@ view.update_play =
 | $main.update
 
 world.update_picked =
-| for M $marks^uncons{mark}: M.free
-| $marks <= $nil
-| Picked = $human.picked
-| when Picked.size <> 1: leave
-| U = Picked.0
-| Marks =
-  if $act and $act.range <> any then []
-  else if U.path then
-    | map XYZ U.path{}{?unheap}
-      | MarkType = \move
-      | B = $block_at{XYZ}
-      | when got B:
-        | MarkType <= if B.owner.is_enemy{U.owner}
-                      then \attack
-                      else \swap
-      | Mark = $human.alloc_unit{"mark_[MarkType]"}
-      | Mark.move{XYZ}
-      | Mark
-  else []
-| $marks <= [$nil @Marks]^cons{mark}
+| for M $marks: M.free
+| $marks.heapfree
+| $marks <= []
+| when $act and $act.range <> any: leave
+| Marks = []
+| for U $human.picked: less U.path.end:
+  | PathGoal = U.path{}.last.unheap
+  | Mark = $human.alloc_unit{"mark_goal"}
+  | Mark.move{PathGoal}
+  | Wave = @int 20.0*(@sin: ($cycle%100).float/100.0*PI)
+  | !Mark.fxyz.2+Wave
+  | push Mark Marks
+| $marks <= Marks.enheap
 
 world.update_cursor CXYZ Brush Mirror =
-| Marks = $marks^uncons{mark}.flip
+| Marks = $marks.unheap
 | P = $human
 | if $act
   then | when $act.affects<>unit:
@@ -147,7 +140,9 @@ world.update_cursor CXYZ Brush Mirror =
                 else if Class.unit then not Us.any{?unit}
                 else not Us.any{?class^address >< Class^address}
       | when Place: push P.alloc_unit{mark_cube}.move{XYZ} Marks
-| $marks <= Marks.flip^cons{mark}
+| for M Marks: M.mark <= 1
+| $marks.heapfree
+| $marks <= Marks.enheap
 
 view.update =
 | when $paused: leave

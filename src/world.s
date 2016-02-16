@@ -45,7 +45,7 @@ type world{main}
    owners // unit owners
    active // active units
    vars/t{} // variables
-   marks
+   marks/[]
    params
    events
    view //viewport, attached rendering this world
@@ -53,7 +53,7 @@ type world{main}
    notes
    mode/brush
    sound_cycles/(t) //used to avoid playing similar sounds at once
-    blink/[0 0]
+   blink/[0 0]
 | $init
 
 world.second = $cycle/24
@@ -118,7 +118,8 @@ world.clear =
 | for P $players: P.clear
 | $human <= $players.1
 | $human.human <= 1
-| $marks <= $nil
+| $marks.heapfree
+| $marks <= []
 | $params <= t
 | for U $active.list: U.active <= 0
 | $active.clear
