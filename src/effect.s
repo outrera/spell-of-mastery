@@ -30,8 +30,6 @@ effect add_item Amount Name: Target.add_item{Amount Name}
 
 effect mod Arg: Target.mod <= Arg
 
-effect add_moves N: bad "effect.s: add_moves is obsolete"
-
 effect tenant_mark Type:
 | Block = $world.block_at{TargetXYZ}
 | S = $world.units_at{TargetXYZ}.find{?type><Type}

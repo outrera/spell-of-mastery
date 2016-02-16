@@ -70,6 +70,8 @@ unit.`!picked` State = $flags <= $flags^set_bit{1 State}
 unit.nonguard = $flags^get_bit{2}
 unit.`!nonguard` State = $flags <= $flags^set_bit{2 State}
 
+unit.hasted = $flags^get_bit{3}
+
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 

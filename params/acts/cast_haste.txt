@@ -1,6 +1,7 @@
 icon: spell_haste
+hotkey: h
 //lore: misc.tier2_lcost
 //cost: 400
 range: 2
 affects: unit
-before: add_effect{haste,3,()},impact{explosion_blood},sound{hasted}
+before: add_effect{haste,0,()},impact{explosion_blood},sound{hasted}

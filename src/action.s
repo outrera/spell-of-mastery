@@ -23,7 +23,7 @@ move_start Me =
 | U.fxyz.init{$fromXYZ}
 | U.facing <= Dirs.locate{X,Y}
 | when U.anim<>move: U.animate{move}
-| $cycles <= U.speed
+| $cycles <= if U.hasted then max 2 U.speed/2 else U.speed
 | $start_cycles <= $cycles
 | Effect = U.class.moves
 | when Effect: U.effect{Effect U U.xyz}
