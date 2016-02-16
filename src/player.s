@@ -24,7 +24,6 @@ type player{id world}
    ai
    human //1 for human controlled players
    mana
-   moves //use to be number for creatues movable per turn; currently obsolete
    leader
    pentagram
    params
