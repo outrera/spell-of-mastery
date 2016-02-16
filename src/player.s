@@ -20,7 +20,10 @@ ai.clear =
 | $params.aiLeaderHarmCycle <= -24*100000
 
 type player{id world}
-   name ai human mana
+   name
+   ai
+   human //1 for human controlled players
+   mana
    moves //use to be number for creatues movable per turn; currently obsolete
    leader
    pentagram

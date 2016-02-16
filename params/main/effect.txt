@@ -1,11 +1,12 @@
 flags: haste{3,5},shell{4,2},flyer{5,-1},poison{6,4},fireaura{7,0},organic{8,-1}
-      ,digger{9,-1},swimmer{10,-1},amphibian{11,-1}
+      ,digger{9,-1},swimmer{10,-1},amphibian{11,-1},invisible{12,-1}
 
 flyer: on{static}
 swimmer: on{static}
 amphibian: on{static}
 organic: on{static}
 digger: on{static}
+invisible: on{static}
 fireaura: on{counter},harm{piercing.5},impact{fire_ring}
 poison: on{cycle.60},host,when{has_health.2},harm{piercing.1}
 shell: on{harm},mod{block.1},sound{shell},impact{shell}

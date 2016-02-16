@@ -234,8 +234,9 @@ effect clear_passage What:
 effect spawn What:
 | S = $owner.alloc_unit{What}
 | S.nonguard <= 1
-| S.alpha <= 255
-| S.delta <= -50
+| less S.alpha:
+  | S.alpha <= 255
+  | S.delta <= -50
 | S.move{TargetXYZ}
 
 effect morph ClassName:
@@ -318,6 +319,7 @@ check_when Me Target C =
 unit.effect Effect Target XYZ =
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
+| when T and T.id<>$id and $invisible: $strip_effect{invisible}
 | Es = Effect.list
 | till Es.end
   | E = pop Es

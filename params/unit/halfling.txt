@@ -9,3 +9,4 @@ impact: harm{user},sound{attack2}
 hit: sound{halfling_hit}
 death: sound{halfling_die}
 moves: sound{step}
+acts: (invisibility)

@@ -76,6 +76,8 @@ unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 unit.digger = $flags^get_bit{9}
 unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
+unit.invisible = $flags^get_bit{12}
+
 
 unit.alive = $hp > 0
 unit.health =
@@ -189,6 +191,7 @@ unit.add_effect Name Duration Params =
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag:
+  | when Name><invisible: $alpha <= 127
   | $flags <= $flags^set_bit{Flag 1}
   | $update_move_method
 
@@ -207,6 +210,7 @@ unit.strip_effect Name =
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag:
+  | when Name><invisible: $alpha <= 0
   | $flags <= $flags^set_bit{Flag 0}
   | $update_move_method
 

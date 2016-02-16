@@ -340,6 +340,7 @@ attack_nearby_enemy Me =
 | check Dst =
   | B = $world.block_at{Dst.xyz}
   | got B and O.is_enemy{B.owner} and ($xyz-Dst.xyz).abs.int<SightF
+    and not B.invisible
 | Found = $pathfind{$sight-1 &check}
 | less Found: leave
 | $order_at{Found.1}
@@ -368,5 +369,7 @@ unit.update =
 | update_fade Me
 | update_action Me
 | when $removed: leave //unit can be removed as a result of an action
-| when $damage and $action.type><idle and not $goal: attack_nearby_enemy Me
+| when $damage and $action.type><idle and not $goal:
+  | when not $invisible or not $owner.human:
+    | attack_nearby_enemy Me
 | 1 // 1 means we are still alive

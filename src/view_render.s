@@ -281,15 +281,16 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
     | UX,UY,Z = XYZ
     | TZ = Z-4
     | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
-      | B = blit_item_from_unit U
-      | FX,FY,FZ = U.fxyz
-      | BX,BY = ScreenXY + to_iso{FX FY FZ}
-      | B.sx <= BX - 32
-      | B.sy <= BY
-      | B.lx <= LX
-      | B.ly <= LY
-      | B.brighten <= Br
-      | push B BlitItems
+      | when not U.invisible or U.owner.id><$player.id or $mode<>play:
+        | B = blit_item_from_unit U
+        | FX,FY,FZ = U.fxyz
+        | BX,BY = ScreenXY + to_iso{FX FY FZ}
+        | B.sx <= BX - 32
+        | B.sy <= BY
+        | B.lx <= LX
+        | B.ly <= LY
+        | B.brighten <= Br
+        | push B BlitItems
 
 Unexplored = 0
 
@@ -403,7 +404,8 @@ handle_picking Me UnitRects =
 | Units = []
 | MXY = $mice_xy
 | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
-  | push Unit Units
+  | when not Unit.invisible or Unit.owner.id><$player.id:
+    | push Unit Units
 | handle_picked Me 0 Units 
 
 view.render_iso =
