@@ -399,6 +399,26 @@ handle_picking Me UnitRects =
     | push Unit Units
 | handle_picked Me 0 Units 
 
+world_to_view P =
+| X,Y,Z = P
+| RX = X - Y
+| RY = (X + Y)/2
+| [RX RY Z]
+
+view_to_z P =
+| X,Y,Z = P
+| -(X+Y+Z)
+
+draw_tile32x32 FB XY =
+| A = XY+|world_to_view [0 0 0]
+| B = XY+|world_to_view [0 32 0]
+| C = XY+|world_to_view [32 32 0]
+| D = XY+|world_to_view [32 0 0]
+| FB.line{#00FF00 A B}
+| FB.line{#00FF00 B C}
+| FB.line{#00FF00 C D}
+| FB.line{#00FF00 D A}
+
 view.render_iso =
 | Wr = $world
 | BlitItems <= []
@@ -433,6 +453,12 @@ view.render_iso =
 | when $mice_click<>left or $mode<>play:
   | render_cursor Me Wr BX BY $cursor
 | less BlitItems.end
+  | Xs = BlitItems{B=>[((view_to_z: [B.x B.y B.z])</8)+B.z B]}
+  | Xs <= Xs.sort{A B => A.0>B.0}
+  | for X,B Xs
+    | O = B.object
+    | O.draw{FB B}
+/*| less BlitItems.end
   | DrawBoundingBox = $main.params.world.bounding_boxes
   | BL = BlitItems.list
   | isort_begin
@@ -444,7 +470,6 @@ view.render_iso =
       | B = BL.N
       | O = B.object
       | O.draw{FB B}
-  | BBP = ScreenXY+[0 -2]
   | when DrawBoundingBox: for I ResultSize:
       | N = _ffi_get int Result I
       | B = BL.N
@@ -454,7 +479,7 @@ view.render_iso =
       | draw_bounding_box_back Color FB B
       | O.draw{FB B}
       | draw_bounding_box_front Color FB B
-  | isort_free_result
+  | isort_free_result*/
 | draw_picked_rects FB PickedRects.list.flip
 | when $mode><play: handle_picking Me UnitRects.list.flip
 | BlitItems <= 0
