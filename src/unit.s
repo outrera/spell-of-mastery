@@ -80,6 +80,9 @@ unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
 
+unit.size =
+| S = $sprite.size
+| if $height then S else [S.0 S.1 0]
 
 unit.alive = $hp > 0
 unit.health =

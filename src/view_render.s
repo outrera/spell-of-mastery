@@ -65,10 +65,6 @@ draw_bounding_box_back Color FB B =
 | for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
   | FB.line{Color A B}
 
-
-
-unit.size = if $height then [37 37 70] else [37 37 0]
-
 blit_item_from_unit Me =
 | X,Y,Z = $fxyz
 | DX,DY = $box_xy
@@ -405,9 +401,9 @@ world_to_view P =
 | RY = (X + Y)/2
 | [RX RY Z]
 
-view_to_z P =
-| X,Y,Z = P
-| -(X+Y+Z)
+// still needs true 3d pipeline interpolate xyz across texture
+view_to_z X Y Z =
+| (X+Y+Z)*-256 + Z
 
 draw_tile32x32 FB XY =
 | A = XY+|world_to_view [0 0 0]
@@ -452,13 +448,13 @@ view.render_iso =
 | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
 | when $mice_click<>left or $mode<>play:
   | render_cursor Me Wr BX BY $cursor
-| less BlitItems.end
-  | Xs = BlitItems{B=>[((view_to_z: [B.x B.y B.z])</8)+B.z B]}
-  | Xs <= Xs.sort{A B => A.0>B.0}
+/*| less BlitItems.end
+  | Xs = BlitItems{B=>[(view_to_z B.x B.y B.z+B.z2) B]}
+  | Xs <= Xs.sort{A B => A.0>B.0} //could be replaced with z-buffer
   | for X,B Xs
     | O = B.object
-    | O.draw{FB B}
-/*| less BlitItems.end
+    | O.draw{FB B}*/
+| less BlitItems.end
   | DrawBoundingBox = $main.params.world.bounding_boxes
   | BL = BlitItems.list
   | isort_begin
@@ -479,7 +475,7 @@ view.render_iso =
       | draw_bounding_box_back Color FB B
       | O.draw{FB B}
       | draw_bounding_box_front Color FB B
-  | isort_free_result*/
+  | isort_free_result
 | draw_picked_rects FB PickedRects.list.flip
 | when $mode><play: handle_picking Me UnitRects.list.flip
 | BlitItems <= 0
