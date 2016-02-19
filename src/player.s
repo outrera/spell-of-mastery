@@ -130,6 +130,10 @@ free_ai_blockers Me =
   | U.free
 
 update_spell_of_mastery Me P =
+| when P.human: for Q $players:
+  | S = Q.params.spell_of_mastery
+  | when got S and not S%(24*5):
+    | P.notify{"[Q.name] will finish Spell of Mastery in [S/24] seconds"}
 | SOM = P.params.spell_of_mastery
 | when got SOM:
   | !SOM-1
@@ -138,9 +142,6 @@ update_spell_of_mastery Me P =
     | $params.victory_type <= 'Victory by casting the Spell of Mastery'
     | leave
   | P.params.spell_of_mastery <= SOM
-| when P.human: for Q $players:
-  | S = Q.params.spell_of_mastery
-  | when got S: P.notify{"[Q.name] will finish Spell of Mastery in [S] turns"}
 
 //FIXME:calculate income per second here
 update_income Me =

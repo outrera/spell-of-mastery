@@ -1,6 +1,6 @@
 icon: spell_of_mastery
-lore: misc.tier4_lcost
-cost: 8000
+lore: misc.tier5_lcost
+cost: 4000
 affects: any
 before: misc.spawn
-after: set{owner spell_of_mastery 10}
+after: set{owner spell_of_mastery 7200}

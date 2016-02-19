@@ -1,6 +1,0 @@
-icon: spell_disrupt_mastery
-lore: misc.tier2_lcost
-cost: 2000
-affects: any
-before: misc.spawn
-after: set{all spell_of_mastery No}
