@@ -1,6 +1,9 @@
 icon: spell_paralyze
+hotkey: p
 lore: misc.tier2_lcost
 cost: 500
-range: 2
+range: 3
+needs: (cast_haste cast_slow)
 affects: unit
-before: paralyze{2},impact{cold_ring},sound{slowed}
+// stops unit for 30 seconds
+before: add_effect{paralyzed,720,()},impact{cold_ring},sound{slowed}

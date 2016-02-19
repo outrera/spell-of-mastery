@@ -1,6 +1,7 @@
 icon: spell_telekinesis
+hotkey: t
 lore: misc.tier1_lcost
 cost: 100
-range: 5
+range: 16
 affects: any
 before: sound{pentagram},spawn{unit_telekinesis}

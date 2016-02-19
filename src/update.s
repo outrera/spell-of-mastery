@@ -354,7 +354,8 @@ unit.update =
   | if $host.serial >< $host_serial
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
-    else $host.dies 
+    else $die
+| when $paralyzed and $alive: leave
 | update_anim Me
 | when $idle:
   | less $empty:

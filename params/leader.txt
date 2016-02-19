@@ -25,8 +25,7 @@ moves: sound{step}
 acts: (pentagram cast_hexagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
        cast_heal cast_shell
-       cast_telekinesis cast_excavate cast_teleport
-       cast_paralyze cast_haste
-       cast_flight
+       cast_telekinesis cast_excavate cast_flight cast_teleport
+       cast_haste cast_slow cast_paralyze
        spell_of_mastery cast_disrupt_mastery)
 

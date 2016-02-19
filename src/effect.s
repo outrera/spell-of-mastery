@@ -129,8 +129,6 @@ effect lifedrain Amount:
 effect suicide Multiplier:
 | Target.harm{Me Target.damage*Multiplier}
 
-effect paralyze Time: bad "effect.s: paralyze is obsolete"
-
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
@@ -257,7 +255,9 @@ effect caster Who:
 | Leader.animate{attack}
 | Leader.face{TargetXYZ}
 
-effect teleport Arg: $forced_order{teleport TargetXYZ}
+effect teleport Arg:
+| $reset_goal
+| $forced_order{teleport TargetXYZ}
 
 effect research Arg:
 | O = Target.owner
@@ -317,7 +317,7 @@ check_when Me Target C =
 unit.effect Effect Target XYZ =
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
-| when T and T.id<>$id and $invisible: $strip_effect{invisible}
+| when T.is_unit and T.id<>$id and $invisible: $strip_effect{invisible}
 | Es = Effect.list
 | till Es.end
   | E = pop Es

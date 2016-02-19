@@ -71,6 +71,7 @@ unit.nonguard = $flags^get_bit{2}
 unit.`!nonguard` State = $flags <= $flags^set_bit{2 State}
 
 unit.hasted = $flags^get_bit{3}
+unit.slowed = $flags^get_bit{14}
 
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
@@ -79,6 +80,7 @@ unit.digger = $flags^get_bit{9}
 unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
+unit.paralyzed = $flags^get_bit{13}
 
 unit.size =
 | S = $sprite.size

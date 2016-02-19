@@ -1,6 +1,7 @@
 icon: spell_flight
-lore: misc.tier2_lcost
+lore: misc.tier1_lcost
 cost: 400
 range: 3
+needs: (cast_telekinesis cast_excavate)
 affects: unit
 before: add_effect{flyer,0,()},impact{explosion_blood},sound{wings}

@@ -1,4 +1,5 @@
 icon: spell_heal
+hotkey: h
 lore: misc.tier1_lcost
 cost: 100
 cool: 960

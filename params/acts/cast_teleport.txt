@@ -1,8 +1,9 @@
 icon: spell_teleport
-//needs: (cast_telekinesis cast_excavate)
+hotkey: e
 lore: misc.tier1_lcost
 cost: 200
-range: 2
+range: 16
+needs: (cast_telekinesis cast_excavate)
 affects: empty
-before: effect{teleport},sound{spawn},set{self alpha 0},set{self delta 10}
+before: effect{teleport},sound{summon},set{self alpha 0},set{self delta 10}
 after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}

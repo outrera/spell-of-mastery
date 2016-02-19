@@ -1,8 +1,9 @@
 icon: spell_lightning
+hotkey: l
 needs: (cast_fireball)
 lore:  misc.tier1_lcost
 cost: 150
 cool: 480
 range: 3
 affects: unit
-before: harm{magic.60},impact{lightning},sound{lightning}//,cool{5}
+before: harm{magic.50},impact{lightning},sound{lightning}//,cool{5}
