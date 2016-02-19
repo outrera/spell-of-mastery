@@ -42,11 +42,12 @@ type player{id world}
 | when $id<Cs.h: $colors <= map I 5: Cs.get{I $id}
 | $clear
 
-player.picked = $picked_.unheap
+player.picked = $picked_.unheap{}.keep{?0><?1.serial}{?1}.skip{?removed}
+
 player.`!picked` Us =
-| for U $picked_: U.picked <= 0
+| for U $picked_: U.1.picked <= 0
 | for U Us: U.picked <= 1
-| Us = Us.enheap
+| Us = Us{[?serial ?]}.enheap
 | $picked_.heapfree
 | $picked_ <= Us
 
