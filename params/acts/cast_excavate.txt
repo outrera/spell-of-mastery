@@ -1,6 +1,6 @@
 icon: spell_excavate
-//lore: misc.tier1_lcost
-//cost: 100
+lore: misc.tier1_lcost
+cost: 100
 range: 1
 fix_z: caster
 affects: any
