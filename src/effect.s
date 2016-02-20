@@ -109,6 +109,11 @@ effect harm As:
         | Whom <= W
   D | Damage <= D
 | when Damage><user: Damage <= Me.damage
+| when Damage.is_int
+  | $run_effects{?><attack Me $xyz}
+  | Mod = $mod
+  | $mod <= 0
+  | case Mod [`.` boost [N M]]: !Damage + | max 1 | Damage*N/M
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 

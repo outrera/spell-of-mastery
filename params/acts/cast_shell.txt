@@ -3,5 +3,6 @@ lore: misc.tier1_lcost
 cost: 100
 cool: 240
 range: 3
+needs: (cast_heal)
 affects: unit
 before: add_effect{shell,0,()},impact{shell},sound{shell}

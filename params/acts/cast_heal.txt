@@ -5,5 +5,5 @@ cost: 100
 cool: 960
 range: 3
 affects: unit
-before: harm{-90},strip{poison},impact{explosion_blood},sound{summon}
+before: harm{-90},strip{poison},strip{slowed},strip{paralyzed},impact{explosion_blood},sound{summon}
 //after: cooldown{3}

@@ -1,0 +1,9 @@
+icon: spell_bloodlust
+hotkey: b
+lore: misc.tier1_lcost
+cost: 300
+cool: 240
+needs: (cast_heal)
+affects: unit
+range: 3
+before: add_effect{bloodlust,0,()},impact{explosion_blood},sound{bloodlust}

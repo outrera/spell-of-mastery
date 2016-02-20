@@ -71,7 +71,6 @@ unit.nonguard = $flags^get_bit{2}
 unit.`!nonguard` State = $flags <= $flags^set_bit{2 State}
 
 unit.hasted = $flags^get_bit{3}
-unit.slowed = $flags^get_bit{14}
 
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
@@ -81,6 +80,7 @@ unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
 unit.paralyzed = $flags^get_bit{13}
+unit.slowed = $flags^get_bit{14}
 
 unit.size =
 | S = $sprite.size
@@ -452,7 +452,8 @@ unit.harm Attacker Damage =
 | less Piercing: Damage <= max 1 Damage-$armor
 | case Mod
   [`.` resist [magic N]] | when Magic and Damage>1: Damage <= max 1 Damage-N
-  [`.` block N] | when Damage>1: Damage <= max 1 Damage-N
+  [`.` block [N M]]
+     | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M
 | !$hp - Damage
 | when!it $blood:
   | E = $world.effect{$xyz it}

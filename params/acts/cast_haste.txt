@@ -1,5 +1,5 @@
 icon: spell_haste
-hotkey: a
+hotkey: s
 lore: misc.tier1_lcost
 cost: 300
 cool: 240
