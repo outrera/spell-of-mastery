@@ -11,7 +11,7 @@ invisible: on{static}
 paralyzed: on{static}
 bloodlust: on{attack},mod{boost.(1 2)}
 fireaura: on{counter},harm{piercing.5},impact{fire_ring}
-poison: on{cycle.60},host,when{has_health.2},harm{piercing.1}
+poison: on{cycle.60},host,when{has_health.3},harm{piercing.2}
 shell: on{harm},mod{block.(1 3)},sound{shell},impact{shell}
 resist_magic: on{harm},mod{resist.(magic 30)},sound{shell},impact{shell}
 regen: on{cycle.30},when{harmed},strip{poison},harm{-1},effect{explosion_blood}
