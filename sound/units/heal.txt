@@ -1,0 +1,3 @@
+author: remaxim
+license: `CC-BY-SA`
+origin: `https://github.com/clintbellanger/flare-game`

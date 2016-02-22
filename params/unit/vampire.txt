@@ -12,3 +12,4 @@ impact: harm{user},lifedrain{6},impact{explosion_blood},sound{orbit2}
 hit: sound{grunt2}
 death: sound{vampire_die}
 moves: sound{step}
+acts: (vampire_bat_form_on)

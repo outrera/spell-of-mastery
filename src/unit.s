@@ -130,8 +130,7 @@ unit.update_move_method =
 unit.move_in State =
 | when $item <> pickup: leave
 | for U $world.units_at{$xyz}: when U.item and U.item <> pickup:
-  | Add = if U.show then [effect,pickup sound,pickup remove,self] else []
-  | U.effect{[@Add @U.item] Me Me.xyz}
+  | U.effect{U.item Me Me.xyz}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
@@ -225,7 +224,7 @@ unit.add_item Amount Name =
 | less Amount: leave
 | for E $effects: case E [When EName Duration Params]: when EName><Name:
   | !Duration-Amount
-  | when Duration >> -1:
+  | when Duration >> 0:
     | $strip_effect{Name}
     | leave
   | E.2 <= Duration
@@ -236,6 +235,20 @@ unit.get_item Name =
 | for E $effects: case E [When EName Duration Params]: when EName><Name:
   | leave -Duration
 | 0
+
+unit.items =
+| Items = []
+| for E $effects: when E.2<0: push [E.1 -E.2] Items
+| Items
+
+unit.acts =
+| Param = $main.params
+| ItemDefs = Param.iacts
+| ItemActs = []
+| for Name,Count $items:
+  | Item = ItemDefs.Name
+  | when got Item: for ActName Item: push Param.acts.ActName ItemActs
+| [@$class.acts @ItemActs]
 
 unit.run_effects Selector Target TargetXYZ =
 | Es = []

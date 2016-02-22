@@ -1,0 +1,17 @@
+sprite: unit_bat
+title: `Vampire` 
+icon: unit_bat
+tier: 3
+health: 60
+damage: 2
+armor: 2
+range: 3
+cool: 10
+blood: blood_undead
+inborn: (upkeep3 flyer resist_magic)
+attack: sound{bat_move}
+impact: harm{user}
+hit: sound{bat_hit}
+death: sound{bat_die}
+moves: sound{bat_move}
+acts: (vampire_bat_form_off)
