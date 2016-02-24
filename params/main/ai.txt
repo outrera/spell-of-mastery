@@ -55,6 +55,7 @@ tier4:
   | attack hydra
 
 
-l2:
+l2: //level2 AI
  | set aiDefensiveSpell cast_shell
+ | wait 2880 //two minutes
  | attack ratman ratman goblin
