@@ -196,6 +196,7 @@ world.clear_passage X Y Z =
 | HH = $fix_z{X,Y,Z}
 | H = HH
 | when H-Z < 5: leave
+| say [Z H]
 | ZZ = Z
 | AddCeil = 1
 | while Z<H:
@@ -205,11 +206,11 @@ world.clear_passage X Y Z =
   | !Z+1
 | Z <= ZZ
 | when H-Z < 5: leave
-| while Z<H:
-  | when Dirs.all{DX,DY=>$at{X+DX Y+DY Z}.empty}: H<=Z
+/*| while Z<H:
+  | when Dirs.all{DX,DY=>$at{X+DX Y+DY Z}.empty}: bad 'resulted flying platform'
   | !Z+1
 | Z <= ZZ
-| when H-Z < 5: leave
+| when H-Z < 5: leave*/
 | while Z<H:
   | $set{X Y Z $main.tiles.filler1}
   | !Z+1
