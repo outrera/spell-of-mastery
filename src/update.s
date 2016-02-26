@@ -351,7 +351,7 @@ unit.update =
   | $active <= 0
   | leave
 | when $host:
-  | if $host.serial >< $host_serial
+  | if $host.serial >< $host_serial and not $host.removed
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
     else $die

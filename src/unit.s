@@ -456,7 +456,10 @@ unit.harm Attacker Damage =
     | Damage <= D
     | Piercing <= 1
     | Magic <= 1
-| when Damage>0: $run_effects{?><harm Me $xyz}
+| when Damage>0:
+  | $run_effects{?><harm Me $xyz}
+  | if Magic then $run_effects{?><magic_harm Me $xyz}
+    else $run_effects{?><_phys_harm Me $xyz}
 | Mod = $mod
 | $mod <= 0
 | when Damage << 0:
@@ -464,9 +467,9 @@ unit.harm Attacker Damage =
   | leave
 | less Piercing: Damage <= max 1 Damage-$armor
 | case Mod
-  [`.` resist [magic N]] | when Magic and Damage>1: Damage <= max 1 Damage-N
   [`.` block [N M]]
      | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M
+  [`.` block N] | when Damage>1: Damage <= max 1 Damage-N
 | !$hp - Damage
 | when!it $blood:
   | E = $world.effect{$xyz it}
