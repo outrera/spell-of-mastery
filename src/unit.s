@@ -456,7 +456,7 @@ unit.harm Attacker Damage =
     | Damage <= D
     | Piercing <= 1
     | Magic <= 1
-| $run_effects{?><harm Me $xyz}
+| when Damage>0: $run_effects{?><harm Me $xyz}
 | Mod = $mod
 | $mod <= 0
 | when Damage << 0:
