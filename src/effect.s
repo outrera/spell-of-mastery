@@ -87,9 +87,13 @@ effect confirm Title Text:
 
 effect animate Anim: $animate{Anim}
 
-effect impact Impact: $world.effect{TargetXYZ Impact}
+effect impact Impact:
+| when TargetXYZ.2 >< -1: leave
+| $world.effect{TargetXYZ Impact}
 
-effect effect Effect: $world.effect{$xyz Effect}
+effect effect Effect:
+| when $xyz.2 >< -1: leave
+| $world.effect{$xyz Effect}
 
 effect effect1 Effect:
 | Type = "effect_[Effect]"

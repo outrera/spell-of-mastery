@@ -20,6 +20,7 @@ default:
   | set aiOffensiveSpell cast_fireball
   | goto tier0
 
+//witch_l0:
 
 tier0:
   | attack ratman
@@ -44,16 +45,14 @@ tier3:
   | set aiOffensiveSpell cast_suicide
   | attack minotaur vampire
   | attack baphomet
-  | attack spider griffin ifrit
+  | attack spider ifrit
   | goto tier4 when lossage >> 64
 
 tier4:
-  | attack dragon
   | attack observer
-  | attack golem
   | attack ogre
   | attack hydra
-
+  | attack dragon
 
 l2: //level2 AI
  | set aiDefensiveSpell cast_shell
