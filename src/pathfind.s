@@ -103,11 +103,12 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
     | for Dst list_moves{U XYZ}:
       | DXYZ = Dst.xyz
       | NewL = (TargetXY-DXYZ.take{2}).abs
-      | when BestL>NewL:
+      | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
         | BestL <= NewL
+        | BestXYZ <= DXYZ
         | R <= [Node Dst]
         | when BestL < 2.0:
-          | when BestL < 1.0: _goto end
+          | when BestXYZ><TargetXYZ: _goto end
           | less $at{@TargetXYZ}.empty: _goto end
           | B = $block_at{TargetXYZ}
           | when got B:
