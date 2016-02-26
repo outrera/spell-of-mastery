@@ -124,7 +124,6 @@ roam Me =
            | MoveIn <= 1
         else if AI><hold and no Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
-        else if AI><turret and no Block then MoveIn <= 1
         else if AI><pentagram and Owner.is_enemy{V.owner} then
            | when no Block or Owner.is_enemy{Block}: MoveIn <= 1
         else if AI><avoid and no Block then
@@ -147,6 +146,13 @@ roam Me =
 | $order_at{TargetXYZ}
 | leave 1
 
+ai_idle_acts Me =
+| for A $acts:
+  | when A.name><invisibility and not $invisible and $can_do{A}:
+    | $order_act{invisibility target/Me}
+    | leave 1
+| 0
+
 ai.update_units Units =
 | Player = $player
 | Pentagram = Player.pentagram
@@ -164,10 +170,12 @@ ai.update_units Units =
     | U.attacker <= 1
     | Os = Os.skip{?ai><attack}
     | AttackTrigger.free
-  | Attacker = U.damage and U.attacker
-  | when Attacker:
-    | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
-      | Handled <= roam U
+  | Handled <= ai_idle_acts U
+  | less Handled:
+    | Attacker = U.damage and U.attacker
+    | when Attacker:
+      | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
+        | Handled <= roam U
   | less Handled:
     | when U.id >< LeaderID: update_leader U
     | when U.id >< PentID and Player.mana>500: ai_update_build Me

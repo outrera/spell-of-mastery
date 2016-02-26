@@ -22,7 +22,7 @@ inborn: (heals organic)
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}
-acts: (pentagram cast_hexagram cast_knowledge
+acts: (pentagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
        cast_heal cast_shell cast_bloodlust
        cast_telekinesis cast_excavate cast_flight cast_teleport
