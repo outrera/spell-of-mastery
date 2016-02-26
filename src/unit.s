@@ -429,13 +429,14 @@ in_range Me XYZ =
 unit.targets_in_range Range = $world.targets_in_range{Me.xyz Range}
 
 retaliate Me Enemy Range =
-| less $idle: leave
+| when $owner.human and not $idle: leave
 | when Range:
   | for U $targets_in_range{Range}:
     | when U.id<>$id and U.damage and U.owner.id><$owner.id:
       | retaliate U Enemy 0
-| when $goal and ($goal.xyz-Me.xyz).abs << (Enemy.xyz-Me.xyz).abs:
-  | leave
+| when $goal and ($goal.damage or $goal.leader):
+  | when ($goal.xyz-Me.xyz).abs << (Enemy.xyz-Me.xyz).abs:
+    | leave
 | less $damage: leave
 | $order_at{Enemy.xyz}
 | $backtrack <= $xyz
