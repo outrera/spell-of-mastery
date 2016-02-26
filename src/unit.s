@@ -3,6 +3,8 @@ use util macros unit_flags
 type cell_goal xyz/[0 0 0] serial
 
 cell_goal.type = \goal
+cell_goal.damage = 0
+cell_goal.leader = 0
 cell_goal.removed = 0
 cell_goal.alive = 1
 cell_goal.empty = 1
