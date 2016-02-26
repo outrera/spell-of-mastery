@@ -205,13 +205,13 @@ world.clear_passage X Y Z =
   | !Z+1
 | Z <= ZZ
 | when H-Z < 5: leave
-/*| while Z<H:
-  | when Dirs.all{DX,DY=>$at{X+DX Y+DY Z}.empty}: bad 'resulted flying platform'
-  | !Z+1
-| Z <= ZZ
-| when H-Z < 5: leave*/
 | while Z<H:
+  | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.filler1}
+  | when Type<>void:
+    | S = $players.0.alloc_unit{unit_dummy}
+    | S.move{[X Y Z]}
+    | S.add_effect{retile 24*10 [[effect [on timeout] [retile [[X Y Z] Type]]]]}
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y

@@ -114,13 +114,11 @@ update_units_effects Me Units =
     | for E U.effects: case E [When Name Duration Params]: when Duration>0:
       | !Duration-1
       | less Duration > 0:
-        | when When >< timeout: push Name RunEs
+        | when When >< timeout: push [Name Params.unheap] RunEs
         | push Name Remove
       | E.2 <= Duration
     | for Name Remove: U.strip_effect{Name}
-    | for Name RunEs:
-      | Effect = $main.params.effect.Name
-      | U.effect{Effect U U.xyz}
+    | for Name,Params RunEs: U.run_effect{Name Params U U.xyz}
 
 update_units Me =
 | ActiveList = $active.list

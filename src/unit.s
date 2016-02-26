@@ -258,6 +258,12 @@ unit.run_effects Selector Target TargetXYZ =
     | push Effect Es //cuz invoking it here may clobber $effects
 | for Effect Es: $effect{Effect Target TargetXYZ}
 
+unit.run_effect Name Params Target TargetXYZ =
+| Es = []
+| Effect = get_named_effect Target Name Params
+| when Effect:
+  | $effect{Effect Target TargetXYZ}
+
 unit.`!backtrack` XYZ =
 | less XYZ:
   | $strip_effect{btrack}

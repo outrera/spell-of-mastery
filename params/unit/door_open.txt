@@ -1,7 +1,7 @@
 sprite: unit_door_open
 icon: unit_door
 title: `Door (open)`
-tier: 2
+tier: 0
 box_xy: (-8 -8)
 health: 150
 damage: 0

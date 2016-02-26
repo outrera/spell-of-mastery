@@ -232,6 +232,23 @@ effect clear_passage What:
   Else | bad "effect clear: invalid target ([What])"
 | $world.clear_passage{X Y Z}
 
+effect set_tile [X Y Z] Type:
+| Tile = $main.tiles.Type
+| when no Tile:
+  | say "set_tile: missing tile `[Type]`"
+  | leave
+| $world.set{X Y Z Tile}
+
+effect retile [X Y Z] Type:
+| B = $world.block_at{[X Y Z]}
+| when got B:
+  | if B.owner.pentagram
+    then B.order_act{recall target/B}
+    else B.die // crushed!
+| Tile = $main.tiles.Type
+| $world.set{X Y Z Tile}
+| $die
+
 effect spawn What:
 | S = $owner.alloc_unit{What}
 | S.nonguard <= 1
