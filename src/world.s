@@ -196,7 +196,6 @@ world.clear_passage X Y Z =
 | HH = $fix_z{X,Y,Z}
 | H = HH
 | when H-Z < 5: leave
-| say [Z H]
 | ZZ = Z
 | AddCeil = 1
 | while Z<H:

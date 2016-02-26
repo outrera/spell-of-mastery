@@ -2,7 +2,7 @@ sprite: unit_vampire
 tier: 3
 health: 60
 damage: 5
-armor: 2
+armor: 1
 range: 3
 cool: 10
 blood: blood_undead
