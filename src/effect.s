@@ -87,13 +87,9 @@ effect confirm Title Text:
 
 effect animate Anim: $animate{Anim}
 
-effect impact Impact:
-| when TargetXYZ.2 >< -1: leave
-| $world.effect{TargetXYZ Impact}
+effect impact Impact: $world.effect{TargetXYZ Impact}
 
-effect effect Effect:
-| when $xyz.2 >< -1: leave
-| $world.effect{$xyz Effect}
+effect effect Effect: $world.effect{$xyz Effect}
 
 effect effect1 Effect:
 | Type = "effect_[Effect]"
@@ -341,6 +337,7 @@ check_when Me Target C =
 | 1
 
 unit.effect Effect Target XYZ =
+| when XYZ.2 >< -1: leave
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
 | when T.is_unit and T.id<>$id and $invisible: $strip_effect{invisible}
