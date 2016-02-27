@@ -337,7 +337,7 @@ respawn_leader Me XYZ =
 | Cost = $main.params.world.death_cost
 | !$owner.mana - Cost
 | $owner.notify{"death cost you [Cost] mana"}
-| when $owner.params.spell_of_mastery:
+| when got $owner.params.spell_of_mastery:
   | $owner.params.spell_of_mastery <= No
   | $owner.notify{"Your Spell of Mastery was broken!"}
 | S = $owner.alloc_unit{$type}

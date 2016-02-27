@@ -213,7 +213,11 @@ effect recall Where:
   else leave
 | Target.remove
 | Target.move{XYZ}
+| Target.strip_effect{btrack}
 | Target.reset_goal
+   //a faster solution would be keeping the linked list of all targeters
+| for U $world.active: when U.goal and U.goal.id><Target.id:
+  | U.reset_goal
 
 effect remove Whom: case Whom
   target | Target.free
