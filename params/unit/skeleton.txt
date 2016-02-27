@@ -1,6 +1,6 @@
 sprite: unit_skeleton
 tier: 1
-health: 50
+health: 60
 damage: 5
 armor: 0
 //speed: 24

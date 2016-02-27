@@ -1,4 +1,11 @@
 sprite: unit_king
 icon: unit_king
-hit: effect{blood}
+range: cross
+health: 140
+armor: 3
+damage: 10 // amount of damage this unit deals
+impact: harm{user},sound{attack2}
+hit: effect{blood},sound{grunt2}
 moves: sound{step}
+
+acts: (pentagram_king cast_knowledge cast_heal cast_shell cast_bloodlust spell_of_mastery)

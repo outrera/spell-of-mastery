@@ -2,7 +2,7 @@ sprite: unit_hydra
 tier: 4
 health: 170
 damage: 12
-armor: 2
+armor: 1
 cooldown: 4
 speed: 28
 inborn: (upkeep4 heals organic regen amphibian)

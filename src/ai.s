@@ -20,7 +20,7 @@ cast_spell_sub Me Offensive =
 | when no SpellName: leave 0
 | Act = $main.params.acts.SpellName
 | when no Act: bad "AI: cant find SpellType `[SpellName]`"
-| Targets = $world.targets_in_range{Me.xyz Act.range}
+| Targets = $world.targets_in_range{Me.xyz Act.range}.skip{?invisible}
 | Ts = Targets.skip{?empty}
 | if Offensive
   then Ts <= Ts.keep{?owner.id<>$owner.id}

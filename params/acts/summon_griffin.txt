@@ -3,4 +3,5 @@ icon: unit_griffin
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
+needs: (summon_knight)
 after: spawn{unit_griffin}

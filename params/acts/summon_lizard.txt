@@ -1,7 +1,7 @@
 proto: spawn__proto
 icon: unit_lizard
-lore: misc.tier2_lcost
+lore: misc.tier1_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
-needs: (summon_halfling)
+needs: (summon_farmer)
 after: spawn{unit_lizard}

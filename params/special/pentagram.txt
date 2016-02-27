@@ -14,6 +14,7 @@ acts: summon_blob, summon_oculus,
              summon_baphomet, summon_hydra,
       summon_ratman, summon_goblin, summon_orc, summon_minotaur,
              summon_spider, summon_ogre,
-      summon_bat, summon_skeleton, summon_wraith, summon_vampire, summon_observer,
+      summon_bat, summon_skeleton, summon_wraith, summon_gargoyle,
+      summon_vampire, summon_observer,
       //summon_lizard, summon_griffin, summon_golem,
       summon_dragon

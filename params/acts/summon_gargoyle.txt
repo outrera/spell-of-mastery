@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_gargoyle
-lore: misc.tier3_lcost
+lore: misc.tier2_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
 needs: (summon_wraith)

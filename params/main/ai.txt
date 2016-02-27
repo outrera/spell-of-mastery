@@ -1,26 +1,118 @@
 nop_loop: | wait 5
 
-/*
-default:
-  | attack ratman
-  | attack ratman goblin ratman
-  | wait 5
-  | attack goblin elf ratman
-  | attack goblin elf goblin
-  | attack orc
-  | attack orc goblin
-  | attack orc elf orc
-  | goto default_cycle
+leader_katzard: | goto leader_wizard
+leader_mime: | goto default
 
-default_cycle:
-  | attack goblin elf goblin
-*/
+leader_wizard:
+  | set aiOffensiveSpell cast_fireball
+  | goto wizard0
+
+wizard0:
+  | attack halfling
+  | attack halfling halfling
+  | goto wizard1
+
+wizard1:
+  | attack halfling elf halfling
+  | goto wizard2 when lossage >> 14
+
+wizard2:
+  | set aiOffensiveSpell cast_lightning
+  | set aiDefensiveSpell cast_shell
+  | attack dwarf halfling elf halfling
+  | goto wizard3 when lossage >> 32
+
+wizard3:
+  | set aiOffensiveSpell cast_suicide
+  | attack dwarf ifrit elf halfling elf minotaur
+  | goto wizard4 when lossage >> 64
+
+wizard4:
+  | attack dwarf hydra ifrit elf halfling elf minotaur
+
+leader_king:
+  | goto king0
+
+king0:
+  | attack farmer
+  | attack farmer farmer
+  | goto king1
+
+king1:
+  | attack farmer lizard farmer
+  | goto king2 when lossage >> 14
+
+king2:
+  | set aiDefensiveSpell cast_shell
+  | attack lizard knight lizard farmer
+  | goto king3 when lossage >> 32
+
+king3:
+  | attack knight knight lizard farmer griffin
+  | goto king4 when lossage >> 64
+
+king4:
+  | attack knight knight lizard farmer griffin griffin golem
+
+leader_witch:
+  | set aiOffensiveSpell cast_fireball
+  | goto witch0
+
+witch0:
+  | attack ratman
+  | attack ratman ratman
+  | goto witch1
+
+witch1:
+  | attack ratman ratman goblin goblin
+  | goto witch2 when lossage >> 14
+
+witch2:
+  | set aiOffensiveSpell cast_lightning
+  | set aiDefensiveSpell cast_shell
+  | attack orc goblin ratman
+  | attack orc orc goblin goblin
+  | goto witch3 when lossage >> 32
+
+witch3:
+  | set aiOffensiveSpell cast_suicide
+  | attack ratman orc baphomet spider goblin
+  | goto witch4 when lossage >> 64
+
+witch4:
+  | attack ratman spider orc goblin baphomet ogre
+
+leader_warlock:
+  | set aiOffensiveSpell cast_fireball
+  | goto warlock0
+
+warlock0:
+  | attack bat skeleton
+  | attack skeleton skeleton
+  | goto warlock1
+
+warlock1:
+  | attack skeleton wraith skeleton bat
+  | goto warlock2 when lossage >> 14
+
+warlock2:
+  | set aiOffensiveSpell cast_lightning
+  | set aiDefensiveSpell cast_shell
+  | attack skeleton wraith wraith bat gargoyle
+  | goto warlock3 when lossage >> 32
+
+warlock3:
+  | set aiOffensiveSpell cast_suicide
+  | attack skeleton wraith skeleton bat gargoyle vampire
+  | goto warlock4 when lossage >> 64
+
+warlock4:
+  | attack skeleton wraith skeleton wraith gargoyle vampire observer
+
 
 default:
   | set aiOffensiveSpell cast_fireball
   | goto tier0
-
-//witch_l0:
 
 tier0:
   | attack ratman

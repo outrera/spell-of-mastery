@@ -3,6 +3,7 @@ tier: 3
 health: 100
 damage: 10
 armor: 0
+speed: 18
 inborn: (upkeep3 heals organic flyer)
 //attack: sound{attack2}
 impact: harm{user},sound{attack2}

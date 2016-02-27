@@ -27,6 +27,7 @@ world.new_game =
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana
 | reinit_units $active
+| PAI = $main.params.ai
 | for P $players:
   | P.lore <= 10
   | P.mana <= StartMana
@@ -36,7 +37,10 @@ world.new_game =
   | L = P.leader
   | C = P.pentagram
   | when L and not C:
-    | C = P.alloc_unit{special_pentagram}
+    | PT = if L.type><leader_king
+           then \special_pentagram_king
+           else \special_pentagram
+    | C = P.alloc_unit{PT}
     | C.move{L.xyz}
     | L.move{C.xyz}
     | L.alpha <= 255
@@ -45,6 +49,7 @@ world.new_game =
     | C.alpha <= 255
     | C.delta <= -10
     | $effect{C.xyz pentagram_appearance}
+  | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got!it $players.find{?human}: $human <= it
 
 EventActions = []
