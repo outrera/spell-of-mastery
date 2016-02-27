@@ -13,7 +13,6 @@ pickable: 1
 passable: 0
 flyer: 0 // can it fly
 range: cross //1
-blood: blood
 ai: unit
 item: pickup
 impact: sound{attack2}

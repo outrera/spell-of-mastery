@@ -8,6 +8,6 @@ acts: (cast_excavate)
 inborn: (upkeep2 heals organic digger)
 //attack: sound{attack2}
 impact: harm{user},sound{attack2}
-hit: sound{dwarf_hit}
+hit: effect{blood},sound{dwarf_hit}
 death: sound{dwarf_die}
 moves: sound{step}

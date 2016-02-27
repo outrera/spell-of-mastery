@@ -6,6 +6,6 @@ armor: 0
 inborn: (upkeep3 heals organic flyer)
 //attack: sound{attack2}
 impact: harm{user},sound{attack2}
-hit: sound{griffin_hit}
+hit: effect{blood},sound{griffin_hit}
 death: sound{griffin_die}
 moves: sound{griffin_move}

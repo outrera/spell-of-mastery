@@ -9,7 +9,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            acts/[] icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
-           inborn/[] blood/0
+           inborn/[]
            attack/0 impact/0 hit/0 death/0 moves/0}
   id
   type/"[Bank]_[Class_name]"
@@ -17,7 +17,6 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   pickable/Pickable
   empty/Empty
   default_sprite/Sprite
-  blood/Blood
   unit/Unit
   box_xy/Box_xy // bounding box x,y correction
   aux/Aux

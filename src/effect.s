@@ -87,6 +87,11 @@ effect confirm Title Text:
 
 effect animate Anim: $animate{Anim}
 
+effect macro Name:
+| M = $main.params.macro.Name
+| when no M: bad "main/macro.txt doesnt define `[Name]`"
+| $effect{M Target TargetXYZ}
+
 effect impact Impact:
 | E = $world.effect{TargetXYZ Impact}
 | when Target: E.fxyz.init{Target.fxyz}
@@ -121,12 +126,13 @@ effect harm As:
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
-effect harm_neibs Arg:
+effect neibs Args:
+| Es = Args{|[_ N A]=>[N A];[_ N @As]=>[N As]}
 | D = (TargetXYZ-$xyz){?sign}
 | DD = D.1,D.0,D.2
-| for XYZ [TargetXYZ+DD TargetXYZ-DD]
+| for XYZ [$xyz+DD $xyz-DD]
   | B = $world.block_at{XYZ}
-  | when got B: B.harm{Me Arg}
+  | when got B: $effect{Es B B.xyz}
 
 effect counter Arg:
 | when $range><cross or not $range:

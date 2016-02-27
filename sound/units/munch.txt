@@ -1,0 +1,3 @@
+author: `fresco`
+license: `CC-BY`
+origin: `http://www.freesound.org/people/fresco/sounds/48933/`

@@ -6,9 +6,8 @@ armor: 3
 range: 3
 speed: 96
 inborn: (upkeep1 heals ttl{1440})
-blood: blood_undead
 //attack: sound{blob_attack}
 impact: harm{user},sound{blob_attack}
-hit: sound{blob_hit}
+hit: effect{blood_undead},sound{blob_hit}
 death: sound{blob_hit}
 moves: sound{step}

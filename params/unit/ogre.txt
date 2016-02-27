@@ -6,6 +6,6 @@ armor: 0
 inborn: (upkeep4 heals organic)
 //attack: sound{ogre_club}
 impact: harm{user},sound{ogre_club}
-hit: sound{ogre_hit}
+hit: effect{blood},sound{ogre_hit}
 death: sound{ogre_die}
 moves: sound{step}

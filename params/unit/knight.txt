@@ -7,6 +7,6 @@ speed: 30
 inborn: (upkeep2 heals organic)
 //attack: sound{attack2}
 impact: harm{user},sound{attack2}
-hit: sound{grunt4}
+hit: effect{blood},sound{grunt4}
 death: sound{dwarf_die}
 moves: sound{step}

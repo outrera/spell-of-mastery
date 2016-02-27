@@ -1,5 +1,5 @@
 sprite: unit_wizard
 icon: unit_wizard
-hit: sound{grunt4}
+hit: effect{blood},sound{grunt4}
 death: sound{orbit}
 moves: sound{step}

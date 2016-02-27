@@ -15,7 +15,6 @@ pickable: 1
 passable: 0
 flyer: 0 // can it fly
 leader: 1
-blood: blood
 ai: unit
 item: pickup
 inborn: (heals organic)

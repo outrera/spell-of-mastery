@@ -1,2 +1,4 @@
 sprite: unit_king
 icon: unit_king
+hit: effect{blood}
+moves: sound{step}

@@ -8,6 +8,7 @@ range: 0
 leader: 2
 inborn: (upkeep1 flyer)
 death: sound{orbit}
+hit: effect{blood},sound{baphomet_hit}
 moves: sound{observer_move}
 acts: (cast_hexagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon

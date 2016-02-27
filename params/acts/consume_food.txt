@@ -2,6 +2,6 @@ icon: item_food
 hotkey: f
 speed: 4
 affects: any
-before: animate{idle},when{harmed},sound{eat},harm{-60},effect{pickup},add_item{food,-1}
+before: animate{idle},when{harmed},sound{munch},harm{-60},effect{pickup},add_item{food,-1}
 
 

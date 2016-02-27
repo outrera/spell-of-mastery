@@ -480,9 +480,6 @@ unit.harm Attacker Damage =
      | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M
   [`.` block N] | when Damage>1: Damage <= max 1 Damage-N
 | !$hp - Damage
-| when!it $blood:
-  | E = $world.effect{$xyz it}
-  | E.fxyz.init{$fxyz}
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
   | Effect = $class.hit

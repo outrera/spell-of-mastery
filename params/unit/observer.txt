@@ -9,6 +9,6 @@ speed: 28
 inborn: (upkeep4 heals organic flyer resist_magic)
 attack: sound{observer_attack}
 impact: harm{user},impact{energy_ring},sound{observer_impact}
-hit: sound{observer_hit}
+hit: effect{blood},sound{observer_hit}
 death: sound{observer_die}
 moves: sound{observer_move}

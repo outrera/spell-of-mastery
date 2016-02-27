@@ -6,7 +6,7 @@ armor: 0
 speed: 20
 inborn: (upkeep3 heals organic)
 //attack: sound{spider_attack}
-impact: harm{user},when{no_child.effect_poison,has.organic},child{effect_poison ((poison 0 ()) (ttl 10000 ()))},impact{explosion_blood},endwhen,sound{spider_attack}
-hit: sound{spider_hit}
+impact: harm{user},macro{poison},sound{spider_attack}
+hit: effect{blood},sound{spider_hit}
 death: sound{spider_death}
 moves: sound{step}

@@ -6,6 +6,6 @@ armor: 1
 speed: 48
 inborn: (upkeep1 heals organic)
 impact: harm{user},sound{spider_attack}
-hit: sound{spider_hit}
+hit: effect{blood},sound{spider_hit}
 death: sound{spider_death}
 moves: sound{step}

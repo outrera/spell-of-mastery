@@ -12,7 +12,7 @@ blood: blood_undead
 inborn: (door_align)
 //attack: sound{attack2}
 impact: sound{attack2}
-hit: sound{door_hit}
+hit: effect{blood_undead},sound{door_hit}
 death: sound{door_die}
 moves: sound{step}
 acts: (door_close)
