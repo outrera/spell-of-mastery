@@ -3,11 +3,13 @@ use util macros unit_flags
 type cell_goal xyz/[0 0 0] serial
 
 cell_goal.type = \goal
+cell_goal.fxyz = [$xyz.0*32 $xyz.1*32 $xyz.2*8]
 cell_goal.damage = 0
 cell_goal.leader = 0
 cell_goal.removed = 0
 cell_goal.alive = 1
 cell_goal.empty = 1
+cell_goal.harm Attacker Damage =
 
 type unit.$class{Id World}
   id/Id

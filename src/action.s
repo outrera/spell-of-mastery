@@ -128,6 +128,7 @@ custom_valid Me =
     else if A >< ally_block then
      | Block = $unit.world.block_at{$xyz}
      | when got Block and not $unit.owner.is_enemy{Block.owner}: leave 1
+    else if A >< area then leave 1
     else $unit.owner.notify{"custom.valid: bad affects specifier - [A]"}
 | 0
 

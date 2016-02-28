@@ -1,0 +1,11 @@
+icon: spell_blizzard
+hotkey: b
+//lore: misc.tier1_lcost
+//cost: 100
+//cool: 240
+//affects: unit
+range: 3
+//before: missile{effect_fireball},harm{magic.30},impact{explosion3},sound{fire1}
+
+before: missile{effect_fireball},area{any,(64 64 64),harm{magic.30}},impact{explosion3},sound{fire1}
+affects: area

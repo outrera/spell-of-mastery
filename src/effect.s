@@ -126,6 +126,18 @@ effect harm As:
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
+effect area As:
+| [Whom [W H D] @Args] = As
+| Es = Args{|[_ N A]=>[N A];[_ N @As]=>[N As]}
+| Range = W/$world.c-1
+| Ts = $world.targets_in_range{TargetXYZ Range}.skip{?empty}
+| case Whom [exclude_self W]:
+  | Whom <= W
+  | Ts <= Ts.skip{?id><$id}
+| when Whom><ally: Ts <= Ts.skip{?is_enemy{Me}}
+| when Whom><enemy: Ts <= Ts.keep{?is_enemy{Me}}
+| for T Ts: $effect{Es T T.xyz}
+
 effect neibs Args:
 | Es = Args{|[_ N A]=>[N A];[_ N @As]=>[N As]}
 | D = (TargetXYZ-$xyz){?sign}
