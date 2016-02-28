@@ -213,7 +213,7 @@ effect recall Where:
   else leave
 | Target.remove
 | Target.move{XYZ}
-| Target.strip_effect{btrack}
+| Target.backtrack <= 0
 | Target.reset_goal
    //a faster solution would be keeping the linked list of all targeters
 | for U $world.active: when U.goal and U.goal.id><Target.id:
@@ -339,14 +339,8 @@ check_when Me Target C =
   [`.` has_mana A] | less $owner.mana>>A: leave 0
   [`.` has Effect] | less Target.has{Effect}: leave 0
   [`.` hasnt Effect] | less Target.has{Effect}: leave 0
-  [`.` got_child Type]
-    | Us = $world.units_at{Target.xyz}
-    | less Us.any{(?type><Type and ?host and ?host.serial><Target.serial)}:
-      | leave 0
-  [`.` no_child Type]
-    | Us = $world.units_at{Target.xyz}
-    | when Us.any{(?type><Type and ?host and ?host.serial><Target.serial)}:
-      | leave 0
+  [`.` got_child Type] | leave: got Target.child{Type}
+  [`.` no_child Type] | leave: no Target.child{Type}
   [`.` kills N] | less Target.kills>>N: leave 0
 | 1
 

@@ -4,7 +4,7 @@ health: 90
 damage: 5
 armor: 2
 speed: 22
-inborn: (upkeep3 heals fireaura flyer)
+inborn: (upkeep3 heals organic fireaura flyer)
 //attack: sound{fire1}
 impact: harm{piercing.5},sound{fire1}
 hit: effect{blood},sound{grunt2}

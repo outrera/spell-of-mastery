@@ -84,6 +84,11 @@ unit.invisible = $flags^get_bit{12}
 unit.paralyzed = $flags^get_bit{13}
 unit.slowed = $flags^get_bit{14}
 
+unit.child Type =
+| $world.units_at{$xyz}.find{(?host and ?type><Type and ?host.serial><$serial)}
+
+unit.is_enemy Target = $owner.is_enemy{Target.owner}
+
 unit.size =
 | S = $sprite.size
 | if $height then S else [S.0 S.1 0]
@@ -432,6 +437,7 @@ unit.targets_in_range Range = $world.targets_in_range{Me.xyz Range}
 
 retaliate Me Enemy Range =
 | when $owner.human and not $idle: leave
+| when Enemy.empty: leave
 | when Range:
   | for U $targets_in_range{Range}:
     | when U.id<>$id and U.damage and U.owner.id><$owner.id:

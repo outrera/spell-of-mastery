@@ -162,25 +162,34 @@ ai.update_units Units =
 | when Player.params.attack_with_guards >< 1:
   | for U Units: U.attacker <= 1
   | Player.params.attack_with_guards <= 0
-| for U Units: when U.idle and not U.goal:
-  | Handled = 0
-  | Os = $world.units_at{U.xyz}
-  | AttackTrigger = Os.find{?ai><attack}
-  | when got AttackTrigger and U.ai<>attack:
-    | U.attacker <= 1
-    | Os = Os.skip{?ai><attack}
-    | AttackTrigger.free
-  | Handled <= ai_idle_acts U
-  | less Handled:
-    | Attacker = U.damage and U.attacker
-    | when Attacker:
-      | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
-        | Handled <= roam U
-  | less Handled:
-    | when U.id >< LeaderID: update_leader U
-    | when U.id >< PentID and Player.mana>500: ai_update_build Me
-    //| when U.nonguard: roam U radius/4
-| leave 0
+| for U Units:
+  | if U.idle and not U.goal then
+     | Handled = 0
+     | Os = $world.units_at{U.xyz}
+     | AttackTrigger = Os.find{?ai><attack}
+     | when got AttackTrigger and U.ai<>attack:
+       | U.attacker <= 1
+       | Os = Os.skip{?ai><attack}
+       | AttackTrigger.free
+     | Handled <= ai_idle_acts U
+     | less Handled:
+       | Attacker = U.damage and U.attacker
+       | when Attacker:
+         | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
+           | Handled <= roam U
+     | less Handled:
+       | when U.id >< LeaderID: update_leader U
+       | when U.id >< PentID and Player.mana>500: ai_update_build Me
+       //| when U.nonguard: roam U radius/4
+    else
+     | when U.type><unit_spider and U.goal.is_unit:
+       | G = U.goal
+       | when got G.child{effect_poison}:
+         | Ts = U.targets_in_range{1}.skip{?.child{effect_poison}^got}
+         | Ts = Ts.skip{?empty}
+         | Ts = Ts.keep{?is_enemy{U}}
+         | when Ts.size: U.order_at{Ts.0.xyz}
+| 0
 
 //when leader is too far from pentagram, just teleport leader back to it
 // after units get teleported, order them to attack
