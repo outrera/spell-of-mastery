@@ -2,5 +2,5 @@ author: `Chris Hopp`, `Nikita Sadkov`
 license: `GPL2`
 origin: `http://www.nongnu.org/aleona/`
 frames: 32*32
-//xy: 4,36
-anims: | idle time-5 0 1 2
+xy: 0,6
+anims: | idle time-5 1 2

@@ -156,6 +156,26 @@ effect lifedrain Amount:
 effect suicide Multiplier:
 | Target.harm{Me Target.damage*Multiplier}
 
+effect spawn_field Args:
+| [TTL Freq R Param @As] = Args
+| S = $owner.alloc_unit{unit_dummy}
+| S.move{TargetXYZ}
+| Es = As{?^normalize_curly}
+| S.add_effect{field TTL [[effect [on [`.` cycle Freq]] [field [Param R Es]]]]}
+
+effect field Param R Es:
+| Ps = points_in_circle{R}{P=>[P.0 P.1 0]+$xyz}
+| WW = $world.w 
+| WH = $world.h
+| Ps = Ps.keep{(?0>0 and ?1>0 and ?0<WW and ?1<WH)}
+| for P Ps: P.2 <= $world.fix_z{P}
+| T = 0
+| if Param><rand_cell then T <= Ps.rand
+  else bad "field: invalid param `[Param]`"
+| less T: leave
+| if T.is_unit then $effect{Es T T.xyz}
+  else $effect{Es 0 T}
+
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
@@ -393,7 +413,9 @@ unit.effect Effect Target XYZ =
         user | S.move{$xyz}
              | S.face{XYZ}
         [target @D] | S.move{$xyz}
-                    | S.fxyz.init{Target.fxyz+D}
+                    | O = if Target then Target.fxyz
+                          else $world.fxyz{XYZ}
+                    | S.fxyz.init{O+D}
         Else | bad "invalid offset specifier [Offset]"
       | S.add_effect{missile 0 [[payload $id $serial Es]]}
       | S.order.init{missile |Target or XYZ}

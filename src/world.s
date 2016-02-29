@@ -282,6 +282,8 @@ world.seen_from A B =
 
 world.slope_at X Y Z = $slope_map.at{X Y Z}
 
+world.fxyz XYZ = [XYZ.0*32 XYZ.1*32 XYZ.2*8]
+
 world.set_slope_at X Y Z Slope = $slope_map.set{X Y Z Slope}
 
 world.proxies_at X,Y,Z =
