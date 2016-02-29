@@ -3,9 +3,9 @@ hotkey: b
 //lore: misc.tier1_lcost
 //cost: 100
 //cool: 240
-//affects: unit
-range: 3
-//before: missile{effect_fireball},harm{magic.30},impact{explosion3},sound{fire1}
-
-before: missile{effect_fireball},area{any,(64 64 64),harm{magic.30}},impact{explosion3},sound{fire1}
 affects: area
+range: 3
+before: area{any,(96 96 96),missile{effect_shard,2,(target -32 0 96)},harm{magic.30},impact{shard_impact},sound{fire1}}
+
+//before: missile{effect_shard,2,(target -32 0 96)},harm{magic.30},impact{shard_impact},sound{fire1}
+//before: area{any,(64 64 64),harm{magic.30}},impact{explosion3},sound{fire1}

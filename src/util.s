@@ -27,6 +27,14 @@ points_in_matrix Ms =
 | R = Ms.size/2
 | points_in_square{R}.keep{X,Y=>Ms.(R+Y).(R+X)}
 
+normalize_curly E =
+| case E
+  [`{}` Name Args @Rest]
+    | if Rest.size then Args <= [Args @Rest]
+      else case Args [`,` @_]: Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
+    | [Name Args]
+  Else | E
+
 
 export points Dirs dirN add_border_to_matrix points_in_square points_in_circle
-       points_in_matrix
+       points_in_matrix normalize_curly

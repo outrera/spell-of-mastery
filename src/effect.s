@@ -128,7 +128,7 @@ effect harm As:
 
 effect area As:
 | [Whom [W H D] @Args] = As
-| Es = Args{|[_ N A]=>[N A];[_ N @As]=>[N As]}
+| Es = Args{?^normalize_curly}
 | Range = W/$world.c-1
 | Ts = $world.targets_in_range{TargetXYZ Range}.skip{?empty}
 | case Whom [exclude_self W]:
@@ -379,12 +379,22 @@ unit.effect Effect Target XYZ =
     else if Name >< user_attack then $effect{$attack T T.xyz}
     else if Name >< user_impact then $effect{$impact T T.xyz}
     else if Name >< missile then
+      | Type = 0
+      | Offset = \user
       | Speed = 2
-      | when Args.is_list
-        | Speed <= Args.1
-        | Args <= Args.0
-      | S = $owner.alloc_unit{Args}
-      | S.move{$xyz}
+      | case Args
+         [T S O]
+           | Type <= T
+           | Speed <= S
+           | Offset <= O
+         T | Type <= T
+      | S = $owner.alloc_unit{Type}
+      | case Offset
+        user | S.move{$xyz}
+             | S.face{XYZ}
+        [target @D] | S.move{$xyz}
+                    | S.fxyz.init{Target.fxyz+D}
+        Else | bad "invalid offset specifier [Offset]"
       | S.add_effect{missile 0 [[payload $id $serial Es]]}
       | S.order.init{missile |Target or XYZ}
       | S.order.cycles <= @int Speed.float*(XYZ-$xyz).abs*1.5

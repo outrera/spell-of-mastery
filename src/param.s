@@ -1,10 +1,4 @@
-normalize_curly E =
-| case E
-  [`{}` Name Args @Rest]
-    | if Rest.size then Args <= [Args @Rest]
-      else case Args [`,` @_]: Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
-    | [Name Args]
-  Else | E
+use util
 
 load_params2 File =
 | less File.exists: bad "cant open [File]"

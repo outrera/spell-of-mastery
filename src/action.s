@@ -52,7 +52,6 @@ dact move.finish | move_finish Me
 
 dact missile.start
 | U = $unit
-| U.face{$xyz}
 | $fromXYZ.init{U.fxyz}
 | U.move{$xyz}
 | $toXYZ.init{U.fxyz}
