@@ -5,5 +5,5 @@ hotkey: b
 //cool: 2400
 affects: area
 range: 7
-needs: (cast_lightning)
-before: spawn_field{240,2,4,rand_cell,missile{effect_shard,1,(target -32 0 96)},area{any,(64 64 64),harm{magic.15}},impact{shard_impact},sound{fire1}}
+//needs: (cast_lightning)
+before: spawn_field{240,2,4,rand_cell,missile{effect_shard,1,(target -32 0 96)},area{any,(64 64 64),harm{magic.5}},impact{shard_impact},sound{fire1}}
