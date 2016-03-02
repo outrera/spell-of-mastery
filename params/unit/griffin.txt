@@ -1,6 +1,6 @@
 sprite: unit_griffin
 tier: 3
-health: 1//100
+health: 100
 damage: 10
 armor: 0
 speed: 18
