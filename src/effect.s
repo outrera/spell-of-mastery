@@ -431,6 +431,12 @@ unit.effect Effect Target XYZ =
      | XYZ.init{P.xyz}
      | Target <= P
     else if Name >< all_alive then
-      | for U $world.active: when U.alive: $effect{Es U U.xyz}
+      | for U $world.active: when U.alive:
+        | when U.ai><unit: $effect{Es U U.xyz}
+      | leave
+    else if Name >< owner_units then
+      | OID = $owner.id
+      | for U $world.active: when U.owner.id><OID:
+        | when U.ai><unit: $effect{Es U U.xyz}
       | leave
     else bad "no effect handler for [Name]{[Args]} of [Me]"

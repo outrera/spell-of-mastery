@@ -3,6 +3,5 @@ hotkey: s
 lore: misc.tier1_lcost
 cost: 300
 cool: 240
-range: 3
 affects: unit
-before: add_effect{haste,0,()},impact{explosion_blood},sound{hasted}
+before: owner_units,add_effect{haste,1440,()},impact{explosion_blood},sound{hasted}

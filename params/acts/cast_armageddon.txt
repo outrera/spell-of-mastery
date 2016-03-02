@@ -1,8 +1,8 @@
 icon: spell_armageddon
-//needs: (cast_suicide)
 lore: misc.tier2_lcost
 cost: 400
 cool: misc.tier4_cool
+needs: (cast_suicide)
 affects: unit
-before: impact{pentagram_appearance},sound{pentagram},cooldown{3}//,enable{0,owner,cast_armageddon}
-after: target{alive},harm{1},impact{fire_ring},sound{fire3}
+before: impact{pentagram_appearance},sound{pentagram}
+after: all_alive,harm{50},impact{fire_ring},sound{fire3}
