@@ -1,8 +1,6 @@
-sprite: tiles_dirt
-water: water,dirt_water
-clear: 1
+sprite: tiles_dirt_water
+aux: 1
 1111: 16
-//1111: 16,17,16,17,16,17,19
 0000: 18
 1000: 0
 1100: 1
