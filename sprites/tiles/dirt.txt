@@ -1,2 +1,2 @@
-author: `Natalya Bugrova`,`Nikita Sadkov`
+author: `Nikita Sadkov`
 frames: 64*64

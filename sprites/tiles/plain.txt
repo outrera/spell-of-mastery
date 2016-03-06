@@ -1,2 +1,2 @@
-author: Yar,`Nikita Sadkov`
+author: `Nikita Sadkov`
 frames: 64*72
