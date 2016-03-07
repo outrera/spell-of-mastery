@@ -1,1 +1,3 @@
-author: Yar,`Nikita Sadkov`
+author: `Daniel Cook`,`Nikita Sadkov`
+copyright: `Daniel Cook`,`Nikita Sadkov`
+origin: `http://lunar.lostgarden.com/labels/free%20game%20graphics.html`
