@@ -1,4 +1,4 @@
-sprite: tiles_castle
+sprite: tiles_castle_floor
 height: 2
 role: wall
 1111: 1

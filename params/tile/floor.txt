@@ -1,8 +1,8 @@
-sprite: tiles_floor
+sprite: tiles_castle
 height: 1
 tiling: side
-0110: 0
-0011: 1
-1001: 2
-1100: 3
-1111: 4
+0110: 13
+0011: 13
+1001: 13
+1100: 13
+1111: 13

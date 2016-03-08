@@ -1,4 +1,4 @@
-sprite: tiles_stairs
+sprite: tiles_castle
 role: stairs
 match: same
 tiling: side

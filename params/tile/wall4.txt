@@ -1,9 +1,9 @@
-sprite: tiles_wall4
+sprite: tiles_castle
 no_lineup: 1
 role: wall
 tiling: side
-1111: 4
-0110: 0
-0011: 1
-1001: 2
-1100: 3
+1111: 8
+0110: 9
+0011: 10
+1001: 11
+1100: 12
