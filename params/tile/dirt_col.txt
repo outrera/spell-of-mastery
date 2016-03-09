@@ -1,0 +1,3 @@
+role: dirt
+water: water,dirt_water
+stack: dirt_col0,dirt_col1,dirt_col2

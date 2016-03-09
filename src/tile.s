@@ -63,7 +63,7 @@ tile.render X Y Z Below Above Seed =
 | Gs = if BR <> $role then T.base
        else if AR <> $role and not AFiller then T.top
        else T.middle
-| G = if $lineup and (AH or AFiller or AR >< $role)
+| G = if $lineup and (AH or AFiller) and AR <> $role
       then | NeibElevs <= #@1111
            | Gs.NeibElevs
       else | Elev = if $match >< same
