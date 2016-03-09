@@ -1,4 +1,4 @@
-sprite: tiles_dirt2
+sprite: tiles_dirt3
 aux: 1
 no_lineup: 1
 water: water,dirt_water
