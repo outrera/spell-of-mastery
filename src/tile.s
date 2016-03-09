@@ -3,7 +3,7 @@ use gfx util
 type tile{As Main Type Role Id Lineup Base Middle Top Plain
           height/1 empty/0 filler/1 invisible/0 tiling/corner shadow/0
           match/same anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
-          parts/0 box/[64 64 h]}
+          parts/0 box/[64 64 h] stack/0}
      id/Id
      main/Main
      bank/Bank
@@ -28,6 +28,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top Plain
      clear/Clear
      parts/Parts
      box/Box
+     stack/Stack
 | when $box.2><h: $box.2 <= $height*8
 | less $parts:
   | if $height>1
@@ -60,10 +61,10 @@ tile.render X Y Z Below Above Seed =
   | Neib,Water = $water
   | when got World.neibs{X Y Z-$height+1}.find{?type><Neib}:
     | T <= $main.tiles.Water
-| Gs = if BR <> $role then T.base
+| Gs = if BR <> $role or World.slope_at{X Y Z-$height}><#@1111 then T.base
        else if AR <> $role and not AFiller then T.top
        else T.middle
-| G = if $lineup and (AH or AFiller) and AR <> $role
+| G = if $lineup and (AH or AFiller) and (not Above.stack or AR <> $role)
       then | NeibElevs <= #@1111
            | Gs.NeibElevs
       else | Elev = if $match >< same
@@ -75,9 +76,7 @@ tile.render X Y Z Below Above Seed =
                          else World.getCorners{P Z}
            | NeibElevs <= Elev.digits{2}
            | R = Gs.NeibElevs
-           | less got R
-             | NeibElevs <= #@1111
-             | R <= Gs.NeibElevs
+           | less got R: R <= Gs.#@1111
            | R
 | World.set_slope_at{X Y Z if $tiling >< side then #@1111 else NeibElevs}
 | less $anim_wait: G <= G.(Seed%G.size)
