@@ -2,5 +2,5 @@ sprite: tiles_castle
 role: stairs
 match: same
 tiling: side
-1111: 8
-0000: 8
+1111: 9
+0000: 9

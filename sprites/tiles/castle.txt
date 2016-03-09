@@ -1,1 +1,2 @@
 author: `Nikita Sadkov`
+frames: 64*67
