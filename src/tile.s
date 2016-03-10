@@ -1,6 +1,6 @@
 use gfx util
 
-type tile{As Main Type Role Id Lineup Base Middle Top Plain
+type tile{As Main Type Role Id Lineup Base Middle Top
           height/1 empty/0 filler/1 invisible/0 tiling/corner shadow/0
           match/same anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
           parts/0 box/[64 64 h] stack/0}
@@ -13,7 +13,6 @@ type tile{As Main Type Role Id Lineup Base Middle Top Plain
      base/Base // column base
      middle/Middle // column segment
      top/Top // column top
-     plain/Plain
      height/Height
      empty/Empty
      filler/Filler //true if tile fills space, matching with other tiles
@@ -33,7 +32,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top Plain
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1
-           | tile As Main Type Role Id Lineup Base Middle Top Plain
+           | tile As Main Type Role Id Lineup Base Middle Top
                  @[parts -(I+1) @As]
     else $parts <= []
 
@@ -119,7 +118,6 @@ main.load_tiles =
            | Frames.I
     | when got!a Tile.alpha: Gs <= Gs{(transparentize ? a)}
     | when Gs.size: Tile.gfxes.E <= Gs
-| Plain = Tiles.dirt.gfxes.#@1111.0
 | $tiles <= t size/1024
 | for K,V Tiles
   | Base,Middle,Top = if got V.stack then V.stack{}{Tiles.?.gfxes}
@@ -130,6 +128,6 @@ main.load_tiles =
               | $last_tid
   | As = V.list.join
   | $tiles.K <=
-    | tile As Me K V.role^~{K} Id Lineup Base Middle Top Plain @As
+    | tile As Me K V.role^~{K} Id Lineup Base Middle Top @As
 
 export tile
