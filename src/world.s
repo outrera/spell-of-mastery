@@ -378,33 +378,33 @@ world.neibs X Y Z =
   [$at{X Y-1 Z} $at{X+1 Y Z} $at{X Y+1 Z} $at{X-1 Y Z}
    $at{X+1 Y-1 Z} $at{X+1 Y+1 Z} $at{X-1 Y+1 Z} $at{X-1 Y-1 Z}]
 
-world.filled X,Y Z =
+world.filled X Y Z =
 | when X < 0 or Y < 0: leave 1
 | $at{X Y Z}.filler
 
-world.getCorners P Z = `[]`
-  [$filled{P+[-1 -1] Z} $filled{P+[0 -1] Z} $filled{P+[-1 0] Z}].all{1}
-  [$filled{P+[ 1 -1] Z} $filled{P+[0 -1] Z} $filled{P+[ 1 0] Z}].all{1}
-  [$filled{P+[ 1  1] Z} $filled{P+[0  1] Z} $filled{P+[ 1 0] Z}].all{1}
-  [$filled{P+[-1  1] Z} $filled{P+[0  1] Z} $filled{P+[-1 0] Z}].all{1}
+world.getCorners X Y Z = `[]`
+  [$filled{X-1 Y-1 Z} $filled{X Y-1 Z} $filled{X-1 Y Z}].all{1}
+  [$filled{X+1 Y-1 Z} $filled{X Y-1 Z} $filled{X+1 Y Z}].all{1}
+  [$filled{X+1 Y+1 Z} $filled{X Y+1 Z} $filled{X+1 Y Z}].all{1}
+  [$filled{X-1 Y+1 Z} $filled{X Y+1 Z} $filled{X-1 Y Z}].all{1}
 
-world.getSides P Z = `[]`
-  $filled{P+[0 -1] Z} $filled{P+[ 1 0] Z}
-  $filled{P+[0  1] Z} $filled{P+[-1 0] Z}
+world.getSides X Y Z = `[]`
+  $filled{X Y-1 Z} $filled{X+1 0 Z}
+  $filled{X Y+1 Z} $filled{X-1 0 Z}
 
-world.role X,Y Z =
+world.role X Y Z =
 | when X < 0 or Y < 0: leave 0
 | $at{X Y Z}.role
 
-world.getCornersSame P Z Role = `[]`
-  [$role{P+[-1 -1] Z} $role{P+[0 -1] Z} $role{P+[-1 0] Z}].all{Role}
-  [$role{P+[ 1 -1] Z} $role{P+[0 -1] Z} $role{P+[ 1 0] Z}].all{Role}
-  [$role{P+[ 1  1] Z} $role{P+[0  1] Z} $role{P+[ 1 0] Z}].all{Role}
-  [$role{P+[-1  1] Z} $role{P+[0  1] Z} $role{P+[-1 0] Z}].all{Role}
+world.getCornersSame X Y Z Role = `[]`
+  [$role{X-1 Y-1 Z} $role{X Y-1 Z} $role{X-1 Y Z}].all{Role}
+  [$role{X+1 Y-1 Z} $role{X Y-1 Z} $role{X+1 Y Z}].all{Role}
+  [$role{X+1 Y+1 Z} $role{X Y+1 Z} $role{X+1 Y Z}].all{Role}
+  [$role{X-1 Y+1 Z} $role{X Y+1 Z} $role{X-1 Y Z}].all{Role}
 
-world.getSidesSame P Z Role = `[]`
-  $role{P+[0 -1] Z}><Role $role{P+[ 1 0] Z}><Role
-  $role{P+[0  1] Z}><Role $role{P+[-1 0] Z}><Role
+world.getSidesSame X Y Z Role = `[]`
+  $role{X Y-1 Z}><Role $role{X+1 Y Z}><Role
+  $role{X Y+1 Z}><Role $role{X-1 Y Z}><Role
 
 world.updPilarGfxes P =
 | X,Y = P

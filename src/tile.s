@@ -27,6 +27,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      parts/Parts
      box/Box
      stack/Stack
+     tiler/0
 | when $box.2><h: $box.2 <= $height*8
 | less $parts:
   | if $height>1
@@ -42,8 +43,12 @@ transparentize Base Alpha =
 
 DummyGfx = gfx 1 1
 
+m_same_side World X Y Z Role = World.getSidesSame{X Y Z Role}
+m_same_corner World X Y Z Role = World.getCornersSame{X Y Z Role}
+m_any_side World X Y Z Role = World.getSides{X Y Z}
+m_any_corner World X Y Z Role = World.getCorners{X Y Z}
+
 tile.render X Y Z Below Above Seed =
-| P = X,Y
 | World = $main.world
 | when $invisible
   | World.set_slope_at{X Y Z #@1111}
@@ -65,18 +70,10 @@ tile.render X Y Z Below Above Seed =
 | G = if $lineup and (AH or AFiller) and (not Above.stack or AR <> $role)
       then | NeibElevs <= #@1111
            | Gs.NeibElevs
-      else | Match,Tiling = $match
-           | Elev = if Match >< same
-                    then if Tiling >< side
-                         then World.getSidesSame{P Z $role}
-                         else World.getCornersSame{P Z $role}
-                    else if Tiling >< side
-                         then World.getSides{P Z}
-                         else World.getCorners{P Z}
+      else | Elev = $tiler{}{World X Y Z $role}
            | NeibElevs <= Elev.digits{2}
            | R = Gs.NeibElevs
            | less got R: R <= Gs.#@1111
-           | when Tiling><side: NeibElevs <= #@1111 //hack
            | R
 | World.set_slope_at{X Y Z NeibElevs}
 | less $anim_wait: G <= G.(Seed%G.size)
@@ -128,7 +125,13 @@ main.load_tiles =
          else | !$last_tid + 1
               | $last_tid
   | As = V.list.join
-  | $tiles.K <=
-    | tile As Me K V.role^~{K} Id Lineup Base Middle Top @As
+  | Tile = tile As Me K V.role^~{K} Id Lineup Base Middle Top @As
+  | Tile.tiler <= case Tile.match
+    [any corner] | &m_any_corner
+    [any side] | &m_any_side
+    [same corner] | &m_same_corner
+    [same side] | &m_same_side
+    Else | bad 'tile [K] has invalid `match` = [Else]'
+  | $tiles.K <= Tile
 
 export tile
