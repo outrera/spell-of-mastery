@@ -48,6 +48,27 @@ m_same_corner World X Y Z Role = World.getCornersSame{X Y Z Role}
 m_any_side World X Y Z Role = World.getSides{X Y Z}
 m_any_corner World X Y Z Role = World.getCorners{X Y Z}
 
+m_any_stairs Me X Y Z Role =
+| E = `[]`
+    $filled{X Y-1 Z} $filled{X+1 Y Z}
+    $filled{X Y+1 Z} $filled{X-1 Y Z}
+//| D = E.digits{2}
+//| when [X Y]><[3 2]: say [Role [X Y Z] E]
+| if E><[1 0 0 1] then
+   | if $role{X+1 Y Z-4}><Role then
+       | when $role{X Y+1 Z-4}<>Role: E<=[0 1 0 1]
+     else if $role{X Y+1 Z-4}><Role then
+       | when $role{X+1 Y Z-4}<>Role: E<=[1 0 1 0]
+     else if $role{X-1 Y Z+4}><Role then E<=[0 1 0 1]
+     else if $role{X Y-1 Z+4}><Role then E<=[1 0 1 0]
+     else
+  else if E><[1 1 0 0] then
+   | when $role{X Y-1 Z+4}><Role: E<=[1 0 1 0]
+  else if E><[0 0 1 1] then
+   | when $role{X-1 Y Z+4}><Role: E<=[0 1 0 1]
+  else
+| E
+
 tile.render X Y Z Below Above Seed =
 | World = $main.world
 | when $invisible
@@ -131,7 +152,8 @@ main.load_tiles =
     [any side] | &m_any_side
     [same corner] | &m_same_corner
     [same side] | &m_same_side
-    Else | bad 'tile [K] has invalid `match` = [Else]'
+    [any stairs] | &m_any_stairs
+    Else | bad "tile [K] has invalid `match` = [Else]"
   | $tiles.K <= Tile
 
 export tile

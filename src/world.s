@@ -389,8 +389,8 @@ world.getCorners X Y Z = `[]`
   [$filled{X-1 Y+1 Z} $filled{X Y+1 Z} $filled{X-1 Y Z}].all{1}
 
 world.getSides X Y Z = `[]`
-  $filled{X Y-1 Z} $filled{X+1 0 Z}
-  $filled{X Y+1 Z} $filled{X-1 0 Z}
+  $filled{X Y-1 Z} $filled{X+1 Y Z}
+  $filled{X Y+1 Z} $filled{X-1 Y Z}
 
 world.role X Y Z =
 | when X < 0 or Y < 0: leave 0
