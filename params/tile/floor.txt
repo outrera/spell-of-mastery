@@ -1,6 +1,5 @@
 sprite: tiles_castle
 height: 1
-tiling: side
 0110: 13
 0011: 13
 1001: 13

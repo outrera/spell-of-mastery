@@ -1,10 +1,8 @@
 sprite: tiles_house
 height: 8
 no_lineup: 1
-match: same
+match: same,side
 role: house_wall
-
-tiling: side
 1111: 19
 0000: 19
 

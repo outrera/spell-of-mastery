@@ -1,8 +1,8 @@
 use gfx util
 
 type tile{As Main Type Role Id Lineup Base Middle Top
-          height/1 empty/0 filler/1 invisible/0 tiling/corner shadow/0
-          match/same anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
+          height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
+          anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
           parts/0 box/[64 64 h] stack/0}
      id/Id
      main/Main
@@ -17,7 +17,6 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      empty/Empty
      filler/Filler //true if tile fills space, matching with other tiles
      invisible/Invisible
-     tiling/Tiling
      shadow/Shadow
      match/Match
      anim_wait/Anim_wait
@@ -66,18 +65,20 @@ tile.render X Y Z Below Above Seed =
 | G = if $lineup and (AH or AFiller) and (not Above.stack or AR <> $role)
       then | NeibElevs <= #@1111
            | Gs.NeibElevs
-      else | Elev = if $match >< same
-                    then if $tiling >< side
+      else | Match,Tiling = $match
+           | Elev = if Match >< same
+                    then if Tiling >< side
                          then World.getSidesSame{P Z $role}
                          else World.getCornersSame{P Z $role}
-                    else if $tiling >< side
+                    else if Tiling >< side
                          then World.getSides{P Z}
                          else World.getCorners{P Z}
            | NeibElevs <= Elev.digits{2}
            | R = Gs.NeibElevs
            | less got R: R <= Gs.#@1111
+           | when Tiling><side: NeibElevs <= #@1111 //hack
            | R
-| World.set_slope_at{X Y Z if $tiling >< side then #@1111 else NeibElevs}
+| World.set_slope_at{X Y Z NeibElevs}
 | less $anim_wait: G <= G.(Seed%G.size)
 | leave G
 
