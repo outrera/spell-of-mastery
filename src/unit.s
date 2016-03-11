@@ -324,6 +324,7 @@ unit.animate Anim =
 | $anim_wait <= $anim_seq.$anim_step.1
 
 player_lost_leader Me Leader =
+| when $world.mode <> play: leave
 | Leaders = []
 | RemainingUnits = []
 | for U $world.active.list: when U.id <> Leader.id:

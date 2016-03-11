@@ -10,3 +10,9 @@ E - while holding `E` key, right click remove empty tiles (like grass), while le
 N - place sprite rotated
 M - place sprite mirrored
 R - pick random object from selected sprite bank. Useful for placing decorations, like bushes
+
+
+Scripting:
+
+// set player 2's mana to 100000
+((repeat always) set{2,mana,100000})

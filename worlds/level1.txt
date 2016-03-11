@@ -1,9 +1,6 @@
 (version 0.2 w 32 h 32 serial 574884 cycle 130 filename level1 name `Level 1` description `Wizard Tower` params ((bank main) (max_size 132) (tile_banks (tile)) (disabled_events ()) (name world) (class_banks (unit leader special trigger)))
 
 events (
-
-((repeat always) (`{}` set (`,` (`,` 2 mana) 100000)))
-
 ((turn 0) (`{}` msg `  Level 1 - Wizard Tower` `It appears that the magic protecting the tower was dispelled. Two halfling servants, you met on your way, say that they barelly escaped alive as the tower was hijacked by the goblins led by an unknown mage. There is something strange happening at the top.
   <br> <br>
   Before entering the tower, local magic nodes must be captured to secure the mana income. Recreating the summoning circle near the tower would help bringing reinforcements.
