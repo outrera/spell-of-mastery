@@ -1,5 +1,0 @@
-sprite: tiles_castle
-role: stairs
-match: same,side
-1111: 9
-0000: 9
