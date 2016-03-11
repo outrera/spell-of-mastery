@@ -311,7 +311,7 @@ update_next_action Me =
     else if Cost and not $owner.mana>>Cost
       then $owner.notify{'Not enough mana.'}
     else if not $next_action.valid
-      then $owner.notify{'Cant perform action.'}
+      then //$owner.notify{'Cant perform action.'}
     else
   | $next_action.init{idle $xyz}
 | swap $action $next_action

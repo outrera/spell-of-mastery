@@ -1,8 +1,5 @@
-sprite: tiles_dirt3
+sprite: tiles_plain2
 aux: 1
-no_lineup: 1
-water: water,dirt_water
-clear: 1
 1111: 16
 //1111: 16,17,16,17,16,17,19
 0000: 18

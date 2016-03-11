@@ -1,4 +1,4 @@
 role: dirt
 no_lineup: 1
 water: water,dirt_water
-stack: dirt_col0,dirt_col1,dirt_col2
+stack: dirt0,dirt1,dirt2
