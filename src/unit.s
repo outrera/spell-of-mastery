@@ -37,7 +37,6 @@ type unit.$class{Id World}
   mirror // true, if drawing code should mirror the sprite
   mark // temporary mark, dont save
   active // true if this unit resides in the list of active units
-  slope // unit is standing on a sloped terrain
   path/[] // path to goal
   path_life
   goal
@@ -530,8 +529,6 @@ unit.move XYZ =
 unit.seen = $world.seen{$xyz.0 $xyz.1}
 
 unit.environment_updated =
-| UX,UY,UZ = $xyz
-| $slope <= $world.slope_at{UX UY UZ-1}^|$1 #@1111 => 0
 
 unit.face XYZ =
 | XY = (XYZ-$xyz).take{2}{?sign}

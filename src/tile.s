@@ -75,34 +75,36 @@ m_any_stairs Me X Y Z Role =
   else
 | E
 
+BelowSlope = 0
+
 tile.render X Y Z Below Above Seed =
 | World = $main.world
 | when $invisible
-  | World.set_slope_at{X Y Z #@1111}
+  | BelowSlope <= #@1111
   | leave DummyGfx
 | BE = Below.empty
 | BR = Below.role
 | AH = Above.heavy
 | AR = Above.role
 | AFiller = AR >< filler
-| NeibElevs = #@0000
+| NeibSlope = #@0000
 | T = Me
 | when $water:
   | Neib,Water = $water
   | when got World.neibs{X Y Z-$height+1}.find{?type><Neib}:
     | T <= $main.tiles.Water
-| Gs = if BR <> $role or World.slope_at{X Y Z-$height}><#@1111 then T.base
+| Gs = if BR <> $role or BelowSlope><#@1111 then T.base
        else if AR <> $role and not AFiller then T.top
        else T.middle
 | G = if $lineup and (AH or AFiller) and (not Above.stack or AR <> $role)
-      then | NeibElevs <= #@1111
-           | Gs.NeibElevs
+      then | NeibSlope <= #@1111
+           | Gs.NeibSlope
       else | Elev = $tiler{}{World X Y Z $role}
-           | NeibElevs <= Elev.digits{2}
-           | R = Gs.NeibElevs
+           | NeibSlope <= Elev.digits{2}
+           | R = Gs.NeibSlope
            | less got R: R <= Gs.#@1111
            | R
-| World.set_slope_at{X Y Z NeibElevs}
+| BelowSlope <= NeibSlope
 | less $anim_wait: G <= G.(Seed%G.size)
 | leave G
 

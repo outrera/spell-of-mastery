@@ -83,10 +83,9 @@ unit.draw FB B =
 | X = B.sx
 | Y = B.sy
 | G = $frame
-//| Slope = $slope*16
 | GW = G.w
 | XX = X+32-GW/2
-| YY = Y-16-G.h //+Slope
+| YY = Y-16-G.h
 | when $mirror:
   | !XX - GW%2
   | G.flop
@@ -117,7 +116,7 @@ unit.draw FB B =
 | less $pickable: leave
 | RW,RH,RY = $sprite.rect
 | RX = X+32 - RW/2
-| RY = Y+RY-RH //+Slope
+| RY = Y+RY-RH
 | UnitRects.push{[RX RY RW RH],Me}
 | less $picked: leave
 | PickedRects.push{[RX RY RW RH],Me}

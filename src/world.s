@@ -26,7 +26,6 @@ type world{main}
    description/`describe the map here`
    tilemap
    unit_map
-   slope_map
    move_map
    units
    free_units
@@ -74,7 +73,6 @@ world.init =
 | $void <= $main.tiles.void
 | $tilemap <= zmap MaxSize $void
 | $unit_map <= zmap MaxSize 0
-| $slope_map <= zmap MaxSize 0
 | $move_map <= zmap MaxSize 0
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -185,7 +183,6 @@ world.clear_tile_ XYZ Filler =
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
-  | $set_slope_at{X Y (Z-I) #@0000}
 | $updElev{X,Y}
 
 world.clear_tile XYZ Filler =
@@ -280,11 +277,7 @@ world.seen_from A B =
   | _label end
   | R
 
-world.slope_at X Y Z = $slope_map.at{X Y Z}
-
 world.fxyz XYZ = [XYZ.0*32 XYZ.1*32 XYZ.2*8]
-
-world.set_slope_at X Y Z Slope = $slope_map.set{X Y Z Slope}
 
 world.proxies_at X,Y,Z =
 | when!it $unit_map.at{X Y Z}: leave $proxies.it^uncons{next}
@@ -456,7 +449,6 @@ world.pop_ X,Y =
 | H = $height{X Y}
 | less H: leave
 | Z = H-1
-| $set_slope_at{X Y Z #@0000}
 | T = $at{X Y Z}
 | times I T.height: $set_{X Y Z-I $void}
 
