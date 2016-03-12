@@ -173,7 +173,7 @@ effect field Param R Es:
 | if Param><rand_cell then T <= Ps.rand
   else bad "field: invalid param `[Param]`"
 | less T: leave
-| if T.is_unit then $effect{Es T T.xyz}
+| if T.is_unit and T.alive then $effect{Es T T.xyz}
   else $effect{Es 0 T}
 
 effect notify Text: Target.owner.notify{Text}
@@ -418,8 +418,10 @@ unit.effect Effect Target XYZ =
                     | S.fxyz.init{O+D}
         Else | bad "invalid offset specifier [Offset]"
       | S.add_effect{missile 0 [[payload $id $serial Es]]}
-      | S.order.init{missile |Target or XYZ}
-      | S.order.cycles <= @int Speed.float*(XYZ-$xyz).abs*1.5
+      | Or = S.order
+      | Or.init{missile |Target or XYZ}
+      | Or.priority <= 1500
+      | Or.cycles <= @int Speed.float*(XYZ-$xyz).abs*1.5
       | Es <= []
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host

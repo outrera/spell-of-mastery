@@ -25,6 +25,6 @@ acts: (pentagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_blizzard cast_suicide cast_armageddon
        cast_heal cast_shell cast_bloodlust
        cast_telekinesis cast_excavate cast_flight cast_teleport
-       cast_haste cast_slow cast_paralyze
+       cast_haste cast_paralyze
        spell_of_mastery)
 

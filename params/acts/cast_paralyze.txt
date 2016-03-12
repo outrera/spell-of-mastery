@@ -3,7 +3,7 @@ hotkey: p
 lore: misc.tier2_lcost
 cost: 500
 range: 3
-needs: (cast_haste cast_slow)
+needs: (cast_haste)
 affects: unit
 // stops unit for 30 seconds
 before: add_effect{paralyzed,720,()},impact{cold_ring},sound{slowed}

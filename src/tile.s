@@ -93,7 +93,8 @@ tile.render X Y Z Below Above Seed =
   | Neib,Water = $water
   | when got World.neibs{X Y Z-$height+1}.find{?type><Neib}:
     | T <= $main.tiles.Water
-| Gs = if BR <> $role or BelowSlope><#@1111 then T.base
+| Gs = if BE then T.top
+       else if BR <> $role or BelowSlope><#@1111 then T.base
        else if AR <> $role and not AFiller then T.top
        else T.middle
 | G = if $lineup and (AH or AFiller) and (not Above.stack or AR <> $role)

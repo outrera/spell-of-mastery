@@ -1,7 +1,7 @@
 sprite: unit_oculus
 icon: unit_oculus
 tier: 2
-health: 30
+health: 50
 damage: 0
 armor: 0
 range: 0
@@ -14,5 +14,5 @@ acts: (cast_hexagram cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
        cast_heal cast_shell
        cast_telekinesis cast_excavate cast_flight cast_teleport
-       cast_haste cast_slow cast_paralyze
+       cast_haste cast_paralyze
        spell_of_mastery)

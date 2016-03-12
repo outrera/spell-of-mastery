@@ -1,9 +1,9 @@
 icon: spell_heal
 hotkey: h
 lore: misc.tier1_lcost
-cost: 100
+cost: 300
 cool: 960
 range: 3
 affects: unit
-before: harm{-90},strip{poison},strip{slowed},strip{paralyzed},impact{explosion_blood},sound{heal}
+before: harm{-50},strip{poison},strip{slowed},strip{paralyzed},impact{explosion_blood},sound{heal}
 //after: cooldown{3}

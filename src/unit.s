@@ -405,6 +405,7 @@ unit.die =
 | Effect = $class.death
 | when Effect: $effect{Effect Me $xyz}
 | $forced_order{die 0}
+| $order.priority <= 2000
 | $cooldown <= 0
 
 unit.set_path Path =
