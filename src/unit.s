@@ -478,7 +478,7 @@ unit.harm Attacker Damage =
 | when Damage>0:
   | $run_effects{?><harm Me $xyz}
   | if Magic then $run_effects{?><magic_harm Me $xyz}
-    else $run_effects{?><_phys_harm Me $xyz}
+    else $run_effects{?><phys_harm Me $xyz}
 | Mod = $mod
 | $mod <= 0
 | when Damage << 0:

@@ -1,8 +1,8 @@
 icon: spell_shell
+hotkey: l
 lore: misc.tier1_lcost
-cost: 100
-cool: 240
-range: 3
-needs: (cast_heal)
+cost: 200
+cool: 2880
 affects: unit
-before: add_effect{shell,0,()},impact{shell},sound{shell}
+needs: (cast_heal)
+before: owner_units,add_effect{shell,1000,()},impact{shell},sound{shell}
