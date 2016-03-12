@@ -2,18 +2,6 @@ use macros unit_flags pathfind util
 
 PerCycle = 0
 
-world.targets_in_range Center R =
-| Targets = []
-| Points = points_in_circle R
-| for X,Y Points
-  | XYZ = Center+[X Y 0]
-  | X = XYZ.0
-  | Y = XYZ.1
-  | when X>0 and X<<$w and Y>0 and Y<<$h:
-    | for U $column_units_at{X Y}: when $seen_from{Center U.xyz}:
-      | push U Targets
-| Targets
-
 cast_spell_sub Me Offensive =
 | SpellType = if Offensive then \aiOffensiveSpell else \aiDefensiveSpell
 | SpellName = $owner.params.SpellType

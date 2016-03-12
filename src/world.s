@@ -367,6 +367,19 @@ world.effect X,Y,Z What =
 | E.die
 | E
 
+world.targets_in_range Center R =
+| Targets = []
+| Points = points_in_circle R
+| for X,Y Points
+  | XYZ = Center+[X Y 0]
+  | X = XYZ.0
+  | Y = XYZ.1
+  | when X>0 and X<<$w and Y>0 and Y<<$h:
+    | for U $column_units_at{X Y}: when $seen_from{Center U.xyz}:
+      | when (U.xyz.2-XYZ.2).abs<R*2:
+        | push U Targets
+| Targets
+
 world.neibs X Y Z =
   [$at{X Y-1 Z} $at{X+1 Y Z} $at{X Y+1 Z} $at{X-1 Y Z}
    $at{X+1 Y-1 Z} $at{X+1 Y+1 Z} $at{X-1 Y+1 Z} $at{X-1 Y-1 Z}]

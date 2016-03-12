@@ -1,9 +1,12 @@
 icon: spell_blizzard
 hotkey: b
-//lore: misc.tier1_lcost
-//cost: 200
-//cool: 2400
+lore: misc.tier1_lcost
+cost: 500
+cool: 1920
 affects: area
-range: 7
-//needs: (cast_lightning)
-before: spawn_field{240,2,4,rand_cell,missile{effect_shard,1,(target -32 0 96)},area{any,(64 64 64),harm{magic.5}},impact{shard_impact},sound{fire1}}
+needs: (cast_lightning)
+//spawn_field{TTL,Latency,R,(Type Count),@Effect}
+before: spawn_field{1920,8,world,(outdoors_cell 1),missile{effect_shard,1,(target -32 0 96)},area{any,(64 64 64),harm{magic.7}},impact{shard_impact},sound{fire1}}
+
+//range: 7
+//before: spawn_field{240,2,4,rand_cell,missile{effect_shard,1,(target -32 0 96)},area{any,(64 64 64),harm{magic.5}},impact{shard_impact},sound{fire1}}

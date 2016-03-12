@@ -1,5 +1,5 @@
 icon: spell_bloodlust
-hotkey: b
+hotkey: o
 lore: misc.tier1_lcost
 cost: 300
 cool: 240

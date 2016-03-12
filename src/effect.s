@@ -163,18 +163,40 @@ effect spawn_field Args:
 | Es = As{?^normalize_curly}
 | S.add_effect{field TTL [[effect [on [`.` cycle Freq]] [field [Param R Es]]]]}
 
+
+range_points World XYZ R FixTop =
+| Ps = points_in_circle{R}{P=>[P.0 P.1 0]+XYZ}
+| WW = World.w 
+| WH = World.h
+| Ps = Ps.keep{(?0>0 and ?1>0 and ?0<<WW and ?1<<WH)}
+| if FixTop then for P Ps: P.2 <= World.height{P.0 P.1}
+  else for P Ps: P.2 <= World.fix_z{P}
+| Ps
+
 effect field Param R Es:
-| Ps = points_in_circle{R}{P=>[P.0 P.1 0]+$xyz}
-| WW = $world.w 
-| WH = $world.h
-| Ps = Ps.keep{(?0>0 and ?1>0 and ?0<WW and ?1<WH)}
-| for P Ps: P.2 <= $world.fix_z{P}
-| T = 0
-| if Param><rand_cell then T <= Ps.rand
+| Ts = 0
+| Type,Count = Param
+| if Type><cell then
+    | Ps = range_points{$world $xyz R 0}
+    | Ts <= dup Count Ps.rand
+  else if Type><outdoors_cell and R><world then
+    | WW = $world.w 
+    | WH = $world.h
+    | Count <= (WH*WW+63)/64*Count
+    | Ts <= dup Count
+      | X = WW.rand+1
+      | Y = WH.rand+1
+      | Z = $world.height{X Y}
+      | [X Y Z]
+  else if Type><outdoors_cell then
+    | Ps = range_points{$world $xyz R 1}
+    | Ts <= dup Count Ps.rand
+  else if Type><world_outdoors_cell then
   else bad "field: invalid param `[Param]`"
-| less T: leave
-| if T.is_unit and T.alive then $effect{Es T T.xyz}
-  else $effect{Es 0 T}
+| less Ts: leave
+| for T Ts
+  | if T.is_unit and T.alive then $effect{Es T T.xyz}
+    else $effect{Es 0 T}
 
 effect notify Text: Target.owner.notify{Text}
 

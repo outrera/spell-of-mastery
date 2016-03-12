@@ -8,7 +8,7 @@ sexp.end = 0
 sexp.as_text = "[$list]"
 sexp.is_list = 1
 
-MAXConses = 8000
+MAXConses = 64000
 
 SEXPConses = stack: dup MAXConses: sexp 0 []
 

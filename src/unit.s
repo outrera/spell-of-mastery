@@ -353,7 +353,8 @@ respawn_leader Me XYZ =
 | S.alpha <= 255
 | S.delta <= -25
 | S.move{XYZ}
-| S.main.ui.view.center_at{XYZ}
+| when $owner.human:
+  | S.main.ui.view.center_at{XYZ}
 | S.owner.leader <= S
 | $world.effect{XYZ teleport}
 | 1
