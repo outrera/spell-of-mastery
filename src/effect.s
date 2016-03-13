@@ -424,10 +424,14 @@ unit.effect Effect Target XYZ =
       | Type = 0
       | Offset = \user
       | Speed = 2
+      | HDiv = 0
       | case Args
          [T S O]
            | Type <= T
-           | Speed <= S
+           | if S><height_div then
+               | Speed <= 1
+               | HDiv <= 1
+             else Speed <= S
            | Offset <= O
          T | Type <= T
       | S = $owner.alloc_unit{Type}
@@ -443,7 +447,10 @@ unit.effect Effect Target XYZ =
       | Or = S.order
       | Or.init{missile |Target or XYZ}
       | Or.priority <= 1500
-      | Or.cycles <= @int Speed.float*(XYZ-$xyz).abs*1.5
+      | H = ($xyz.2-XYZ.2).abs
+      | C = Speed.float*(XYZ-$xyz).abs*1.5
+      | when HDiv: C <= C/(max 1 H/4).float
+      | Or.cycles <= @int C
       | Es <= []
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
