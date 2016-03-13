@@ -1,33 +1,33 @@
 nop_loop: | wait 5
 
-leader_katzard: | goto leader_wizard
+leader_katzard: | goto leader_mage
 leader_mime: | goto default
 
-leader_wizard:
+leader_mage:
   | set aiOffensiveSpell cast_fireball
-  | goto wizard0
+  | goto mage0
 
-wizard0:
+mage0:
   | attack halfling
   | attack halfling halfling
-  | goto wizard1
+  | goto mage1
 
-wizard1:
+mage1:
   | attack halfling elf halfling
-  | goto wizard2 when lossage >> 14
+  | goto mage2 when lossage >> 14
 
-wizard2:
+mage2:
   | set aiOffensiveSpell cast_lightning
   | set aiDefensiveSpell cast_shell
   | attack dwarf halfling elf halfling
-  | goto wizard3 when lossage >> 32
+  | goto mage3 when lossage >> 32
 
-wizard3:
+mage3:
   | set aiOffensiveSpell cast_suicide
   | attack dwarf ifrit elf halfling elf minotaur
-  | goto wizard4 when lossage >> 64
+  | goto mage4 when lossage >> 64
 
-wizard4:
+mage4:
   | attack dwarf hydra ifrit elf halfling elf minotaur
 
 leader_king:
@@ -82,31 +82,31 @@ witch3:
 witch4:
   | attack ratman spider orc goblin baphomet ogre
 
-leader_warlock:
+leader_priest:
   | set aiOffensiveSpell cast_fireball
-  | goto warlock0
+  | goto priest0
 
-warlock0:
+priest0:
   | attack bat skeleton
   | attack skeleton skeleton
-  | goto warlock1
+  | goto priest1
 
-warlock1:
+priest1:
   | attack skeleton wraith skeleton bat
-  | goto warlock2 when lossage >> 14
+  | goto priest2 when lossage >> 14
 
-warlock2:
+priest2:
   | set aiOffensiveSpell cast_lightning
   | set aiDefensiveSpell cast_shell
   | attack skeleton wraith wraith bat gargoyle
-  | goto warlock3 when lossage >> 32
+  | goto priest3 when lossage >> 32
 
-warlock3:
+priest3:
   | set aiOffensiveSpell cast_suicide
   | attack skeleton wraith skeleton bat gargoyle vampire
-  | goto warlock4 when lossage >> 64
+  | goto priest4 when lossage >> 64
 
-warlock4:
+priest4:
   | attack skeleton wraith skeleton wraith gargoyle vampire observer
 
 

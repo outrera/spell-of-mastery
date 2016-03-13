@@ -1,0 +1,6 @@
+sprite: unit_priest
+icon: unit_priest
+pentagram: special_pentagram_priest
+hit: effect{blood},sound{grunt4}
+death: sound{orbit}
+moves: sound{step}

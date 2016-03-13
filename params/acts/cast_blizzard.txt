@@ -1,6 +1,6 @@
 icon: spell_blizzard
 hotkey: b
-lore: misc.tier1_lcost
+lore: misc.tier2_lcost
 cost: 500
 cool: 1920
 needs: (cast_lightning)

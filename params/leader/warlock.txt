@@ -1,5 +1,0 @@
-sprite: unit_warlock
-icon: unit_warlock
-hit: effect{blood},sound{grunt4}
-death: sound{orbit}
-moves: sound{step}

@@ -1,5 +1,6 @@
 sprite: unit_mime
 icon: unit_mime
+pentagram: special_pentagram
 hit: effect{blood}
 death: sound{orbit}
 moves: sound{step}

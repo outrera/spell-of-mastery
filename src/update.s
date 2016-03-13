@@ -37,10 +37,7 @@ world.new_game =
   | L = P.leader
   | C = P.pentagram
   | when L and not C:
-    | PT = if L.type><leader_king
-           then \special_pentagram_king
-           else \special_pentagram
-    | C = P.alloc_unit{PT}
+    | C = P.alloc_unit{L.class.pentagram}
     | C.move{L.xyz}
     | L.move{C.xyz}
     | L.alpha <= 255

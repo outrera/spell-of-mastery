@@ -1,5 +1,6 @@
-sprite: unit_wizard
-icon: unit_wizard
+sprite: unit_mage
+icon: unit_mage
+pentagram: special_pentagram_mage
 hit: effect{blood},sound{grunt4}
 death: sound{orbit}
 moves: sound{step}

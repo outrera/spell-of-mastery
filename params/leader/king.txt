@@ -1,5 +1,6 @@
 sprite: unit_king
 icon: unit_king
+pentagram: special_pentagram_king
 range: cross
 health: 140
 armor: 3

@@ -10,6 +10,6 @@ ai: pentagram
 inborn: (enemy_damages removes_firewall)
 
 acts: summon_blob, summon_oculus,
-      summon_farmer, summon_lizard, summon_knight,
-        summon_griffin, summon_golem,
+      summon_ratman, summon_goblin, summon_orc, summon_minotaur,
+        summon_spider, summon_ogre,
       summon_dragon
