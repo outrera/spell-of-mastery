@@ -324,7 +324,6 @@ unit.animate Anim =
 | $anim_wait <= $anim_seq.$anim_step.1
 
 player_lost_leader Me Leader =
-| when $world.mode <> play: leave
 | Leaders = []
 | RemainingUnits = []
 | for U $world.active.list: when U.id <> Leader.id:
@@ -336,6 +335,7 @@ player_lost_leader Me Leader =
 | when Leader.owner.human: less Leaders.any{?owner.human}:
   | $world.params.winner <= 0
   | $world.params.victory_type <= 'Defeat by losing your leader.'
+| $world.notify{"[$name] was defeated."}
 | less RemainingUnits.any{?leader><1}: for U RemainingUnits: U.free
 
 respawn_leader Me XYZ =
@@ -364,7 +364,7 @@ unit.free =
 | when $owner: $owner.lost_unit{Me}
 | when $leader><1:
   | $owner.leader <= 0
-  | when $hp << 0:
+  | when $hp << 0 and $world.mode >< play:
     | P = $owner.pentagram
     | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
