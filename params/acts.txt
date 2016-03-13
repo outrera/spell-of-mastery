@@ -6,3 +6,4 @@ speed: 4
 before: ()
 after: ()
 needs: ()
+targets: seen

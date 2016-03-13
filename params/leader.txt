@@ -18,7 +18,7 @@ leader: 1
 ai: unit
 item: pickup
 pentagram: special_pentagram
-inborn: (heals organic)
+inborn: (heals organic resist_magic)
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}

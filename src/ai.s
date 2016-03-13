@@ -8,6 +8,7 @@ cast_spell_sub Me Offensive =
 | when no SpellName: leave 0
 | Act = $main.params.acts.SpellName
 | when no Act: bad "AI: cant find SpellType `[SpellName]`"
+| when Act.range>>9000: leave //FIXME: pick better any visible unit here
 | Targets = $world.targets_in_range{Me.xyz Act.range}.skip{?invisible}
 | Ts = Targets.skip{?empty}
 | if Offensive

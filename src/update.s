@@ -259,7 +259,10 @@ update_path Me =
             then (GXYZ.take{2}-$xyz.take{2}){?abs}.sum><1
                  and (GXYZ.2-$xyz.2).abs<<4
             else (GXYZ.take{2}-$xyz.take{2}).abs.int<<R
-                 and $world.seen_from{$xyz $goal.xyz}
+                 and (| T = $goal_act.targets
+                      | if T><seen then $world.seen_from{$xyz $goal.xyz}
+                        else if T><any then 1
+                        else 0)
   | when Reach:
     | $set_path{[]}
     | $order.init{Act $goal}

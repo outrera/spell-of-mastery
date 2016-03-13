@@ -318,7 +318,7 @@ order_act Me Act XYZ Target =
   | $goal <= Target
   | $goal_serial <= Target.serial
 
-handle_picked Me Rect Units =
+handle_picked Me Rect Units = //Me is view
 | $ui.on_unit_pick{$picked}
 | Units = Units.keep{?seen}
 | Act = $world.act
@@ -326,24 +326,33 @@ handle_picked Me Rect Units =
   | when $picked.end:
     | $world.act <= 0
     | leave
+  | Affects = Act.affects
+  | Outdoor = 0
+  | case Affects outdoor,A
+    | Affects <= A
+    | Outdoor <= 1
   | less $mice_click><pick:
-    | when Act.affects><unit:
+    | when Affects><unit:
       | Cur = if Units.end then \ui_cursor_target else \ui_cursor_target2
       | get_gui{}.cursor <= $main.img{Cur}
     | leave
   | $mice_click <= 0
-  | when Act.affects><unit and Units.end: leave
+  | when Affects><unit and Units.end: leave
   | $world.act <= 0
-  | for U $picked
-    | Target = if Units.end then 0 else Units.0
-    | XYZ = if Target then Target.xyz else $cursor
-    | when Act.affects><land:
-      | Target <= 0
-      | when Act.fix_z><caster: $cursor.2 <= U.xyz.2
-      | XYZ <= $cursor
-    | when $world.seen{@XYZ.take{2}}:
-      | when Target: $world.blink.init{[4 Target]}
-      | order_act U Act XYZ Target
+  | Target = if Units.end then 0 else Units.0
+  | XYZ = if Target and Affects><unit then Target.xyz else $cursor
+  | Proceed = 1
+  | when Outdoor and not $world.outdoor{XYZ}:
+    | $player.notify{"Target should be outdoors."}
+    | Proceed <= 0
+  | when Proceed:
+    | Blink = 1
+    | for U $picked
+      | when $world.seen{@XYZ.take{2}}:
+        | when Target and Blink:
+          | $world.blink.init{[4 Target]}
+          | Blink <= 0
+        | order_act U Act XYZ Target
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | less $mice_click:

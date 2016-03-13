@@ -445,6 +445,8 @@ world.updElev P =
 
 world.height X Y = $tilemap.height{X Y}
 
+world.outdoor XYZ = $height{XYZ.0 XYZ.1} << XYZ.2
+
 world.push_ X Y Tile =
 | Z = $height{X Y}
 | H = Tile.height-1
