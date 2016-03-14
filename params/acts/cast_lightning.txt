@@ -4,7 +4,7 @@ lore:  misc.tier1_lcost
 cost: 400
 cool: 480
 range: 9000
-//needs: (cast_fireball)
+needs: (cast_fireball)
 affects: outdoor,unit
 targets: any
-before: harm{magic.100},impact{lightning},sound{lightning}//,cool{5}
+before: harm{magic.100},impact{lightning},sound{lightning}

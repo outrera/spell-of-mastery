@@ -323,50 +323,11 @@ unit.animate Anim =
 | $pick_facing{$facing}
 | $anim_wait <= $anim_seq.$anim_step.1
 
-player_lost_leader Me Leader =
-| Leaders = []
-| RemainingUnits = []
-| for U $world.active.list: when U.id <> Leader.id:
-  | when U.leader><1: push U Leaders
-  | when U.owner.id >< $id: push U RemainingUnits
-| case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
-  | $world.params.winner <= L.owner.id
-  | $world.params.victory_type <= 'Victory by defeating other leaders.'
-| when Leader.owner.human: less Leaders.any{?owner.human}:
-  | $world.params.winner <= 0
-  | $world.params.victory_type <= 'Defeat by losing your leader.'
-| $world.notify{"[$name] was defeated."}
-| less RemainingUnits.any{?leader><1}: for U RemainingUnits: U.free
-
-respawn_leader Me XYZ =
-| Block = $world.block_at{XYZ}
-| when got Block and $owner.is_enemy{Block.owner}: leave 0
-| when $owner.mana << 0: leave 0
-| Cost = $main.params.world.death_cost
-| !$owner.mana - Cost
-| $owner.notify{"death cost you [Cost] mana"}
-| when got $owner.params.spell_of_mastery:
-  | $owner.params.spell_of_mastery <= No
-  | $owner.notify{"Your Spell of Mastery was broken!"}
-| S = $owner.alloc_unit{$type}
-| S.nonguard <= 0
-| S.alpha <= 255
-| S.delta <= -25
-| S.move{XYZ}
-| when $owner.human:
-  | S.main.ui.view.center_at{XYZ}
-| S.owner.leader <= S
-| $world.effect{XYZ teleport}
-| 1
-
 unit.free =
 | when $picked: $owner.picked <= $owner.picked.skip{?id><$id}
 | when $owner: $owner.lost_unit{Me}
 | when $leader><1:
   | $owner.leader <= 0
-  | when $hp << 0 and $world.mode >< play:
-    | P = $owner.pentagram
-    | less P and respawn_leader Me P.xyz: player_lost_leader $owner Me
 | when $active: $active <= 2 //request removal from active list
 | less $path.end: $set_path{[]}
 | $goal <= 0
