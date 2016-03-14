@@ -5,4 +5,4 @@ cost: 400
 cool: 480
 range: 3
 affects: unit
-before: suicide{10},impact{explosion_blood},sound{fire1}//,cooldown{5}
+before: suicide{10},impact{explosion_blood},sound{wail}//,cooldown{5}

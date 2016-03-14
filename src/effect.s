@@ -122,7 +122,7 @@ effect harm As:
   | $run_effects{?><attack Me $xyz}
   | Mod = $mod
   | $mod <= 0
-  | case Mod [`.` boost [N M]]: !Damage + | max 1 | Damage*N/M
+  | case Mod [`.` boost [N M]]: Damage <= max 1 Damage*N/M
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | T.harm{Me Damage}
 
@@ -402,7 +402,9 @@ unit.effect Effect Target XYZ =
 | when XYZ.2 >< -1: leave
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
-| when T.is_unit and T.id<>$id and $invisible: $strip_effect{invisible}
+| when T.is_unit and T.id<>$id and $invisible:
+  | $strip_effect{invisible}
+  | $add_effect{invisible_bonus 240 []}
 | Es = Effect.list
 | till Es.end
   | E = pop Es

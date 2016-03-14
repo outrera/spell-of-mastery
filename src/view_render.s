@@ -344,6 +344,7 @@ handle_picked Me Rect Units = //Me is view
   | Proceed = 1
   | when Outdoor and not $world.outdoor{XYZ}:
     | $player.notify{"Target should be outdoors."}
+    | $main.sound{illegal}
     | Proceed <= 0
   | when Proceed:
     | Blink = 1

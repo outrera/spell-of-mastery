@@ -1,9 +1,9 @@
 icon: spell_invisibility
 affects: ally
 hotkey: i
-before: add_effect{invisible,0,()},impact{explosion_blood},sound{summon}
+before: add_effect{invisible,0,()},impact{explosion_blood},sound{invisibility}
 after: ()
 range: 0
 //lore: misc.tier1_lcost
 cost: 20
-cool: 240
+cool: 480

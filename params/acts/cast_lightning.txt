@@ -3,8 +3,8 @@ hotkey: l
 lore:  misc.tier1_lcost
 cost: 400
 cool: 480
-range: 9000
 needs: (cast_fireball)
+range: 9000
 affects: outdoor,unit
 targets: any
 before: harm{magic.100},impact{lightning},sound{lightning}

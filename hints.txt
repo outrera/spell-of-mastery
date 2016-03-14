@@ -1,0 +1,4 @@
+- Attack out of invisibility is 6 times stronger than usual attack.
+- Lightning and blizzard spells affect only outdoors cells, so take cover to avoid being hit by them.
+- Poisoned units lose health down to 1, unless heal is cast. Undead units and units with regen are immune to poison.
+- Hydra can cross water.

@@ -1,6 +1,6 @@
 sprite: unit_orc
 tier: 2
-health: 90
+health: 100
 damage: 8
 armor: 0
 inborn: (upkeep2 heals organic)

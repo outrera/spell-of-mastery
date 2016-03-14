@@ -109,7 +109,8 @@ roam Me =
     | AI = V.ai
     | when AI:
       | Block = World.block_at{Dst.xyz}
-      | if AI><unit and got Block and Owner.is_enemy{Block.owner} then
+      | if AI><unit and got Block and Owner.is_enemy{Block.owner}
+           and not Block.invisible then
            | MoveIn <= 1
         else if AI><hold and no Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
