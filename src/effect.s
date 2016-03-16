@@ -333,6 +333,13 @@ effect morph ClassName:
 | less got Class: bad "morph: Missing class `[ClassName]`"
 | $morph{Class}
 
+effect charm NewOwner:
+| XYZ = Target.xyz.deep_copy
+| Target.remove
+| Target.owner <= $owner
+| Target.colors <= $owner.colors
+| Target.move{XYZ}
+
 effect child What Effects:
 | S = $owner.alloc_unit{What}
 | S.alpha <= 255

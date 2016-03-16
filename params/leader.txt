@@ -27,7 +27,7 @@ spells:
       (cast_knowledge
        cast_fireball cast_firewall cast_lightning cast_blizzard cast_suicide cast_armageddon
        cast_heal cast_shell cast_resist
-       cast_telekinesis cast_excavate cast_flight cast_teleport
+       cast_telekinesis cast_excavate cast_flight cast_teleport cast_charm
        cast_haste cast_paralyze
        spell_of_mastery)
 

@@ -1,7 +1,7 @@
 icon: spell_heal
 hotkey: h
-//lore: misc.tier1_lcost
-//cost: 300
-//cool: 2880
+lore: misc.tier1_lcost
+cost: 300
+cool: 2880
 affects: unit
 before: owner_units,harm{-50},strip{poison},strip{slowed},strip{paralyzed},impact{heal},sound{heal}
