@@ -1,6 +1,6 @@
 sprite: unit_katzard
 icon: unit_katzard
-pentagram: special_pentagram_mage
 hit: effect{blood},sound{grunt4}
 death: sound{orbit}
 moves: sound{step}
+pentagram: special_pentagram_mage

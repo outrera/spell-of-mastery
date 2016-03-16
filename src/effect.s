@@ -318,6 +318,9 @@ effect retile [X Y Z] Type:
 | $die
 
 effect spawn What:
+| when What><pentagram:
+  | L = $owner.leader
+  | What <= if L then L.pentagram else \special_pentagram
 | S = $owner.alloc_unit{What}
 | S.nonguard <= 1
 | less S.alpha:

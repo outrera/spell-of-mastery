@@ -1,6 +1,6 @@
 sprite: unit_witch
 icon: unit_witch
-pentagram: special_pentagram_witch
 hit: effect{blood},sound{grunt_female1}
 death: sound{orbit}
 moves: sound{step}
+pentagram: special_pentagram_witch

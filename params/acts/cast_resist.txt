@@ -1,0 +1,7 @@
+icon: spell_resist
+lore: misc.tier1_lcost
+cost: 200
+cool: 2880
+needs: (cast_blizzard cast_shell)
+affects: unit
+before: owner_units,add_effect{resist,1000,()},impact{resist},sound{resist}

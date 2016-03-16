@@ -1,7 +1,7 @@
 title: `Pentagram`
 affects: any
 before: impact{pentagram_appearance},sound{pentagram}
-after: spawn{pentagram}
+after: spawn{special_pentagram_witch}
 icon: special_pentagram
 cost: misc.tier1_scost
 //lore: misc.tier1_lcost

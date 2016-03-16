@@ -10,9 +10,4 @@ inborn: (upkeep1 flyer)
 death: sound{orbit}
 hit: effect{blood},sound{baphomet_hit}
 moves: sound{observer_move}
-acts: (cast_hexagram cast_knowledge
-       cast_fireball cast_firewall cast_lightning cast_suicide cast_armageddon
-       cast_heal cast_shell
-       cast_telekinesis cast_excavate cast_flight cast_teleport
-       cast_haste cast_paralyze
-       spell_of_mastery)
+acts: (cast_hexagram)
