@@ -1,10 +1,10 @@
 icon: spell_charm
 hotkey: m
-//lore: misc.tier2_lcost
-//cost: 500
-//cool: 1920
-//needs: (cast_telekinesis cast_lightning)
+lore: misc.tier2_lcost
+cost: 500
+cool: 1920
+needs: (cast_telekinesis cast_lightning)
 range: 9000
-affects: unit
-before: sound{charm},impact{teleport},charm{owner}//,recall{self}
+affects: (non_leader),unit
+before: sound{charm},impact{hypnotize},charm{owner}//,recall{self}
 after: ()

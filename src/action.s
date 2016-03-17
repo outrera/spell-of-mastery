@@ -156,9 +156,15 @@ dact teleport.start | $unit.move{$xyz}
 custom_init Me =
 custom_valid Me =
 | Affects = $affects
-| case Affects outdoor,A
-  | less $unit.world.outdoor{$xyz}: leave 0
-  | Affects <= A
+| when Affects.is_list and Affects.0.is_list:
+  | Ms = Affects.0
+  | Affects <= Affects.1
+  | for Mod Ms
+    | if Mod >< outdoor then
+        | less $unit.world.outdoor{$xyz}: leave 0
+      else if Mod >< non_leader then
+        | when $target and $target.leader><1: leave 0
+      else
 | As = if Affects.is_list then Affects
        else | when Affects >< any: leave 1
             | [Affects]

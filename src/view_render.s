@@ -328,9 +328,14 @@ handle_picked Me Rect Units = //Me is view
     | leave
   | Affects = Act.affects
   | Outdoor = 0
-  | case Affects outdoor,A
-    | Affects <= A
-    | Outdoor <= 1
+  | NonLeader = 0
+  | when Affects.is_list and Affects.0.is_list:
+    | Ms = Affects.0
+    | Affects <= Affects.1
+    | for Mod Ms
+      | if Mod >< outdoor then Outdoor <= 1
+        else if Mod >< non_leader then NonLeader <= 1
+        else
   | less $mice_click><pick:
     | when Affects><unit:
       | Cur = if Units.end then \ui_cursor_target else \ui_cursor_target2
@@ -344,6 +349,10 @@ handle_picked Me Rect Units = //Me is view
   | Proceed = 1
   | when Outdoor and not $world.outdoor{XYZ}:
     | $player.notify{"Target should be outdoors."}
+    | $main.sound{illegal}
+    | Proceed <= 0
+  | when NonLeader and Target and Target.leader><1:
+    | $player.notify{"Cant target leader."}
     | $main.sound{illegal}
     | Proceed <= 0
   | when Proceed:

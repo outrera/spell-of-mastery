@@ -5,6 +5,6 @@ cost: 400
 cool: 480
 needs: (cast_fireball)
 range: 9000
-affects: outdoor,unit
+affects: (outdoor),unit
 targets: any
 before: harm{magic.100},impact{lightning},sound{lightning}
