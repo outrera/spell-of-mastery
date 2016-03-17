@@ -28,6 +28,6 @@ spells:
        cast_fireball cast_firewall cast_lightning cast_blizzard cast_suicide cast_armageddon
        cast_heal cast_shell cast_resist
        cast_telekinesis cast_excavate cast_flight cast_teleport cast_charm
-       cast_haste cast_paralyze
+       cast_haste cast_slow cast_paralyze
        spell_of_mastery)
 

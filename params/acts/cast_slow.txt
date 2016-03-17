@@ -1,8 +1,7 @@
 icon: spell_slow
 hotkey: w
 lore: misc.tier1_lcost
-cost: 50
-cool: 240
-range: 4
+cost: 200
+cool: 2880
 affects: unit
-before: add_effect{slowed,0,()},impact{cold_ring},sound{slowed}
+before: all_alive,add_effect{slowed,1000,()},impact{slow},sound{slowed}

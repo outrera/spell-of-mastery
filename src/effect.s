@@ -482,4 +482,9 @@ unit.effect Effect Target XYZ =
       | for U $world.active: when U.owner.id><OID:
         | when U.ai><unit: $effect{Es U U.xyz}
       | leave
+    else if Name >< enemy_units then
+      | OID = $owner.id
+      | for U $world.active: when $is_enemy{U}:
+        | when U.ai><unit: $effect{Es U U.xyz}
+      | leave
     else bad "no effect handler for [Name]{[Args]} of [Me]"

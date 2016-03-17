@@ -1,3 +1,3 @@
-author: `Natalya Bugrova`
-copyright: `Nikita Sadkov`
-
+author: `Fenrir-Lunaris`
+license: `GPL2`
+origin: `http://rpg.hamsterrepublic.com/ohrrpgce/Game:Vikings_of_Midgard`
