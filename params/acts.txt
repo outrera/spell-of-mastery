@@ -6,4 +6,5 @@ speed: 4
 before: ()
 after: ()
 needs: ()
+affects: unit
 targets: seen

@@ -3,6 +3,6 @@ hotkey: s
 lore: misc.tier1_lcost
 cost: 200
 cool: 2880
-affects: unit
 needs: (cast_heal)
+affects: unit
 before: owner_units,add_effect{shell,1000,()},impact{shell},sound{shell}
