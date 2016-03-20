@@ -1,0 +1,6 @@
+empty: 1
+filler: 0
+invisible: 1
+height: 4
+1111: 0
+heavy: 0

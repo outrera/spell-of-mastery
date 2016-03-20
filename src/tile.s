@@ -86,7 +86,6 @@ tile.render X Y Z Below Above Seed =
 | BR = Below.role
 | AH = Above.heavy
 | AR = Above.role
-| AFiller = AR >< filler
 | NeibSlope = #@0000
 | T = Me
 | when $water:
@@ -95,9 +94,9 @@ tile.render X Y Z Below Above Seed =
     | T <= $main.tiles.Water
 | Gs = if BE then T.top
        else if BR <> $role or BelowSlope><#@1111 then T.base
-       else if AR <> $role and not AFiller then T.top
+       else if AR <> $role then T.top
        else T.middle
-| G = if $lineup and (AH or AFiller) and (not Above.stack or AR <> $role)
+| G = if $lineup and AH and (not Above.stack or AR <> $role)
       then | NeibSlope <= #@1111
            | Gs.NeibSlope
       else | Elev = $tiler{}{World X Y Z $role}

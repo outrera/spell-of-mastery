@@ -1,5 +1,6 @@
 sprite: system_dummy
 empty: 0
+filler: 1 //true if it forces other tiles to align with respect to it
 invisible: 0
 trn: 0
 match: any,corner

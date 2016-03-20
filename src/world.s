@@ -204,7 +204,7 @@ world.clear_passage X Y Z =
 | when H-Z < 5: leave
 | while Z<H:
   | Type = $at{X Y Z}.type
-  | $set{X Y Z $main.tiles.filler1}
+  | $set{X Y Z $main.tiles.empty1}
   | when Type<>void:
     | S = $players.0.alloc_unit{unit_dummy}
     | S.move{[X Y Z]}

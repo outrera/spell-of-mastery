@@ -291,7 +291,7 @@ effect clear What:
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
   Else | bad "effect clear: invalid target ([What])"
-| $world.clear_tile{X,Y,Z $main.tiles.filler.id}
+| $world.clear_tile{X,Y,Z $main.tiles.empty4.id}
 
 effect clear_passage What:
 | X,Y,Z = case What

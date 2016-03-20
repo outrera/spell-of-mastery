@@ -1,6 +1,0 @@
-// fills space for neighbor tiles
-empty: 1
-filler: 1
-invisible: 1
-1111: 0
-heavy: 0
