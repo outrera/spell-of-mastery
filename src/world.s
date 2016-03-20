@@ -101,12 +101,12 @@ world.create W H =
 | $create_borders
 
 // add movement blocking walls
-world.create_borders =
+world.create_borders = // draws maps borders in clockwise order
 | Border = $main.tiles.border_
-| for P points{0    0    $w+2 1   }: times I 26: $push_{P.0 P.1 Border}
-| for P points{0    0    1    $h+2}: times I 26: $push_{P.0 P.1 Border}
-| for P points{0    $h+1 $w+2 1   }: times I 26: $push_{P.0 P.1 Border}
-| for P points{$w+1 0    1    $h+2}: times I 26: $push_{P.0 P.1 Border}
+| for P points{0    0    $w+1 1   }: times I 63: $push_{P.0 P.1 Border}
+| for P points{$w+1 0    1    $h+1}: times I 63: $push_{P.0 P.1 Border}
+| for P points{1    $h+1 $w+1 1   }: times I 63: $push_{P.0 P.1 Border}
+| for P points{0    1    1    $h+1}: times I 63: $push_{P.0 P.1 Border}
 
 world.clear =
 | $act <= 0

@@ -344,6 +344,7 @@ attack_nearby_enemy Me =
   | B = $world.block_at{Dst.xyz}
   | got B and O.is_enemy{B.owner} and ($xyz-Dst.xyz).abs.int<SightF
     and not B.invisible
+    //and $world.seen_from{$xyz Dst.xyz}^log
 | Found = $pathfind{$sight-1 &check}
 | less Found: leave
 | $order_at{Found.1}
