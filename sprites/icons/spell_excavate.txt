@@ -1,3 +1,3 @@
-author: `Henrique Lazarini '7Soul' 'Ails'`
-license: `CC-BY`
-origin: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg
+author: `Koen Witters`
+license: `MIT`
+origin: https://github.com/koonsolo/MysticMine
