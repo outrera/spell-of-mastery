@@ -101,10 +101,14 @@ respawn_leader Me XYZ =
 | S = Me
 | S.strip_effect{poison}
 | S.strip_effect{flight}
+| S.backtrack <= 0
+| S.reset_goal
+| S.reset_followers
 | S.hp <= S.class.hp
 | S.nonguard <= 0
 | S.alpha <= 255
 | S.delta <= -25
+| $world.effect{$xyz teleport}
 | S.move{XYZ}
 | when $owner.human:
   | S.main.ui.view.center_at{XYZ}

@@ -341,6 +341,11 @@ unit.reset_goal =
 | less $path.end: $set_path{[]}
 | $goal <= 0
 
+//a faster solution would be keeping the linked list of all targeters
+unit.reset_followers =
+| for U $world.active: when U.goal and U.goal.id><$id:
+  | U.reset_goal
+
 unit.remove =
 | when $xyz.2 <> -1:
   | when $passable and $block: $world.clear_tile{$xyz $world.void}

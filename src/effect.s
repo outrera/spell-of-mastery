@@ -269,9 +269,7 @@ effect recall Where:
 | Target.move{XYZ}
 | Target.backtrack <= 0
 | Target.reset_goal
-   //a faster solution would be keeping the linked list of all targeters
-| for U $world.active: when U.goal and U.goal.id><Target.id:
-  | U.reset_goal
+| Target.reset_followers
 
 effect remove Whom: case Whom
   target | Target.free
