@@ -1,7 +1,7 @@
 sprite: unit_ogre
 tier: 4
 health: 200
-damage: 10
+damage: 12
 armor: 0
 inborn: (upkeep4 heals organic)
 //attack: sound{ogre_club}
