@@ -76,8 +76,9 @@ m_any_stairs Me X Y Z Role =
      if $role{X-1 Y Z+4}><Role then E<=[0 0 0 1]
      else if $role{X+1 Y Z-4}><Role and not $filled{X+1 Y Z} then E<=[0 0 0 1]
      else if $role{X Y-1 Z-4}><Role and not $filled{X-1 Y Z} then E<=[0 1 1 1]
-     else if $role{X Y+1 Z+4}><Role and not $filled{X Y+1 Z} then E<=[0 1 1 1]
+     else if $role{X Y+1 Z+4}><Role then E<=[0 1 1 1]
      else if $filled{X-1 Y Z+4} and not $filled{X Y+1 Z+4} then E<=[0 1 1 1]
+     else if not $filled{X+1 Y Z-4} then E<=[0 1 1 1]
      else
   else if E><[1 0 0 0] then
      if $role{X-1 Y Z-4}><Role then E<=[0 1 0 0]
