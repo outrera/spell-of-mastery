@@ -1,6 +1,7 @@
 empty: 1
 filler: 0
 invisible: 1
+aux: 1
 height: 1
 1111: 0
 heavy: 0

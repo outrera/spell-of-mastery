@@ -6,8 +6,7 @@ Hotkeys:
 ] - incease cursor Z
 
 Click Modifiers:
-B - creates roof/bridge.
-E - while holding `E` key, right click remove empty tiles (like grass), while left click places on top of empty tiles.  Without `E`, objects get placed inside of grass
+B - creates roof/bridge over empty space.
 N - place sprite rotated 180 degrees
 M - place sprite mirrored
 R - pick random object from selected sprite bank. Useful for placing decorations, like bushes
