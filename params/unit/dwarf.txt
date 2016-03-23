@@ -1,7 +1,7 @@
 sprite: unit_dwarf
 tier: 2
-health: 60
-damage: 3
+health: 70
+damage: 4
 armor: 4
 speed: 28
 acts: (cast_excavate)
