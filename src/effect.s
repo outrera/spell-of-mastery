@@ -108,7 +108,9 @@ effect effect1 Effect:
 
 effect sound Sound:
 | when not $id or (not $removed and $world.human.explored{$xyz}>1):
-  | $main.sound{Sound}
+  | CXYZ = $main.ui.view.center
+  | V = 1.0 / | max 1.0 (CXYZ - TargetXYZ).abs*0.5
+  | when V>0.01: $main.sound{Sound volume/V}
 
 effect harm As:
 | Damage = 1

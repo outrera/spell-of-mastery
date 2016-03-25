@@ -17,14 +17,14 @@ main.load_sounds =
     | push "[Name].[Ext]" PlayList
 | PlayList <= PlayList.sort
 
-main.sound Name =
+main.sound Name volume/1.0 =
 | Cycle = $world.cycle
 | SCycles = $world.sound_cycles
 | when SCycles.Name><Cycle: leave
 | SCycles.Name <= Cycle
 | S = $sounds.Name
 | when no S: bad "missing sound ([Name])"
-| sound_play S
+| sound_play S volume/Volume
 
 Channel = 0
 
