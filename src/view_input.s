@@ -151,7 +151,15 @@ world.update_cursor CXYZ Brush Mirror =
       | Place = if not Us then 0
                 else if Class.unit then not Us.any{?unit}
                 else not Us.any{?class^address >< Class^address}
-      | when Place: push P.alloc_unit{mark_cube}.move{XYZ} Marks
+      | when Place:
+        | ClassName = "[Bank]_[Type]"
+        | Class = $main.classes.ClassName
+        | M = P.alloc_unit{mark_cube}
+        | M.sprite <= Class.default_sprite
+        | M.animate{idle}
+        | M.move{XYZ}
+        | M.alpha <= 110
+        | push M Marks
 | for M Marks: M.mark <= 1
 | $marks.heapfree
 | $marks <= Marks.enheap
