@@ -132,7 +132,7 @@ world.update_picked =
   | push Mark Marks
 | $marks <= Marks.enheap
 
-world.update_cursor CXYZ Brush Mirror =
+world.update_cursor CXYZ Brush Mirror Reverse =
 | Marks = $marks.unheap
 | P = $human
 | if $act
@@ -145,21 +145,23 @@ world.update_cursor CXYZ Brush Mirror =
   [obj Bank,Type]
     | ClassName = "[Bank]_[Type]"
     | Class = $main.classes.ClassName
-    | for X,Y,Z Class.form:
-      | XYZ = CXYZ + if Mirror then [-Y X Z] else [X -Y Z]
-      | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_at{XYZ}
-      | Place = if not Us then 0
-                else if Class.unit then not Us.any{?unit}
-                else not Us.any{?class^address >< Class^address}
-      | when Place:
-        | ClassName = "[Bank]_[Type]"
-        | Class = $main.classes.ClassName
-        | M = P.alloc_unit{mark_cube}
-        | M.sprite <= Class.default_sprite
-        | M.animate{idle}
-        | M.move{XYZ}
-        | M.alpha <= 110
-        | push M Marks
+    | XYZ = CXYZ //+ if Mirror then [-Y X Z] else [X -Y Z]
+    | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_at{XYZ}
+    | Place = if not Us then 0
+              else if Class.unit then not Us.any{?unit}
+              else not Us.any{?class^address >< Class^address}
+    | when Place:
+      | ClassName = "[Bank]_[Type]"
+      | Class = $main.classes.ClassName
+      | Facing = if Mirror then 5 else 3
+      | when Reverse: Facing <= if Mirror then 1 else 6
+      | M = P.alloc_unit{mark_cube}
+      | M.sprite <= Class.default_sprite
+      | M.animate{idle}
+      | M.pick_facing{Facing}
+      | M.move{XYZ}
+      | M.alpha <= 110
+      | push M Marks
 | for M Marks: M.mark <= 1
 | $marks.heapfree
 | $marks <= Marks.enheap
@@ -187,7 +189,8 @@ view.update =
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
 | Mirror = $keys.m >< 1
-| $world.update_cursor{$cursor Brush Mirror}
+| PlaceReversed = $keys.n >< 1
+| $world.update_cursor{$cursor Brush Mirror PlaceReversed}
 | case $mode
     play | $update_play
     brush | $update_brush
