@@ -1,26 +1,5 @@
 use widgets gfx
 
-/*
-type minimap.widget{Main CenterAt}
-     main/Main w/128 h/128 pressed center/CenterAt
-minimap.draw G PX PY =
-| MM = $main.world.minimap
-| X,Y = $main.world.human.view/32
-| X = X*$w/$main.world.w
-| Y = Y*$h/$main.world.h
-| W = $main.view_w/32*$w/$main.world.w
-| H = $main.view_h/32*$h/$main.world.h
-| G.blit{PX PY MM}
-| G.rectangle{#A0A0A0 0 PX+X PY+Y W H}
-
-minimap.center_at P = ($center){[P.0*$main.world.w/$w P.1*$main.world.h/$h]}
-
-minimap.input In = case In
-  [mice_move _ XY] | when $pressed: $center_at{XY}
-  [mice left 1 XY] | $pressed <= 1; $center_at{XY}
-  [mice left 0 XY] | $pressed <= 0
-*/
-
 
 /*
 type icon_popup.widget info enabled resources text/txt{small ''}
@@ -28,6 +7,26 @@ type icon_popup.widget info enabled resources text/txt{small ''}
 icon_popup.render =
 | for X $info.items: X.pick{$enabled}
 | $info.render*/
+
+type minimap.widget{Main CenterAt}
+     main/Main w/128 h/128 pressed center/CenterAt
+minimap.draw G PX PY =
+| MM = $main.world.minimap
+| G.blit{PX PY MM}
+/*| X,Y = $main.world.human.view/32
+| X = X*$w/$main.world.w
+| Y = Y*$h/$main.world.h
+| W = $main.view_w/32*$w/$main.world.w
+| H = $main.view_h/32*$h/$main.world.h
+| G.rectangle{#A0A0A0 0 PX+X PY+Y W H}*/
+
+minimap.center_at P = ($center){P.0*$main.world.w/$w P.1*$main.world.h/$h}
+
+minimap.input In = case In
+  [mice_move _ XY] | when $pressed: $center_at{XY}
+  [mice left 1 XY] | $pressed <= 1; $center_at{XY}
+  [mice left 0 XY] | $pressed <= 0
+
 
 DisabledIconOverlay = 0
 
@@ -78,4 +77,4 @@ icon.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
-export /*minimap*/ icon
+export minimap icon

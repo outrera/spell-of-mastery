@@ -1,4 +1,4 @@
-use stack heap zmap util line_points unit player
+use gfx stack heap zmap util line_points unit player
 
 MaxSize = No
 MaxUnits = No
@@ -53,6 +53,7 @@ type world{main}
    mode/brush
    sound_cycles/(t) //used to avoid playing similar sounds at once
    blink/[0 0]
+   minimap/0
 | $init
 
 world.second = $cycle/24
@@ -61,6 +62,7 @@ world.new_turn = $cycle%(24*10)><0
 
 world.init =
 | $main.world <= Me
+| $minimap <= gfx 128 128
 | WParam = $main.params.world
 | MaxSize <= WParam.max_size
 | MaxUnits <= WParam.max_units
@@ -109,6 +111,7 @@ world.create_borders = // draws maps borders in clockwise order
 | for P points{0    1    1    $h+1}: times I 63: $push_{P.0 P.1 Border}
 
 world.clear =
+| $minimap.clear{#000000}
 | $act <= 0
 | for U $units: less U.removed: U.free
 | $tilemap.clear{$void}
@@ -412,6 +415,33 @@ world.getSidesSame X Y Z Role = `[]`
   $role{X Y-1 Z}><Role $role{X+1 Y Z}><Role
   $role{X Y+1 Z}><Role $role{X-1 Y Z}><Role
 
+world.color_at X Y =
+| Z = $height{X Y}-1
+| Gs = $gfxes.Y.X
+| when Z > 0 and $at{X Y Z}.empty:
+  | Gs <= Gs.lead
+  | !Z-1
+| G = Gs.last
+| G.get{G.w/2 (min G.h/2 16)} ^^ #FFFFFF
+
+world.update_minimap X Y =
+| Z = $height{X Y}-1
+| T = $at{X Y Z}
+| G = $gfxes.Y.X.last
+| Color = $color_at{X Y}
+| WW = $w
+| WH = $h
+| MW = $minimap.w
+| MH = $minimap.h
+//| SX = (MW-WW)/2
+//| SY = (MH-WH)/2
+| PW = (MW+WW-1)/WW
+| PH = (MH+WH-1)/WH
+| SX = (X-1)*PW
+| SY = (Y-1)*PH
+| for YY PH: for XX PW:
+  | $minimap.set{SX+XX SY+YY Color}
+
 world.updPilarGfxes P =
 | X,Y = P
 | when X < 0 or Y < 0: leave 0
@@ -438,6 +468,7 @@ world.updPilarGfxes P =
          | PrevGs.init{[@Gs @(dup PrevGs.size-Gs.size Dummy)]}
   else $gfxes.Y.X <= Gs
 | for U $column_units_at{X Y}: U.environment_updated
+| $update_minimap{X Y}
 
 world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}

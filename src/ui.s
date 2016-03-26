@@ -266,17 +266,19 @@ create_view_ui Me =
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
 | GameUnitUI <= hidden: dlg: mtx
-  |  0   0| UnitPanel
+  | 128  0| UnitPanel
 | GameUI = dlg: mtx
   |  0   0| $view
   |  0   0| GameUnitUI
   |  4 $height-112| layH{s/4 ActIcons.drop{ActIcons.size/2}}
   |  4 $height-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 $height-10 | info_line Me
+  | 0 0 | minimap $main | X Y => $view.center_at{[X Y 0]}
 | BrushUI = dlg: mtx
   | 0 0 | $view
   | 0 0 | layH: BankList,ItemList
   | PanelW 0 | PlayerWidget
+  | $width-128 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
 | tabs brush: t brush(BrushUI) pick(GameUI) play(GameUI)
 
 create_ingame_dlg Me =
