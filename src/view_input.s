@@ -39,11 +39,12 @@ view.update_brush =
                   then "[Bank]_[$main.classes_banks.Bank.rand]"
                   else "[Bank]_[Type]"
     | Class = $main.classes.ClassName
+    | when Z+Class.height>63: leave
     | Place = 1
     | for XX,YY,ZZ Class.form: when Place:
       | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
       | Us = $world.units_at{XYZ}.skip{?bank><mark}
-      | Place <= if XYZ.any{?<0} then 0
+      | Place <= if not $world.valid{@XYZ} then 0
                  else if not Class.empty then Us.all{?empty}
                  else if $keys.r >< 1 then Us.end
                  else not Us.any{?class^address >< Class^address}

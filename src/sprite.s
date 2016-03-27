@@ -1,5 +1,10 @@
 use gfx util param
 
+worldToSprite X Y =
+| RX = (X*64 - Y*64)/2
+| RY = (X*32 + Y*32)/2
+| [RX RY]
+
 type sprite{Bank Name xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]] recolors/0
             class/0 margins/0 pick_height/0
@@ -23,7 +28,12 @@ type sprite{Bank Name xy/[0 0]
   recolors/Recolors
   colors/0
 | XYs = []
-| for Y,Hs Form.tail.i: for X,H Hs.i: when H: push [-X Y 0] XYs
+| Form = Form.tail
+| FormH = Form.size
+| FormW = Form.0.size
+| when FormH+FormW>2:
+  | $xy <= $xy + worldToSprite{FormW-1 FormH-1}
+| for Y,Hs Form.i: for X,H Hs.i: when H: push [X -Y 0] XYs
 | $form <= XYs.list
 | $anims <= @table: map [Name@Frames] Anims.tail
   | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}
