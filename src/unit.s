@@ -346,13 +346,6 @@ unit.reset_followers =
 | for U $world.active: when U.goal and U.goal.id><$id:
   | U.reset_goal
 
-unit.remove =
-| when $xyz.2 <> -1:
-  | when $passable and $block: $world.clear_tile{$xyz $world.void}
-  | $move_in{0}
-| $world.remove_unit{Me}
-| $xyz.2 <= -1
-
 unit.removed = $xyz.2 >< -1
 
 unit.order = $ordered
@@ -483,8 +476,6 @@ unit.fine_move FXYZ =
 | C = $world.c
 | $fxyz.init{FXYZ}
 | $world.place_unit{Me}
-| when $passable and $block:
-  | $world.set{@$xyz $block}
 | $environment_updated
 | $move_in{1}
 | Me
@@ -494,6 +485,12 @@ unit.move XYZ =
 | $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*8]}
 | when $class.active: $run_effects{?><move Me $xyz}
 | Me
+
+unit.remove =
+| when $xyz.2 >< -1: leave
+| $move_in{0}
+| $world.remove_unit{Me}
+| $xyz.2 <= -1
 
 unit.seen = $world.seen{$xyz.0 $xyz.1}
 

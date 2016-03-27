@@ -333,9 +333,12 @@ world.seen X Y = $human.sight.Y.X>1
 world.place_unit U =
 | XYZ = U.xyz.copy
 | Mirror = U.facing >< 5
+| Blocker = U.passable and U.block
 | for XX,YY,ZZ U.form:
-  | U.xyz.init{XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]}
+  | P = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
+  | U.xyz.init{P}
   | $place_unitS{U}
+  | when Blocker: $set{@P U.block}
 | U.xyz.init{XYZ}
 | U.explore{1}
 
@@ -359,9 +362,12 @@ world.remove_unit U =
 | XYZ = U.xyz.copy
 | when XYZ.2 >< -1: leave
 | Mirror = U.facing >< 5
+| Blocker = U.passable and U.block
 | for XX,YY,ZZ U.form:
-  | U.xyz.init{XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]}
+  | P = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
+  | U.xyz.init{P}
   | $remove_unitS{U}
+  | when Blocker: $clear_tile{P $void}
 | U.xyz.init{XYZ}
 
 world.effect X,Y,Z What =
