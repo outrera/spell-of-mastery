@@ -1,3 +1,5 @@
+leader_defense_bonus: 10
+
 nop_loop: | wait 5
 
 leader_katzard: | goto leader_mage
