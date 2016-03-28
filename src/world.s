@@ -485,7 +485,7 @@ world.height X Y = $tilemap.height{X Y}
 world.outdoor XYZ = $height{XYZ.0 XYZ.1} << XYZ.2
 
 world.valid X Y Z =
-| X >> 0 and Y >> 0 and Z >> 0 and X < $w and Y < $h and Z < 64
+| X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < 64
 
 world.push_ X Y Tile =
 | Z = $height{X Y}
