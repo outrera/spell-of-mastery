@@ -1,4 +1,5 @@
 author: `Tim Jonsson`
 copyright: `Nikita Sadkov`
-height: 4
-xy: 0,8
+height: 8
+xy: 8,0
+class: height,8
