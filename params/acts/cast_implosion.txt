@@ -1,0 +1,8 @@
+icon: spell_implosion
+lore:  misc.tier2_lcost
+cost: 400
+cool: 480
+needs: (cast_fireball)
+range: 5
+affects: unit
+before: decimate{1 2},impact{implosion},sound{lifedrain}

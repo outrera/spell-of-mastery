@@ -155,8 +155,10 @@ effect counter Arg:
 effect lifedrain Amount:
 | when Target and Target.has{organic}: Me.harm{Me -Amount}
 
-effect suicide Multiplier:
-| Target.harm{Me Target.damage*Multiplier}
+effect decimate A B:
+| NewHealth = Target.health*A/B
+| Harm = Target.health-NewHealth
+| when Harm: Target.harm{Me Harm}
 
 effect spawn_field Args:
 | [TTL Freq R Param @As] = Args

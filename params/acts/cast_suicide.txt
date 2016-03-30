@@ -1,8 +1,0 @@
-icon: spell_suicide
-needs: (cast_lightning)
-lore: misc.tier2_lcost
-cost: 400
-cool: 480
-range: 3
-affects: unit
-before: suicide{10},impact{explosion_blood},sound{wail}//,cooldown{5}

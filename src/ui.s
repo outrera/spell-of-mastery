@@ -266,7 +266,7 @@ create_view_ui Me =
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
 | GameUnitUI <= hidden: dlg: mtx
-  | 128  0| UnitPanel
+  | 0  128| UnitPanel
 | GameUI = dlg: mtx
   |  0   0| $view
   |  0   0| GameUnitUI

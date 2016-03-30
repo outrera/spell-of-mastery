@@ -1,4 +1,4 @@
-icon: spell_suicide
+icon: nil
 range: 0
 affects: any
 
