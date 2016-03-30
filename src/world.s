@@ -18,8 +18,9 @@ proxy.init Unit =
 | $column_next <= 0
 
 type world{main}
-   w
-   h
+   w //width
+   h //height
+   d //depth
    c //cell dimension unit
    filename/`default`
    name/`default map`
@@ -64,6 +65,7 @@ world.init =
 | $main.world <= Me
 | $minimap <= gfx 128 128
 | WParam = $main.params.world
+| $d <= WParam.depth
 | MaxSize <= WParam.max_size
 | MaxUnits <= WParam.max_units
 | NoteSize = WParam.note_size
@@ -73,9 +75,9 @@ world.init =
 | $players <= map Id WParam.max_players: player Id Me
 | $c <= WParam.cell_size
 | $void <= $main.tiles.void
-| $tilemap <= zmap MaxSize $void
-| $unit_map <= zmap MaxSize 0
-| $move_map <= zmap MaxSize 0
+| $tilemap <= zmap MaxSize $d $void
+| $unit_map <= zmap MaxSize $d 0
+| $move_map <= zmap MaxSize $d 0
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -105,10 +107,10 @@ world.create W H =
 // add movement blocking walls
 world.create_borders = // draws maps borders in clockwise order
 | Border = $main.tiles.border_
-| for P points{0    0    $w+1 1   }: times I 63: $push_{P.0 P.1 Border}
-| for P points{$w+1 0    1    $h+1}: times I 63: $push_{P.0 P.1 Border}
-| for P points{1    $h+1 $w+1 1   }: times I 63: $push_{P.0 P.1 Border}
-| for P points{0    1    1    $h+1}: times I 63: $push_{P.0 P.1 Border}
+| for P points{0    0    $w+1 1   }: times I $d-1: $push_{P.0 P.1 Border}
+| for P points{$w+1 0    1    $h+1}: times I $d-1: $push_{P.0 P.1 Border}
+| for P points{1    $h+1 $w+1 1   }: times I $d-1: $push_{P.0 P.1 Border}
+| for P points{0    1    1    $h+1}: times I $d-1: $push_{P.0 P.1 Border}
 
 world.clear =
 | $minimap.clear{#000000}
@@ -248,7 +250,7 @@ world.fix_z_void XYZ =
 
 world.roof XYZ =
 | X,Y,Z = XYZ
-| while $at{X Y Z}.empty and Z < 63: !Z+1
+| while $at{X Y Z}.empty and Z < $d-1: !Z+1
 | Z
 
 
@@ -485,7 +487,7 @@ world.height X Y = $tilemap.height{X Y}
 world.outdoor XYZ = $height{XYZ.0 XYZ.1} << XYZ.2
 
 world.valid X Y Z =
-| X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < 64
+| X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < $d
 
 world.push_ X Y Tile =
 | Z = $height{X Y}

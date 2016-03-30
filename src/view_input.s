@@ -39,7 +39,7 @@ view.update_brush =
                   then "[Bank]_[$main.classes_banks.Bank.rand]"
                   else "[Bank]_[Type]"
     | Class = $main.classes.ClassName
-    | when Z+Class.height>63: leave
+    | when Z+Class.height>>$world.d: leave
     | Place = 1
     | for XX,YY,ZZ Class.form: when Place:
       | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
@@ -72,7 +72,7 @@ view.update_brush =
       | Z <= $cursor.2
       | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
       | Tile = $main.tiles.Type
-      | when Z+Tile.height>63: leave
+      | when Z+Tile.height>>$world.d: leave
       | less Tile.empty
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
       | $world.set{X Y Z $main.tiles.Type}

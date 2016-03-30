@@ -186,7 +186,8 @@ effect field Param R Es:
   else if Type><outdoors_cell and R><world then
     | WW = $world.w 
     | WH = $world.h
-    | Count <= (WH*WW+63)/64*Count
+    | WD = $world.d
+    | Count <= (WH*WW+WD-1)/WD*Count
     | Ts <= dup Count
       | X = WW.rand+1
       | Y = WH.rand+1

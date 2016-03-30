@@ -1,6 +1,5 @@
-ZMapHeight = 64
-type zmap{size init} data
-| $data <= dup $size: dup $size: dup ZMapHeight $init
+type zmap{size depth init} data
+| $data <= dup $size: dup $size: dup $depth $init
 
 zmap.clear Value = for Ys $data: for Zs Ys: Zs.clear{Value}
 
@@ -20,7 +19,7 @@ zmap.setPilar X Y Zs =
 
 zmap.height X Y =
 | Vs = $data.X.Y
-| Z = ZMapHeight
+| Z = $depth
 | while Z
   | !Z-1
   | when Vs.Z.id: leave Z+1
