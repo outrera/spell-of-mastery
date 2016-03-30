@@ -1,10 +1,10 @@
 lore: (0 0)
 cost: 0
 priority: 50
-range: 0
+range: 0 //0=target self
 speed: 4
 before: ()
 after: ()
 needs: ()
-affects: unit
-targets: seen
+affects: unit //what it can target
+targets: seen //seen=requires line of sight, any=any explored cell

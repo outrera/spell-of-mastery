@@ -7,4 +7,4 @@ armor: 0
 show: 0
 speed: 0
 pickable: 0
-inborn: (ttl{1})
+inborn: (ttl_s{1})

@@ -4,4 +4,6 @@ lore: misc.tier1_lcost
 cost: 100
 range: 9000
 affects: any
-before: sound{pentagram},spawn{unit_telekinesis}
+targets: any
+before: sound{pentagram}
+after: spawn{unit_telekinesis}

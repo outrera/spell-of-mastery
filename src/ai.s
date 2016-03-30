@@ -202,12 +202,12 @@ ai.harm Attacker Victim =
   | Cycle = $world.cycle
   | PParams = $player.params
   | LHC = $params.aiLeaderHarmCycle
-  | Bonus = max 0 LHC
-  | !$player.mana + ((Cycle-Bonus)/24*$main.params.ai.leader_defense_bonus)
   | when LHC+24*120>Cycle:
     | when Attacker: for U $player.units: when U.damage and U.idle:
       | U.order_at{Attacker.xyz}
     | leave
+  | Bonus = max 0 LHC
+  | !$player.mana + ((Cycle-Bonus)/24*$main.params.ai.leader_defense_bonus)
   | $params.aiLeaderHarmCycle <= Cycle
   | for U $player.units: when U.id <> Victim.id: when U.speed:
     | U.attacker <= 1
