@@ -21,7 +21,10 @@ view.mice_rect =
 | Y = min AY MY
 | U = max AX MX
 | V = max AY MY
-| [X Y U-X V-Y]
+| MW = U-X
+| MH = V-Y
+| less MW>4 or MH>4: leave 0
+| [X Y MW MH]
 
 view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
 
@@ -210,7 +213,7 @@ view.input In =
     | $mice_xy.init{XY}
     | less $mice_click: $mice_xy_anchor.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
-    | when $mode <> play or $world.human.sight.CY.CX:
+    | when $mode <> play or $world.human.sight.CY.CX: less $mice_click:
       | $cursor.init{[CX CY $cursor.2]}
       | $cursor.2 <= $fix_z{$cursor}
   [mice left State XY]

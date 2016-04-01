@@ -3,9 +3,6 @@ type zmap{size depth init} data
 
 zmap.clear Value = for Ys $data: for Zs Ys: Zs.clear{Value}
 
-// gets cube at P in the form of [Value OriginXYZ EdgeLength]
-zmap.get X Y Z = [$data.X.Y.Z 1]
-
 zmap.set X Y Z V = $data.X.Y.Z <= V
 
 zmap.at X Y Z = $data.X.Y.Z

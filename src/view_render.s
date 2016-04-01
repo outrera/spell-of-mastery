@@ -394,17 +394,19 @@ handle_picked Me Rect Units = //Me is view
   | $picked <= [@NewPicked @Picked]
   | leave
 
+handle_rect_picking Me UnitRects MR = 
+| RX,RY,RW,RH = MR
+| when $mice_click><left: $fb.rectangle{#00FF00 0 RX RY RW RH}
+| Units = []
+| for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
+  | when Unit.speed>0 and Unit.owner.id><$player.id:
+    | push Unit Units
+| handle_picked Me 1 Units
+
 handle_picking Me UnitRects =
 | MR = $mice_rect
-| RX,RY,RW,RH = MR
-| LargeEnough = RW>4 or RH>4
-| when LargeEnough:
-  | when $mice_click><left: $fb.rectangle{#00FF00 0 RX RY RW RH}
-  | Units = []
-  | for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
-    | when Unit.speed>0 and Unit.owner.id><$player.id:
-      | push Unit Units
-  | handle_picked Me 1 Units
+| when MR:
+  | handle_rect_picking Me UnitRects MR
   | leave
 | Units = []
 | MXY = $mice_xy
