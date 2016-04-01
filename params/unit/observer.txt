@@ -1,14 +1,14 @@
 sprite: unit_observer
 tier: 4
 health: 90
-damage: 12
+damage: 10
 armor: 0
 cooldown: 4
 range: 4
 speed: 28
 inborn: (upkeep4 heals organic flyer resist_magic)
 attack: sound{observer_attack}
-impact: harm{user},impact{energy_ring},sound{observer_impact}
+impact: harm{user},impact{energy_ring},decimate{1 10},macro{poison},sound{observer_impact}
 hit: effect{blood},sound{observer_hit}
 death: sound{observer_die}
 moves: sound{observer_move}

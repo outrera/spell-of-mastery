@@ -156,8 +156,7 @@ effect lifedrain Amount:
 | when Target and Target.has{organic}: Me.harm{Me -Amount}
 
 effect decimate A B:
-| NewHealth = Target.health*A/B
-| Harm = Target.health-NewHealth
+| Harm = Target.health*A/B
 | when Harm: Target.harm{Me Harm}
 
 effect spawn_field Args:
