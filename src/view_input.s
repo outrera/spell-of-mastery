@@ -213,9 +213,10 @@ view.input In =
     | $mice_xy.init{XY}
     | less $mice_click: $mice_xy_anchor.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
-    | when $mode <> play or $world.human.sight.CY.CX: less $mice_click:
-      | $cursor.init{[CX CY $cursor.2]}
-      | $cursor.2 <= $fix_z{$cursor}
+    | when $mode <> play or $world.human.sight.CY.CX:
+      | less $mice_click and $mode >< play:
+        | $cursor.init{[CX CY $cursor.2]}
+        | $cursor.2 <= $fix_z{$cursor}
   [mice left State XY]
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
