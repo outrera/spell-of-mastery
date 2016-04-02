@@ -3,6 +3,7 @@ icon: unit_king
 range: cross
 health: 140
 armor: 3
+range: 0
 damage: 10 // amount of damage this unit deals
 impact: harm{user},sound{attack2}
 hit: effect{blood},sound{grunt2}

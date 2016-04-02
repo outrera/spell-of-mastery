@@ -3,7 +3,7 @@ use gfx util
 type tile{As Main Type Role Id Lineup Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
-          parts/0 box/[64 64 h] stack/0}
+          parts/0 box/[64 64 h] stack/0 indoor/Indoor}
      id/Id
      main/Main
      bank/Bank
@@ -28,6 +28,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      box/Box
      stack/Stack
      tiler/0
+     indoor/Indoor
 | when $box.2><h: $box.2 <= $height*8
 | less $parts:
   | if $height>1
@@ -100,20 +101,24 @@ m_any_stairs Me X Y Z Role =
 | E
 
 BelowSlope = 0
+ColumnHeight = 0
 
 tile.render X Y Z Below Above Seed =
-| World = $main.world
 | when $invisible
   | BelowSlope <= #@1111
   | leave DummyGfx
+| World = $main.world
+| less Z: ColumnHeight <= World.height{X Y}
 | BE = Below.empty
 | BR = Below.role
 | AH = Above.heavy
 | AR = Above.role
 | NeibSlope = #@0000
 | T = Me
-| when $water:
-  | Neib,Water = $water
+| when $indoor and Z < ColumnHeight-$height:
+  | T <= $main.tiles.($indoor)
+| when T.water:
+  | Neib,Water = T.water
   | when got World.neibs{X Y Z-$height+1}.find{?type><Neib}:
     | T <= $main.tiles.Water
 | Gs = if BE then T.top
