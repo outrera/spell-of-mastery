@@ -3,5 +3,5 @@ no_lineup: 1
 clear: 1
 indoor: dirt
 box: (64 64 39)
-water: water,plain_water
-stack: plain0,dirt1,plain2
+water: water,soil_water
+stack: soil0,dirt1,soil2

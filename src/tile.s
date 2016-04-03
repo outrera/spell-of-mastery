@@ -115,7 +115,7 @@ tile.render X Y Z Below Above Seed =
 | AR = Above.role
 | NeibSlope = #@0000
 | T = Me
-| when $indoor and Z < ColumnHeight-$height:
+| when $indoor and Z < ColumnHeight-$height /*and AH*/: //FIXME: non-ceil tiles?
   | T <= $main.tiles.($indoor)
 | when T.water:
   | Neib,Water = T.water
