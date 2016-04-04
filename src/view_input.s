@@ -62,6 +62,7 @@ view.update_brush =
       | U.run_effects{?><place U U.xyz}
       | U.animate{idle}
   [tile Type]
+    | Tile = $main.tiles.Type
     | IsBridge = $keys.b><1
     | when IsBridge
       | EmptyTile = $main.tiles.empty
@@ -73,18 +74,25 @@ view.update_brush =
       | $cursor.2 <= Z
       | $cursor.2 <= $world.fix_z_void{$cursor}
     | less IsBridge
-      | while $world.at{X Y $cursor.2-1}.liquid:
-        | H = $world.at{X Y $cursor.2-1}.height
-        | !$cursor.2-H
-        | $world.clear_tile{$cursor $main.tiles.empty}
+      | if Tile.liquid then
+          | when $cursor.2>1: when $cursor.2<<$anchor.2+4:
+            less $world.at{X Y $cursor.2-1}.liquid:
+            | H = $world.at{X Y $cursor.2-1}.height
+            | !$cursor.2-H
+            | $anchor.2 <= $cursor.2
+            | $world.clear_tile{$cursor $main.tiles.empty}
+        else
+          | while $world.at{X Y $cursor.2-1}.liquid:
+            | H = $world.at{X Y $cursor.2-1}.height
+            | !$cursor.2-H
+            | $world.clear_tile{$cursor $main.tiles.empty}
     | while 1
       | Z <= $cursor.2
       | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
-      | Tile = $main.tiles.Type
       | when Z+Tile.height>>$world.d: leave
       | less Tile.empty
         | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
-      | $world.set{X Y Z $main.tiles.Type}
+      | $world.set{X Y Z Tile}
       | when Tile.empty:
         | when Tile.id><0: leave
         | when $keys.e><1: leave
