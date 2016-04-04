@@ -3,7 +3,7 @@ use gfx util
 type tile{As Main Type Role Id Lineup Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
-          parts/0 box/[64 64 h] stack/0 indoor/Indoor}
+          parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0}
      id/Id
      main/Main
      bank/Bank
@@ -29,6 +29,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      stack/Stack
      tiler/0
      indoor/Indoor
+     liquid/Liquid
 | when $box.2><h: $box.2 <= $height*8
 | less $parts:
   | if $height>1

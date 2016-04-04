@@ -62,15 +62,21 @@ view.update_brush =
       | U.run_effects{?><place U U.xyz}
       | U.animate{idle}
   [tile Type]
-    | when $keys.b><1
+    | IsBridge = $keys.b><1
+    | when IsBridge
       | EmptyTile = $main.tiles.empty
       | Z = 0
       | while Z<$anchor.2:
         | when $world.at{X Y Z}.type >< void:
           | $world.set{X Y Z EmptyTile}
         | !Z+1
-      | $cursor.2 <= Z 
+      | $cursor.2 <= Z
       | $cursor.2 <= $world.fix_z_void{$cursor}
+    | less IsBridge
+      | while $world.at{X Y $cursor.2-1}.liquid:
+        | H = $world.at{X Y $cursor.2-1}.height
+        | !$cursor.2-H
+        | $world.clear_tile{$cursor $main.tiles.empty}
     | while 1
       | Z <= $cursor.2
       | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
@@ -83,7 +89,7 @@ view.update_brush =
         | when Tile.id><0: leave
         | when $keys.e><1: leave
       | $cursor.2 <= $fix_z{$cursor}
-      | when $keys.b><1: leave
+      | when IsBridge: leave
 | when $mice_click><right:
   | Brush = $brush
   | T = $world.at{X Y Z-1}
