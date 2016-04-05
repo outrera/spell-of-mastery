@@ -64,6 +64,7 @@ view.update_brush =
   [tile Type]
     | Tile = $main.tiles.Type
     | IsBridge = $keys.b><1
+    | IsEmpty = $keys.e><1 or Tile.empty
     | when IsBridge
       | EmptyTile = $main.tiles.empty
       | Z = 0
@@ -95,7 +96,7 @@ view.update_brush =
       | $world.set{X Y Z Tile}
       | when Tile.empty:
         | when Tile.id><0: leave
-        | when $keys.e><1: leave
+        | when IsEmpty: leave
       | $cursor.2 <= $fix_z{$cursor}
       | when IsBridge: leave
 | when $mice_click><right:
