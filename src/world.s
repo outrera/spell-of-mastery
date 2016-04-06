@@ -486,6 +486,24 @@ world.height X Y = $tilemap.height{X Y}
 
 world.outdoor XYZ = $height{XYZ.0 XYZ.1} << XYZ.2
 
+world.up XYZ = //finds Z of the floor above
+| X,Y,Z = XYZ
+| H = $height{X Y}
+| when Z>>H: leave 0
+| while Z<H and $at{X Y Z}.empty: !Z+1
+| till Z>>H or $at{X Y Z}.empty: !Z+1
+| leave Z
+
+world.down XYZ = //finds Z of the floor below
+| X,Y,Z = XYZ
+| B = 1
+| till $at{X Y B}.empty: !B+1
+| when Z<<B: leave 0
+| while Z>B and $at{X Y Z}.empty: !Z-1
+| till Z<<B or $at{X Y Z}.empty: !Z-1
+| while Z>B and $at{X Y Z-1}.empty: !Z-1
+| leave Z
+
 world.valid X Y Z =
 | X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < $d
 

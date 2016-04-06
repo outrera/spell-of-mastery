@@ -524,8 +524,12 @@ view.draw_indicators =
 | for [Expires Chars] $world.notes: when Clock < Expires:
   | Font.draw{$fb 150 IY+C "* [Chars.text]"}
   | !C+16
+| Add = ""
+| when $world.up{$cursor}: Add <= "[Add]+"
+| when $world.down{$cursor}: Add <= "[Add]-"
+| TileName = "[$world.at{X Y Z-1}.type]"
 | Font = font small
-| Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[$world.at{X Y Z-1}.type]"}
+| Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[TileName][Add]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1
