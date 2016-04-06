@@ -201,16 +201,25 @@ view.update =
 //| $cursor.0 <= $cursor.0.clip{1 $world.w}
 //| $cursor.1 <= $cursor.1.clip{1 $world.h}
 | case $keys.`[` 1:
-  | $zfix <= 0
-  | when $cursor.2>1: !$cursor.2 - 1
+  | NewZ = $world.down{$cursor}
+  | when NewZ: $cursor.2 <= NewZ
   | $keys.`[` <= 0
 | case $keys.`]` 1:
-  | $zfix <= 0
-  | when $cursor.2<62: !$cursor.2 + 1
+  | NewZ = $world.up{$cursor}
+  | when NewZ: $cursor.2 <= NewZ
   | $keys.`]` <= 0
-| case $keys.p 1:
-  | $zfix <= 1
-  | $keys.p <= 0
+| when $mode <> brush
+  | case $keys.`;` 1:
+    | $zfix <= 0
+    | when $cursor.2>1: !$cursor.2 - 1
+    | $keys.`;` <= 0
+  | case $keys.`'` 1: //'
+    | $zfix <= 0
+    | when $cursor.2<$world.d-2: !$cursor.2 + 1
+    | $keys.`'` <= 0 //'
+  | case $keys.p 1:
+    | $zfix <= 1
+    | $keys.p <= 0
 | X,Y,Z = $cursor
 | $world.update_picked
 | Brush = if $mode >< brush then $brush else 0
