@@ -28,6 +28,9 @@ view.mice_rect =
 
 view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
 
+LMB_Count = 0
+BridgeAnchorHack = -1
+
 view.update_brush =
 | $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
@@ -67,6 +70,10 @@ view.update_brush =
     | IsEmpty = $keys.e><1 or Tile.empty
     | when IsBridge
       | EmptyTile = $main.tiles.empty
+      | when LMB_Count<>BridgeAnchorHack:
+        | AZ = max 1 $anchor.2-Tile.height
+        | $anchor.2 <= AZ
+        | BridgeAnchorHack <= LMB_Count
       | Z = 0
       | while Z<$anchor.2:
         | when $world.at{X Y Z}.type >< void:
@@ -233,6 +240,7 @@ view.input In =
         | $cursor.init{[CX CY $cursor.2]}
         | $cursor.2 <= $fix_z{$cursor}
   [mice left State XY]
+    | !LMB_Count+1
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
     | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
