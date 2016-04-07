@@ -1,5 +1,5 @@
 icon: spell_blizzard
-hotkey: l
+hotkey: i
 lore: misc.tier2_lcost
 cost: 500
 cool: 1920

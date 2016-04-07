@@ -1,8 +1,8 @@
 icon: spell_lightning
-hotkey: i
+hotkey: l
 lore:  misc.tier1_lcost
 cost: 400
-cool: 480
+cool: 1920
 needs: (cast_fireball)
 range: 9000
 affects: (outdoor),unit
