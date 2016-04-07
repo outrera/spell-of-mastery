@@ -202,11 +202,15 @@ view.update =
 //| $cursor.1 <= $cursor.1.clip{1 $world.h}
 | case $keys.`[` 1:
   | NewZ = $world.down{$cursor}
-  | when NewZ: $cursor.2 <= NewZ
+  | when NewZ:
+    | $cursor.2 <= NewZ
+    | $zlock <= NewZ
   | $keys.`[` <= 0
 | case $keys.`]` 1:
   | NewZ = $world.up{$cursor}
-  | when NewZ: $cursor.2 <= NewZ
+  | when NewZ:
+    | $cursor.2 <= NewZ
+    | $zlock <= NewZ
   | $keys.`]` <= 0
 | when $mode <> brush
   | case $keys.`;` 1:
@@ -248,6 +252,14 @@ view.input In =
       | less $mice_click and $mode >< play:
         | $cursor.init{[CX CY $cursor.2]}
         | $cursor.2 <= $fix_z{$cursor}
+        | NewZ = $cursor.2 //$world.down{$cursor}
+        | while NewZ and NewZ>>$zlock:
+          | $cursor.2 <= NewZ
+          | NewZ <= $world.down{$cursor}
+        | NewZ = $cursor.2
+        | while NewZ and NewZ<<$zlock:
+          | $cursor.2 <= NewZ
+          | NewZ <= $world.up{$cursor}
   [mice left State XY]
     | !LMB_Count+1
     | $zfix <= 1

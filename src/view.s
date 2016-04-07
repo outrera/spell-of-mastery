@@ -28,6 +28,7 @@ type view.widget{M UI W H}
   view_size/32  // render 32x32 world chunk
   center/[0 0 0]
   zfix/1
+  zlock/0
   zbuffer/0
   xunit
   yunit
@@ -52,6 +53,7 @@ view.picked = $player.picked
 view.`!picked` Us = $player.picked <= Us
 
 view.clear =
+| $zlock <= 0
 | $zfix <= 1
 | $center_at{[0 0 0]}
 | $blit_origin.init{[$w/2 -170]}
@@ -69,6 +71,7 @@ view.center_at XYZ cursor/0 =
 | X = X.clip{1 $world.w}
 | Y = Y.clip{1 $world.h}
 | Z = Z.clip{1 64}
+| $zlock <= Z
 | $center.init{X,Y,Z}
 | when Cursor: $cursor.init{X,Y,Z}
 | VO = -[$h/32 $h/32]+[X Y]-[Z/8 Z/8]+[6 6]
