@@ -1,5 +1,5 @@
 icon: item_food
-hotkey: e
+hotkey: x
 speed: 4
 affects: any
 before: animate{idle},when{harmed},sound{munch},harm{-60},effect{pickup},add_item{food,-1}

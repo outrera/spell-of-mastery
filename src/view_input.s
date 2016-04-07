@@ -40,8 +40,9 @@ view.update_brush =
 | when $mice_click><left: case $brush
   [obj Bank,Type]
     | less Z << $anchor.2: leave
-    | Mirror = $keys.m >< 1
-    | ClassName = if $keys.r >< 1
+    | Mirror = $key{edit_place_mirrored}
+    | PlaceRandom = $key{edit_place_random}
+    | ClassName = if PlaceRandom
                   then "[Bank]_[$main.classes_banks.Bank.rand]"
                   else "[Bank]_[Type]"
     | Class = $main.classes.ClassName
@@ -52,22 +53,22 @@ view.update_brush =
       | Us = $world.units_at{XYZ}.skip{?bank><mark}
       | Place <= if not $world.valid{@XYZ} then 0
                  else if not Class.empty then Us.all{?empty}
-                 else if $keys.r >< 1 then Us.end
+                 else if PlaceRandom then Us.end
                  else not Us.any{?class^address >< Class^address}
     | when Place
       | U = $player.alloc_unit{ClassName}
       | Facing = if Mirror then 5 else 3
-      | Reverse = $keys.n >< 1
+      | Reverse = $key{edit_place_reversed}
       | when Reverse: Facing <= if Mirror then 1 else 6
       | U.pick_facing{Facing}
-      | when $keys.t >< 1: U.facing <= 3.rand
+      | when $key{edit_random_facing}: U.facing <= 3.rand
       | U.move{X,Y,Z}
       | U.run_effects{?><place U U.xyz}
       | U.animate{idle}
   [tile Type]
     | Tile = $main.tiles.Type
-    | IsBridge = $keys.b><1
-    | IsEmpty = $keys.e><1 or Tile.empty
+    | IsBridge = $key{edit_bridge}
+    | IsEmpty = $key{edit_over_empty} or Tile.empty
     | when IsBridge
       | EmptyTile = $main.tiles.empty
       | when LMB_Count<>BridgeAnchorHack:
@@ -158,7 +159,9 @@ world.update_picked =
   | push Mark Marks
 | $marks <= Marks.enheap
 
-world.update_cursor CXYZ Brush Mirror Reverse =
+world.update_cursor =
+| View = $view
+| CXYZ = View.cursor
 | Marks = $marks.unheap
 | P = $human
 | if $act
@@ -167,8 +170,10 @@ world.update_cursor CXYZ Brush Mirror Reverse =
   else when $view.mode<>play:
        | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
        | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks
-| case Brush
+| when View.mode >< brush: case View.brush
   [obj Bank,Type]
+    | Mirror = View.key{edit_place_mirrored}
+    | Reverse = View.key{edit_place_reversed}
     | ClassName = "[Bank]_[Type]"
     | Class = $main.classes.ClassName
     | XYZ = CXYZ //+ if Mirror then [-Y X Z] else [X -Y Z]
@@ -194,42 +199,39 @@ world.update_cursor CXYZ Brush Mirror Reverse =
 
 view.update =
 | when $paused: leave
-| case $keys.up 1: $center_at{$center-[1 1 0]}
-| case $keys.down 1: $center_at{$center+[1 1 0]}
-| case $keys.left 1: $center_at{$center-[1 -1 0]}
-| case $keys.right 1: $center_at{$center+[1 -1 0]}
+| case $key{up} 1: $center_at{$center-[1 1 0]}
+| case $key{down} 1: $center_at{$center+[1 1 0]}
+| case $key{left} 1: $center_at{$center-[1 -1 0]}
+| case $key{right} 1: $center_at{$center+[1 -1 0]}
 //| $cursor.0 <= $cursor.0.clip{1 $world.w}
 //| $cursor.1 <= $cursor.1.clip{1 $world.h}
-| case $keys.`[` 1:
+| case $key{floor_down} 1:
   | NewZ = $world.down{$cursor}
   | when NewZ:
     | $cursor.2 <= NewZ
     | $zlock <= NewZ
-  | $keys.`[` <= 0
-| case $keys.`]` 1:
+  | $key_set{floor_down 0}
+| case $key{floor_up} 1:
   | NewZ = $world.up{$cursor}
   | when NewZ:
     | $cursor.2 <= NewZ
     | $zlock <= NewZ
-  | $keys.`]` <= 0
+  | $key_set{floor_up 0}
 | when $mode <> brush
-  | case $keys.`;` 1:
+  | case $key{edit_down} 1:
     | $zfix <= 0
     | when $cursor.2>1: !$cursor.2 - 1
-    | $keys.`;` <= 0
-  | case $keys.`'` 1: //'
+    | $key_set{edit_down 0}
+  | case $key{edit_up} 1:
     | $zfix <= 0
     | when $cursor.2<$world.d-2: !$cursor.2 + 1
-    | $keys.`'` <= 0 //'
-  | case $keys.p 1:
+    | $key_set{edit_up 0}
+  | case $key{edit_zfix} 1:
     | $zfix <= 1
-    | $keys.p <= 0
+    | $key_set{edit_zfix 0}
 | X,Y,Z = $cursor
 | $world.update_picked
-| Brush = if $mode >< brush then $brush else 0
-| Mirror = $keys.m >< 1
-| PlaceReversed = $keys.n >< 1
-| $world.update_cursor{$cursor Brush Mirror PlaceReversed}
+| $world.update_cursor
 | case $mode
     play | $update_play
     brush | $update_brush
@@ -239,7 +241,7 @@ view.update =
 
 view.fix_z XYZ =
 | less $zfix: leave XYZ.2
-| if $keys.e><1 then $world.fix_z_void{XYZ} else $world.fix_z{XYZ}
+| if $key{edit_over_empty} then $world.fix_z_void{XYZ} else $world.fix_z{XYZ}
 
 view.input In =
 //| when $paused: leave

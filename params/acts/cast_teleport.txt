@@ -1,5 +1,5 @@
 icon: spell_teleport
-hotkey: e
+hotkey: p
 lore: misc.tier1_lcost
 cost: 200
 cool: 4000

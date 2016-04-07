@@ -1,5 +1,5 @@
 icon: act_switch
-hotkey: d
+hotkey: f
 speed: 4
 affects: any
 before: sound{door_switch},morph{unit_door_open}

@@ -33,6 +33,8 @@ type view.widget{M UI W H}
   xunit
   yunit
   zunit
+  keymap
+| $keymap <= $main.params.keymap
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
 | $param <= $main.params.ui
@@ -43,6 +45,14 @@ type view.widget{M UI W H}
 | $yunit <= WParam.tile_h
 | $zunit <= WParam.tile_d
 | $fpsT <= clock
+
+view.key Name =
+| K = $keymap.Name
+| $keys.K >< 1
+
+view.key_set Name Value =
+| K = $keymap.Name
+| $keys.K <= Value
 
 view.mode = $world.mode
 view.`!mode` V = $world.mode <= V

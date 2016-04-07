@@ -1,5 +1,5 @@
 icon: spell_lightning
-hotkey: l
+hotkey: i
 lore:  misc.tier1_lcost
 cost: 400
 cool: 480

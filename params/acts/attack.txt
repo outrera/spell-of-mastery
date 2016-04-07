@@ -1,5 +1,5 @@
 icon: attack
-hotkey: a
+hotkey: t
 affects: unit
 before: (user_attack)
 impact: counter{1},user_impact
