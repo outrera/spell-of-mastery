@@ -71,8 +71,8 @@ view.center_at XYZ cursor/0 =
 | X = X.clip{1 $world.w}
 | Y = Y.clip{1 $world.h}
 | Z = Z.clip{1 64}
-| $zlock <= Z
 | $center.init{X,Y,Z}
+| when Cursor: $zlock <= Z
 | when Cursor: $cursor.init{X,Y,Z}
 | VO = -[$h/32 $h/32]+[X Y]-[Z/8 Z/8]+[6 6]
 | when Z > 31: !VO+[2 2] //hack to improve high altitude centering

@@ -252,7 +252,7 @@ view.input In =
       | less $mice_click and $mode >< play:
         | $cursor.init{[CX CY $cursor.2]}
         | $cursor.2 <= $fix_z{$cursor}
-        | NewZ = $cursor.2 //$world.down{$cursor}
+        | NewZ = $cursor.2
         | while NewZ and NewZ>>$zlock:
           | $cursor.2 <= NewZ
           | NewZ <= $world.down{$cursor}
@@ -260,6 +260,12 @@ view.input In =
         | while NewZ and NewZ<<$zlock:
           | $cursor.2 <= NewZ
           | NewZ <= $world.up{$cursor}
+        | Ds = [[1 0] [0 1] [-1 0] [0 -1]]
+        | X,Y,NewZ = $cursor
+        | while NewZ>$zlock+4:
+          | less Ds.all{[XD YD] => $world.at{X+XD Y+YD NewZ}.empty}:
+            | $cursor.2 <= NewZ
+          | !NewZ-1
   [mice left State XY]
     | !LMB_Count+1
     | $zfix <= 1
