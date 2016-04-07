@@ -79,8 +79,8 @@ view.update_brush =
         | when $world.at{X Y Z}.type >< void:
           | $world.set{X Y Z EmptyTile}
         | !Z+1
+      | till $world.at{X Y Z}.empty: !Z+1
       | $cursor.2 <= Z
-      | $cursor.2 <= $world.fix_z_void{$cursor}
     | less IsBridge
       | if Tile.liquid then
           | when $cursor.2>1: when $cursor.2<<$anchor.2+4:
