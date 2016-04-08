@@ -32,4 +32,4 @@ world.generate W H =
 | for P points{0 0 $w $h}: $push_{P $filler}
 | Rooms.0.draw{Me 1 1 1}
 | Rooms.0.draw{Me 1 1 5}
-| for P points{0 0 $w $h}: $updPilarGfxes{P}
+| for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}

@@ -28,6 +28,7 @@ type world{main}
    tilemap
    unit_map
    lightmap
+   heighmap
    units
    free_units
    proxies
@@ -78,6 +79,7 @@ world.init =
 | $tilemap <= zmap MaxSize $d $void
 | $unit_map <= zmap MaxSize $d 0
 | $lightmap <= zmap MaxSize $d 0
+| $heighmap <= dup MaxSize: @bytes MaxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -99,22 +101,37 @@ world.create W H =
 | $clear
 | Filler = $main.tiles.base_
 | for Y $h: when Y: for X $w: when X: $push_{X Y Filler}
-| for Y $h: when Y: for X $w: when X: $updPilarGfxes{X,Y}
+| for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
 | !$w-1
 | !$h-1
 | $create_borders
 
+calc_height Cs =
+| Z = Cs.size
+| while Z
+  | !Z-1
+  | when Cs.Z.id: leave Z+1
+| 0
+
+create_border_column Me X Y =
+| Border = $main.tiles.border_
+| Hs = $heighmap.X
+| times I $d-1:
+  | $push_{X Y Border}
+  | !Hs.Y+1
+| $heighmap.X.Y <= calc_height $tilemap.data.X.Y
+
 // add movement blocking walls
 world.create_borders = // draws maps borders in clockwise order
-| Border = $main.tiles.border_
-| for P points{0    0    $w+1 1   }: times I $d-1: $push_{P.0 P.1 Border}
-| for P points{$w+1 0    1    $h+1}: times I $d-1: $push_{P.0 P.1 Border}
-| for P points{1    $h+1 $w+1 1   }: times I $d-1: $push_{P.0 P.1 Border}
-| for P points{0    1    1    $h+1}: times I $d-1: $push_{P.0 P.1 Border}
+| for X,Y points{0    0    $w+1 1   }: create_border_column Me X Y
+| for X,Y points{$w+1 0    1    $h+1}: create_border_column Me X Y
+| for X,Y points{1    $h+1 $w+1 1   }: create_border_column Me X Y
+| for X,Y points{0    1    1    $h+1}: create_border_column Me X Y
 
 world.clear =
 | $minimap.clear{#000000}
 | $lightmap.clear{0}
+| for H $heighmap: H.clear{0}
 | $act <= 0
 | for U $units: less U.removed: U.free
 | $tilemap.clear{$void}
@@ -188,7 +205,7 @@ world.clear_tile_ XYZ Filler =
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
-| $updElev{X,Y}
+| $upd_column{X Y}
 
 world.clear_tile XYZ Filler =
 | $clear_tile_{XYZ Filler}
@@ -230,7 +247,7 @@ world.dirty_set X Y Z Tile =
 
 world.set X Y Z Tile =
 | $dirty_set{X Y Z Tile}
-| $updElev{X,Y}
+| $upd_column{X Y}
 
 world.fix_z XYZ =
 | X,Y,Z = XYZ
@@ -451,9 +468,9 @@ world.update_minimap X Y =
 | for YY PH: for XX PW:
   | $minimap.set{SX+XX SY+YY Color}
 
-world.updPilarGfxes P =
-| X,Y = P
+world.updPilarGfxes X Y =
 | when X < 0 or Y < 0: leave 0
+| $heighmap.X.Y <= calc_height $tilemap.data.X.Y
 | Seed = $seed.Y.X
 | Gs = []
 | Z = 0
@@ -480,17 +497,12 @@ world.updPilarGfxes P =
 | for U $column_units_at{X Y}: U.environment_updated
 | $update_minimap{X Y}
 
-world.updElev P =
-| for D Dirs: $updPilarGfxes{P+D}
-| $updPilarGfxes{P}
+world.upd_column X Y =
+| $heighmap.X.Y <= calc_height $tilemap.data.X.Y
+| for DX,DY Dirs: $updPilarGfxes{X+DX Y+DY}
+| $updPilarGfxes{X Y}
 
-world.height X Y =
-| Cs = $tilemap.data.X.Y
-| Z = $d
-| while Z
-  | !Z-1
-  | when Cs.Z.id: leave Z+1
-| 0
+world.height X Y = $heighmap.X.Y
 
 world.outdoor XYZ = $height{XYZ.0 XYZ.1} << XYZ.2
 
@@ -525,8 +537,9 @@ world.push_ X Y Tile =
 
 // push Tile on top of pilar at X,Y
 world.push XY Tile =
-| $push_{XY.0 XY.1 Tile}
-| $updElev{XY}
+| X,Y = XY
+| $push_{X Y Tile}
+| $upd_column{X Y}
 
 world.pop_ X,Y =
 | H = $height{X Y}
@@ -538,6 +551,6 @@ world.pop_ X,Y =
 // pop top tile of pilar at X,Y
 world.pop XY =
 | $pop_{XY}
-| $updElev{XY}
+| $upd_column{XY.0 XY.1}
 
 export world
