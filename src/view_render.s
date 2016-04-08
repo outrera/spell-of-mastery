@@ -190,16 +190,17 @@ render_cursor Me Wr BX BY CursorXYZ =
   | UnitZ <= Z + TH
   | TH = T.height
   | ZZ = Z*$zunit
-  | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 TH*8
-                       special_blit{box_back}
-  | B.sx <= BX
-  | B.sy <= BY-G.h-ZZ
-  | push B BlitItems
-  | B = make_blit_item X*32 Y*32 Z*8+2 64 64 TH*8
-                       special_blit{box_front}
-  | B.sx <= BX
-  | B.sy <= BY-G.h-ZZ
-  | push B BlitItems
+  | when G
+    | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 TH*8
+                         special_blit{box_back}
+    | B.sx <= BX
+    | B.sy <= BY-G.h-ZZ
+    | push B BlitItems
+    | B = make_blit_item X*32 Y*32 Z*8+2 64 64 TH*8
+                         special_blit{box_front}
+    | B.sx <= BX
+    | B.sy <= BY-G.h-ZZ
+    | push B BlitItems
   | Z <= UnitZ
   | when Z>>CurZ: _goto for_break
 | _label for_break
@@ -228,6 +229,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LX = LX.clip{-127 127}
 | LY = LY.clip{-127 127}
 | SkipZ = -1//if $mode<>play then -1 else 0
+| LM = Wr.lightmap
 | for G Gs
   | T = Wr.at{X Y Z}
   | TH = T.height
@@ -250,7 +252,8 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       | B.sy <= BY-G.h-ZZ
       | B.lx <= LX
       | B.ly <= LY
-      | B.brighten <= Br
+      //| B.brighten <= Br
+      | B.brighten <= LM.at{X Y Z}
       | when Fog: B.flags <= #40 //dither
       | push B BlitItems
   | Z <= UnitZ

@@ -27,6 +27,7 @@ type world{main}
    description/`describe the map here`
    tilemap
    unit_map
+   lightmap
    units
    free_units
    proxies
@@ -76,6 +77,7 @@ world.init =
 | $void <= $main.tiles.void
 | $tilemap <= zmap MaxSize $d $void
 | $unit_map <= zmap MaxSize $d 0
+| $lightmap <= zmap MaxSize $d 0
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -112,6 +114,7 @@ world.create_borders = // draws maps borders in clockwise order
 
 world.clear =
 | $minimap.clear{#000000}
+| $lightmap.clear{0}
 | $act <= 0
 | for U $units: less U.removed: U.free
 | $tilemap.clear{$void}
@@ -423,10 +426,11 @@ world.getSidesSame X Y Z Role = `[]`
 world.color_at X Y =
 | Z = $height{X Y}-1
 | Gs = $gfxes.Y.X
-| when Z > 0 and $at{X Y Z}.empty:
+| when Z > 0 and not Gs.last:
   | Gs <= Gs.lead
   | !Z-1
 | G = Gs.last
+| less G: leave 0
 | G.get{G.w/2 (min G.h/2 16)} ^^ #FFFFFF
 
 world.update_minimap X Y =

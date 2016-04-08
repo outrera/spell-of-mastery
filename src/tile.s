@@ -3,7 +3,7 @@ use gfx util
 type tile{As Main Type Role Id Lineup Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
-          parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0}
+          parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0 opaque/1}
      id/Id
      main/Main
      bank/Bank
@@ -30,6 +30,8 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      tiler/0
      indoor/Indoor
      liquid/Liquid
+     opaque/Opaque
+| when $invisible: $opaque <= 0
 | when $box.2><h: $box.2 <= $height*8
 | less $parts:
   | if $height>1
@@ -107,9 +109,20 @@ ColumnHeight = 0
 tile.render X Y Z Below Above Seed =
 | when $invisible
   | BelowSlope <= #@1111
-  | leave DummyGfx
+  | leave 0
 | World = $main.world
 | less Z: ColumnHeight <= World.height{X Y}
+| Limpid = 0
+| when Above.opaque:
+  | Z = Z-$height+1
+  | A = World.at{X+1 Y Z}
+  | B = World.at{X Y+1 Z}
+  | C = World.at{X+1 Y+1 Z}
+  | when  A.opaque and B.opaque and C.opaque
+         and A.height>>$height
+         and B.height>>$height
+         and C.height>>$height:
+    | Limpid <= 1
 | BE = Below.empty
 | BR = Below.role
 | AH = Above.heavy
@@ -135,6 +148,7 @@ tile.render X Y Z Below Above Seed =
            | less got R: R <= Gs.#@1111
            | R
 | BelowSlope <= NeibSlope
+| when Limpid: leave 0
 | less $anim_wait: G <= G.(Seed%G.size)
 | leave G
 

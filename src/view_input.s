@@ -209,13 +209,13 @@ view.update =
   | NewZ = $world.down{$cursor}
   | when NewZ:
     | $cursor.2 <= NewZ
-    | $zlock <= NewZ
+  | $zlock <= $cursor.2
   | $key_set{floor_down 0}
 | case $key{floor_up} 1:
   | NewZ = $world.up{$cursor}
   | when NewZ:
     | $cursor.2 <= NewZ
-    | $zlock <= NewZ
+  | $zlock <= $cursor.2
   | $key_set{floor_up 0}
 | when $mode <> brush
   | case $key{edit_down} 1:
