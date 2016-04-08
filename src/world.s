@@ -457,10 +457,11 @@ world.updPilarGfxes P =
 | Seed = $seed.Y.X
 | Gs = []
 | Z = 0
+| H = $height{X Y}
 | Column = $tilemap.data.X.Y
 | Below = $tid_map.0
 | C = Column.0
-| while C.id
+| while Z < H:
   | NextZ = Z + C.height
   | Above = Column.NextZ
   | when Above.parts.is_int: Above <= Column.(NextZ-Above.parts)
@@ -483,7 +484,13 @@ world.updElev P =
 | for D Dirs: $updPilarGfxes{P+D}
 | $updPilarGfxes{P}
 
-world.height X Y = $tilemap.height{X Y}
+world.height X Y =
+| Cs = $tilemap.data.X.Y
+| Z = $d
+| while Z
+  | !Z-1
+  | when Cs.Z.id: leave Z+1
+| 0
 
 world.outdoor XYZ = $height{XYZ.0 XYZ.1} << XYZ.2
 

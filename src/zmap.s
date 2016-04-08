@@ -14,12 +14,4 @@ zmap.setPilar X Y Zs =
 | Vs.clear{$init}
 | times I Zs.size: Vs.I <= Zs.I
 
-zmap.height X Y =
-| Vs = $data.X.Y
-| Z = $depth
-| while Z
-  | !Z-1
-  | when Vs.Z.id: leave Z+1
-| leave 0
-
 export zmap
