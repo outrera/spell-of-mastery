@@ -113,15 +113,15 @@ tile.render X Y Z Below Above Seed =
 | World = $main.world
 | less Z: ColumnHeight <= World.height{X Y}
 | Limpid = 0
+| TH = $height
 | when Above.opaque:
   | Z = Z-$height+1
   | A = World.at{X+1 Y Z}
   | B = World.at{X Y+1 Z}
   | C = World.at{X+1 Y+1 Z}
-  | when  A.opaque and B.opaque and C.opaque
-         and A.height>>$height
-         and B.height>>$height
-         and C.height>>$height:
+  | D = World.at{X+1 Y-1 Z}
+  | when A.opaque and B.opaque and C.opaque and D.opaque
+         and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH:
     | Limpid <= 1
 | BE = Below.empty
 | BR = Below.role
@@ -129,11 +129,11 @@ tile.render X Y Z Below Above Seed =
 | AR = Above.role
 | NeibSlope = #@0000
 | T = Me
-| when $indoor and Z < ColumnHeight-$height /*and AH*/: //FIXME: non-ceil tiles?
+| when $indoor and Z < ColumnHeight-TH /*and AH*/: //FIXME: non-ceil tiles?
   | T <= $main.tiles.($indoor)
 | when T.water:
   | Neib,Water = T.water
-  | when got World.neibs{X Y Z-$height+1}.find{?type><Neib}:
+  | when got World.neibs{X Y Z-TH+1}.find{?type><Neib}:
     | T <= $main.tiles.Water
 | Gs = if BE then T.top
        else if BR <> $role or BelowSlope><#@1111 then T.base
