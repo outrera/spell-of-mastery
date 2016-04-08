@@ -7,7 +7,7 @@ zmap.set X Y Z V = $data.X.Y.Z <= V
 
 zmap.at X Y Z = $data.X.Y.Z
 
-zmap.getPilar X Y = $data.X.Y.take{$height{X Y}}
+zmap.pilar_at X Y = $data.X.Y
 
 zmap.setPilar X Y Zs =
 | Vs = $data.X.Y

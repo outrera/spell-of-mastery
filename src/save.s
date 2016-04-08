@@ -55,7 +55,9 @@ world.save =
     player | $human.id
     units | Units
     tilemap | map X $w: map Y $h:
-              | Ts = $tilemap.getPilar{X+1 Y+1}.drop{1}
+              | XX = X+1
+              | YY = Y+1
+              | Ts = $tilemap.pilar_at{XX YY}.take{$height{XX YY}}.drop{1}
               | map T Ts: if T.parts.is_int then T.parts else T.id
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
