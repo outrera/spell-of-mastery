@@ -217,7 +217,7 @@ view.update =
     | $cursor.2 <= NewZ
   | $zlock <= $cursor.2
   | $key_set{floor_up 0}
-| when $mode <> brush
+| when $mode >< brush
   | case $key{edit_down} 1:
     | $zfix <= 0
     | when $cursor.2>1: !$cursor.2 - 1

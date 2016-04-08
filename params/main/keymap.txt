@@ -16,8 +16,8 @@ edit_bridge: b //hold this key while drawing to create a bridge
 edit_zfix: p
 
 // following keys control placement height of objecy/tile
-edit_up: `;`
-edit_down: `'`
+edit_up: `'`
+edit_down: `;`
 // following keys control how objects should be placed
 edit_place_mirrored: m
 edit_place_reversed: n
