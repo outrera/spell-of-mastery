@@ -504,9 +504,14 @@ view.render_iso =
 
 
 Indicators = 0
+IndicUp = 0
+IndicDown = 0
 
 view.draw_indicators =
-| less Indicators: Indicators <= $main.img{ui_indicators}
+| less Indicators:
+  | Indicators <= $main.img{ui_indicators}
+  | IndicUp <= $main.img{ui_arr_up}
+  | IndicDown <= $main.img{ui_arr_down}
 | IX = ($w-Indicators.w)/2
 | IY = 0
 | P = $player
@@ -524,12 +529,11 @@ view.draw_indicators =
 | for [Expires Chars] $world.notes: when Clock < Expires:
   | Font.draw{$fb 150 IY+C "* [Chars.text]"}
   | !C+16
-| Add = ""
-| when $world.up{$cursor}: Add <= "[Add]+"
-| when $world.down{$cursor}: Add <= "[Add]-"
+| when $world.up{$cursor}: $fb.blit{128 0 IndicUp}
+| when $world.down{$cursor}: $fb.blit{128 IndicUp.h IndicDown}
 | TileName = "[$world.at{X Y Z-1}.type]"
 | Font = font small
-| Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[TileName][Add]"}
+| Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[TileName]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1
