@@ -27,7 +27,6 @@ type world{main}
    description/`describe the map here`
    tilemap
    unit_map
-   move_map
    units
    free_units
    proxies
@@ -77,7 +76,6 @@ world.init =
 | $void <= $main.tiles.void
 | $tilemap <= zmap MaxSize $d $void
 | $unit_map <= zmap MaxSize $d 0
-| $move_map <= zmap MaxSize $d 0
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
@@ -117,7 +115,6 @@ world.clear =
 | $act <= 0
 | for U $units: less U.removed: U.free
 | $tilemap.clear{$void}
-| $move_map.clear{0}
 | for P $players: P.clear
 | $human <= $players.1
 | $human.human <= 1
