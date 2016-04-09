@@ -3,7 +3,7 @@ use gfx util
 type tile{As Main Type Role Id Lineup Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
-          parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0 opaque/1}
+          parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0 opaque/No}
      id/Id
      main/Main
      bank/Bank
@@ -31,7 +31,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      indoor/Indoor
      liquid/Liquid
      opaque/Opaque
-| when $invisible: $opaque <= 0
+| when no $opaque: $opaque <= not $invisible
 | when $box.2><h: $box.2 <= $height*8
 | less $parts:
   | if $height>1
@@ -123,7 +123,7 @@ tile.render X Y Z Below Above Seed =
   | B = World.at{X Y+1 Z}
   | C = World.at{X+1 Y+1 Z}
   | D = World.at{X+1 Y-1 Z}
-  | when A.opaque and B.opaque and C.opaque and D.opaque
+  | when A.opaque and B.opaque and C.opaque and (D.opaque or D.type><border_)
          and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH:
     | Limpid <= 1
 | BE = Below.empty
