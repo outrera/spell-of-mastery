@@ -42,6 +42,7 @@ world.save =
                      U.action.save U.ordered.save U.next_action.save
   | list U.type U.id U.serial U.owner.id U.xyz U.fxyz U.facing
          U.flags U.hp Active
+| $params.view_zlock <= $view.zlock
 | list version(0.2) w($w) h($h) serial($serial) cycle($cycle)
     filename | $filename
     name | $name

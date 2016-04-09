@@ -47,7 +47,7 @@ type world{main}
    active // active units
    vars/t{} // variables
    marks/[]
-   params
+   params/(t)
    events
    view //viewport, attached rendering this world
    act
@@ -140,7 +140,7 @@ world.clear =
 | $human.human <= 1
 | $marks.heapfree
 | $marks <= []
-| $params <= t
+| for K,V $params: $params.K <= No
 | for U $active.list: U.active <= 0
 | $active.clear
 | for [K V] $sound_cycles: $sound_cycles.K <= 0
