@@ -9,7 +9,7 @@ starts: still // initial animation
 ai: pentagram
 inborn: (enemy_damages removes_firewall)
 
-acts: summon_blob, summon_oculus,
+acts: summon_blob, summon_oculus, summon_bat,
       summon_farmer, summon_lizard, summon_knight,
         summon_griffin, summon_golem,
       summon_dragon

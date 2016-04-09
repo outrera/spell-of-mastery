@@ -10,12 +10,12 @@ leader_mage:
   | goto mage0
 
 mage0:
-  | attack halfling
+  | attack halfling bat
   | attack halfling halfling
   | goto mage1
 
 mage1:
-  | attack halfling elf halfling
+  | attack bat halfling elf halfling
   | goto mage2 when lossage >> 14
 
 mage2:
@@ -36,12 +36,12 @@ leader_king:
   | goto king0
 
 king0:
-  | attack farmer
+  | attack bat farmer
   | attack farmer farmer
   | goto king1
 
 king1:
-  | attack farmer lizard farmer
+  | attack bat farmer lizard farmer
   | goto king2 when lossage >> 14
 
 king2:
@@ -61,12 +61,12 @@ leader_witch:
   | goto witch0
 
 witch0:
-  | attack ratman
+  | attack bat ratman
   | attack ratman ratman
   | goto witch1
 
 witch1:
-  | attack ratman ratman goblin goblin
+  | attack bat ratman ratman goblin goblin
   | goto witch2 when lossage >> 14
 
 witch2:
@@ -117,12 +117,12 @@ default:
   | goto tier0
 
 tier0:
-  | attack ratman
+  | attack bat ratman
   | attack ratman ratman
   | goto tier1
 
 tier1:
-  | attack ratman ratman goblin
+  | attack bat ratman ratman goblin
   | attack ratman goblin goblin
   | goto tier2 when lossage >> 14
 
