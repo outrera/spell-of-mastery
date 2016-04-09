@@ -70,7 +70,7 @@ view.update_brush =
     | IsBridge = $key{edit_bridge}
     | IsEmpty = $key{edit_over_empty} or Tile.empty
     | when IsBridge
-      | EmptyTile = $main.tiles.empty
+      | EmptyTile = $main.tiles.void
       | when LMB_Count<>BridgeAnchorHack:
         | AZ = max 1 $anchor.2-Tile.height
         | $anchor.2 <= AZ
@@ -89,12 +89,12 @@ view.update_brush =
             | H = $world.at{X Y $cursor.2-1}.height
             | !$cursor.2-H
             | $anchor.2 <= $cursor.2
-            | $world.clear_tile{$cursor $main.tiles.empty}
+            | $world.clear_tile{$cursor $main.tiles.void}
         else
           | while $world.at{X Y $cursor.2-1}.liquid:
             | H = $world.at{X Y $cursor.2-1}.height
             | !$cursor.2-H
-            | $world.clear_tile{$cursor $main.tiles.empty}
+            | $world.clear_tile{$cursor $main.tiles.void}
     | while 1
       | Z <= $cursor.2
       | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave

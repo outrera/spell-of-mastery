@@ -131,10 +131,10 @@ world.create_borders = // draws maps borders in clockwise order
 world.clear =
 | $minimap.clear{#000000}
 | $lightmap.clear{0}
-| for H $heighmap: H.clear{0}
 | $act <= 0
 | for U $units: less U.removed: U.free
 | $tilemap.clear{$void}
+| for H $heighmap: H.clear{0}
 | for P $players: P.clear
 | $human <= $players.1
 | $human.human <= 1
@@ -226,7 +226,7 @@ world.clear_passage X Y Z =
 | when H-Z < 5: leave
 | while Z<H:
   | Type = $at{X Y Z}.type
-  | $set{X Y Z $main.tiles.empty1}
+  | $set{X Y Z $main.tiles.void}
   | when Type<>void:
     | S = $players.0.alloc_unit{unit_dummy}
     | S.move{[X Y Z]}
