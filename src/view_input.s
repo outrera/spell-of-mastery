@@ -99,9 +99,8 @@ view.update_brush =
       | Z <= $cursor.2
       | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
       | when Z+Tile.height>>$world.d: leave
-      | less Tile.empty
-        | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
       | $world.set{X Y Z Tile}
+      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
       | when Tile.empty:
         | when Tile.id><0: leave
         | when IsEmpty: leave
