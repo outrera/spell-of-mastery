@@ -190,17 +190,17 @@ render_cursor Me Wr BX BY CursorXYZ =
   | UnitZ <= Z + TH
   | TH = T.height
   | ZZ = Z*$zunit
-  | when G
-    | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 TH*8
-                         special_blit{box_back}
-    | B.sx <= BX
-    | B.sy <= BY-G.h-ZZ
-    | push B BlitItems
-    | B = make_blit_item X*32 Y*32 Z*8+2 64 64 TH*8
-                         special_blit{box_front}
-    | B.sx <= BX
-    | B.sy <= BY-G.h-ZZ
-    | push B BlitItems
+  | GH = if G then G.h else 32
+  | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 TH*8
+                       special_blit{box_back}
+  | B.sx <= BX
+  | B.sy <= BY-GH-ZZ
+  | push B BlitItems
+  | B = make_blit_item X*32 Y*32 Z*8+2 64 64 TH*8
+                       special_blit{box_front}
+  | B.sx <= BX
+  | B.sy <= BY-GH-ZZ
+  | push B BlitItems
   | Z <= UnitZ
   | when Z>>CurZ: _goto for_break
 | _label for_break
