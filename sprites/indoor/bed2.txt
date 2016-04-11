@@ -1,5 +1,4 @@
 author: `Artem Belov`
-license: GPL2
 origin: `https://sourceforge.net/projects/allacrost/`
 height: 4
 form: | 4 4

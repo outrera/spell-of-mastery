@@ -12,6 +12,8 @@ cell_goal.alive = 1
 cell_goal.empty = 1
 cell_goal.harm Attacker Damage =
 
+GravAcc = 9.807
+
 type unit.$class{Id World}
   id/Id
   world/World
@@ -22,6 +24,7 @@ type unit.$class{Id World}
   xyz/[0 0 -1] // world cell X,Y,Z
   fix_z/0
   from/[0 0 0]
+  velocity/[0 0 0]
   anim // animation id
   anim_step // frame index inside of current animation
   anim_seq // current animation sequence
@@ -167,6 +170,7 @@ unit.init Class =
   | $ordered.type <= 0
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
+  | $velocity.init{0,0,0}
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
   | $path_life <= 0

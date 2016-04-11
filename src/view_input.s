@@ -31,105 +31,113 @@ view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
 LMB_Count = 0
 BridgeAnchorHack = -1
 
-view.update_brush =
+place_object Me Bank Type =
+| X,Y,Z = $cursor
+| less Z << $anchor.2: leave
+| Mirror = $key{edit_place_mirrored}
+| PlaceRandom = $key{edit_place_random}
+| ClassName = if PlaceRandom
+              then "[Bank]_[$main.classes_banks.Bank.rand]"
+              else "[Bank]_[Type]"
+| Class = $main.classes.ClassName
+| when Z+Class.height>>$world.d: leave
+| Place = 1
+| for XX,YY,ZZ Class.form: when Place:
+  | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
+  | Us = $world.units_at{XYZ}.skip{?bank><mark}
+  | Place <= if not $world.valid{@XYZ} then 0
+             else if not Class.empty then Us.all{?empty}
+             else if PlaceRandom then Us.end
+             else not Us.any{?class^address >< Class^address}
+| when Place
+  | U = $player.alloc_unit{ClassName}
+  | Facing = if Mirror then 5 else 3
+  | Reverse = $key{edit_place_reversed}
+  | when Reverse: Facing <= if Mirror then 1 else 6
+  | U.pick_facing{Facing}
+  | when $key{edit_random_facing}: U.facing <= 3.rand
+  | U.move{X,Y,Z}
+  | U.run_effects{?><place U U.xyz}
+  | U.animate{idle}
+
+place_tile Me Type =
 | $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
+| Tile = $main.tiles.Type
+| IsBridge = $key{edit_bridge}
+| IsEmpty = $key{edit_over_empty} or Tile.empty
+| when IsBridge
+  | EmptyTile = $main.tiles.void
+  | when LMB_Count<>BridgeAnchorHack:
+    | AZ = max 1 $anchor.2-Tile.height
+    | $anchor.2 <= AZ
+    | BridgeAnchorHack <= LMB_Count
+  | Z = 0
+  | while Z<$anchor.2:
+    | when $world.at{X Y Z}.type >< void:
+      | $world.set{X Y Z EmptyTile}
+    | !Z+1
+  | till $world.at{X Y Z}.empty: !Z+1
+  | $cursor.2 <= Z
+| less IsBridge
+  | if Tile.liquid then
+      | when $cursor.2>1: when $cursor.2<<$anchor.2+4:
+        less $world.at{X Y $cursor.2-1}.liquid:
+        | H = $world.at{X Y $cursor.2-1}.height
+        | !$cursor.2-H
+        | $anchor.2 <= $cursor.2
+        | $world.clear_tile{$cursor $main.tiles.void}
+    else
+      | while $world.at{X Y $cursor.2-1}.liquid:
+        | H = $world.at{X Y $cursor.2-1}.height
+        | !$cursor.2-H
+        | $world.clear_tile{$cursor $main.tiles.void}
+| while 1
+  | Z <= $cursor.2
+  | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
+  | when Z+Tile.height>>$world.d: leave
+  | $world.set{X Y Z Tile}
+  | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+  | when Tile.empty:
+    | when Tile.id><0: leave
+    | when IsEmpty: leave
+  | $cursor.2 <= $fix_z{$cursor}
+  | when IsBridge: leave
+
+remove_object_or_tile Me =
+| X,Y,Z = $cursor
+| Brush = $brush
+| T = $world.at{X Y Z-1}
+| Us = $units_at{X,Y,Z}
+| when T.unit and not Us.size:
+  | ZZ = Z - T.height
+  | BelowUs = $units_at{X,Y,ZZ}
+  | when BelowUs.size:
+    | $mice_click <= 0
+    | for U BelowUs: U.free
+    | leave
+| case Brush
+  [obj Type]
+    | for U Us: U.free
+  [tile Type]
+    | while 1
+      | Z <= $cursor.2
+      | less Z >> $anchor.2 and Z > 1: leave
+      | less Z > 1: leave
+      | Tile = $world.at{X Y Z-1}
+      | less Tile.height: leave
+      | $world.clear_tile{X,Y,Z-1 $world.void}
+      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
+      | $cursor.2 <= $fix_z{$cursor}
+
+view.update_brush =
 | when $mice_click><leftup:
   | $mice_click <= 0
   | leave
 | when $mice_click><left: case $brush
-  [obj Bank,Type]
-    | less Z << $anchor.2: leave
-    | Mirror = $key{edit_place_mirrored}
-    | PlaceRandom = $key{edit_place_random}
-    | ClassName = if PlaceRandom
-                  then "[Bank]_[$main.classes_banks.Bank.rand]"
-                  else "[Bank]_[Type]"
-    | Class = $main.classes.ClassName
-    | when Z+Class.height>>$world.d: leave
-    | Place = 1
-    | for XX,YY,ZZ Class.form: when Place:
-      | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
-      | Us = $world.units_at{XYZ}.skip{?bank><mark}
-      | Place <= if not $world.valid{@XYZ} then 0
-                 else if not Class.empty then Us.all{?empty}
-                 else if PlaceRandom then Us.end
-                 else not Us.any{?class^address >< Class^address}
-    | when Place
-      | U = $player.alloc_unit{ClassName}
-      | Facing = if Mirror then 5 else 3
-      | Reverse = $key{edit_place_reversed}
-      | when Reverse: Facing <= if Mirror then 1 else 6
-      | U.pick_facing{Facing}
-      | when $key{edit_random_facing}: U.facing <= 3.rand
-      | U.move{X,Y,Z}
-      | U.run_effects{?><place U U.xyz}
-      | U.animate{idle}
-  [tile Type]
-    | Tile = $main.tiles.Type
-    | IsBridge = $key{edit_bridge}
-    | IsEmpty = $key{edit_over_empty} or Tile.empty
-    | when IsBridge
-      | EmptyTile = $main.tiles.void
-      | when LMB_Count<>BridgeAnchorHack:
-        | AZ = max 1 $anchor.2-Tile.height
-        | $anchor.2 <= AZ
-        | BridgeAnchorHack <= LMB_Count
-      | Z = 0
-      | while Z<$anchor.2:
-        | when $world.at{X Y Z}.type >< void:
-          | $world.set{X Y Z EmptyTile}
-        | !Z+1
-      | till $world.at{X Y Z}.empty: !Z+1
-      | $cursor.2 <= Z
-    | less IsBridge
-      | if Tile.liquid then
-          | when $cursor.2>1: when $cursor.2<<$anchor.2+4:
-            less $world.at{X Y $cursor.2-1}.liquid:
-            | H = $world.at{X Y $cursor.2-1}.height
-            | !$cursor.2-H
-            | $anchor.2 <= $cursor.2
-            | $world.clear_tile{$cursor $main.tiles.void}
-        else
-          | while $world.at{X Y $cursor.2-1}.liquid:
-            | H = $world.at{X Y $cursor.2-1}.height
-            | !$cursor.2-H
-            | $world.clear_tile{$cursor $main.tiles.void}
-    | while 1
-      | Z <= $cursor.2
-      | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
-      | when Z+Tile.height>>$world.d: leave
-      | $world.set{X Y Z Tile}
-      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
-      | when Tile.empty:
-        | when Tile.id><0: leave
-        | when IsEmpty: leave
-      | $cursor.2 <= $fix_z{$cursor}
-      | when IsBridge: leave
-| when $mice_click><right:
-  | Brush = $brush
-  | T = $world.at{X Y Z-1}
-  | Us = $units_at{X,Y,Z}
-  | when T.unit and not Us.size:
-    | ZZ = Z - T.height
-    | BelowUs = $units_at{X,Y,ZZ}
-    | when BelowUs.size:
-      | $mice_click <= 0
-      | for U BelowUs: U.free
-      | leave
-  | case Brush
-    [obj Type]
-      | for U Us: U.free
-    [tile Type]
-      | while 1
-        | Z <= $cursor.2
-        | less Z >> $anchor.2 and Z > 1: leave
-        | less Z > 1: leave
-        | Tile = $world.at{X Y Z-1}
-        | less Tile.height: leave
-        | $world.clear_tile{X,Y,Z-1 $world.void}
-        | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
-        | $cursor.2 <= $fix_z{$cursor}
+  [obj Bank,Type] | place_object Me Bank Type
+  [tile Type] | place_tile Me Type
+| when $mice_click><right: remove_object_or_tile Me
 
 view.update_pick = //FIXME
 
