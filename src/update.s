@@ -350,6 +350,7 @@ attack_nearby_enemy Me =
 | $order_at{Found.1}
 | $backtrack <= $xyz
 
+GravAcc = 9.807/2.0
 unit.update =
 | when $removed or $active<>1:
   | $active <= 0
@@ -359,6 +360,16 @@ unit.update =
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
     else $die
+| if $xyz.2 > $fix_z then
+    | !$velocity.2 - GravAcc
+    | FZ = $fix_z
+    | FDst = $fxyz+$velocity{}{?int}
+    | if FDst.2 > FZ*8 then $fine_move{FDst}
+      else $move{[$xyz.0 $xyz.1 FZ]}
+    | leave
+  else
+    | when $velocity.2<0.0
+      | $velocity.2 <= 0.0
 | when $paralyzed and $alive: leave
 | update_anim Me
 | when $idle:
