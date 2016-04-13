@@ -1,5 +1,5 @@
 // game world update routines
-use pathfind
+use pathfind util
 
 main.update =
 | $world.update
@@ -256,9 +256,9 @@ update_path Me =
   | when R><user: R <= $range
   | GXYZ = $goal.xyz
   | Reach = if R><cross
-            then (GXYZ.take{2}-$xyz.take{2}){?abs}.sum><1
+            then (GXYZ-$xyz).take{2}{?abs}.sum><1
                  and (GXYZ.2-$xyz.2).abs<<4
-            else (GXYZ.take{2}-$xyz.take{2}).abs.int<<R
+            else (GXYZ-$xyz).take{2}.abs.int<<R
                  and (| T = $goal_act.targets
                       | if T><seen then $world.seen_from{$xyz $goal.xyz}
                         else if T><any then 1
@@ -337,17 +337,32 @@ update_action Me =
     | $cooldown <= $class.cooldown
 | $action.update
 
+find_in_circle CX CY R F =
+| for PX,PY points_in_circle{R}
+  | X = CX + PX
+  | Y = CY + PY
+  | when X > 0 and Y > 0:
+    | Found = F X Y
+    | when Found: leave Found
+| 0
+
 attack_nearby_enemy Me =
 | O = $owner
 | SightF = $sight
-| check Dst =
-  | B = $world.block_at{Dst.xyz}
-  | got B and O.is_enemy{B.owner} and ($xyz-Dst.xyz).abs.int<SightF
-    and not B.invisible
-    //and $world.seen_from{$xyz Dst.xyz}^log
-| Found = $pathfind{$sight-1 &check}
+| UXY = $xyz.take{2}
+| check X Y =
+  | R = 0
+  | for B $world.column_units_at{X Y}.skip{?empty}
+    | when O.is_enemy{B.owner}
+           and B.health
+           and (UXY-[X Y]).abs.int << SightF
+           and not B.invisible
+           and $world.seen_from{$xyz B.xyz}:
+      | R <= B
+  | R
+| Found = find_in_circle $xyz.0 $xyz.1 $sight &check
 | less Found: leave
-| $order_at{Found.1}
+| $order_at{Found.xyz}
 | $backtrack <= $xyz
 
 GravAcc = 9.807/2.0
