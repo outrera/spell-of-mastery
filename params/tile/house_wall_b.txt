@@ -1,4 +1,6 @@
 sprite: tiles_house
+opaque: 0
+filler: 0
 height: 8
 no_lineup: 1
 match: same,side
