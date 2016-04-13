@@ -537,6 +537,10 @@ view.draw_indicators =
 | TileName = "[$world.at{X Y Z-1}.type]"
 | Font = font small
 | Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[TileName]"}
+| Us = $world.units_at{X,Y,Z}.skip{?empty}
+| less Us.end:
+  | U = Us.0
+  | Font.draw{$fb IX+210 IY+2+16 "[U.type]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1
