@@ -3,7 +3,7 @@ use gfx util param
 ClassIdCounter = 1
 
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
-           unit/0 box_xy/[0 0] aux/0 shadow/0 speed/0 sight/No
+           unit/0 box_xy/[0 0] aux/0 speed/0 sight/No
            active/0 range/0 leader/0
            health/0 damage/0 armor/0 cooldown/24
            acts/[] spells/0 icon/0 title/0 item/0
@@ -20,7 +20,6 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   unit/Unit
   box_xy/Box_xy // bounding box x,y correction
   aux/Aux
-  shadow/Shadow // unit casts shadow in air
   speed/Speed // number of turns it has to wait, before moving again
   sight/Sight
   active/Active // non-zero if unit should be updated
