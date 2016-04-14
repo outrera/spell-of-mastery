@@ -1,5 +1,5 @@
 role: dirt
-lineup: other
+lineup: 0
 clear: 1
 indoor: dirt
 box: (64 64 39)
