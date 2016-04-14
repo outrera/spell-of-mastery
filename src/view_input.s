@@ -77,8 +77,8 @@ world_place_tile Me X Y Z Tile =
   | DTile = $at{XX YY Z} 
   | when DTile.type <> Tile.type and (DTile.clear or DTile.empty):
     | PlaceWall = 1
-    | when [DX DY]><[1 -1] and $at{X+2 Y-1 Z}.wall><1: PlaceWall <= 0
-    | when [DX DY]><[-1 1] and $at{X-1 Y+2 Z}.wall><1: PlaceWall <= 0
+    | when [DX DY]><[1 -1] and $at{X+2 Y-1 Z}.wall.is_text: PlaceWall <= 0
+    | when [DX DY]><[-1 1] and $at{X-1 Y+2 Z}.wall.is_text: PlaceWall <= 0
     | when PlaceWall:
       | $clear_tile{XX,YY,Z $main.tiles.void}
       | world_place_tile Me XX YY Z WallTile
@@ -116,9 +116,10 @@ place_tile Me Type =
         | !$cursor.2-H
         | $world.clear_tile{$cursor $main.tiles.void}
   | when Tile.wall.is_list
-    | while $world.at{X Y $cursor.2-1}.wall><1:
+    | while $world.at{X Y $cursor.2-1}.wall.is_text:
       | H = $world.at{X Y $cursor.2-1}.height
       | !$cursor.2-H
+      | $anchor.2 <= $cursor.2
       | $world.clear_tile{$cursor $main.tiles.void}
 | while 1
   | Z <= $cursor.2
