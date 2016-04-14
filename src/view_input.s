@@ -116,7 +116,7 @@ place_tile Me Type =
         | !$cursor.2-H
         | $world.clear_tile{@$cursor}
   | when Tile.wall.is_list
-    | while $world.at{X Y $cursor.2-1}.wall.is_text:
+    | while $world.at{X Y $cursor.2-1}.wall:
       | H = $world.at{X Y $cursor.2-1}.height
       | !$cursor.2-H
       | $anchor.2 <= $cursor.2
