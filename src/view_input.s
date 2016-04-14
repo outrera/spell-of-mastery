@@ -60,6 +60,29 @@ place_object Me Bank Type =
   | U.run_effects{?><place U U.xyz}
   | U.animate{idle}
 
+FWDirs = [[-1 1] [0 1] [1 1] [1 0] [1 -1]]
+BWDirs = [[-1 0] [-1 -1] [0 -1]]
+
+world_place_tile Me X Y Z Tile =
+| $set{X Y Z Tile}
+| for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+| less Tile.wall.is_list: leave
+| Count,FWall,BWall = Tile.wall
+| FWall = $main.tiles.FWall
+| BWall = $main.tiles.BWall
+| WDs = [[FWall FWDirs] [BWall BWDirs]]
+| for [WallTile WDirs] WDs: for DX,DY WDirs:
+  | XX = X+DX
+  | YY = Y+DY
+  | DTile = $at{XX YY Z} 
+  | when DTile.type <> Tile.type and (DTile.clear or DTile.empty):
+    | PlaceWall = 1
+    | when [DX DY]><[1 -1] and $at{X+2 Y-1 Z}.wall><1: PlaceWall <= 0
+    | when [DX DY]><[-1 1] and $at{X-1 Y+2 Z}.wall><1: PlaceWall <= 0
+    | when PlaceWall:
+      | $clear_tile{XX,YY,Z $main.tiles.void}
+      | world_place_tile Me XX YY Z WallTile
+
 place_tile Me Type =
 | $cursor.2 <= $fix_z{$cursor}
 | X,Y,Z = $cursor
@@ -92,12 +115,16 @@ place_tile Me Type =
         | H = $world.at{X Y $cursor.2-1}.height
         | !$cursor.2-H
         | $world.clear_tile{$cursor $main.tiles.void}
+  | when Tile.wall.is_list
+    | while $world.at{X Y $cursor.2-1}.wall><1:
+      | H = $world.at{X Y $cursor.2-1}.height
+      | !$cursor.2-H
+      | $world.clear_tile{$cursor $main.tiles.void}
 | while 1
   | Z <= $cursor.2
   | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
   | when Z+Tile.height>>$world.d: leave
-  | $world.set{X Y Z Tile}
-  | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+  | world_place_tile $world X Y Z Tile
   | when Tile.empty:
     | when Tile.id><0: leave
     | when IsEmpty: leave

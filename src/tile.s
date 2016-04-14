@@ -2,7 +2,7 @@ use gfx util
 
 type tile{As Main Type Role Id Lineup Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
-          anim_wait/0 water/0 bank/0 unit/0 heavy/1 clear/0
+          anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 clear/0
           parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0 opaque/No}
      id/Id
      main/Main
@@ -21,6 +21,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      match/Match
      anim_wait/Anim_wait
      water/Water
+     wall/Wall
      unit/Unit //used for units that act as platforms
      heavy/Heavy
      clear/Clear

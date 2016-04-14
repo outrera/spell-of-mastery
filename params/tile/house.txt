@@ -1,0 +1,4 @@
+sprite: tiles_floor_wooden
+wall: 3,house_wall_f,house_wall_b
+height: 1
+1111: 0

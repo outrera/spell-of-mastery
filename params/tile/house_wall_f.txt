@@ -1,4 +1,5 @@
 sprite: tiles_house
+wall: 1
 opaque: 0
 filler: 0
 height: 8
