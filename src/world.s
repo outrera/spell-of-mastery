@@ -196,8 +196,8 @@ world.get XYZ = $tilemap.at{XYZ.0 XYZ.1 XYZ.2}
 
 world.set_ X Y Z V = $tilemap.set{X Y Z V}
 
-world.clear_tile_ XYZ Filler =
-| X,Y,Z = XYZ
+world.clear_tile X Y Z =
+| Filler = $void
 | Tile = $tilemap.at{X Y Z}
 | when Tile.parts.is_int
   | !Z-Tile.parts
@@ -205,11 +205,12 @@ world.clear_tile_ XYZ Filler =
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
+| for DX,DY Dirs:
+  | XX = X+DX
+  | YY = Y+DY
+  | TT = Tile.type
+  | when $at{XX YY Z}.wall><TT: $clear_tile{XX YY Z}
 | $upd_column{X Y}
-
-world.clear_tile XYZ Filler =
-| $clear_tile_{XYZ Filler}
-| XY = XYZ.take{2}
 
 world.clear_passage X Y Z =
 | HH = $fix_z{X,Y,Z}
@@ -239,7 +240,7 @@ world.clear_passage X Y Z =
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =
 | H = Tile.height
-| times I H: $clear_tile_{X,Y,Z+I $void}
+| times I H: $clear_tile{X Y Z+I}
 | Ps = Tile.parts
 | H = H-1
 | times I H: $set_{X Y Z+I Ps.I} // push padding
@@ -386,7 +387,7 @@ world.remove_unit U =
   | P = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
   | U.xyz.init{P}
   | $remove_unitS{U}
-  | when Blocker: $clear_tile{P $void}
+  | when Blocker: $clear_tile{@P}
 | U.xyz.init{XYZ}
 
 world.effect X,Y,Z What =

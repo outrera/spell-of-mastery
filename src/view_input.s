@@ -80,7 +80,7 @@ world_place_tile Me X Y Z Tile =
     | when [DX DY]><[1 -1] and $at{X+2 Y-1 Z}.wall.is_text: PlaceWall <= 0
     | when [DX DY]><[-1 1] and $at{X-1 Y+2 Z}.wall.is_text: PlaceWall <= 0
     | when PlaceWall:
-      | $clear_tile{XX,YY,Z $main.tiles.void}
+      | $clear_tile{XX YY Z}
       | world_place_tile Me XX YY Z WallTile
 
 place_tile Me Type =
@@ -109,18 +109,18 @@ place_tile Me Type =
         | H = $world.at{X Y $cursor.2-1}.height
         | !$cursor.2-H
         | $anchor.2 <= $cursor.2
-        | $world.clear_tile{$cursor $main.tiles.void}
+        | $world.clear_tile{@$cursor}
     else
       | while $world.at{X Y $cursor.2-1}.liquid:
         | H = $world.at{X Y $cursor.2-1}.height
         | !$cursor.2-H
-        | $world.clear_tile{$cursor $main.tiles.void}
+        | $world.clear_tile{@$cursor}
   | when Tile.wall.is_list
     | while $world.at{X Y $cursor.2-1}.wall.is_text:
       | H = $world.at{X Y $cursor.2-1}.height
       | !$cursor.2-H
       | $anchor.2 <= $cursor.2
-      | $world.clear_tile{$cursor $main.tiles.void}
+      | $world.clear_tile{@$cursor}
 | while 1
   | Z <= $cursor.2
   | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
@@ -154,7 +154,7 @@ remove_object_or_tile Me =
       | less Z > 1: leave
       | Tile = $world.at{X Y Z-1}
       | less Tile.height: leave
-      | $world.clear_tile{X,Y,Z-1 $world.void}
+      | $world.clear_tile{X Y Z-1}
       | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
       | $cursor.2 <= $fix_z{$cursor}
 

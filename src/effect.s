@@ -293,7 +293,7 @@ effect clear What:
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
   Else | bad "effect clear: invalid target ([What])"
-| $world.clear_tile{X,Y,Z $main.tiles.void}
+| $world.clear_tile{X Y Z}
 
 effect clear_passage What:
 | X,Y,Z = case What
