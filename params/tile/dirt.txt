@@ -1,5 +1,5 @@
 role: dirt
 aux: 1
-no_lineup: 1
+lineup: other
 water: water,dirt_water
 stack: dirt0,dirt1,dirt2

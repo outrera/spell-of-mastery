@@ -1,6 +1,6 @@
 sprite: tiles_dirt0
 aux: 1
-no_lineup: 1
+lineup: 0
 water: water,dirt_water
 clear: 1
 1111: 16

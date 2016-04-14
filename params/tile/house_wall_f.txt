@@ -1,9 +1,10 @@
 sprite: tiles_house
 wall: house
+heavy: 1
 opaque: 0
 filler: 0
 height: 8
-no_lineup: 1
+lineup: 0
 match: same,side
 role: house_wall
 1111: 19

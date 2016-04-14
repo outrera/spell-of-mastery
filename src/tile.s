@@ -1,15 +1,14 @@
 use gfx util
 
-type tile{As Main Type Role Id Lineup Base Middle Top
+type tile{As Main Type Role Id Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
-          anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 clear/0
+          anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 clear/0
           parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0 opaque/No}
      id/Id
      main/Main
      bank/Bank
      type/Type
      role/Role
-     lineup/Lineup
      base/Base // column base
      middle/Middle // column segment
      top/Top // column top
@@ -24,6 +23,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top
      wall/Wall
      unit/Unit //used for units that act as platforms
      heavy/Heavy
+     lineup/Lineup
      clear/Clear
      parts/Parts
      box/Box
@@ -37,7 +37,7 @@ type tile{As Main Type Role Id Lineup Base Middle Top
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1
-           | tile As Main Type Role Id Lineup Base Middle Top
+           | tile As Main Type Role Id Base Middle Top
                  @[parts -(I+1) @As]
     else $parts <= []
 
@@ -143,7 +143,10 @@ tile.render X Y Z Below Above Seed =
        else if BR <> $role or BelowSlope><#@1111 then T.base
        else if AR <> $role then T.top
        else T.middle
-| G = if $lineup and AH and (not Above.stack or AR <> $role)
+| Lineup = 0
+| when AH and $lineup and ($lineup<>other or AR<>$role):
+  | Lineup <= not Above.stack or AR <> $role
+| G = if Lineup
       then | NeibSlope <= #@1111
            | Gs.NeibSlope
       else | Elev = $tiler{}{World X Y Z $role}
@@ -197,12 +200,11 @@ main.load_tiles =
 | for K,V Tiles
   | Base,Middle,Top = if got V.stack then V.stack{}{Tiles.?.gfxes}
                       else | T = V.gfxes; [T T T]
-  | Lineup = V.no_lineup^~{0}^not
   | Id = if K >< void then 0
          else | !$last_tid + 1
               | $last_tid
   | As = V.list.join
-  | Tile = tile As Me K V.role^~{K} Id Lineup Base Middle Top @As
+  | Tile = tile As Me K V.role^~{K} Id Base Middle Top @As
   | Tile.tiler <= case Tile.match
     [any corner] | &m_any_corner
     [any side] | &m_any_side

@@ -2,7 +2,7 @@ sprite: tiles_water
 height: 2
 empty: 0
 liquid: 1
-no_lineup: 1
+lineup: 0
 //anim_wait: 8
 //alpha: 127
 
