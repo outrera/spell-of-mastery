@@ -1,5 +1,6 @@
 sprite: tiles_house
 wall: house
+wallShift: -18 //precise pixel dimension used for door align
 heavy: 1
 opaque: 0
 filler: 0

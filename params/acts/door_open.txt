@@ -2,6 +2,6 @@ icon: act_switch
 hotkey: f
 speed: 4
 affects: any
-before: sound{door_switch},morph{unit_door_open}
+before: sound{door_switch},morph{special_door_open}
 
 

@@ -11,11 +11,13 @@ reinit_units Us =
   | Owner = U.owner
   | Facing = U.facing
   | XYZ = U.xyz.deep_copy
+  | FXYZ = U.fxyz.deep_copy
   | when U.leader: U.hp <= U.class.hp
   | U.free
   | U = Owner.alloc_unit{Type}
   | U.move{XYZ}
   | U.pick_facing{Facing}
+  | U.fxyz.init{FXYZ}
 
 world.new_game =
 | for K,V $main.params.world: $params.K <= V

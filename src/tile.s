@@ -3,7 +3,8 @@ use gfx util
 type tile{As Main Type Role Id Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 clear/0
-          parts/0 box/[64 64 h] stack/0 indoor/0 liquid/0 opaque/No}
+          parts/0 box/[64 64 h] wallShift/0 stack/0 indoor/0 liquid/0 opaque/No
+          door_shift}
      id/Id
      main/Main
      bank/Bank
@@ -27,6 +28,7 @@ type tile{As Main Type Role Id Base Middle Top
      clear/Clear
      parts/Parts
      box/Box
+     wallShift/WallShift //FIXME: tile.box should be used for everything
      stack/Stack
      tiler/0
      indoor/Indoor

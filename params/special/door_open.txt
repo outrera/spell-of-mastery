@@ -1,0 +1,8 @@
+proto: door_proto
+aux: 0
+sprite: special_door_open
+title: `Door (open)`
+tier: 0
+box_xy: (-8 -8)
+empty: 1
+acts: (door_close)

@@ -391,8 +391,12 @@ effect align How:
 | XYZ = $xyz
 | less $world.get{XYZ-[0 1 0]}.empty or $world.get{XYZ+[0 1 0]}.empty:
   | $face{$xyz+[1 0 0]}
+  | T = $world.get{XYZ-[0 1 0]}
+  | when T.wallShift: $fxyz.init{$fxyz+[T.wallShift 0 0]}
   | leave
 | $face{$xyz+[0 1 0]}
+| T = $world.get{XYZ-[1 0 0]}
+| when T.wallShift: $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 check_when Me Target C =
 | case C
