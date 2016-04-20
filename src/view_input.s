@@ -68,7 +68,8 @@ world_place_tile_walls Me X Y Z Tile =
 | FWall = $main.tiles.FWall
 | BWall = $main.tiles.BWall
 | WDs = [[FWall FWDirs] [BWall BWDirs]]
-| for [WallTile WDirs] WDs: for DX,DY WDirs:
+| for [WT WDirs] WDs: for DX,DY WDirs:
+  | WallTile = WT
   | XX = X+DX
   | YY = Y+DY
   | DTile = $at{XX YY Z} 
@@ -77,6 +78,10 @@ world_place_tile_walls Me X Y Z Tile =
     | when [DX DY]><[1 -1] and $at{X+2 Y-1 Z}.wall.is_text: PlaceWall <= 0
     | when [DX DY]><[-1 1] and $at{X-1 Y+2 Z}.wall.is_text: PlaceWall <= 0
     | when PlaceWall:
+      | when [DX DY]><[0 1] and $at{X+1 Y+1 Z}.type><Tile.type:
+        | WallTile <= BWall
+      | when [DX DY]><[1 0] and $at{X+1 Y+1 Z}.type><Tile.type:
+        | WallTile <= BWall
       | $clear_tile{XX YY Z}
       | world_place_tile Me XX YY Z WallTile
 
