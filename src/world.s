@@ -209,7 +209,7 @@ world.clear_tile X Y Z =
   | XX = X+DX
   | YY = Y+DY
   | TT = Tile.type
-  | when $at{XX YY Z}.wall><TT:
+  | when $at{XX YY Z}.around><TT:
     | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
       | $clear_tile{XX YY Z}
 | $upd_column{X Y}

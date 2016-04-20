@@ -388,15 +388,17 @@ effect victory Player Reason:
 
 effect align How:
 | less How><door: bad "effect align: cant [How]-align"
-| XYZ = $xyz
-| less $world.get{XYZ-[0 1 0]}.empty or $world.get{XYZ+[0 1 0]}.empty:
+| X,Y,Z = $xyz
+| less $world.at{X Y-1 Z}.empty or $world.at{X Y+1 Z}.empty:
   | $face{$xyz+[1 0 0]}
-  | T = $world.get{XYZ-[0 1 0]}
-  | when T.wallShift: $fxyz.init{$fxyz+[T.wallShift 0 0]}
+  | T = $world.at{X Y-1 Z}
+  | when T.wallShift and not $world.at{X+1 Y Z}.type><T.around:
+    | $fxyz.init{$fxyz+[T.wallShift 0 0]}
   | leave
 | $face{$xyz+[0 1 0]}
-| T = $world.get{XYZ-[1 0 0]}
-| when T.wallShift: $fxyz.init{$fxyz+[0 T.wallShift 0]}
+| T = $world.at{X-1 Y Z}
+| when T.wallShift and not $world.at{X Y+1 Z}.type><T.around:
+  | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 check_when Me Target C =
 | case C
