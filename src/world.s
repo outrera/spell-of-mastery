@@ -205,11 +205,13 @@ world.clear_tile X Y Z =
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
-| for DX,DY Dirs:
+| when Tile.wall: for DX,DY Dirs: //tile has associated walls
   | XX = X+DX
   | YY = Y+DY
   | TT = Tile.type
-  | when $at{XX YY Z}.wall><TT: $clear_tile{XX YY Z}
+  | when $at{XX YY Z}.wall><TT:
+    | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
+      | $clear_tile{XX YY Z}
 | $upd_column{X Y}
 
 world.clear_passage X Y Z =

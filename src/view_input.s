@@ -63,10 +63,7 @@ place_object Me Bank Type =
 FWDirs = [[-1 1] [0 1] [1 1] [1 0] [1 -1]]
 BWDirs = [[-1 0] [-1 -1] [0 -1]]
 
-world_place_tile Me X Y Z Tile =
-| $set{X Y Z Tile}
-| for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
-| less Tile.wall.is_list: leave
+world_place_tile_walls Me X Y Z Tile =
 | Count,FWall,BWall = Tile.wall
 | FWall = $main.tiles.FWall
 | BWall = $main.tiles.BWall
@@ -82,6 +79,12 @@ world_place_tile Me X Y Z Tile =
     | when PlaceWall:
       | $clear_tile{XX YY Z}
       | world_place_tile Me XX YY Z WallTile
+
+world_place_tile Me X Y Z Tile =
+| $set{X Y Z Tile}
+| for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+| less Tile.wall.is_list: leave
+| world_place_tile_walls Me X Y Z Tile
 
 place_tile Me Type =
 | $cursor.2 <= $fix_z{$cursor}
