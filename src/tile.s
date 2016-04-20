@@ -138,11 +138,11 @@ tile.render X Y Z Below Above Seed =
 | NeibSlope = #@0000
 | T = Me
 | when $indoor and Z < ColumnHeight-1 /*and AH*/: //FIXME: non-ceil tiles?
-  | T <= $main.tiles.($indoor)
+  | T <= $indoor
 | when T.water:
   | Neib,Water = T.water
   | when got World.neibs{X Y Z-TH+1}.find{?type><Neib}:
-    | T <= $main.tiles.Water
+    | T <= Water
 | when $back:
   | Z = Z-$height+1
   | A = World.at{X+1 Y Z}
@@ -150,7 +150,7 @@ tile.render X Y Z Below Above Seed =
   | C = World.at{X+1 Y+1 Z}
   | Ar = $around
   | when A.type><Ar or B.type><Ar or C.type><Ar:
-    | T <= $main.tiles.($back)
+    | T <= $back
 | Gs = if BE then T.top
        else if BR <> $role or BelowSlope><#@1111 then T.base
        else if AR <> $role then T.top
@@ -225,5 +225,13 @@ main.load_tiles =
     [any stairs] | &m_any_stairs
     Else | bad "tile [K] has invalid `match` = [Else]"
   | $tiles.K <= Tile
+| for K,T $tiles
+  | when T.indoor:
+    | T.indoor <= $tiles.(T.indoor)
+    | less got T.indoor: say "tile [K] references unknown indoor tile"
+  | when T.back: T.back <= $tiles.(T.back)
+  | when T.water:
+    | T.water <= [T.water.0 $tiles.(T.water.1)]
+    | less got T.water: say "tile [K] references unknown water tile"
 
 export tile
