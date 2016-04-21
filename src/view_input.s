@@ -150,8 +150,8 @@ remove_object_or_tile Me =
       | Tile = $world.at{X Y Z-1}
       | less Tile.height: leave
       | $world.clear_tile{X Y Z-1}
-      | for U $world.units_at{X,Y,Z}: U.move{X,Y,Z-Tile.height}
       | $cursor.2 <= $fix_z{$cursor}
+      | for U $world.units_at{X,Y,Z}: U.move{$cursor}
 
 view.update_brush =
 | when $mice_click><leftup:

@@ -1,7 +1,7 @@
 sprite: tiles_house
 //aux: 1
 heavy: 1
-opaque: 0
+opaque: 1
 filler: 0
 height: 8
 lineup: 0

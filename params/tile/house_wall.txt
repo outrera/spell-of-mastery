@@ -3,7 +3,7 @@ around: house //this wall goes around house tiles
 back: house_wall_back
 //wallShift: -18 //precise pixel dimension used for door align
 heavy: 1
-opaque: 0
+opaque: 1
 filler: 0
 height: 8
 lineup: 0
