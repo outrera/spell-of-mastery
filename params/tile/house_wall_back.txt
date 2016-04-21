@@ -1,6 +1,5 @@
 sprite: tiles_house
-wall: house
-aux: 1
+//aux: 1
 heavy: 1
 opaque: 0
 filler: 0
