@@ -4,7 +4,7 @@ type tile{As Main Type Role Id Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 clear/0
           parts/0 box/[64 64 h] wallShift/0 stack/0 indoor/0 liquid/0 opaque/No
-          around/0 back/0}
+          around/0 back/0 fallback/0}
      id/Id
      main/Main
      bank/Bank
@@ -36,6 +36,7 @@ type tile{As Main Type Role Id Base Middle Top
      indoor/Indoor
      liquid/Liquid
      opaque/Opaque
+     fallback/Fallback
 | when no $opaque: $opaque <= not $invisible
 | when $box.2><h: $box.2 <= $height*8
 | less $parts:
@@ -162,6 +163,9 @@ tile.render X Y Z Below Above Seed =
       then | NeibSlope <= #@1111
            | Gs.NeibSlope
       else | Elev = $tiler{}{World X Y Z $role}
+           | when $fallback and Elev><[1 1 1 1]:
+             | Elev <= m_same_corner{World X Y Z $role}
+             | Gs <= $fallback.base
            | NeibSlope <= Elev.digits{2}
            | R = Gs.NeibSlope
            | less got R: R <= Gs.#@1111
@@ -229,9 +233,10 @@ main.load_tiles =
   | when T.indoor:
     | T.indoor <= $tiles.(T.indoor)
     | less got T.indoor: say "tile [K] references unknown indoor tile"
-  | when T.back: T.back <= $tiles.(T.back)
   | when T.water:
     | T.water <= [T.water.0 $tiles.(T.water.1)]
     | less got T.water: say "tile [K] references unknown water tile"
+  | when T.back: T.back <= $tiles.(T.back)
+  | when T.fallback: T.fallback <= $tiles.(T.fallback)
 
 export tile
