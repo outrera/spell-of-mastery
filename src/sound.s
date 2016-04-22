@@ -20,7 +20,7 @@ main.load_sounds =
 main.sound Name volume/1.0 =
 | Cycle = $world.cycle
 | SCycles = $world.sound_cycles
-| when SCycles.Name><Cycle: leave
+| when SCycles.Name><Cycle and $world.mode><play: leave
 | SCycles.Name <= Cycle
 | S = $sounds.Name
 | when no S: bad "missing sound ([Name])"

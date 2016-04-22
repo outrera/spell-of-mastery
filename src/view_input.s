@@ -49,7 +49,10 @@ place_object Me Bank Type =
              else if not Class.empty then Us.all{?empty}
              else if PlaceRandom then Us.end
              else not Us.any{?class^address >< Class^address}
-  | when Place: Place <= $world.get{XYZ}.empty
+  | when Place:
+    | X,Y,Z = XYZ
+    | Place <= Class.height.list.all{I=>$world.get{X,Y,Z+I}.empty}
+    | less Place: $main.sound{illegal}
 | when Place
   | U = $player.alloc_unit{ClassName}
   | Facing = if Mirror then 5 else 3
@@ -134,7 +137,7 @@ remove_object_or_tile Me =
 | T = $world.at{X Y Z-1}
 | Us = $units_at{X,Y,Z}
 | when T.unit and not Us.size:
-  | Z <= $fix_z{$cursor}
+  | while $world.at{X Y Z}.type >< T.type: !Z+1
   | ZZ = Z - T.height
   | BelowUs = $units_at{X,Y,ZZ}
   | when BelowUs.size:
