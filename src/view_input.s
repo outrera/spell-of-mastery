@@ -133,6 +133,7 @@ remove_object_or_tile Me =
 | T = $world.at{X Y Z-1}
 | Us = $units_at{X,Y,Z}
 | when T.unit and not Us.size:
+  | Z <= $fix_z{$cursor}
   | ZZ = Z - T.height
   | BelowUs = $units_at{X,Y,ZZ}
   | when BelowUs.size:
