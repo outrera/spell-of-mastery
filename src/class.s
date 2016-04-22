@@ -36,7 +36,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   ai/Ai
   show/Show
   height/Height
-  passable/Passable
+  passable/Passable // other units can move on top of this one
   movable/Movable
   counter/Counter //counterattack
   tier/Tier

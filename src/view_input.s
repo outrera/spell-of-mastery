@@ -51,7 +51,8 @@ place_object Me Bank Type =
              else not Us.any{?class^address >< Class^address}
   | when Place:
     | X,Y,Z = XYZ
-    | Place <= Class.height.list.all{I=>$world.get{X,Y,Z+I}.empty}
+    | H = if Class.passable then Class.height else 5
+    | Place <= H.list.all{I=>$world.get{X,Y,Z+I}.empty}
     | less Place: $main.sound{illegal}
 | when Place
   | U = $player.alloc_unit{ClassName}

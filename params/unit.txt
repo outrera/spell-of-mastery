@@ -10,7 +10,7 @@ cooldown: 16
 sight: 5
 speed: 24 // cycles required to move between game world cells
 pickable: 1
-passable: 0 // can be moved over
+passable: 0 // other units can move on top of this one
 flyer: 0 // can it fly
 range: cross //1
 ai: unit
