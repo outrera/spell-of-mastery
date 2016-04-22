@@ -49,6 +49,7 @@ place_object Me Bank Type =
              else if not Class.empty then Us.all{?empty}
              else if PlaceRandom then Us.end
              else not Us.any{?class^address >< Class^address}
+  | when Place: Place <= $world.get{XYZ}.empty
 | when Place
   | U = $player.alloc_unit{ClassName}
   | Facing = if Mirror then 5 else 3
