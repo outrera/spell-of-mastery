@@ -1,5 +1,6 @@
 sprite: tiles_house_roof
 match: any,stairs
+roof: self
 fallback: house_roof_fallback //fall back for 1111
 0000: 2
 1001: 0

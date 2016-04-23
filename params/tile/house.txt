@@ -1,4 +1,5 @@
 sprite: tiles_floor_wooden
 wall: house_wall
+roof: 7,house_roof
 height: 1
 1111: 0

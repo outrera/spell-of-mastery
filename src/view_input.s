@@ -78,6 +78,9 @@ world_place_tile_walls Me X Y Z Tile =
 world_place_tile Me X Y Z Tile =
 | $set{X Y Z Tile}
 | for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+| when Tile.roof.is_list:
+  | H,RoofTile = Tile.roof
+  | world_place_tile Me X Y Z+H+Tile.height RoofTile
 | less Tile.wall: leave
 | world_place_tile_walls Me X Y Z Tile
 
@@ -115,7 +118,7 @@ place_tile Me Type =
         | $world.clear_tile{@$cursor}
   | when Tile.wall
     | Below = $world.at{X Y $cursor.2-1}
-    | while Below.around or Below.wall:
+    | while Below.around or Below.wall or Below.roof or Below.type><void:
       | H = $world.at{X Y $cursor.2-1}.height
       | !$cursor.2-H
       | $anchor.2 <= $cursor.2
