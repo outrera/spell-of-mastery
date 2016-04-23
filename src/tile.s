@@ -125,7 +125,7 @@ tile.render X Y Z Below Above Seed =
   | when $type >< base_:
     | BelowSlope <= #@1111
     | leave 0
-  | Z = Z-$height+1
+  //| Z = Z-$height+1
   | A = World.at{X+1 Y Z}
   | B = World.at{X Y+1 Z}
   | C = World.at{X+1 Y+1 Z}
