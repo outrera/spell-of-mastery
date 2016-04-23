@@ -1,1 +1,2 @@
-author: `Seth Galbraith`,`Nikita Sadkov`
+author: `Tim Jonsson`, `Nikita Sadkov`
+copyright: `Nikita Sadkov`
