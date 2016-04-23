@@ -1,2 +1,3 @@
 role: column
 stack: column0,column1,column2
+opaque: 0
