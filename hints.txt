@@ -2,3 +2,14 @@
 - Lightning and blizzard spells affect only outdoors cells, so take cover to avoid being hit by them.
 - Poisoned units lose health down to 1, unless heal is cast. Undead units and units with regen are immune to poison.
 - Hydra can cross water.
+
+
+
+Units tech tree:
+wizard,katzard: halfling -> elf or dwarf -> ifrit or minotaur -> hydra
+witch: ratman -> goblin or orc -> baphomet or spider -> ogre
+warlock: skeleton -> wraith -> vampire or gargoyle -> observer
+king: farmer -> knight or lizard -> griffin -> golem
+neutral: blob, beetle, oculus
+
+All wizards can summon bat and blob, while hydra or ogre or observer or golem allow summoning dragon.

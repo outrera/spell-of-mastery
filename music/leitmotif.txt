@@ -1,3 +1,0 @@
-author: `Galina Bulatova`
-copyright: `Gaziza Mansurova`
-license: `CC3-BY-SA`
