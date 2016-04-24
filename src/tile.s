@@ -72,6 +72,8 @@ m_any_stairs Me X Y Z Role =
        | when $role{X+1 Y Z-4}<>Role: E<=[1 0 0 0]
      else if $role{X-1 Y Z+4}><Role then E<=[0 0 0 1]
      else if $role{X Y-1 Z+4}><Role then E<=[1 0 0 0]
+     else if $role{X Y-1 Z}><Role and $role{X Y-1 Z+4}<>Role then
+     else if $role{X-1 Y Z}><Role and $role{X-1 Y Z+4}<>Role then
      else if $filled{X Y-1 Z+4} and not $filled{X-1 Y Z+4} then E<=[0 0 0 1]
      else if $filled{X-1 Y Z+4} and not $filled{X Y-1 Z+4} then E<=[1 0 0 0]
      else
@@ -79,6 +81,7 @@ m_any_stairs Me X Y Z Role =
      if $role{X Y-1 Z+4}><Role then E<=[1 0 0 0]
      else if $role{X+1 Y Z}><Role and $role{X Y-1 Z}><Role then
      else if $role{X+1 Y Z+4}><Role then E<=[0 1 0 0]
+     else if $role{X+1 Y Z}><Role and $role{X+1 Y Z+4}<>Role then
      else if $role{X Y+1 Z-4}><Role and not $filled{X Y+1 Z} then E<=[1 0 0 0]
      else if $role{X-1 Y Z-4}><Role and not $filled{X-1 Y Z} then E<=[0 1 0 0]
      else if $filled{X Y-1 Z+4} and not $filled{X-1 Y Z+4} then E<=[0 1 0 0]
@@ -87,6 +90,7 @@ m_any_stairs Me X Y Z Role =
   else if E><[0 0 1 1] then
      if $role{X-1 Y Z+4}><Role then E<=[0 0 0 1]
      else if $role{X-1 Y Z}><Role and $role{X Y+1 Z}><Role then
+     else if $role{X Y+1 Z}><Role and $role{X Y+1 Z+4}<>Role then
      else if $role{X+1 Y Z-4}><Role and not $filled{X+1 Y Z} then E<=[0 0 0 1]
      else if $role{X Y-1 Z-4}><Role and not $filled{X-1 Y Z} then E<=[0 0 1 0]
      else if $role{X Y+1 Z+4}><Role then E<=[0 0 1 0]
@@ -167,7 +171,7 @@ tile.render X Y Z Below Above Seed =
            | Gs.NeibSlope
       else | Elev = $tiler{}{World X Y Z $role}
            | when $fallback and Elev><[1 1 1 1]:
-             | Elev <= m_same_corner{World X Y Z $role}
+             | Elev <= m_any_corner{World X Y Z $role}
              | Gs <= $fallback.base
            | NeibSlope <= Elev.digits{2}
            | R = Gs.NeibSlope
