@@ -64,7 +64,7 @@ m_any_stairs Me X Y Z Role =
     $filled{X Y-1 Z} $filled{X+1 Y Z}
     $filled{X Y+1 Z} $filled{X-1 Y Z}
 //| D = E.digits{2}
-//| when [X Y]><[4 3]: say [Role [X Y Z] E]
+//| when [X Y]><[5 4]: say [Role [X Y Z] E]
 | if E><[1 0 0 1] then
    | if $role{X+1 Y Z-4}><Role then
        | when $role{X Y+1 Z-4}<>Role: E<=[0 0 0 1]
@@ -77,6 +77,7 @@ m_any_stairs Me X Y Z Role =
      else
   else if E><[1 1 0 0] then
      if $role{X Y-1 Z+4}><Role then E<=[1 0 0 0]
+     else if $role{X+1 Y Z}><Role and $role{X Y-1 Z}><Role then
      else if $role{X+1 Y Z+4}><Role then E<=[0 1 0 0]
      else if $role{X Y+1 Z-4}><Role and not $filled{X Y+1 Z} then E<=[1 0 0 0]
      else if $role{X-1 Y Z-4}><Role and not $filled{X-1 Y Z} then E<=[0 1 0 0]
@@ -85,6 +86,7 @@ m_any_stairs Me X Y Z Role =
      else
   else if E><[0 0 1 1] then
      if $role{X-1 Y Z+4}><Role then E<=[0 0 0 1]
+     else if $role{X-1 Y Z}><Role and $role{X Y+1 Z}><Role then
      else if $role{X+1 Y Z-4}><Role and not $filled{X+1 Y Z} then E<=[0 0 0 1]
      else if $role{X Y-1 Z-4}><Role and not $filled{X-1 Y Z} then E<=[0 0 1 0]
      else if $role{X Y+1 Z+4}><Role then E<=[0 0 1 0]
