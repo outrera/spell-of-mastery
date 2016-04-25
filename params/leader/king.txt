@@ -2,7 +2,7 @@ sprite: unit_king
 icon: unit_king
 range: cross
 health: 140
-armor: 3
+armor: 4
 range: 0
 damage: 10 // amount of damage this unit deals
 impact: harm{user},sound{attack2}
