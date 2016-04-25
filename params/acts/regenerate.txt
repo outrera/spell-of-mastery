@@ -1,5 +1,0 @@
-icon: spell_heal
-//lore: (8 200)
-//cost: 100
-affects: self
-before: harm{-2},poison{0},impact{explosion_blood},sound{spawn}

@@ -7,7 +7,7 @@ range: 3
 cool: 10
 inborn: (upkeep3 resist_magic)
 //attack: sound{lifedrain}
-impact: harm{user},lifedrain{6},impact{explosion_blood},sound{lifedrain}
+impact: harm{user},lifedrain{6},impact{lifedrain},sound{lifedrain}
 hit: effect{blood_undead},sound{grunt2}
 death: sound{vampire_die}
 moves: sound{step}

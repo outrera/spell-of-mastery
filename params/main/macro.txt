@@ -1,1 +1,1 @@
-poison: when{no_child.effect_poison,has.organic},child{effect_poison ((poison 0 ()) (ttl 10000 ()))},impact{explosion_blood},endwhen
+poison: when{no_child.effect_poison,has.organic},child{effect_poison ((poison 0 ()) (ttl 10000 ()))}/*,impact{lifedrain}*/,endwhen

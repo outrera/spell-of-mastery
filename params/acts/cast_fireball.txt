@@ -5,4 +5,4 @@ cost: 100
 cool: 240
 affects: unit
 range: 4
-before: missile{effect_fireball},harm{magic.40},impact{explosion3},sound{fire1}
+before: missile{effect_fireball},harm{magic.40},impact{explosion},sound{fire1}

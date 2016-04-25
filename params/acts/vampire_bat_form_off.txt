@@ -3,5 +3,5 @@ title: `Bat Form Swith`
 hotkey: b
 speed: 4
 affects: any
-before: sound{bat_move},effect{explosion_blood},morph{unit_vampire},strip{flyer}
+before: sound{bat_move},effect{spell},morph{unit_vampire},strip{flyer}
 
