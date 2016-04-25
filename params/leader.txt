@@ -1,3 +1,5 @@
+//NOTE: ensure all leaders have 32 frames of attack animation
+//      otherwise some leader could put more damage than the other
 unit: 1
 active: 1
 draw_order: 4

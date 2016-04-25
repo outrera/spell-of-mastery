@@ -3,4 +3,5 @@ icon: unit_katzard
 hit: effect{blood},sound{grunt4}
 death: sound{orbit}
 moves: sound{step}
+impact: harm{user},impact{fire_spiral},sound{fire1}
 pentagram: special_pentagram_mage
