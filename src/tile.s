@@ -79,8 +79,12 @@ m_any_stairs Me X Y Z Role =
 //| D = E.digits{2}
 //| when [X Y]><[6 4]: say [Role [X Y Z] E]
 | if E><SFrontC then 
-     if      $role{X-1 Y Z+4}><Role and $role{X Y-1 Z+4}<>Role then E<=SRight
-     else if $role{X-1 Y Z+4}<>Role and $role{X Y-1 Z+4}><Role then E<=SLeft
+     if      $role{X-1 Y Z+4}><Role and $role{X Y-1 Z+4}<>Role
+             and $filled{X+1 Y Z-4}
+        then E<=SRight
+     else if $role{X-1 Y Z+4}<>Role and $role{X Y-1 Z+4}><Role
+             and $filled{Y+1 Y Z-4}
+        then E<=SLeft
      else if $filled{X+1 Y Z-4} and not $filled{X Y+1 Z-4} then E<=SRight
      else if $filled{X Y+1 Z-4} and not $filled{X+1 Y Z-4} then E<=SLeft
      else
