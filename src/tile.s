@@ -70,39 +70,40 @@ SRightC = SRight+SRightR //right-corner
 SBackC  = SLeftR+SRightR //back-corner
 SLineH  = SLeftR+SRight
 SLineV  = SRightR+SLeft
+SRightE = SRightR+SLeft+SRight
 SFlat = [0 0 0 0]
 SFilled = [1 1 1 1]
 
 m_any_stairs Me X Y Z Role =
 | E = `[]` //   north            east             south            west
            $filled{X Y-1 Z} $filled{X+1 Y Z} $filled{X Y+1 Z} $filled{X-1 Y Z}
+| AN = $role{X Y-1 Z+4}><Role and not $filled{X Y-1 Z+8}
+| AE = $role{X+1 Y Z+4}><Role and not $filled{X+1 Y Z+8}
+| AS = $role{X Y+1 Z+4}><Role and not $filled{X Y+1 Z+8}
+| AW = $role{X-1 Y Z+4}><Role and not $filled{X-1 Y Z+8}
 //| D = E.digits{2}
 //| when [X Y]><[6 4]: say [Role [X Y Z] E]
-| if E><SFrontC then 
-     if      $role{X-1 Y Z+4}><Role and $role{X Y-1 Z+4}<>Role
-             and $filled{X+1 Y Z-4}
-        then E<=SRight
-     else if $role{X-1 Y Z+4}<>Role and $role{X Y-1 Z+4}><Role
-             and $filled{Y+1 Y Z-4}
-        then E<=SLeft
+| if E><SFrontC then
+     if      AW and not AN and $filled{X+1 Y Z-4} then E<=SRight
+     else if not AW and AN and $filled{X Y+1 Z-4} then E<=SLeft
      else if $filled{X+1 Y Z-4} and not $filled{X Y+1 Z-4} then E<=SRight
      else if $filled{X Y+1 Z-4} and not $filled{X+1 Y Z-4} then E<=SLeft
      else
   else if E><SLeftC then
-     if      $role{X+1 Y Z+4}><Role and $role{X Y-1 Z+4}<>Role then E<=SLeftR
-     else if $role{X+1 Y Z+4}<>Role and $role{X Y-1 Z+4}><Role then E<=SLeft
+     if      AE and not AN and $filled{X-1 Y Z-4} then E<=SLeftR
+     else if not AE and AN and $filled{X Y+1 Z-4} then E<=SLeft
      else if $filled{X-1 Y Z-4} and not $filled{X Y+1 Z-4} then E<=SLeftR
      else if $filled{X Y+1 Z-4} and not $filled{X-1 Y Z-4} then E<=SLeft
      else
   else if E><SRightC then
-     if      $role{X-1 Y Z+4}><Role and $role{X Y+1 Z+4}<>Role then E<=SRight
-     else if $role{X-1 Y Z+4}<>Role and $role{X Y+1 Z+4}><Role then E<=SRightR
+     if      AW and not AS and $filled{X+1 Y Z-4} then E<=SRight
+     else if not AW and AS and $filled{X Y-1 Z-4} then E<=SRightR
      else if $filled{X+1 Y Z-4} and not $filled{X Y-1 Z-4} then E<=SRight
      else if $filled{X Y-1 Z-4} and not $filled{X+1 Y Z-4} then E<=SRightR
      else
   else if E><SBackC then 
-     if      $role{X+1 Y Z+4}><Role and $role{X Y+1 Z+4}<>Role then E<=SLeftR
-     else if $role{X+1 Y Z+4}<>Role and $role{X Y+1 Z+4}><Role then E<=SRightR
+     if      AE and not AS then E<=SLeftR
+     else if not AE and AS then E<=SRightR
      else if $filled{X-1 Y Z-4} and not $filled{X Y-1 Z-4} then E<=SLeftR
      else if $filled{X Y-1 Z-4} and not $filled{X-1 Y Z-4} then E<=SRightR
      else
