@@ -54,10 +54,10 @@ transparentize Base Alpha =
 
 DummyGfx = gfx 1 1
 
-m_same_side World X Y Z Role = World.getSidesSame{X Y Z Role}
-m_same_corner World X Y Z Role = World.getCornersSame{X Y Z Role}
-m_any_side World X Y Z Role = World.getSides{X Y Z}
-m_any_corner World X Y Z Role = World.getCorners{X Y Z}
+m_same_side World X Y Z Tile = World.getSidesSame{X Y Z Tile.role}
+m_same_corner World X Y Z Tile = World.getCornersSame{X Y Z Tile.role}
+m_any_side World X Y Z Tile = World.getSides{X Y Z}
+m_any_corner World X Y Z Tile = World.getCorners{X Y Z}
 
 //stairs defs
 SLeft   = [1 0 0 0]      //left-stairs
@@ -74,75 +74,77 @@ SRightE = SRightR+SLeft+SRight
 SFlat = [0 0 0 0]
 SFilled = [1 1 1 1]
 
-m_any_stairs Me X Y Z Role =
+m_any_stairs Me X Y Z Tile =
+| Role = Tile.role
+| H = Tile.height
 | E = `[]` //   north            east             south            west
            $filled{X Y-1 Z} $filled{X+1 Y Z} $filled{X Y+1 Z} $filled{X-1 Y Z}
-| AN = $role{X Y-1 Z+4}><Role and not $filled{X Y-1 Z+8}
-| AE = $role{X+1 Y Z+4}><Role and not $filled{X+1 Y Z+8}
-| AS = $role{X Y+1 Z+4}><Role and not $filled{X Y+1 Z+8}
-| AW = $role{X-1 Y Z+4}><Role and not $filled{X-1 Y Z+8}
+| AN = $role{X Y-1 Z+H}><Role and not $filled{X Y-1 Z+H+1}
+| AE = $role{X+1 Y Z+H}><Role and not $filled{X+1 Y Z+H+1}
+| AS = $role{X Y+1 Z+H}><Role and not $filled{X Y+1 Z+H+1}
+| AW = $role{X-1 Y Z+H}><Role and not $filled{X-1 Y Z+H+1}
 //| D = E.digits{2}
 //| when [X Y]><[6 4]: say [Role [X Y Z] E]
 | if E><SFrontC then
-     if      AW and not AN and $filled{X+1 Y Z-4} then E<=SRight
-     else if not AW and AN and $filled{X Y+1 Z-4} then E<=SLeft
-     else if $filled{X+1 Y Z-4} and not $filled{X Y+1 Z-4} then E<=SRight
-     else if $filled{X Y+1 Z-4} and not $filled{X+1 Y Z-4} then E<=SLeft
+     if      AW and not AN and $filled{X+1 Y Z-H} then E<=SRight
+     else if not AW and AN and $filled{X Y+1 Z-H} then E<=SLeft
+     else if $filled{X+1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=SRight
+     else if $filled{X Y+1 Z-H} and not $filled{X+1 Y Z-H} then E<=SLeft
      else
   else if E><SLeftC then
-     if      AE and not AN and $filled{X-1 Y Z-4} then E<=SLeftR
-     else if not AE and AN and $filled{X Y+1 Z-4} then E<=SLeft
-     else if $filled{X-1 Y Z-4} and not $filled{X Y+1 Z-4} then E<=SLeftR
-     else if $filled{X Y+1 Z-4} and not $filled{X-1 Y Z-4} then E<=SLeft
+     if      AE and not AN and $filled{X-1 Y Z-H} then E<=SLeftR
+     else if not AE and AN and $filled{X Y+1 Z-H} then E<=SLeft
+     else if $filled{X-1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=SLeftR
+     else if $filled{X Y+1 Z-H} and not $filled{X-1 Y Z-H} then E<=SLeft
      else
   else if E><SRightC then
-     if      AW and not AS and $filled{X+1 Y Z-4} then E<=SRight
-     else if not AW and AS and $filled{X Y-1 Z-4} then E<=SRightR
-     else if $filled{X+1 Y Z-4} and not $filled{X Y-1 Z-4} then E<=SRight
-     else if $filled{X Y-1 Z-4} and not $filled{X+1 Y Z-4} then E<=SRightR
+     if      AW and not AS and $filled{X+1 Y Z-H} then E<=SRight
+     else if not AW and AS and $filled{X Y-1 Z-H} then E<=SRightR
+     else if $filled{X+1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=SRight
+     else if $filled{X Y-1 Z-H} and not $filled{X+1 Y Z-H} then E<=SRightR
      else
   else if E><SBackC then 
      if      AE and not AS then E<=SLeftR
      else if not AE and AS then E<=SRightR
-     else if $filled{X-1 Y Z-4} and not $filled{X Y-1 Z-4} then E<=SLeftR
-     else if $filled{X Y-1 Z-4} and not $filled{X-1 Y Z-4} then E<=SRightR
+     else if $filled{X-1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=SLeftR
+     else if $filled{X Y-1 Z-H} and not $filled{X-1 Y Z-H} then E<=SRightR
      else
   else if E><SLeft then
-     if      $role{X Y+1 Z-4}><Role and not $filled{X Y+1 Z} then
-     else if $role{X-1 Y Z-4}><Role and not $filled{X-1 Y Z} then E<=SLeftR
-     else if $role{X+1 Y Z-4}><Role and not $filled{X+1 Y Z} then E<=SRight
+     if      $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then
+     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=SLeftR
+     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=SRight
      else
   else if E><SRight then
-     if      $role{X+1 Y Z-4}><Role and not $filled{X+1 Y Z} then
-     else if $role{X Y-1 Z-4}><Role and not $filled{X Y-1 Z} then E<=SRightR
-     else if $role{X Y+1 Z-4}><Role and not $filled{X Y+1 Z} then E<=SLeft
+     if      $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then
+     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=SRightR
+     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=SLeft
      else
   else if E><SLeftR then
-     if      $role{X-1 Y Z-4}><Role and not $filled{X-1 Y Z} then
-     else if $role{X Y-1 Z-4}><Role and not $filled{X Y-1 Z} then E<=SRightR
-     else if $role{X Y+1 Z-4}><Role and not $filled{X Y+1 Z} then E<=SLeft
+     if      $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then
+     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=SRightR
+     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=SLeft
      else
   else if E><SRightR then
-     if      $role{X Y-1 Z-4}><Role and not $filled{X Y-1 Z} then
-     else if $role{X-1 Y Z-4}><Role and not $filled{X-1 Y Z} then E<=SLeftR
-     else if $role{X+1 Y Z-4}><Role and not $filled{X+1 Y Z} then E<=SRight
+     if      $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then
+     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=SLeftR
+     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=SRight
      else
   else if E><SLineH then
-   | A = $filled{X Y+1 Z-4}
-   | B = $filled{X Y-1 Z-4}
+   | A = $filled{X Y+1 Z-H}
+   | B = $filled{X Y-1 Z-H}
    | if      A and not B then E<=SLeft
      else if B and not A then E<=SRightR
      else E<=SFilled
   else if E><SLineV then
-   | A = $filled{X+1 Y Z-4}
-   | B = $filled{X-1 Y Z-4} 
+   | A = $filled{X+1 Y Z-H}
+   | B = $filled{X-1 Y Z-H} 
    | if      A and not B then E<=SRight
      else if B and not A then E<=SLeftR
      else E<=SFilled
   else if E><SFlat then
-     if $role{X-1 Y Z-4}><Role then E<=SLeftR
-     else if $role{X Y+1 Z-4}><Role then E<=[1 0 0 0]
-     else if $role{X Y-1 Z-4}><Role then E<=SRightR
+     if $role{X-1 Y Z-H}><Role then E<=SLeftR
+     else if $role{X Y+1 Z-H}><Role then E<=[1 0 0 0]
+     else if $role{X Y-1 Z-H}><Role then E<=SRightR
      else
   else
 | E
@@ -200,9 +202,9 @@ tile.render X Y Z Below Above Seed =
 | G = if Lineup
       then | NeibSlope <= #@1111
            | Gs.NeibSlope
-      else | Elev = $tiler{}{World X Y Z $role}
+      else | Elev = $tiler{}{World X Y Z Me}
            | when $fallback and Elev><[1 1 1 1]:
-             | Elev <= m_any_corner{World X Y Z $role}
+             | Elev <= m_any_corner{World X Y Z Me}
              | Gs <= $fallback.base
            | NeibSlope <= Elev.digits{2}
            | R = Gs.NeibSlope

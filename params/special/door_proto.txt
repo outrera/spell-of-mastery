@@ -19,5 +19,5 @@ inborn: (door_align)
 //attack: sound{attack2}
 impact: sound{attack2}
 hit: effect{blood_undead},sound{door_hit}
-death: sound{door_die}
+death: effect{explosion},sound{door_die}
 moves: sound{step}
