@@ -205,17 +205,23 @@ world.clear_tile X Y Z =
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
-| when Tile.wall: for DX,DY Dirs: //tile has associated walls
-  | XX = X+DX
-  | YY = Y+DY
-  | TT = Tile.type
-  | when $at{XX YY Z}.around><TT:
-    | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
-      | $clear_tile{XX YY Z}
-| when Tile.roof.is_list:
-  | H,RoofTile = Tile.roof
-  | ZZ = Z+H+1
-  | when ZZ < $d and $at{X Y ZZ}.type><RoofTile.type: $clear_tile{X Y ZZ}
+| when Tile.wall:
+  | ZZ = 0
+  | RT = 0
+  | when Tile.roof.is_list:
+    | H,RoofTile = Tile.roof
+    | RT <= RoofTile
+    | ZZ <= Z+H+1
+    | less ZZ < $d: ZZ <= 0
+    | when ZZ and $at{X Y ZZ}.type><RT.type: $clear_tile{X Y ZZ}
+  | for DX,DY Dirs: //tile has associated walls
+    | XX = X+DX
+    | YY = Y+DY
+    | TT = Tile.type
+    | when ZZ and $at{XX YY ZZ}.type><RT.type: $clear_tile{XX YY ZZ}
+    | when $at{XX YY Z}.around><TT:
+      | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
+        | $clear_tile{XX YY Z}
 | $upd_column{X Y}
 
 world.clear_passage X Y Z =
