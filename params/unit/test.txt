@@ -4,8 +4,8 @@ health: 50
 damage: 10
 armor: 0
 inborn: (flyer)
-//attack: sound{fire1}
-impact: harm{user},sound{fire1}
+//attack: sound{explosion}
+impact: harm{user},sound{explosion}
 hit: effect{blood},sound{baphomet_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

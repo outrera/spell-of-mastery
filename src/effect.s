@@ -300,7 +300,7 @@ effect clear_passage What:
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
   Else | bad "effect clear: invalid target ([What])"
-| $world.clear_passage{X Y Z}
+| $world.clear_passage{X Y Z (max 4 $height)}
 
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type

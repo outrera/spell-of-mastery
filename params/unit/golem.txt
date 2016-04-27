@@ -5,8 +5,7 @@ damage: 10
 armor: 4
 speed: 34
 inborn: (upkeep4 heals)
-//attack: sound{attack2}
-impact: harm{user},sound{stone_hit}
-hit: effect{blood_undead}
+impact: harm{user},sound{golem_attack}
+hit: sound{golem_hit},effect{blood_undead}
 death: sound{golem_die}
 moves: sound{step}

@@ -5,8 +5,7 @@ damage: 4
 armor: 2
 speed: 28
 inborn: (upkeep2 heals regen flyer resist_magic)
-//attack: sound{attack2}
-impact: harm{user},sound{attack2}
+impact: harm{user},sound{cut}
 hit: effect{blood_undead},sound{wraith_hit}
 death: sound{wraith_die}
 moves: sound{wraith_move}

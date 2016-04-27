@@ -4,8 +4,7 @@ health: 60
 damage: 6
 armor: 0
 inborn: (upkeep1 heals organic)
-//attack: sound{attack2}
-impact: harm{user},sound{attack2}
+impact: harm{user},sound{cut}
 hit: effect{blood},sound{rat_death}
 death: sound{rat_death}
 moves: sound{step}

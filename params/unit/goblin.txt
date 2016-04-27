@@ -5,8 +5,7 @@ damage: 5
 armor: 0
 range: 3
 inborn: (upkeep1 heals organic)
-//attack: sound{attack2}
-impact: harm{user},sound{attack2}
+impact: harm{user},sound{cut}
 hit: sound{goblin_hit}
 death: sound{goblin_die}
 moves: sound{step}

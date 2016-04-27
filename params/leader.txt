@@ -8,7 +8,6 @@ tier: 5
 health: 100 // hit points - number of hits, before this unit is dead
 range: 3
 damage: 4 // amount of damage this unit deals
-impact: missile{effect_bolt},harm{user},impact{bolt_impact},sound{fire1}
 armor: 0 // amount of damage this unit can absorb, without losing health
 cooldown: 24
 sight: 3
@@ -20,6 +19,7 @@ leader: 1
 ai: unit
 item: pickup
 inborn: (heals organic resist_magic)
+impact: missile{effect_bolt},harm{user},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}

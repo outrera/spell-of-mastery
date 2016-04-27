@@ -16,8 +16,8 @@ armor: 3
 speed: 0
 blood: blood_undead
 inborn: (door_align)
-//attack: sound{attack2}
-impact: sound{attack2}
+//attack: sound{cut}
+impact: sound{cut}
 hit: effect{blood_undead},sound{door_hit}
 death: effect{explosion},sound{door_die}
 moves: sound{step}

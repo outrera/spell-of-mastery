@@ -224,9 +224,8 @@ world.clear_tile X Y Z =
         | $clear_tile{XX YY Z}
 | $upd_column{X Y}
 
-world.clear_passage X Y Z =
-| HH = $fix_z{X,Y,Z}
-| H = HH
+world.clear_passage X Y Z PassageH =
+| H = min $fix_z{X,Y,Z} Z+PassageH
 | when H-Z < 5: leave
 | ZZ = Z
 | AddCeil = 1

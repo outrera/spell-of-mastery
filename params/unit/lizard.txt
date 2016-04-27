@@ -6,7 +6,7 @@ armor: 0
 speed: 18
 inborn: (upkeep2 heals organic)
 attack: sound{lizard_attack}
-impact: harm{user}//,sound{attack2}
+impact: harm{user}//,sound{cut}
 hit: effect{blood},sound{lizard_hit}
 death: sound{baphomet_hit}
 moves: sound{lizard_move}
