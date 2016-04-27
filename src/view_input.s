@@ -80,7 +80,8 @@ world_place_tile Me X Y Z Tile =
 | for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
 | when Tile.roof.is_list:
   | H,RoofTile = Tile.roof
-  | world_place_tile Me X Y Z+H+Tile.height RoofTile
+  | for DX,DY [0,0 @Dirs]:
+    | world_place_tile Me X+DX Y+DY Z+H+Tile.height RoofTile
 | less Tile.wall: leave
 | world_place_tile_walls Me X Y Z Tile
 

@@ -1,5 +1,4 @@
 sprite: tiles_house
-roof: 0,house_roof
 around: house //this wall goes around house tiles
 back: house_wall_back
 //wallShift: -18 //precise pixel dimension used for door align
