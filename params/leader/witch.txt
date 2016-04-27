@@ -1,6 +1,6 @@
 sprite: unit_witch
 icon: unit_witch
-hit: effect{blood},sound{grunt_female1}
-death: sound{orbit}
+hit: effect{blood},sound{female_hit}
+death: sound{female_die},sound{mage_die}
 moves: sound{step}
 pentagram: special_pentagram_witch

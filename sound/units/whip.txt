@@ -1,5 +1,0 @@
-author: `Wesnoth Team`
-license: `GPL2`
-origin: `wesnoth.org`
-
-//originally tail.ogg

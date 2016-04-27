@@ -1,7 +1,7 @@
 sprite: unit_katzard
 icon: unit_katzard
-hit: effect{blood},sound{grunt4}
-death: sound{orbit}
+hit: effect{blood},sound{male_hit}
+death: sound{mage_die}
 moves: sound{step}
 impact: harm{user},impact{fire_spiral},sound{explosion}
 pentagram: special_pentagram_mage

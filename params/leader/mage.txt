@@ -1,6 +1,6 @@
 sprite: unit_mage
 icon: unit_mage
-hit: effect{blood},sound{grunt4}
-death: sound{orbit}
+hit: effect{blood},sound{male_hit}
+death: sound{mage_die}
 moves: sound{step}
 pentagram: special_pentagram_mage

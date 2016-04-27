@@ -6,6 +6,6 @@ armor: 4
 speed: 30
 inborn: (upkeep2 heals organic)
 impact: harm{user},sound{cut}
-hit: effect{blood},sound{grunt4}
-death: sound{dwarf_die}
+hit: effect{blood},sound{knight_hit}
+death: sound{male_die}
 moves: sound{step}

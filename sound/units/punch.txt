@@ -1,3 +1,0 @@
-author: `sodaholic/FreeDoom Team`
-license: `BSD`
-origin: `freedoom.sourceforge.net`

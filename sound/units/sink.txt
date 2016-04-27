@@ -1,3 +1,0 @@
-author: `www.freesfx.co.uk`
-license: `CC-BY`
-origin: `http://www.freesfx.co.uk/sfx/bubbles`

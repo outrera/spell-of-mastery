@@ -1,3 +1,0 @@
-author: `Hero of Allacrost team`
-license: `GPL2`
-origin: `allacrost.org`

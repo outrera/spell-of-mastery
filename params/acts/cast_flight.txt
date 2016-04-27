@@ -4,4 +4,4 @@ cost: 400
 range: 3
 needs: (cast_telekinesis cast_excavate)
 affects: unit
-before: add_effect{flyer,0,()},impact{heal},sound{wings}
+before: add_effect{flyer,0,()},impact{heal},sound{flight}

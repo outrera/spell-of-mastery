@@ -7,7 +7,7 @@ armor: 0
 range: 0
 leader: 2
 inborn: (upkeep1 flyer)
-death: sound{orbit}
+death: sound{mage_die}
 hit: effect{blood},sound{baphomet_hit}
 moves: sound{observer_move}
 acts: (cast_hexagram)

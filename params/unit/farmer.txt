@@ -5,6 +5,6 @@ damage: 3
 armor: 0
 inborn: (income1 heals organic)
 impact: harm{user},sound{cut}
-hit: effect{blood},sound{grunt4}
-death: sound{grunt_die1}
+hit: effect{blood},sound{male_hit}
+death: sound{male_die}
 moves: sound{step}

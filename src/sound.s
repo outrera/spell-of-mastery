@@ -4,14 +4,15 @@ PlayList = []
 PlayListIndex = 0
 
 main.load_sounds =
-| Folder = "[$data]sound/units/"
+| Folders = "[$data]sound/".urls.keep{(?1><'' and ?2><'')}{?0}
 | Params = load_params "[$data]/sound/"
 | $credits.sound <= extract_params_authors Params
-| $sounds <= @table: map Name Folder.urls.keep{is.[@_ txt]}{?1}
-  | SoundFile = "[Folder][Name].wav"
-  | less SoundFile.exists: SoundFile <= "[Folder][Name].ogg"
-  | less SoundFile.exists: bad "missing [SoundFile]"
-  | [Name SoundFile^sound_load]
+| $sounds <= @table: @join: map Folder Folders:
+  | map Name Folder.urls.keep{is.[@_ txt]}{?1}
+    | SoundFile = "[Folder][Name].wav"
+    | less SoundFile.exists: SoundFile <= "[Folder][Name].ogg"
+    | less SoundFile.exists: bad "missing [SoundFile]"
+    | [Name SoundFile^sound_load]
 | for [Path Name Ext] "[$data]/music".urls:
   | when Ext<>txt: case Name "ingame[X]":
     | push "[Name].[Ext]" PlayList

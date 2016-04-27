@@ -2,13 +2,13 @@ sprite: unit_vampire
 tier: 3
 health: 60
 damage: 5
-armor: 1
+armor: 2
 range: 3
 cool: 10
 inborn: (upkeep3 resist_magic)
 //attack: sound{lifedrain}
 impact: harm{user},lifedrain{6},impact{lifedrain},sound{lifedrain}
-hit: effect{blood_undead},sound{grunt2}
-death: sound{vampire_die}
+hit: effect{blood_undead},sound{ifrit_hit}
+death: sound{wraith_die}
 moves: sound{step}
 acts: (vampire_bat_form_on)
