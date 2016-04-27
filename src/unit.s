@@ -128,7 +128,11 @@ swimmer_can_move Me Src Dst =
 
 flyer_can_move Me Src Dst =
 | DX,DY,DZ = Dst
-| $world.at{DX DY DZ}.empty // FIXME: check for roof
+| Wr = $world
+| less Wr.at{DX DY DZ}.empty: leave 0
+| SX,SY,SZ = Src
+| if SZ<DZ then (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}
+  else (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}
 
 unit.update_move_method =
 | $can_move <= if $flyer then &flyer_can_move
