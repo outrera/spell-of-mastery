@@ -212,6 +212,10 @@ world.clear_tile X Y Z =
   | when $at{XX YY Z}.around><TT:
     | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
       | $clear_tile{XX YY Z}
+| when Tile.roof.is_list:
+  | H,RoofTile = Tile.roof
+  | ZZ = Z+H+1
+  | when ZZ < $d and $at{X Y ZZ}.type><RoofTile.type: $clear_tile{X Y ZZ}
 | $upd_column{X Y}
 
 world.clear_passage X Y Z =
