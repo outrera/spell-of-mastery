@@ -1,7 +1,7 @@
 icon: spell_flight
-lore: misc.tier1_lcost
-cost: 400
-range: 3
-needs: (cast_telekinesis cast_excavate)
+//lore: misc.tier1_lcost
+//cost: 800
+cool: 5760
 affects: unit
-before: add_effect{flyer,0,()},impact{heal},sound{flight}
+//two minutes should be enough to traverse 128x128 map
+before: owner_units,add_effect{flyer,2880,()},impact{heal},sound{flight}
