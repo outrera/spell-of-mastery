@@ -1,6 +1,5 @@
 use gfx stack heap zmap util line_points unit player
 
-MaxSize = No
 MaxUnits = No
 MaxActiveUnits = 4096
 NoteLife = 1.0
@@ -22,6 +21,7 @@ type world{main}
    h //height
    d //depth
    c //cell dimension unit
+   maxSize //max size
    filename/`default`
    name/`default map`
    description/`describe the map here`
@@ -67,7 +67,7 @@ world.init =
 | $minimap <= gfx 128 128
 | WParam = $main.params.world
 | $d <= WParam.depth
-| MaxSize <= WParam.max_size
+| $maxSize <= WParam.max_size+12 //FIXME: get rid of this 12 margin
 | MaxUnits <= WParam.max_units
 | NoteSize = WParam.note_size
 | NoteLife <= WParam.note_life
@@ -76,17 +76,18 @@ world.init =
 | $players <= map Id WParam.max_players: player Id Me
 | $c <= WParam.cell_size
 | $void <= $main.tiles.void
-| $tilemap <= zmap MaxSize $d $void
-| $unit_map <= zmap MaxSize $d 0
-| $lightmap <= zmap MaxSize $d 0
-| $heighmap <= dup MaxSize: @bytes MaxSize
+| $tilemap <= zmap $maxSize $d $void
+| $unit_map <= zmap $maxSize $d 0
+| $lightmap <= zmap $maxSize $d 0
+| $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $proxies <= MaxUnits{(proxy ?)}
 | $free_proxies <= stack $proxies.flip
 | $active <= stack MaxActiveUnits
 | $shadow <= $main.sprites.system_shadow.frames
-| SS = MaxSize*MaxSize
+| SS = $maxSize*$maxSize
+| MaxSize = $maxSize
 | $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $players.0.alloc_unit{unit_nil}

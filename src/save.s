@@ -168,7 +168,12 @@ world.load Saved =
 | when got Explored:
   | for PID,Sight Explored
     | PS = $players.PID.sight
-    | for I PS.size PS.I.init{Sight.I^rle_decode}
+    | WH = min{Sight.size $maxSize}
+    | for I WH
+      | Dst = PS.I
+      | Src = Sight.I^rle_decode
+      | if Dst.size><Src.size then Src.init{Src}
+        else for J WH: Dst.J <= Src.J
 | AEs = Saved.actions_enabled
 | when got AEs: for Name,Enabled AEs:
   | when got Acts.Name: Acts.Name.enabled <= Enabled

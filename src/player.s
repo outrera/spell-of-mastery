@@ -36,7 +36,8 @@ type player{id world}
 | $unit_counts <= dup 300
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $params <= t
-| $sight <= dup 132: 132.bytes
+| MaxSize = $world.maxSize
+| $sight <= dup MaxSize: MaxSize.bytes
 | $ai <= ai Me
 | Cs = $main.img{ui_colors}
 | when $id<Cs.h: $colors <= map I 5: Cs.get{I $id}
