@@ -7,3 +7,4 @@ needs: (cast_implosion)
 range: 5
 affects: (non_leader),unit
 before: harm{1000},impact{reaper},sound{armageddon}
+hint: harm

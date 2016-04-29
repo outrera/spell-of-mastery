@@ -5,3 +5,4 @@ cost: 300
 cool: 2880
 affects: unit
 before: owner_units,add_effect{haste,1000,()},impact{haste},sound{hasted}
+hint: boost_allies

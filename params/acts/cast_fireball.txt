@@ -6,3 +6,4 @@ cool: 240
 affects: unit
 range: 4
 before: missile{effect_fireball},harm{magic.40},impact{explosion},sound{explosion}
+hint: harm

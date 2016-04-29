@@ -5,3 +5,4 @@ before: (user_attack)
 impact: counter{1},user_impact
 range: user
 repeat: 1
+hint: harm

@@ -2,23 +2,25 @@ use macros unit_flags pathfind util
 
 PerCycle = 0
 
-cast_spell_sub Me Offensive =
-| SpellType = if Offensive then \aiOffensiveSpell else \aiDefensiveSpell
-| SpellName = $owner.params.SpellType
-| when no SpellName: leave 0
-| Act = $main.params.acts.SpellName
-| when no Act: bad "AI: cant find SpellType `[SpellName]`"
-| when Act.range>>9000: leave //FIXME: pick better any visible unit here
-| Targets = $world.targets_in_range{Me.xyz Act.range}.skip{?invisible}
-| Ts = Targets.skip{?empty}
-| if Offensive
+cast_spell_sub Me Spell =
+| less Spell and got Spell: leave 0
+| Act = Spell
+| when Act.is_text:
+  | Act <= $main.params.acts.Spell
+  | when no Act: bad "AI: cant find spell `[Spell]`"
+  | Spell <= Act.name
+| R = Act.range
+| Targets =
+    if R>>9000 then $world.active.list.skip{?removed}
+    else if R><0 then [Me]
+    else $world.targets_in_range{Me.xyz Act.range}.skip{?invisible}
+| Ts = Targets.skip{?empty}.keep{?alive}
+| if Act.hint><harm
   then Ts <= Ts.keep{?owner.id<>$owner.id}
   else Ts <= Ts.keep{?owner.id><$owner.id}
-| Ts = Ts.keep{?alive}
-| case SpellName //FIXME: spells actions should have `can do` method
-  cast_shell
-    | FlagN = getUnitFlagsTable{}.shell
-    | Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
+| for Flag Act.flags //avoid overriding
+  | FlagN = getUnitFlagsTable{}.Flag
+  | when got FlagN: Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
 | less Ts.size: leave 0
 | Target = Ts.0
 | Cost = Act.cost
@@ -29,9 +31,14 @@ cast_spell_sub Me Offensive =
 cast_spell Me =
 | PP = $owner.params
 | Cycle = $world.cycle
+| when PP.aiCastFlight:
+  | when cast_spell_sub{Me cast_flight}:
+    | PP.aiCastFlight <= 0 //wake up all units that previously could reach goal
+    | leave 1
 | when PP.aiSpellWait>>Cycle /*and Cycle>10000*/: leave 0
-| AT = $owner.params.aiType
-| when cast_spell_sub{Me 1} or cast_spell_sub{Me 0}:
+| AT = PP.aiType
+| when cast_spell_sub{Me PP.aiOffensiveSpell}
+    or cast_spell_sub{Me PP.aiDefensiveSpell}:
   | D = max 1 10-PP.difficulty
   | PP.aiSpellWait <= Cycle+D*24
   | leave 1
@@ -167,12 +174,17 @@ ai.update_units Units =
        | when Attacker:
          | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
            | Handled <= roam U
+           | less Handled or U.flyer: //casting flight is required?
+             | PP = Player.params
+             | when PP.aiCastFlightCycle+(60*24*4)<$world.cycle:
+               | PP.aiCastFlight <= 1
+               | PP.aiCastFlightCycle <= $world.cycle
      | less Handled:
        | when U.id >< LeaderID: update_leader U
        | when U.id >< PentID and Player.mana>500: ai_update_build Me
        //| when U.nonguard: roam U radius/4
     else
-     | when U.type><unit_spider and U.goal.is_unit:
+     | when U.type><unit_spider and U.goal.is_unit: //FIXME: hack
        | G = U.goal
        | when got G.child{effect_poison}:
          | Ts = U.targets_in_range{1}.skip{?.child{effect_poison}^got}

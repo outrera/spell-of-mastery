@@ -8,3 +8,4 @@ range: 9000
 affects: (outdoor),unit
 targets: any
 before: harm{magic.100},impact{lightning},sound{lightning}
+hint: harm

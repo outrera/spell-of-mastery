@@ -18,6 +18,8 @@ ai.clear =
 | $params.aiSpellWait <= 0 //hack to stop AI from spamming spells
 | $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
 | $params.aiLeaderHarmCycle <= -24*100000
+| $params.aiCastFlight <= 0
+| $params.aiCastFlightCycle <= -24*100000
 
 type player{id world}
    name

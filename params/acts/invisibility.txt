@@ -7,3 +7,4 @@ range: 0
 //lore: misc.tier1_lcost
 cost: 20
 cool: 480
+hint: boost

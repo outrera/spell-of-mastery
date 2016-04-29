@@ -8,3 +8,4 @@ range: 9000
 affects: (non_leader),unit
 before: sound{charm},impact{hypnotize},charm{owner}//,recall{self}
 after: ()
+hint: harm

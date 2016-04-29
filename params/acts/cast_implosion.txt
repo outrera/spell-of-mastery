@@ -6,3 +6,4 @@ needs: (cast_fireball)
 range: 5
 affects: unit
 before: decimate{1 2},impact{implosion},sound{lifedrain}
+hint: harm
