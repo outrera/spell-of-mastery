@@ -10,4 +10,4 @@ inborn: (upkeep1 flyer)
 death: sound{mage_die}
 hit: effect{blood},sound{baphomet_hit}
 moves: sound{observer_move}
-acts: (cast_hexagram)
+acts: (pentagram)

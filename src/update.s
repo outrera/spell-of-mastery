@@ -19,6 +19,14 @@ reinit_units Us =
   | U.pick_facing{Facing}
   | U.fxyz.init{FXYZ}
 
+handle_attack_triggers Us =
+| for U Us
+  | Os = U.world.units_at{U.xyz}
+  | AttackTrigger = Os.find{?ai><attack}
+  | when got AttackTrigger and U.ai<>attack:
+    | U.attacker <= 1
+    | AttackTrigger.free
+
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
@@ -50,6 +58,7 @@ world.new_game =
     | $effect{C.xyz pentagram_appearance}
   | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got!it $players.find{?human}: $human <= it
+| handle_attack_triggers $active
 
 EventActions = []
 

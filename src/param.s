@@ -79,8 +79,8 @@ params_handle_acts Me =
   | when got C: Act.before <= [@Act.before [cool C]]
   | when no Act.title: Act.title <= ActName.replace{_ ' '}
   | Flags = []
-  | for E [@Act.before @Act.after]: case E [add_effect [Name Dur As]]:
-    | when Dur<>0: push Name Flags
+  | for E [@Act.before @Act.after]:
+    | case E [add_effect [Name Dur As]]: push Name Flags
   | Act.flags <= Flags
 
 main.load_params =

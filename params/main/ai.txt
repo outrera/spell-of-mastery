@@ -6,7 +6,7 @@ leader_katzard: | goto leader_mage
 leader_mime: | goto default
 
 leader_mage:
-  | set aiOffensiveSpell cast_fireball
+  | set ai_spells (cast_fireball)
   | goto mage0
 
 mage0:
@@ -19,13 +19,12 @@ mage1:
   | goto mage2 when lossage >> 14
 
 mage2:
-  | set aiOffensiveSpell cast_lightning
-  | set aiDefensiveSpell cast_shell
+  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
   | attack dwarf halfling elf halfling
   | goto mage3 when lossage >> 32
 
 mage3:
-  | set aiOffensiveSpell cast_banish
+  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
   | attack dwarf ifrit elf halfling elf minotaur
   | goto mage4 when lossage >> 64
 
@@ -45,7 +44,7 @@ king1:
   | goto king2 when lossage >> 14
 
 king2:
-  | set aiDefensiveSpell cast_shell
+  | set ai_spells (cast_shell)
   | attack lizard knight lizard farmer
   | goto king3 when lossage >> 32
 
@@ -57,7 +56,7 @@ king4:
   | attack knight knight lizard farmer griffin griffin golem
 
 leader_witch:
-  | set aiOffensiveSpell cast_fireball
+  | set ai_spells (cast_fireball)
   | goto witch0
 
 witch0:
@@ -70,14 +69,13 @@ witch1:
   | goto witch2 when lossage >> 14
 
 witch2:
-  | set aiOffensiveSpell cast_lightning
-  | set aiDefensiveSpell cast_shell
+  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
   | attack orc goblin ratman
   | attack orc orc goblin goblin
   | goto witch3 when lossage >> 32
 
 witch3:
-  | set aiOffensiveSpell cast_banish
+  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
   | attack ratman orc baphomet spider goblin
   | goto witch4 when lossage >> 64
 
@@ -85,7 +83,7 @@ witch4:
   | attack ratman spider orc goblin baphomet ogre
 
 leader_priest:
-  | set aiOffensiveSpell cast_fireball
+  | set ai_spells (cast_fireball)
   | goto priest0
 
 priest0:
@@ -98,13 +96,12 @@ priest1:
   | goto priest2 when lossage >> 14
 
 priest2:
-  | set aiOffensiveSpell cast_lightning
-  | set aiDefensiveSpell cast_shell
+  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
   | attack skeleton wraith wraith bat gargoyle
   | goto priest3 when lossage >> 32
 
 priest3:
-  | set aiOffensiveSpell cast_banish
+  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
   | attack skeleton wraith skeleton bat gargoyle vampire
   | goto priest4 when lossage >> 64
 
@@ -113,7 +110,7 @@ priest4:
 
 
 default:
-  | set aiOffensiveSpell cast_fireball
+  | set ai_spells (cast_fireball)
   | goto tier0
 
 tier0:
@@ -127,8 +124,7 @@ tier1:
   | goto tier2 when lossage >> 14
 
 tier2:
-  | set aiOffensiveSpell cast_lightning
-  | set aiDefensiveSpell cast_shell
+  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
   | attack dwarf dwarf elf
   | attack orc orc
   | attack wraith
@@ -136,7 +132,7 @@ tier2:
   | goto tier3 when lossage >> 32
 
 tier3:
-  | set aiOffensiveSpell cast_banish
+  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
   | attack minotaur vampire
   | attack baphomet
   | attack spider ifrit
@@ -149,6 +145,6 @@ tier4:
   | attack dragon
 
 l2: //level2 AI
- | set aiDefensiveSpell cast_shell
+ | set ai_spells (cast_shell)
  | wait 2880 //two minutes
  | attack ratman ratman goblin
