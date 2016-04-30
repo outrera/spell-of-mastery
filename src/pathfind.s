@@ -90,7 +90,7 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
 | !MaxCost+StartCost
 | PFMap.X.Y.Z <= StartCost
 | PFQueue.push{[0 XYZ StartCost]}
-| BestXYZ = U.xyz
+| BestXYZ = XYZ
 | TargetXY = TargetXYZ.take{2}
 | BestL = (TargetXY-BestXYZ.take{2}).abs
 | R = 0
@@ -121,7 +121,7 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
         | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end
 | PFQueue.clear
-| if R then [R.0 R.1.xyz 0] else 0
+| if R then [R.0 R.1.xyz 0]^node_to_path else 0
 
 unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $xyz Check}
 
@@ -132,7 +132,7 @@ unit.find MaxCost Check =
 //FIXME: AI version should setup unit_block
 unit.path_to XYZ close/0 =
 | Found = $world.pathfind_closest{1000 Me $xyz XYZ}
-| if Found then Found^node_to_path else []
+| if Found then Found else []
 
 
 export node_to_path

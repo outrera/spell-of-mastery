@@ -8,24 +8,26 @@ unit.can_do Act =
 | when $cooldown_of{Act.name}: leave 0
 | 1
 
-cast_spell_sub Me Spell =
+Autocast = [boost harm]
+
+cast_spell_sub Me Spell Force =
 | less Spell and got Spell: leave 0
 | Act = Spell
 | when Act.is_text:
   | Act <= $main.params.acts.Spell
   | when no Act: bad "AI: cant find spell `[Spell]`"
 | Hint = Act.hint
-| less Hint: leave 0
+| when Hint<>boost and Hint<>harm: less Force: leave 0
 | when Act.name><attack: leave 0
 | R = Act.range
 | Targets =
     if R>>9000 then $world.active.list.skip{?removed}
     else if R><0 then [Me]
     else $world.targets_in_range{Me.xyz Act.range}
-| Ts = Targets.skip{?empty}.keep{?alive} //.skip{?invisible}
-| if Act.hint><harm
-  then Ts <= Ts.keep{?owner.id<>$owner.id}
-  else Ts <= Ts.keep{?owner.id><$owner.id}
+| Ts = Targets.skip{?empty}.keep{?alive}
+| if Hint><harm
+  then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}.skip{?invisible}
+  else Ts <= Ts.skip{U=>U.owner.is_enemy{$owner}}
 | when Act.affects<>unit:
   | case Act.affects [[@As] _]
     | for A As: case A
@@ -56,18 +58,18 @@ cast_spell Me =
   | less Pentagram: // if enemies are near, attacking them could do better results
     | when cast_pentagram Me: leave 1
   | when PP.aiCastFlight:
-    | when cast_spell_sub{Me cast_flight}:
+    | when cast_spell_sub{Me cast_flight 1}:
       | PP.aiCastFlight <= 0 //wake up all units that previously could reach goal
       | leave 1
   | Cycle = $world.cycle
   | when PP.aiSpellWait>>Cycle /*and Cycle>10000*/: leave 0
   | for Act PP.ai_spells
-    | when cast_spell_sub{Me Act}:
+    | when cast_spell_sub{Me Act 0}:
       | D = max 1 10-PP.difficulty
       | PP.aiSpellWait <= Cycle+D*24
       | leave 1
   | leave 0
-| for Act Acts: when cast_spell_sub{Me Act}: leave 1
+| for Act Acts: when cast_spell_sub{Me Act 0}: leave 1
 | 0
 
 cast_pentagram Me =
@@ -154,11 +156,27 @@ roam Me =
 | $order_at{TargetXYZ}
 | leave 1
 
+ai_cast_flight Me =
+| PP = $player.params
+| when PP.aiCastFlightCycle+(60*24*4)<$world.cycle:
+  | PP.aiCastFlight <= 1
+  | PP.aiCastFlightCycle <= $world.cycle
+
+ai_cast_teleport Me U =
+| Es = $world.active.list.skip{?removed}.keep{?.is_enemy{U}}.keep{?unit}
+| Es = Es{E=>[(E.xyz.take{2}-U.xyz.take{2}).abs E]}.sort{?0<??0}{?1}
+| less Es.size: leave
+| E = Es.0
+| Found = $world.pathfind_closest{1000 U E.xyz U.xyz}
+| less Found: leave
+| !U.owner.mana+$main.params.acts.cast_teleport.cost
+| U.order_act{cast_teleport target/Found.last}
+
+
 ai.update_units Units =
-| Player = $player
-| when Player.params.attack_with_guards >< 1:
+| when $player.params.attack_with_guards >< 1:
   | for U Units: U.attacker <= 1
-  | Player.params.attack_with_guards <= 0
+  | $player.params.attack_with_guards <= 0
 | for U Units:
   | if U.idle and not U.goal then
      | Handled = cast_spell U
@@ -168,11 +186,9 @@ ai.update_units Units =
          | Os = U.world.units_at{U.xyz}
          | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
            | Handled <= roam U
-           | less Handled or U.flyer: //casting flight is required?
-             | PP = Player.params
-             | when PP.aiCastFlightCycle+(60*24*4)<$world.cycle:
-               | PP.aiCastFlight <= 1
-               | PP.aiCastFlightCycle <= $world.cycle
+           | less Handled:
+             | less U.flyer: ai_cast_flight Me
+             | when U.flyer: ai_cast_teleport Me U
     else
      | when U.type><unit_spider and U.goal.is_unit: //FIXME: hack
        | G = U.goal

@@ -1,11 +1,12 @@
 icon: spell_teleport
 hotkey: p
-lore: misc.tier1_lcost
-cost: 100
-cool: 5760
-needs: (cast_telekinesis cast_haste cast_excavate)
+//lore: misc.tier1_lcost
+//cost: 400
+//cool: 5760
+//needs: (cast_telekinesis cast_haste)
 range: 9000
 affects: empty
+targets: any
 before: effect{teleport},sound{summon},set{self alpha 0},set{self delta 10}
 after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}
 hint: teleport
