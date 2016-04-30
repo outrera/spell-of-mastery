@@ -206,15 +206,16 @@ unit.add_effect Name Duration Params =
 | when On.0 <> `on`:
   | $world.notify{"unit.add_effect: missing `on{When}` for effect [Name]"}
   | leave
+| Flag = getUnitFlagsTable{}.Name
+| when got Flag:
+  | when $flags^get_bit{Flag}: leave //already got this effect
+  | when Name><invisible: $alpha <= 127
+  | $flags <= $flags^set_bit{Flag 1}
+  | $update_move_method
 | When = On.1
 | Es = @enheap [[When Name Duration Params] @$effects.list]
 | $effects.heapfree
 | $effects <= Es
-| Flag = getUnitFlagsTable{}.Name
-| when got Flag:
-  | when Name><invisible: $alpha <= 127
-  | $flags <= $flags^set_bit{Flag 1}
-  | $update_move_method
 
 unit.has Name = got $effects.find{?1><Name}
 
