@@ -79,25 +79,6 @@ cast_pentagram Me =
   | leave 1
 | leave 0
 
-ai.update_research =
-| P = $player
-| Pentagram = P.pentagram
-| less Pentagram: leave 0
-| Spawns = Pentagram.acts.keep{?after_table.spawn^got}
-| less Spawns.size: leave 0
-| Missing = PerCycle.missing
-| less got Missing: leave
-| for Type Missing:
-  | S = Spawns.find{?after_table.spawn >< Type}
-  | less got S: $world.notify{"AI: missing spawn `[Type]`"}
-  | when got S and P.research_remain{S} > 0:
-    | when S.lore.0<<P.lore and S.lore.1 << P.mana:
-      | !P.lore-S.lore.0
-      | !P.mana-S.lore.1
-      | P.research_item{S.name}
-      | leave 1
-| 0
-
 ai_update_build Me =
 | Pentagram = $player.pentagram
 | less Pentagram: leave 0
@@ -157,21 +138,24 @@ roam Me =
 | leave 1
 
 ai_cast_flight Me =
-| PP = $player.params
-| when PP.aiCastFlightCycle+(60*24*4)<$world.cycle:
-  | PP.aiCastFlight <= 1
-  | PP.aiCastFlightCycle <= $world.cycle
+| PP = $owner.params
+| less PP.aiCastFlightCycle+(60*24*4)<$world.cycle: leave 0
+| PP.aiCastFlightCycle <= $world.cycle
+| when no PP.ai_spells.find{cast_flight}: leave 0 //are we allowed to fly?
+| PP.aiCastFlight <= 1
+| 1
 
 ai_cast_teleport Me U =
+| when U.cooldown_of{cast_teleport}: leave 0
 | Es = $world.active.list.skip{?removed}.keep{?.is_enemy{U}}.keep{?unit}
 | Es = Es{E=>[(E.xyz.take{2}-U.xyz.take{2}).abs E]}.sort{?0<??0}{?1}
-| less Es.size: leave
+| less Es.size: leave 0
 | E = Es.0
 | Found = $world.pathfind_closest{1000 U E.xyz U.xyz}
-| less Found: leave
-| !U.owner.mana+$main.params.acts.cast_teleport.cost
+| less Found: leave 0
+| !U.owner.mana + $main.params.acts.cast_teleport.cost
 | U.order_act{cast_teleport target/Found.last}
-
+| 1
 
 ai.update_units Units =
 | when $player.params.attack_with_guards >< 1:
@@ -180,15 +164,25 @@ ai.update_units Units =
 | for U Units:
   | if U.idle and not U.goal then
      | Handled = cast_spell U
+     | when U.ai_wait:
+       | !U.ai_wait-10 //ai.update_units gets called every 10th cycle
+       | Handled <= 1
      | less Handled:
        | Attacker = U.damage and U.attacker
        | when Attacker:
          | Os = U.world.units_at{U.xyz}
          | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
-           | Handled <= roam U
+           | less U.flyer: when ai_cast_flight U:
+             | U.ai_wait <= 40
+             | Handled <= 1
            | less Handled:
-             | less U.flyer: ai_cast_flight Me
-             | when U.flyer: ai_cast_teleport Me U
+             | Handled <= roam U
+             | less Handled:
+               | less ai_cast_teleport Me U:
+                 | CD = U.cooldown_of{cast_teleport}
+                 | W = if CD then CD.0 else 0
+                 | when W<<0: W <= 1000
+                 | U.ai_wait <= W
     else
      | when U.type><unit_spider and U.goal.is_unit: //FIXME: hack
        | G = U.goal
@@ -202,6 +196,7 @@ ai.update_units Units =
 //when leader is too far from pentagram, just teleport leader back to it
 // after units get teleported, order them to attack
 ai.harm Attacker Victim =
+| Victim.ai_wait <= 0
 | when Victim.leader><1:
   | Pent = Victim.owner.pentagram
   | when Pent and (Pent.xyz-Victim.xyz).abs>>5.0:
@@ -289,9 +284,7 @@ ai_update Me =
 | Player = $player
 | Player.lore <= 9000
 | when Player.id: while $script><1:
-| Quit = $update_units{Player.units}
-| when Quit: leave
-//| $update_research
+| $update_units{Player.units}
 
 ai.update =
 | PerCycle <= t

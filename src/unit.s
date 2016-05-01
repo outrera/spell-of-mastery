@@ -13,48 +13,47 @@ cell_goal.empty = 1
 cell_goal.harm Attacker Damage =
 
 type unit.$class{Id World}
-  id/Id
-  world/World
-  name
-  serial
-  class
+  world/World //FIXME: get rid of it, we wont be using several world
+  id/Id //id could be reused, when this unit is freed
+  serial //seral cant be reused, when this unit is freed
+  class //data shared between all units of that class
+  owner // player controlling this unit
   fxyz/[0 0 0] // fine X,Y,Z
   xyz/[0 0 -1] // world cell X,Y,Z
-  fix_z/0
-  from/[0 0 0]
-  velocity/[0.0 0.0 0.0]
+  fix_z/0 // z of the ground under this unit
+  from/[0 0 0] //where this unit moved from
+  facing // direction this unit faces
+  velocity/[0.0 0.0 0.0] //when unit falls down or gets kicked
+  sprite //sprite used by this unit
+  colors //colors for the sprite
+  alpha //how transparent is the sprite of this unit
+  delta //change of transparency per cycle
   anim // animation id
   anim_step // frame index inside of current animation
   anim_seq // current animation sequence
   anim_wait // cycles till the next animation frame
-  frame
-  facing // direction this unit faces
-  owner // player controlling this unit
+  frame //gfx of current animation frame
+  mirror // true, if drawing code should mirror the sprite
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
-  cooldown
-  sprite
-  mirror // true, if drawing code should mirror the sprite
-  mark // temporary mark, dont save
+  cooldown //cooldown before the unit can attack again
+  ai_wait //cycles for ai to wait
   active // true if this unit resides in the list of active units
   path/[] // path to goal
-  path_life
+  path_life //cycles before updating path
   goal
-  goal_serial
+  goal_serial //in case goal gets killed
   goal_act
+  host //what unit hosts this sprite
+  host_serial //when host dies, its serial changes
   unit_goal/cell_goal{}
   hp // hit points
-  flags
-  alpha //how transparent is this unit
-  delta //change of transparency per cycle
   kills //how many enemies this unit has killed
+  flags //various flags (mostly effects)
   effects/[] //active effects
   mod //set by various effects to modify some contextual behavior
-  host //what unit hosts this sprite
-  host_serial
-  colors
-  can_move
+  can_move //movement function
 | $action <= $world.action{Me}
 | $next_action <= $world.action{Me}
 | $ordered <= $world.action{Me}
@@ -86,6 +85,10 @@ unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
 unit.paralyzed = $flags^get_bit{13}
 unit.slowed = $flags^get_bit{14}
+
+// this unit is a temporary mark (i.e. cursor); dont save it
+unit.mark = $flags^get_bit{16}
+unit.`!mark` State = $flags <= $flags^set_bit{16 State}
 
 unit.child Type =
 | $world.units_at{$xyz}.find{(?host and ?type><Type and ?host.serial><$serial)}
@@ -157,7 +160,6 @@ unit.init Class =
 | $serial <= $world.serial
 | !$world.serial + 1
 | $animate{idle}
-| $mark <= 0
 | $hp <= $class.hp
 | $flags <= 0
 | $alpha <= 0
@@ -176,6 +178,7 @@ unit.init Class =
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
   | $path_life <= 0
+  | $ai_wait <= 0
   | for E $inborn: case E
       [`{}` Name Duration @Args] | $add_effect{Name Duration Args}
       Else | $add_effect{E 0 []}

@@ -1,9 +1,9 @@
 icon: spell_teleport
 hotkey: p
-//lore: misc.tier1_lcost
-//cost: 400
-//cool: 5760
-//needs: (cast_telekinesis cast_haste)
+lore: misc.tier1_lcost
+cost: 400
+cool: 4320
+needs: (cast_telekinesis cast_haste)
 range: 9000
 affects: empty
 targets: any
