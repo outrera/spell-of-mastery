@@ -29,8 +29,10 @@ type world{main}
    unit_map
    lightmap
    heighmap
+   owners // unit owners
    units
    free_units
+   active // active units
    proxies
    free_proxies
    players
@@ -43,8 +45,6 @@ type world{main}
    cycle // counts calls to world.update
    serial
    nil // null unit with id >< 0
-   owners // unit owners
-   active // active units
    vars/t{} // variables
    marks/[]
    params/(t)
