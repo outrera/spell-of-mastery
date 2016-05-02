@@ -1,11 +1,11 @@
 sprite: unit_bat
 tier: 1
-health: 10
+health: 12
 damage: 2
 armor: 2
 speed: 20
 inborn: (upkeep1 heals flyer organic)
-attack: sound{bat_move}
+attack: sound{bat_attack}
 impact: harm{user}
 hit: effect{blood},sound{bat_hit}
 death: sound{bat_die}

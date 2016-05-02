@@ -1,3 +1,3 @@
-author: `Nooskewl Games`
-license: `Public Domain`
-origin: `http://opengameart.org/content/sound-effects-from-monster-rpg-2`
+author: `Aaron Bishop`, `Ben Bishop`
+license: `GPL2`
+origin: `https://sourceforge.net/projects/egoboo/`

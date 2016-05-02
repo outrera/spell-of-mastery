@@ -1,0 +1,6 @@
+author: `Stratagus Team`,`Nikita Sadkov`
+license: `GPL2`
+origin: `http://stratagus.com/games/aleonas-tales/`
+frames: 64*32
+xy: 0,16
+anims: | idle time-18 0

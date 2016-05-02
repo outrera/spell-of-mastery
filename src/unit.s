@@ -510,4 +510,10 @@ unit.face XYZ =
 | XY = (XYZ-$xyz).take{2}{?sign}
 | less XY >< [0 0]: $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
+unit.sound SoundName =
+| when not $id or (not $removed and $world.human.explored{$xyz}>1):
+  | CXYZ = $main.ui.view.center
+  | V = 1.0 / | max 1.0 (CXYZ - $xyz).abs*0.5
+  | when V>0.01: $main.sound{SoundName volume/V}
+
 export unit
