@@ -70,12 +70,13 @@ world_place_tile_walls Me X Y Z Tile =
 | for DX,DY Dirs:
   | XX = X+DX
   | YY = Y+DY
-  | DTile = $at{XX YY Z} 
+  | DTile = $at{XX YY Z}
   | when DTile.type <> Tile.type and (DTile.clear or DTile.empty):
     | $clear_tile{XX YY Z}
     | world_place_tile Me XX YY Z Wall
 
 world_place_tile Me X Y Z Tile =
+| when X<1 or Y<1 or X>$w or Y>$h: leave
 | $set{X Y Z Tile}
 | for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
 | when Tile.roof.is_list:
