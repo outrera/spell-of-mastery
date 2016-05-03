@@ -291,12 +291,12 @@ effect clear What:
   Else | bad "effect clear: invalid target ([What])"
 | $world.clear_tile{X Y Z}
 
-effect clear_passage What:
+effect excavate What:
 | X,Y,Z = case What
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
   Else | bad "effect clear: invalid target ([What])"
-| $world.clear_passage{X Y Z (max 4 $height)}
+| $world.excavate{X Y Z 8}
 
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type

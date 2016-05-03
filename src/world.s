@@ -225,7 +225,12 @@ world.clear_tile X Y Z =
         | $clear_tile{XX YY Z}
 | $upd_column{X Y}
 
-world.clear_passage X Y Z PassageH =
+world_respawn_tile Me XYZ Type Delay =
+| S = $players.0.alloc_unit{unit_dummy}
+| S.move{XYZ}
+| S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
+
+world.excavate X Y Z PassageH =
 | H = min $fix_z{X,Y,Z} Z+PassageH
 | when H-Z < 5: leave
 | ZZ = Z
@@ -240,10 +245,7 @@ world.clear_passage X Y Z PassageH =
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
-  | when Type<>void:
-    | S = $players.0.alloc_unit{unit_dummy}
-    | S.move{[X Y Z]}
-    | S.add_effect{retile 24*10 [[effect [on timeout] [retile [[X Y Z] Type]]]]}
+  | when Type<>void: world_respawn_tile Me X,Y,Z Type 24*30
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y
