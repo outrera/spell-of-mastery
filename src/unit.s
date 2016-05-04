@@ -115,33 +115,53 @@ land_can_move Me Src Dst =
 | SZ = Src.2
 | Z = DZ-SZ
 | when Z.abs > 4: leave 0
-| $world.at{DX DY DZ-1}.type <> water
+| less $world.at{DX DY DZ}.empty: leave 0
+| when $world.at{DX DY DZ-1}.type >< water: leave 0
+| Dst
+
+digger_can_move Me Src Dst =
+| DX,DY,DZ = Dst
+| SZ = Src.2
+| Z = DZ-SZ
+| when Z.abs > 4:
+  | when $world.at{DX DY SZ}.clear: leave DX,DY,SZ
+  | leave 0
+| less $world.at{DX DY DZ}.empty: leave 0
+| when $world.at{DX DY DZ-1}.type >< water: leave 0
+| Dst
 
 amphibian_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | SZ = Src.2
 | Z = DZ-SZ
 | when Z.abs > 4: leave 0
+| if $world.at{DX DY DZ}.empty then Dst else 0
 
 swimmer_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | SZ = Src.2
 | Z = DZ-SZ
 | when Z.abs > 4: leave 0
-| $world.at{DX DY DZ-1}.type >< water
+| less $world.at{DX DY DZ}.empty: leave 0
+| less $world.at{DX DY DZ-1}.type >< water: leave 0
+| Dst
 
 flyer_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | Wr = $world
 | less Wr.at{DX DY DZ}.empty: leave 0
 | SX,SY,SZ = Src
-| if SZ<DZ then (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}
-  else (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}
+| if SZ<DZ then 
+   | less (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}: leave 0
+  else
+   | less (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}: leave 0
+| Dst
 
 unit.update_move_method =
 | $can_move <= if $flyer then &flyer_can_move
                else if $amphibian then &amphibian_can_move
                else if $swimmer then &swimmer_can_move
+               else if $digger then &digger_can_move
                else if $builder then &amphibian_can_move
                else &land_can_move
 

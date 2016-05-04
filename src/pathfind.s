@@ -8,26 +8,28 @@ Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
 list_moves Me Src =
 | Ms = []
 | SX,SY,SZ = Src
-| Digger = $digger
+| CanMove = $can_move
 | for DX,DY Dir4
   | X = SX+DX
   | Y = SY+DY
   | Z = SZ
-  | Tile = $world.at{X Y Z}
-  | if Tile.type >< border_ then
-    else if Digger and Tile.clear and (Z-$world.fix_z{X,Y,Z}).abs>4 then
-     | push move{excavate [X Y Z]} Ms
-    else
-    | Z <= $world.fix_z{X,Y,Z}
-    | Dst = [X Y Z]
+  | Dst = X,Y,Z
+  | if CanMove{Me Src Dst} then
+      | less $world.at{X Y Z}.unit: Dst.2 <= $world.fix_z{Dst}
+    else 
+      | Tile = $world.at{X Y Z}
+      | if Tile.type >< border_ then Dst <= 0
+        else | Dst.2 <= $world.fix_z{Dst}
+             | Dst <= CanMove{Me Src Dst}
+  | when Dst:
     | B = $world.block_at{Dst}
     | if got B then
         | if $owner.id <> B.owner.id
           then when B.alive and $damage and (SZ-Z).abs<<4:
                | push move{attack Dst} Ms
-          else when B.speed and $can_move{}{Me Src Dst} and B.can_move{}{B Dst Src}:
-               | push move{swap Dst} Ms //when B cant move to Src, ask B to move back
-      else when $can_move{}{Me Src Dst}: push move{move Dst} Ms
+          else when B.speed and B.can_move{}{B Dst Src}:
+               | push move{swap Dst} Ms //FIXME: condier moving B back
+      else push move{move Dst} Ms
 | Ms
 
 

@@ -213,7 +213,7 @@ unit_check_move Me Dst =
 | Below = $world.at{X Y $world.fix_z{X,Y,Z}-1}
 | when $builder:
   | when Below.type><water: leave bridge
-  | B = $world.block_at{X Y Z}
+  | B = $world.block_at{X,Y,Z}
   | when got B and B.ai><tree: leave excavate
 | when Below.type><water:
   | less $flyer or $amphibian or $swimmer: leave 0
