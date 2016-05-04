@@ -1,1 +1,1 @@
-class: empty,0,invincible,1,height,8
+class: empty,0,invincible,1,height,8,ai,tree

@@ -1,8 +1,0 @@
-icon: spell_excavate
-lore: misc.tier1_lcost
-cost: 100
-range: 1
-fix_z: caster
-affects: any
-before: sound{summon}
-after: same_z,excavate{target},impact{explosion},sound{impact},sound{excavate}

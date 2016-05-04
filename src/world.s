@@ -245,7 +245,7 @@ world.excavate X Y Z PassageH =
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
-  | when Type<>void: $respawn_tile{X,Y,Z Type 24*30}
+  | when Type<>void: $respawn_tile{X,Y,Z Type 24*40}
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y

@@ -211,8 +211,11 @@ unit_check_move Me Dst =
   | when $digger and Tile.clear: leave excavate
   | leave 0
 | Below = $world.at{X Y $world.fix_z{X,Y,Z}-1}
+| when $builder:
+  | when Below.type><water: leave bridge
+  | B = $world.block_at{X Y Z}
+  | when got B and B.ai><tree: leave excavate
 | when Below.type><water:
-  | when $builder: leave bridge
   | less $flyer or $amphibian or $swimmer: leave 0
 | B = $world.block_at{Dst}
 | when no B: leave move

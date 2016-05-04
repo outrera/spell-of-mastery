@@ -304,7 +304,7 @@ effect bridge What:
   X,Y,Z | X,Y,Z
   Else | bad "effect bridge: invalid target ([What])"
 | Z = $world.fix_z{X,Y,Z}
-| $world.respawn_tile{X,Y,Z `void` 24*10}
+| $world.respawn_tile{X,Y,Z `void` 24*40}
 | $world.set{X Y Z $main.tiles.floor_wooden}
 
 effect set_tile [X Y Z] Type:
