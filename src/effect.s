@@ -295,8 +295,17 @@ effect excavate What:
 | X,Y,Z = case What
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
-  Else | bad "effect clear: invalid target ([What])"
+  Else | bad "effect excavate: invalid target ([What])"
 | $world.excavate{X Y Z 8}
+
+effect bridge What:
+| X,Y,Z = case What
+  target | TargetXYZ.deep_copy
+  X,Y,Z | X,Y,Z
+  Else | bad "effect bridge: invalid target ([What])"
+| Z = $world.fix_z{X,Y,Z}
+| $world.respawn_tile{X,Y,Z `void` 24*10}
+| $world.set{X Y Z $main.tiles.floor_wooden}
 
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type

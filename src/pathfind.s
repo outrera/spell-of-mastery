@@ -18,8 +18,6 @@ list_moves Me Src =
     else if Digger and Tile.clear and (Z-$world.fix_z{X,Y,Z}).abs>4 then
      | push move{excavate [X Y Z]} Ms
     else
-    | when Digger
-      | $world.at{X Y Z}
     | Z <= $world.fix_z{X,Y,Z}
     | Dst = [X Y Z]
     | B = $world.block_at{Dst}

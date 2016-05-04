@@ -1,0 +1,5 @@
+icon: spell_excavate
+fix_z: caster
+range: 1
+affects: any
+impact: same_z,bridge{target},impact{spell},sound{impact}

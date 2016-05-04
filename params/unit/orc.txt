@@ -3,7 +3,8 @@ tier: 2
 health: 100
 damage: 8
 armor: 0
-inborn: (upkeep2 heals organic)
+acts: (bridge)
+inborn: (upkeep2 heals organic builder)
 //attack: sound{cut}
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{orc_hit}

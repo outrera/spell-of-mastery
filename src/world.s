@@ -225,7 +225,7 @@ world.clear_tile X Y Z =
         | $clear_tile{XX YY Z}
 | $upd_column{X Y}
 
-world_respawn_tile Me XYZ Type Delay =
+world.respawn_tile XYZ Type Delay =
 | S = $players.0.alloc_unit{unit_dummy}
 | S.move{XYZ}
 | S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
@@ -245,11 +245,10 @@ world.excavate X Y Z PassageH =
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
-  | when Type<>void: world_respawn_tile Me X,Y,Z Type 24*30
+  | when Type<>void: $respawn_tile{X,Y,Z Type 24*30}
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y
-
 
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =

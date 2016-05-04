@@ -2,6 +2,7 @@ flags: attacker{0,-1},picked{1,-1},nonguard{2,-1}
       ,haste{3,5},shell{4,2},flyer{5,-1},fireaura{7,0},organic{8,-1}
       ,digger{9,-1},swimmer{10,-1},amphibian{11,-1},invisible{12,-1}
       ,paralyzed{13,3},slowed{14,-1},bloodlust{15,1},mark{16,-1}
+      ,builder{17,-1}
 
 haste: on{static}
 flyer: on{static}
@@ -9,6 +10,7 @@ swimmer: on{static}
 amphibian: on{static}
 organic: on{static}
 digger: on{static}
+builder: on{static}
 invisible: on{static}
 paralyzed: on{static}
 bloodlust: on{attack},mod{boost.(15 10)}

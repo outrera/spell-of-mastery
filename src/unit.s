@@ -89,6 +89,7 @@ unit.slowed = $flags^get_bit{14}
 // this unit is a temporary mark (i.e. cursor); dont save it
 unit.mark = $flags^get_bit{16}
 unit.`!mark` State = $flags <= $flags^set_bit{16 State}
+unit.builder = $flags^get_bit{17}
 
 unit.child Type =
 | $world.units_at{$xyz}.find{(?host and ?type><Type and ?host.serial><$serial)}
@@ -141,6 +142,7 @@ unit.update_move_method =
 | $can_move <= if $flyer then &flyer_can_move
                else if $amphibian then &amphibian_can_move
                else if $swimmer then &swimmer_can_move
+               else if $builder then &amphibian_can_move
                else &land_can_move
 
 
