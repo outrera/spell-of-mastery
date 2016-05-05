@@ -1,7 +1,7 @@
 proto: spawn__proto
 icon: unit_dragon
-lore: misc.tier4_lcost
-cost: misc.tier4_scost
-cool: misc.tier4_cool
+lore: misc.tier5_lcost
+cost: misc.tier5_scost
+cool: misc.tier5_cool
 needs: ((summon_hydra summon_ogre summon_observer summon_golem))
 after: spawn{unit_dragon}

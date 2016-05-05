@@ -14,6 +14,6 @@ tier3_cool: 4000
 tier4_lcost: (20 1000)
 tier4_scost: 1000
 tier4_cool: 8000
-tier5_lcost: (20 1400)
+tier5_lcost: (20 1000)
 tier5_scost: 1400
 tier5_cool: 16000
