@@ -149,11 +149,9 @@ flyer_can_move Me Src Dst =
 | Wr = $world
 | less Wr.at{DX DY DZ}.empty: leave 0
 | SX,SY,SZ = Src
-| if SZ<DZ then 
-   | less (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}: leave 0
-  else
-   | less (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}: leave 0
-| 1
+| when SZ<DZ:leave (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}
+| (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}
+
 
 unit.update_move_method =
 | $can_move <= if $flyer then &flyer_can_move
