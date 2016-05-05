@@ -1,2 +1,3 @@
 role: castle_wall
 stack: castle_wall0,castle_wall1,castle_wall2
+clear: 0

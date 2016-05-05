@@ -15,12 +15,12 @@ list_moves Me Src =
   | Z = SZ
   | Dst = X,Y,Z
   | if CanMove{Me Src Dst} then
-      | less $world.at{X Y Z}.unit: Dst.2 <= $world.fix_z{Dst}
-    else 
-      | Tile = $world.at{X Y Z}
-      | if Tile.type >< border_ then Dst <= 0
-        else | Dst.2 <= $world.fix_z{Dst}
-             | Dst <= CanMove{Me Src Dst}
+    | when $world.at{X Y Z-1}.empty: Dst.2 <= $world.fix_z{Dst} //gonna fall
+    else
+    | Tile = $world.at{X Y Z}
+    | if Tile.type >< border_ then Dst <= 0
+      else | Dst.2 <= $world.fix_z{Dst}
+           | less CanMove{Me Src Dst}: Dst <= 0
   | when Dst:
     | B = $world.block_at{Dst}
     | if got B then
@@ -28,7 +28,7 @@ list_moves Me Src =
           then when B.alive and $damage and (SZ-Z).abs<<4:
                | push move{attack Dst} Ms
           else when B.speed and B.can_move{}{B Dst Src}:
-               | push move{swap Dst} Ms //FIXME: condier moving B back
+               | push move{swap Dst} Ms //FIXME: consider moving B back
       else push move{move Dst} Ms
 | Ms
 
