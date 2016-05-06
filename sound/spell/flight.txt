@@ -1,3 +1,5 @@
 author: `Wesnoth Team`
 license: `GPL2`
 origin: `wesnoth.org`
+
+//edited out of hatchet-miss.wav

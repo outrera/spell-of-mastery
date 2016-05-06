@@ -391,6 +391,13 @@ update_fall Me =
 | if FDst.2 > FZ*8 then $fine_move{FDst}
   else $move{[$xyz.0 $xyz.1 FZ]}
 
+unit_sink Me =
+| $sound{sink}
+| $world.effect{$xyz sink}
+| $move{[$world.w+1 $world.h+1 1]} //move it out of sight
+| $harm{Me 6000}
+
+
 unit.update =
 | when $removed or $active<>1:
   | $active <= 0
@@ -403,10 +410,8 @@ unit.update =
 | if $xyz.2 > $fix_z then | update_fall Me; leave
   else when $velocity.2<0.0:
   | $velocity.2 <= 0.0
-  | when $world.at{$xyz.0 $xyz.1 $xyz.2-1}.liquid:
-    | $sound{sink}
-    | $world.effect{$xyz sink}
-    | $free
+  | when $world.at{$xyz.0 $xyz.1 $xyz.2-1}.liquid and not $flyer: 
+    | unit_sink Me
     | leave
 | when $paralyzed and $alive: leave
 | update_anim Me
