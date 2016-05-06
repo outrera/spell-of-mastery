@@ -361,8 +361,6 @@ unit.explore V =
 
 world.explore State = for P $players: P.explore{State}
 
-world.seen X Y = $human.sight.Y.X>1
-
 world.place_unit U =
 | XYZ = U.xyz.copy
 | Mirror = U.facing >< 5

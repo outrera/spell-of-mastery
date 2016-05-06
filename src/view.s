@@ -57,7 +57,7 @@ view.key_set Name Value =
 view.mode = $world.mode
 view.`!mode` V = $world.mode <= V
 
-view.player = $world.human
+view.player = $world.human //view deals with human player
 
 view.picked = $player.picked
 view.`!picked` Us = $player.picked <= Us

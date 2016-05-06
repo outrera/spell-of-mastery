@@ -323,7 +323,8 @@ order_act Me Act XYZ Target =
 
 handle_picked Me Rect Units = //Me is view
 | $ui.on_unit_pick{$picked}
-| Units = Units.keep{?seen}
+| Player = $player
+| Units = Units.keep{U=>Player.seen{U.xyz}}
 | Act = $world.act
 | when Act:
   | when $picked.end:
@@ -361,7 +362,7 @@ handle_picked Me Rect Units = //Me is view
   | when Proceed:
     | Blink = 1
     | for U $picked
-      | when $world.seen{@XYZ.take{2}}:
+      | when Player.seen{XYZ}:
         | when Target and Blink:
           | $world.blink.init{[4 Target]}
           | Blink <= 0

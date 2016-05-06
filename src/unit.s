@@ -520,8 +520,6 @@ unit.remove =
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
 
-unit.seen = $world.seen{$xyz.0 $xyz.1}
-
 unit.environment_updated =
 
 unit.face XYZ =

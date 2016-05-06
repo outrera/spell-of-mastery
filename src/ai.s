@@ -1,5 +1,8 @@
 use macros unit_flags pathfind util
 
+SeenUnits = 0
+OwnedUnits = 0
+SeenEnemies = 0
 PerCycle = 0
 
 unit.can_do Act =
@@ -21,12 +24,12 @@ cast_spell_sub Me Spell Force =
 | when Act.name><attack: leave 0
 | R = Act.range
 | Targets =
-    if R>>9000 then $world.active.list.skip{?removed}
+    if R>>9000 then SeenUnits
     else if R><0 then [Me]
     else $world.targets_in_range{Me.xyz Act.range}
 | Ts = Targets.skip{?empty}.keep{?alive}
 | if Hint><harm
-  then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}.skip{?invisible}
+  then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}
   else Ts <= Ts.skip{U=>U.owner.is_enemy{$owner}}
 | when Act.affects<>unit:
   | case Act.affects [[@As] _]
@@ -147,8 +150,7 @@ ai_cast_flight Me =
 
 ai_cast_teleport Me U =
 | when U.cooldown_of{cast_teleport}: leave 0
-| Es = $world.active.list.skip{?removed}.keep{?.is_enemy{U}}.keep{?unit}
-| Es = Es{E=>[(E.xyz.take{2}-U.xyz.take{2}).abs E]}.sort{?0<??0}{?1}
+| Es = SeenEnemies{E=>[(E.xyz.take{2}-U.xyz.take{2}).abs E]}.sort{?0<??0}{?1}
 | less Es.size: leave 0
 | E = Es.0
 | Found = $world.pathfind_closest{1000 U E.xyz U.xyz}
@@ -157,13 +159,14 @@ ai_cast_teleport Me U =
 | U.order_act{cast_teleport target/Found.last}
 | 1
 
-ai.update_units Units =
+ai.update_units =
+| Units = OwnedUnits
 | when $player.params.attack_with_guards >< 1:
   | for U Units: U.attacker <= 1
   | $player.params.attack_with_guards <= 0
 | for U Units:
-  | if U.idle and not U.goal then
-     | Handled = cast_spell U
+  | Handled = cast_spell U
+  | less Handled: if U.idle and not U.goal then
      | when U.ai_wait:
        | !U.ai_wait-10 //ai.update_units gets called every 10th cycle
        | Handled <= 1
@@ -193,38 +196,38 @@ ai.update_units Units =
          | when Ts.size: U.order_at{Ts.0.xyz}
 | 0
 
-//when leader is too far from pentagram, just teleport leader back to it
-// after units get teleported, order them to attack
+ai_leader_harmed Me Attacker Victim =
+| Pent = Victim.owner.pentagram
+| when Pent and (Pent.xyz-Victim.xyz).abs>>5.0:
+  | Victim.order_act{recall target/Victim}
+  | leave
+| when Attacker:
+  | R = Attacker.range
+  | when R><cross or R><1 or (Attacker.xyz-Victim.xyz).abs<2.0:
+      | F = Victim.find{8
+        | D => (D.xyz-Attacker.xyz).abs >> 2.0
+               and (D.xyz-Victim.xyz).abs < 3.0}
+      | when F: Victim.order_at{F}
+| when Pent:
+  | SAct = $main.params.acts.summon_blob
+  | when Pent.can_do{SAct}: Pent.order_act{SAct}
+| Cycle = $world.cycle
+| PParams = $player.params
+| LHC = $params.aiLeaderHarmCycle
+| when LHC+24*120>Cycle:
+  | when Attacker: for U OwnedUnits: when U.damage and U.idle:
+    | U.order_at{Attacker.xyz}
+  | leave
+| Bonus = max 0 LHC
+| !$player.mana + ((Cycle-Bonus)/24*$main.params.ai.leader_defense_bonus)
+| $params.aiLeaderHarmCycle <= Cycle
+| for U OwnedUnits: when U.id <> Victim.id: when U.speed:
+  | U.attacker <= 1
+  | U.order_act{recall target/U}
+
 ai.harm Attacker Victim =
 | Victim.ai_wait <= 0
-| when Victim.leader><1:
-  | Pent = Victim.owner.pentagram
-  | when Pent and (Pent.xyz-Victim.xyz).abs>>5.0:
-    | Victim.order_act{recall target/Victim}
-    | leave
-  | when Attacker:
-    | R = Attacker.range
-    | when R><cross or R><1 or (Attacker.xyz-Victim.xyz).abs<2.0:
-        | F = Victim.find{8
-          | D => (D.xyz-Attacker.xyz).abs >> 2.0
-                 and (D.xyz-Victim.xyz).abs < 3.0}
-        | when F: Victim.order_at{F}
-  | when Pent:
-    | SAct = $main.params.acts.summon_blob
-    | when Pent.can_do{SAct}: Pent.order_act{SAct}
-  | Cycle = $world.cycle
-  | PParams = $player.params
-  | LHC = $params.aiLeaderHarmCycle
-  | when LHC+24*120>Cycle:
-    | when Attacker: for U $player.units: when U.damage and U.idle:
-      | U.order_at{Attacker.xyz}
-    | leave
-  | Bonus = max 0 LHC
-  | !$player.mana + ((Cycle-Bonus)/24*$main.params.ai.leader_defense_bonus)
-  | $params.aiLeaderHarmCycle <= Cycle
-  | for U $player.units: when U.id <> Victim.id: when U.speed:
-    | U.attacker <= 1
-    | U.order_act{recall target/U}
+| when Victim.leader><1: ai_leader_harmed Me Attacker Victim
 
 ai.group_attack Types =
 | Units = $player.units
@@ -284,11 +287,20 @@ ai_update Me =
 | Player = $player
 | Player.lore <= 9000
 | when Player.id: while $script><1:
-| $update_units{Player.units}
+| $update_units
 
 ai.update =
 | PerCycle <= t
+| Player = $player
+| SeenUnits <= $world.active.list.keep{U=>Player.seen{U.xyz}}
+                     .keep{(?unit and not ?removed)}
+| PID = Player.id
+| OwnedUnits <= SeenUnits.keep{?owner.id><PID}
+| SeenEnemies <= SeenUnits.keep{?owner.is_enemy{Player}}.skip{?invisible}
 | ai_update Me
+| SeenUnits <= 0
+| OwnedUnits <= 0
+| SeenEnemies <= 0
 | PerCycle <= 0
 
 
