@@ -79,7 +79,6 @@ unit.hasted = $flags^get_bit{3}
 unit.flyer = $flags^get_bit{5}
 unit.`!flyer` State = $flags <= $flags^set_bit{5 State}
 
-unit.digger = $flags^get_bit{9}
 unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
@@ -89,7 +88,6 @@ unit.slowed = $flags^get_bit{14}
 // this unit is a temporary mark (i.e. cursor); dont save it
 unit.mark = $flags^get_bit{16}
 unit.`!mark` State = $flags <= $flags^set_bit{16 State}
-unit.builder = $flags^get_bit{17}
 
 unit.child Type =
 | $world.units_at{$xyz}.find{(?host and ?type><Type and ?host.serial><$serial)}
@@ -152,13 +150,25 @@ flyer_can_move Me Src Dst =
 | when SZ<DZ:leave (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}
 | (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}
 
+worker_can_move Me Src Dst =
+| DX,DY,DZ = Dst
+| SZ = Src.2
+| Z = DZ-SZ
+| when Z.abs > 4: leave 0
+| Tile = $world.at{DX DY DZ}
+| when Tile.empty: leave 1
+| when Tile.clear: leave ($world.fix_z{DX,DY,DZ}-DZ)>>5
+| when Tile.unit:
+  | B = $world.block_at{DX,DY,DZ}
+  | when got B and B.ai><remove:
+    | leave 1 //FIXME: some units, like bookshelves, could be moved
+| 0
 
 unit.update_move_method =
 | $can_move <= if $flyer then &flyer_can_move
                else if $amphibian then &amphibian_can_move
                else if $swimmer then &swimmer_can_move
-               else if $digger then &digger_can_move
-               else if $builder then &amphibian_can_move
+               else if $worker then &worker_can_move
                else &land_can_move
 
 

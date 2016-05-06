@@ -230,18 +230,41 @@ world.respawn_tile XYZ Type Delay =
 | S.move{XYZ}
 | S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
 
-world.excavate X Y Z PassageH =
-| H = min $fix_z{X,Y,Z} Z+PassageH
-| when H-Z < 5: leave
-| ZZ = Z
+world.excavate X Y Z PassageH Amount =
+| Work = $units_at{X,Y,Z}.find{?type><unit_work}
+| when no Work:
+  | Work <= $players.0.alloc_unit{unit_work}
+  | Work.move{X,Y,Z}
+  | Work.hp <= 0
+| !Work.hp+Amount
+| Tile = $at{X Y Z}
+| when $at{X Y Z}.unit:
+  | B = $block_at{X,Y,Z}
+  | when got B:
+    | when Work.hp >> B.class.hp:
+      | when B.death: Work.effect{B.death Work X,Y,Z}
+      | B.free
+      | Work.free
+      | leave 1
+    | when B.hit: Work.effect{B.hit Work X,Y,Z}
+    | leave 0
+  | leave 1
+| when Work.hp < Tile.hp:
+  | when Tile.hit: Work.effect{Tile.hit Work X,Y,Z}
+  | leave 0
+| when Tile.death: Work.effect{Tile.death Work X,Y,Z}
+| Work.free
 | AddCeil = 1
+| H = min $fix_z{X,Y,Z} Z+PassageH
+| when H-Z < 5: AddCeil <= 0 //leave 1
+| ZZ = Z
 | while Z<H:
   | less $at{X Y Z}.clear:
     | H<=Z
     | AddCeil <= 0
   | !Z+1
 | Z <= ZZ
-| when H-Z < 5: leave
+| when H-Z < 5: AddCeil <= 0 //leave 1
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
@@ -249,6 +272,7 @@ world.excavate X Y Z PassageH =
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y
+| 1
 
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =

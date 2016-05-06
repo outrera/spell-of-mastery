@@ -19,12 +19,13 @@ main.load_sounds =
 | PlayList <= PlayList.sort
 
 main.sound Name volume/1.0 =
+| when Name.is_list: Name <= Name.rand
 | Cycle = $world.cycle
 | SCycles = $world.sound_cycles
 | when SCycles.Name><Cycle and $world.mode><play: leave
 | SCycles.Name <= Cycle
 | S = $sounds.Name
-| when no S: bad "missing sound ([Name])"
+| when no S: bad "missing sound `[Name]`"
 | sound_play S volume/Volume
 
 Channel = 0

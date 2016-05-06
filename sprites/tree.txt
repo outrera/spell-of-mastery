@@ -1,1 +1,7 @@
-class: empty,0,invincible,1,height,8,ai,tree
+class: empty,0
+      ,invincible,1
+      ,height,8
+      ,ai,remove
+      ,health,100
+      ,hit,((effect spell) (sound (tree_hit1 tree_hit2)))
+      ,death,((effect spell) (sound (tree_hit1 tree_hit2)) (sound tree_death))

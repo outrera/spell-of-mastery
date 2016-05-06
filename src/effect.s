@@ -284,28 +284,28 @@ effect die Whom:
 | T = if Whom >< self then Me else Target
 | when T.action.type <> die: T.die
 
-effect clear What:
-| X,Y,Z = case What
+effect clear Where:
+| X,Y,Z = case Where
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
-  Else | bad "effect clear: invalid target ([What])"
+  Else | bad "effect clear: invalid target ([Where])"
 | $world.clear_tile{X Y Z}
 
-effect excavate What:
-| X,Y,Z = case What
+effect excavate Where:
+| X,Y,Z = case Where
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
-  Else | bad "effect excavate: invalid target ([What])"
-| $world.excavate{X Y Z 8}
+  Else | bad "effect excavate: invalid target ([Where])"
+| $world.excavate{X Y Z 8 (max $worker 1)}
 
-effect bridge What:
-| X,Y,Z = case What
+effect build Where What:
+| X,Y,Z = case Where
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
-  Else | bad "effect bridge: invalid target ([What])"
+  Else | bad "effect bridge: invalid target ([Where])"
 | Z = $world.fix_z{X,Y,Z}
 | $world.respawn_tile{X,Y,Z `void` 24*40}
-| $world.set{X Y Z $main.tiles.floor_wooden}
+| $world.set{X Y Z $main.tiles.What}
 
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type

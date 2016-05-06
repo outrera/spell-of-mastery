@@ -208,14 +208,15 @@ unit_check_move Me Dst =
 | when (X-SX).abs>1 or (Y-SY).abs>1: leave 0
 | Tile = $world.at{X Y Z}
 | less Tile.empty
-  | when $digger and Tile.clear: leave excavate
+  | when $worker:
+    | when Tile.clear: leave excavate
+    | when Tile.unit
+      | B = $world.block_at{X,Y,Z}
+      | when got B and B.ai><remove: leave excavate
   | leave 0
 | Below = $world.at{X Y $world.fix_z{X,Y,Z}-1}
-| when $builder:
-  | when Below.type><water: leave bridge
-  | B = $world.block_at{X,Y,Z}
-  | when got B and B.ai><tree: leave excavate
 | when Below.type><water:
+  | when $builder: leave bridge
   | less $flyer or $amphibian or $swimmer: leave 0
 | B = $world.block_at{Dst}
 | when no B: leave move

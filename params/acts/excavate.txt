@@ -5,4 +5,4 @@ fix_z: caster
 range: 1
 affects: any
 //before: sound{summon}
-impact: same_z,excavate{target},impact{explosion},sound{impact},sound{excavate}
+impact: same_z,excavate{target}

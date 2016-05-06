@@ -22,11 +22,13 @@ list_moves Me Src =
       else | Dst.2 <= $world.fix_z{Dst}
            | less CanMove{Me Src Dst}: Dst <= 0
   | when Dst:
-    | B = $world.block_at{Dst}
+    | B = $world.block_at{Dst} //FIXME: could be optimized
     | if got B then
         | if $owner.id <> B.owner.id
-          then when B.alive and $damage and (SZ-Z).abs<<4:
-               | push move{attack Dst} Ms
+          then if B.alive and $damage and (SZ-Z).abs<<4 then
+                 | push move{attack Dst} Ms
+               else when B.ai><remove and $worker:
+                 | push move{move Dst} Ms
           else when B.speed and B.can_move{}{B Dst Src}:
                | push move{swap Dst} Ms //FIXME: consider moving B back
       else push move{move Dst} Ms

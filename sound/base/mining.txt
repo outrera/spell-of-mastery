@@ -1,0 +1,5 @@
+author: `Wildfire Games (http://www.wildfiregames.com/)`
+license: `CC-BY-SA`
+origin: `https://github.com/Andrettin/Wyrmsun/`
+
+//appears to be coming from 0ad

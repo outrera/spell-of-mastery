@@ -1,0 +1,10 @@
+// housekeeps work amount put into given tile, i.e. chops to the tree
+sprite: special_missing
+tier: 0
+health: 0
+damage: 0
+armor: 0
+speed: 0
+empty: 1
+show: 0
+invincible: 1
