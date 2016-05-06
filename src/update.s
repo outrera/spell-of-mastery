@@ -383,7 +383,7 @@ attack_nearby_enemy Me =
 | $order_at{Found.xyz}
 | $backtrack <= $xyz
 
-GravAcc = 9.807/2.0
+GravAcc = 9.807*0.2
 update_fall Me =
 | !$velocity.2 - GravAcc
 | FZ = $fix_z
