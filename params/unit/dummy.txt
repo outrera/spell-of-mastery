@@ -7,3 +7,5 @@ armor: 0
 speed: 0
 empty: 1
 show: 0
+aux: 1
+invincible: 1

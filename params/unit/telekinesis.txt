@@ -1,6 +1,7 @@
 sprite: system_dummy
 empty: 1
 aux: 1
+invincible: 1
 health: 0
 damage: 0
 armor: 0
