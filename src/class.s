@@ -20,7 +20,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   unit/Unit
   box_xy/Box_xy // bounding box x,y correction
   aux/Aux
-  speed/Speed // number of turns it has to wait, before moving again
+  speed/Speed // number of cycles it has to wait, before moving again
   sight/Sight
   active/Active // non-zero if unit should be updated
   range/Range

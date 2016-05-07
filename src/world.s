@@ -58,10 +58,6 @@ type world{main}
    minimap/0
 | $init
 
-world.second = $cycle/24
-world.turn = $second/10
-world.new_turn = $cycle%(24*10)><0
-
 world.init =
 | $main.world <= Me
 | $minimap <= gfx 128 128
@@ -268,7 +264,7 @@ world.excavate X Y Z PassageH Amount =
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
-  | when Type<>void: $respawn_tile{X,Y,Z Type 24*40}
+  | when Type<>void: $respawn_tile{X,Y,Z Type $params.excavate_ttl}
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
 | XY = X,Y

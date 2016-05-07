@@ -135,7 +135,6 @@ dact swap.valid
 | T = $target
 | less $target and not $target.removed: leave 0
 | U = $unit
-| Turn = U.world.turn
 | U.owner.id >< T.owner.id and T.idle
 
 dact swap.start

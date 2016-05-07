@@ -120,7 +120,6 @@ player.research_remain Act =
 
 player.units =
 | PID = $id
-| Turn = $world.turn
 | $world.active.list.keep{(?owner.id >< PID and not ?removed)}
 
 player.seen XYZ = $sight.(XYZ.1).(XYZ.0)>1
