@@ -22,6 +22,7 @@ BankList =
 HotKeyInvoke = 0
 
 MenuBG =
+IconsPanelBG =
 
 type ui.$tabs{main} tabs width height world message_box view
 | $world <= $main.world
@@ -251,6 +252,11 @@ create_bank_list Me =
 
 PlayerPicker = 0
 
+create_icons_panel_tabs Me =
+| Icons = map Name [spell summon build]:
+  | icon data/spell $img{"icons_tab_[Name]"} click/|Icon =>
+| layH{s/4 Icons}
+
 create_view_ui Me =
 | PlayerPickers = map Player $world.players:
   | player_picker Player.name 0 Player.colors.1: Item =>
@@ -265,10 +271,14 @@ create_view_ui Me =
 | BankList,ItemList = create_bank_list Me
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
+| IconsPanelTabs = create_icons_panel_tabs Me
 | GameUnitUI <= hidden: dlg: mtx
   | 0  0| UnitPanel
+| IPY = $height-IconsPanelBG.h
 | GameUI = dlg: mtx
   |  0   0| $view
+  |  0 IPY| IconsPanelBG
+  |  0 IPY-24| IconsPanelTabs
   |  0   0| GameUnitUI
   |  4 $height-112| layH{s/4 ActIcons.drop{ActIcons.size/2}}
   |  4 $height-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
@@ -468,6 +478,7 @@ ui.init =
 | MenuButtonsX <= $width/2 - 162
 | X = MenuButtonsX
 | MenuBG <= $img{ui_menu_bg}
+| IconsPanelBG <= $img{ui_panel}
 | $message_box <= message_box Me
 | InputBlocker <= hidden: spacer $width $height
 | WorldProperties <= create_world_props Me

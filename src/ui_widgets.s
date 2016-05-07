@@ -3,7 +3,7 @@ use gui widgets ui_icon
 DialogResult = 0
 
 type message_box.$base{ui} base title text buttons width margin/[0 0]
-| BG = $ui.img{ui_panel5}
+| BG = $ui.img{ui_scroll}
 | $width <= BG.w
 | $title <= txt medium '' 
 | $text <= txt medium ''
@@ -87,7 +87,7 @@ type world_props.$base{world callback}
 | MarginW = 65
 | MarginH = 50
 | $base <= dlg: mtx
-  | -MarginW  -MarginH | $world.main.img{ui_panel5}
+  | -MarginW  -MarginH | $world.main.img{ui_scroll}
   | 130  10 | txt medium 'Properties'
   |  15  40 | layV s/8 PropFields{(txt small ?0)}
   | 100  36 | layV PropFields{?1}
@@ -131,7 +131,7 @@ type load_world_dlg.$base{world folder cancelCB loadCB}
 | MarginW = 65
 | MarginH = 50
 | $base <= dlg: mtx
-  | -MarginW   -MarginH | $world.main.img{ui_panel5}
+  | -MarginW   -MarginH | $world.main.img{ui_scroll}
   | 130  10 | txt medium 'Load World'
   |  15  40 | folder_widget $folder: File =>
               | $picked <= File
