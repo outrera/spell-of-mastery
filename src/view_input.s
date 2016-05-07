@@ -71,7 +71,7 @@ world_place_tile_walls Me X Y Z Tile =
   | XX = X+DX
   | YY = Y+DY
   | DTile = $at{XX YY Z}
-  | when DTile.type <> Tile.type and (DTile.clear or DTile.empty):
+  | when DTile.type <> Tile.type and (DTile.excavate or DTile.empty):
     | $clear_tile{XX YY Z}
     | world_place_tile Me XX YY Z Wall
 

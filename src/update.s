@@ -209,7 +209,7 @@ unit_check_move Me Dst =
 | Tile = $world.at{X Y Z}
 | less Tile.empty
   | when $worker:
-    | when Tile.clear: leave excavate
+    | when Tile.excavate: leave excavate
     | when Tile.unit
       | B = $world.block_at{X,Y,Z}
       | when got B and B.ai><remove: leave excavate

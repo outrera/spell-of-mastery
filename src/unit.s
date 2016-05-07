@@ -123,7 +123,7 @@ digger_can_move Me Src Dst =
 | when Z.abs > 4: leave 0
 | Tile = $world.at{DX DY DZ}
 | less Tile.empty:
-  | less Tile.clear: leave 0
+  | less Tile.excavate: leave 0
   | when ($world.fix_z{DX,DY,DZ}-DZ)<5: leave 0
 | $world.at{DX DY DZ-1}.type <> water
 
@@ -157,7 +157,7 @@ worker_can_move Me Src Dst =
 | when Z.abs > 4: leave 0
 | Tile = $world.at{DX DY DZ}
 | when Tile.empty: leave 1
-| when Tile.clear: leave ($world.fix_z{DX,DY,DZ}-DZ)>>5
+| when Tile.excavate: leave ($world.fix_z{DX,DY,DZ}-DZ)>>5
 | when Tile.unit:
   | B = $world.block_at{DX,DY,DZ}
   | when got B and B.ai><remove:

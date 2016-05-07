@@ -1,6 +1,6 @@
 role: dirt
 lineup: 0
-clear: 1
+excavate: 1
 indoor: dirt
 box: (64 64 39)
 hp: 100

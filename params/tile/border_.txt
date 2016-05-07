@@ -1,5 +1,4 @@
 sprite: tiles_base_
-clear: 0
 invisible: 1
 height: 1
 aux: 1

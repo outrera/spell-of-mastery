@@ -259,7 +259,7 @@ world.excavate X Y Z PassageH Amount =
 | when H-Z < 5: AddCeil <= 0 //leave 1
 | ZZ = Z
 | while Z<H:
-  | less $at{X Y Z}.clear:
+  | less $at{X Y Z}.excavate:
     | H<=Z
     | AddCeil <= 0
   | !Z+1

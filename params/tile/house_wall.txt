@@ -1,5 +1,6 @@
 sprite: tiles_house
 around: house //this wall goes around house tiles
+excavate: 1
 back: house_wall_back
 //wallShift: -18 //precise pixel dimension used for door align
 heavy: 1
