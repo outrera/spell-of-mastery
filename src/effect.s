@@ -304,7 +304,7 @@ effect build Where What:
   X,Y,Z | X,Y,Z
   Else | bad "effect bridge: invalid target ([Where])"
 | Z = $world.fix_z{X,Y,Z}
-| $world.respawn_tile{X,Y,Z `void` 24*40}
+| $world.respawn_tile{X,Y,Z `void` $world.params.build_ttl}
 | $world.set{X Y Z $main.tiles.What}
 
 effect set_tile [X Y Z] Type:
