@@ -23,6 +23,7 @@ HotKeyInvoke = 0
 
 MenuBG =
 IconsPanelBG =
+PanelTab = \spell
 
 type ui.$tabs{main} tabs width height world message_box view
 | $world <= $main.world
@@ -253,8 +254,9 @@ create_bank_list Me =
 PlayerPicker = 0
 
 create_icons_panel_tabs Me =
+| Click = Icon => | PanelTab <= Icon.data
 | Icons = map Name [spell summon build]:
-  | icon data/spell $img{"icons_tab_[Name]"} click/|Icon =>
+  | icon data/Name $img{"icons_tab_[Name]"} click/Click
 | layH{s/4 Icons}
 
 create_view_ui Me =
@@ -387,27 +389,14 @@ ui.update = //called by world.update each game cycle
     | $load{"[MapsFolder][NextWorld].txt"}
     | $world.new_game
 
-ui.on_unit_pick Units =
-| for Icon ActIcons: Icon.show <= 0
-| NUnits = Units.size
-| when NUnits<1
-  | GameUnitUI.show <= 0
-  | UnitPanel.set_unit{0}
-  | leave
-| Unit = Units.0
-| when NUnits><1: GameUnitUI.show <= 1
+ui_update_panel_buttons Me Unit As =
 | Acts = $main.params.acts
-| Player = Unit.owner
-| T = Unit.acts{}{[?name 1]}.table
-| for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
-| As = Unit.acts.keep{A=>T.(A.name)><NUnits}
 | As = As.i.take{min{MaxActIcons As.size}}
+| Player = Unit.owner
 | for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
   | Preqs = Act.needs.all{Ns=>Ns.any{N=>Player.research_remain{Acts.N}<<0}}
   | when Preqs:
     | Active = 1
-    | when Act.act >< spawn and not Unit.owner.pentagram:
-      | Active <= 0
     | Icon = ActIcons.I.widget
     | ResearchRemain = Player.research_remain{Act}
     | ActName = Act.name
@@ -427,7 +416,34 @@ ui.on_unit_pick Units =
     | HK = Act.hotkey
     | Icon.hotkey <= if got HK then HK else 0
     | ActIcons.I.show <= Active
+
+ui.on_unit_pick Units =
+| Player = $world.human
+| if PanelTab >< spell then
+    | U = Player.leader
+    | Units <= []
+    | when U: Units <= [U]
+  else if PanelTab >< summon then
+    | U = Player.pentagram
+    | Units <= []
+    | when U: Units <= [U]
+  else if PanelTab >< build then
+    | Units <= []
+  else
+| for Icon ActIcons: Icon.show <= 0
+| NUnits = Units.size
+| when NUnits<>1
+  | GameUnitUI.show <= 0
+  | UnitPanel.set_unit{0}
+  | leave
+| Unit = Units.0
+| when NUnits><1: GameUnitUI.show <= 1
 | UnitPanel.set_unit{Unit}
+| As = Unit.acts
+/*| T = As{[?name 1]}.table
+| for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
+| As = As.keep{A=>T.(A.name)><NUnits}*/
+| ui_update_panel_buttons Me Unit As
 
 create_act_icons Me =
 | actClick Icon =
@@ -453,8 +469,9 @@ create_act_icons Me =
       | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
     else when O.id >< $player.id:
          | if Act.range >< 0 
-           then | for U $main.ui.view.picked: U.order.init{Act U}
+           then | /*for Unit $main.ui.view.picked:*/ Unit.order.init{Act Unit}
            else | $world.act <= Act
+                | $world.act_unit.init{Unit,Unit.serial}
                 | when HKI: $view.mice_click <= \leftup
 | map I MaxActIcons: hidden: icon 0 click/&actClick
 

@@ -327,9 +327,11 @@ handle_picked Me Rect Units = //Me is view
 | Units = Units.keep{U=>Player.seen{U.xyz}}
 | Act = $world.act
 | when Act:
-  | when $picked.end:
+  | ActUnit = $world.act_unit
+  | when ActUnit.0.serial<>ActUnit.1
     | $world.act <= 0
     | leave
+  | ActUnits = [ActUnit.0]
   | Affects = Act.affects
   | Outdoor = 0
   | NonLeader = 0
@@ -361,7 +363,7 @@ handle_picked Me Rect Units = //Me is view
     | Proceed <= 0
   | when Proceed:
     | Blink = 1
-    | for U $picked
+    | for U ActUnits
       | when Player.seen{XYZ}:
         | when Target and Blink:
           | $world.blink.init{[4 Target]}
