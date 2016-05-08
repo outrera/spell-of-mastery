@@ -254,7 +254,9 @@ create_bank_list Me =
 PlayerPicker = 0
 
 create_icons_panel_tabs Me =
-| Click = Icon => | PanelTab <= Icon.data
+| Click = Icon =>
+  | $main.sound{ui_click}
+  | PanelTab <= Icon.data
 | Icons = map Name [spell summon build]:
   | icon data/Name $img{"icons_tab_[Name]"} click/Click
 | layH{s/4 Icons}
@@ -418,6 +420,11 @@ ui_update_panel_buttons Me Unit As =
     | ActIcons.I.show <= Active
 
 ui.on_unit_pick Units =
+| if Units.size><1
+  then | GameUnitUI.show <= 1
+       | UnitPanel.set_unit{Units.0}
+  else | GameUnitUI.show <= 0
+       | UnitPanel.set_unit{0}
 | Player = $world.human
 | if PanelTab >< spell then
     | U = Player.leader
@@ -431,14 +438,8 @@ ui.on_unit_pick Units =
     | Units <= []
   else
 | for Icon ActIcons: Icon.show <= 0
-| NUnits = Units.size
-| when NUnits<>1
-  | GameUnitUI.show <= 0
-  | UnitPanel.set_unit{0}
-  | leave
+| when Units.size><0: leave
 | Unit = Units.0
-| when NUnits><1: GameUnitUI.show <= 1
-| UnitPanel.set_unit{Unit}
 | As = Unit.acts
 /*| T = As{[?name 1]}.table
 | for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
