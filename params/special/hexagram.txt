@@ -14,4 +14,4 @@ leader: 2
 ai: turret
 inborn: (upkeep0 enemy_removes)
 
-acts: (cast_fireball cast_lightning cast_call)
+acts: (cast_fireball)

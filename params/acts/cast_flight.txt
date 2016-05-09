@@ -6,3 +6,4 @@ affects: unit
 //two minutes should be enough to traverse 128x128 map
 before: owner_units,add_effect{flyer,2880,()},impact{heal},sound{flight}
 hint: boost_allies
+spell: 1

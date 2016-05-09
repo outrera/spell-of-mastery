@@ -6,3 +6,4 @@ hint: pentagram
 affects: any
 before: impact{pentagram_appearance},sound{pentagram}
 after: spawn{special_hexagram}
+spell: 1

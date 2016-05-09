@@ -7,3 +7,4 @@ needs: (cast_heal)
 affects: unit
 before: owner_units,add_effect{bloodlust,1000,()},impact{heal},sound{bloodlust}
 hint: boost_allies
+spell: 1

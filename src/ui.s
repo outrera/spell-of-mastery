@@ -257,9 +257,9 @@ create_icons_panel_tabs Me =
 | Click = Icon =>
   | $main.sound{ui_click}
   | PanelTab <= Icon.data
-| Icons = map Name [spell summon build]:
+| Icons = map Name [spell summon build unit]:
   | icon data/Name $img{"icons_tab_[Name]"} click/Click
-| layH{s/4 Icons}
+| layH{s/6 Icons}
 
 create_view_ui Me =
 | PlayerPickers = map Player $world.players:
@@ -436,11 +436,15 @@ ui.on_unit_pick Units =
     | when U: Units <= [U]
   else if PanelTab >< build then
     | Units <= []
+  else if PanelTab >< unit then
+    | Units <= Units
   else
 | for Icon ActIcons: Icon.show <= 0
 | when Units.size><0: leave
 | Unit = Units.0
 | As = Unit.acts
+| when PanelTab><spell: As <= As.keep{?spell}
+| when PanelTab><unit and Unit.leader: As <= As.skip{?spell}
 /*| T = As{[?name 1]}.table
 | for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
 | As = As.keep{A=>T.(A.name)><NUnits}*/

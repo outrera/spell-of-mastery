@@ -10,3 +10,4 @@ targets: any
 // stops unit for 30 seconds
 before: add_effect{paralyzed,720,()},impact{cold_ring},sound{slowed}
 hint: harm
+spell: 1
