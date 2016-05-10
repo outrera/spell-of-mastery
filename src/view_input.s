@@ -175,14 +175,45 @@ view.update_brush =
 
 view.update_pick = //FIXME
 
+mark_tile Me =
+| X,Y,Z = $cursor
+| Work = $units_at{X,Y,0}.find{?type><unit_work}
+| when got Work:
+  //| Work.free
+  | leave
+| when Z < 6: leave
+| Work <= $world.human.alloc_unit{unit_work}
+| Work.move{X,Y,0}
+| Work.hp <= 0
+| $main.sound{excavate_mark}
+//| T = $world.at{X Y Z-1}
+//| when T.unit:
+/*
+  [tile Type]
+    | while 1
+      | Z <= $cursor.2
+      | less Z >> $anchor.2 and Z > 1: leave
+      | less Z > 1: leave
+      | Tile = $world.at{X Y Z-1}
+      | less Tile.height: leave
+      | $world.clear_tile{X Y Z-1}
+      | $cursor.2 <= $fix_z{$cursor}
+      | for U $world.units_at{X,Y,Z}: U.move{$cursor}
+*/
+
 view.update_play =
 | Player = $player
 | case $mice_click
   leftup | $mice_click <= \pick
-  right | $mice_click <= \order
+  right | less $picked.size or $world.act:
+          | mark_tile Me
+        | when $picked.size:
+          | $mice_click <= \order
         | when $world.act:
           | $world.act <= 0
           | $mice_click <= 0
+  rightup
+    | $mice_click <= 0
 | $main.update
 
 world.update_picked =
@@ -292,7 +323,7 @@ view.input In =
     | less $mice_click: $mice_xy_anchor.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
     | when $mode <> play or $world.human.sight.CY.CX:
-      | less $mice_click and $mode >< play:
+      | less ($mice_click><left or $mice_click><pick) and $mode >< play:
         | $cursor.init{[CX CY $cursor.2]}
         | $cursor.2 <= $fix_z{$cursor}
         | NewZ = $cursor.2
@@ -317,8 +348,9 @@ view.input In =
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
     | $zfix <= 1
-    | $mice_click <= if State then \right else 0
+    | $mice_click <= if State then \right else \rightup
     | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
+    | when State: $mice_xy_anchor.init{XY}
   [key Name S]
     | $keys.Name <= S
 | when $mode <> play: $mice_xy_anchor.init{$mice_xy}

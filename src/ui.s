@@ -431,29 +431,33 @@ ui.on_unit_pick Units =
        | UnitPanel.set_unit{Units.0}
   else | GameUnitUI.show <= 0
        | UnitPanel.set_unit{0}
-| Player = $world.human
-| if PanelTab >< spell then
-    | U = Player.leader
-    | Units <= []
-    | when U: Units <= [U]
-  else if PanelTab >< summon then
-    | U = Player.pentagram
-    | Units <= []
-    | when U: Units <= [U]
-  else if PanelTab >< build then
-    | Units <= []
-  else if PanelTab >< unit then
-    | Units <= Units
-  else
 | for Icon ActIcons: Icon.show <= 0
-| when Units.size><0: leave
-| Unit = Units.0
-| As = Unit.acts
-| when PanelTab><spell: As <= As.keep{?spell}
-| when PanelTab><unit and Unit.leader: As <= As.skip{?spell}
-/*| T = As{[?name 1]}.table
-| for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
-| As = As.keep{A=>T.(A.name)><NUnits}*/
+| Unit = 0
+| As = 0
+| Player = $world.human
+|  if PanelTab >< unit then
+     | less Units.size: leave
+     | Unit <= Units.0
+     | As <= Unit.acts
+     | when Unit.leader: As <= As.skip{?tab}
+     | T = As{[?name 1]}.table
+     | for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
+     | NUnits = Units.size
+     | As = As.keep{A=>T.(A.name)><NUnits}
+   else
+     | if PanelTab >< spell then
+         | Unit <= Player.leader
+         | less Unit: leave
+         | As <= Unit.acts.keep{?tab><spell}
+       else if PanelTab >< summon then
+         | Unit <= Player.pentagram
+         | less Unit: leave
+         | As <= Unit.acts
+       else if PanelTab >< build then
+         | Unit <= Player.leader
+         | less Unit: leave
+         | As <= Unit.acts.keep{?tab><build}
+       else
 | ui_update_panel_buttons Me Unit As
 
 create_act_icons Me =

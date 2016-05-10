@@ -4,4 +4,4 @@ cost: 1000
 affects: any
 before: misc.spawn
 after: set{owner spell_of_mastery 7200}
-spell: 1
+tab: spell

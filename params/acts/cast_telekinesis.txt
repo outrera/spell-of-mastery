@@ -7,4 +7,4 @@ affects: any
 targets: any
 before: sound{pentagram}
 after: spawn{unit_telekinesis}
-spell: 1
+tab: spell

@@ -7,4 +7,4 @@ affects: unit
 before: impact{pentagram_appearance},sound{pentagram}
 after: all_alive,harm{50},impact{fire_ring},sound{armageddon}
 hint: harm_all
-spell: 1
+tab: spell

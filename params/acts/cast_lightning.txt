@@ -9,4 +9,4 @@ affects: (outdoor),unit
 targets: any
 before: harm{magic.100},impact{lightning},sound{lightning}
 hint: harm
-spell: 1
+tab: spell

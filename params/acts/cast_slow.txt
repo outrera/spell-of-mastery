@@ -5,4 +5,4 @@ cost: 200
 cool: 2880
 affects: unit
 before: all_alive,add_effect{slowed,1000,()},impact{slow},sound{slowed}
-spell: 1
+tab: spell

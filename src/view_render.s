@@ -3,6 +3,12 @@ use gfx gui util widgets macros isort_ unit_flags stack
 ScreenXY = [0 0]
 BrightFactor = 0
 YDiv = No
+BlitItems = 0
+XUnit2 =
+YUnit2 =
+Folded = 0
+Marked = 0
+Unexplored = 0
 
 draw_text FB X Y Msg =
 | Font = font small
@@ -175,9 +181,6 @@ special_blit.draw FB BlitItem =
   else if $what >< box_back then draw_bounding_box_back #FF0000 FB BlitItem
   else
 
-Folded = 0
-BlitItems = 0
-
 render_cursor Me Wr BX BY CursorXYZ =
 | X,Y,CurZ = CursorXYZ
 | Gs = Wr.gfxes.Y.X
@@ -205,12 +208,9 @@ render_cursor Me Wr BX BY CursorXYZ =
   | when Z>>CurZ: _goto for_break
 | _label for_break
 
-XUnit2 =
-YUnit2 =
-
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
-| less Folded: Folded <= Wr.main.img{ui_folded}
+| DrawMark = 0
 | Gs = Wr.gfxes.Y.X
 | CurX,CurY,CurZ = CursorXYZ
 | CurH = (CurX+CurY)/2
@@ -230,6 +230,35 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LY = LY.clip{-127 127}
 | SkipZ = -1//if $mode<>play then -1 else 0
 | LM = Wr.lightmap
+| Us = Wr.column_units_at{X Y}
+| when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
+//| draw_text FB BX+32 BY-$zunit*Z-20 "[Explored]"
+| for U Us:
+  | if U.frame.w > 1 then
+    | XYZ = U.xyz
+    | UX,UY,Z = XYZ
+    | TZ = Z-4
+    | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
+      | when not U.invisible or U.owner.id><$player.id or $mode<>play:
+        | B = blit_item_from_unit U
+        | FX,FY,FZ = U.fxyz
+        | BX,BY = ScreenXY + to_iso{FX FY FZ}
+        | B.sx <= BX - 32
+        | B.sy <= BY
+        | B.lx <= LX
+        | B.ly <= LY
+        | B.brighten <= Br
+        | push B BlitItems
+    else if not U.xyz.2 and U.type><unit_work then //marked for excavation
+     | ZZ = Wr.fix_z{X,Y,RoofZ}*8
+     | B = make_blit_item X*32 Y*32 ZZ 64 64 4*8 gfx_item{}
+     | B.data <= Marked
+     | FX,FY,FZ = U.fxyz
+     | BX,BY = ScreenXY + to_iso{FX-16 FY+16 ZZ}
+     | B.sx <= BX
+     | B.sy <= BY-Marked.h-Z
+     | push B BlitItems
+    else
 | for G Gs
   | T = Wr.at{X Y Z}
   | TH = T.height
@@ -252,39 +281,15 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       | B.sy <= BY-G.h-ZZ
       | B.lx <= LX
       | B.ly <= LY
-      //| B.brighten <= Br
-      | B.brighten <= LM.at{X Y Z}
+      | B.brighten <= Br
+      //| B.brighten <= LM.at{X Y Z}
       | when Fog: B.flags <= #40 //dither
       | push B BlitItems
   | Z <= UnitZ
   | when Z >> RoofZ: _goto for_break
 | _label for_break
-| Us = Wr.column_units_at{X Y}
-| when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
-//| draw_text FB BX+32 BY-$zunit*Z-20 "[Explored]"
-| for U Us:
-  | when no U.frame:
-    | say U.type
-  | when U.frame.w > 1:
-    | XYZ = U.xyz
-    | UX,UY,Z = XYZ
-    | TZ = Z-4
-    | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
-      | when not U.invisible or U.owner.id><$player.id or $mode<>play:
-        | B = blit_item_from_unit U
-        | FX,FY,FZ = U.fxyz
-        | BX,BY = ScreenXY + to_iso{FX FY FZ}
-        | B.sx <= BX - 32
-        | B.sy <= BY
-        | B.lx <= LX
-        | B.ly <= LY
-        | B.brighten <= Br
-        | push B BlitItems
-
-Unexplored = 0
 
 render_unexplored Me Wr X Y BX BY =
-| less Unexplored: Unexplored <= Wr.main.img{ui_unexplored}
 | B = make_blit_item X*32 Y*32 0 64 64 4*8 gfx_item{}
 | B.data <= Unexplored
 | B.sx <= BX
@@ -378,6 +383,7 @@ handle_picked Me Rect Units = //Me is view
     | get_gui{}.cursor <= $main.img{ui_cursor_glass}
     //| $on_unit_pick{}{[Units.0]}
   | leave
+| when $mice_click >< rightup: leave
 | when $mice_click >< left: leave
 | when $mice_click >< order:
   | $mice_click <= 0
@@ -462,6 +468,10 @@ view.render_iso =
 | VS = $view_size
 | XUnit2 <= $xunit/2
 | YUnit2 <= $yunit/2
+| less Folded:
+  | Folded <= Wr.main.img{ui_cell_folded}
+  | Marked <= Wr.main.img{ui_cell_marked}
+  | Unexplored <= Wr.main.img{ui_cell_unexplored}
 | times YY VS
   | Y = YY + VY
   | when 0<Y and Y<<WH: times XX VS:

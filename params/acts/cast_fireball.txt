@@ -7,4 +7,4 @@ affects: unit
 range: 4
 before: missile{effect_fireball},harm{magic.40},impact{explosion},sound{explosion}
 hint: harm
-spell: 1
+tab: spell

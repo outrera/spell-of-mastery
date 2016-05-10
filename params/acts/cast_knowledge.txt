@@ -4,4 +4,4 @@ cost: misc.tier1_scost
 affects: self
 before: effect{teleport},sound{spawn}
 after: lore{1}
-spell: 1
+tab: spell

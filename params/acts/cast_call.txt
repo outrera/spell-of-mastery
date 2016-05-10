@@ -5,4 +5,4 @@ range: 9000
 affects: ally
 before: effect{teleport},sound{summon},impact{teleport},recall{self}
 after: ()
-spell: 1
+tab: spell
