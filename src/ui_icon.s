@@ -36,6 +36,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    pressed
    over
    picked
+   picked_overlay
    disabled
    grayed
    text/[0 0 No]
@@ -44,6 +45,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    unit/0
    hotkey
    on_click/Click
+   group //use for exclusive widgets, like radio buttons or tabs
    //popup/icon_popup{}
 icon.draw G PX PY =
 | less $fg: leave
@@ -56,7 +58,11 @@ icon.draw G PX PY =
   | IconFrame = skin{$frame.2}
   | G.blit{X-$frame.0 Y-$frame.1 IconFrame}
 | G.blit{X Y $fg}
-| when $picked: G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
+| when $picked:
+  | if $picked_overlay
+    then | XX,YY,Overlay = $picked_overlay
+         | G.blit{X+XX Y+YY Overlay}
+    else G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
 | when $grayed:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
   | Ov = DisabledIconOverlay
@@ -74,8 +80,13 @@ icon.input In =
   [mice over S P] | $over <= S
   [mice left 1 P] | $over <= 1
                   | less $pressed: $pressed <= 1
-  [mice left 0 P] | when $pressed:
-                    | when $over: $on_click{}{Me}
-                    | $pressed <= 0
+  [mice left 0 P] 
+     | when $pressed:
+       | when $over:
+         | when $group:
+           | for Icon $group: Icon.picked <= 0
+           | $picked <= 1
+         | $on_click{}{Me}
+       | $pressed <= 0
 
 export minimap icon

@@ -252,13 +252,19 @@ create_bank_list Me =
 
 
 PlayerPicker = 0
+PickedIconOverlay = 0
 
 create_icons_panel_tabs Me =
+| PickedIconOverlay <= [0 0 $img{"ui_icon_hl"}]
 | Click = Icon =>
   | $main.sound{ui_click}
   | PanelTab <= Icon.data
 | Icons = map Name [spell summon build unit]:
-  | icon data/Name $img{"icons_tab_[Name]"} click/Click
+  | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
+  | when Name><spell: Icon.picked<=1
+  | Icon.picked_overlay <= PickedIconOverlay
+  | Icon
+| for Icon Icons: Icon.group <= Icons
 | layH{s/6 Icons}
 
 create_view_ui Me =
