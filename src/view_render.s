@@ -247,17 +247,10 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | B.sy <= BY
         | B.lx <= LX
         | B.ly <= LY
-        | B.brighten <= Br
+        | B.brighten <= if DrawMark and not U.active then 100 else Br
         | push B BlitItems
     else if not U.xyz.2 and U.type><unit_work then //marked for excavation
-     | ZZ = Wr.fix_z{X,Y,RoofZ}*8
-     | B = make_blit_item X*32 Y*32 ZZ 64 64 4*8 gfx_item{}
-     | B.data <= Marked
-     | FX,FY,FZ = U.fxyz
-     | BX,BY = ScreenXY + to_iso{FX-16 FY+16 ZZ}
-     | B.sx <= BX
-     | B.sy <= BY-Marked.h-Z
-     | push B BlitItems
+     | DrawMark <= 1
     else
 | for G Gs
   | T = Wr.at{X Y Z}
@@ -281,7 +274,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       | B.sy <= BY-G.h-ZZ
       | B.lx <= LX
       | B.ly <= LY
-      | B.brighten <= Br
+      | B.brighten <= if DrawMark then 100 else Br
       //| B.brighten <= LM.at{X Y Z}
       | when Fog: B.flags <= #40 //dither
       | push B BlitItems

@@ -175,12 +175,19 @@ view.update_brush =
 
 view.update_pick = //FIXME
 
+Unmarking = No
+
 mark_tile Me =
 | X,Y,Z = $cursor
 | Work = $units_at{X,Y,0}.find{?type><unit_work}
 | when got Work:
-  //| Work.free
+  | when Unmarking<>0:
+    | Unmarking <= 1
+    | $main.sound{excavate_unmark}
+    | when Work.free
   | leave
+| when Unmarking><1: leave
+| Unmarking <= 0
 | when Z < 6: leave
 | Work <= $world.human.alloc_unit{unit_work}
 | Work.move{X,Y,0}
@@ -213,6 +220,7 @@ view.update_play =
           | $world.act <= 0
           | $mice_click <= 0
   rightup
+    | Unmarking <= No
     | $mice_click <= 0
 | $main.update
 
@@ -344,12 +352,14 @@ view.input In =
     | !LMB_Count+1
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
-    | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
+    | if State then $anchor.init{$cursor}
+      else when $world.at{@$cursor}.empty: $cursor.2 <= $fix_z{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
     | $zfix <= 1
     | $mice_click <= if State then \right else \rightup
-    | if State then $anchor.init{$cursor} else $cursor.2 <= $fix_z{$cursor}
+    | if State then $anchor.init{$cursor}
+      else when $world.at{@$cursor}.empty: $cursor.2 <= $fix_z{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [key Name S]
     | $keys.Name <= S
