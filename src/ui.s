@@ -480,10 +480,13 @@ create_act_icons Me =
       | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
     else when O.id >< $player.id:
          | if Act.range >< 0 
-           then | /*for Unit $main.ui.view.picked:*/ Unit.order.init{Act Unit}
+           then 
+            | Us = if PanelTab><unit then $main.ui.view.picked else [Unit]
+            | for U Us: U.order.init{Act U}
            else | $world.act <= Act
-                | $world.act_unit.init{Unit,Unit.serial}
-                | when HKI: $view.mice_click <= \leftup
+                | if PanelTab><unit then $world.act_unit.init{0,0}
+                  else $world.act_unit.init{Unit,Unit.serial}
+                | when HKI: $view.mice_click <= \leftup //FIXME: kludge
 | map I MaxActIcons: hidden: icon 0 click/&actClick
 
 create_ingame_icons Me =

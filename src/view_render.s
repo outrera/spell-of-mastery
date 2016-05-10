@@ -327,11 +327,13 @@ handle_picked Me Rect Units = //Me is view
 | Units = Units.keep{U=>Player.seen{U.xyz}}
 | Act = $world.act
 | when Act:
+  | ActUnits = $picked
   | ActUnit = $world.act_unit
-  | when ActUnit.0.serial<>ActUnit.1
-    | $world.act <= 0
-    | leave
-  | ActUnits = [ActUnit.0]
+  | when ActUnit.0
+    | when ActUnit.0.serial<>ActUnit.1
+      | $world.act <= 0
+      | leave
+    | ActUnits <= [ActUnit.0]
   | Affects = Act.affects
   | Outdoor = 0
   | NonLeader = 0

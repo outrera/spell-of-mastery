@@ -3,5 +3,5 @@ speed: 4
 affects: unit
 before: animate{idle}
        ,confirm{`Disband Unit?`,`Are you sure this unit should be disbanded?`}
-after: when{confirmed},sound{cancel},remove{target}
+after: when{confirmed},sound{cancel},effect{teleport},remove{target}
 
