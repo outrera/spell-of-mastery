@@ -296,7 +296,8 @@ effect excavate Where:
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
   Else | bad "effect excavate: invalid target ([Where])"
-| $world.excavate{X Y Z 8 (max $worker 1)}
+| when $world.excavate{X Y Z 8 (max $worker 1)}:
+  | when!mark $owner.excavate_mark{X Y Z}: mark.free
 
 effect build Where What:
 | X,Y,Z = case Where

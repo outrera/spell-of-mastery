@@ -265,10 +265,9 @@ world.excavate X Y Z PassageH Amount =
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
-  | when Type<>void: $respawn_tile{X,Y,Z Type $params.excavate_ttl}
+  //| when Type<>void: $respawn_tile{X,Y,Z Type $params.excavate_ttl}
   | !Z+1
 | when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
-| XY = X,Y
 | 1
 
 // FIXME: remove overlapping tiles above setted tile

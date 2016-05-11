@@ -116,17 +116,6 @@ land_can_move Me Src Dst =
 | less $world.at{DX DY DZ}.empty: leave 0
 | $world.at{DX DY DZ-1}.type <> water
 
-digger_can_move Me Src Dst =
-| DX,DY,DZ = Dst
-| SZ = Src.2
-| Z = DZ-SZ
-| when Z.abs > 4: leave 0
-| Tile = $world.at{DX DY DZ}
-| less Tile.empty:
-  | less Tile.excavate: leave 0
-  | when ($world.fix_z{DX,DY,DZ}-DZ)<5: leave 0
-| $world.at{DX DY DZ-1}.type <> water
-
 amphibian_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | SZ = Src.2
@@ -157,7 +146,9 @@ worker_can_move Me Src Dst =
 | when Z.abs > 4: leave 0
 | Tile = $world.at{DX DY DZ}
 | when Tile.empty: leave 1
-| when Tile.excavate: leave ($world.fix_z{DX,DY,DZ}-DZ)>>5
+| when Tile.excavate:
+  | when ($world.fix_z{DX,DY,DZ}-DZ)<5: leave 0
+  | leave $owner.excavate_mark{DX DY DZ} 
 | when Tile.unit:
   | B = $world.block_at{DX,DY,DZ}
   | when got B and B.ai><remove:

@@ -5,6 +5,10 @@ move.as_text = "#move{[$type] [$xyz]}"
 
 Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
 
+player.excavate_mark X Y Z =
+| W = $world.units_at{X,Y,0}.find{(?type><unit_work and ?owner.id><$id)}
+| if got W then W else 0
+
 list_moves Me Src =
 | Ms = []
 | SX,SY,SZ = Src
@@ -27,7 +31,8 @@ list_moves Me Src =
         | if $owner.id <> B.owner.id
           then if B.alive and $damage and (SZ-Z).abs<<4 then
                  | push move{attack Dst} Ms
-               else when B.ai><remove and $worker:
+               else when B.ai><remove and $worker
+                        and $owner.excavate_mark{X Y Z}:
                  | push move{move Dst} Ms
           else when B.speed and B.can_move{}{B Dst Src}:
                | push move{swap Dst} Ms //FIXME: consider moving B back
