@@ -1,6 +1,6 @@
 icon: spell_flight
 lore: misc.tier1_lcost
-cost: 600
+cost: 1000
 cool: 5760
 affects: unit
 //two minutes should be enough to traverse 128x128 map

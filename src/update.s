@@ -6,6 +6,7 @@ main.update =
 
 // force reset of all unit effects and health
 reinit_units Us =
+| InitedUnits = []
 | for U Us: less U.removed
   | Type = U.type
   | Owner = U.owner
@@ -18,6 +19,8 @@ reinit_units Us =
   | U.move{XYZ}
   | U.pick_facing{Facing}
   | U.fxyz.init{FXYZ}
+  | push U InitedUnits
+| InitedUnits
 
 handle_attack_triggers Us =
 | for U Us
@@ -36,7 +39,7 @@ world.new_game =
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana
-| reinit_units $active
+| InitedUnits = reinit_units $active
 | PAI = $main.params.ai
 | for P $players:
   | P.lore <= 10
@@ -58,7 +61,7 @@ world.new_game =
     | $effect{C.xyz pentagram_appearance}
   | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got!it $players.find{?human}: $human <= it
-| handle_attack_triggers $active
+| handle_attack_triggers InitedUnits
 
 EventActions = []
 

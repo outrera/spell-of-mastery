@@ -9,4 +9,4 @@ empty: 1
 show: 0
 aux: 1
 invincible: 1
-inborn: (ttl_s{1440}) //1440=24*60
+//inborn: (ttl_s{1440}) //1440=24*60
