@@ -227,6 +227,8 @@ world.respawn_tile XYZ Type Delay =
 | S.move{XYZ}
 | S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
 
+Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
+
 world.excavate X Y Z PassageH Amount =
 | Work = $units_at{X,Y,Z}.find{?type><unit_work}
 | when no Work:
@@ -251,23 +253,20 @@ world.excavate X Y Z PassageH Amount =
   | leave 0
 | when Tile.death: Work.effect{Tile.death Work X,Y,Z}
 | Work.free
-| AddCeil = 1
 | H = min $fix_z{X,Y,Z} Z+PassageH
-| when H-Z < 5: AddCeil <= 0 //leave 1
 | ZZ = Z
 | while Z<H:
-  | less $at{X Y Z}.excavate:
-    | H<=Z
-    | AddCeil <= 0
+  | less $at{X Y Z}.excavate: H<=Z
   | !Z+1
 | Z <= ZZ
-| when H-Z < 5: AddCeil <= 0 //leave 1
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
   //| when Type<>void: $respawn_tile{X,Y,Z Type $params.excavate_ttl}
   | !Z+1
-| when AddCeil: $set{X Y H-1 $main.tiles.floor_wooden}
+| when $at{X Y H}.empty:
+  | when Dir4.any{DX,DY => not $at{X+DY Y+DY H-1}.empty}:
+    | $set{X Y H-1 $main.tiles.floor_wooden}
 | 1
 
 // FIXME: remove overlapping tiles above setted tile
