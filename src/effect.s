@@ -296,8 +296,15 @@ effect excavate Where:
   target | TargetXYZ.deep_copy
   X,Y,Z | X,Y,Z
   Else | bad "effect excavate: invalid target ([Where])"
-| when $world.excavate{X Y Z 8 (max $worker 1)}:
-  | when!mark $owner.excavate_mark{X Y Z}: mark.free
+| Mark = $owner.excavate_mark{X Y Z}
+| ExcavateGoal = $goal and $goal_act and $goal_act.name><excavate
+| when Mark and $world.excavate{X Y Z 8 (max $worker 1)}:
+  | Mark.free
+  | Mark <= 0
+| less Mark: when ExcavateGoal:
+  | Marked = $find{16 | Dst => $owner.excavate_mark{@Dst.xyz}}
+  | if Marked then $order_at{Marked}
+    else $reset_goal
 
 effect build Where What:
 | X,Y,Z = case Where

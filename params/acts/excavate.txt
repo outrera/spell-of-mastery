@@ -2,7 +2,8 @@ icon: spell_excavate
 //lore: misc.tier1_lcost
 //cost: 100
 fix_z: caster
-range: 1
+range: cross
+repeat: 1
 affects: any
 //before: sound{summon}
 impact: same_z,excavate{target}

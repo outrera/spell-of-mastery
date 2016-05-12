@@ -44,7 +44,7 @@ type unit.$class{Id World}
   path_life //cycles before updating path
   goal
   goal_serial //in case goal gets killed
-  goal_act
+  goal_act //what to do with the goal
   host //what unit hosts this sprite
   host_serial //when host dies, its serial changes
   unit_goal/cell_goal{}
@@ -413,6 +413,7 @@ unit.order_at XYZ act/0 =
 | $goal <= $world.block_at{XYZ}
 | if no $goal
   then | $goal <= $unit_goal
+       | less Act: when $owner.excavate_mark{@XYZ}: Act <= \excavate
   else | Enemy = $owner.is_enemy{$goal.owner}
        | less Act or Enemy: $goal <= $unit_goal
        | when Enemy: Act <= $main.params.acts.attack

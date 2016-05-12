@@ -264,7 +264,7 @@ world.excavate X Y Z PassageH Amount =
   | $set{X Y Z $main.tiles.void}
   //| when Type<>void: $respawn_tile{X,Y,Z Type $params.excavate_ttl}
   | !Z+1
-| when $at{X Y H}.empty:
+| when H>4 and $at{X Y H}.empty:
   | when Dir4.any{DX,DY => not $at{X+DY Y+DY H-1}.empty}:
     | $set{X Y H-1 $main.tiles.floor_wooden}
 | 1
