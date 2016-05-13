@@ -52,9 +52,6 @@ cast_spell_sub Me Spell Force =
 cast_spell Me =
 | Acts = $acts
 | less Acts.size: leave 0
-| when $ai >< pentagram
-  | when $owner.mana>500: ai_update_build $owner.ai
-  | leave 1
 | PP = $owner.params
 | when $leader:
   | Pentagram = $owner.pentagram
@@ -164,6 +161,8 @@ ai.update_units =
 | when $player.params.attack_with_guards >< 1:
   | for U Units: U.attacker <= 1
   | $player.params.attack_with_guards <= 0
+| Pentagram = $player.pentagram
+| when Pentagram and Pentagram.idle and $player.mana>500: ai_update_build Me
 | for U Units:
   | Handled = cast_spell U
   | less Handled: if U.idle and not U.goal then
