@@ -3,5 +3,5 @@ icon: unit_hydra
 lore: misc.tier4_lcost
 cost: misc.tier4_scost
 cool: misc.tier4_cool
-needs: ((summon_ifrit summon_baphomet))
+needs: ((summon_ifrit summon_devil))
 after: spawn{unit_hydra}

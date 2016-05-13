@@ -1,7 +1,7 @@
 proto: spawn__proto
-icon: unit_baphomet
+icon: unit_devil
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
 needs: ((summon_goblin summon_orc))
-after: spawn{unit_baphomet}
+after: spawn{unit_devil}

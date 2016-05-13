@@ -6,6 +6,6 @@ armor: 0
 inborn: (upkeep2 heals organic flyer)
 //attack: sound{impact}
 impact: harm{user},sound{impact}
-hit: effect{blood_undead},sound{baphomet_hit}
+hit: effect{blood_undead},sound{devil_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

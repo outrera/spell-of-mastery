@@ -76,11 +76,11 @@ witch2:
 
 witch3:
   | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
-  | attack ratman orc baphomet spider goblin
+  | attack ratman orc devil spider goblin
   | goto witch4 when lossage >> 64
 
 witch4:
-  | attack ratman spider orc goblin baphomet ogre
+  | attack ratman spider orc goblin devil ogre
 
 leader_heretic:
   | set ai_spells (cast_fireball)
@@ -134,7 +134,7 @@ tier2:
 tier3:
   | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
   | attack minotaur vampire
-  | attack baphomet
+  | attack devil
   | attack spider ifrit
   | goto tier4 when lossage >> 64
 

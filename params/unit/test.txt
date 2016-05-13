@@ -6,6 +6,6 @@ armor: 0
 inborn: (flyer)
 //attack: sound{explosion}
 impact: harm{user},sound{explosion}
-hit: effect{blood},sound{baphomet_hit}
+hit: effect{blood},sound{devil_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

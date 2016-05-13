@@ -1,9 +1,0 @@
-sprite: unit_baphomet
-tier: 3
-health: 60
-damage: 2
-armor: 10
-inborn: (upkeep3 heals organic)
-impact: harm{user},when{kills.1},harm{50},impact{lifedrain},endwhen,sound{baphomet_attack}
-hit: effect{blood},sound{baphomet_hit}
-death: sound{baphomet_hit}
