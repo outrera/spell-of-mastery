@@ -82,30 +82,30 @@ witch3:
 witch4:
   | attack ratman spider orc goblin baphomet ogre
 
-leader_priest:
+leader_heretic:
   | set ai_spells (cast_fireball)
-  | goto priest0
+  | goto heretic0
 
-priest0:
+heretic0:
   | attack bat skeleton
   | attack skeleton skeleton
-  | goto priest1
+  | goto heretic1
 
-priest1:
+heretic1:
   | attack skeleton wraith skeleton bat
-  | goto priest2 when lossage >> 14
+  | goto heretic2 when lossage >> 14
 
-priest2:
+heretic2:
   | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
   | attack skeleton wraith wraith bat gargoyle
-  | goto priest3 when lossage >> 32
+  | goto heretic3 when lossage >> 32
 
-priest3:
+heretic3:
   | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
   | attack skeleton wraith skeleton bat gargoyle vampire
-  | goto priest4 when lossage >> 64
+  | goto heretic4 when lossage >> 64
 
-priest4:
+heretic4:
   | attack skeleton wraith skeleton wraith gargoyle vampire observer
 
 

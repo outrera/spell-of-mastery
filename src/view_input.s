@@ -193,20 +193,6 @@ mark_tile Me =
 | Work.move{X,Y,0}
 | Work.hp <= 0
 | $main.sound{excavate_mark}
-//| T = $world.at{X Y Z-1}
-//| when T.unit:
-/*
-  [tile Type]
-    | while 1
-      | Z <= $cursor.2
-      | less Z >> $anchor.2 and Z > 1: leave
-      | less Z > 1: leave
-      | Tile = $world.at{X Y Z-1}
-      | less Tile.height: leave
-      | $world.clear_tile{X Y Z-1}
-      | $cursor.2 <= $fix_z{$cursor}
-      | for U $world.units_at{X,Y,Z}: U.move{$cursor}
-*/
 
 view.update_play =
 | Player = $player
