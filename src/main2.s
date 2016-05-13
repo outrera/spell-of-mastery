@@ -43,7 +43,7 @@ type main{Data}
                "\n\n\nTHANKS TO:\n"
                "  Matthew Ostil\n"
               ]
-//| sprite_dump Me "/Users/nikita/Downloads/1" staticFrame/160 sheet/0 unit_baphomet
+| sprite_dump Me "/Users/nikita/Downloads/1" staticFrame/128 sheet/1 unit_baphomet
 | init_unit_flags Me
 | world Me
 
