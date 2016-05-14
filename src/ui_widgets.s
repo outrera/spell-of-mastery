@@ -55,21 +55,21 @@ unit_panel.set_unit Unit =
 unit_panel.draw G X Y =
 | less $unit: leave
 | Main = $unit.main
-| Icon = Main.sprites."icons_[$unit.icon or $unit.type]"
-| IconBg = Main.sprites.ui_icon_bg
-| G.blit{X+3 Y+20 IconBg.frames.0}
-| when got Icon: G.blit{X+3 Y+20 Icon.frames.0}
 | G.blit{X Y $bg}
+| Icon = Main.sprites."icons_[$unit.icon or $unit.type]"
+//| IconBg = Main.sprites.ui_icon_bg
+//| G.blit{X+2 Y+35 IconBg.frames.0}
+| when got Icon: G.blit{X+2 Y+35 Icon.frames.0}
 | Font = font medium
 //| Font.draw{G X+85 Y+48 "[$unit.owner.name]"}
-| Font.draw{G X+4 Y "[$unit.title or $unit.class_name.title]"}
-| Font.draw{G X+23 Y+74"[max 0 $unit.health]"}
-| Font.draw{G X+70 Y+28"[$unit.damage]"}
-| Font.draw{G X+60 Y+64"[$unit.armor]"}
+| Font.draw{G X+4 Y+75 "[$unit.title or $unit.class_name.title]"}
+| Font.draw{G X+27 Y+14"[max 0 $unit.health]"}
+| Font.draw{G X+67 Y+28"[$unit.damage]"}
+| Font.draw{G X+67 Y+57"[$unit.armor]"}
 | when Main.params.ui.debug><1:
-  | Font.draw{G X+2 Y+90 "serial:[max 0 $unit.serial]"}
+  | Font.draw{G X+3 Y+35 "sn:[max 0 $unit.serial]"}
 | when Main.params.ui.debug><1:
-  | Font.draw{G X+2 Y+106 "id:[max 0 $unit.id]"}
+  | Font.draw{G X+3 Y+51 "id:[max 0 $unit.id]"}
 
 type world_props.$base{world callback}
      filename name description width height base

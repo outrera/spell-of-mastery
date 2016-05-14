@@ -283,17 +283,17 @@ create_view_ui Me =
 | UnitPanel <= unit_panel Me
 | IconsPanelTabs = create_icons_panel_tabs Me
 | GameUnitUI <= hidden: dlg: mtx
-  | 0  0| UnitPanel
+  | 0  $height-128-UnitPanel.bg.h | UnitPanel
 | IPY = $height-IconsPanelBG.h
 | GameUI = dlg: mtx
   |  0   0| $view
-  |  0 IPY| IconsPanelBG
-  |  0 IPY-24| IconsPanelTabs
+  | 0 IPY| IconsPanelBG
   |  0   0| GameUnitUI
-  |  4 $height-112| layH{s/4 ActIcons.drop{ActIcons.size/2}}
-  |  4 $height-56 | layH{s/4 ActIcons.take{ActIcons.size/2}}
+  | 140 IPY-28| IconsPanelTabs
+  | 142 $height-110| layH{s/4 ActIcons.drop{ActIcons.size/2}}
+  | 142 $height-54 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 $height-10 | info_line Me
-  | $width-128 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
+  | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
 | BrushUI = dlg: mtx
   | 0 0 | $view
   | 0 0 | layH: BankList,ItemList

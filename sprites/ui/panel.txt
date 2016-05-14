@@ -1,3 +1,1 @@
-author: `Roman Iljin 'Ashiroxzer' (http://ashirox.deviantart.com/)`, `Nikita Sadkov`
-license: `CC-BY-SA 3.0`
-origin: `http://opengameart.org/content/fantasy-decoration`
+author: `Nikita Sadkov`

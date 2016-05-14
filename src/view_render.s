@@ -542,9 +542,9 @@ view.draw_indicators =
   | Font.draw{$fb 150 IY+C "* [Chars.text]"}
   | !C+16
 | when $world.up{$cursor}:
-  | $fb.blit{$w-IndicUp.w $h-128-IndicUp.h IndicUp}
+  | $fb.blit{100 $h-156-IndicUp.h IndicUp}
 | when $world.down{$cursor}:
-  | $fb.blit{$w-IndicUp.w-IndicDown.w $h-128-IndicDown.h IndicDown}
+  | $fb.blit{100+IndicUp.w $h-156-IndicDown.h IndicDown}
 | TileName = "[$world.at{X Y Z-1}.type]"
 | Font = font small
 | Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[TileName]"}
