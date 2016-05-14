@@ -22,7 +22,7 @@ main.sound Name volume/1.0 =
 | when Name.is_list: Name <= Name.rand
 | Cycle = $world.cycle
 | SCycles = $world.sound_cycles
-| when SCycles.Name><Cycle and $world.mode><play: leave
+| when SCycles.Name><Cycle and not $world.paused: leave
 | SCycles.Name <= Cycle
 | S = $sounds.Name
 | when no S: bad "missing sound `[Name]`"

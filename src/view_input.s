@@ -173,8 +173,6 @@ view.update_brush =
   [tile Type] | place_tile Me Type
 | when $mice_click><right: remove_object_or_tile Me
 
-view.update_pick = //FIXME
-
 Unmarking = No
 
 mark_tile Me =
@@ -195,8 +193,7 @@ mark_tile Me =
 | $main.sound{excavate_mark}
 
 view.update_play =
-| Player = $player
-| case $mice_click
+| less $brush.0: case $mice_click
   leftup | $mice_click <= \pick
   right | less $picked.size or $world.act:
           | mark_tile Me
@@ -208,7 +205,6 @@ view.update_play =
   rightup
     | Unmarking <= No
     | $mice_click <= 0
-| $main.update
 
 world.update_picked =
 | for M $marks: M.free
@@ -233,10 +229,9 @@ world.update_cursor =
 | if $act
   then | when $act.affects<>unit:
          | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
-  else when $view.mode<>play:
-       | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
+  else | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
        | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks
-| when View.mode >< brush: case View.brush
+| case View.brush
   [obj Bank,Type]
     | Mirror = View.key{edit_place_mirrored}
     | Reverse = View.key{edit_place_reversed}
@@ -264,7 +259,6 @@ world.update_cursor =
 | $marks <= Marks.enheap
 
 view.update =
-| when $paused: leave
 | case $key{up} 1: $center_at{$center-[1 1 0]}
 | case $key{down} 1: $center_at{$center+[1 1 0]}
 | case $key{left} 1: $center_at{$center-[1 -1 0]}
@@ -283,7 +277,7 @@ view.update =
     | $cursor.2 <= NewZ
   | $zlock <= $cursor.2
   | $key_set{floor_up 0}
-| when $mode >< brush
+| when $brush.0:
   | case $key{edit_down} 1:
     | $zfix <= 0
     | when $cursor.2>1: !$cursor.2 - 1
@@ -298,11 +292,9 @@ view.update =
 | X,Y,Z = $cursor
 | $world.update_picked
 | $world.update_cursor
-| case $mode
-    play | $update_play
-    brush | $update_brush
-    pick | $update_pick
-    Else | bad "bad view mode ([$mode])"
+| when $brush.0: $update_brush
+| $update_play
+| less $paused: $main.update
 | 1
 
 view.fix_z XYZ =
@@ -316,8 +308,8 @@ view.input In =
     | $mice_xy.init{XY}
     | less $mice_click: $mice_xy_anchor.init{XY}
     | CX,CY = $viewToWorld{$mice_xy}
-    | when $mode <> play or $world.human.sight.CY.CX:
-      | less ($mice_click><left or $mice_click><pick) and $mode >< play:
+    | when $brush.0 or $world.human.sight.CY.CX:
+      | less ($mice_click><left or $mice_click><pick) and not $brush.0:
         | $cursor.init{[CX CY $cursor.2]}
         | $cursor.2 <= $fix_z{$cursor}
         | NewZ = $cursor.2
@@ -349,7 +341,7 @@ view.input In =
     | when State: $mice_xy_anchor.init{XY}
   [key Name S]
     | $keys.Name <= S
-| when $mode <> play: $mice_xy_anchor.init{$mice_xy}
+| when $brush.0: $mice_xy_anchor.init{$mice_xy}
 
 view.pause = $paused <= 1
 view.unpause = $paused <= 0

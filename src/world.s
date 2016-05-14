@@ -53,7 +53,8 @@ type world{main}
    act
    act_unit/[0 0]
    notes
-   mode/brush
+   editor/0 //world is in editor mode
+   paused/0
    sound_cycles/(t) //used to avoid playing similar sounds at once
    blink/[0 0]
    minimap/0
@@ -127,6 +128,7 @@ world.create_borders = // draws maps borders in clockwise order
 | for X,Y points{0    1    1    $h+1}: create_border_column Me X Y
 
 world.clear =
+| $paused <= 1
 | $minimap.clear{#000000}
 | $lightmap.clear{0}
 | $act <= 0

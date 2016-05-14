@@ -228,7 +228,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LX,LY = LXY
 | LX = LX.clip{-127 127}
 | LY = LY.clip{-127 127}
-| SkipZ = -1//if $mode<>play then -1 else 0
+| SkipZ = -1//if $brush.0 then -1 else 0
 | LM = Wr.lightmap
 | Us = Wr.column_units_at{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
@@ -239,7 +239,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
     | UX,UY,Z = XYZ
     | TZ = Z-4
     | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
-      | when not U.invisible or U.owner.id><$player.id or $mode<>play:
+      | when not U.invisible or U.owner.id><$player.id or $brush.0:
         | B = blit_item_from_unit U
         | FX,FY,FZ = U.fxyz
         | BX,BY = ScreenXY + to_iso{FX FY FZ}
@@ -478,7 +478,7 @@ view.render_iso =
         else render_unexplored Me Wr X Y BX BY
 | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
 | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
-| when $mice_click<>left or $mode<>play:
+| when $mice_click<>left or $brush.0:
   | render_cursor Me Wr BX BY $cursor
 /*| less BlitItems.end
   | Xs = BlitItems{B=>[(view_to_z B.x B.y B.z+B.z2) B]}
@@ -509,7 +509,7 @@ view.render_iso =
       | draw_bounding_box_front Color FB B
   | isort_free_result
 | draw_picked_rects FB PickedRects.list.flip
-| when $mode><play: handle_picking Me UnitRects.list.flip
+| less $brush.0: handle_picking Me UnitRects.list.flip
 | BlitItems <= 0
 | UnitRects <= 0
 
@@ -528,7 +528,6 @@ view.draw_indicators =
 | IY = 0
 | P = $player
 | Font = font medium
-| when $mode <> play: !IX + 80
 | X,Y,Z = $cursor
 | $fb.blit{IX IY Indicators}
 | Font.draw{$fb IX+36 IY+2 "[P.mana]"}
@@ -559,7 +558,7 @@ view.render_frame =
 //| $fb.clear{#929292/*#00A0C0*/}
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
-| /*when $mode >< play:*/ $draw_indicators
+| $draw_indicators
 | InfoText = []
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText

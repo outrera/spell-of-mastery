@@ -7,7 +7,6 @@ type view.widget{M UI W H}
   w/W
   h/H
   frame
-  paused
   keys/(t)
   view_origin/[0 0]
   blit_origin/[W/2 -170]
@@ -54,8 +53,8 @@ view.key_set Name Value =
 | K = $keymap.Name
 | $keys.K <= Value
 
-view.mode = $world.mode
-view.`!mode` V = $world.mode <= V
+view.paused = $world.paused
+view.`!paused` V = $world.paused <= V
 
 view.player = $world.human //view deals with human player
 

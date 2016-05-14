@@ -31,6 +31,8 @@ PickedIconOverlay = 0
 BrushPicker =
 PlayerWidget =
 
+LastBrush = [0 0]
+
 type ui.$tabs{main} tabs width height world message_box view
 | $world <= $main.world
 | $width <= $params.ui.width
@@ -231,7 +233,6 @@ create_credits_dlg Me =
   |  $width-80 $height-20
      | button 'Exit' skin/small_medium: => pick_main_menu Me pause/0
 
-
 create_bank_list Me =
 | TileBanks = $main.params.world.tile_banks
 | BankName =
@@ -241,12 +242,13 @@ create_bank_list Me =
             then [tile N]
             else [obj BankName,N]
   | $view.set_brush{Brush}
+  | LastBrush.init{Brush}
 | BankList <= litems w/80 lines/40 BankNames f: N =>
   | BankName <= N
   | if got TileBanks.find{BankName}
     then | ItemList.data <= $main.tile_names{BankName}
          | ItemList.pick{0}
-         //| ItemList.pick{TileNames.locate{plain}}
+         //| ItemList.pick{TileNames.locate{soil}}
     else | ItemList.data <= $main.classes_banks.BankName
          | ItemList.pick{0}
 | BankList,ItemList
@@ -257,19 +259,22 @@ create_editor_tabs Me =
   | if Icon.picked then $view.unpause else $view.pause
 | PlayIcon = icon data/play $img{icons_play} click/PlayIconClick
 | PlayIcon.picked_overlay <= PickedIconOverlay
-| BrushIconClick = Icon =>
-  | Icon.picked <= not Icon.picked
-  | BrushPicker.show <= Icon.picked
-  | PlayerWidget.show <= Icon.picked
-| BrushIcon = icon data/play $img{icons_brush} click/BrushIconClick
-| BrushIcon.picked_overlay <= PickedIconOverlay
-| hidden: layH s/0 PlayIcon,spacer{8 0},BrushIcon
+| hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon
 
 create_icons_panel_tabs Me =
 | Click = Icon =>
   | $main.sound{ui_click}
+  | if PanelTab><brush
+    then when Icon.data<>brush:
+         | BrushPicker.show <= 0
+         | PlayerWidget.show <= 0
+         | $view.set_brush{0,0}
+    else when Icon.data><brush:
+         | BrushPicker.show <= 1
+         | PlayerWidget.show <= 1
+         | $view.set_brush{LastBrush}
   | PanelTab <= Icon.data
-| Icons = map Name [spell summon build unit]:
+| Icons = map Name [spell summon build unit brush]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
   | when Name><spell: Icon.picked<=1
   | Icon.picked_overlay <= PickedIconOverlay
@@ -299,16 +304,16 @@ create_view_ui Me =
 | IPY = $height-IconsPanelBG.h
 | dlg: mtx
   |  0   0| $view
-  | $width-200 0 | BrushPicker
+  | 0 0 | BrushPicker
   |  0 IPY| IconsPanelBG
   |  0   0| GameUnitUI
   | 140 IPY-28| IconsPanelTabs
-  |  $width-400 IPY-28| EditorTabs
+  | 640 IPY-28| EditorTabs
   | 142 $height-110| layH{s/4 ActIcons.drop{ActIcons.size/2}}
   | 142 $height-54 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 $height-10 | info_line Me
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
-  | 0 IPY-10 | PlayerWidget
+  | 0 IPY | PlayerWidget
 
 create_ingame_dlg Me =
 | Ingame = dlg w/$width h/$height: mtx
@@ -470,7 +475,7 @@ create_act_icons Me =
 
 ui_input Me Base In =
 | Base.input{In}
-| when $view.mode<>play or InputBlocker.show: leave 
+| when InputBlocker.show: leave 
 | case In [key Key 1]
   | for Icon ActIcons: when Icon.show: when Icon.hotkey><Key:
     | HotKeyInvoke <= 1

@@ -124,7 +124,7 @@ dact die.start
 
 dact die.finish
 | U = $unit
-| when U.leader><1 and U.hp << 0 and U.world.mode >< play:
+| when U.leader><1 and U.hp << 0:
   | P = U.owner.pentagram
   | when P and respawn_leader U P.xyz: leave
   | player_lost_leader U.owner U

@@ -171,7 +171,7 @@ unit.move_in State =
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
-| $sprite <= if $show or $world.mode <> play
+| $sprite <= if $show or $world.editor
              then $default_sprite
              else $world.nil.sprite
 | $facing <= 3
@@ -207,7 +207,7 @@ unit.morph Class =
 | $owner.lost_unit{Me}
 | $hp <= Class.hp + $hp - $class.hp
 | $class <= Class
-| $sprite <= if $show or $world.mode <> play
+| $sprite <= if $show or $world.editor
              then $default_sprite
              else $world.nil.sprite
 | $animate{idle}
