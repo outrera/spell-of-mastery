@@ -25,6 +25,12 @@ MenuBG =
 IconsPanelBG =
 PanelTab = \spell
 
+PlayerPicker = 0
+PickedIconOverlay = 0
+
+BrushPicker =
+PlayerWidget =
+
 type ui.$tabs{main} tabs width height world message_box view
 | $world <= $main.world
 | $width <= $params.ui.width
@@ -176,19 +182,14 @@ create_main_menu_dlg Me =
        | CreditsRoll.reset
        | $pick{credits}
 
-EditorIcons =
-GearsIcon =
+EditorTabs =
 begin_ingame Me Editor =
-| less Editor: $main.music{playlist}
-| EditorIcons.show <= Editor
-| GearsIcon.show <= not Editor
-| $view.mode <= [play brush].Editor
+| $main.music{playlist}
+| EditorTabs.show <= Editor
 
-ViewUI =
 load_game Me NewGame Path =
 | begin_ingame Me 0
 | $load{Path}
-| ViewUI.pick{play}
 | when NewGame: $world.new_game
 | $unpause
 | $pick{ingame}
@@ -250,12 +251,21 @@ create_bank_list Me =
          | ItemList.pick{0}
 | BankList,ItemList
 
-
-PlayerPicker = 0
-PickedIconOverlay = 0
+create_editor_tabs Me =
+| PlayIconClick = Icon =>
+  | Icon.picked <= not Icon.picked
+  | if Icon.picked then $view.unpause else $view.pause
+| PlayIcon = icon data/play $img{icons_play} click/PlayIconClick
+| PlayIcon.picked_overlay <= PickedIconOverlay
+| BrushIconClick = Icon =>
+  | Icon.picked <= not Icon.picked
+  | BrushPicker.show <= Icon.picked
+  | PlayerWidget.show <= Icon.picked
+| BrushIcon = icon data/play $img{icons_brush} click/BrushIconClick
+| BrushIcon.picked_overlay <= PickedIconOverlay
+| hidden: layH s/0 PlayIcon,spacer{8 0},BrushIcon
 
 create_icons_panel_tabs Me =
-| PickedIconOverlay <= [0 0 $img{"ui_icon_hl"}]
 | Click = Icon =>
   | $main.sound{ui_click}
   | PanelTab <= Icon.data
@@ -277,73 +287,38 @@ create_view_ui Me =
     | when got!it $world.players.find{?name >< Name}: $world.human <= it
 | PlayerPicker <= PlayerPickers.1
 | PlayerPicker.picked <= 1
-| PlayerWidget = layH PlayerPickers
+| PlayerWidget <= hidden: layH PlayerPickers
 | BankList,ItemList = create_bank_list Me
+| BrushPicker <= hidden: layH: BankList,ItemList
 | for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
 | IconsPanelTabs = create_icons_panel_tabs Me
+| EditorTabs <= create_editor_tabs Me
 | GameUnitUI <= hidden: dlg: mtx
   | 0  $height-128-UnitPanel.bg.h | UnitPanel
 | IPY = $height-IconsPanelBG.h
-| GameUI = dlg: mtx
+| dlg: mtx
   |  0   0| $view
-  | 0 IPY| IconsPanelBG
+  | $width-200 0 | BrushPicker
+  |  0 IPY| IconsPanelBG
   |  0   0| GameUnitUI
   | 140 IPY-28| IconsPanelTabs
+  |  $width-400 IPY-28| EditorTabs
   | 142 $height-110| layH{s/4 ActIcons.drop{ActIcons.size/2}}
   | 142 $height-54 | layH{s/4 ActIcons.take{ActIcons.size/2}}
   |  4 $height-10 | info_line Me
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
-| BrushUI = dlg: mtx
-  | 0 0 | $view
-  | 0 0 | layH: BankList,ItemList
-  | PanelW 0 | PlayerWidget
-  | $width-128 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
-| tabs brush: t brush(BrushUI) pick(GameUI) play(GameUI)
+  | 0 IPY-10 | PlayerWidget
 
 create_ingame_dlg Me =
-| ViewUI <= create_view_ui Me
 | Ingame = dlg w/$width h/$height: mtx
   |  0   0| spacer $width $height
-  |  0   0| ViewUI
-  |  $width-54 4| EditorIcons
-  |  $width-111 0| GearsIcon
+  |  0   0| create_view_ui Me
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
-
-create_editor_icons Me =
-| ModeIcon = No
-| EditorModeIconClick = Icon =>
-  | ModeIcon.picked <= 0
-  | Icon.picked <= 1
-  | ModeIcon <= Icon
-  | Mode = Icon.data
-  | $view.mode <= Mode
-  | ViewUI.pick{Mode}
-  | if Mode >< play then $world.new_game else $world.explore{1}
-| BrushIcon = icon data/brush $img{icons_brush} click/EditorModeIconClick
-//| PickIcon = icon data/pick $img{icons_pick} click/EditorModeIconClick
-| PlayIcon = icon data/play $img{icons_play} click/EditorModeIconClick
-| WorldIcon = icon $img{icons_world} click: Icon =>
-  | $pause
-  | WorldProperties.show <= 1
-  | WorldProperties.update
-| SaveIcon = icon data/pick $img{icons_save} click: Icon =>
-  | $save{"[MapsFolder][$world.filename].txt"}
-  //| $main.show_message{'Saved' 'Your map is saved!'}
-| LoadIcon = icon data/pick $img{icons_load} click: Icon =>
-  | $pause
-  | LoadWorldDlg.show <= 1 
-  //| $load{"[MapsFolder][$world.filename].txt"}
-| ExitIcon = icon data/pick $img{icons_exit} click: Icon => pick_main_menu Me
-| ModeIcon <= BrushIcon
-| BrushIcon.picked <= 1
-| hidden: layV s/8
-    BrushIcon,spacer{8 0}/*,PickIcon,spacer{8 0}*/,PlayIcon,spacer{8 0},
-    WorldIcon,spacer{8 0},SaveIcon,spacer{8 0},LoadIcon,spacer{8 0},ExitIcon
 
 create_load_buttons Me =
 | load_slot Name = 
@@ -493,10 +468,6 @@ create_act_icons Me =
                 | when HKI: $view.mice_click <= \leftup //FIXME: kludge
 | map I MaxActIcons: hidden: icon 0 click/&actClick
 
-create_ingame_icons Me =
-| GearsIcon <= hidden: button 'GEARS' skin/gears: => | $pause; $pick{game_menu}
-
-
 ui_input Me Base In =
 | Base.input{In}
 | when $view.mode<>play or InputBlocker.show: leave 
@@ -512,6 +483,7 @@ ui.init =
 | $create{8 8}
 | MenuButtonsX <= $width/2 - 162
 | X = MenuButtonsX
+| PickedIconOverlay <= [0 0 $img{"ui_icon_hl"}]
 | MenuBG <= $img{ui_menu_bg}
 | IconsPanelBG <= $img{ui_panel}
 | $message_box <= message_box Me
@@ -519,8 +491,6 @@ ui.init =
 | WorldProperties <= create_world_props Me
 | LoadWorldDlg <= create_load_world_dlg Me
 | ActIcons <= create_act_icons Me
-| EditorIcons <= create_editor_icons Me
-| create_ingame_icons Me
 | Tabs = create_dialog_tabs Me
 | $tabs <= input_split Tabs: Base In => ui_input Me Base In
 | BankList.pick{0}

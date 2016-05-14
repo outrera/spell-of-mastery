@@ -163,7 +163,8 @@ player_picker.draw G PX PY =
 player_picker.input In =
 | case In
   [mice over S P] | $over <= S
-  [mice left 1 P] | less $pressed: $pressed <= 1
+  [mice left 1 P] | $over <= 1
+                  | less $pressed: $pressed <= 1
   [mice left 0 P] | when $pressed:
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
