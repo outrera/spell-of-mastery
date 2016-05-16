@@ -257,24 +257,53 @@ create_editor_tabs Me =
 | PlayIconClick = Icon =>
   | Icon.picked <= not Icon.picked
   | if Icon.picked then $view.unpause else $view.pause
-| PlayIcon = icon data/play $img{icons_play} click/PlayIconClick
+| PlayIcon = icon data/play $img{icons_tab_play} click/PlayIconClick
 | PlayIcon.picked_overlay <= PickedIconOverlay
 | hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon
 
+
+handle_brush_tab Me Picked =
+| if PanelTab><brush
+  then when Picked<>brush:
+       | BrushPicker.show <= 0
+       | PlayerWidget.show <= 0
+       | $view.set_brush{0,0}
+  else when Picked><brush:
+       | BrushPicker.show <= 1
+       | PlayerWidget.show <= 1
+       | $view.set_brush{LastBrush}
+
+MenuTab = 
+ActIconsLay =
+
+create_menu_tab Me =
+| WorldIcon = icon $img{icons_menu_world} click: Icon =>
+  | $pause
+  | WorldProperties.show <= 1
+  | WorldProperties.update
+| SaveIcon = icon data/pick $img{icons_menu_save} click: Icon =>
+  | say 'FIXME: implement save menu'
+  //| $save{"[MapsFolder][$world.filename].txt"}
+  //| $main.show_message{'Saved' 'Your map is saved!'}
+| LoadIcon = icon data/pick $img{icons_menu_load} click: Icon =>
+  | $pause
+  | LoadWorldDlg.show <= 1 
+  //| $load{"[MapsFolder][$world.filename].txt"}
+| ExitIcon = icon data/pick $img{icons_menu_exit} click: Icon =>
+  | pick_main_menu Me
+| hidden: layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
+
+handle_menu_tab Me Picked =
+
 create_icons_panel_tabs Me =
+| MenuTab <= create_menu_tab Me
 | Click = Icon =>
   | $main.sound{ui_click}
-  | if PanelTab><brush
-    then when Icon.data<>brush:
-         | BrushPicker.show <= 0
-         | PlayerWidget.show <= 0
-         | $view.set_brush{0,0}
-    else when Icon.data><brush:
-         | BrushPicker.show <= 1
-         | PlayerWidget.show <= 1
-         | $view.set_brush{LastBrush}
+  | when PanelTab><brush or Icon.data><brush: handle_brush_tab Me Icon.data
   | PanelTab <= Icon.data
-| Icons = map Name [spell summon build unit brush]:
+  | ActIconsLay.show <= no [brush menu].find{PanelTab}
+  | MenuTab.show <= PanelTab><menu
+| Icons = map Name [spell summon build unit brush menu]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
   | when Name><spell: Icon.picked<=1
   | Icon.picked_overlay <= PickedIconOverlay
@@ -302,16 +331,20 @@ create_view_ui Me =
 | GameUnitUI <= hidden: dlg: mtx
   | 0  $height-128-UnitPanel.bg.h | UnitPanel
 | IPY = $height-IconsPanelBG.h
+| ActIconsLay <= hidden: layV s/4 
+                     layH{s/4 ActIcons.drop{ActIcons.size/2}}
+                    ,layH{s/4 ActIcons.take{ActIcons.size/2}}
+| ActIconsLay.show <= 1
 | dlg: mtx
   |  0   0| $view
-  | 0 0 | BrushPicker
+  |  0   0| BrushPicker
   |  0 IPY| IconsPanelBG
   |  0   0| GameUnitUI
   | 140 IPY-28| IconsPanelTabs
   | 640 IPY-28| EditorTabs
-  | 142 $height-110| layH{s/4 ActIcons.drop{ActIcons.size/2}}
-  | 142 $height-54 | layH{s/4 ActIcons.take{ActIcons.size/2}}
-  |  4 $height-10 | info_line Me
+  | 142 $height-110| ActIconsLay
+  | 142 $height-110| MenuTab
+  | 134 $height-10 | info_line Me
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0 IPY | PlayerWidget
 
@@ -437,7 +470,7 @@ ui.on_unit_pick Units =
          | Unit <= Player.leader
          | less Unit: leave
          | As <= Unit.acts.keep{?tab><build}
-       else
+       else leave
 | ui_update_panel_buttons Me Unit As
 
 create_act_icons Me =

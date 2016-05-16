@@ -67,9 +67,8 @@ unit_panel.draw G X Y =
 | Font.draw{G X+67 Y+28"[$unit.damage]"}
 | Font.draw{G X+67 Y+57"[$unit.armor]"}
 | when Main.params.ui.debug><1:
-  | Font.draw{G X+3 Y+35 "sn:[max 0 $unit.serial]"}
-| when Main.params.ui.debug><1:
-  | Font.draw{G X+3 Y+51 "id:[max 0 $unit.id]"}
+  | Font.draw{G X+3 Y-16 "sn:[max 0 $unit.serial]"}
+  | Font.draw{G X+3 Y-32 "id:[max 0 $unit.id]"}
 
 type world_props.$base{world callback}
      filename name description width height base
