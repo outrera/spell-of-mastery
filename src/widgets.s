@@ -100,7 +100,7 @@ button.`!state` V =
 
 button.render = Me
 button.draw G PX PY =
-| State = $state
+| State = $state_
 | when State >< normal and $over: State <= \over
 | Sprite = $sprite
 | BG = Sprite.frames.(case State over normal Else State).0
@@ -122,10 +122,10 @@ button.draw G PX PY =
 button.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | $over <= 1
-                  | case $state normal: Me.state <= \pressed
+                  | case $state normal: $state_ <= \pressed
   [mice left 0 P] | case $state pressed
                     | when $over: $on_click{}{}
-                    | $state <= \normal
+                    | $state_ <= \normal
 button.as_text = "#button{[$text]}"
 
 type litem.widget{Text w/140 state/normal}
