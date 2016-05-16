@@ -30,6 +30,7 @@ PickedIconOverlay = 0
 
 BrushPicker =
 PlayerWidget =
+PlayIcon =
 
 LastBrush = [0 0]
 
@@ -49,9 +50,11 @@ ui.act_icons = ActIcons
 ui.pause =
 | InputBlocker.show <= 1
 | $view.pause
+| PlayIcon.picked <= 0
 ui.unpause =
 | InputBlocker.show <= 0
-| $view.unpause
+| less $world.editor: $view.unpause
+| PlayIcon.picked <= not $world.paused
 
 ui.img File = $main.img{File}
 ui.create W H =
@@ -187,6 +190,7 @@ create_main_menu_dlg Me =
 EditorTabs =
 begin_ingame Me Editor =
 | $main.music{playlist}
+| $world.editor <= Editor
 | EditorTabs.show <= Editor
 
 load_game Me NewGame Path =
@@ -220,7 +224,9 @@ create_load_world_dlg Me =
   | World = $world
   | World.human <= World.players.1
   | World.human.human <= 1
-  | World.explore{1}
+  | when World.editor:
+    | World.paused <= 1
+    | World.explore{1}
   | hideLoadWorldDlg
 | LoadWorldDlgW.folder <= MapsFolder
 | LoadWorldDlg <= hidden: LoadWorldDlgW
@@ -257,7 +263,7 @@ create_editor_tabs Me =
 | PlayIconClick = Icon =>
   | Icon.picked <= not Icon.picked
   | if Icon.picked then $view.unpause else $view.pause
-| PlayIcon = icon data/play $img{icons_tab_play} click/PlayIconClick
+| PlayIcon <= icon data/play $img{icons_tab_play} click/PlayIconClick
 | PlayIcon.picked_overlay <= PickedIconOverlay
 | hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon
 
@@ -297,6 +303,7 @@ handle_menu_tab Me Picked =
 
 create_icons_panel_tabs Me =
 | MenuTab <= create_menu_tab Me
+| MenuTab.show <= 1
 | Click = Icon =>
   | $main.sound{ui_click}
   | when PanelTab><brush or Icon.data><brush: handle_brush_tab Me Icon.data
@@ -305,7 +312,7 @@ create_icons_panel_tabs Me =
   | MenuTab.show <= PanelTab><menu
 | Icons = map Name [spell summon build unit brush menu]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
-  | when Name><spell: Icon.picked<=1
+  | when Name><menu: Icon.picked<=1
   | Icon.picked_overlay <= PickedIconOverlay
   | Icon
 | for Icon Icons: Icon.group <= Icons
@@ -334,7 +341,6 @@ create_view_ui Me =
 | ActIconsLay <= hidden: layV s/4 
                      layH{s/4 ActIcons.drop{ActIcons.size/2}}
                     ,layH{s/4 ActIcons.take{ActIcons.size/2}}
-| ActIconsLay.show <= 1
 | dlg: mtx
   |  0   0| $view
   |  0   0| BrushPicker
@@ -532,6 +538,7 @@ ui.init =
 | Tabs = create_dialog_tabs Me
 | $tabs <= input_split Tabs: Base In => ui_input Me Base In
 | BankList.pick{0}
+| $view.set_brush{0,0}
 | begin_ingame Me 1
 
 main.run =
