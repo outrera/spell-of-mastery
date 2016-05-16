@@ -123,15 +123,43 @@ info_line.render =
   | $info_text.value <= Info.upcase
 | $info_text.render
 
-type load_world_dlg.$base{world folder cancelCB loadCB}
-  filename base picked
+type save_dlg.$base{world folder cancelCB loadCB}
+  base picked title dirname filename button
+| $button <= button 'Save' skin/medium_small: => ($loadCB){$picked}
+| $button.state <= 'normal'
+| MarginW = 65
+| MarginH = 50
+| $dirname <= $folder
+| $title <= txt medium 'Save'
+| $filename <= txt_input{''}
+| FolderW = 0
+| FolderW <= folder_widget $folder: File =>
+  | $dirname <= FolderW.base.root or $dirname
+  | $picked <= File
+  | FN = File.url.1
+  | when FN<>'': $filename.value <= FN
+| $base <= dlg: mtx
+  | -MarginW   -MarginH | $world.main.img{ui_scroll}
+  | 130  10 | $title
+  |  15  40 | $filename
+  |  15  60 | FolderW
+  |  15 305 | $button
+  | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
+
+save_dlg.render =
+| $button.state <= if $filename.value<>'' then \normal else \disabled
+| $base.render 
+
+type load_dlg.$base{world folder cancelCB loadCB}
+  filename base picked title
 | LoadButton = button 'Load' skin/medium_small: => ($loadCB){$picked}
 | LoadButton.state <= 'disabled'
 | MarginW = 65
 | MarginH = 50
+| $title <= txt medium 'Load'
 | $base <= dlg: mtx
   | -MarginW   -MarginH | $world.main.img{ui_scroll}
-  | 130  10 | txt medium 'Load World'
+  | 130  10 | $title
   |  15  40 | folder_widget $folder: File =>
               | $picked <= File
               | LoadButton.state <= if File.exists and File.urls.size >< 0
@@ -168,5 +196,5 @@ player_picker.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
-export message_box unit_panel world_props info_line load_world_dlg credits_roll
-       player_picker
+export message_box unit_panel world_props info_line credits_roll
+       player_picker save_dlg load_dlg

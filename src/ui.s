@@ -14,6 +14,7 @@ MenuButtonsX = 0
 
 InputBlocker =
 WorldProperties = No
+SaveWorldDlg =
 LoadWorldDlg =
 CreditsRoll =
 GameUnitUI =
@@ -127,7 +128,7 @@ create_game_menu_dlg Me =
 
 create_scenario_menu Me =
 | loadScenarioBack = $pick{new_game_menu}
-| LoadScenarioDlg = load_world_dlg $world MapsFolder &loadScenarioBack: X =>
+| LoadScenarioDlg = load_dlg $world MapsFolder &loadScenarioBack: X =>
   | load_game Me 1 X
 | LoadScenarioDlg.folder <= MapsFolder
 | dlg: mtx
@@ -214,12 +215,28 @@ create_world_props Me =
   | $unpause
   | WorldProperties.show <= 0
 
-create_load_world_dlg Me =
-| LoadWorldDlg = No
-| hideLoadWorldDlg = 
-  | LoadWorldDlg.show <= 0
+create_save_world_dlg Me =
+| Dlg = No
+| hideDlg = 
+  | Dlg.show <= 0
   | $unpause
-| LoadWorldDlgW = load_world_dlg $world MapsFolder &hideLoadWorldDlg: X =>
+| DlgW =
+| DlgW <= save_dlg $world MapsFolder &hideDlg: X =>
+  | Path = "[DlgW.dirname][DlgW.filename.value].txt"
+  | say Path
+  | $save{"[MapsFolder][$world.filename].txt"}
+  //| $main.show_message{'Saved' 'Your map is saved!'}
+  | hideDlg
+| DlgW.folder <= MapsFolder
+| Dlg <= hidden: DlgW
+| Dlg
+
+create_load_world_dlg Me =
+| Dlg = No
+| hideDlg = 
+  | Dlg.show <= 0
+  | $unpause
+| DlgW = load_dlg $world MapsFolder &hideDlg: X =>
   | $load{X}
   | World = $world
   | World.human <= World.players.1
@@ -227,10 +244,10 @@ create_load_world_dlg Me =
   | when World.editor:
     | World.paused <= 1
     | World.explore{1}
-  | hideLoadWorldDlg
-| LoadWorldDlgW.folder <= MapsFolder
-| LoadWorldDlg <= hidden: LoadWorldDlgW
-| LoadWorldDlg
+  | hideDlg
+| DlgW.folder <= MapsFolder
+| Dlg <= hidden: DlgW
+| Dlg
 
 create_credits_dlg Me =
 | dlg: mtx
@@ -288,9 +305,9 @@ create_menu_tab Me =
   | WorldProperties.show <= 1
   | WorldProperties.update
 | SaveIcon = icon data/pick $img{icons_menu_save} click: Icon =>
-  | say 'FIXME: implement save menu'
-  //| $save{"[MapsFolder][$world.filename].txt"}
-  //| $main.show_message{'Saved' 'Your map is saved!'}
+  | $pause
+  | SaveWorldDlg.show <= 1
+  | SaveWorldDlg.filename.value <= $world.filename
 | LoadIcon = icon data/pick $img{icons_menu_load} click: Icon =>
   | $pause
   | LoadWorldDlg.show <= 1 
@@ -361,6 +378,7 @@ create_ingame_dlg Me =
   |  0   0| InputBlocker
   |170 100| WorldProperties
   |170 100| LoadWorldDlg
+  |170 100| SaveWorldDlg
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
 
@@ -533,6 +551,7 @@ ui.init =
 | $message_box <= message_box Me
 | InputBlocker <= hidden: spacer $width $height
 | WorldProperties <= create_world_props Me
+| SaveWorldDlg <= create_save_world_dlg Me
 | LoadWorldDlg <= create_load_world_dlg Me
 | ActIcons <= create_act_icons Me
 | Tabs = create_dialog_tabs Me

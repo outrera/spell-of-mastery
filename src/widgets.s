@@ -88,10 +88,16 @@ bar.draw G X Y =
 
 
 type button.widget{Text Fn state/normal skin/medium_large}
-  text/Text value on_click/Fn state/State sprite over w h
+  text/Text value on_click/Fn state_/State sprite over w h
 | $sprite <= Main.spr{"ui_button_[Skin]"} 
 | $w <= $sprite.frames.normal.0.w
 | $h <= $sprite.frames.normal.0.h
+button.state = $state_
+button.`!state` V =
+| when V><normal and $state><pressed: leave
+| $state_ <= V
+
+
 button.render = Me
 button.draw G PX PY =
 | State = $state
@@ -347,11 +353,11 @@ folder_litems.input In = case In
   Else | $litems.input{In}
 folder_litems.itemAt Point XY WH = [Me XY WH]
 
-folder_widget Root F =
+type folder_widget.$lay{Root F} lay base
 | FL = folder_litems Root f/F
+| $base <= FL
 | S = slider size/124 v f/(N => FL.offset <= @int N*FL.data.size.float)
-| layH [FL S]
-
+| $lay <= layH FL,S
 
 export set_main skin font txt button litem droplist slider folder_widget 
        litems txt_input img
