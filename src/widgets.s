@@ -115,7 +115,8 @@ button.draw G PX PY =
   | F.draw{G PX+X+ShiftX PY+Y+ShiftY $text}
 button.input In = case In
   [mice over S P] | $over <= S
-  [mice left 1 P] | case $state normal: Me.state <= \pressed
+  [mice left 1 P] | $over <= 1
+                  | case $state normal: Me.state <= \pressed
   [mice left 0 P] | case $state pressed
                     | when $over: $on_click{}{}
                     | $state <= \normal
@@ -179,7 +180,8 @@ droplist.input In = case In
                     | $xs.$p.state <= \normal
                     | $p <= (P.1/$ih).clip{0 $xs.size-1}
                     | $xs.$p.state <= \picked
-  [mice left 1 P] | $drop <= 1
+  [mice left 1 P] | $over <= 1
+                  | $drop <= 1
                   | $p <= $picked
                   | $above_all <= 1
                   | $xs.$p.state <= \picked
