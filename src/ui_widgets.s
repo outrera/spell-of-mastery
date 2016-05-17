@@ -2,7 +2,7 @@ use gui widgets ui_icon
 
 DialogResult = 0
 
-type message_box.$base{ui} base title text buttons width margin/[0 0]
+type message_box.$base{ui} base title text buttons width margin/[0 0] click
 | BG = $ui.img{ui_scroll}
 | $width <= BG.w
 | $title <= txt medium '' 
@@ -11,6 +11,7 @@ type message_box.$base{ui} base title text buttons width margin/[0 0]
   | DialogResult <= Result
   | $ui.unpause
   | $show <= 0
+  | when $click: $click{}{DialogResult}
 | Buttons =
 | Buttons <= 3{I => button 'Text' skin/medium_small: =>
                     | button_click Buttons.I.value}
@@ -24,9 +25,10 @@ type message_box.$base{ui} base title text buttons width margin/[0 0]
   | 276 140 | $text
   | 290 395 | layH s/5 $buttons
 
-message_box.display Buttons Title Text =
+message_box.display Buttons Title Text Click =
 | DialogResult <= 0
 | $title.value <= Title
+| $click <= Click
 | $text.value <= $text.font.format{$width-$margin.0*2 Text}
 | for B $buttons: B.show <= 0
 | for [I [Value Text]] Buttons.i
@@ -37,8 +39,8 @@ message_box.display Buttons Title Text =
 | $show <= 1
 | $ui.pause
 
-main.show_message Title Text buttons/[ok,'Ok'] =
-| $ui.message_box.display{Buttons Title Text}
+main.show_message Title Text buttons/[ok,'Ok'] click/0 =
+| $ui.message_box.display{Buttons Title Text Click}
 
 main.dialog_result = DialogResult
 
@@ -70,15 +72,12 @@ unit_panel.draw G X Y =
   | Font.draw{G X+3 Y-16 "sn:[max 0 $unit.serial]"}
   | Font.draw{G X+3 Y-32 "id:[max 0 $unit.id]"}
 
-type world_props.$base{world callback}
-     filename name description width height base
-| $filename <= txt_input{''}
+type world_props.$base{world callback} name description width height base
 | $name <= txt_input{''}
 | $description <= txt_input{w/240 ''}
 | $width <= txt_input{''}
 | $height <= txt_input{''}
-| PropFields = ['File Name:',$filename
-                'World Name:',$name 
+| PropFields = ['World Name:',$name 
                 'Description:',$description
                 'Width:',$width
                 'Height:',$height
@@ -94,7 +93,6 @@ type world_props.$base{world callback}
 
 world_props.update =
 | W = $world
-| $filename.value <= W.filename
 | $name.value <= W.name
 | $description.value <= W.description
 | $width.value <= "[W.w]"

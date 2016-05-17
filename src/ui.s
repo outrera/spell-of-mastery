@@ -179,7 +179,6 @@ create_world_props Me =
   | W = parse_int_normalized{$world.w P.width.value}.clip{4 240}
   | H = parse_int_normalized{$world.h P.height.value}.clip{4 240}
   | when W <> $world.w or H <> $world.h: $create{W H}
-  | $world.filename <= P.filename.value
   | $world.name <= P.name.value
   | $world.description <= P.description.value
   | $unpause
@@ -283,7 +282,10 @@ create_menu_tab Me =
   | LoadWorldDlg.show <= 1 
   | LoadWorldDlg.folder <= if $world.editor then MapsFolder else SavesFolder
 | ExitIcon = icon data/pick $img{icons_menu_exit} click: Icon =>
-  | pick_main_menu Me
+  | $main.show_message{'Exit to Main Menu?'
+                       'Are you sure want to exit?'
+       buttons/[yes,'Yes' no,'No']
+       click/|$0 yes => pick_main_menu Me}
 | hidden: layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
 
 handle_menu_tab Me Picked =
