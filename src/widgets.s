@@ -121,8 +121,7 @@ button.draw G PX PY =
   | F.draw{G PX+X+ShiftX PY+Y+ShiftY $text}
 button.input In = case In
   [mice over S P] | $over <= S
-  [mice left 1 P] | $over <= 1
-                  | case $state normal: $state_ <= \pressed
+  [mice left 1 P] | case $state normal: $state_ <= \pressed
   [mice left 0 P] | case $state pressed
                     | when $over: $on_click{}{}
                     | $state_ <= \normal

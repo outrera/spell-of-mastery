@@ -1,4 +1,4 @@
-author: `Wesnoth Team`
+author: `Jetrel`, `Wesnoth Team`
 license: `GPL2`
 origin: `wesnoth.org`
 height: 4
