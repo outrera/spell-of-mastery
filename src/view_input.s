@@ -181,7 +181,7 @@ mark_tile Me =
 | when got Work:
   | when Unmarking<>0:
     | Unmarking <= 1
-    | $main.sound{excavate_unmark}
+    | $main.sound{dig}
     | when Work.free
   | leave
 | when Unmarking><1: leave
@@ -190,7 +190,7 @@ mark_tile Me =
 | Work <= $world.human.alloc_unit{unit_work}
 | Work.move{X,Y,0}
 | Work.hp <= 0
-| $main.sound{excavate_mark}
+| $main.sound{dig}
 
 view.update_play =
 | less $brush.0: case $mice_click
