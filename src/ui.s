@@ -1,6 +1,6 @@
 use gui widgets view ui_icon ui_widgets macros
 
-CopyrightLine = 'SymtaEngine v0.2; Copyright (c) 2015 Nikita Sadkov'
+CopyrightLine = 'SymtaEngine v0.3; Copyright (c) 2016 Nikita Sadkov'
 MapsFolder = 'work/worlds/'
 SavesFolder = 'work/saves/'
 
@@ -39,6 +39,10 @@ type ui.$tabs{main} tabs width height world message_box view
 | $world <= $main.world
 | $width <= $params.ui.width
 | $height <= $params.ui.height
+
+ui.render =
+| PlayIcon.picked <= not $world.paused
+| $tabs.render
 
 ui.player = $world.human
 ui.data = $main.data
