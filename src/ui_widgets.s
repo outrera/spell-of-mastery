@@ -123,18 +123,15 @@ info_line.render =
   | $info_text.value <= Info.upcase
 | $info_text.render
 
-type save_dlg.$base{world folder cancelCB loadCB}
-  base picked title dirname filename button
+type save_dlg.$base{world start cancelCB loadCB}
+  base picked title filename button widget
 | $button <= button 'Save' skin/medium_small: => ($loadCB){$picked}
 | $button.state <= 'normal'
 | MarginW = 65
 | MarginH = 50
-| $dirname <= $folder
 | $title <= txt medium 'Save'
 | $filename <= txt_input{''}
-| FolderW = 0
-| FolderW <= folder_widget $folder: File =>
-  | $dirname <= FolderW.base.root or $dirname
+| $widget <= folder_widget $start: File =>
   | $picked <= File
   | FN = File.url.1
   | when FN<>'': $filename.value <= FN
@@ -142,31 +139,35 @@ type save_dlg.$base{world folder cancelCB loadCB}
   | -MarginW   -MarginH | $world.main.img{ui_scroll}
   | 130  10 | $title
   |  15  40 | $filename
-  |  15  60 | FolderW
+  |  15  60 | $widget
   |  15 305 | $button
   | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
-
+save_dlg.folder = $widget.folder
+save_dlg.`!folder` V = $widget.folder <= V
 save_dlg.render =
 | $button.state <= if $filename.value<>'' then \normal else \disabled
-| $base.render 
+| $base.render
 
-type load_dlg.$base{world folder cancelCB loadCB}
-  filename base picked title
+type load_dlg.$base{world start cancelCB loadCB}
+  filename base picked title widget
 | LoadButton = button 'Load' skin/medium_small: => ($loadCB){$picked}
 | LoadButton.state <= 'disabled'
 | MarginW = 65
 | MarginH = 50
 | $title <= txt medium 'Load'
+| $widget <= folder_widget $start: File =>
+  | $picked <= File
+  | LoadButton.state <= if File.exists and File.urls.size >< 0
+    then 'normal'
+    else 'disabled'
 | $base <= dlg: mtx
   | -MarginW   -MarginH | $world.main.img{ui_scroll}
   | 130  10 | $title
-  |  15  40 | folder_widget $folder: File =>
-              | $picked <= File
-              | LoadButton.state <= if File.exists and File.urls.size >< 0
-                then 'normal'
-                else 'disabled'
+  |  15  40 | $widget
   |  15 305 | LoadButton
   | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
+load_dlg.folder = $widget.folder
+load_dlg.`!folder` V = $widget.folder <= V
 
 type credits_roll.widget{ui text} cycle txt
 | $txt <= txt medium $text

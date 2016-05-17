@@ -114,17 +114,6 @@ create_new_game_dlg Me =
   | X 360 | button 'MULTIPLAYER' skin/scroll: => 
   | X 500 | button 'BACK' skin/scroll: => $pick{main_menu}
 
-create_game_menu_dlg Me =
-| X = MenuButtonsX
-| dlg: mtx
-  |   0   0 | MenuBG
-  |  16 $height-16 | txt small CopyrightLine
-  | X 290 | button 'SAVE GAME' skin/scroll: => $pick{save_menu}
-  | X 360 | button 'RESUME GAME' skin/scroll: =>
-            | $unpause
-            | $pick{ingame}
-  | X 500 | button 'EXIT TO MENU' skin/scroll: => pick_main_menu Me pause/0
-
 
 create_scenario_menu Me =
 | loadScenarioBack = $pick{new_game_menu}
@@ -136,36 +125,15 @@ create_scenario_menu Me =
   |  220 200 | LoadScenarioDlg
   |  16 $height-16 | txt small CopyrightLine
 
-LoadButtons =
-
 create_load_menu_dlg Me =
-| X = MenuButtonsX
+| loadScenarioBack = $pick{new_game_menu}
+| LoadScenarioDlg = load_dlg $world SavesFolder &loadScenarioBack: X =>
+  | load_game Me 1 X
+| LoadScenarioDlg.folder <= SavesFolder
 | dlg: mtx
   |   0   0 | MenuBG
+  |  220 200 | LoadScenarioDlg
   |  16 $height-16 | txt small CopyrightLine
-  | X 200 | LoadButtons.a
-  | X 270 | LoadButtons.b
-  | X 340 | LoadButtons.c
-  | X 410 | LoadButtons.d
-  | X 500 | button 'CANCEL' skin/scroll: => $pick{main_menu}
-
-create_save_menu_dlg Me =
-| X = MenuButtonsX
-| save_slot Name = 
-  | $save{"[SavesFolder][Name].txt"}
-  | $unpause
-  | $pick{ingame}
-  //| $main.show_message{'Saved' 'Your game is saved!'}
-| dlg: mtx
-  |   0   0 | MenuBG
-  |  16 $height-16 | txt small CopyrightLine
-  | X 200 | button 'SLOT A' skin/scroll: => save_slot a
-  | X 270 | button 'SLOT B' skin/scroll: => save_slot b
-  | X 340 | button 'SLOT C' skin/scroll: => save_slot c
-  | X 410 | button 'SLOT D' skin/scroll: => save_slot d
-  | X 500 | button 'CANCEL' skin/scroll: =>
-            | $unpause
-            | $pick{ingame}
 
 create_main_menu_dlg Me =
 | X = MenuButtonsX
@@ -173,9 +141,7 @@ create_main_menu_dlg Me =
   |   0   0 | MenuBG
   |  16 $height-16 | txt small CopyrightLine
   | X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
-  | X 290 | button 'LOAD GAME' skin/scroll: =>
-            | for N,B LoadButtons: B.show <= "[SavesFolder][N].txt".exists
-            | $pick{load_menu}
+  | X 290 | button 'LOAD GAME' skin/scroll: => $pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $create{8 8}
             | begin_ingame Me 1
@@ -222,9 +188,8 @@ create_save_world_dlg Me =
   | $unpause
 | DlgW =
 | DlgW <= save_dlg $world MapsFolder &hideDlg: X =>
-  | Path = "[DlgW.dirname][DlgW.filename.value].txt"
-  | say Path
-  | $save{"[MapsFolder][$world.filename].txt"}
+  | Path = "[DlgW.folder][DlgW.filename.value].txt"
+  | $save{Path}
   //| $main.show_message{'Saved' 'Your map is saved!'}
   | hideDlg
 | DlgW.folder <= MapsFolder
@@ -307,11 +272,12 @@ create_menu_tab Me =
 | SaveIcon = icon data/pick $img{icons_menu_save} click: Icon =>
   | $pause
   | SaveWorldDlg.show <= 1
+  | SaveWorldDlg.folder <= if $world.editor then MapsFolder else SavesFolder
   | SaveWorldDlg.filename.value <= $world.filename
 | LoadIcon = icon data/pick $img{icons_menu_load} click: Icon =>
   | $pause
   | LoadWorldDlg.show <= 1 
-  //| $load{"[MapsFolder][$world.filename].txt"}
+  | LoadWorldDlg.folder <= if $world.editor then MapsFolder else SavesFolder
 | ExitIcon = icon data/pick $img{icons_menu_exit} click: Icon =>
   | pick_main_menu Me
 | hidden: layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
@@ -382,23 +348,13 @@ create_ingame_dlg Me =
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
 
-create_load_buttons Me =
-| load_slot Name = 
-  | load_game Me 0 "[SavesFolder][Name].txt"
-  //| $main.show_message{'Loaded' 'Your game is loaded!'}
-| new_load_button N = button "SLOT [N.upcase]" skin/scroll: => load_slot N
-| @table: map N [a b c d]: N,(hidden: new_load_button N)
-
 create_dialog_tabs Me =
-| LoadButtons <= create_load_buttons Me
 | CreditsRoll <= credits_roll Me $main.credits
 | ScenarioMenu = create_scenario_menu Me
 | NewGameMenu = create_new_game_dlg Me
 | MainMenu = create_main_menu_dlg Me
-| GameMenu = create_game_menu_dlg Me
 | Victory = create_victory_dlg Me
 | Defeat = create_defeat_dlg Me
-| SaveMenu = create_save_menu_dlg Me
 | LoadMenu = create_load_menu_dlg Me
 | Credits = create_credits_dlg Me
 | Ingame = create_ingame_dlg Me
@@ -408,8 +364,6 @@ create_dialog_tabs Me =
           main_menu(MainMenu)
           new_game_menu(NewGameMenu)
           scenario_menu(ScenarioMenu)
-          game_menu(GameMenu)
-          save_menu(SaveMenu)
           load_menu(LoadMenu)
           ingame(Ingame)
           victory(Victory)

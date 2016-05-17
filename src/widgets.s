@@ -340,16 +340,17 @@ folder_nomalized Path =
 | [@Parent @Folders @Files]
 
 type folder_litems.$litems{Root w/300 lines/10 f/(V=>)} root/Root f/F litems
-| when $root.last <> '/': $root <= "[$root]/"
+| when not $root.size or $root.last <> '/': $root <= "[$root]/"
 | $litems <= litems lines/Lines w/W f/(N => F "[$root][N]")
                     $root^folder_nomalized
+folder_litems.cd NewRoot =
+| $root <= NewRoot
+| $litems.data <= $root^folder_nomalized
 folder_litems.input In = case In
   [mice double_left 1 P] | R = if $litems.value >< '../'
                                then "[$root.lead.url.0]"
                                else "[$root][$litems.value]"
-                         | when R.folder
-                           | $root <= R
-                           | $litems.data <= $root^folder_nomalized
+                         | when R.folder: $cd{R}
   Else | $litems.input{In}
 folder_litems.itemAt Point XY WH = [Me XY WH]
 
@@ -358,6 +359,8 @@ type folder_widget.$lay{Root F} lay base
 | $base <= FL
 | S = slider size/124 v f/(N => FL.offset <= @int N*FL.data.size.float)
 | $lay <= layH FL,S
+folder_widget.folder = $base.root
+folder_widget.`!folder` NewFolder = $base.cd{NewFolder}
 
 export set_main skin font txt button litem droplist slider folder_widget 
        litems txt_input img
