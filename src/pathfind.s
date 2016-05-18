@@ -5,6 +5,9 @@ move.as_text = "#move{[$type] [$xyz]}"
 
 Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
 
+//note: here order is important, or path will go zig-zag
+//Dirs = [[-1 -1] [1 1] [1 -1] [-1 1] [0 -1] [1 0] [0 1] [-1 0]]
+
 player.excavate_mark X Y Z =
 | W = $world.units_at{X,Y,0}.find{(?type><unit_work and ?owner.id><$id)}
 | if got W then W else 0
