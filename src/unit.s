@@ -119,7 +119,7 @@ land_can_move Me Src Dst =
 | Z = DZ-SZ
 | when Z.abs > 1: leave 0
 | less $world.at{DX DY DZ}.empty: leave 0
-| $world.at{DX DY DZ-1}.type <> water
+| not $world.at{DX DY DZ-1}.liquid
 
 amphibian_can_move Me Src Dst =
 | DX,DY,DZ = Dst

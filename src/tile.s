@@ -6,7 +6,7 @@ type tile{As Main Type Role Id Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 excavate/0
           parts/0 box/[64 64 h] wallShift/0 stack/0 indoor/0 liquid/0 opaque/No
-          around/0 back/0 fallback/0 roof/0 hp/0 hit/0 death/0}
+          around/0 back/0 fallback/0 roof/0 hp/0 hit/0 death/0 embed/0}
      id/Id
      main/Main
      bank/Bank
@@ -40,6 +40,7 @@ type tile{As Main Type Role Id Base Middle Top
      opaque/Opaque
      fallback/Fallback
      roof/Roof
+     embed/Embed
      hp/Hp
      hit/Hit
      death/Death

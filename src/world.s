@@ -99,12 +99,16 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
-| Filler = $main.tiles.water
+| Filler = $main.tiles.soil
 | for Y $h: when Y: for X $w: when X: $push_{X Y Filler}
-| for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
 | !$w-1
 | !$h-1
 | $create_borders
+| !$w+1
+| !$h+1
+| for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
+| !$w-1
+| !$h-1
 
 calc_height Cs =
 | Z = Cs.size
@@ -220,9 +224,9 @@ world.clear_tile_ X Y Z =
     | YY = Y+DY
     | TT = Tile.type
     | when ZZ and $at{XX YY ZZ}.type><RT.type: $clear_tile{XX YY ZZ}
-    | when $at{XX YY Z}.around><TT:
+    | when $at{XX YY Z+1}.around><TT:
       | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
-        | $clear_tile{XX YY Z}
+        | $clear_tile{XX YY Z+1}
 
 
 world.clear_tile X Y Z =
@@ -488,6 +492,7 @@ world.color_at X Y =
 
 world.update_minimap X Y =
 | Z = $height{X Y}-1
+| when Z < 0: leave
 | T = $at{X Y Z}
 | G = $gfxes.Y.X.last
 | Color = $color_at{X Y}

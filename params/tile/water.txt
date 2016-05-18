@@ -5,6 +5,7 @@ empty: 0
 liquid: 1
 lineup: 0
 filler: 0
+embed: 1
 //anim_wait: 8
 //alpha: 127
 

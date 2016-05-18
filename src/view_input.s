@@ -51,7 +51,7 @@ place_object Me Bank Type =
              else not Us.any{?class^address >< Class^address}
   | when Place:
     | X,Y,Z = XYZ
-    | H = if Class.passable then Class.height else 5
+    | H = if Class.passable then Class.height else 2
     | Place <= H.list.all{I=>$world.get{X,Y,Z+I}.empty}
     | less Place: $main.sound{illegal}
 | when Place
@@ -71,20 +71,24 @@ world_place_tile_walls Me X Y Z Tile =
   | XX = X+DX
   | YY = Y+DY
   | DTile = $at{XX YY Z}
-  | when DTile.type <> Tile.type and (DTile.excavate or DTile.empty):
-    | $clear_tile{XX YY Z}
-    | world_place_tile Me XX YY Z Wall
+  | when DTile.excavate or DTile.empty:
+    | when $at{XX YY Z-1}.type <> Wall.around:
+      | $clear_tile{XX YY Z}
+      | world_place_tile Me XX YY Z Wall
 
 world_place_tile Me X Y Z Tile =
 | when X<1 or Y<1 or X>$w or Y>$h: leave
 | $set{X Y Z Tile}
 | for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+| world_place_tile_deco Me X Y Z Tile
+
+world_place_tile_deco Me X Y Z Tile =
 | when Tile.roof.is_list:
   | H,RoofTile = Tile.roof
   | for DX,DY [0,0 @Dirs]:
-    | world_place_tile Me X+DX Y+DY Z+H+Tile.height RoofTile
-| less Tile.wall: leave
-| world_place_tile_walls Me X Y Z Tile
+    | world_place_tile Me X+DX Y+DY Z+H RoofTile
+| when Tile.wall: world_place_tile_walls Me X Y Z Tile
+
 
 place_tile Me Type =
 | $cursor.2 <= $fix_z{$cursor}
@@ -106,31 +110,32 @@ place_tile Me Type =
   | till $world.at{X Y Z}.empty: !Z+1
   | $cursor.2 <= Z
 | less IsBridge
-  | if Tile.liquid then
+  | if Tile.embed then
+      | when Tile.wall
+        | Below = $world.at{X Y $cursor.2-1}
+        | while $cursor.2 > 1 and (Below.around or Below.roof or Below.type><void):
+          | H = $world.at{X Y $cursor.2-1}.height
+          | !$cursor.2-H
+          | $anchor.2 <= $cursor.2
+          | $world.clear_tile{@$cursor}
+          | Below <= $world.at{X Y $cursor.2-1}
       | when $cursor.2<<$anchor.2:
         | Below = $world.at{X Y $cursor.2-1}
         | less Below.empty
-          | less Below.liquid: $world.set{X Y $cursor.2-1 Tile}
+          | $world.set{X Y $cursor.2-1 Tile}
+          | world_place_tile_deco $world X Y $cursor.2 Tile
           | leave
     else
-      | when $world.at{X Y $cursor.2-1}.liquid: 
+      | when $world.at{X Y $cursor.2-1}.embed: 
         | Z = $cursor.2-1
         | when AnchorHack<>LMB_Count:
           | $anchor.2 <= Z
           | AnchorHack <= LMB_Count
-        | while Z>>0 and $world.at{X Y Z}.liquid:
+        | while Z>>0 and $world.at{X Y Z}.embed:
           | $world.set{X Y Z Tile}
           | !Z-1
         | leave
   | AnchorHack <= LMB_Count
-  | when Tile.wall
-    | Below = $world.at{X Y $cursor.2-1}
-    | while Below.around or Below.wall or Below.roof or Below.type><void:
-      | H = $world.at{X Y $cursor.2-1}.height
-      | !$cursor.2-H
-      | $anchor.2 <= $cursor.2
-      | $world.clear_tile{@$cursor}
-      | Below <= $world.at{X Y $cursor.2-1}
 | while 1
   | Z <= $cursor.2
   | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
@@ -159,6 +164,9 @@ remove_object_or_tile Me =
   [obj Type]
     | for U Us: U.free
   [tile Type]
+    | less $world.at{X Y Z}.empty: when Z>1
+      | $world.clear_tile{X Y Z-1}
+      | $cursor.2 <= Z-1
     | while 1
       | Z <= $cursor.2
       | less Z >> $anchor.2 and Z > 1: leave
@@ -342,7 +350,9 @@ view.input In =
     | $zfix <= 1
     | $mice_click <= if State then \right else \rightup
     | if State then $anchor.init{$cursor}
-      else when $world.at{@$cursor}.empty: $cursor.2 <= $fix_z{$cursor}
+      else when $world.at{@$cursor}.empty:
+           | $cursor.2 <= $fix_z{$cursor}
+           | $anchor.init{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [key Name S]
     | $keys.Name <= S
