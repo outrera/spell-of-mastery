@@ -249,7 +249,7 @@ create_editor_tabs Me =
   | Icon.picked <= not Icon.picked
   | if Icon.picked then $view.unpause else $view.pause
 | PlayIcon <= icon data/play $img{icons_tab_play} click/PlayIconClick
-| PlayIcon.picked_overlay <= PickedIconOverlay
+| PlayIcon.picked_fg <= $img{icons_tab_pause}
 | hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon
 
 

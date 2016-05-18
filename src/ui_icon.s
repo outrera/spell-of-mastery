@@ -36,9 +36,10 @@ type icon.widget{fg data/0 click/(Icon=>)}
    pressed
    over
    picked
+   picked_fg
    picked_overlay
    disabled
-   grayed
+   grayed //percent of grayed area of the icon
    text/[0 0 No]
    frame/[2 2 icon_frame]
    data/Data
@@ -57,7 +58,7 @@ icon.draw G PX PY =
 | when $frame.2
   | IconFrame = skin{$frame.2}
   | G.blit{X-$frame.0 Y-$frame.1 IconFrame}
-| G.blit{X Y $fg}
+| G.blit{X Y | if $picked and $picked_fg then $picked_fg else $fg}
 | when $picked:
   | if $picked_overlay
     then | XX,YY,Overlay = $picked_overlay
