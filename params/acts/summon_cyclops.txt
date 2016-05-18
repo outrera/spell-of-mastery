@@ -1,7 +1,7 @@
 proto: spawn__proto
-icon: unit_ogre
+icon: unit_cyclops
 lore: misc.tier4_lcost
 cost: misc.tier4_scost
 cool: misc.tier4_cool
 needs: ((summon_spider summon_minotaur))
-after: spawn{unit_ogre}
+after: spawn{unit_cyclops}

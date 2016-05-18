@@ -80,7 +80,7 @@ witch3:
   | goto witch4 when lossage >> 64
 
 witch4:
-  | attack ratman spider orc goblin devil ogre
+  | attack ratman spider orc goblin devil cyclops
 
 leader_heretic:
   | set ai_spells (cast_fireball)
@@ -140,7 +140,7 @@ tier3:
 
 tier4:
   | attack observer
-  | attack ogre
+  | attack cyclops
   | attack hydra
   | attack dragon
 
