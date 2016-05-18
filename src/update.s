@@ -392,7 +392,7 @@ update_fall Me =
 | !$velocity.2 - GravAcc
 | FZ = $fix_z
 | FDst = $fxyz+$velocity{}{?int}
-| if FDst.2 > FZ*8 then $fine_move{FDst}
+| if FDst.2 > FZ*$world.c then $fine_move{FDst}
   else $move{[$xyz.0 $xyz.1 FZ]}
 
 unit_sink Me =

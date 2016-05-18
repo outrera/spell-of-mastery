@@ -13,12 +13,6 @@ type minimap.widget{Main CenterAt}
 minimap.draw G PX PY =
 | MM = $main.world.minimap
 | G.blit{PX PY MM}
-/*| X,Y = $main.world.human.view/32
-| X = X*$w/$main.world.w
-| Y = Y*$h/$main.world.h
-| W = $main.view_w/32*$w/$main.world.w
-| H = $main.view_h/32*$h/$main.world.h
-| G.rectangle{#A0A0A0 0 PX+X PY+Y W H}*/
 
 minimap.center_at P = ($center){P.0*$main.world.w/$w P.1*$main.world.h/$h}
 

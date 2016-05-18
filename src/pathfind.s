@@ -29,7 +29,7 @@ list_moves Me Src =
     | B = $world.block_at{Dst} //FIXME: could be optimized
     | if got B then
         | if $owner.id <> B.owner.id
-          then if B.alive and $damage and (SZ-Z).abs<<4 then
+          then if B.alive and $damage and (SZ-Z).abs<<1 then
                  | push move{attack Dst} Ms
                else when B.ai><remove and $worker
                         and $owner.excavate_mark{X Y Z}:

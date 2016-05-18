@@ -298,7 +298,7 @@ effect excavate Where:
   Else | bad "effect excavate: invalid target ([Where])"
 | Mark = $owner.excavate_mark{X Y Z}
 | ExcavateGoal = $goal and $goal_act and $goal_act.name><excavate
-| when Mark and $world.excavate{X Y Z 8 (max $worker 1)}:
+| when Mark and $world.excavate{X Y Z 2 (max $worker 1)}:
   | Mark.free
   | Mark <= 0
 | less Mark: when ExcavateGoal:
@@ -457,13 +457,10 @@ unit.effect Effect Target XYZ =
       | Type = 0
       | Offset = \user
       | Speed = 2
-      | HDiv = 0
       | case Args
          [T S O]
            | Type <= T
-           | if S><height_div then
-               | Speed <= 1
-               | HDiv <= 1
+           | if S><height_div then Speed <= 1
              else Speed <= S
            | Offset <= O
          T | Type <= T
@@ -480,9 +477,7 @@ unit.effect Effect Target XYZ =
       | Or = S.order
       | Or.init{missile |Target or XYZ}
       | Or.priority <= 1500
-      | H = ($xyz.2-XYZ.2).abs
       | C = Speed.float*(XYZ-$xyz).abs*1.5
-      | when HDiv: C <= C/(max 1 H/4).float
       | Or.cycles <= @int C
       | Es <= []
     else if Name >< target then T <= Target

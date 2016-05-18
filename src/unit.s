@@ -2,9 +2,14 @@ use util macros unit_flags
 
 type cell_goal xyz/[0 0 0] serial
 
+CellSize =
+
+init_unit_module CS =
+| CellSize <= CS
+
 cell_goal.id = -1
 cell_goal.type = \goal
-cell_goal.fxyz = [$xyz.0*32 $xyz.1*32 $xyz.2*8]
+cell_goal.fxyz = [$xyz.0*CellSize $xyz.1*CellSize $xyz.2*CellSize]
 cell_goal.damage = 0
 cell_goal.leader = 0
 cell_goal.removed = 0
@@ -112,7 +117,7 @@ land_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | SZ = Src.2
 | Z = DZ-SZ
-| when Z.abs > 4: leave 0
+| when Z.abs > 1: leave 0
 | less $world.at{DX DY DZ}.empty: leave 0
 | $world.at{DX DY DZ-1}.type <> water
 
@@ -120,14 +125,14 @@ amphibian_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | SZ = Src.2
 | Z = DZ-SZ
-| when Z.abs > 4: leave 0
+| when Z.abs > 1: leave 0
 | $world.at{DX DY DZ}.empty
 
 swimmer_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | SZ = Src.2
 | Z = DZ-SZ
-| when Z.abs > 4: leave 0
+| when Z.abs > 1: leave 0
 | less $world.at{DX DY DZ}.empty: leave 0
 | $world.at{DX DY DZ-1}.type >< water
 
@@ -143,7 +148,7 @@ worker_can_move Me Src Dst =
 | DX,DY,DZ = Dst
 | SZ = Src.2
 | Z = DZ-SZ
-| when Z.abs > 4: leave 0
+| when Z.abs > 1: leave 0
 | Tile = $world.at{DX DY DZ}
 | when Tile.empty: leave 1
 | when Tile.excavate:
@@ -498,7 +503,7 @@ unit.harm Attacker Damage =
 
 unit.fine_move FXYZ =
 | C = $world.c
-| XYZ = [FXYZ.0/C FXYZ.1/C FXYZ.2/8]
+| XYZ = [FXYZ.0/C FXYZ.1/C FXYZ.2/C]
 | $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
@@ -512,7 +517,7 @@ unit.fine_move FXYZ =
 
 unit.move XYZ =
 | C = $world.c
-| $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*8]}
+| $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
 | when $class.active: $run_effects{?><move Me $xyz}
 | Me
 
@@ -534,4 +539,4 @@ unit.sound SoundName =
   | V = 1.0 / | max 1.0 (CXYZ - $xyz).abs*0.5
   | when V>0.01: $main.sound{SoundName volume/V}
 
-export unit
+export unit init_unit_module

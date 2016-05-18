@@ -73,6 +73,7 @@ world.init =
   | [0.0 (dup NoteSize ``)]
 | $players <= map Id WParam.max_players: player Id Me
 | $c <= WParam.cell_size
+| init_unit_module $c
 | $void <= $main.tiles.void
 | $tilemap <= zmap $maxSize $d $void
 | $unit_map <= zmap $maxSize $d 0
@@ -264,11 +265,7 @@ world.excavate X Y Z PassageH Amount =
 | while Z<H:
   | Type = $at{X Y Z}.type
   | $set{X Y Z $main.tiles.void}
-  //| when Type<>void: $respawn_tile{X,Y,Z Type $params.excavate_ttl}
   | !Z+1
-| when H>4 and $at{X Y H}.empty:
-  | when Dir4.any{DX,DY => not $at{X+DY Y+DY H-1}.empty}:
-    | $set{X Y H-1 $main.tiles.floor_wooden}
 | 1
 
 // FIXME: remove overlapping tiles above setted tile
@@ -315,7 +312,7 @@ world.seen_from A B =
 | PZ = AZ
 | BottomClear = 1
 | when DZ.abs>16: leave 0 //z-difference is too large
-| when DZ > 4:
+| when DZ > 1:
   | BAX = BX + (AX-BX).sign
   | BAY = BY + (AY-BY).sign
   | BottomClear <= $at{BAX BAY BZ}.empty and $at{BAX BAY BZ-1}.empty
@@ -334,7 +331,9 @@ world.seen_from A B =
   | _label end
   | R
 
-world.fxyz XYZ = [XYZ.0*32 XYZ.1*32 XYZ.2*8]
+world.fxyz XYZ =
+| CellSize = $c
+| [XYZ.0*CellSize XYZ.1*CellSize XYZ.2*CellSize]
 
 world.proxies_at X,Y,Z =
 | when!it $unit_map.at{X Y Z}: leave $proxies.it^uncons{next}
