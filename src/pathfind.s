@@ -19,7 +19,10 @@ list_moves Me Src =
   | Z = SZ
   | Dst = X,Y,Z
   | if CanMove{Me Src Dst} then
-    | when $world.at{X Y Z-1}.empty: Dst.2 <= $world.fix_z{Dst} //gonna fall
+    | when $world.at{X Y Z-1}.empty:
+      | ZZ = $world.fix_z{Dst} //gonna fall
+      | if Z-ZZ > 1 then Dst <= 0
+        else Dst.2 <= ZZ
     else
     | Tile = $world.at{X Y Z}
     | if Tile.type >< border_ then Dst <= 0

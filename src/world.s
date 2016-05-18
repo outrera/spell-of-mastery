@@ -99,7 +99,7 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
-| Filler = $main.tiles.base_
+| Filler = $main.tiles.water
 | for Y $h: when Y: for X $w: when X: $push_{X Y Filler}
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
 | !$w-1
@@ -197,7 +197,7 @@ world.get XYZ = $tilemap.at{XYZ.0 XYZ.1 XYZ.2}
 
 world.set_ X Y Z V = $tilemap.set{X Y Z V}
 
-world.clear_tile X Y Z =
+world.clear_tile_ X Y Z =
 | Filler = $void
 | Tile = $tilemap.at{X Y Z}
 | when Tile.parts.is_int
@@ -223,6 +223,10 @@ world.clear_tile X Y Z =
     | when $at{XX YY Z}.around><TT:
       | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
         | $clear_tile{XX YY Z}
+
+
+world.clear_tile X Y Z =
+| $clear_tile_{X Y Z}
 | $upd_column{X Y}
 
 world.respawn_tile XYZ Type Delay =
@@ -271,7 +275,7 @@ world.excavate X Y Z PassageH Amount =
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =
 | H = Tile.height
-| times I H: $clear_tile{X Y Z+I}
+| times I H: $clear_tile_{X Y Z+I}
 | Ps = Tile.parts
 | H = H-1
 | times I H: $set_{X Y Z+I Ps.I} // push padding

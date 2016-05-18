@@ -1,6 +1,7 @@
 sprite: tiles_floor_wooden
 excavate: 1
+floor: 1
 wall: house_wall
-roof: 7,house_roof
+roof: 2,house_roof
 height: 1
 1111: 0

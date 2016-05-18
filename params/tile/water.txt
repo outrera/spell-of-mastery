@@ -1,4 +1,5 @@
 sprite: tiles_water
+opaque: 0
 height: 1
 empty: 0
 liquid: 1

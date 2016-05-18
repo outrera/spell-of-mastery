@@ -107,17 +107,19 @@ place_tile Me Type =
   | $cursor.2 <= Z
 | less IsBridge
   | if Tile.liquid then
-      | when $cursor.2>1: when $cursor.2<<$anchor.2+1:
-        less $world.at{X Y $cursor.2-1}.liquid:
-        | H = $world.at{X Y $cursor.2-1}.height
-        | !$cursor.2-H
-        | $anchor.2 <= $cursor.2
-        | $world.clear_tile{@$cursor}
+      | when $cursor.2<<$anchor.2:
+        | Below = $world.at{X Y $cursor.2-1}
+        | less Below.empty
+          | less Below.liquid: $world.set{X Y $cursor.2-1 Tile}
+          | leave
     else
-      | while $world.at{X Y $cursor.2-1}.liquid:
-        | H = $world.at{X Y $cursor.2-1}.height
-        | !$cursor.2-H
-        | $world.clear_tile{@$cursor}
+      | when $world.at{X Y $cursor.2-1}.liquid: 
+        | Z = $cursor.2-1
+        | $anchor.2 <= Z
+        | while Z>>0 and $world.at{X Y Z}.liquid:
+          | $world.set{X Y Z Tile}
+          | !Z-1
+        | leave
   | when Tile.wall
     | Below = $world.at{X Y $cursor.2-1}
     | while Below.around or Below.wall or Below.roof or Below.type><void:

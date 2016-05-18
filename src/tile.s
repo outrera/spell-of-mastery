@@ -166,9 +166,9 @@ tile.render X Y Z Below Above Seed =
 | Limpid = 0
 | TH = $height
 | when Above.opaque:
-  | when Z><0:
+  /*| when Z><0 and X < World.w-2 and Y<World.h-2:
     | BelowSlope <= #@1111
-    | leave 0
+    | leave 0*/
   //| Z = Z-$height+1
   | A = World.at{X+1 Y Z}
   | B = World.at{X Y+1 Z}
