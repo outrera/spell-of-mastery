@@ -32,6 +32,7 @@ type view.widget{M UI W H}
   xunit
   yunit
   zunit
+  d //cell edge size
   keymap
 | $keymap <= $main.params.keymap
 | $fpsGoal <= $main.params.ui.fps
@@ -40,9 +41,11 @@ type view.widget{M UI W H}
 | Wr = $world
 | Wr.view <= Me
 | WParam = $main.params.world
-| $xunit <= WParam.tile_w
-| $yunit <= WParam.tile_h
-| $zunit <= WParam.tile_d
+| TS = WParam.tile_size
+| $xunit <= TS.0
+| $yunit <= TS.1
+| $zunit <= TS.2
+| $d <= WParam.cell_size
 | $fpsT <= clock
 
 view.key Name =

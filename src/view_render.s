@@ -6,6 +6,11 @@ YDiv = No
 BlitItems = 0
 XUnit2 =
 YUnit2 =
+XUnit =
+YUnit =
+ZUnit =
+CS =
+CS2 =
 Folded = 0
 Marked = 0
 Unexplored = 0
@@ -80,7 +85,8 @@ blit_item_from_unit Me =
 | !Y+DDY
 | XD,YD,ZD = $size
 | when $mirror: swap XD YD
-| make_blit_item X Y Z+7 XD YD ZD Me //Z+7 is a hack to avoid cursor cluttering
+  //CS-1 is a hack to avoid cursor cluttering
+| make_blit_item X Y Z+CS-1 XD YD ZD Me
 
 UnitRects = 0
 PickedRects = 0
@@ -90,8 +96,8 @@ unit.draw FB B =
 | Y = B.sy
 | G = $frame
 | GW = G.w
-| XX = X+32-GW/2
-| YY = Y-16-G.h
+| XX = X+XUnit2-GW/2
+| YY = Y-YUnit2-G.h
 | when $mirror:
   | !XX - GW%2
   | G.flop
@@ -99,11 +105,11 @@ unit.draw FB B =
 | when S.shadow:
   | S = $world.shadow
   | ZZ = $xyz.2-$fix_z
-  | I = min (ZZ/4).abs S.size-1
+  | I = min (ZZ/16).abs S.size-1
   | SGfx = S.I
   | SGfx.brighten{B.brighten}
 //  | SGfx.light{B.lx B.ly}
-  | FB.blit{X+8 Y-38+ZZ*8 SGfx}
+  | FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
 | Colors = $colors
 | when Colors:
   | Rs = S.colors
@@ -121,7 +127,7 @@ unit.draw FB B =
 | FB.blit{XX YY G}
 | less $pickable: leave
 | RW,RH,RY = $sprite.rect
-| RX = X+32 - RW/2
+| RX = X+XUnit2 - RW/2
 | RY = Y+RY-RH
 | UnitRects.push{[RX RY RW RH],Me}
 | less $picked: leave
@@ -192,14 +198,14 @@ render_cursor Me Wr BX BY CursorXYZ =
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
   | TH = T.height
-  | ZZ = Z*$zunit
-  | GH = if G then G.h else 32
-  | B = make_blit_item X*32-2 Y*32-2 Z*8 64 64 TH*8
+  | ZZ = Z*ZUnit
+  | GH = if G then G.h else YUnit
+  | B = make_blit_item X*CS-2 Y*CS-2 Z*CS CS2 CS2 TH*CS
                        special_blit{box_back}
   | B.sx <= BX
   | B.sy <= BY-GH-ZZ
   | push B BlitItems
-  | B = make_blit_item X*32 Y*32 Z*8+2 64 64 TH*8
+  | B = make_blit_item X*CS Y*CS Z*CS+2 CS2 CS2 TH*CS
                        special_blit{box_front}
   | B.sx <= BX
   | B.sy <= BY-GH-ZZ
@@ -232,18 +238,18 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LM = Wr.lightmap
 | Us = Wr.column_units_at{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
-//| draw_text FB BX+32 BY-$zunit*Z-20 "[Explored]"
+//| draw_text FB BX+XUnit2 BY-ZUnit*Z-20 "[Explored]"
 | for U Us:
   | if U.frame.w > 1 then
     | XYZ = U.xyz
     | UX,UY,Z = XYZ
-    | TZ = Z-4
+    | TZ = Z-1
     | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
       | when not U.invisible or U.owner.id><$player.id or $brush.0:
         | B = blit_item_from_unit U
         | FX,FY,FZ = U.fxyz
         | BX,BY = ScreenXY + to_iso{FX FY FZ}
-        | B.sx <= BX - 32
+        | B.sx <= BX - XUnit2
         | B.sy <= BY
         | B.lx <= LX
         | B.ly <= LY
@@ -256,10 +262,10 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | for G Gs
   | T = Wr.at{X Y Z}
   | TH = T.height
-  | ZZ = Z*$zunit
+  | ZZ = Z*ZUnit
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
-  | TZ = UnitZ - 4
+  | TZ = UnitZ - 1
   | less T.invisible
     | G = G
     | if AboveCursor or TZ << ZCut then
@@ -269,7 +275,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       else G <= 0
     | when G and Z>SkipZ:
       | Box = T.box
-      | B = make_blit_item X*32 Y*32 Z*8 Box.0 Box.1 Box.2 T
+      | B = make_blit_item X*CS Y*CS Z*CS Box.0 Box.1 Box.2 T
       | B.data <= G
       | B.sx <= BX
       | B.sy <= BY-G.h-ZZ
@@ -284,7 +290,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | _label for_break
 
 render_unexplored Me Wr X Y BX BY =
-| B = make_blit_item X*32 Y*32 0 64 64 4*8 gfx_item{}
+| B = make_blit_item X*CS Y*CS 0 CS2 CS2 CS gfx_item{}
 | B.data <= Unexplored
 | B.sx <= BX
 | B.sy <= BY-$zunit-Unexplored.h
@@ -423,25 +429,8 @@ handle_picking Me UnitRects =
     | push Unit Units
 | handle_picked Me 0 Units 
 
-world_to_view P =
-| X,Y,Z = P
-| RX = X - Y
-| RY = (X + Y)/2
-| [RX RY Z]
-
 // still needs true 3d pipeline interpolate xyz across texture
-view_to_z X Y Z =
-| (X+Y+Z)*-256 + Z
-
-draw_tile32x32 FB XY =
-| A = XY+|world_to_view [0 0 0]
-| B = XY+|world_to_view [0 32 0]
-| C = XY+|world_to_view [32 32 0]
-| D = XY+|world_to_view [32 0 0]
-| FB.line{#00FF00 A B}
-| FB.line{#00FF00 B C}
-| FB.line{#00FF00 C D}
-| FB.line{#00FF00 D A}
+view_to_z X Y Z = (X+Y+Z)*-256 + Z
 
 view.render_iso =
 | Wr = $world
@@ -453,15 +442,20 @@ view.render_iso =
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
 | CurX,CurY,CurZ = $cursor
-| YDiv <= $yunit/$zunit
-| TX,TY = $blit_origin+[0 Z]%YDiv*$zunit + [0 32]
+| XUnit <= $xunit
+| YUnit <= $yunit
+| ZUnit <= $zunit
+| XUnit2 <= XUnit/2
+| YUnit2 <= YUnit/2
+| CS <= $d
+| CS2 <= CS*2
+| YDiv <= YUnit/ZUnit
+| TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 YUnit]
 | VX,VY = $view_origin-[Z Z]/YDiv
-| ScreenXY.init{[TX+32 TY]+to_iso{-VX*32 -VY*32 0}}
+| ScreenXY.init{[TX+XUnit2 TY]+to_iso{-VX*XUnit2 -VY*YUnit 0}}
 | WW = Wr.w
 | WH = Wr.h
 | VS = $view_size
-| XUnit2 <= $xunit/2
-| YUnit2 <= $yunit/2
 | less Folded:
   | Folded <= Wr.main.img{ui_cell_folded}
   | Marked <= Wr.main.img{ui_cell_marked}

@@ -7,7 +7,7 @@ view.worldToView P =
 | [RX RY] + $blit_origin
 
 view.viewToWorld P =
-| X,Y = P - $blit_origin - [32 -32+$zunit*4]
+| X,Y = P - $blit_origin - [$yunit -$yunit+$zunit]
 | WH = $xunit*$yunit
 | RX = (Y*$xunit + X*$yunit)/WH
 | RY = (Y*$xunit - X*$yunit)/WH
@@ -107,7 +107,7 @@ place_tile Me Type =
   | $cursor.2 <= Z
 | less IsBridge
   | if Tile.liquid then
-      | when $cursor.2>1: when $cursor.2<<$anchor.2+4:
+      | when $cursor.2>1: when $cursor.2<<$anchor.2+1:
         less $world.at{X Y $cursor.2-1}.liquid:
         | H = $world.at{X Y $cursor.2-1}.height
         | !$cursor.2-H
@@ -322,7 +322,7 @@ view.input In =
           | NewZ <= $world.up{$cursor}
         | Ds = [[1 0] [0 1] [-1 0] [0 -1]]
         | X,Y,NewZ = $cursor
-        | while NewZ>$zlock+4:
+        | while NewZ>$zlock+1:
           | less Ds.all{[XD YD] => $world.at{X+XD Y+YD NewZ}.empty}:
             | $cursor.2 <= NewZ
           | !NewZ-1

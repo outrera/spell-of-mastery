@@ -6,7 +6,7 @@ back: house_wall_back
 heavy: 1
 opaque: 1
 filler: 0
-height: 8
+height: 2
 lineup: 0
 match: same,side
 role: house_wall
