@@ -29,7 +29,7 @@ view.mice_rect =
 view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
 
 LMB_Count = 0
-BridgeAnchorHack = -1
+AnchorHack = -1
 
 place_object Me Bank Type =
 | X,Y,Z = $cursor
@@ -94,10 +94,10 @@ place_tile Me Type =
 | IsEmpty = $key{edit_over_empty} or Tile.empty
 | when IsBridge
   | EmptyTile = $main.tiles.void
-  | when LMB_Count<>BridgeAnchorHack:
+  | when LMB_Count<>AnchorHack:
     | AZ = max 1 $anchor.2-Tile.height
     | $anchor.2 <= AZ
-    | BridgeAnchorHack <= LMB_Count
+    | AnchorHack <= LMB_Count
   | Z = 0
   | while Z<$anchor.2:
     | when $world.at{X Y Z}.type >< void:
@@ -115,11 +115,14 @@ place_tile Me Type =
     else
       | when $world.at{X Y $cursor.2-1}.liquid: 
         | Z = $cursor.2-1
-        | $anchor.2 <= Z
+        | when AnchorHack<>LMB_Count:
+          | $anchor.2 <= Z
+          | AnchorHack <= LMB_Count
         | while Z>>0 and $world.at{X Y Z}.liquid:
           | $world.set{X Y Z Tile}
           | !Z-1
         | leave
+  | AnchorHack <= LMB_Count
   | when Tile.wall
     | Below = $world.at{X Y $cursor.2-1}
     | while Below.around or Below.wall or Below.roof or Below.type><void:
