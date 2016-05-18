@@ -85,8 +85,7 @@ blit_item_from_unit Me =
 | !Y+DDY
 | XD,YD,ZD = $size
 | when $mirror: swap XD YD
-  //CS-1 is a hack to avoid cursor cluttering
-| make_blit_item X Y Z+CS-1 XD YD ZD Me
+| make_blit_item X Y Z+7 XD YD ZD Me //Z+7 is a hack to avoid cursor cluttering
 
 UnitRects = 0
 PickedRects = 0
@@ -481,7 +480,7 @@ view.render_iso =
     | O = B.object
     | O.draw{FB B}*/
 | less BlitItems.end
-  | DrawBoundingBox = $main.params.world.bounding_boxes
+  | DrawBoundingBox = $main.params.world.bounding_boxes><1
   | BL = BlitItems.list
   | isort_begin
   | for I,B BL.i: isort_add I 0 B.x B.y B.z B.x2 B.y2 B.z2

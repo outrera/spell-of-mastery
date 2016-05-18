@@ -1,7 +1,3 @@
-sprite: tiles_castle
+sprite: tiles_floor_wooden
 height: 1
-0110: 13
-0011: 13
-1001: 13
-1100: 13
-1111: 13
+1111: 0

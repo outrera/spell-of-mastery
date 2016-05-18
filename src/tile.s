@@ -1,5 +1,7 @@
 use gfx util
 
+CellSize = 32 //FIXME: hardcoded
+
 type tile{As Main Type Role Id Base Middle Top
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 excavate/0
@@ -42,7 +44,7 @@ type tile{As Main Type Role Id Base Middle Top
      hit/Hit
      death/Death
 | when no $opaque: $opaque <= not $invisible
-| when $box.2><h: $box.2 <= $height*8
+| when $box.2><h: $box.2 <= $height*CellSize
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1
@@ -164,7 +166,7 @@ tile.render X Y Z Below Above Seed =
 | Limpid = 0
 | TH = $height
 | when Above.opaque:
-  | when $type >< base_:
+  | when Z><0:
     | BelowSlope <= #@1111
     | leave 0
   //| Z = Z-$height+1
