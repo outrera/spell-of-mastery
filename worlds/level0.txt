@@ -1,7 +1,7 @@
 (version 0.2 w 8 h 8 serial 71040 cycle 0 filename level0 name `Level 0` description `Level 0 - Tutorial` params ((next_world level1)) events
 
 ( //events
- ((turn 0)
+ ((cycle 0)
  (`{}` enable 0 1 all)
  (`{}` enable 1 1 (pentagram disband summon_halfling))
   (`{}` msg `  Level 0 - Forest` `During his usual herb gathering, mage was confronted by hungry goblins.
@@ -11,7 +11,7 @@
    Move the mage out of pentagram, then use pick the pentagram to summon halfing to defend against goblins.
    `))
 
-((turn 10) (`{}` set 2 attack_with_guards 1))
+((cycle 2880) (`{}` set 2 attack_with_guards 1))
 
 ((got_unit 1 unit_halfling) (`{}` msg `  Halfling Summoned` `Finally something to counter goblins!
    Move your new unit towards goblins.
