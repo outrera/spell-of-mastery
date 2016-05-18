@@ -58,7 +58,7 @@ world.save =
     tilemap | map X $w: map Y $h:
               | XX = X+1
               | YY = Y+1
-              | Ts = $tilemap.pilar_at{XX YY}.take{$height{XX YY}}.drop{1}
+              | Ts = $tilemap.pilar_at{XX YY}.take{$height{XX YY}}
               | map T Ts: if T.parts.is_int then T.parts else T.id
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
@@ -95,8 +95,7 @@ world.load Saved =
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
 | Tilemap = remap_tids Me LookupTable Saved.tilemap
-| Base = $main.tiles.base_
-| for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 [Base@Tilemap.X.Y]}
+| for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 Tilemap.X.Y}
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
 //| StartTime = clock
