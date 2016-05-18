@@ -2,7 +2,6 @@ use gfx gui util widgets macros isort_ unit_flags stack
 
 ScreenXY = [0 0]
 BrightFactor = 0
-YDiv = No
 BlitItems = 0
 XUnit2 =
 YUnit2 =
@@ -220,8 +219,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | CurH = (CurX+CurY)/2
 | XY2 = (X+Y)/2
 | AboveCursor = CurH >> XY2
-| CurHH = YDiv*(XY2-CurH-2)+3
-| ZCut = max CurZ CurHH
+| ZCut = max CurZ 0
 | Z = 0
 | UnitZ = 0
 | Fog = Explored><1
@@ -448,9 +446,8 @@ view.render_iso =
 | YUnit2 <= YUnit/2
 | CS <= $d
 | CS2 <= CS*2
-| YDiv <= YUnit/ZUnit
-| TX,TY = $blit_origin+[0 Z]%YDiv*ZUnit + [0 YUnit]
-| VX,VY = $view_origin-[Z Z]/YDiv
+| TX,TY = $blit_origin + [0 YUnit] + [0 Z]*ZUnit
+| VX,VY = $view_origin
 | ScreenXY.init{[TX+XUnit2 TY]+to_iso{-VX*XUnit2 -VY*YUnit 0}}
 | WW = Wr.w
 | WH = Wr.h
