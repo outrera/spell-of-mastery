@@ -1,5 +1,5 @@
 sprite: tiles_grass
-height: 2
+height: 1
 empty: 1
 1111: 16
 1000: 0

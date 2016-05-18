@@ -2,5 +2,5 @@ class: empty,1
       ,box_xy,(2 2)
       ,speed,24
       ,active,1
-      ,height,4
+      ,height,1
       ,passable,0

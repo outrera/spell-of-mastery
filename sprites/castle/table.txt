@@ -1,6 +1,6 @@
 author: `Tim Jonsson`
 copyright: `Nikita Sadkov`
-height: 2
+height: 1
 form: | 4 4
       | 4 4
       | 4 4

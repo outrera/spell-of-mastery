@@ -1,3 +1,2 @@
 author: `Tim Jonsson`
-height: 4
 xy: 0,14

@@ -1,5 +1,4 @@
 author: `Artem Belov`
-height: 4
 form: | 4 4
       | 4 4
 xy: 0,0

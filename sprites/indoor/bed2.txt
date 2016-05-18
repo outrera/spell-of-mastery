@@ -1,7 +1,6 @@
 author: `Artem Belov`
 origin: `https://sourceforge.net/projects/allacrost/`
-height: 4
 form: | 4 4
       | 4 4
 xy: -4,12
-class: height,2
+class: height,1
