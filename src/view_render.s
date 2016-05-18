@@ -188,10 +188,12 @@ special_blit.draw FB BlitItem =
 
 render_cursor Me Wr BX BY CursorXYZ =
 | X,Y,CurZ = CursorXYZ
-| Gs = Wr.gfxes.Y.X
 | Z = 0
 | UnitZ = 0
-| for G Gs
+| EndZ = min CurZ Wr.height{X Y}
+| Gs = Wr.gfxes.data.X.Y
+| while Z < EndZ:
+  | G = Gs.Z
   | T = Wr.at{X Y Z}
   | TH = T.height
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
@@ -210,13 +212,10 @@ render_cursor Me Wr BX BY CursorXYZ =
   | B.sy <= BY-GH-ZZ
   | push B BlitItems
   | Z <= UnitZ
-  | when Z>>CurZ: _goto for_break
-| _label for_break
 
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
 | DrawMark = 0
-| Gs = Wr.gfxes.Y.X
 | CurX,CurY,CurZ = CursorXYZ
 | CurH = (CurX+CurY)/2
 | XY2 = (X+Y)/2
@@ -258,7 +257,10 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
             and U.owner.id><$world.human.id then
      | DrawMark <= 1 //marked for excavation
     else
-| for G Gs
+| Gs = Wr.gfxes.data.X.Y
+| EndZ = min RoofZ Wr.height{X Y}
+| while Z < EndZ:
+  | G = Gs.Z
   | T = Wr.at{X Y Z}
   | TH = T.height
   | ZZ = Z*ZUnit
@@ -285,8 +287,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       | when Fog: B.flags <= #40 //dither
       | push B BlitItems
   | Z <= UnitZ
-  | when Z >> RoofZ: _goto for_break
-| _label for_break
 
 render_unexplored Me Wr X Y BX BY =
 | B = make_blit_item X*CS Y*CS 0 CS2 CS2 CS gfx_item{}

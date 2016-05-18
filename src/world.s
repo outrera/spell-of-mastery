@@ -78,6 +78,7 @@ world.init =
 | $tilemap <= zmap $maxSize $d $void
 | $unit_map <= zmap $maxSize $d 0
 | $lightmap <= zmap $maxSize $d 0
+| $gfxes <= zmap $maxSize $d 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -87,7 +88,6 @@ world.init =
 | $shadow <= $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
 | MaxSize = $maxSize
-| $gfxes <= MaxSize{_=>MaxSize{_=>[]}}
 | $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $players.0.alloc_unit{unit_nil}
 | $main.params.unit_setters_ <=
@@ -482,19 +482,13 @@ world.getSidesSame X Y Z Role = `[]`
 
 world.color_at X Y =
 | Z = $height{X Y}-1
-| Gs = $gfxes.Y.X
-| when Z > 0 and not Gs.last:
-  | Gs <= Gs.lead
-  | !Z-1
-| G = Gs.last
+| Gs = $gfxes.data.X.Y
+| while Z > 0 and not Gs.Z: !Z-1
+| G = Gs.Z
 | less G: leave 0
 | G.get{G.w/2 (min G.h/2 16)} ^^ #FFFFFF
 
 world.update_minimap X Y =
-| Z = $height{X Y}-1
-| when Z < 0: leave
-| T = $at{X Y Z}
-| G = $gfxes.Y.X.last
 | Color = $color_at{X Y}
 | WW = $w
 | WH = $h
@@ -513,28 +507,21 @@ world.updPilarGfxes X Y =
 | when X < 0 or Y < 0: leave 0
 | $heighmap.X.Y <= calc_height $tilemap.data.X.Y
 | Seed = $seed.Y.X
-| Gs = []
 | Z = 0
 | H = $height{X Y}
 | Column = $tilemap.data.X.Y
 | Below = $tid_map.0
 | C = Column.0
+| Gs = $gfxes.data.X.Y
 | while Z < H:
   | NextZ = Z + C.height
   | Above = Column.NextZ
   | when Above.parts.is_int: Above <= Column.(NextZ-Above.parts)
   // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
-  | push C.render{X Y NextZ-1 Below Above Seed} Gs
+  | Gs.Z <= C.render{X Y NextZ-1 Below Above Seed}
   | Below <= C
   | C <= Above
   | Z <= NextZ
-| Gs = Gs.flip
-| PrevGs = $gfxes.Y.X
-| if PrevGs.size >< Gs.size then PrevGs.init{Gs}
-  else if PrevGs.size > Gs.size
-    then | Dummy = $nil.sprite.frames.0
-         | PrevGs.init{[@Gs @(dup PrevGs.size-Gs.size Dummy)]}
-  else $gfxes.Y.X <= Gs
 | for U $column_units_at{X Y}: U.environment_updated
 | $update_minimap{X Y}
 
