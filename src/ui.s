@@ -113,7 +113,8 @@ create_new_game_dlg Me =
   |   0   0 | MenuBG
   |  16 $height-16 | txt small CopyrightLine
   | X 220 | button 'CAMPAIGN' skin/scroll: =>
-            | load_game Me 1 "[MapsFolder]level0.txt"
+            | load_game Me 1 "[MapsFolder]default.txt"
+            //| load_game Me 1 "[MapsFolder]level0.txt"
   | X 290 | button 'SCENARIO' skin/scroll: => $pick{scenario_menu}
   | X 360 | button 'MULTIPLAYER' skin/scroll: => 
   | X 500 | button 'BACK' skin/scroll: => $pick{main_menu}

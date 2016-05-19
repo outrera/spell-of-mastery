@@ -219,7 +219,6 @@ unit_check_move Me Dst =
   | leave 0
 | Below = $world.at{X Y $world.fix_z{X,Y,Z}-1}
 | when Below.type><water:
-  | when $worker: leave bridge
   | less $flyer or $amphibian or $swimmer: leave 0
 | B = $world.block_at{Dst}
 | when no B: leave move

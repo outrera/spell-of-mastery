@@ -199,7 +199,7 @@ mark_tile Me =
   | leave
 | when Unmarking><1: leave
 | Unmarking <= 0
-| when Z < 6: leave
+| when Z < 2: leave
 | Work <= $world.human.alloc_unit{unit_work}
 | Work.move{X,Y,0}
 | Work.hp <= 0
