@@ -247,7 +247,13 @@ create_bank_list Me =
 create_editor_tabs Me =
 | PlayIconClick = Icon =>
   | Icon.picked <= not Icon.picked
-  | if Icon.picked then $view.unpause else $view.pause
+  | if Icon.picked
+    then | when $world.editor
+           | less $world.params.init><1
+             | $world.new_game
+             | $world.params.init <= 1
+         | $view.unpause
+    else $view.pause
 | PlayIcon <= icon data/play $img{icons_tab_play} click/PlayIconClick
 | PlayIcon.picked_fg <= $img{icons_tab_pause}
 | hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon
