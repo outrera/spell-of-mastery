@@ -27,7 +27,6 @@ type world{main}
    description/`describe the map here`
    tilemap
    unit_map
-   lightmap
    heighmap
    owners // unit owners
    units
@@ -77,7 +76,6 @@ world.init =
 | $void <= $main.tiles.void
 | $tilemap <= zmap $maxSize $d $void
 | $unit_map <= zmap $maxSize $d 0
-| $lightmap <= zmap $maxSize $d 0
 | $gfxes <= zmap $maxSize $d 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
@@ -135,7 +133,6 @@ world.create_borders = // draws maps borders in clockwise order
 world.clear =
 | $paused <= 1
 | $minimap.clear{#000000}
-| $lightmap.clear{0}
 | $act <= 0
 | for U $units: less U.removed: U.free
 | $tilemap.clear{$void}

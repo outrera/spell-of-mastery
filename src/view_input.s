@@ -178,7 +178,7 @@ remove_object_or_tile Me =
       | for U $world.units_at{X,Y,Z}: U.move{$cursor}
 
 view.update_brush =
-| when $mice_click><leftup:
+| when $mice_click><leftup or $mice_click><rightup:
   | $mice_click <= 0
   | leave
 | when $mice_click><left: case $brush

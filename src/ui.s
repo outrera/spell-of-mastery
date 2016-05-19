@@ -501,7 +501,7 @@ ui_input Me Base In =
 ui.init =
 | MapsFolder <= "[$data][MapsFolder]"
 | SavesFolder <= "[$data][SavesFolder]"
-| $view <= view $main Me $width $height
+| $view <= view $main Me $width $height-128
 | $create{8 8}
 | MenuButtonsX <= $width/2 - 162
 | X = MenuButtonsX

@@ -231,7 +231,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LX = LX.clip{-127 127}
 | LY = LY.clip{-127 127}
 | SkipZ = -1//if $brush.0 then -1 else 0
-| LM = Wr.lightmap
 | Us = Wr.column_units_at{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
 //| draw_text FB BX+XUnit2 BY-ZUnit*Z-20 "[Explored]"
