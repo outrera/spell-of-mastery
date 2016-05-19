@@ -312,16 +312,11 @@ world.seen_from A B =
 | AX,AY,AZ = A
 | BX,BY,BZ = B
 | DZ = (BZ-AZ)
-| PX = AX
+| PX = AX //prev X
 | PY = AY
-| PZ = AZ
-| BottomClear = 1
-| when DZ.abs>16: leave 0 //z-difference is too large
-| when DZ > 1:
-  | BAX = BX + (AX-BX).sign
-  | BAY = BY + (AY-BY).sign
-  | BottomClear <= $at{BAX BAY BZ}.empty and $at{BAX BAY BZ-1}.empty
-| line_calls3d AX AY AZ BX BY BZ: X Y Z =>
+| when DZ.abs>4: leave 0 //z-difference is too large
+  //Z+1 is required, because actual units are above the ground
+| line_calls3d AX AY AZ+1 BX BY BZ+1: X Y Z =>
   | R = 0
   | DX = X-PX
   | DY = Y-PY
@@ -329,10 +324,7 @@ world.seen_from A B =
     | less $at{PX+DX PY Z}.empty or $at{PX PY+DY Z}.empty: _goto end
   | PX <= X
   | PY <= Y
-  | PZ <= Z
   | R <= $at{X Y Z}.empty
-         or (X><AX and Y><AY)
-         or (BottomClear and X><BX and Y><BY)
   | _label end
   | R
 
