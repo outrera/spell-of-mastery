@@ -479,6 +479,7 @@ world.getSidesSame X Y Z Role = `[]`
 
 world.color_at X Y =
 | Z = $height{X Y}-1
+| when Z<0: Z <= 0
 | Gs = $gfxes.data.X.Y
 | while Z > 0 and not Gs.Z: !Z-1
 | G = Gs.Z

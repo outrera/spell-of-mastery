@@ -1,0 +1,4 @@
+sprite: tiles_treasury
+excavate: 1
+embed: 1
+1111: 0

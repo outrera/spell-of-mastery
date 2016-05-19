@@ -1,0 +1,2 @@
+author: `Jana Ochse (www.2d-retroperspectives.org)`
+frames: 64*64

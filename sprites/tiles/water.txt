@@ -1,2 +1,2 @@
-author: `Tim Jonsson`
+author: `Nikita Sadkov`
 frames: 64*48
