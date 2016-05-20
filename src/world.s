@@ -4,18 +4,6 @@ MaxUnits = No
 MaxActiveUnits = 4096
 NoteLife = 1.0
 
-type proxy.$unit_{id}
-  unit_ 
-  next // next unit inside of this world cell
-  column_next // next unit inside of this world column
-
-proxy.as_text = "#proxy{[$id] [$type] [$unit_id]}"
-
-proxy.init Unit =
-| $unit_ <= Unit
-| $next <= 0
-| $column_next <= 0
-
 type world{main}
    w //width
    h //height
@@ -32,8 +20,6 @@ type world{main}
    units
    free_units
    active // active units
-   proxies
-   free_proxies
    players
    human // human controlled player
    gfxes
@@ -75,13 +61,11 @@ world.init =
 | init_unit_module $c
 | $void <= $main.tiles.void
 | $tilemap <= zmap $maxSize $d $void
-| $unit_map <= zmap $maxSize $d 0
+| $unit_map <= zmap $maxSize $d []
 | $gfxes <= zmap $maxSize $d 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
-| $proxies <= MaxUnits{(proxy ?)}
-| $free_proxies <= stack $proxies.flip
 | $active <= stack MaxActiveUnits
 | $shadow <= $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
@@ -332,37 +316,15 @@ world.fxyz XYZ =
 | CellSize = $c
 | [XYZ.0*CellSize XYZ.1*CellSize XYZ.2*CellSize]
 
-world.proxies_at X,Y,Z =
-| when!it $unit_map.at{X Y Z}: leave $proxies.it^uncons{next}
-| []
+world.units_at X,Y,Z = $unit_map.data.X.Y.Z.unheap
 
-world.column_proxies_at X Y =
-| when!it $unit_map.at{X Y 0}: leave $proxies.it^uncons{column_next}
-| []
-
-world.units_at XYZ = $proxies_at{XYZ}{?unit_}
-
-world.column_units_at X Y = $column_proxies_at{X Y}{?unit_}
+world.column_units_at X Y =  $unit_map.data.X.Y.0.unheap
 
 world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
 
 world.block_at XYZ =
 | Block = $units_at{XYZ}.skip{?empty}
 | if Block.size then Block.head else No
-
-world.place_unitS UU =
-| U = $free_proxies.pop
-| U.init{UU}
-| XYZ = U.xyz
-| X,Y,Z = XYZ
-| Us = U,@$proxies_at{XYZ}
-| Consed = Us^cons{next}
-| Id = if Consed then Consed.id else 0
-| $unit_map.set{X Y Z Id}
-| Us = U,@$column_proxies_at{X Y}.skip{?id >< U.id}
-| Consed = Us^cons{column_next}
-| Id = if Consed then Consed.id else 0
-| $unit_map.set{X Y 0 Id}
 
 unit.explore V =
 | Sight = $sight
@@ -378,6 +340,12 @@ unit.explore V =
 
 world.explore State = for P $players: P.explore{State}
 
+world.place_unitS U =
+| X,Y,Z = U.xyz
+| Ks = $unit_map.data.X.Y
+| Ks.Z <= Ks.Z.cons{U}
+| Ks.0 <= Ks.0.cons{U}
+
 world.place_unit U =
 | XYZ = U.xyz.copy
 | Mirror = U.facing >< 5
@@ -392,19 +360,14 @@ world.place_unit U =
 
 world.remove_unitS U =
 | U.explore{-1}
-| XYZ = U.xyz
-| Us = []
-| for P $proxies_at{XYZ}: if P.unit_.id >< U.id 
-  then $free_proxies.push{P} 
-  else push P Us
-| Consed = Us^cons{next}
-| Id = if Consed then Consed.id else 0
-| X,Y,Z = XYZ
-| $unit_map.set{X Y Z Id}
-| Us = $column_proxies_at{X Y}.skip{?.unit_.id >< U.id}
-| Consed = Us^cons{column_next}
-| Id = if Consed then Consed.id else 0
-| $unit_map.set{X Y 0 Id}
+| X,Y,Z = U.xyz
+| Ks = $unit_map.data.X.Y
+| K = Ks.0
+| Ks.0 <= K.unheap.skip{?id><U.id}.enheap
+| K.heapfree
+| K = Ks.Z
+| Ks.Z <= K.unheap.skip{?id><U.id}.enheap
+| K.heapfree
 
 world.remove_unit U =
 | XYZ = U.xyz.copy
