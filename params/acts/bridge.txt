@@ -1,5 +1,4 @@
-icon: spell_excavate
-fix_z: caster
+icon: room_bridge
 range: 1
 affects: any
 impact: same_z,build{target,bridge},impact{spell},sound{impact}

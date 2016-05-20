@@ -6,7 +6,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 speed/0 sight/No
            active/0 range/0 leader/0
            health/0 damage/0 armor/0 cooldown/24
-           acts/[] spells/0 icon/0 title/0 item/0
+           acts/[] spells/0 rooms/0 icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
            inborn/[] pentagram/0
@@ -48,7 +48,8 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   moves/Moves
   pentagram/Pentagram
   worker/Worker
-| when Spells: $acts <= [@$acts @Spells]
+| when Spells: $acts <= [@$acts @Spells].list
+| when Rooms: $acts <= [@$acts @Rooms].list
 | when $active:
   | $id <= ClassIdCounter
   | !ClassIdCounter+1
