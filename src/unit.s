@@ -253,8 +253,10 @@ unit.cooldown_of ActName =
 unit.get_effect Name = $effects.find{?1><Name}
 
 unit.strip_effect Name =
-| less $has{Name}: leave
-| Es = @enheap $effects.skip{?1><Name}
+| Es = @enheap if got Name
+       then | less $has{Name}: leave
+            | $effects.skip{?1><Name}
+       else $effects.skip{?2><No}
 | $effects.heapfree
 | $effects <= Es
 | Flag = getUnitFlagsTable{}.Name

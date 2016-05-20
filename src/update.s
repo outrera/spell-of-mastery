@@ -125,15 +125,16 @@ update_units_effects Me Units =
   | less U.effects.end:
     | U.run_effects{(X=>case X [`.`cycle N] Cycle%N><0) U U.xyz}
     | when U.idle: U.run_effects{(X=>case X [`.`idle N] Cycle%N><0) U U.xyz}
-    | Remove = []
+    | Remove = 0
     | RunEs = []
     | for E U.effects: case E [When Name Duration Params]: when Duration>0:
       | !Duration-1
       | less Duration > 0:
         | when When >< timeout: push [Name Params.unheap] RunEs
-        | push Name Remove
+        | Remove <= 1
+        | Duration <= No
       | E.2 <= Duration
-    | for Name Remove: U.strip_effect{Name}
+    | when Remove: U.strip_effect{No} //strip effects with zero duration
     | for Name,Params RunEs: U.run_effect{Name Params U U.xyz}
 
 update_units Me =
