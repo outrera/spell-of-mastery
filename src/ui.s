@@ -26,11 +26,10 @@ MenuBG =
 IconsPanelBG =
 PanelTab = \spell
 
-PlayerPicker = 0
-PickedIconOverlay = 0
-
 BrushPicker =
 PlayerWidget =
+PlayerPickers = 0
+PickedIconOverlay = 0
 PlayIcon =
 
 LastBrush = [0 0]
@@ -42,6 +41,8 @@ type ui.$tabs{main} tabs width height world message_box view
 
 ui.render =
 | PlayIcon.picked <= not $world.paused
+| HumanName = $world.human.name
+| for PP PlayerPickers: PP.picked <= PP.name >< HumanName
 | $tabs.render
 
 ui.player = $world.human
@@ -315,15 +316,11 @@ create_icons_panel_tabs Me =
 | layH{s/6 Icons}
 
 create_view_ui Me =
-| PlayerPickers = map Player $world.players:
+| PlayerPickers <= map Player $world.players:
   | player_picker Player.name 0 Player.colors.1: Item =>
-    | PlayerPicker.picked <= 0
-    | Item.picked <= 1
-    | PlayerPicker <= Item
     | Name = Item.name
     | when got!it $world.players.find{?name >< Name}: $world.human <= it
-| PlayerPicker <= PlayerPickers.1
-| PlayerPicker.picked <= 1
+| PlayerPickers.1.picked <= 1
 | PlayerWidget <= hidden: layH PlayerPickers
 | BankList,ItemList = create_bank_list Me
 | BrushPicker <= hidden: layH: BankList,ItemList
