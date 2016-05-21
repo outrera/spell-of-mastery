@@ -286,14 +286,14 @@ effect die Whom:
 
 effect clear Where:
 | X,Y,Z = case Where
-  target | TargetXYZ.deep_copy
+  target | TargetXYZ
   X,Y,Z | X,Y,Z
   Else | bad "effect clear: invalid target ([Where])"
 | $world.clear_tile{X Y Z}
 
 effect excavate Where:
 | X,Y,Z = case Where
-  target | TargetXYZ.deep_copy
+  target | TargetXYZ
   X,Y,Z | X,Y,Z
   Else | bad "effect excavate: invalid target ([Where])"
 | Mark = $owner.excavate_mark{X Y Z}
@@ -308,13 +308,27 @@ effect excavate Where:
 
 effect build Where What:
 | X,Y,Z = case Where
-  target | TargetXYZ.deep_copy
+  target | TargetXYZ
   X,Y,Z | X,Y,Z
   Else | bad "effect bridge: invalid target ([Where])"
 | Z = $world.fix_z{X,Y,Z}
 | Tile = $main.tiles.What
 | when no Tile: bad "effect build: undefined tile `[What]`"
 | $world.set{X Y Z-1 $main.tiles.What}
+
+effect mark TileType:
+| X,Y,Z = TargetXYZ
+| ActName = $action.type
+| Act = $main.params.acts.ActName
+| Tile = $main.tiles.TileType
+| when Tile.embed: !Z-1
+| Work = $owner.alloc_unit{unit_work}
+| Work.move{X,Y,Z}
+| Work.hp <= 0
+| Work.kills <= TileType
+| Work.goal <= Work.unit_goal
+| Work.goal.init{X,Y,Z}
+| Work.goal_act <= Act
 
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type

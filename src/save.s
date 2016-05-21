@@ -29,7 +29,7 @@ world.save =
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
   | Active = 0
-  | when U.active:
+  | when U.active or U.type><unit_work:
     | Effects = if U.effects.end then 0 else U.effects
     | Host = if U.host then U.host.id else 0
     | G = U.goal

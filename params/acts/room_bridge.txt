@@ -3,6 +3,7 @@ room: 1
 //needs: (room_library)
 range: 9000
 affects: any
-targets: any
-impact: build{target,bridge},impact{spell},sound{impact}
+targets: any //tile,water
+impact: mark{room_bridge},impact{spell},sound{impact}
+//impact: build{target,bridge},impact{spell},sound{impact}
 tab: build

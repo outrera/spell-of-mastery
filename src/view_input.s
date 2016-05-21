@@ -190,7 +190,7 @@ Unmarking = No
 
 mark_tile Me =
 | X,Y,Z = $cursor
-| Work = $units_at{X,Y,0}.find{?type><unit_work}
+| Work = $column_units_at{X Y}.find{?type><unit_work}
 | when got Work:
   | when Unmarking<>0:
     | Unmarking <= 1
