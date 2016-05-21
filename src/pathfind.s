@@ -9,7 +9,8 @@ Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
 //Dirs = [[-1 -1] [1 1] [1 -1] [-1 1] [0 -1] [1 0] [0 1] [-1 0]]
 
 player.excavate_mark X Y Z =
-| W = $world.units_at{X,Y,0}.find{(?type><unit_work and ?owner.id><$id)}
+| W = $world.column_units_at{X Y}
+      .find{(?type><unit_work and ?owner.id><$id and not ?goal)}
 | if got W then W else 0
 
 list_moves Me Src =

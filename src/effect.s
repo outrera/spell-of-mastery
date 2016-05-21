@@ -292,10 +292,7 @@ effect clear Where:
 | $world.clear_tile{X Y Z}
 
 effect excavate Where:
-| X,Y,Z = case Where
-  target | TargetXYZ
-  X,Y,Z | X,Y,Z
-  Else | bad "effect excavate: invalid target ([Where])"
+| X,Y,Z = TargetXYZ
 | Mark = $owner.excavate_mark{X Y Z}
 | ExcavateGoal = $goal and $goal_act and $goal_act.name><excavate
 | when Mark and $world.excavate{X Y Z 2 (max $worker 1)}:
@@ -306,22 +303,28 @@ effect excavate Where:
   | if Marked then $order_at{Marked}
     else $reset_goal
 
-effect build Where What:
-| X,Y,Z = case Where
-  target | TargetXYZ
-  X,Y,Z | X,Y,Z
-  Else | bad "effect bridge: invalid target ([Where])"
-| Z = $world.fix_z{X,Y,Z}
-| Tile = $main.tiles.What
-| when no Tile: bad "effect build: undefined tile `[What]`"
-| $world.set{X Y Z-1 $main.tiles.What}
+effect build Where:
+| X,Y,Z = TargetXYZ
+| Work = $world.units_at{X,Y,Z}.find{(?type><unit_work and ?goal)}
+| when no Work:
+  | $reset_goal
+  | leave
+| TileType = Work.kills
+| Tile = $main.tiles.TileType
+| !Work.hp + $worker
+| $sound{hammer}
+| when Work.hp < Tile.build: leave
+| Work.free
+| when Tile.embed: Z-1
+| $world.set{X Y Z-1 Tile}
+| $reset_goal
 
 effect mark TileType:
 | X,Y,Z = TargetXYZ
 | ActName = $action.type
 | Act = $main.params.acts.ActName
 | Tile = $main.tiles.TileType
-| when Tile.embed: !Z-1
+| when no Tile: bad "effect mark: undefined tile `[TileType]`"
 | Work = $owner.alloc_unit{unit_work}
 | Work.move{X,Y,Z}
 | Work.hp <= 0

@@ -1,3 +1,5 @@
 sprite: tiles_floor_wooden
 1111: 0
 aux: 1
+embed: 1
+build: 100

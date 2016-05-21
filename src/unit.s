@@ -420,7 +420,11 @@ unit.order_at XYZ act/0 =
 | $goal <= $world.block_at{XYZ}
 | if no $goal
   then | $goal <= $unit_goal
-       | less Act: when $owner.excavate_mark{@XYZ}: Act <= \excavate
+       | less Act:
+         | X,Y,Z = XYZ
+         | when $owner.excavate_mark{X Y Z}: Act <= \excavate
+         | when got $world.units_at{XYZ}.find{(?type><unit_work and ?goal)}:
+           | Act <= \build
   else | Enemy = $owner.is_enemy{$goal.owner}
        | less Act or Enemy: $goal <= $unit_goal
        | when Enemy: Act <= $main.params.acts.attack

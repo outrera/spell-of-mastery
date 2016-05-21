@@ -4,7 +4,6 @@ health: 70
 damage: 4
 armor: 4
 speed: 28
-acts: (excavate)
 worker: 20
 inborn: (upkeep2 heals organic)
 impact: harm{user},sound{cut}
