@@ -4,6 +4,6 @@ room: 1
 range: 9000
 affects: any
 targets: any //tile,water
-impact: mark{room_bridge},impact{spell},sound{impact}
+impact: mark{bridge},impact{spell},sound{impact}
 //impact: build{target,bridge},impact{spell},sound{impact}
 tab: build

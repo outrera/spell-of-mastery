@@ -327,8 +327,10 @@ effect mark TileType:
 | Work.hp <= 0
 | Work.kills <= TileType
 | Work.goal <= Work.unit_goal
-| Work.goal.init{X,Y,Z}
+| Work.goal.xyz.init{X,Y,Z}
 | Work.goal_act <= Act
+| Work.sprite <= $main.sprites.special_construction
+| Work.animate{idle}
 
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type
