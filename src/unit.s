@@ -150,14 +150,14 @@ worker_can_move Me Src Dst =
 | Z = DZ-SZ
 | when Z.abs > 1: leave 0
 | Tile = $world.at{DX DY DZ}
-| when Tile.empty: leave 1
+| when Tile.empty: leave $world.at{DX DY DZ-1}.type <> water
 | when Tile.excavate:
   | when ($world.fix_z{DX,DY,DZ}-DZ)<5: leave 0
   | leave $owner.excavate_mark{DX DY DZ} 
 | when Tile.unit:
   | B = $world.block_at{DX,DY,DZ}
   | when got B and B.ai><remove:
-    | leave 1 //FIXME: some units, like bookshelves, could be moved
+    | leave 1
 | 0
 
 unit.update_move_method =
