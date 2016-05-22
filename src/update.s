@@ -296,7 +296,17 @@ update_path Me =
   | when $xyz >< $goal.xyz:
     | $goal <= 0
     | leave
-  | $set_path{$path_to{$goal.xyz}}
+  | Path = $path_to{$goal.xyz}
+  | when Path.end:
+    | $goal <= 0
+    | leave 0
+  | LastPathLife = $path_life
+  | $set_path{Path}
+  | when Path.last<>$goal.xyz: //cant reach goal from here?
+    | when LastPathLife>0: //got stuck?
+      | $goal <= 0
+      | leave 0
+    | $path_life <= Path.size+1 //ensure it gets as close as possible
 | Path = $path
 | when Path.end: leave
 | XYZ = Path.head.unheap
