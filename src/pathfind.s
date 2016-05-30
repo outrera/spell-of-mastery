@@ -1,23 +1,16 @@
-use queue
+use queue util
 
 type move{type xyz}
 move.as_text = "#move{[$type] [$xyz]}"
 
-Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
-
 //note: here order is important, or path will go zig-zag
 //Dirs = [[-1 -1] [1 1] [1 -1] [-1 1] [0 -1] [1 0] [0 1] [-1 0]]
-
-player.excavate_mark X Y Z =
-| W = $world.column_units_at{X Y}
-      .find{(?type><unit_work and ?owner.id><$id and not ?goal)}
-| if got W then W else 0
 
 list_moves Me Src =
 | Ms = []
 | SX,SY,SZ = Src
 | CanMove = $can_move
-| for DX,DY Dir4
+| for DX,DY Dirs4
   | X = SX+DX
   | Y = SY+DY
   | Z = SZ

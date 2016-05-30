@@ -1,5 +1,7 @@
 use macros
 
+Dirs4 = [[0 -1] [1 0] [0 1] [-1 0]]
+
 // take up to N elements
 list.upto N = $take{|min $size N}
 
@@ -36,5 +38,6 @@ normalize_curly E =
   Else | E
 
 
-export points Dirs dirN add_border_to_matrix points_in_square points_in_circle
+export points Dirs Dirs4 dirN add_border_to_matrix
+       points_in_square points_in_circle
        points_in_matrix normalize_curly

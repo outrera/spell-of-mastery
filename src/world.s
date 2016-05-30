@@ -219,8 +219,6 @@ world.respawn_tile XYZ Type Delay =
 | S.move{XYZ}
 | S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
 
-Dir4 = [[0 -1] [1 0] [0 1] [-1 0]]
-
 world.excavate X Y Z PassageH Amount =
 | Work = $units_at{X,Y,Z}.find{?type><unit_work}
 | when no Work:

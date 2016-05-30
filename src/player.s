@@ -175,5 +175,9 @@ player.update =
   | $ai.update
   //|free_ai_blockers $world
 
+player.excavate_mark X Y Z =
+| W = $world.column_units_at{X Y}
+      .find{(?type><unit_work and ?owner.id><$id and not ?goal)}
+| if got W then W else 0
 
 export player
