@@ -365,8 +365,17 @@ handle_picked Me Rect Units = //Me is view
     | $player.notify{"Cant target leader."}
     | $main.sound{illegal}
     | Proceed <= 0
-  | when IsRoom and $world.human.work_at{XYZ}:
-    | $player.notify{"This place is already occupied."}
+  | when IsRoom:
+    | Work = $player.work_at{XYZ}
+    | when Work:
+      | when Act.name >< room_demolish:
+        | Work.free
+        | leave
+      | $player.notify{"This place is already occupied."}
+      | $main.sound{illegal}
+      | Proceed <= 0
+  | when Act.name >< room_demolish:
+    | $player.notify{"Cant demolish this."}
     | $main.sound{illegal}
     | Proceed <= 0
   | when Proceed:
