@@ -111,6 +111,16 @@ world.load Saved =
   | for K,V Params: P.params.K <= V
   | for N,R Research: P.research.N <= R
   | P.params.picked <= if Picked then Picked else []
+| Explored = Saved.explored
+| when got Explored:
+  | for PID,Sight Explored
+    | PS = $players.PID.sight
+    | WH = min{Sight.size $maxSize}
+    | for I WH
+      | Dst = PS.I
+      | Src = map X Sight.I^rle_decode: if X then 1 else 0
+      | if Dst.size><Src.size then Src.init{Src}
+        else for J WH: Dst.J <= Src.J
 | $human <= $players.(Saved.player)
 | Acts = $main.params.acts
 | for X Saved.units
@@ -172,16 +182,6 @@ world.load Saved =
   | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
 | for P $players: P.picked <= (P.params.picked){IdMap.?}
-| Explored = Saved.explored
-| when got Explored:
-  | for PID,Sight Explored
-    | PS = $players.PID.sight
-    | WH = min{Sight.size $maxSize}
-    | for I WH
-      | Dst = PS.I
-      | Src = Sight.I^rle_decode
-      | if Dst.size><Src.size then Src.init{Src}
-        else for J WH: Dst.J <= Src.J
 | AEs = Saved.actions_enabled
 | when got AEs: for Name,Enabled AEs:
   | when got Acts.Name: Acts.Name.enabled <= Enabled

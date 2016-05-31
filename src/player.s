@@ -78,6 +78,8 @@ player.explore State =
 | for U $units: U.explore{1}
 
 
+//or 0 if the cell is unexplored
+//else number of units seeing this cell + 1
 player.explored X,Y,Z = $sight.Y.X
 
 player.clear =
