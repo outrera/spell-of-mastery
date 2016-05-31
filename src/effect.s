@@ -299,10 +299,19 @@ effect excavate Where:
   | Mark.free
   | Mark <= 0
 | less Mark: when ExcavateGoal:
-  | Marked = $find{16 | Dst => $owner.excavate_mark{@Dst.xyz}}
-  | if Marked then $order_at{Marked}
-    else $reset_goal
-
+  | Ds = Dirs4{X,Y => [X Y 0]}
+  | Marked = $find{16 (Dst =>
+    | R = 0
+    | for D Ds
+      | XYZ = Dst.xyz+D
+      | when $owner.excavate_mark{@XYZ}:
+        | $order_at{XYZ}
+        | R <= 1
+        | _goto loop_end
+    | _label loop_end
+    | R
+    )}
+  | less Marked: $reset_goal
 effect build Where:
 | X,Y,Z = TargetXYZ
 | Work = $world.units_at{X,Y,Z}.find{(?type><unit_work and ?goal)}
