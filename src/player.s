@@ -180,4 +180,9 @@ player.excavate_mark X Y Z =
       .find{(?type><unit_work and ?owner.id><$id and not ?goal)}
 | if got W then W else 0
 
+
+player.work_at XYZ =
+| W = $world.units_at{XYZ}
+    .find{(?type><unit_work and ?owner.id><$id and ?goal)}
+| if got W then W else 0
 export player

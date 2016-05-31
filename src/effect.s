@@ -318,21 +318,19 @@ effect build Where:
   | $world.set{X Y Z-1 Tile}
 | less got Work:
   | OID = $owner.id
-  | has_work_tile XYZ = got $world.units_at{XYZ}
-           .find{(?type><unit_work and ?owner.id><OID and ?goal)}
   | Ds = [[0 0] @Dirs4]{X,Y => [X Y 0]}
-  | Got = $find{16 (Dst =>
+  | Found = $find{16 (Dst =>
     | R = 0
     | for D Ds
       | XYZ = Dst.xyz+D
-      | when has_work_tile XYZ:
+      | when $owner.work_at{XYZ}:
         | $order_at{XYZ}
         | R <= 1
         | _goto loop_end
     | _label loop_end
     | R
     )}
-  | less Got: $reset_goal
+  | less Found: $reset_goal
 
 effect mark TileType:
 | X,Y,Z = TargetXYZ

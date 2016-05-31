@@ -112,10 +112,11 @@ world.load Saved =
   | for N,R Research: P.research.N <= R
   | P.params.picked <= if Picked then Picked else []
 | $human <= $players.(Saved.player)
+| Acts = $main.params.acts
 | for X Saved.units
   | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active]=X
   | U = $players.Owner.alloc_unit{Type}
-  | less U.class.hp or U.ai >< pentagram: U.change_owner{$players.0}
+  | less Active or U.type><unit_work: U.change_owner{$players.0}
   | U.serial <= Serial
   | case XYZ A,B:
     | XYZ <= A
@@ -141,11 +142,19 @@ world.load Saved =
       | U.path <= P
       | U.path_life <= Path.1
     | U.host <= [Host Goal Action Ordered NextAction]
+    | when Type><unit_work: //kludge!
+      | Target,ActName = Goal
+      | U.goal <= U.unit_goal
+      | U.goal.xyz.init{XYZ}
+      | U.goal_act <= Acts.ActName
+      | U.sprite <= $main.sprites.special_construction
+      | U.goal_act <= Acts.ActName
+      | U.host <= 0
+      | U.animate{idle}
   | U.flags <= Flags
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
-| Acts = $main.params.acts
 | for U $active: when U.host:
   | [HostId Goal Action Ordered NextAction] = U.host
   | U.host <= 0

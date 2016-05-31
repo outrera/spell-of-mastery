@@ -317,8 +317,13 @@ unit.`!backtrack` XYZ =
 | $add_effect{btrack 0 [[effect [on [`.` cycle 24]] [btrack XYZ]]]}
 
 unit.change_owner NewOwner =
+| FXYZ = 0
+| less $removed:
+  | FXYZ = $fxyz
+  | $remove
 | $owner.lost_unit{Me}
 | $owner <= NewOwner
+| when FXYZ: $fine_move{FXYZ}
 | NewOwner.got_unit{Me}
 
 unit.idle = not $ordered.type and
@@ -423,8 +428,7 @@ unit.order_at XYZ act/0 =
        | less Act:
          | X,Y,Z = XYZ
          | when $owner.excavate_mark{X Y Z}: Act <= \excavate
-         | when got $world.units_at{XYZ}.find{(?type><unit_work and ?goal)}:
-           | Act <= \build
+         | when $owner.work_at{XYZ}: Act <= \build
   else | Enemy = $owner.is_enemy{$goal.owner}
        | less Act or Enemy: $goal <= $unit_goal
        | when Enemy: Act <= $main.params.acts.attack

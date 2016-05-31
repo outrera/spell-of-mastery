@@ -11,4 +11,5 @@ aux: 1
 invincible: 1
 pickable: 0
 active: 0
+sight: 0
 //inborn: (ttl_s{1440}) //1440=24*60
