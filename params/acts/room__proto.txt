@@ -1,6 +1,6 @@
-proto: room__proto
 icon: room_bridge
-//needs: (room_library)
+room: 1
+range: 9000
 affects: any
 targets: any //tile,water
 impact: mark{bridge},impact{spell},sound{impact}

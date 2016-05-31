@@ -343,8 +343,6 @@ effect build Where:
 
 effect mark TileType:
 | X,Y,Z = TargetXYZ
-| ActName = $action.type
-| Act = $main.params.acts.ActName
 | Tile = $main.tiles.TileType
 | when no Tile: bad "effect mark: undefined tile `[TileType]`"
 | Work = $owner.alloc_unit{unit_work}
@@ -353,7 +351,7 @@ effect mark TileType:
 | Work.kills <= TileType
 | Work.goal <= Work.unit_goal
 | Work.goal.xyz.init{X,Y,Z}
-| Work.goal_act <= Act
+| Work.goal_act <= $main.params.acts.build
 | Work.sprite <= $main.sprites.special_construction
 | Work.animate{idle}
 

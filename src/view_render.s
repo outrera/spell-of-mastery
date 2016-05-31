@@ -352,7 +352,8 @@ handle_picked Me Rect Units = //Me is view
     | leave
   | $mice_click <= 0
   | when Affects><unit and Units.end: leave
-  | $world.act <= 0
+  | IsRoom = Act.room><1
+  | less IsRoom: $world.act <= 0
   | Target = if Units.end then 0 else Units.0
   | XYZ = if Target and Affects><unit then Target.xyz else $cursor
   | Proceed = 1
@@ -364,6 +365,10 @@ handle_picked Me Rect Units = //Me is view
     | $player.notify{"Cant target leader."}
     | $main.sound{illegal}
     | Proceed <= 0
+  | when IsRoom and $world.human.work_at{XYZ}:
+    | $player.notify{"This place is already occupied."}
+    | $main.sound{illegal}
+    | Proceed <= 0
   | when Proceed:
     | Blink = 1
     | for U ActUnits
@@ -371,7 +376,9 @@ handle_picked Me Rect Units = //Me is view
         | when Target and Blink:
           | $world.blink.init{[4 Target]}
           | Blink <= 0
-        | order_act U Act XYZ Target
+        | if IsRoom
+          then U.effect{Act.impact 0 XYZ}
+          else order_act U Act XYZ Target
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | less $mice_click:

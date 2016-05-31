@@ -1,4 +1,4 @@
-author: `Wildfire Games`
+author: `Wildfire Games`, `Nikita Sadkov`
 license: `CC-by-sa`
 origin: `http://www.wildfiregames.com/`
 
