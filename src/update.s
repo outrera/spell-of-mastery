@@ -15,11 +15,12 @@ reinit_units Us =
   | FXYZ = U.fxyz.deep_copy
   | when U.leader: U.hp <= U.class.hp
   | U.free
-  | U = Owner.alloc_unit{Type}
-  | U.move{XYZ}
-  | U.pick_facing{Facing}
-  | U.fxyz.init{FXYZ}
-  | push U InitedUnits
+  | less U.ordered.type><die:
+    | U = Owner.alloc_unit{Type}
+    | U.move{XYZ}
+    | U.pick_facing{Facing}
+    | U.fxyz.init{FXYZ}
+    | push U InitedUnits
 | InitedUnits
 
 handle_attack_triggers Us =
