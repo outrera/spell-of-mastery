@@ -338,12 +338,16 @@ handle_picked Me Rect Units = //Me is view
   | Affects = Act.affects
   | Outdoor = 0
   | NonLeader = 0
+  | LandOnly = 0
+  | WaterOnly = 0
   | when Affects.is_list and Affects.0.is_list:
     | Ms = Affects.0
     | Affects <= Affects.1
     | for Mod Ms
       | if Mod >< outdoor then Outdoor <= 1
         else if Mod >< non_leader then NonLeader <= 1
+        else if Mod >< land  then LandOnly <= 1
+        else if Mod >< water then WaterOnly <= 1
         else
   | less $mice_click><pick:
     | when Affects><unit:
@@ -354,9 +358,18 @@ handle_picked Me Rect Units = //Me is view
   | when Affects><unit and Units.end: leave
   | IsRoom = Act.room><1
   | less IsRoom: $world.act <= 0
+  | Proceed = 1
   | Target = if Units.end then 0 else Units.0
   | XYZ = if Target and Affects><unit then Target.xyz else $cursor
-  | Proceed = 1
+  | Below = $world.at{XYZ.0 XYZ.1 XYZ.2-1}
+  | when LandOnly and (Below.liquid or Below.type><void):
+    | $player.notify{"Can target only land."}
+    | $main.sound{illegal}
+    | leave
+  | when WaterOnly and Below.type <> water:
+    | $player.notify{"Can target only water."}
+    | $main.sound{illegal}
+    | leave
   | when Outdoor and not $world.outdoor{XYZ}:
     | $player.notify{"Target should be outdoors."}
     | $main.sound{illegal}
