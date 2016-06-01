@@ -336,9 +336,9 @@ create_view_ui Me =
                     ,layH{s/4 ActIcons.take{ActIcons.size/2}}
 | dlg: mtx
   |  0   0| $view
+  |  0   0| GameUnitUI
   |  0   0| BrushPicker
   |  0 IPY| IconsPanelBG
-  |  0   0| GameUnitUI
   | 140 IPY-28| IconsPanelTabs
   | 640 IPY-28| EditorTabs
   | 142 $height-110| ActIconsLay
