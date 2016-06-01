@@ -298,6 +298,10 @@ effect excavate Where:
 | when Mark and $world.excavate{X Y Z 2 (max $worker 1)}:
   | Mark.free
   | Mark <= 0
+  | when got $world.units_at{TargetXYZ}.find{(?item and ?item<>pickup)}:
+    | XYZ = $xyz.deep_copy // hack to pickup dropped stuff
+    | $move{TargetXYZ}
+    | $move{XYZ}
 | less Mark: when ExcavateGoal:
   | Ds = Dirs4{X,Y => [X Y 0]}
   | Marked = $find{16 (Dst =>
