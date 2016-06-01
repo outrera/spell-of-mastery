@@ -1,4 +1,4 @@
-sprite: tiles_room_treasury
+sprite: tiles_room_storage
 excavate: 1
 embed: 1
 1111: 0
