@@ -10,7 +10,7 @@ max_units: 4096 // maximum number of objects in world
 cell_size: 32 // cell edge's size
 tile_size: 64,32,32 //width,height,depthm; typical isometric tile cube is 64x32x32
 tile_banks: tile//,deco
-class_banks: unit,leader,special,trigger
+class_banks: unit,leader,item,special,trigger
 explored: 1 //all maps are explored from the beginning
 income_cycle: 4
 defeat_threshold: -1000 //negative mana forcing player defeat

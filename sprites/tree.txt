@@ -4,4 +4,5 @@ class: empty,0
       ,ai,remove
       ,health,100
       ,hit,((effect spell) (sound (tree_hit1 tree_hit2)))
-      ,death,((effect spell) (sound (tree_hit1 tree_hit2)) (sound tree_death))
+      ,death,((effect spell) (sound (tree_hit1 tree_hit2)) (sound tree_death)
+             (spawn item_wood))

@@ -1,0 +1,5 @@
+sprite: item_goods
+item: add_item{wood,1},sound{pickup},effect{pickup},remove{self}
+//ai: hold
+height: 4
+box_xy: (-1 -1)

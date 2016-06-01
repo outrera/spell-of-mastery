@@ -312,6 +312,7 @@ effect excavate Where:
     | R
     )}
   | less Marked: $reset_goal
+
 effect build Where:
 | X,Y,Z = TargetXYZ
 | Work = $world.units_at{X,Y,Z}.find{(?type><unit_work and ?goal)}
