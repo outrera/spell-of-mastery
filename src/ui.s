@@ -329,14 +329,14 @@ create_view_ui Me =
 | IconsPanelTabs = create_icons_panel_tabs Me
 | EditorTabs <= create_editor_tabs Me
 | GameUnitUI <= hidden: dlg: mtx
-  | 0  $height-128-UnitPanel.bg.h | UnitPanel
+  | 0  0 | UnitPanel
 | IPY = $height-IconsPanelBG.h
 | ActIconsLay <= hidden: layV s/4 
                      layH{s/4 ActIcons.drop{ActIcons.size/2}}
                     ,layH{s/4 ActIcons.take{ActIcons.size/2}}
 | dlg: mtx
   |  0   0| $view
-  |  0   0| GameUnitUI
+  |  0 $height-136-UnitPanel.bg.h| GameUnitUI
   |  0   0| BrushPicker
   |  0 IPY| IconsPanelBG
   | 140 IPY-28| IconsPanelTabs

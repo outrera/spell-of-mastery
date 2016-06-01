@@ -423,7 +423,7 @@ unit.order_at XYZ act/0 =
   | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
-| if no $goal
+| if no $goal or ($goal.ai><remove and $owner.excavate_mark{@XYZ})
   then | $goal <= $unit_goal
        | less Act:
          | X,Y,Z = XYZ
