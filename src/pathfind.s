@@ -13,27 +13,18 @@ list_moves Me Src =
 | for DX,DY Dirs4
   | X = SX+DX
   | Y = SY+DY
-  | Z = SZ
-  | Dst = X,Y,Z
-  | if CanMove{Me Src Dst} then
-    | when $world.at{X Y Z-1}.empty:
-      | ZZ = $world.fix_z{Dst} //gonna fall
-      | if Z-ZZ > 1 then Dst <= 0
-        else Dst.2 <= ZZ
-    else
-    | Tile = $world.at{X Y Z}
-    | if Tile.type >< border_ then Dst <= 0
-      else | Dst.2 <= $world.fix_z{Dst}
-           | less CanMove{Me Src Dst}: Dst <= 0
+  | Dst = 0
+  | less $world.at{X Y SZ}.type >< border_:
+    | Dst <= X,Y,SZ
+    | Dst.2 <= $world.fix_z{Dst}
+    | less CanMove{Me Src Dst}: Dst <= 0
   | when Dst:
     | B = $world.block_at{Dst} //FIXME: could be optimized
     | if got B then
         | if $owner.id <> B.owner.id
-          then if B.alive and $damage and (SZ-Z).abs<<1 then
-                 | push move{attack Dst} Ms
-               else when B.ai><remove and $worker
-                        and $owner.excavate_mark{X Y Z}:
-                 | push move{move Dst} Ms
+          then if B.alive and $damage and (SZ-Dst.2).abs<<1
+               then push move{attack Dst} Ms
+               else
           else when B.speed and B.can_move{}{B Dst Src}:
                | push move{swap Dst} Ms //FIXME: consider moving B back
       else push move{move Dst} Ms

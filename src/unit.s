@@ -141,7 +141,7 @@ flyer_can_move Me Src Dst =
 | Wr = $world
 | less Wr.at{DX DY DZ}.empty: leave 0
 | SX,SY,SZ = Src
-| when SZ<DZ:leave (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}
+| when SZ<DZ: leave (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}
 | (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}
 
 worker_can_move Me Src Dst =
