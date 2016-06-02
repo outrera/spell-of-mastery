@@ -338,7 +338,7 @@ do_excavate Me TargetXYZ =
     | R
     )}
   | less Marked:
-    | $owner.notify{"Your [$title] has completed the work."}
+    | $owner.notify{"[$title] has completed the work."}
     | $reset_goal
 
 effect idle_void How:
@@ -376,7 +376,9 @@ effect build Where:
     | _label loop_end
     | R
     )}
-  | less Found: $reset_goal
+  | less Found:
+    | $owner.notify{"[$title] has completed the work."}
+    | $reset_goal
 
 effect mark TileType:
 | X,Y,Z = TargetXYZ
