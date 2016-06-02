@@ -1,5 +1,0 @@
-sprite: item_mana
-item: mana{500},sound{pickup},notify{`Gained 500 mana.`},effect{pickup},remove{self}
-ai: hold
-height: 4
-box_xy: (-1 -1)

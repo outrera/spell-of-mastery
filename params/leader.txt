@@ -17,7 +17,7 @@ passable: 0
 flyer: 0 // can it fly
 leader: 1
 ai: unit
-item: pickup
+item: 0
 inborn: (heals organic resist_magic)
 impact: missile{effect_bolt},harm{user},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}

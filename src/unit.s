@@ -169,9 +169,9 @@ unit.update_move_method =
 
 
 unit.move_in State =
-| when $item <> pickup: leave
-| for U $world.units_at{$xyz}: when U.item and U.item <> pickup:
-  | U.effect{U.item Me Me.xyz}
+| when $ai <> unit: leave
+| for U $world.units_at{$xyz}: when U.item and U.item.0><pickuse:
+  | U.effect{U.item.tail Me Me.xyz}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =

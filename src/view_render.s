@@ -568,7 +568,10 @@ view.draw_indicators =
 | Us = $world.units_at{X,Y,Z}.skip{?empty}
 | less Us.end:
   | U = Us.0
-  | Font.draw{$fb IX+210 IY+2+16 "[U.type]"}
+  | S = "[U.type]"
+  | when U.goal:
+    | S <= "[S] ([U.goal_act.name] at [U.goal.xyz])"
+  | Font.draw{$fb IX+210 IY+2+16 "[S]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1

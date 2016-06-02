@@ -1,0 +1,7 @@
+icon: recall
+affects: ally
+//hotkey: s
+before: sound{summon},impact{teleport}
+after: ()
+range: 0
+//lore: misc.tier1_lcost

@@ -14,7 +14,7 @@ passable: 0 // other units can move on top of this one
 flyer: 0 // can it fly
 range: cross //1
 ai: unit
-item: pickup
+item: 0
 impact: sound{attack2}
 moves: sound{step}
 spells: (cast_teleport)

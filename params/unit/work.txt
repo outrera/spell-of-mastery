@@ -13,4 +13,5 @@ pickable: 0
 active: 0
 sight: 0
 item: 0
+ai: 0
 //inborn: (ttl_s{1440}) //1440=24*60
