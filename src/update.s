@@ -243,8 +243,7 @@ update_path_move Me XYZ =
                 and Target.goal and Target.path.end)):
   | when Target.xyz<>$goal.xyz:
     | when UpdatePathHangTrap>0: leave
-    | Stuck = $get_effect{stuck}
-    | Stuck = if got Stuck then Stuck.3 else 0
+    | Stuck = $get_effect_value{stuck}
     | Cycle = $world.cycle
     | less Stuck and Stuck.0.list><$xyz and Stuck.1.list><$goal.xyz:
       | when got Stuck: $strip_effect{stuck}
@@ -267,6 +266,11 @@ update_path_move Me XYZ =
 | $order.init{M | Target or XYZ}
 
 
+goal_in_range Me =
+| Act = $goal_act
+| $order.init{Act $goal}
+| less Act.repeat><1: $goal <= 0
+
 update_path Me =
 | when not $goal or $goal.serial <> $goal_serial or $goal.removed
        or not $goal.alive:
@@ -288,14 +292,13 @@ update_path Me =
                         else 0)
   | when Reach:
     | $set_path{[]}
-    | $order.init{Act $goal}
-    | less Act.repeat><1: $goal <= 0
+    | goal_in_range Me
     | leave
 | Path = $path
 | !$path_life-1
 | when $path_life<<0 or Path.end:
   | when $xyz >< $goal.xyz:
-    | $goal <= 0
+    | goal_in_range Me
     | leave
   | Path = $path_to{$goal.xyz}
   | when Path.end:

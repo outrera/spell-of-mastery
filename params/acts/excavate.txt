@@ -5,5 +5,5 @@ fix_z: caster
 range: cross
 repeat: 1
 affects: any
-//before: sound{summon}
+before: same_z,idle_void{0} //kludge: idle if goal is void
 impact: same_z,excavate{target}

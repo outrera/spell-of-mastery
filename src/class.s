@@ -51,6 +51,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
 | when Spells: $acts <= [@$acts @Spells].list
 | when Rooms: $acts <= [@$acts @Rooms].list
 | when $active:
+  | less $title: $title <= $class_name.title
   | $id <= ClassIdCounter
   | !ClassIdCounter+1
 | less $empty

@@ -64,7 +64,7 @@ unit_panel.draw G X Y =
 | when got Icon: G.blit{X+2 Y+35 Icon.frames.0}
 | Font = font medium
 //| Font.draw{G X+85 Y+48 "[$unit.owner.name]"}
-| Font.draw{G X+4 Y+75 "[$unit.title or $unit.class_name.title]"}
+| Font.draw{G X+4 Y+75 "[$unit.title]"}
 | Font.draw{G X+27 Y+14"[max 0 $unit.health]"}
 | Font.draw{G X+67 Y+28"[$unit.damage]"}
 | Font.draw{G X+67 Y+57"[$unit.armor]"}

@@ -291,20 +291,38 @@ effect clear Where:
   Else | bad "effect clear: invalid target ([Where])"
 | $world.clear_tile{X Y Z}
 
-effect excavate Where:
+effect store How:
+| S = $get_effect_value{store_}.unheap
+| less S: leave
+| $strip_effect{store_}
+| [ItemType Amount BackXYZ] = S
+| Amount <= min $get_item{ItemType} Amount
+| Pile = $world.units_at{TargetXYZ}.find{(?type><pile)}
+| less got Pile:
+  | Pile <= $owner.alloc_unit{item_pile}
+  | Pile.move{TargetXYZ}
+| $add_item{-Amount ItemType}
+| Pile.add_item{Amount ItemType}
+| $order_at{BackXYZ act/excavate}
+
+do_excavate Me TargetXYZ =
 | X,Y,Z = TargetXYZ
 | Mark = $owner.excavate_mark{X Y Z}
 | ExcavateGoal = $goal and $goal_act and $goal_act.name><excavate
 | when Mark and $world.excavate{X Y Z 2 (max $worker 1)}:
   | Mark.free
   | Mark <= 0
-  | Item = $world.units_at{TargetXYZ}
-                 .find{(?item and got ?item.0.find{resource})}
+  | Item = $world.units_at{TargetXYZ}.find{(?item><resource)}
   | when got Item:
-    | Item.effect{Item.item.tail Me Me.xyz}
+    | ItemType = Item.type
+    | Amount = max 1 $get_effect_value{amount}
+    | $add_item{Amount ItemType}
+    | Item.free
     | Found = $find{128 | Dst => $world.get{Dst.xyz-[0 0 1]}.type><storage}
     | when Found:
-      | $order_at{Found}
+      | $strip_effect{store_}
+      | $add_effect{store_ 0 [ItemType Amount TargetXYZ]}
+      | $order_at{Found act/store}
       | leave
 | less Mark: when ExcavateGoal:
   | Ds = Dirs4{X,Y => [X Y 0]}
@@ -319,7 +337,17 @@ effect excavate Where:
     | _label loop_end
     | R
     )}
-  | less Marked: $reset_goal
+  | less Marked:
+    | $owner.notify{"Your [$title] has completed the work."}
+    | $reset_goal
+
+effect idle_void How:
+| when $world.get{TargetXYZ}.type><void:
+  | $animate{idle}
+  | do_excavate Me TargetXYZ
+
+effect excavate How: do_excavate Me TargetXYZ
+
 
 effect build Where:
 | X,Y,Z = TargetXYZ

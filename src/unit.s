@@ -170,8 +170,8 @@ unit.update_move_method =
 
 unit.move_in State =
 | when $ai <> unit: leave
-| for U $world.units_at{$xyz}: when U.item and U.item.0><pickuse:
-  | U.effect{U.item.tail Me Me.xyz}
+| for U $world.units_at{$xyz}: when U.item.is_list:
+  | U.effect{U.item Me Me.xyz}
 
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
@@ -251,6 +251,11 @@ unit.cooldown_of ActName =
 | if got E then [E.2 E.3.0.1.1] else 0
 
 unit.get_effect Name = $effects.find{?1><Name}
+
+unit.get_effect_value Name =
+| E = $effects.find{?1><Name}
+| if got E then E.3 else 0
+
 
 unit.strip_effect Name =
 | Es = @enheap if got Name
