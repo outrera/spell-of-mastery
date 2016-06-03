@@ -1,8 +1,5 @@
 use queue util
 
-type move{type xyz}
-move.as_text = "#move{[$type] [$xyz]}"
-
 //note: here order is important, or path will go zig-zag
 //Dirs = [[-1 -1] [1 1] [1 -1] [-1 1] [0 -1] [1 0] [0 1] [-1 0]]
 
@@ -23,11 +20,11 @@ list_moves Me Src =
     | if got B then
         | if $owner.id <> B.owner.id
           then if B.alive and $damage and (SZ-Dst.2).abs<<1
-               then push move{attack Dst} Ms
+               then push Dst Ms //attack
                else
           else when B.speed and B.can_move{}{B Dst Src}:
-               | push move{swap Dst} Ms //FIXME: consider moving B back
-      else push move{move Dst} Ms
+               | push Dst Ms //FIXME: consider moving B back
+      else push Dst Ms
 | Ms
 
 
@@ -65,16 +62,16 @@ world.pathfind MaxCost U XYZ Check =
     | X,Y,Z = XYZ
     | NextCost = Cost+1
     | for Dst list_moves{U XYZ}:
-      | X,Y,Z = Dst.xyz
+      | X,Y,Z = Dst
       | MXY = PFMap.X.Y
-      | C = Check Dst.xyz
+      | C = Check Dst
       | when C:
         | if C><block then NextCost <= MXY.Z //high cost blocks it
-          else | R <= [Node Dst.xyz $block_at{Dst.xyz}]
+          else | R <= [Node Dst $block_at{Dst}]
                | _goto end
       | when NextCost < MXY.Z:
         | MXY.Z <= NextCost
-        | PFQueue.push{[Node Dst.xyz NextCost]}
+        | PFQueue.push{[Node Dst NextCost]}
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime
@@ -100,13 +97,12 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
   | when Cost<MaxCost:
     | X,Y,Z = XYZ
     | NextCost = Cost+1
-    | for Dst list_moves{U XYZ}:
-      | DXYZ = Dst.xyz
+    | for DXYZ list_moves{U XYZ}:
       | NewL = (TargetXY-DXYZ.take{2}).abs
       | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
         | BestL <= NewL
         | BestXYZ <= DXYZ
-        | R <= [Node Dst]
+        | R <= [Node DXYZ]
         | when BestL < 2.0:
           | when BestXYZ><TargetXYZ: _goto end
           | less $at{@TargetXYZ}.empty: _goto end
@@ -114,14 +110,14 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
           | when got B:
             | less B.speed: _goto end
             | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
-      | X,Y,Z = Dst.xyz
+      | X,Y,Z = DXYZ
       | MXY = PFMap.X.Y
       | when NextCost < MXY.Z
         | MXY.Z <= NextCost
-        | PFQueue.push{[Node Dst.xyz NextCost]}
+        | PFQueue.push{[Node DXYZ NextCost]}
 | _label end
 | PFQueue.clear
-| if R then [R.0 R.1.xyz 0]^node_to_path else 0
+| if R then [R.0 R.1 0]^node_to_path else 0
 
 unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $xyz Check}
 
