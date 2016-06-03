@@ -65,12 +65,14 @@ world.pathfind MaxCost U XYZ Check =
     | X,Y,Z = XYZ
     | NextCost = Cost+1
     | for Dst list_moves{U XYZ}:
-      | when Check Dst:
-        | R <= [Node Dst.xyz $block_at{Dst.xyz}]
-        | _goto end
       | X,Y,Z = Dst.xyz
       | MXY = PFMap.X.Y
-      | when NextCost < MXY.Z and Dst.type:
+      | C = Check Dst.xyz
+      | when C:
+        | if C><block then NextCost <= MXY.Z //high cost blocks it
+          else | R <= [Node Dst.xyz $block_at{Dst.xyz}]
+               | _goto end
+      | when NextCost < MXY.Z:
         | MXY.Z <= NextCost
         | PFQueue.push{[Node Dst.xyz NextCost]}
 | _label end

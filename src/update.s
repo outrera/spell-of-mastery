@@ -183,16 +183,16 @@ update_anim Me =
 
 find_path_around_busy_units Me XYZ =
 | OID = $owner.id
-| check Dst =
-  | DXYZ = Dst.xyz
+| check DXYZ =
   | if DXYZ><XYZ then 1
     else | Us = $world.units_at{DXYZ}.skip{?empty}
+         | R = 0
          | when Us.size
            | U = Us.0
            | when U.owner.id><OID:
              | when not U.path.end or U.action.type><attack:
-               | Dst.type <= 0
-         | 0
+               | R <= \block
+         | R
 | Found = $pathfind{10 &check}
 | if Found
   then | Path = Found^node_to_path
@@ -437,8 +437,7 @@ unit.update =
   | less $empty:
     | B = $world.units_at{$xyz}.skip{U => U.empty or U.id><$id}
     | less B.end: when B.0.idle:
-      | Found = $world.pathfind{100 Me $xyz
-                               | Dst => no $world.block_at{Dst.xyz}}
+      | Found = $world.pathfind{100 Me $xyz | Dst => no $world.block_at{Dst}}
       | when Found: $order_at{Found.1}
   | UpdatePathHangTrap <= 0
   | update_path Me

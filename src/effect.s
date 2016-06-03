@@ -318,7 +318,7 @@ do_excavate Me TargetXYZ =
     | Amount = max 1 $get_effect_value{amount}
     | $add_item{Amount ItemType}
     | Item.free
-    | Found = $find{128 | Dst => $world.get{Dst.xyz-[0 0 1]}.type><storage}
+    | Found = $find{128 | Dst => $world.get{Dst-[0 0 1]}.type><storage}
     | when Found:
       | $strip_effect{store_}
       | $add_effect{store_ 0 [ItemType Amount TargetXYZ]}
@@ -329,7 +329,7 @@ do_excavate Me TargetXYZ =
   | Marked = $find{16 (Dst =>
     | R = 0
     | for D Ds
-      | XYZ = Dst.xyz+D
+      | XYZ = Dst+D
       | when $owner.excavate_mark{@XYZ}:
         | $order_at{XYZ}
         | R <= 1
@@ -368,7 +368,7 @@ effect build Where:
   | Found = $find{16 (Dst =>
     | R = 0
     | for D Ds
-      | XYZ = Dst.xyz+D
+      | XYZ = Dst+D
       | when $owner.work_at{XYZ}:
         | $order_at{XYZ}
         | R <= 1
