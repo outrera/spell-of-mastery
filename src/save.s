@@ -30,7 +30,8 @@ world.save =
   | ActivePlayers.(U.owner.id) <= 1
   | Active = 0
   | when U.active or U.type><unit_work:
-    | Effects = if U.effects.end then 0 else U.effects
+    | Effects = if U.effects.end then 0
+                else U.effects.map{E=>[E.when E.name E.amount E.params]}
     | Host = if U.host then U.host.id else 0
     | G = U.goal
     | Goal = if not G then 0
@@ -144,8 +145,11 @@ world.load Saved =
     | U.anim_wait <= AnimWait
     | U.kills <= Kills
     | U.cooldown <= Cool
+    | for E U.effects: $free_effect{E}
     | U.effects.heapfree
-    | U.effects <= if Efx.is_list and not Efx.end then @enheap Efx else []
+    | U.effects <= if Efx.is_list and not Efx.end
+                   then Efx{E=>$new_effect{@E}}
+                   else []
     | when Path:
       | P = Path.0.enheap
       | U.path.heapfree

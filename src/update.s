@@ -128,13 +128,12 @@ update_units_effects Me Units =
     | when U.idle: U.run_effects{(X=>case X [`.`idle N] Cycle%N><0) U U.xyz}
     | Remove = 0
     | RunEs = []
-    | for E U.effects: case E [When Name Duration Params]: when Duration>0:
-      | !Duration-1
-      | less Duration > 0:
-        | when When >< timeout: push [Name Params.unheap] RunEs
+    | for E U.effects: when E.amount>0:
+      | !E.amount-1
+      | less E.amount > 0:
+        | when E.when >< timeout: push [E.name E.params.unheap] RunEs
         | Remove <= 1
-        | Duration <= No
-      | E.2 <= Duration
+        | E.amount <= No
     | when Remove: U.strip_effect{No} //strip effects with zero duration
     | for Name,Params RunEs: U.run_effect{Name Params U U.xyz}
 

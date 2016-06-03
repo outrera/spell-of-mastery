@@ -4,6 +4,8 @@ MaxUnits = No
 MaxActiveUnits = 4096
 NoteLife = 1.0
 
+type efx when name amount params
+
 type world{main}
    w //width
    h //height
@@ -19,6 +21,8 @@ type world{main}
    owners // unit owners
    units
    free_units
+   effects
+   free_effects
    active // active units
    players
    human // human controlled player
@@ -66,6 +70,8 @@ world.init =
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
+| $effects <= (MaxUnits*2){N=>(efx)}
+| $free_effects <= stack $effects
 | $active <= stack MaxActiveUnits
 | $shadow <= $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
@@ -531,5 +537,17 @@ world.pop_ X,Y =
 world.pop XY =
 | $pop_{XY}
 | $upd_column{XY.0 XY.1}
+
+world.new_effect When Name Amount Params =
+| E = $free_effects.pop
+| E.when <= When
+| E.name <= Name
+| E.amount <= Amount
+| E.params <= Params.enheap
+| E
+
+world.free_effect E =
+| E.params.heapfree
+| $free_effects.push{E}
 
 export world

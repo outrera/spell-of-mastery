@@ -240,30 +240,32 @@ unit.add_effect Name Duration Params =
   | $flags <= $flags^set_bit{Flag 1}
   | $update_move_method
 | When = On.1
-| Es = @enheap [[When Name Duration Params] @$effects.list]
-| $effects.heapfree
-| $effects <= Es
+| $effects <= $effects.cons{$world.new_effect{When Name Duration Params}}
 
-unit.has Name = got $effects.find{?1><Name}
+unit.has Name = got $effects.find{?name><Name}
 
 unit.cooldown_of ActName =
-| E = $effects.find{E => E.1><cool and E.3.0.1.0><ActName}
-| if got E then [E.2 E.3.0.1.1] else 0
+| E = $effects.find{E => E.name><cool and E.params.0.1.0><ActName}
+| if got E then [E.amount E.params.0.1.1] else 0
 
-unit.get_effect Name = $effects.find{?1><Name}
+unit.get_effect Name = $effects.find{?name><Name}
 
 unit.get_effect_value Name =
-| E = $effects.find{?1><Name}
-| if got E then E.3 else 0
-
+| E = $effects.find{?name><Name}
+| if got E then E.params else 0
 
 unit.strip_effect Name =
-| Es = @enheap if got Name
-       then | less $has{Name}: leave
-            | $effects.skip{?1><Name}
-       else $effects.skip{?2><No}
+| FreeEs =
+| Es =
+| if got Name
+  then | FreeEs <= $effects.keep{?name><Name}
+       | when FreeEs.end: leave
+       | Es <= $effects.skip{?name><Name}
+  else | FreeEs <= $effects.keep{?amount><No}
+       | Es <= $effects.skip{?amount><No}
+| for E FreeEs: $world.free_effect{E}
 | $effects.heapfree
-| $effects <= Es
+| $effects <= Es.enheap
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag:
   | when Name><invisible: $alpha <= 0
@@ -272,23 +274,21 @@ unit.strip_effect Name =
 
 unit.add_item Amount Name =
 | less Amount: leave
-| for E $effects: case E [When EName Duration Params]: when EName><Name:
-  | !Duration-Amount
-  | when Duration >> 0:
+| for E $effects: when E.name><Name:
+  | !E.amount-Amount
+  | when E.amount >> 0:
     | $strip_effect{Name}
     | leave
-  | E.2 <= Duration
   | leave
 | $add_effect{Name -Amount []}
 
 unit.get_item Name =
-| for E $effects: case E [When EName Duration Params]: when EName><Name:
-  | leave -Duration
+| for E $effects: when E.name><Name: leave -E.amount
 | 0
 
 unit.items =
 | Items = []
-| for E $effects: when E.2<0: push [E.1 -E.2] Items
+| for E $effects: when E.amount<0: push [E.name -E.amount] Items
 | Items
 
 unit.acts =
@@ -302,17 +302,16 @@ unit.acts =
 
 unit.run_effects Selector Target TargetXYZ =
 | Es = []
-| for [When Name Duration Params] $effects: when Selector When:
-  | Effect = get_named_effect Target Name Params
+| for E $effects: when Selector E.when:
+  | Effect = get_named_effect Target E.name E.params
   | when Effect:
-    | push Effect Es //cuz invoking it here may clobber $effects
+    | push Effect Es //cuz invoking it right here may clobber $effects
 | for Effect Es: $effect{Effect Target TargetXYZ}
 
 unit.run_effect Name Params Target TargetXYZ =
 | Es = []
 | Effect = get_named_effect Target Name Params
-| when Effect:
-  | $effect{Effect Target TargetXYZ}
+| when Effect: $effect{Effect Target TargetXYZ}
 
 unit.`!backtrack` XYZ =
 | less XYZ:
@@ -379,6 +378,7 @@ unit.free =
 | $goal <= 0
 | $host <= 0
 | $colors <= 0
+| for E $effects: $world.free_effect{E}
 | $effects.heapfree
 | $effects <= []
 | $world.free_unit{Me}
