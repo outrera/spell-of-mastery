@@ -59,7 +59,6 @@ world.pathfind MaxCost U XYZ Check =
   | Node = PFQueue.pop
   | Prev,XYZ,Cost = Node
   | when Cost<MaxCost:
-    | X,Y,Z = XYZ
     | NextCost = Cost+1
     | for Dst list_moves{U XYZ}:
       | X,Y,Z = Dst
@@ -95,7 +94,6 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
   | Node = PFQueue.pop
   | Prev,XYZ,Cost = Node
   | when Cost<MaxCost:
-    | X,Y,Z = XYZ
     | NextCost = Cost+1
     | for DXYZ list_moves{U XYZ}:
       | NewL = (TargetXY-DXYZ.take{2}).abs
