@@ -296,14 +296,14 @@ main.load_tiles =
   | when T.stack: T.stack <= T.stack{}{$tiles.?}
   | when T.indoor:
     | T.indoor <= $tiles.(T.indoor)
-    | less got T.indoor: say "tile [K] references unknown indoor tile"
+    | less got T.indoor: say "bad [K] references unknown indoor tile"
   | when T.water:
     | T.water <= [T.water.0 $tiles.(T.water.1)]
-    | less got T.water: say "tile [K] references unknown water tile"
+    | less got T.water: say "bad [K] references unknown water tile"
   | when T.back: T.back <= $tiles.(T.back)
   | when T.fallback.0:
     | T.fallback.2 <= $tiles.(T.fallback.2)
-    | less got T.fallback.2: say "tile [K] references unknown fallback tile"
+    | less got T.fallback.2: bad "tile [K] references unknown fallback tile"
     | Match = T.fallback.3
     | T.fallback.3 <= get_match_fn Match
     | less T.fallback.3: bad "tile [K] has invalid fallback match = [Match]"

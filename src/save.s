@@ -156,7 +156,7 @@ world.load Saved =
       | U.path <= P
       | U.path_life <= Path.1
     | U.host <= [Host Goal Action Ordered NextAction]
-    | when Type><unit_work: //kludge!
+    | when Type><unit_work and Goal: //kludge!
       | Target,ActName = Goal
       | U.goal <= U.unit_goal
       | U.goal.xyz.init{XYZ}

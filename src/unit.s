@@ -415,13 +415,32 @@ unit.die =
 | $cooldown <= 0
 
 unit.set_path Path =
-| $path_life <= Path.size/4
+| $path_life <= max 1 Path.size/4
 | P = Path.enheap
 | $path.heapfree
 | $path <= P
 
+normalize_act Me Act =
+| if Act.is_text then $main.params.acts.Act
+  else if Act then Act
+  else $main.params.acts.move
+
+set_goal Me Act Target =
+| if Target.is_unit then $goal <= Target
+  else | $unit_goal.xyz.init{Target}
+       | $goal <= $unit_goal
+       | $goal_serial <= $goal.serial
+| $goal_act <= normalize_act Me Act
+| $set_path{[]}
+
 unit.order_at XYZ act/0 =
 | when $xyz >< XYZ:
+  | when Act and normalize_act{Me Act}.type<>move:
+    | Ms = $list_moves{$xyz}
+    | less Ms.end:
+      | set_goal Me Act $xyz
+      | $set_path{[Ms.0 $xyz]}
+      | leave
   | $goal <= 0
   | $goal_act <= 0 //if Act then Act else $main.params.acts.idle
   | $set_path{[]}
@@ -437,9 +456,7 @@ unit.order_at XYZ act/0 =
   else | Enemy = $owner.is_enemy{$goal.owner}
        | less Act or Enemy: $goal <= $unit_goal
        | when Enemy: Act <= $main.params.acts.attack
-| $goal_act <= if Act.is_text then $main.params.acts.Act
-               else if Act then Act
-               else $main.params.acts.move
+| $goal_act <= normalize_act Me Act
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
 

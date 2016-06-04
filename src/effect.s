@@ -331,7 +331,7 @@ do_excavate Me TargetXYZ =
     | for D Ds
       | XYZ = Dst+D
       | when $owner.excavate_mark{@XYZ}:
-        | $order_at{XYZ}
+        | $order_at{XYZ act/excavate}
         | R <= 1
         | _goto loop_end
     | _label loop_end
@@ -370,7 +370,7 @@ effect build Where:
     | for D Ds
       | XYZ = Dst+D
       | when $owner.work_at{XYZ}:
-        | $order_at{XYZ}
+        | $order_at{XYZ act/build}
         | R <= 1
         | _goto loop_end
     | _label loop_end

@@ -281,9 +281,9 @@ update_path Me =
 | when R:
   | when R><user: R <= $range
   | GXYZ = $goal.xyz
-  | Reach = if R><cross
-            then (GXYZ-$xyz).take{2}{?abs}.sum><1
-                 and (GXYZ.2-$xyz.2).abs<<4
+  | Reach = if R><neib
+              then (GXYZ-$xyz).take{2}{?abs}.sum><1 and (GXYZ.2-$xyz.2).abs<<1
+            else if R><cross then (GXYZ-$xyz).take{2}{?abs}.sum><1
             else (GXYZ-$xyz).take{2}.abs.int<<R
                  and (| T = $goal_act.targets
                       | if T><seen then $world.seen_from{$xyz $goal.xyz}

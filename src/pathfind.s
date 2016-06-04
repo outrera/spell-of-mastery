@@ -3,7 +3,7 @@ use queue util
 //note: here order is important, or path will go zig-zag
 //Dirs = [[-1 -1] [1 1] [1 -1] [-1 1] [0 -1] [1 0] [0 1] [-1 0]]
 
-list_moves Me Src =
+unit.list_moves Src =
 | Ms = []
 | SX,SY,SZ = Src
 | CanMove = $can_move
@@ -60,7 +60,7 @@ world.pathfind MaxCost U XYZ Check =
   | Prev,XYZ,Cost = Node
   | when Cost<MaxCost:
     | NextCost = Cost+1
-    | for Dst list_moves{U XYZ}:
+    | for Dst U.list_moves{XYZ}:
       | X,Y,Z = Dst
       | MXY = PFMap.X.Y
       | C = Check Dst
@@ -95,7 +95,7 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
   | Prev,XYZ,Cost = Node
   | when Cost<MaxCost:
     | NextCost = Cost+1
-    | for DXYZ list_moves{U XYZ}:
+    | for DXYZ U.list_moves{XYZ}:
       | NewL = (TargetXY-DXYZ.take{2}).abs
       | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
         | BestL <= NewL
