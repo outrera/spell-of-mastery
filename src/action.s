@@ -67,11 +67,10 @@ dact missile.update
 
 dact missile.finish
 | U = $unit
-| for [When Name Duration Params] U.effects: when Name><missile:
-  | _,UId,USerial,Es = Params.0
-  | Source = U.world.units.UId
-  | less Source.serial >< USerial: Source <= $world.nil
-  | Source.effect{Es $target $xyz}
+| _,UId,USerial,Es = U.get_effect_value{missile}.0
+| Source = U.world.units.UId
+| less Source.serial >< USerial: Source <= $world.nil
+| Source.effect{Es $target $xyz}
 | U.free
 
 player_lost_leader Me Leader =

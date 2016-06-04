@@ -66,9 +66,15 @@ m_any_corner World X Y Z Tile = World.getCorners{X Y Z}
 
 m_any_cornerside World X Y Z Tile =
 | R = World.getCorners{X Y Z}
-//| when [X Y]><[7 4]: say [Z R]
-| if R><[0 1 0 0] and World.filled{X Y+1 Z} then R <= [1 1 0 1]
-  else if R><[0 0 0 1] and World.filled{X+1 Y Z} then R <= [1 1 0 1]
+//| when [X Y]><[3 6]: say [Z R]
+| if R><[0 1 0 0] then
+    if World.filled{X Y+1 Z} then R <= [1 1 0 1]
+    else if World.at{X Y Z+1}.type><Tile.type then R <= [1 1 0 0]
+    else
+  else if R><[0 0 0 1] then 
+    if World.filled{X+1 Y Z} then R <= [1 1 0 1]
+    else if World.at{X Y Z+1}.type><Tile.type then R <= [1 0 0 1]
+    else
   else
 | R
 
@@ -219,7 +225,7 @@ tile.render X Y Z Below Above Seed =
            | FB = TT.fallback
            | when FB.0><Elev and FB.1><AH:
              | Elev <= (FB.3){World X Y Z Me}
-             | when [X Y]><[6 4]: say [Z Elev]
+             //| when [X Y]><[7 4]: say [Z Elev]
              | Gs <= FB.2.gfxes
            | NeibSlope <= Elev.digits{2}
            | R = Gs.NeibSlope
