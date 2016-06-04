@@ -2,20 +2,19 @@ use gfx util
 
 CellSize = 32 //FIXME: hardcoded
 
-type tile{As Main Type Role Id Base Middle Top
+type tile{As Main Type Role Id stack/0 gfxes/0
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 excavate/0
-          parts/0 box/[64 64 h] wallShift/0 stack/0 indoor/0 liquid/0 opaque/No
-          around/0 back/0 fallback/0 roof/0 hp/0 build/0
+          parts/0 box/[64 64 h] wallShift/0 indoor/0 liquid/0 opaque/No
+          around/0 back/0 fallback/[0 0 0] roof/0 hp/0 build/0
           hit/0 death/0 embed/0}
      id/Id
      main/Main
      bank/Bank
      type/Type
      role/Role
-     base/Base // column base
-     middle/Middle // column segment
-     top/Top // column top
+     stack/Stack //column base, middle, top segments
+     gfxes/Gfxes
      height/Height
      empty/Empty
      filler/Filler //true if tile fills space, matching with other tiles
@@ -34,25 +33,23 @@ type tile{As Main Type Role Id Base Middle Top
      parts/Parts
      box/Box
      wallShift/WallShift //FIXME: tile.box should be used for everything
-     stack/Stack
      tiler/0
      indoor/Indoor
      liquid/Liquid
      opaque/Opaque
      fallback/Fallback
      roof/Roof
-     embed/Embed
+     embed/Embed //embed into ground
      hp/Hp
-     build/Build
-     hit/Hit
-     death/Death
+     build/Build //buildtime (FIXME: rename to work)
+     hit/Hit //on hit effect
+     death/Death //on death effect
 | when no $opaque: $opaque <= not $invisible
 | when $box.2><h: $box.2 <= $height*CellSize
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1
-           | tile As Main Type Role Id Base Middle Top
-                 @[parts -(I+1) @As]
+           | tile As Main Type Role Id @[parts -(I+1) @As]
     else $parts <= []
 
 transparentize Base Alpha =
@@ -169,10 +166,6 @@ tile.render X Y Z Below Above Seed =
 | Limpid = 0
 | TH = $height
 | when Above.opaque:
-  /*| when Z><0 and X < World.w-2 and Y<World.h-2:
-    | BelowSlope <= #@1111
-    | leave 0*/
-  //| Z = Z-$height+1
   | A = World.at{X+1 Y Z}
   | B = World.at{X Y+1 Z}
   | C = World.at{X+1 Y+1 Z}
@@ -200,10 +193,14 @@ tile.render X Y Z Below Above Seed =
   | Ar = $around
   | when A.type><Ar or B.type><Ar or C.type><Ar:
     | T <= $back
-| Gs = if BE then T.top
-       else if BR <> $role or BelowSlope><#@1111 then T.base
-       else if AR <> $role then T.top
-       else T.middle
+| TT = T
+| St = TT.stack
+| when St:
+  | TT <= if BE then St.2
+          else if BR <> $role or BelowSlope><#@1111 then St.0
+          else if AR <> $role then St.2
+          else St.1
+| Gs = TT.gfxes
 | Lineup = 0
 | when AH and $lineup and ($lineup<>other or AR<>$role):
   | Lineup <= not Above.stack or AR <> $role
@@ -211,9 +208,10 @@ tile.render X Y Z Below Above Seed =
       then | NeibSlope <= #@1111
            | Gs.NeibSlope
       else | Elev = $tiler{}{World X Y Z Me}
-           | when $fallback and Elev><[1 1 1 1]:
-             | Elev <= m_any_corner{World X Y Z Me}
-             | Gs <= $fallback.base
+           | FB = TT.fallback
+           | when FB.0><Elev and FB.1><AH:
+             | Elev <= (FB.3){World X Y Z Me}
+             | Gs <= FB.2.gfxes
            | NeibSlope <= Elev.digits{2}
            | R = Gs.NeibSlope
            | less got R: R <= Gs.#@1111
@@ -225,6 +223,14 @@ tile.render X Y Z Below Above Seed =
 
 main.tile_names Bank =
 | $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort
+
+get_match_fn Desc = case Desc
+  [any corner] | &m_any_corner
+  [any side] | &m_any_side
+  [same corner] | &m_same_corner
+  [same side] | &m_same_side
+  [any stairs] | &m_any_stairs
+  Else | 0
 
 main.load_tiles =
 | BankNames = case $params.world.tile_banks [@Xs](Xs) X[X]
@@ -262,22 +268,16 @@ main.load_tiles =
     | when Gs.size: Tile.gfxes.E <= Gs
 | $tiles <= t size/1024
 | for K,V Tiles
-  | Base,Middle,Top = if got V.stack then V.stack{}{Tiles.?.gfxes}
-                      else | T = V.gfxes; [T T T]
   | Id = if K >< void then 0
          else | !$last_tid + 1
               | $last_tid
   | As = V.list.join
-  | Tile = tile As Me K V.role^~{K} Id Base Middle Top @As
-  | Tile.tiler <= case Tile.match
-    [any corner] | &m_any_corner
-    [any side] | &m_any_side
-    [same corner] | &m_same_corner
-    [same side] | &m_same_side
-    [any stairs] | &m_any_stairs
-    Else | bad "tile [K] has invalid `match` = [Else]"
+  | Tile = tile As Me K V.role^~{K} Id @As
+  | Tile.tiler <= get_match_fn Tile.match
+  | less Tile.tiler: bad "tile [K] has invalid `match` = [Tile.match]"
   | $tiles.K <= Tile
 | for K,T $tiles
+  | when T.stack: T.stack <= T.stack{}{$tiles.?}
   | when T.indoor:
     | T.indoor <= $tiles.(T.indoor)
     | less got T.indoor: say "tile [K] references unknown indoor tile"
@@ -285,7 +285,12 @@ main.load_tiles =
     | T.water <= [T.water.0 $tiles.(T.water.1)]
     | less got T.water: say "tile [K] references unknown water tile"
   | when T.back: T.back <= $tiles.(T.back)
-  | when T.fallback: T.fallback <= $tiles.(T.fallback)
+  | when T.fallback.0:
+    | T.fallback.2 <= $tiles.(T.fallback.2)
+    | less got T.fallback.2: say "tile [K] references unknown fallback tile"
+    | Match = T.fallback.3
+    | T.fallback.3 <= get_match_fn Match
+    | less T.fallback.3: bad "tile [K] has invalid fallback match = [Match]"
   | when T.roof.is_list: T.roof <= [T.roof.0 $tiles.(T.roof.1)]
 
 export tile
