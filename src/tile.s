@@ -225,7 +225,7 @@ tile.render X Y Z Below Above Seed =
            | FB = TT.fallback
            | when FB.0><Elev and FB.1><AH:
              | Elev <= (FB.3){World X Y Z Me}
-             //| when [X Y]><[7 4]: say [Z Elev]
+             //| when [X Y]><[2 3]: say [Z Elev]
              | Gs <= FB.2.gfxes
            | NeibSlope <= Elev.digits{2}
            | R = Gs.NeibSlope

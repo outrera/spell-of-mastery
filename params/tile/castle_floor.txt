@@ -1,4 +1,6 @@
 sprite: tiles_castle
+excavate: 1
+embed: 1
 height: 1
 0110: 14
 0011: 14
