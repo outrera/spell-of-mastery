@@ -1,4 +1,5 @@
 role: dirt
+match: any,cornerside
 lineup: 0
 excavate: 1
 indoor: dirt

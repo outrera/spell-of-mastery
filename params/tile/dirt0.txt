@@ -1,5 +1,6 @@
 sprite: tiles_dirt0
 aux: 1
+match: any,cornerside
 fallback: ((0 0 0 0) 1 dirt0_side (any side))
 lineup: 0
 water: water,dirt_water

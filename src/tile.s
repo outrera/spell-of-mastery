@@ -64,6 +64,14 @@ m_same_corner World X Y Z Tile = World.getCornersSame{X Y Z Tile.role}
 m_any_side World X Y Z Tile = World.getSides{X Y Z}
 m_any_corner World X Y Z Tile = World.getCorners{X Y Z}
 
+m_any_cornerside World X Y Z Tile =
+| R = World.getCorners{X Y Z}
+//| when [X Y]><[7 4]: say [Z R]
+| if R><[0 1 0 0] and World.filled{X Y+1 Z} then R <= [1 1 0 1]
+  else if R><[0 0 0 1] and World.filled{X+1 Y Z} then R <= [1 1 0 1]
+  else
+| R
+
 //stairs defs
 SLeft   = [1 0 0 0]      //left-stairs
 SLeftR  = [0 1 0 0]      //left-stairs-reversed
@@ -211,6 +219,7 @@ tile.render X Y Z Below Above Seed =
            | FB = TT.fallback
            | when FB.0><Elev and FB.1><AH:
              | Elev <= (FB.3){World X Y Z Me}
+             | when [X Y]><[6 4]: say [Z Elev]
              | Gs <= FB.2.gfxes
            | NeibSlope <= Elev.digits{2}
            | R = Gs.NeibSlope
@@ -229,6 +238,7 @@ get_match_fn Desc = case Desc
   [any side] | &m_any_side
   [same corner] | &m_same_corner
   [same side] | &m_same_side
+  [any cornerside] | &m_any_cornerside
   [any stairs] | &m_any_stairs
   Else | 0
 

@@ -247,7 +247,7 @@ update_path_move Me XYZ =
     | less Stuck and Stuck.0.list><$xyz and Stuck.1.list><$goal.xyz:
       | when got Stuck: $strip_effect{stuck}
       | $add_effect{stuck 0 [$xyz $goal.xyz Cycle 4]}
-      | Stuck <= $get_effect{stuck}.3
+      | Stuck <= $get_effect_value{stuck}
     | [Src Dst Wait Tries] = Stuck
     | when Tries<<0:
       | $strip_effect{stuck}
