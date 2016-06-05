@@ -194,8 +194,8 @@ render_cursor Me Wr BX BY CursorXYZ =
 | while Z < EndZ:
   | G = Cell.gfx
   | T = Cell.tile
-  | Cell <= Cell.up1
   | TH = T.height
+  | Cell <= Cell.up{TH}
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
   | TH = T.height
@@ -260,8 +260,8 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | while Z < EndZ:
   | G = Cell.gfx
   | T = Cell.tile
-  | Cell <= Cell.up1
   | TH = T.height
+  | Cell <= Cell.up{TH}
   | ZZ = Z*ZUnit
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH

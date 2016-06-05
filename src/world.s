@@ -489,8 +489,7 @@ world.updPilarGfxes X Y =
   | Next = Cell.up{TH}
   | Above = Next.tile
   | when Above.parts.is_int: //multi-height tile
-    | Next <= Next.up{-Above.parts}
-    | Above <= Next.tile
+    | Above <= Next.up{-Above.parts}.tile
   // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
   | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Seed}
   | Below <= T
