@@ -1,10 +1,23 @@
-use gfx stack heap zmap util line_points unit player
+use gfx stack heap util line_points unit player
 
 MaxUnits = No
 MaxActiveUnits = 4096
 NoteLife = 1.0
 
 type efx when name amount params
+
+CELL_ELTS = 3
+Cells =
+
+//FIXME: such structs could be defined with a macro
+int.tile = Cells.Me
+int.`!tile` V = Cells.Me <= V
+int.units = Cells.(Me+1)
+int.`!units` V = Cells.(Me+1) <= V
+int.gfx = Cells.(Me+2)
+int.`!gfx` V = Cells.(Me+2) <= V
+int.up N = Me+N*CELL_ELTS
+int.up1 = Me+CELL_ELTS
 
 type world{main}
    w //width
@@ -15,8 +28,6 @@ type world{main}
    filename/`default`
    name/`default map`
    description/`describe the map here`
-   tilemap
-   unit_map
    heighmap
    owners // unit owners
    units
@@ -26,7 +37,6 @@ type world{main}
    active // active units
    players
    human // human controlled player
-   gfxes
    seed
    tid_map/Main.tid_map
    void
@@ -64,9 +74,7 @@ world.init =
 | $c <= WParam.cell_size
 | init_unit_module $c
 | $void <= $main.tiles.void
-| $tilemap <= zmap $maxSize $d $void
-| $unit_map <= zmap $maxSize $d []
-| $gfxes <= zmap $maxSize $d 0
+| Cells <= dup $maxSize*$maxSize*$d*CELL_ELTS 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -98,11 +106,12 @@ world.create W H =
 | !$w-1
 | !$h-1
 
-calc_height Cs =
-| Z = Cs.size
+calc_height Me X Y =
+| Cell = $cell{X Y 0}
+| Z = $d
 | while Z
   | !Z-1
-  | when Cs.Z.id: leave Z+1
+  | when Cell.up{Z}.tile.id: leave Z+1
 | 0
 
 create_border_column Me X Y =
@@ -111,7 +120,7 @@ create_border_column Me X Y =
 | times I $d-1:
   | $push_{X Y Border}
   | !Hs.Y+1
-| $heighmap.X.Y <= calc_height $tilemap.data.X.Y
+| $heighmap.X.Y <= calc_height Me X Y
 
 // add movement blocking walls
 world.create_borders = // draws maps borders in clockwise order
@@ -125,7 +134,11 @@ world.clear =
 | $minimap.clear{#000000}
 | $act <= 0
 | for U $units: less U.removed: U.free
-| $tilemap.clear{$void}
+| Void = $void
+| for I Cells.size/CELL_ELTS:
+  | Cell = CELL_ELTS*I
+  | Cell.tile <= Void
+  | Cell.units <= []
 | for H $heighmap: H.clear{0}
 | for P $players: P.clear
 | $human <= $players.1
@@ -183,17 +196,17 @@ world.free_unit U =
 world.picked = $player.picked
 world.`!picked` Us = $player.picked <= Us
 
-world.at X Y Z = $tilemap.at{X Y Z}
-world.get XYZ = $tilemap.at{XYZ.0 XYZ.1 XYZ.2}
-
-world.set_ X Y Z V = $tilemap.set{X Y Z V}
+world.cell X Y Z = (Y*$maxSize*$d+X*$d+Z)*CELL_ELTS
+world.at X Y Z = $cell{X Y Z}.tile
+world.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
+world.set_ X Y Z V = $cell{X Y Z}.tile <= V
 
 world.clear_tile_ X Y Z =
 | Filler = $void
-| Tile = $tilemap.at{X Y Z}
+| Tile = $cell{X Y Z}.tile
 | when Tile.parts.is_int
   | !Z-Tile.parts
-  | Tile <= $tilemap.at{X Y Z}
+  | Tile <= $cell{X Y Z}.tile
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
@@ -320,9 +333,9 @@ world.fxyz XYZ =
 | CellSize = $c
 | [XYZ.0*CellSize XYZ.1*CellSize XYZ.2*CellSize]
 
-world.units_at X,Y,Z = $unit_map.data.X.Y.Z.unheap
+world.units_at X,Y,Z = $cell{X Y Z}.units.unheap
 
-world.column_units_at X Y =  $unit_map.data.X.Y.0.unheap
+world.column_units_at X Y = $cell{X Y 0}.units.unheap
 
 world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
 
@@ -346,9 +359,10 @@ world.explore State = for P $players: P.explore{State}
 
 world.place_unitS U =
 | X,Y,Z = U.xyz
-| Ks = $unit_map.data.X.Y
-| Ks.Z <= Ks.Z.cons{U}
-| Ks.0 <= Ks.0.cons{U}
+| Cell = $cell{X Y 0}
+| Cell.units <= Cell.units.cons{U}
+| Cell <= Cell.up{Z}
+| Cell.units <= Cell.units.cons{U}
 
 world.place_unit U =
 | XYZ = U.xyz.copy
@@ -365,12 +379,13 @@ world.place_unit U =
 world.remove_unitS U =
 | U.explore{-1}
 | X,Y,Z = U.xyz
-| Ks = $unit_map.data.X.Y
-| K = Ks.0
-| Ks.0 <= K.unheap.skip{?id><U.id}.enheap
+| Cell = $cell{X Y 0}
+| K = Cell.units
+| Cell.units <= K.unheap.skip{?id><U.id}.enheap
 | K.heapfree
-| K = Ks.Z
-| Ks.Z <= K.unheap.skip{?id><U.id}.enheap
+| Cell <= Cell.up{Z}
+| K = Cell.units
+| Cell.units <= K.unheap.skip{?id><U.id}.enheap
 | K.heapfree
 
 world.remove_unit U =
@@ -439,9 +454,9 @@ world.getSidesSame X Y Z Role = `[]`
 world.color_at X Y =
 | Z = $height{X Y}-1
 | when Z<0: Z <= 0
-| Gs = $gfxes.data.X.Y
-| while Z > 0 and not Gs.Z: !Z-1
-| G = Gs.Z
+| Cell = $cell{X Y 0}
+| while Z > 0 and not Cell.up{Z}.gfx: !Z-1
+| G = Cell.up{Z}.gfx
 | less G: leave 0
 | G.get{G.w/2 (min G.h/2 16)} ^^ #FFFFFF
 
@@ -462,28 +477,31 @@ world.update_minimap X Y =
 
 world.updPilarGfxes X Y =
 | when X < 0 or Y < 0: leave 0
-| $heighmap.X.Y <= calc_height $tilemap.data.X.Y
+| $heighmap.X.Y <= calc_height Me X Y
 | Seed = $seed.Y.X
 | Z = 0
 | H = $height{X Y}
-| Column = $tilemap.data.X.Y
+| Cell = $cell{X Y 0}
 | Below = $tid_map.0
-| C = Column.0
-| Gs = $gfxes.data.X.Y
+| T = Cell.tile
 | while Z < H:
-  | NextZ = Z + C.height
-  | Above = Column.NextZ
-  | when Above.parts.is_int: Above <= Column.(NextZ-Above.parts)
-  // NextZ-1 is a hack to exclude short tiles from tiling with tall-tiles
-  | Gs.Z <= C.render{X Y NextZ-1 Below Above Seed}
-  | Below <= C
-  | C <= Above
-  | Z <= NextZ
+  | TH = T.height
+  | Next = Cell.up{TH}
+  | Above = Next.tile
+  | when Above.parts.is_int: //multi-height tile
+    | Next <= Next.up{-Above.parts}
+    | Above <= Next.tile
+  // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
+  | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Seed}
+  | Below <= T
+  | T <= Above
+  | Cell <= Next
+  | !Z+TH
 | for U $column_units_at{X Y}: U.environment_updated
 | $update_minimap{X Y}
 
 world.upd_column X Y =
-| $heighmap.X.Y <= calc_height $tilemap.data.X.Y
+| $heighmap.X.Y <= calc_height Me X Y
 | for DX,DY Dirs: $updPilarGfxes{X+DX Y+DY}
 | $updPilarGfxes{X Y}
 

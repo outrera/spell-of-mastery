@@ -190,10 +190,11 @@ render_cursor Me Wr BX BY CursorXYZ =
 | Z = 0
 | UnitZ = 0
 | EndZ = min CurZ Wr.height{X Y}
-| Gs = Wr.gfxes.data.X.Y
+| Cell = Wr.cell{X Y 0}
 | while Z < EndZ:
-  | G = Gs.Z
-  | T = Wr.at{X Y Z}
+  | G = Cell.gfx
+  | T = Cell.tile
+  | Cell <= Cell.up1
   | TH = T.height
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
@@ -254,11 +255,12 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
             and U.owner.id><$world.human.id then
      | DrawMark <= 1 //marked for excavation
     else
-| Gs = Wr.gfxes.data.X.Y
+| Cell = Wr.cell{X Y 0}
 | EndZ = min RoofZ Wr.height{X Y}
 | while Z < EndZ:
-  | G = Gs.Z
-  | T = Wr.at{X Y Z}
+  | G = Cell.gfx
+  | T = Cell.tile
+  | Cell <= Cell.up1
   | TH = T.height
   | ZZ = Z*ZUnit
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
