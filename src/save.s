@@ -29,7 +29,7 @@ world.save =
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
   | Active = 0
-  | when U.active or U.type><unit_work:
+  | when U.active or (U.type><unit_work and U.goal):
     | Effects = if U.effects.end then 0
                 else U.effects.map{E=>[E.when E.name E.amount E.params]}
     | Host = if U.host then U.host.id else 0
@@ -59,7 +59,7 @@ world.save =
     tilemap | map X $w: map Y $h:
               | XX = X+1
               | YY = Y+1
-              | Ts = $tilemap.pilar_at{XX YY}.take{$height{XX YY}}
+              | Ts = $pilar{XX YY}
               | map T Ts: if T.parts.is_int then T.parts else T.id
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
@@ -96,7 +96,7 @@ world.load Saved =
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
 | Tilemap = remap_tids Me LookupTable Saved.tilemap
-| for X $w: for Y $h: $tilemap.setPilar{X+1 Y+1 Tilemap.X.Y}
+| for X $w: for Y $h: $set_pilar{X+1 Y+1 Tilemap.X.Y}
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
 //| StartTime = clock

@@ -75,6 +75,11 @@ world.init =
 | init_unit_module $c
 | $void <= $main.tiles.void
 | Cells <= dup $maxSize*$maxSize*$d*CELL_ELTS 0
+| Void = $void
+| for I Cells.size/CELL_ELTS:
+  | Cell = CELL_ELTS*I
+  | Cell.tile <= Void
+  | Cell.units <= []
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -95,8 +100,8 @@ world.create W H =
 | !$w+1
 | !$h+1
 | $clear
-| Filler = $main.tiles.soil
-| for Y $h: when Y: for X $w: when X: $push_{X Y Filler}
+| Filler = [$main.tiles.soil]
+| for Y $h: for X $w: $set_pilar{X Y Filler}
 | !$w-1
 | !$h-1
 | $create_borders
@@ -114,31 +119,24 @@ calc_height Me X Y =
   | when Cell.up{Z}.tile.id: leave Z+1
 | 0
 
-create_border_column Me X Y =
-| Border = $main.tiles.border_
-| Hs = $heighmap.X
-| times I $d-1:
-  | $push_{X Y Border}
-  | !Hs.Y+1
-| $heighmap.X.Y <= calc_height Me X Y
-
 // add movement blocking walls
 world.create_borders = // draws maps borders in clockwise order
-| for X,Y points{0    0    $w+1 1   }: create_border_column Me X Y
-| for X,Y points{$w+1 0    1    $h+1}: create_border_column Me X Y
-| for X,Y points{1    $h+1 $w+1 1   }: create_border_column Me X Y
-| for X,Y points{0    1    1    $h+1}: create_border_column Me X Y
+| H = $d-1
+| Border = $main.tiles.border_
+| Pilar = dup H Border
+| create_border_pilar X Y =
+  | $set_pilar{X Y Pilar}
+  | $heighmap.X.Y <= H 
+| for X,Y points{0    0    $w+1 1   }: create_border_pilar X Y
+| for X,Y points{$w+1 0    1    $h+1}: create_border_pilar X Y
+| for X,Y points{1    $h+1 $w+1 1   }: create_border_pilar X Y
+| for X,Y points{0    1    1    $h+1}: create_border_pilar X Y
 
 world.clear =
 | $paused <= 1
 | $minimap.clear{#000000}
 | $act <= 0
 | for U $units: less U.removed: U.free
-| Void = $void
-| for I Cells.size/CELL_ELTS:
-  | Cell = CELL_ELTS*I
-  | Cell.tile <= Void
-  | Cell.units <= []
 | for H $heighmap: H.clear{0}
 | for P $players: P.clear
 | $human <= $players.1
@@ -196,10 +194,25 @@ world.free_unit U =
 world.picked = $player.picked
 world.`!picked` Us = $player.picked <= Us
 
-world.cell X Y Z = (Y*$maxSize*$d+X*$d+Z)*CELL_ELTS
+world.cell X Y Z = ((Y*$maxSize+X)*$d+Z)*CELL_ELTS
 world.at X Y Z = $cell{X Y Z}.tile
 world.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
 world.set_ X Y Z V = $cell{X Y Z}.tile <= V
+
+world.pilar X Y =
+| H = $height{X Y}
+| Cell = $cell{X Y 0}
+| map Z H: Cell.up{Z}.tile
+
+world.set_pilar X Y Ts =
+| Cell = $cell{X Y 0}
+| for T Ts:
+  | Cell.tile <= T
+  | !Cell + CELL_ELTS
+| Void = $void
+| times I $d-Ts.size
+  | Cell.tile <= Void
+  | !Cell + CELL_ELTS
 
 world.clear_tile_ X Y Z =
 | Filler = $void
