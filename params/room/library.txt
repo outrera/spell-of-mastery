@@ -1,5 +1,7 @@
-sprite: tiles_carpet
+sprite: tiles_library
 match: same,corner
+deco: indoor_bookshelf
+embed: 1
 height: 1
 1111: 8
 0000: 8

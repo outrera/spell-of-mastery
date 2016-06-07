@@ -296,8 +296,28 @@ world.dirty_set X Y Z Tile =
 | times I H: $set_{X Y Z+I Ps.I} // push padding
 | $set_{X Y Z+H Tile}
 
+
+DecoDirs = [[0 0] [1 1] [1 0] [0 1]]
+
+update_deco Me Tile X Y Z =
+| Type = Tile.type
+| ZH = Z+Tile.height
+| DecoType = Tile.deco
+| Deco = $units_at{X,Y,ZH}.find{?type><DecoType}
+| less DecoDirs.all{DX,DY => $at{X-DX Y-DY Z}.type><Type}:
+  | when got Deco: Deco.free
+  | leave
+| when got Deco: leave
+| Deco = $players.0.alloc_unit{DecoType}
+| Deco.move{X,Y,ZH}
+| Deco.fxyz.init{Deco.fxyz+[-16 -16 0]}
+
 world.set X Y Z Tile =
+| Removed = $at{X Y Z}
 | $dirty_set{X Y Z Tile}
+//| when Removed.deco: 
+| when Tile.deco: //decoration
+  | for DX,DY DecoDirs: update_deco Me Tile X+DX Y+DY Z
 | $upd_column{X Y}
 
 world.fix_z XYZ =
