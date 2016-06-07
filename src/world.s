@@ -315,7 +315,8 @@ update_deco Me Tile X Y Z =
 world.set X Y Z Tile =
 | Removed = $at{X Y Z}
 | $dirty_set{X Y Z Tile}
-//| when Removed.deco: 
+| when Removed.deco:
+  | for DX,DY DecoDirs: update_deco Me Removed X+DX Y+DY Z
 | when Tile.deco: //decoration
   | for DX,DY DecoDirs: update_deco Me Tile X+DX Y+DY Z
 | $upd_column{X Y}
