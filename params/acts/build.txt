@@ -1,4 +1,5 @@
 icon: tab_build
+range: cross
 repeat: 1
 affects: any
 impact: build{target}
