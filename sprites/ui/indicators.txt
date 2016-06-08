@@ -1,1 +1,3 @@
-author: `Nikita Sadkov`,`Ironthunder (http://opengameart.org/users/ironthunder)`,`Blasphemer Team (https://code.google.com/archive/p/blasphemer/)`
+author: `Ironthunder (http://opengameart.org/users/ironthunder)`, `yinakoSGA (http://www.supergameasset.com)`, `Nikita Sadkov`
+license: CC-BY-SA
+origin: `http://opengameart.org/content/basic-rpg-item-icons-free`
