@@ -252,7 +252,7 @@ world.respawn_tile XYZ Type Delay =
 | S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
 
 world.excavate X Y Z PassageH Amount =
-| Work = $units_at{X,Y,Z}.find{?type><unit_work}
+| Work = $units_get{X,Y,Z}.find{?type><unit_work}
 | when no Work:
   | Work <= $players.0.alloc_unit{unit_work}
   | Work.move{X,Y,Z}
@@ -303,7 +303,7 @@ update_deco Me Tile X Y Z =
 | Type = Tile.type
 | ZH = Z+Tile.height
 | DecoType = Tile.deco
-| Deco = $units_at{X,Y,ZH}.find{?type><DecoType}
+| Deco = $units_get{X,Y,ZH}.find{?type><DecoType}
 | less DecoDirs.all{DX,DY => $at{X-DX Y-DY Z}.type><Type}:
   | when got Deco: Deco.free
   | leave
@@ -367,14 +367,14 @@ world.fxyz XYZ =
 | CellSize = $c
 | [XYZ.0*CellSize XYZ.1*CellSize XYZ.2*CellSize]
 
-world.units_at X,Y,Z = $cell{X Y Z}.units.unheap
+world.units_get X,Y,Z = $cell{X Y Z}.units.unheap
 
-world.column_units_at X Y = $cell{X Y 0}.units.unheap
+world.column_units_get X Y = $cell{X Y 0}.units.unheap
 
-world.no_block_at XYZ = $units_at{XYZ}.all{?empty}
+world.no_block_at XYZ = $units_get{XYZ}.all{?empty}
 
 world.block_at XYZ =
-| Block = $units_at{XYZ}.skip{?empty}
+| Block = $units_get{XYZ}.skip{?empty}
 | if Block.size then Block.head else No
 
 unit.explore V =
@@ -448,7 +448,7 @@ world.targets_in_range Center R =
   | X = XYZ.0
   | Y = XYZ.1
   | when X>0 and X<<$w and Y>0 and Y<<$h:
-    | for U $column_units_at{X Y}: when $seen_from{Center U.xyz}:
+    | for U $column_units_get{X Y}: when $seen_from{Center U.xyz}:
       | when (U.xyz.2-XYZ.2).abs<R*2:
         | push U Targets
 | Targets
@@ -530,7 +530,7 @@ world.updPilarGfxes X Y =
   | T <= Above
   | Cell <= Next
   | !Z+TH
-| for U $column_units_at{X Y}: U.environment_updated
+| for U $column_units_get{X Y}: U.environment_updated
 | $update_minimap{X Y}
 
 world.upd_column X Y =

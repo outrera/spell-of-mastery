@@ -26,7 +26,7 @@ view.mice_rect =
 | less MW>4 or MH>4: leave 0
 | [X Y MW MH]
 
-view.units_at XYZ = $world.units_at{XYZ}.skip{?mark}
+view.units_get XYZ = $world.units_get{XYZ}.skip{?mark}
 
 LMB_Count = 0
 AnchorHack = -1
@@ -44,7 +44,7 @@ place_object Me Bank Type =
 | Place = 1
 | for XX,YY,ZZ Class.form: when Place:
   | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
-  | Us = $world.units_at{XYZ}.skip{?bank><mark}
+  | Us = $world.units_get{XYZ}.skip{?bank><mark}
   | Place <= if not $world.valid{@XYZ} then 0
              else if not Class.empty then Us.all{?empty}
              else if PlaceRandom then Us.end
@@ -79,7 +79,7 @@ world_place_tile_walls Me X Y Z Tile =
 world_place_tile Me X Y Z Tile =
 | when X<1 or Y<1 or X>$w or Y>$h: leave
 | $set{X Y Z Tile}
-| for U $units_at{X,Y,Z}: U.move{X,Y,Z+Tile.height}
+| for U $units_get{X,Y,Z}: U.move{X,Y,Z+Tile.height}
 | world_place_tile_deco Me X Y Z Tile
 
 world_place_tile_deco Me X Y Z Tile =
@@ -151,11 +151,11 @@ remove_object_or_tile Me =
 | X,Y,Z = $cursor
 | Brush = $brush
 | T = $world.at{X Y Z-1}
-| Us = $units_at{X,Y,Z}
+| Us = $units_get{X,Y,Z}
 | when T.unit and not Us.size:
   | while $world.at{X Y Z}.type >< T.type: !Z+1
   | ZZ = Z - T.height
-  | BelowUs = $units_at{X,Y,ZZ}
+  | BelowUs = $units_get{X,Y,ZZ}
   | when BelowUs.size:
     | $mice_click <= 0
     | for U BelowUs: U.free
@@ -175,7 +175,7 @@ remove_object_or_tile Me =
       | less Tile.height: leave
       | $world.clear_tile{X Y Z-1}
       | $cursor.2 <= $fix_z{$cursor}
-      | for U $world.units_at{X,Y,Z}: U.move{$cursor}
+      | for U $world.units_get{X,Y,Z}: U.move{$cursor}
 
 view.update_brush =
 | when $mice_click><leftup or $mice_click><rightup:
@@ -190,7 +190,7 @@ Unmarking = No
 
 mark_tile Me =
 | X,Y,Z = $cursor
-| Work = $world.column_units_at{X Y}.find{
+| Work = $world.column_units_get{X Y}.find{
     (?type><unit_work and not ?goal)}
 | when got Work:
   | when Unmarking<>0:
@@ -252,7 +252,7 @@ world.update_cursor =
     | ClassName = "[Bank]_[Type]"
     | Class = $main.classes.ClassName
     | XYZ = CXYZ //+ if Mirror then [-Y X Z] else [X -Y Z]
-    | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_at{XYZ}
+    | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_get{XYZ}
     | Place = if not Us then 0
               else if Class.unit then not Us.any{?unit}
               else not Us.any{?class^address >< Class^address}

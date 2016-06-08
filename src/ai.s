@@ -105,7 +105,7 @@ roam Me =
 | free_blockers = for B Blockers: B.free
 | Check = Dst =>
   | MoveIn = 0
-  | Vs = World.units_at{Dst}
+  | Vs = $world.cell{Dst.0 Dst.1 Dst.2}.units
   | for V Vs
     | AI = V.ai
     | when AI:
@@ -172,7 +172,7 @@ ai.update_units =
      | less Handled:
        | Attacker = U.damage and U.attacker
        | when Attacker:
-         | Os = U.world.units_at{U.xyz}
+         | Os = U.world.units_get{U.xyz}
          | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
            | less U.flyer: when ai_cast_flight U:
              | U.ai_wait <= 40

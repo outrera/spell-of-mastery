@@ -32,7 +32,7 @@ effect mod Arg: Target.mod <= Arg
 
 effect tenant_mark Type:
 | Block = $world.block_at{TargetXYZ}
-| S = $world.units_at{TargetXYZ}.find{?type><Type}
+| S = $world.units_get{TargetXYZ}.find{?type><Type}
 | less got Block:
   | when got S:
     | S.delta <= 50
@@ -102,7 +102,7 @@ effect effect Effect:
 
 effect effect1 Effect:
 | Type = "effect_[Effect]"
-| E = $world.units_at{TargetXYZ}.find{?type><Type}
+| E = $world.units_get{TargetXYZ}.find{?type><Type}
 | when got E: leave
 | $world.effect{TargetXYZ Effect}
 
@@ -276,7 +276,7 @@ effect remove Whom: case Whom
   self | Me.free
   X,Y,Z | U = $world.block_at{X,Y,Z}
         | when got U: U.free
-  neib,Type | for U $world.units_at{$xyz}: when U.type><Type: U.free
+  neib,Type | for U $world.units_get{$xyz}: when U.type><Type: U.free
   Serial | U = $world.units.find{?serial><Serial}
          | when got U and U.xyz.2<>-1: U.free
 
@@ -297,7 +297,7 @@ effect store How:
 | $strip_effect{store_}
 | [ItemType Amount BackXYZ] = S
 | Amount <= min $get_item{ItemType} Amount
-| Pile = $world.units_at{TargetXYZ}.find{(?type><pile)}
+| Pile = $world.units_get{TargetXYZ}.find{(?type><pile)}
 | less got Pile:
   | Pile <= $owner.alloc_unit{item_pile}
   | Pile.move{TargetXYZ}
@@ -312,7 +312,7 @@ do_excavate Me TargetXYZ =
 | when Mark and $world.excavate{X Y Z 2 (max $worker 1)}:
   | Mark.free
   | Mark <= 0
-  | Item = $world.units_at{TargetXYZ}.find{(?item><resource)}
+  | Item = $world.units_get{TargetXYZ}.find{(?item><resource)}
   | when got Item:
     | ItemType = Item.type
     | Amount = max 1 $get_effect_value{amount}
@@ -351,7 +351,7 @@ effect excavate How: do_excavate Me TargetXYZ
 
 effect build Where:
 | X,Y,Z = TargetXYZ
-| Work = $world.units_at{X,Y,Z}.find{(?type><unit_work and ?goal)}
+| Work = $world.units_get{X,Y,Z}.find{(?type><unit_work and ?goal)}
 | when got Work:
   | TileType = Work.kills
   | Tile = $main.tiles.TileType

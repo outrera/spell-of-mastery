@@ -232,7 +232,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LX = LX.clip{-127 127}
 | LY = LY.clip{-127 127}
 | SkipZ = -1//if $brush.0 then -1 else 0
-| Us = Wr.column_units_at{X Y}
+| Us = Wr.column_units_get{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
 //| draw_text FB BX+XUnit2 BY-ZUnit*Z-20 "[Explored]"
 | for U Us:
@@ -567,7 +567,7 @@ view.draw_indicators =
 | TileName = "[$world.at{X Y Z-1}.type]"
 | Font = font small
 | Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[TileName]"}
-| Us = $world.units_at{X,Y,Z}.skip{?empty}
+| Us = $world.units_get{X,Y,Z}.skip{?empty}
 | less Us.end:
   | U = Us.0
   | S = "[U.type]"

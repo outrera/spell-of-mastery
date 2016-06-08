@@ -95,7 +95,8 @@ unit.mark = $flags^get_bit{16}
 unit.`!mark` State = $flags <= $flags^set_bit{16 State}
 
 unit.child Type =
-| $world.units_at{$xyz}.find{(?host and ?type><Type and ?host.serial><$serial)}
+| $world.units_get{$xyz}
+        .find{(?host and ?type><Type and ?host.serial><$serial)}
 
 unit.is_enemy Target = $owner.is_enemy{Target.owner}
 
@@ -170,7 +171,7 @@ unit.update_move_method =
 
 unit.move_in State =
 | when $ai <> unit: leave
-| for U $world.units_at{$xyz}: when U.item.is_list:
+| for U $world.units_get{$xyz}: when U.item.is_list:
   | U.effect{U.item Me Me.xyz}
 
 //FIXME: when serials get exhausted, compress serial space

@@ -25,7 +25,7 @@ reinit_units Us =
 
 handle_attack_triggers Us =
 | for U Us
-  | Os = U.world.units_at{U.xyz}
+  | Os = U.world.units_get{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}
   | when got AttackTrigger and U.ai<>attack:
     | U.attacker <= 1
@@ -121,8 +121,9 @@ update_events Me =
 update_units_effects Me Units =
 | Cycle = $cycle
 | for U Units: less U.removed:
-  | less U.empty: when U.class.hp>0: for V $units_at{U.xyz}: less V.effects.end:
-    | V.run_effects{(X=>case X [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
+  | less U.empty: when U.class.hp>0:
+    | for V $units_get{U.xyz}: less V.effects.end:
+      | V.run_effects{(X=>case X [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
   | less U.effects.end:
     | U.run_effects{(X=>case X [`.`cycle N] Cycle%N><0) U U.xyz}
     | when U.idle: U.run_effects{(X=>case X [`.`idle N] Cycle%N><0) U U.xyz}
@@ -184,7 +185,7 @@ find_path_around_busy_units Me XYZ =
 | OID = $owner.id
 | check DXYZ =
   | if DXYZ><XYZ then 1
-    else | Us = $world.units_at{DXYZ}.skip{?empty}
+    else | Us = $world.units_get{DXYZ}.skip{?empty}
          | R = 0
          | when Us.size
            | U = Us.0
@@ -231,7 +232,7 @@ unit_check_move Me Dst =
 update_path_move Me XYZ =
 | M = unit_check_move Me XYZ
 | less M: leave 0
-| Us = $world.units_at{XYZ}.skip{?empty}
+| Us = $world.units_get{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
 | when Target and Target.owner.id >< $owner.id
        // good idea would be pushing ranged unit forward, so other rangers
@@ -387,7 +388,7 @@ attack_nearby_enemy Me =
 | UXY = $xyz.take{2}
 | check X Y =
   | R = 0
-  | for B $world.column_units_at{X Y}.skip{?empty}
+  | for B $world.column_units_get{X Y}.skip{?empty}
     | when O.is_enemy{B.owner}
            and B.health
            and (UXY-[X Y]).abs.int << SightF
@@ -434,7 +435,7 @@ unit.update =
 | update_anim Me
 | when $idle:
   | less $empty:
-    | B = $world.units_at{$xyz}.skip{U => U.empty or U.id><$id}
+    | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}
     | less B.end: when B.0.idle:
       | Found = $world.pathfind{100 Me $xyz | Dst => no $world.block_at{Dst}}
       | when Found: $order_at{Found.1}
