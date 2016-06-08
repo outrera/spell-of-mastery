@@ -6,7 +6,7 @@ NoteLife = 1.0
 
 type efx when name amount params
 
-CELL_ELTS = 3
+CELL_ELTS = 4
 Cells =
 
 //FIXME: such structs could be defined with a macro
@@ -16,6 +16,8 @@ int.units = Cells.(Me+1)
 int.`!units` V = Cells.(Me+1) <= V
 int.gfx = Cells.(Me+2)
 int.`!gfx` V = Cells.(Me+2) <= V
+int.block = Cells.(Me+3) //unit blocking the tile
+int.`!block` V = Cells.(Me+3) <= V
 int.up N = Me+N*CELL_ELTS
 int.up1 = Me+CELL_ELTS
 
@@ -261,15 +263,14 @@ world.excavate X Y Z PassageH Amount =
 | Tile = $at{X Y Z}
 | when $at{X Y Z}.unit:
   | B = $block_at{X,Y,Z}
-  | when got B:
-    | when Work.hp >> B.class.hp:
-      | when B.death: Work.effect{B.death Work X,Y,Z}
-      | B.free
-      | Work.free
-      | leave 1
-    | when B.hit: Work.effect{B.hit Work X,Y,Z}
-    | leave 0
-  | leave 1
+  | less B: leave 1
+  | when Work.hp >> B.class.hp:
+    | when B.death: Work.effect{B.death Work X,Y,Z}
+    | B.free
+    | Work.free
+    | leave 1
+  | when B.hit: Work.effect{B.hit Work X,Y,Z}
+  | leave 0
 | when Work.hp < Tile.hp:
   | when Tile.hit: Work.effect{Tile.hit Work X,Y,Z}
   | leave 0
@@ -371,11 +372,9 @@ world.units_get X,Y,Z = $cell{X Y Z}.units.unheap
 
 world.column_units_get X Y = $cell{X Y 0}.units.unheap
 
-world.no_block_at XYZ = $units_get{XYZ}.all{?empty}
+world.block_at XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
-world.block_at XYZ =
-| Block = $units_get{XYZ}.skip{?empty}
-| if Block.size then Block.head else No
+world.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
 unit.explore V =
 | Sight = $sight
@@ -397,6 +396,7 @@ world.place_unitS U =
 | Cell.units <= Cell.units.cons{U}
 | Cell <= Cell.up{Z}
 | Cell.units <= Cell.units.cons{U}
+| less U.empty: Cell.block <= U
 
 world.place_unit U =
 | XYZ = U.xyz.copy
@@ -419,8 +419,12 @@ world.remove_unitS U =
 | K.heapfree
 | Cell <= Cell.up{Z}
 | K = Cell.units
-| Cell.units <= K.unheap.skip{?id><U.id}.enheap
+| Us = K.unheap.skip{?id><U.id}
+| Cell.units <= Us.enheap
 | K.heapfree
+| less U.empty:
+  | Cell.block <= 0
+  | for U Us: less U.empty: Cell.block <= U
 
 world.remove_unit U =
 | XYZ = U.xyz.copy

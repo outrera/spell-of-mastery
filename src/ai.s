@@ -110,14 +110,14 @@ roam Me =
     | AI = V.ai
     | when AI:
       | Block = World.block_at{Dst}
-      | if AI><unit and got Block and Owner.is_enemy{Block.owner}
+      | if AI><unit and Block and Owner.is_enemy{Block.owner}
            and not Block.invisible then
            | MoveIn <= 1
-        else if AI><hold and no Block and no Vs.find{?ai><unhold}
+        else if AI><hold and not Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
         else if AI><pentagram and Owner.is_enemy{V.owner} then
-           | when no Block or Owner.is_enemy{Block}: MoveIn <= 1
-        else if AI><avoid and no Block then //FIXME: blocking code is broken
+           | when not Block or Owner.is_enemy{Block}: MoveIn <= 1
+        else if AI><avoid and not Block then //FIXME: blocking code is broken
            | block Dst
            | MoveIn <= \block
            | _goto end 

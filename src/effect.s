@@ -33,7 +33,7 @@ effect mod Arg: Target.mod <= Arg
 effect tenant_mark Type:
 | Block = $world.block_at{TargetXYZ}
 | S = $world.units_get{TargetXYZ}.find{?type><Type}
-| less got Block:
+| less Block:
   | when got S:
     | S.delta <= 50
     | when S.alpha><255
@@ -58,7 +58,7 @@ effect btrack XYZ:
   | $backtrack <= 0
   | leave
 | B = $world.block_at{XYZ}
-| when got B and not B.idle: leave
+| when B and not B.idle: leave
 | $order_at{XYZ}
 
 effect gain @Args:
@@ -142,7 +142,7 @@ effect neibs Args:
 | DD = D.1,D.0,D.2
 | for XYZ [$xyz+DD $xyz-DD]
   | B = $world.block_at{XYZ}
-  | when got B: $effect{Es B B.xyz}
+  | when B: $effect{Es B B.xyz}
 
 effect counter Arg:
 | when $range><cross or not $range:
@@ -275,7 +275,7 @@ effect remove Whom: case Whom
   target | Target.free
   self | Me.free
   X,Y,Z | U = $world.block_at{X,Y,Z}
-        | when got U: U.free
+        | when U: U.free
   neib,Type | for U $world.units_get{$xyz}: when U.type><Type: U.free
   Serial | U = $world.units.find{?serial><Serial}
          | when got U and U.xyz.2<>-1: U.free
@@ -403,7 +403,7 @@ effect set_tile [X Y Z] Type:
 
 effect retile [X Y Z] Type:
 | B = $world.block_at{[X Y Z]}
-| when got B:
+| when B:
   | if B.owner.pentagram
     then B.order_act{recall target/B}
     else B.die // crushed!

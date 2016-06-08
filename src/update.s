@@ -217,13 +217,13 @@ unit_check_move Me Dst =
     | when Tile.excavate: leave excavate
     | when Tile.unit
       | B = $world.block_at{X,Y,Z}
-      | when got B and B.ai><remove: leave excavate
+      | when B and B.ai><remove: leave excavate
   | leave 0
 | Below = $world.at{X Y $world.fix_z{X,Y,Z}-1}
 | when Below.type><water:
   | less $flyer or $amphibian or $swimmer: leave 0
 | B = $world.block_at{Dst}
-| when no B: leave move
+| less B: leave move
 | if $owner.id <> B.owner.id
   then when B.alive and $damage: leave attack
   else when B.speed and B.can_move{}{B Dst Src}: leave swap
@@ -437,7 +437,7 @@ unit.update =
   | less $empty:
     | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}
     | less B.end: when B.0.idle:
-      | Found = $world.pathfind{100 Me $xyz | Dst => no $world.block_at{Dst}}
+      | Found = $world.pathfind{100 Me $xyz | Dst => not $world.block_at{Dst}}
       | when Found: $order_at{Found.1}
   | UpdatePathHangTrap <= 0
   | update_path Me

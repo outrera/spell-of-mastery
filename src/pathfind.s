@@ -17,7 +17,7 @@ unit.list_moves Src =
     | less CanMove{Me Src Dst}: Dst <= 0
   | when Dst:
     | B = $world.block_at{Dst} //FIXME: could be optimized
-    | if got B then
+    | if B then
         | if $owner.id <> B.owner.id
           then if B.alive and $damage and (SZ-Dst.2).abs<<1
                then push Dst Ms //attack
@@ -105,7 +105,7 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
           | when BestXYZ><TargetXYZ: _goto end
           | less $at{@TargetXYZ}.empty: _goto end
           | B = $block_at{TargetXYZ}
-          | when got B:
+          | when B:
             | less B.speed: _goto end
             | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
       | X,Y,Z = DXYZ

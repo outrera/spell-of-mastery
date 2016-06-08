@@ -90,7 +90,7 @@ player_lost_leader Me Leader =
 
 respawn_leader Me XYZ =
 | Block = $world.block_at{XYZ}
-| when got Block and $owner.is_enemy{Block.owner}: leave 0
+| when Block and $owner.is_enemy{Block.owner}: leave 0
 | when $owner.mana << 0: leave 0
 | Cost = $main.params.world.death_cost
 | !$owner.mana - Cost
@@ -179,10 +179,10 @@ custom_valid Me =
     else if A >< ally then
      | when HasTarget and not $unit.owner.is_enemy{T.owner}: leave 1
     else if A >< empty then
-     | when no $unit.world.block_at{$xyz}: leave 1
+     | less $unit.world.block_at{$xyz}: leave 1
     else if A >< ally_block then
      | Block = $unit.world.block_at{$xyz}
-     | when got Block and not $unit.owner.is_enemy{Block.owner}: leave 1
+     | when Block and not $unit.owner.is_enemy{Block.owner}: leave 1
     else if A >< area then leave 1
     else $unit.owner.notify{"custom.valid: bad affects specifier - [A]"}
 | 0
