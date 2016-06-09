@@ -36,22 +36,14 @@ node_to_path Node =
   | Node <= Prev
 | Path.tail.list
 
-PFMap = dup 134: dup 134: dup 64: #FFFFFFFFFFFF
 PFQueue = queue 256*256
-PFCount = #FFFFFF
-
-pf_reset_count =
-| for Ys PFMap: for Xs Ys: Xs.init{#FFFFFFFFFFFF}
-| PFCount <= #FFFFFF
 
 world.pathfind MaxCost U XYZ Check =
 | less U.speed: leave 0
 | X,Y,Z = XYZ
-| !PFCount-1
-| less PFCount: pf_reset_count
-| StartCost = PFCount*#1000000
+| StartCost = $new_visit
 | !MaxCost+StartCost
-| PFMap.X.Y.Z <= StartCost
+| $cell{X Y Z}.visited <= StartCost
 | PFQueue.push{[0 XYZ StartCost]}
 | R = 0
 //| StartTime = clock
@@ -60,17 +52,17 @@ world.pathfind MaxCost U XYZ Check =
   | Prev,XYZ,Cost = Node
   | when Cost<MaxCost:
     | NextCost = Cost+1
-    | for Dst U.list_moves{XYZ}:
-      | X,Y,Z = Dst
-      | MXY = PFMap.X.Y
-      | C = Check Dst
+    | for DXYZ U.list_moves{XYZ}:
+      | X,Y,Z = DXYZ
+      | Cell = $cell{X Y Z}
+      | C = Check DXYZ
       | when C:
-        | if C><block then NextCost <= MXY.Z //high cost blocks it
-          else | R <= [Node Dst $block_at{Dst}]
+        | if C><block then NextCost <= Cell.visited //high cost blocks it
+          else | R <= [Node DXYZ $block_at{DXYZ}]
                | _goto end
-      | when NextCost < MXY.Z:
-        | MXY.Z <= NextCost
-        | PFQueue.push{[Node Dst NextCost]}
+      | when NextCost < Cell.visited:
+        | Cell.visited <= NextCost
+        | PFQueue.push{[Node DXYZ NextCost]}
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime
@@ -80,11 +72,9 @@ world.pathfind MaxCost U XYZ Check =
 world.pathfind_closest MaxCost U XYZ TargetXYZ =
 | less U.speed: leave 0
 | X,Y,Z = XYZ
-| !PFCount-1
-| less PFCount: pf_reset_count
-| StartCost = PFCount*#1000000
+| StartCost = $new_visit
 | !MaxCost+StartCost
-| PFMap.X.Y.Z <= StartCost
+| $cell{X Y Z}.visited <= StartCost
 | PFQueue.push{[0 XYZ StartCost]}
 | BestXYZ = XYZ
 | TargetXY = TargetXYZ.take{2}
@@ -109,9 +99,9 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
             | less B.speed: _goto end
             | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
       | X,Y,Z = DXYZ
-      | MXY = PFMap.X.Y
-      | when NextCost < MXY.Z
-        | MXY.Z <= NextCost
+      | Cell = $cell{X Y Z}
+      | when NextCost < Cell.visited:
+        | Cell.visited <= NextCost
         | PFQueue.push{[Node DXYZ NextCost]}
 | _label end
 | PFQueue.clear
