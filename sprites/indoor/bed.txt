@@ -1,0 +1,7 @@
+author: `Tim Jonsson`
+copyright: `Nikita Sadkov`
+//xy: -12,12
+//form: | 4 4
+//class: empty,0,height,1,aux,1
+xy: 16,32
+class: empty,1,height,1,aux,1

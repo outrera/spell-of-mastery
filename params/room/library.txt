@@ -1,6 +1,6 @@
 sprite: tiles_library
 match: same,corner
-deco: indoor_bookshelf
+deco: 3,(1 1 1),(1 1 1),0,indoor_bookshelf
 embed: 1
 height: 1
 1111: 8

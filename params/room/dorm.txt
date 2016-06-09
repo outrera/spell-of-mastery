@@ -1,0 +1,5 @@
+sprite: tiles_room_bridge
+// ((0 1) (0 0) (1 1) (1 0))
+deco: 5,(0 0 2),(0 1 1),(),indoor_bed
+1111: 0
+embed: 1

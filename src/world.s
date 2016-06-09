@@ -6,7 +6,7 @@ NoteLife = 1.0
 
 type efx when name amount params
 
-CELL_ELTS = 4
+CELL_ELTS = 5
 Cells =
 
 //FIXME: such structs could be defined with a macro
@@ -18,8 +18,11 @@ int.gfx = Cells.(Me+2)
 int.`!gfx` V = Cells.(Me+2) <= V
 int.block = Cells.(Me+3) //unit blocking the tile
 int.`!block` V = Cells.(Me+3) <= V
+int.visited = Cells.(Me+4)
+int.`!visited` V = Cells.(Me+4) <= V
 int.up N = Me+N*CELL_ELTS
 int.up1 = Me+CELL_ELTS
+//FIXME: we can do X,Y,Z, north,east,south,west
 
 type world{main}
    w //width
@@ -59,6 +62,7 @@ type world{main}
    sound_cycles/(t) //used to avoid playing similar sounds at once
    blink/[0 0]
    minimap/0
+   visited/#FFFFFF
 | $init
 
 world.init =
@@ -82,6 +86,7 @@ world.init =
   | Cell = CELL_ELTS*I
   | Cell.tile <= Void
   | Cell.units <= []
+  | Cell.visited <= #FFFFFFFFFFFF
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -95,6 +100,15 @@ world.init =
 | $nil <= $players.0.alloc_unit{unit_nil}
 | $main.params.unit_setters_ <=
   | ($nil)^methods_.keep{?0.0 >< '!'}{[?0.tail ?1]}.table
+
+world.new_visit =
+| !$visited - 1
+| less $visited:
+  | for I Cells.size/CELL_ELTS
+    | Cell = CELL_ELTS*I
+    | Cell.visited <= #FFFFFFFFFFFF
+  | $visited <= #FFFFFF
+| $visited*#1000000
 
 world.create W H =
 | $w <= W
@@ -297,29 +311,71 @@ world.dirty_set X Y Z Tile =
 | times I H: $set_{X Y Z+I Ps.I} // push padding
 | $set_{X Y Z+H Tile}
 
+DecoDirs = list
+   [[0 0]]
+   [[0 0]]
+   [[0 0] [-1 -1] [-1 0] [0 -1]]
+   [[-1 1] [-1 0] [-1 -1]
+    [ 0 1] [ 0 0] [ 0 -1]
+    [ 1 1] [ 1 0] [ 1 -1]]
+   [[0 0]]
+   [[ 0 1] [ 0 0] [ 0 -1]
+    [ 1 1] [ 1 0] [ 1 -1]
+    [ 2 1] [ 2 0] [ 2 -1]]
 
-DecoDirs = [[0 0] [1 1] [1 0] [0 1]]
+linked_tiles2dS Me Cost X Y Check =
+| Cell = $cell{X Y 0}
+| when Cell.visited><Cost: leave []
+| Cell.visited <= Cost
+| less Check X Y: leave []
+| Rs = [[X Y]]
+| for DX,DY Dirs4: for R linked_tiles2dS{Me Cost X+DX Y+DY Check}: push R Rs
+| Rs
 
-update_deco Me Tile X Y Z =
+linked_tiles2d Me X Y Check =
+| linked_tiles2dS Me $new_visit X Y Check
+
+points_rect Ps =
+| X = Ps{?0}.min
+| Y = Ps{?1}.min
+| [X Y Ps{?0}.max+1-X Ps{?1}.max+1-Y]
+
+update_deco Me Tile Z Ps =
 | Type = Tile.type
 | ZH = Z+Tile.height
-| DecoType = Tile.deco
-| Deco = $units_get{X,Y,ZH}.find{?type><DecoType}
-| less DecoDirs.all{DX,DY => $at{X-DX Y-DY Z}.type><Type}:
-  | when got Deco: Deco.free
-  | leave
-| when got Deco: leave
-| Deco = $players.0.alloc_unit{DecoType}
-| Deco.move{X,Y,ZH}
-| Deco.fxyz.init{Deco.fxyz+[-16 -16 0]}
+| DSize,OX,OY,Params,DecoType = Tile.deco
+| Single = 0
+| when Params: for P Params: case P
+  single | Single <= 1
+| MY,MX,W,H = points_rect Ps
+| XYs = points{MX MY W H}
+| for X,Y XYs:
+  | D = $units_get{X,Y,ZH}.find{?type><DecoType}
+  | when got D: D.free
+| Ds = if DSize.is_list then DSize else DecoDirs.DSize
+| Y = MY + OY.0
+| EY = Y + H-OY.1
+| while Y < EY:
+  | X = MX + OX.0
+  | EX = X + W-OX.1
+  | while X < EX:
+    | when Ds.all{DX,DY => $at{X+DX Y+DY Z}.type><Type}
+      | Deco = $players.0.alloc_unit{DecoType}
+      | Deco.move{X,Y,ZH}
+      //| Deco.fxyz.init{Deco.fxyz-[FOff.0 FOff.1 0]}
+    | !X + OX.2
+  | !Y + OY.2
 
 world.set X Y Z Tile =
 | Removed = $at{X Y Z}
+| DecoTs = 0
+| when Removed.deco and Removed.type<>Tile.type:
+  | DecoTs <= linked_tiles2d Me X Y: X Y => $at{X Y Z}.type><Removed.type
 | $dirty_set{X Y Z Tile}
-| when Removed.deco:
-  | for DX,DY DecoDirs: update_deco Me Removed X+DX Y+DY Z
-| when Tile.deco: //decoration
-  | for DX,DY DecoDirs: update_deco Me Tile X+DX Y+DY Z
+| when DecoTs: update_deco Me Removed Z DecoTs
+| when Tile.deco:
+  | DecoTs <= linked_tiles2d Me X Y: X Y => $at{X Y Z}.type><Tile.type
+  | update_deco Me Tile Z DecoTs
 | $upd_column{X Y}
 
 world.fix_z XYZ =

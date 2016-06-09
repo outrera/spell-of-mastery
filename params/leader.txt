@@ -34,4 +34,4 @@ spells:
        cast_haste cast_slow cast_paralyze
        spell_of_mastery)
 
-rooms: (room_demolish room_bridge room_storage room_treasury room_library)
+rooms: (room_demolish room_bridge room_storage room_treasury room_library room_dorm)
