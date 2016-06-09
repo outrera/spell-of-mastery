@@ -347,7 +347,7 @@ update_deco Me Tile Z Ps =
 | Single = 0
 | when Params: for P Params: case P
   single | Single <= 1
-| MY,MX,W,H = points_rect Ps
+| MX,MY,W,H = points_rect Ps
 | XYs = points{MX MY W H}
 | for X,Y XYs:
   | D = $units_get{X,Y,ZH}.find{?type><DecoType}
