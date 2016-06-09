@@ -7,16 +7,14 @@ unit.list_moves Src =
 | Ms = []
 | SX,SY,SZ = Src
 | CanMove = $can_move
-| for DX,DY Dirs4
-  | X = SX+DX
-  | Y = SY+DY
+| for Cell $world.cell{SX SY SZ}.neibs
   | Dst = 0
-  | less $world.at{X Y SZ}.type >< border_:
-    | Dst <= X,Y,SZ
-    | Dst.2 <= $world.fix_z{Dst}
+  | less Cell.tile.type >< border_:
+    | Cell <= Cell.fix_z
+    | Dst <= Cell.xyz
     | less CanMove{Me Src Dst}: Dst <= 0
   | when Dst:
-    | B = $world.block_at{Dst} //FIXME: could be optimized
+    | B = Cell.block
     | if B then
         | if $owner.id <> B.owner.id
           then if B.alive and $damage and (SZ-Dst.2).abs<<1
@@ -26,7 +24,6 @@ unit.list_moves Src =
                | push Dst Ms //FIXME: consider moving B back
       else push Dst Ms
 | Ms
-
 
 node_to_path Node =
 | Path = []
@@ -43,7 +40,8 @@ world.pathfind MaxCost U XYZ Check =
 | X,Y,Z = XYZ
 | StartCost = $new_visit
 | !MaxCost+StartCost
-| $cell{X Y Z}.visited <= StartCost
+| StartCell = $cell{X Y Z}
+| StartCell.visited <= StartCost
 | PFQueue.push{[0 XYZ StartCost]}
 | R = 0
 //| StartTime = clock
@@ -74,7 +72,8 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
 | X,Y,Z = XYZ
 | StartCost = $new_visit
 | !MaxCost+StartCost
-| $cell{X Y Z}.visited <= StartCost
+| StartCell = $cell{X Y Z}
+| StartCell.visited <= StartCost
 | PFQueue.push{[0 XYZ StartCost]}
 | BestXYZ = XYZ
 | TargetXY = TargetXYZ.take{2}

@@ -8,6 +8,10 @@ type efx when name amount params
 
 CELL_ELTS = 5
 Cells =
+WorldSize = 1 //max world size
+WorldDepth = 1
+CellsLineSize = 1
+CellsPilarSize = 1
 
 //FIXME: such structs could be defined with a macro
 int.tile = Cells.Me
@@ -22,7 +26,24 @@ int.visited = Cells.(Me+4)
 int.`!visited` V = Cells.(Me+4) <= V
 int.up N = Me+N*CELL_ELTS
 int.up1 = Me+CELL_ELTS
-//FIXME: we can do X,Y,Z, north,east,south,west
+int.down1 = Me-CELL_ELTS
+int.xyz =
+| N = Me/CELL_ELTS
+| [N/WorldDepth%WorldSize Me/CellsLineSize N%WorldDepth]
+int.north = Me-CellsLineSize
+int.south = Me+CellsLineSize
+int.west = Me-CellsPilarSize
+int.east = Me+CellsPilarSize
+int.neibs = [Me-CellsLineSize Me+CellsLineSize
+             Me-CellsPilarSize Me+CellsPilarSize]
+int.fix_z =
+| Cell = Me
+| till Cell.tile.empty: Cell <= Cell.up1
+| Cell <= Cell.down1
+| while Cell.tile.empty: Cell <= Cell.down1
+| Cell <= Cell.up1
+| Cell
+
 
 type world{main}
    w //width
@@ -70,7 +91,11 @@ world.init =
 | $minimap <= gfx 128 128
 | WParam = $main.params.world
 | $d <= WParam.depth
+| WorldDepth <= $d
 | $maxSize <= WParam.max_size+12 //FIXME: get rid of this 12 margin
+| WorldSize <= $maxSize
+| CellsPilarSize <= WorldDepth*CELL_ELTS
+| CellsLineSize <= WorldSize*CellsPilarSize
 | MaxUnits <= WParam.max_units
 | NoteSize = WParam.note_size
 | NoteLife <= WParam.note_life
@@ -378,13 +403,7 @@ world.set X Y Z Tile =
   | update_deco Me Tile Z DecoTs
 | $upd_column{X Y}
 
-world.fix_z XYZ =
-| X,Y,Z = XYZ
-| till $at{X Y Z}.empty: !Z+1
-| !Z-1
-| while $at{X Y Z}.empty: !Z-1
-| !Z+1
-| Z
+world.fix_z XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.fix_z/CELL_ELTS%WorldDepth
 
 world.fix_z_void XYZ =
 | X,Y,Z = XYZ
