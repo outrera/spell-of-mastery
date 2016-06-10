@@ -30,6 +30,7 @@ int.`!visited` V = CellsVisited.Me <= V
 int.prev = CellsPrev.Me
 int.`!prev` V = CellsPrev.Me <= V
 int.xyz = [Me/WorldDepth%WorldSize Me/CellsLineSize Me%WorldDepth]
+int.z = Me%WorldDepth
 int.north = Me-CellsLineSize
 int.south = Me+CellsLineSize
 int.west = Me-WorldDepth
@@ -49,6 +50,7 @@ int.path =
   | push Cell.xyz Path
   | Cell <= Cell.prev
 | Path.tail.list
+list.cell = (Me.1*WorldSize+Me.0)*WorldDepth+Me.2
 
 
 type world{main}

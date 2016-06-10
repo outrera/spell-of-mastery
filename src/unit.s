@@ -116,58 +116,34 @@ unit.health =
 | R
 
 land_can_move Me Src Dst =
-| DX,DY,DZ = Dst
-| SZ = Src.2
-| Z = DZ-SZ
-| when Z.abs > 1: leave 0
-| less $world.at{DX DY DZ}.empty: leave 0
-| not $world.at{DX DY DZ-1}.liquid
+| H = Dst.z-Src.z
+| when H > 1 or H < -1: leave 0
+| Dst.tile.empty and not (Dst-1).tile.liquid
 
 amphibian_can_move Me Src Dst =
-| DX,DY,DZ = Dst
-| SZ = Src.2
-| Z = DZ-SZ
-| when Z.abs > 1: leave 0
-| $world.at{DX DY DZ}.empty
+| H = Dst.z-Src.z
+| when H > 1 or H < -1: leave 0
+| Dst.tile.empty
 
 swimmer_can_move Me Src Dst =
-| DX,DY,DZ = Dst
-| SZ = Src.2
-| Z = DZ-SZ
-| when Z.abs > 1: leave 0
-| less $world.at{DX DY DZ}.empty: leave 0
-| $world.at{DX DY DZ-1}.type >< water
+| H = Dst.z-Src.z
+| when H > 1 or H < -1: leave 0
+| Dst.tile.empty and (Dst-1).tile.type><water
 
 flyer_can_move Me Src Dst =
-| DX,DY,DZ = Dst
-| Wr = $world
-| less Wr.at{DX DY DZ}.empty: leave 0
-| SX,SY,SZ = Src
-| when SZ<DZ: leave (DZ-SZ).list.all{I => Wr.at{SX SY SZ+I}.empty}
-| (SZ-DZ).list.all{I => Wr.at{DX DY DZ+I}.empty}
-
-worker_can_move Me Src Dst =
-| DX,DY,DZ = Dst
-| SZ = Src.2
-| Z = DZ-SZ
-| when Z.abs > 1: leave 0
-| Tile = $world.at{DX DY DZ}
-| when Tile.empty: leave $world.at{DX DY DZ-1}.type <> water
-| when Tile.excavate:
-  | when ($world.fix_z{DX,DY,DZ}-DZ)<5: leave 0
-  | leave $owner.excavate_mark{DX DY DZ} 
-| when Tile.unit:
-  | B = $world.block_at{DX,DY,DZ}
-  | when B and B.ai><remove: leave 1
-| 0
+| less Dst.tile.empty: leave 0
+| SZ = Src.z
+| DZ = Dst.z
+| if SZ<DZ
+  then times I DZ-SZ: less (Src+I).tile.empty: leave 0
+  else times I SZ-DZ: less (Dst+I).tile.empty: leave 0
+| 1
 
 unit.update_move_method =
 | $can_move <= if $flyer then &flyer_can_move
                else if $amphibian then &amphibian_can_move
                else if $swimmer then &swimmer_can_move
-               else if $worker then &worker_can_move
                else &land_can_move
-
 
 unit.move_in State =
 | when $ai <> unit: leave
@@ -437,7 +413,7 @@ set_goal Me Act Target =
 unit.order_at XYZ act/0 =
 | when $xyz >< XYZ:
   | when Act and normalize_act{Me Act}.type<>move:
-    | Ms = $list_moves{$xyz}
+    | Ms = $list_moves{$cell}
     | less Ms.end:
       | set_goal Me Act $xyz
       | $set_path{[Ms.0 $xyz]}

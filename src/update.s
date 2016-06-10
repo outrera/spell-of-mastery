@@ -227,7 +227,8 @@ unit_check_move Me Dst =
 | less B: leave move
 | if $owner.id <> B.owner.id
   then when B.alive and $damage: leave attack
-  else when B.speed and B.can_move{}{B Dst Src}: leave swap
+  else when B.speed and B.can_move{}{B Dst.cell Src.cell}:
+       | leave swap
 | 0
 
 update_path_move Me XYZ =

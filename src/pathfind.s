@@ -5,19 +5,16 @@ use queue util
 
 unit.list_moves Src =
 | Ms = []
-| SX,SY,SZ = Src
 | CanMove = $can_move
-| for Cell $world.cell{SX SY SZ}.neibs
-  | Dst = 0
-  | less Cell.tile.type >< border_:
-    | Cell <= Cell.fix_z
-    | Dst <= Cell.xyz
-    | less CanMove{Me Src Dst}: Dst <= 0
+| for Dst Src.neibs
+  | if Dst.tile.type >< border_ then Dst <= 0
+    else | Dst <= Dst.fix_z
+         | less CanMove{Me Src Dst}: Dst <= 0
   | when Dst:
-    | B = Cell.block
+    | B = Dst.block
     | if B then
         | if $owner.id <> B.owner.id
-          then if B.alive and $damage and (SZ-Dst.2).abs<<1
+          then if B.alive and $damage and (Src.z-Dst.z).abs<<1
                then push Dst Ms //attack
                else
           else when B.speed and B.can_move{}{B Dst Src}:
@@ -43,8 +40,7 @@ world.pathfind MaxCost U StartCell Check =
   | Cost = Src.visited
   | when Cost<MaxCost:
     | NextCost = Cost+1
-    | for DXYZ U.list_moves{Src.xyz}:
-      | Dst = $cell{DXYZ.0 DXYZ.1 DXYZ.2}
+    | for Dst U.list_moves{Src}:
       | when NextCost < Dst.visited:
         | Dst.prev <= Src
         | C = Check Dst
@@ -85,47 +81,6 @@ world.closest_reach MaxCost U StartCell TargetXYZ =
   | R
 | $pathfind{MaxCost U StartCell &check}
 | Best
-
-/*world.closest_reach MaxCost U StartCell TargetXYZ =
-| less U.speed: leave 0
-| X,Y,Z = StartCell.xyz
-| TargetXY = TargetXYZ.take{2}
-| BestXYZ = X,Y,Z
-| BestL = (TargetXY-[X Y]).abs
-| StartCost = $new_visit
-| !MaxCost+StartCost
-| StartCell.visited <= StartCost
-| StartCell.prev <= 0
-| PFQueue.reset
-| PFQueue.push{StartCell}
-| R = 0
-| till PFQueue.end
-  | Src = PFQueue.pop
-  | Cost = Src.visited
-  | when Cost<MaxCost:
-    | NextCost = Cost+1
-    | for DXYZ U.list_moves{Src.xyz}:
-      | X,Y,Z = DXYZ
-      | Dst = $cell{X Y Z}
-      | when NextCost < Dst.visited:
-        | NewL = (TargetXY-[X Y]).abs
-        | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
-          | BestL <= NewL
-          | BestXYZ <= DXYZ
-          | Dst.prev <= Src
-          | R <= Dst
-          | when BestL < 2.0:
-            | when BestXYZ><TargetXYZ: _goto end
-            | less $at{@TargetXYZ}.empty: _goto end
-            | B = $block_at{TargetXYZ}
-            | when B:
-              | less B.speed: _goto end
-              | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
-        | Dst.visited <= NextCost
-        | Dst.prev <= Src
-        | PFQueue.push{Dst}
-| _label end
-| R*/
 
 world.find MaxCost U StartCell Check =
 | Found = $pathfind{MaxCost U StartCell Check}
