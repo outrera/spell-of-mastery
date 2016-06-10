@@ -105,11 +105,11 @@ roam Me =
 | free_blockers = for B Blockers: B.free
 | Check = Dst =>
   | MoveIn = 0
-  | Vs = $world.cell{Dst.0 Dst.1 Dst.2}.units
+  | Vs = Dst.units
   | for V Vs
     | AI = V.ai
     | when AI:
-      | Block = World.block_at{Dst}
+      | Block = Dst.block
       | if AI><unit and Block and Owner.is_enemy{Block.owner}
            and not Block.invisible then
            | MoveIn <= 1
@@ -118,7 +118,7 @@ roam Me =
         else if AI><pentagram and Owner.is_enemy{V.owner} then
            | when not Block or Owner.is_enemy{Block}: MoveIn <= 1
         else if AI><avoid and not Block then //FIXME: blocking code is broken
-           | block Dst
+           | block Dst.xyz
            | MoveIn <= \block
            | _goto end 
         else if AI><block then
@@ -203,9 +203,8 @@ ai_leader_harmed Me Attacker Victim =
 | when Attacker:
   | R = Attacker.range
   | when R><cross or R><1 or (Attacker.xyz-Victim.xyz).abs<2.0:
-      | F = Victim.find{8
-        | D => (D-Attacker.xyz).abs >> 2.0
-               and (D-Victim.xyz).abs < 3.0}
+      | F = Victim.find{8 | D => (D.xyz-Attacker.xyz).abs >> 2.0
+                                 and (D.xyz-Victim.xyz).abs < 3.0}
       | when F: Victim.order_at{F}
 | when Pent:
   | SAct = $main.params.acts.summon_blob

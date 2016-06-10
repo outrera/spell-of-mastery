@@ -308,14 +308,14 @@ order_at Me XYZ Target =
 | Us = Us{U=>[(XYZ-U.xyz).abs U]}.sort{?0<??0}{?1}
 | Used = []
 | less Target and Target.owner.is_enemy{Player}: Target <= 0
+| Cell = $world.cell{@XYZ}
 | for U Us:
-  | P = XYZ
+  | P = Cell
   | less Target: less Used.end:
-    | Cell = $world.cell{@XYZ}
     | Found = $world.find{1000 U Cell | Dst => no Used.find{Dst}}
     | when Found: P <= Found
   | U.backtrack <= 0
-  | U.order_at{P}
+  | U.order_at{P.xyz}
   | push P Used
 
 order_act Me Act XYZ Target =

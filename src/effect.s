@@ -318,7 +318,7 @@ do_excavate Me TargetXYZ =
     | Amount = max 1 $get_effect_value{amount}
     | $add_item{Amount ItemType}
     | Item.free
-    | Found = $find{128 | Dst => $world.get{Dst-[0 0 1]}.type><storage}
+    | Found = $find{128 | Dst => (Dst-1).tile.type><storage}
     | when Found:
       | $strip_effect{store_}
       | $add_effect{store_ 0 [ItemType Amount TargetXYZ]}
@@ -328,8 +328,8 @@ do_excavate Me TargetXYZ =
   | Ds = Dirs4{X,Y => [X Y 0]}
   | Marked = $find{16 (Dst =>
     | R = 0
-    | for D Ds
-      | XYZ = Dst+D
+    | for Neib Dst.neibs
+      | XYZ = Neib.xyz
       | when $owner.excavate_mark{@XYZ}:
         | $order_at{XYZ act/excavate}
         | R <= 1
@@ -364,11 +364,10 @@ effect build Where:
   | $world.set{X Y Z-1 Tile}
 | less got Work:
   | OID = $owner.id
-  | Ds = [[0 0] @Dirs4]{X,Y => [X Y 0]}
   | Found = $find{16 (Dst =>
     | R = 0
-    | for D Ds
-      | XYZ = Dst+D
+    | for Neib [Dst @Dst.neibs]
+      | XYZ = Neib.xyz
       | when $owner.work_at{XYZ}:
         | $order_at{XYZ act/build}
         | R <= 1

@@ -183,9 +183,10 @@ update_anim Me =
 
 find_path_around_busy_units Me XYZ = //Me is unit
 | OID = $owner.id
-| check DXYZ =
-  | if DXYZ><XYZ then 1
-    else | Us = $world.units_get{DXYZ}.skip{?empty}
+| Target = $world.cell{@XYZ}
+| check Dst =
+  | if Dst><Target then 1
+    else | Us = Dst.units.skip{?empty}
          | R = 0
          | when Us.size
            | U = Us.0
@@ -437,8 +438,8 @@ unit.update =
   | less $empty:
     | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}
     | less B.end: when B.0.idle:
-      | Found = $world.find{100 Me $cell | Dst => not $world.block_at{Dst}}
-      | when Found: $order_at{Found}
+      | Found = $world.find{100 Me $cell | Dst => not Dst.block}
+      | when Found: $order_at{Found.xyz}
   | UpdatePathHangTrap <= 0
   | update_path Me
 | update_order Me
