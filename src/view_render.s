@@ -102,7 +102,7 @@ unit.draw FB B =
 | S = $sprite
 | when S.shadow:
   | S = $world.shadow
-  | ZZ = $xyz.2-$fix_z
+  | ZZ = $cell-$floor
   | I = min (ZZ/16).abs S.size-1
   | SGfx = S.I
   | SGfx.brighten{B.brighten}

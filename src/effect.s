@@ -169,7 +169,7 @@ range_points World XYZ R FixTop =
 | WH = World.h
 | Ps = Ps.keep{(?0>0 and ?1>0 and ?0<<WW and ?1<<WH)}
 | if FixTop then for P Ps: P.2 <= World.height{P.0 P.1}
-  else for P Ps: P.2 <= World.fix_z{P}
+  else for P Ps: P.2 <= World.floor{P}
 | Ps
 
 effect field Param R Es:

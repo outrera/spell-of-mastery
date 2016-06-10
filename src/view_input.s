@@ -91,7 +91,7 @@ world_place_tile_deco Me X Y Z Tile =
 
 
 place_tile Me Type =
-| $cursor.2 <= $fix_z{$cursor}
+| $cursor.2 <= $floor{$cursor}
 | X,Y,Z = $cursor
 | Tile = $main.tiles.Type
 | IsBridge = $key{edit_bridge}
@@ -144,7 +144,7 @@ place_tile Me Type =
   | when Tile.empty:
     | when Tile.id><0: leave
     | when IsEmpty: leave
-  | $cursor.2 <= $fix_z{$cursor}
+  | $cursor.2 <= $floor{$cursor}
   | when IsBridge: leave
 
 remove_object_or_tile Me =
@@ -174,7 +174,7 @@ remove_object_or_tile Me =
       | Tile = $world.at{X Y Z-1}
       | less Tile.height: leave
       | $world.clear_tile{X Y Z-1}
-      | $cursor.2 <= $fix_z{$cursor}
+      | $cursor.2 <= $floor{$cursor}
       | for U $world.units_get{X,Y,Z}: U.move{$cursor}
 
 view.update_brush =
@@ -311,9 +311,9 @@ view.update =
 | less $paused: $main.update
 | 1
 
-view.fix_z XYZ =
+view.floor XYZ =
 | less $zfix: leave XYZ.2
-| if $key{edit_over_empty} then $world.fix_z_void{XYZ} else $world.fix_z{XYZ}
+| if $key{edit_over_empty} then $world.floor_void{XYZ} else $world.floor{XYZ}
 
 view.input In =
 //| when $paused: leave
@@ -325,7 +325,7 @@ view.input In =
     | when $brush.0 or $world.human.sight.CY.CX:
       | less ($mice_click><left or $mice_click><pick) and not $brush.0:
         | $cursor.init{[CX CY $cursor.2]}
-        | $cursor.2 <= $fix_z{$cursor}
+        | $cursor.2 <= $floor{$cursor}
         | NewZ = $cursor.2
         | while NewZ and NewZ>>$zlock:
           | $cursor.2 <= NewZ
@@ -345,14 +345,14 @@ view.input In =
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
     | if State then $anchor.init{$cursor}
-      else when $world.at{@$cursor}.empty: $cursor.2 <= $fix_z{$cursor}
+      else when $world.at{@$cursor}.empty: $cursor.2 <= $floor{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
     | $zfix <= 1
     | $mice_click <= if State then \right else \rightup
     | if State then $anchor.init{$cursor}
       else when $world.at{@$cursor}.empty:
-           | $cursor.2 <= $fix_z{$cursor}
+           | $cursor.2 <= $floor{$cursor}
            | $anchor.init{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [key Name S]

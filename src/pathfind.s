@@ -3,14 +3,12 @@ use queue util
 //note: here order is important, or path will go zig-zag
 //Dirs = [[-1 -1] [1 1] [1 -1] [-1 1] [0 -1] [1 0] [0 1] [-1 0]]
 
-unit.list_moves Src =
+unit.list_moves Src Cost =
 | Ms = []
 | CanMove = $can_move
 | for Dst Src.neibs
-  | if Dst.tile.type >< border_ then Dst <= 0
-    else | Dst <= Dst.fix_z
-         | less CanMove{Me Src Dst}: Dst <= 0
-  | when Dst:
+  | Dst <= Dst.floor
+  | when Cost < Dst.visited and CanMove{Me Src Dst}:
     | B = Dst.block
     | if B then
         | if $owner.id <> B.owner.id
@@ -39,17 +37,16 @@ world.pathfind MaxCost U StartCell Check =
   | Src = PFQueue.pop
   | Cost = Src.visited
   | NextCost = Cost+1
-  | for Dst U.list_moves{Src}:
-    | when NextCost < Dst.visited:
-      | Dst.prev <= Src
-      | C = Check Dst
-      | when C:
-        | if C><block then NextCost <= Dst.visited
-          else | Dst.prev <= Src
-               | R <= Dst
-               | _goto end
-      | Dst.visited <= NextCost
-      | when NextCost<MaxCost: PFQueue.push{Dst}
+  | for Dst U.list_moves{Src NextCost}:
+    | Dst.prev <= Src
+    | C = Check Dst
+    | when C:
+      | if C><block then NextCost <= Dst.visited
+        else | Dst.prev <= Src
+             | R <= Dst
+             | _goto end
+    | Dst.visited <= NextCost
+    | when NextCost<MaxCost: PFQueue.push{Dst}
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime

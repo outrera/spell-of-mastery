@@ -12,6 +12,7 @@ CellsGfxes =
 CellsBlock =
 CellsVisited =
 CellsPrev =
+CellsFloor =
 WorldSize = 1 //max world size
 WorldDepth = 1
 CellsLineSize = 1
@@ -29,6 +30,8 @@ int.visited = CellsVisited.Me
 int.`!visited` V = CellsVisited.Me <= V
 int.prev = CellsPrev.Me
 int.`!prev` V = CellsPrev.Me <= V
+int.floor = CellsFloor.Me
+int.`!floor` V = CellsFloor.Me <= V
 int.xyz = [Me/WorldDepth%WorldSize Me/CellsLineSize Me%WorldDepth]
 int.z = Me%WorldDepth
 int.north = Me-CellsLineSize
@@ -36,13 +39,6 @@ int.south = Me+CellsLineSize
 int.west = Me-WorldDepth
 int.east = Me+WorldDepth
 int.neibs = [Me-CellsLineSize Me+CellsLineSize Me-WorldDepth Me+WorldDepth]
-int.fix_z =
-| Cell = Me
-| till Cell.tile.empty: !Cell+1
-| !Cell-1
-| while Cell.tile.empty: !Cell-1
-| !Cell+1
-| Cell
 int.path =
 | Cell = Me
 | Path = []
@@ -120,6 +116,7 @@ world.init =
 | CellsBlock <= dup NCells 0
 | CellsVisited <= dup NCells #FFFFFFFFFFFF
 | CellsPrev <= dup NCells 0
+| CellsFloor <= dup NCells 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -157,14 +154,6 @@ world.create W H =
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
 | !$w-1
 | !$h-1
-
-calc_height Me X Y =
-| Low = $cell{X Y -1}
-| Cell = Low + $d
-| while Low < Cell:
-  | when CellsTile.Cell.id: leave Cell-Low
-  | !Cell-1
-| 0
 
 // add movement blocking walls
 world.create_borders = // draws maps borders in clockwise order
@@ -321,7 +310,7 @@ world.excavate X Y Z PassageH Amount =
   | leave 0
 | when Tile.death: Work.effect{Tile.death Work X,Y,Z}
 | Work.free
-| H = min $fix_z{X,Y,Z} Z+PassageH
+| H = min $floor{X,Y,Z} Z+PassageH
 | ZZ = Z
 | while Z<H:
   | less $at{X Y Z}.excavate: H<=Z
@@ -409,9 +398,9 @@ world.set X Y Z Tile =
   | update_deco Me Tile Z DecoTs
 | $upd_column{X Y}
 
-world.fix_z XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.fix_z%WorldDepth
+world.floor XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.floor%WorldDepth
 
-world.fix_z_void XYZ =
+world.floor_void XYZ =
 | X,Y,Z = XYZ
 | while $at{X Y Z}.id: !Z+1
 | !Z-1
@@ -591,13 +580,31 @@ world.update_minimap X Y =
 | for YY PH: for XX PW:
   | $minimap.set{SX+XX SY+YY Color}
 
+calc_floor Cell =
+| till Cell.tile.empty: !Cell+1
+| !Cell-1
+| while Cell.tile.empty: !Cell-1
+| !Cell+1
+| Cell
+
+calc_height Me X Y =
+| Low = $cell{X Y -1}
+| Cell = Low + $d
+| while Low < Cell:
+  | when CellsTile.Cell.id: leave Cell-Low
+  | !Cell-1
+| 0
+
 world.updPilarGfxes X Y =
 | when X < 0 or Y < 0: leave 0
+| Cell = $cell{X Y 0}
+| times I $d:
+  | C = Cell+I
+  | C.floor <= calc_floor C
 | $heighmap.X.Y <= calc_height Me X Y
 | Seed = $seed.Y.X
 | Z = 0
 | H = $height{X Y}
-| Cell = $cell{X Y 0}
 | Below = $tid_map.0
 | T = Cell.tile
 | while Z < H:

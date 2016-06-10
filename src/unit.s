@@ -26,7 +26,7 @@ type unit.$class{Id World}
   fxyz/[0 0 0] // fine X,Y,Z
   xyz/[0 0 -1] // world cell X,Y,Z
   cell/0 //cell this unit resides in
-  fix_z/0 // z of the ground under this unit
+  floor/0 // ground cell under this unit
   from/[0 0 0] //where this unit moved from
   facing // direction this unit faces
   velocity/[0.0 0.0 0.0] //when unit falls down or gets kicked
@@ -135,7 +135,8 @@ flyer_can_move Me Src Dst =
 | SZ = Src.z
 | DZ = Dst.z
 | if SZ<DZ
-  then times I DZ-SZ: less (Src+I).tile.empty: leave 0
+  then | when DZ > $world.d-3: leave 0
+       | times I DZ-SZ: less (Src+I).tile.empty: leave 0
   else times I SZ-DZ: less (Dst+I).tile.empty: leave 0
 | 1
 
@@ -413,7 +414,7 @@ set_goal Me Act Target =
 unit.order_at XYZ act/0 =
 | when $xyz >< XYZ:
   | when Act and normalize_act{Me Act}.type<>move:
-    | Ms = $list_moves{$cell}
+    | Ms = $list_moves{$cell -1}
     | less Ms.end:
       | set_goal Me Act $xyz
       | $set_path{[Ms.0 $xyz]}
@@ -516,10 +517,10 @@ unit.fine_move FXYZ =
 | $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
-| $fix_z <= $world.fix_z{XYZ}
 | C = $world.c
 | $fxyz.init{FXYZ}
 | $world.place_unit{Me}
+| $floor <= $cell.floor
 | $environment_updated
 | $move_in{1}
 | Me

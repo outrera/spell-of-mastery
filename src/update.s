@@ -220,7 +220,7 @@ unit_check_move Me Dst =
       | B = $world.block_at{X,Y,Z}
       | when B and B.ai><remove: leave excavate
   | leave 0
-| Below = $world.at{X Y $world.fix_z{X,Y,Z}-1}
+| Below = $world.at{X Y $world.floor{X,Y,Z}-1}
 | when Below.type><water:
   | less $flyer or $amphibian or $swimmer: leave 0
 | B = $world.block_at{Dst}
@@ -406,7 +406,7 @@ attack_nearby_enemy Me =
 GravAcc = 9.807*0.2
 update_fall Me =
 | !$velocity.2 - GravAcc
-| FZ = $fix_z
+| FZ = $floor.z
 | FDst = $fxyz+$velocity{}{?int}
 | if FDst.2 > FZ*$world.c then $fine_move{FDst}
   else $move{[$xyz.0 $xyz.1 FZ]}
@@ -427,7 +427,7 @@ unit.update =
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
     else $die
-| if $xyz.2 > $fix_z then | update_fall Me; leave
+| if $cell > $floor then | update_fall Me; leave
   else when $velocity.2<0.0:
   | $velocity.2 <= 0.0
   | when $world.at{$xyz.0 $xyz.1 $xyz.2-1}.liquid and not $flyer: 
