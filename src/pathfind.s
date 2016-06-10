@@ -27,12 +27,11 @@ unit.list_moves Src =
 
 PFQueue = queue 256*256
 
-world.pathfind MaxCost U XYZ Check =
+world.pathfind MaxCost U StartCell Check =
 | less U.speed: leave 0
-| X,Y,Z = XYZ
+| X,Y,Z = StartCell.xyz
 | StartCost = $new_visit
 | !MaxCost+StartCost
-| StartCell = $cell{X Y Z}
 | StartCell.visited <= StartCost
 | StartCell.prev <= 0
 | PFQueue.reset
@@ -61,19 +60,18 @@ world.pathfind MaxCost U XYZ Check =
 //| say EndTime-StartTime
 | R
 
-world.closest_reach MaxCost U XYZ TargetXYZ =
+world.closest_reach MaxCost U StartCell TargetXYZ =
 | less U.speed: leave 0
-| X,Y,Z = XYZ
+| X,Y,Z = StartCell.xyz
 | StartCost = $new_visit
 | !MaxCost+StartCost
-| StartCell = $cell{X Y Z}
 | StartCell.visited <= StartCost
 | StartCell.prev <= 0
 | PFQueue.reset
 | PFQueue.push{StartCell}
-| BestXYZ = XYZ
 | TargetXY = TargetXYZ.take{2}
-| BestL = (TargetXY-BestXYZ.take{2}).abs
+| BestXYZ = X,Y,Z
+| BestL = (TargetXY-[X Y]).abs
 | R = 0
 | till PFQueue.end
   | Src = PFQueue.pop
@@ -103,15 +101,15 @@ world.closest_reach MaxCost U XYZ TargetXYZ =
 | _label end
 | R
 
-world.find MaxCost U XYZ Check =
-| Found = $pathfind{MaxCost U XYZ Check}
+world.find MaxCost U StartCell Check =
+| Found = $pathfind{MaxCost U StartCell Check}
 | if Found then Found.xyz else 0
 
-unit.find MaxCost Check = $world.find{MaxCost Me $xyz Check}
+unit.find MaxCost Check = $world.find{MaxCost Me $cell Check}
 
-unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $xyz Check}
+unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $cell Check}
 
 unit.path_to XYZ close/0 =
-| Found = $world.closest_reach{1000 Me $xyz XYZ}
+| Found = $world.closest_reach{1000 Me $cell XYZ}
 | if Found then Found.path else []
 
