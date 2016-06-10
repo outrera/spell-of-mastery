@@ -27,9 +27,6 @@ int.`!block` V = CellsBlock.Me <= V
 int.visited = CellsVisited.Me
 int.`!visited` V = CellsVisited.Me <= V
 int.xyz = [Me/WorldDepth%WorldSize Me/CellsLineSize Me%WorldDepth]
-int.up N = Me+N
-int.up1 = Me+1
-int.down1 = Me-1
 int.north = Me-CellsLineSize
 int.south = Me+CellsLineSize
 int.west = Me-WorldDepth
@@ -149,11 +146,11 @@ world.create W H =
 | !$h-1
 
 calc_height Me X Y =
-| Cell = $cell{X Y 0}
-| Z = $d
-| while Z
-  | !Z-1
-  | when Cell.up{Z}.tile.id: leave Z+1
+| Low = $cell{X Y -1}
+| Cell = Low + $d
+| while Low < Cell:
+  | when CellsTile.Cell.id: leave Cell-Low
+  | !Cell-1
 | 0
 
 // add movement blocking walls
@@ -465,7 +462,7 @@ world.place_unitS U =
 | X,Y,Z = U.xyz
 | Cell = $cell{X Y 0}
 | Cell.units <= Cell.units.cons{U}
-| Cell <= Cell.up{Z}
+| !Cell+Z
 | Cell.units <= Cell.units.cons{U}
 | less U.empty: Cell.block <= U
 
@@ -488,7 +485,7 @@ world.remove_unitS U =
 | K = Cell.units
 | Cell.units <= K.unheap.skip{?id><U.id}.enheap
 | K.heapfree
-| Cell <= Cell.up{Z}
+| !Cell+Z
 | K = Cell.units
 | Us = K.unheap.skip{?id><U.id}
 | Cell.units <= Us.enheap
@@ -564,8 +561,8 @@ world.color_at X Y =
 | Z = $height{X Y}-1
 | when Z<0: Z <= 0
 | Cell = $cell{X Y 0}
-| while Z > 0 and not Cell.up{Z}.gfx: !Z-1
-| G = Cell.up{Z}.gfx
+| while Z > 0 and not (Cell+Z).gfx: !Z-1
+| G = (Cell+Z).gfx
 | less G: leave 0
 | G.get{G.w/2 (min G.h/2 16)} ^^ #FFFFFF
 
@@ -595,10 +592,10 @@ world.updPilarGfxes X Y =
 | T = Cell.tile
 | while Z < H:
   | TH = T.height
-  | Next = Cell.up{TH}
+  | Next = Cell+TH
   | Above = Next.tile
   | when Above.parts.is_int: //multi-height tile
-    | Above <= Next.up{-Above.parts}.tile
+    | Above <= (Next-Above.parts).tile
   // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
   | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Seed}
   | Below <= T
