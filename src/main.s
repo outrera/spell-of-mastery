@@ -1,4 +1,4 @@
-use enheap param sprite class tile sound world action update
+use enheap param sprite class tile sound world pathfind action update
     view_render view_input ui save
     generate ai effect main2
 

@@ -1,5 +1,5 @@
 // game world update routines
-use pathfind util
+use util
 
 main.update =
 | $world.update
@@ -181,7 +181,7 @@ update_anim Me =
   | $anim_wait <= Step.1
 
 
-find_path_around_busy_units Me XYZ =
+find_path_around_busy_units Me XYZ = //Me is unit
 | OID = $owner.id
 | check DXYZ =
   | if DXYZ><XYZ then 1
@@ -195,7 +195,7 @@ find_path_around_busy_units Me XYZ =
          | R
 | Found = $pathfind{10 &check}
 | if Found
-  then | Path = Found^node_to_path
+  then | Path = Found.path
        | $set_path{Path}
        | $path_life <= Path.size
   else | $set_path{[]}

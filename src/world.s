@@ -11,6 +11,7 @@ CellsUnits =
 CellsGfxes =
 CellsBlock =
 CellsVisited =
+CellsPrev =
 WorldSize = 1 //max world size
 WorldDepth = 1
 CellsLineSize = 1
@@ -26,6 +27,8 @@ int.block = CellsBlock.Me //unit blocking the tile
 int.`!block` V = CellsBlock.Me <= V
 int.visited = CellsVisited.Me
 int.`!visited` V = CellsVisited.Me <= V
+int.prev = CellsPrev.Me
+int.`!prev` V = CellsPrev.Me <= V
 int.xyz = [Me/WorldDepth%WorldSize Me/CellsLineSize Me%WorldDepth]
 int.north = Me-CellsLineSize
 int.south = Me+CellsLineSize
@@ -39,6 +42,13 @@ int.fix_z =
 | while Cell.tile.empty: !Cell-1
 | !Cell+1
 | Cell
+int.path =
+| Cell = Me
+| Path = []
+| while Cell
+  | push Cell.xyz Path
+  | Cell <= Cell.prev
+| Path.tail.list
 
 
 type world{main}
@@ -107,6 +117,7 @@ world.init =
 | CellsGfxes <= dup NCells 0
 | CellsBlock <= dup NCells 0
 | CellsVisited <= dup NCells #FFFFFFFFFFFF
+| CellsPrev <= dup NCells 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip

@@ -1,4 +1,4 @@
-use macros unit_flags pathfind util
+use macros unit_flags util
 
 SeenUnits = 0
 OwnedUnits = 0
@@ -150,10 +150,10 @@ ai_cast_teleport Me U =
 | Es = SeenEnemies{E=>[(E.xyz.take{2}-U.xyz.take{2}).abs E]}.sort{?0<??0}{?1}
 | less Es.size: leave 0
 | E = Es.0
-| Found = $world.pathfind_closest{1000 U E.xyz U.xyz}
+| Found = $world.closest_reach{1000 U E.xyz U.xyz}
 | less Found: leave 0
 | !U.owner.mana + $main.params.acts.cast_teleport.cost
-| U.order_act{cast_teleport target/Found.last}
+| U.order_act{cast_teleport target/Found.path.last}
 | 1
 
 ai.update_units =

@@ -25,14 +25,6 @@ unit.list_moves Src =
       else push Dst Ms
 | Ms
 
-node_to_path Node =
-| Path = []
-| while Node
-  | Prev,Cell,Cost = Node
-  | push Cell.xyz Path
-  | Node <= Prev
-| Path.tail.list
-
 PFQueue = queue 256*256
 
 world.pathfind MaxCost U XYZ Check =
@@ -42,83 +34,84 @@ world.pathfind MaxCost U XYZ Check =
 | !MaxCost+StartCost
 | StartCell = $cell{X Y Z}
 | StartCell.visited <= StartCost
-| PFQueue.push{[0 StartCell StartCost]}
+| StartCell.prev <= 0
+| PFQueue.reset
+| PFQueue.push{StartCell}
 | R = 0
 //| StartTime = clock
 | till PFQueue.end
-  | Node = PFQueue.pop
-  | Prev,Src,Cost = Node
+  | Src = PFQueue.pop
+  | Cost = Src.visited
   | when Cost<MaxCost:
     | NextCost = Cost+1
     | for DXYZ U.list_moves{Src.xyz}:
       | Dst = $cell{DXYZ.0 DXYZ.1 DXYZ.2}
-      | C = Check DXYZ
-      | when C:
-        | if C><block then NextCost <= Dst.visited //high cost blocks it
-          else | R <= [Node Dst 0]
-               | _goto end
       | when NextCost < Dst.visited:
+        | C = Check DXYZ
+        | when C:
+          | if C><block then NextCost <= Dst.visited
+            else | Dst.prev <= Src
+                 | R <= Dst
+                 | _goto end
         | Dst.visited <= NextCost
-        | PFQueue.push{[Node Dst NextCost]}
+        | Dst.prev <= Src
+        | PFQueue.push{Dst}
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime
-| PFQueue.clear
 | R
 
-world.pathfind_closest MaxCost U XYZ TargetXYZ =
+world.closest_reach MaxCost U XYZ TargetXYZ =
 | less U.speed: leave 0
 | X,Y,Z = XYZ
 | StartCost = $new_visit
 | !MaxCost+StartCost
 | StartCell = $cell{X Y Z}
 | StartCell.visited <= StartCost
-| PFQueue.push{[0 StartCell StartCost]}
+| StartCell.prev <= 0
+| PFQueue.reset
+| PFQueue.push{StartCell}
 | BestXYZ = XYZ
 | TargetXY = TargetXYZ.take{2}
 | BestL = (TargetXY-BestXYZ.take{2}).abs
 | R = 0
 | till PFQueue.end
-  | Node = PFQueue.pop
-  | Prev,Src,Cost = Node
+  | Src = PFQueue.pop
+  | Cost = Src.visited
   | when Cost<MaxCost:
     | NextCost = Cost+1
     | for DXYZ U.list_moves{Src.xyz}:
       | X,Y,Z = DXYZ
       | Dst = $cell{X Y Z}
-      | NewL = (TargetXY-[X Y]).abs
-      | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
-        | BestL <= NewL
-        | BestXYZ <= DXYZ
-        | R <= [Node Dst]
-        | when BestL < 2.0:
-          | when BestXYZ><TargetXYZ: _goto end
-          | less $at{@TargetXYZ}.empty: _goto end
-          | B = $block_at{TargetXYZ}
-          | when B:
-            | less B.speed: _goto end
-            | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
       | when NextCost < Dst.visited:
+        | NewL = (TargetXY-[X Y]).abs
+        | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
+          | BestL <= NewL
+          | BestXYZ <= DXYZ
+          | Dst.prev <= Src
+          | R <= Dst
+          | when BestL < 2.0:
+            | when BestXYZ><TargetXYZ: _goto end
+            | less $at{@TargetXYZ}.empty: _goto end
+            | B = $block_at{TargetXYZ}
+            | when B:
+              | less B.speed: _goto end
+              | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
         | Dst.visited <= NextCost
-        | PFQueue.push{[Node Dst NextCost]}
+        | Dst.prev <= Src
+        | PFQueue.push{Dst}
 | _label end
-| PFQueue.clear
-| if R then [R.0 R.1 0]^node_to_path else 0
+| R
 
 world.find MaxCost U XYZ Check =
-| Found = $world.pathfind{MaxCost U XYZ Check}
-| if Found then Found.1.xyz else 0
+| Found = $pathfind{MaxCost U XYZ Check}
+| if Found then Found.xyz else 0
+
+unit.find MaxCost Check = $world.find{MaxCost Me $xyz Check}
 
 unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $xyz Check}
 
-unit.find MaxCost Check =
-| Found = $world.pathfind{MaxCost Me $xyz Check}
-| if Found then Found.1.xyz else 0
-
-//FIXME: AI version should setup unit_block
 unit.path_to XYZ close/0 =
-| Found = $world.pathfind_closest{1000 Me $xyz XYZ}
-| if Found then Found else []
+| Found = $world.closest_reach{1000 Me $xyz XYZ}
+| if Found then Found.path else []
 
-
-export node_to_path
