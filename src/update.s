@@ -437,8 +437,8 @@ unit.update =
   | less $empty:
     | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}
     | less B.end: when B.0.idle:
-      | Found = $world.pathfind{100 Me $xyz | Dst => not $world.block_at{Dst}}
-      | when Found: $order_at{Found.1}
+      | Found = $world.find{100 Me $xyz | Dst => not $world.block_at{Dst}}
+      | when Found: $order_at{Found}
   | UpdatePathHangTrap <= 0
   | update_path Me
 | update_order Me

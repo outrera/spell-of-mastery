@@ -28,8 +28,8 @@ unit.list_moves Src =
 node_to_path Node =
 | Path = []
 | while Node
-  | Prev,XYZ,Cost = Node
-  | push XYZ Path
+  | Prev,Cell,Cost = Node
+  | push Cell.xyz Path
   | Node <= Prev
 | Path.tail.list
 
@@ -42,25 +42,24 @@ world.pathfind MaxCost U XYZ Check =
 | !MaxCost+StartCost
 | StartCell = $cell{X Y Z}
 | StartCell.visited <= StartCost
-| PFQueue.push{[0 XYZ StartCost]}
+| PFQueue.push{[0 StartCell StartCost]}
 | R = 0
 //| StartTime = clock
 | till PFQueue.end
   | Node = PFQueue.pop
-  | Prev,XYZ,Cost = Node
+  | Prev,Src,Cost = Node
   | when Cost<MaxCost:
     | NextCost = Cost+1
-    | for DXYZ U.list_moves{XYZ}:
-      | X,Y,Z = DXYZ
-      | Cell = $cell{X Y Z}
+    | for DXYZ U.list_moves{Src.xyz}:
+      | Dst = $cell{DXYZ.0 DXYZ.1 DXYZ.2}
       | C = Check DXYZ
       | when C:
-        | if C><block then NextCost <= Cell.visited //high cost blocks it
-          else | R <= [Node DXYZ $block_at{DXYZ}]
+        | if C><block then NextCost <= Dst.visited //high cost blocks it
+          else | R <= [Node Dst 0]
                | _goto end
-      | when NextCost < Cell.visited:
-        | Cell.visited <= NextCost
-        | PFQueue.push{[Node DXYZ NextCost]}
+      | when NextCost < Dst.visited:
+        | Dst.visited <= NextCost
+        | PFQueue.push{[Node Dst NextCost]}
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime
@@ -74,22 +73,24 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
 | !MaxCost+StartCost
 | StartCell = $cell{X Y Z}
 | StartCell.visited <= StartCost
-| PFQueue.push{[0 XYZ StartCost]}
+| PFQueue.push{[0 StartCell StartCost]}
 | BestXYZ = XYZ
 | TargetXY = TargetXYZ.take{2}
 | BestL = (TargetXY-BestXYZ.take{2}).abs
 | R = 0
 | till PFQueue.end
   | Node = PFQueue.pop
-  | Prev,XYZ,Cost = Node
+  | Prev,Src,Cost = Node
   | when Cost<MaxCost:
     | NextCost = Cost+1
-    | for DXYZ U.list_moves{XYZ}:
-      | NewL = (TargetXY-DXYZ.take{2}).abs
+    | for DXYZ U.list_moves{Src.xyz}:
+      | X,Y,Z = DXYZ
+      | Dst = $cell{X Y Z}
+      | NewL = (TargetXY-[X Y]).abs
       | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
         | BestL <= NewL
         | BestXYZ <= DXYZ
-        | R <= [Node DXYZ]
+        | R <= [Node Dst]
         | when BestL < 2.0:
           | when BestXYZ><TargetXYZ: _goto end
           | less $at{@TargetXYZ}.empty: _goto end
@@ -97,20 +98,22 @@ world.pathfind_closest MaxCost U XYZ TargetXYZ =
           | when B:
             | less B.speed: _goto end
             | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
-      | X,Y,Z = DXYZ
-      | Cell = $cell{X Y Z}
-      | when NextCost < Cell.visited:
-        | Cell.visited <= NextCost
-        | PFQueue.push{[Node DXYZ NextCost]}
+      | when NextCost < Dst.visited:
+        | Dst.visited <= NextCost
+        | PFQueue.push{[Node Dst NextCost]}
 | _label end
 | PFQueue.clear
 | if R then [R.0 R.1 0]^node_to_path else 0
+
+world.find MaxCost U XYZ Check =
+| Found = $world.pathfind{MaxCost U XYZ Check}
+| if Found then Found.1.xyz else 0
 
 unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $xyz Check}
 
 unit.find MaxCost Check =
 | Found = $world.pathfind{MaxCost Me $xyz Check}
-| if Found then Found.1 else 0
+| if Found then Found.1.xyz else 0
 
 //FIXME: AI version should setup unit_block
 unit.path_to XYZ close/0 =

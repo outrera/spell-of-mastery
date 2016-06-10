@@ -311,8 +311,8 @@ order_at Me XYZ Target =
 | for U Us:
   | P = XYZ
   | less Target: less Used.end:
-    | Found = $world.pathfind{1000 U XYZ | Dst => no Used.find{Dst}}
-    | when Found: P <= Found.1
+    | Found = $world.find{1000 U XYZ | Dst => no Used.find{Dst}}
+    | when Found: P <= Found
   | U.backtrack <= 0
   | U.order_at{P}
   | push P Used
