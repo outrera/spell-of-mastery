@@ -393,7 +393,7 @@ unit.die =
 | $cooldown <= 0
 
 unit.set_path Path =
-| $path_life <= max 1 Path.size/4
+| $path_life <= max 2 Path.size/4
 | P = Path.enheap
 | $path.heapfree
 | $path <= P

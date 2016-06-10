@@ -254,7 +254,7 @@ update_path_move Me XYZ =
     | [Src Dst Wait Tries] = Stuck
     | when Tries<<0:
       | $strip_effect{stuck}
-      | $goal <= 0 //FIXME: let AI know that we can reach goal
+      | $goal <= 0 //FIXME: let AI know that we cant reach the goal
       | $set_path{[]}
       | leave
     | when Wait>Cycle: leave

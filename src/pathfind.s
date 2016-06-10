@@ -66,7 +66,7 @@ world.closest_reach MaxCost U StartCell TargetXYZ =
   | when BestL>>NewL and (BestL>NewL or TZ><DZ):
     | BestL <= NewL
     | Best <= Dst
-    | when BestL < 2.0:
+    | when BestL < 1.4:
       | when Best><TCell: | R <= 1; _goto end
       | less TCell.tile.empty: | R <= 1; _goto end
       | B = TCell.block
