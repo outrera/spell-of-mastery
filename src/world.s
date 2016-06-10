@@ -10,7 +10,7 @@ CellsTile =
 CellsUnits =
 CellsGfxes =
 CellsBlock =
-CellsVisited =
+CellsCost =
 CellsPrev =
 CellsFloor =
 WorldSize = 1 //max world size
@@ -26,8 +26,8 @@ int.gfx = CellsGfxes.Me
 int.`!gfx` V = CellsGfxes.Me <= V
 int.block = CellsBlock.Me //unit blocking the tile
 int.`!block` V = CellsBlock.Me <= V
-int.visited = CellsVisited.Me
-int.`!visited` V = CellsVisited.Me <= V
+int.cost = CellsCost.Me
+int.`!cost` V = CellsCost.Me <= V
 int.prev = CellsPrev.Me
 int.`!prev` V = CellsPrev.Me <= V
 int.floor = CellsFloor.Me
@@ -87,7 +87,7 @@ type world{main}
    sound_cycles/(t) //used to avoid playing similar sounds at once
    blink/[0 0]
    minimap/0
-   visited/#FFFFFF
+   cost/#FFFFFF //cost for pathfinder
 | $init
 
 world.init =
@@ -114,7 +114,7 @@ world.init =
 | CellsUnits <= dup NCells []
 | CellsGfxes <= dup NCells 0
 | CellsBlock <= dup NCells 0
-| CellsVisited <= dup NCells #FFFFFFFFFFFF
+| CellsCost <= dup NCells #FFFFFFFFFFFF
 | CellsPrev <= dup NCells 0
 | CellsFloor <= dup NCells 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
@@ -131,12 +131,12 @@ world.init =
 | $main.params.unit_setters_ <=
   | ($nil)^methods_.keep{?0.0 >< '!'}{[?0.tail ?1]}.table
 
-world.new_visit =
-| !$visited - 1
-| less $visited:
-  | CellsVisited.clear{#FFFFFFFFFFFF}
-  | $visited <= #FFFFFF
-| $visited*#1000000
+world.new_cost =
+| !$cost - 1
+| less $cost:
+  | CellsCost.clear{#FFFFFFFFFFFF}
+  | $cost <= #FFFFFF
+| $cost*#1000000
 
 world.create W H =
 | $w <= W
@@ -345,15 +345,15 @@ DecoDirs = list
 
 linked_tiles2dS Me Cost X Y Check =
 | Cell = $cell{X Y 0}
-| when Cell.visited><Cost: leave []
-| Cell.visited <= Cost
+| when Cell.cost><Cost: leave []
+| Cell.cost <= Cost
 | less Check X Y: leave []
 | Rs = [[X Y]]
 | for DX,DY Dirs4: for R linked_tiles2dS{Me Cost X+DX Y+DY Check}: push R Rs
 | Rs
 
 linked_tiles2d Me X Y Check =
-| linked_tiles2dS Me $new_visit X Y Check
+| linked_tiles2dS Me $new_cost X Y Check
 
 points_rect Ps =
 | X = Ps{?0}.min

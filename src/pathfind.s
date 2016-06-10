@@ -8,7 +8,7 @@ unit.list_moves Src Cost =
 | CanMove = $can_move
 | for Dst Src.neibs
   | Dst <= Dst.floor
-  | when Cost < Dst.visited and CanMove{Me Src Dst}:
+  | when Cost < Dst.cost and CanMove{Me Src Dst}:
     | B = Dst.block
     | if B then
         | if $owner.id <> B.owner.id
@@ -25,9 +25,9 @@ PFQueue = queue 256*256
 world.pathfind MaxCost U StartCell Check =
 | less U.speed: leave 0
 | X,Y,Z = StartCell.xyz
-| StartCost = $new_visit
+| StartCost = $new_cost
 | !MaxCost+StartCost
-| StartCell.visited <= StartCost
+| StartCell.cost <= StartCost
 | StartCell.prev <= 0
 | PFQueue.reset
 | PFQueue.push{StartCell}
@@ -35,17 +35,17 @@ world.pathfind MaxCost U StartCell Check =
 //| StartTime = clock
 | till PFQueue.end
   | Src = PFQueue.pop
-  | Cost = Src.visited
+  | Cost = Src.cost
   | NextCost = Cost+1
   | for Dst U.list_moves{Src NextCost}:
     | Dst.prev <= Src
     | C = Check Dst
     | when C:
-      | if C><block then NextCost <= Dst.visited
+      | if C><block then NextCost <= Dst.cost
         else | Dst.prev <= Src
              | R <= Dst
              | _goto end
-    | Dst.visited <= NextCost
+    | Dst.cost <= NextCost
     | when NextCost<MaxCost: PFQueue.push{Dst}
 | _label end
 //| EndTime = clock
