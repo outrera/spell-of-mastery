@@ -38,19 +38,18 @@ world.pathfind MaxCost U StartCell Check =
 | till PFQueue.end
   | Src = PFQueue.pop
   | Cost = Src.visited
-  | when Cost<MaxCost:
-    | NextCost = Cost+1
-    | for Dst U.list_moves{Src}:
-      | when NextCost < Dst.visited:
-        | Dst.prev <= Src
-        | C = Check Dst
-        | when C:
-          | if C><block then NextCost <= Dst.visited
-            else | Dst.prev <= Src
-                 | R <= Dst
-                 | _goto end
-        | Dst.visited <= NextCost
-        | PFQueue.push{Dst}
+  | NextCost = Cost+1
+  | for Dst U.list_moves{Src}:
+    | when NextCost < Dst.visited:
+      | Dst.prev <= Src
+      | C = Check Dst
+      | when C:
+        | if C><block then NextCost <= Dst.visited
+          else | Dst.prev <= Src
+               | R <= Dst
+               | _goto end
+      | Dst.visited <= NextCost
+      | when NextCost<MaxCost: PFQueue.push{Dst}
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime
