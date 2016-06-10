@@ -278,7 +278,7 @@ effect remove Whom: case Whom
         | when U: U.free
   neib,Type | for U $world.units_get{$xyz}: when U.type><Type: U.free
   Serial | U = $world.units.find{?serial><Serial}
-         | when got U and U.xyz.2<>-1: U.free
+         | when got U and not U.removed: U.free
 
 effect die Whom:
 | T = if Whom >< self then Me else Target

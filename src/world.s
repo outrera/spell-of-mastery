@@ -469,8 +469,7 @@ unit.explore V =
 
 world.explore State = for P $players: P.explore{State}
 
-world.place_unitS U =
-| X,Y,Z = U.xyz
+world.place_unitS U X Y Z =
 | Cell = $cell{X Y 0}
 | Cell.units <= Cell.units.cons{U}
 | !Cell+Z
@@ -478,20 +477,18 @@ world.place_unitS U =
 | less U.empty: Cell.block <= U
 
 world.place_unit U =
-| XYZ = U.xyz.copy
+| XYZ = U.xyz
 | Mirror = U.facing >< 5
 | Blocker = U.passable and U.block
-| for XX,YY,ZZ U.form:
-  | P = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
-  | U.xyz.init{P}
-  | $place_unitS{U}
-  | when Blocker: $set{@P U.block}
-| U.xyz.init{XYZ}
+| for DX,DY,DZ U.form:
+  | XX,YY,ZZ = XYZ + if Mirror then [-DY DX DZ] else [DX -DY DZ]
+  | $place_unitS{U XX YY ZZ}
+  | when Blocker: $set{XX YY ZZ U.block}
+| U.cell <= $cell{XYZ.0 XYZ.1 XYZ.2}
 | U.explore{1}
 
-world.remove_unitS U =
+world.remove_unitS U X Y Z =
 | U.explore{-1}
-| X,Y,Z = U.xyz
 | Cell = $cell{X Y 0}
 | K = Cell.units
 | Cell.units <= K.unheap.skip{?id><U.id}.enheap
@@ -506,20 +503,20 @@ world.remove_unitS U =
   | for U Us: less U.empty: Cell.block <= U
 
 world.remove_unit U =
+| when U.removed: leave
 | XYZ = U.xyz.copy
-| when XYZ.2 >< -1: leave
 | Mirror = U.facing >< 5
 | Blocker = U.passable and U.block
 | for XX,YY,ZZ U.form:
-  | P = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
-  | U.xyz.init{P}
-  | $remove_unitS{U}
-  | when Blocker: $clear_tile{@P}
+  | XX,YY,ZZ = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
+  | $remove_unitS{U XX YY ZZ}
+  | when Blocker: $clear_tile{XX YY ZZ}
+| U.cell <= 0
 | U.xyz.init{XYZ}
 
-world.effect X,Y,Z What =
+world.effect XYZ What =
 | E = $players.0.alloc_unit{"effect_[What]"}
-| E.move{X,Y,Z}
+| E.move{XYZ}
 | E.die
 | E
 

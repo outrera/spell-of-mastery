@@ -25,6 +25,7 @@ type unit.$class{Id World}
   owner // player controlling this unit
   fxyz/[0 0 0] // fine X,Y,Z
   xyz/[0 0 -1] // world cell X,Y,Z
+  cell/0 //cell this unit resides in
   fix_z/0 // z of the ground under this unit
   from/[0 0 0] //where this unit moved from
   facing // direction this unit faces
@@ -554,7 +555,7 @@ unit.move XYZ =
 | Me
 
 unit.remove =
-| when $xyz.2 >< -1: leave
+| when $removed: leave
 | $move_in{0}
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
