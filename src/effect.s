@@ -322,7 +322,7 @@ do_excavate Me TargetXYZ =
     | when Found:
       | $strip_effect{store_}
       | $add_effect{store_ 0 [ItemType Amount TargetXYZ]}
-      | $order_at{Found act/store}
+      | $order_at{Found.xyz act/store}
       | leave
 | less Mark: when ExcavateGoal:
   | Ds = Dirs4{X,Y => [X Y 0]}

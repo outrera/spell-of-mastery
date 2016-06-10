@@ -82,7 +82,7 @@ world.find MaxCost U StartCell Check =
 | Found = $pathfind{MaxCost U StartCell Check}
 | if Found then Found else 0
 
-unit.find MaxCost Check = $world.find{MaxCost Me $cell Check}.xyz
+unit.find MaxCost Check = $world.find{MaxCost Me $cell Check}
 
 unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $cell Check}
 
