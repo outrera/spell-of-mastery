@@ -280,7 +280,7 @@ world.clear_tile_ X Y Z =
 
 world.clear_tile X Y Z =
 | $clear_tile_{X Y Z}
-| $upd_column{X Y}
+| $upd_neibs{X Y}
 
 world.respawn_tile XYZ Type Delay =
 | S = $players.0.alloc_unit{unit_dummy}
@@ -396,7 +396,7 @@ world.set X Y Z Tile =
 | when Tile.deco:
   | DecoTs <= linked_tiles2d Me X Y: X Y => $at{X Y Z}.type><Tile.type
   | update_deco Me Tile Z DecoTs
-| $upd_column{X Y}
+| $upd_neibs{X Y}
 
 world.floor XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.floor%WorldDepth
 
@@ -580,28 +580,33 @@ world.update_minimap X Y =
 | for YY PH: for XX PW:
   | $minimap.set{SX+XX SY+YY Color}
 
-calc_floor Cell =
-| till Cell.tile.empty: !Cell+1
-| !Cell-1
-| while Cell.tile.empty: !Cell-1
-| !Cell+1
-| Cell
-
-calc_height Me X Y =
-| Low = $cell{X Y -1}
-| Cell = Low + $d
-| while Low < Cell:
-  | when CellsTile.Cell.id: leave Cell-Low
+upd_floor Me Bottom =
+| Cell = Bottom
+| Floor = Cell
+| LastEmpty = 0
+| times I $d:
+  | Empty = Cell.tile.empty
+  | when Empty
+    | less LastEmpty: Floor <= Cell
+    | Cell.floor <= Floor
+  | !Cell+1
+  | LastEmpty <= Empty
+| Cell = Bottom+$d-1
+| Floor = Cell
+| LastEmpty = 0
+| times I $d:
+  | Empty = Cell.tile.empty
+  | less Empty
+    | when LastEmpty: Floor <= Cell+1
+    | Cell.floor <= Floor
   | !Cell-1
-| 0
+  | LastEmpty <= Empty
 
 world.updPilarGfxes X Y =
 | when X < 0 or Y < 0: leave 0
 | Cell = $cell{X Y 0}
-| times I $d:
-  | C = Cell+I
-  | C.floor <= calc_floor C
-| $heighmap.X.Y <= calc_height Me X Y
+| upd_floor Me Cell
+| $heighmap.X.Y <= (Cell+$d-2).floor.z
 | Seed = $seed.Y.X
 | Z = 0
 | H = $height{X Y}
@@ -622,8 +627,7 @@ world.updPilarGfxes X Y =
 | for U $column_units_get{X Y}: U.environment_updated
 | $update_minimap{X Y}
 
-world.upd_column X Y =
-| $heighmap.X.Y <= calc_height Me X Y
+world.upd_neibs X Y =
 | for DX,DY Dirs: $updPilarGfxes{X+DX Y+DY}
 | $updPilarGfxes{X Y}
 
@@ -664,7 +668,7 @@ world.push_ X Y Tile =
 world.push XY Tile =
 | X,Y = XY
 | $push_{X Y Tile}
-| $upd_column{X Y}
+| $upd_neibs{X Y}
 
 world.pop_ X,Y =
 | H = $height{X Y}
@@ -676,7 +680,7 @@ world.pop_ X,Y =
 // pop top tile of pilar at X,Y
 world.pop XY =
 | $pop_{XY}
-| $upd_column{XY.0 XY.1}
+| $upd_neibs{XY.0 XY.1}
 
 world.new_effect When Name Amount Params =
 | E = $free_effects.pop
