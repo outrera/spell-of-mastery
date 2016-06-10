@@ -63,43 +63,29 @@ world.pathfind MaxCost U StartCell Check =
 world.closest_reach MaxCost U StartCell TargetXYZ =
 | less U.speed: leave 0
 | X,Y,Z = StartCell.xyz
-| StartCost = $new_visit
-| !MaxCost+StartCost
-| StartCell.visited <= StartCost
-| StartCell.prev <= 0
-| PFQueue.reset
-| PFQueue.push{StartCell}
-| TargetXY = TargetXYZ.take{2}
+| TX,TY,TZ = TargetXYZ
+| TCell = $cell{@TargetXYZ}
 | BestXYZ = X,Y,Z
-| BestL = (TargetXY-[X Y]).abs
-| R = 0
-| till PFQueue.end
-  | Src = PFQueue.pop
-  | Cost = Src.visited
-  | when Cost<MaxCost:
-    | NextCost = Cost+1
-    | for DXYZ U.list_moves{Src.xyz}:
-      | X,Y,Z = DXYZ
-      | Dst = $cell{X Y Z}
-      | when NextCost < Dst.visited:
-        | NewL = (TargetXY-[X Y]).abs
-        | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
-          | BestL <= NewL
-          | BestXYZ <= DXYZ
-          | Dst.prev <= Src
-          | R <= Dst
-          | when BestL < 2.0:
-            | when BestXYZ><TargetXYZ: _goto end
-            | less $at{@TargetXYZ}.empty: _goto end
-            | B = $block_at{TargetXYZ}
-            | when B:
-              | less B.speed: _goto end
-              | when not U.damage and U.owner.is_enemy{B.owner}: _goto end
-        | Dst.visited <= NextCost
-        | Dst.prev <= Src
-        | PFQueue.push{Dst}
-| _label end
-| R
+| BestL = [TX-X TY-Y].abs
+| Best = 0
+| check DXYZ =
+  | R = 0
+  | NewL = [TX-DXYZ.0 TY-DXYZ.1].abs
+  | when BestL>>NewL and (BestL>NewL or TargetXYZ.2><DXYZ.2):
+    | BestL <= NewL
+    | BestXYZ <= DXYZ
+    | Best <= $cell{DXYZ.0 DXYZ.1 DXYZ.2}
+    | when BestL < 2.0:
+      | when Best><TCell: | R <= 1; _goto end
+      | less TCell.tile.empty: | R <= 1; _goto end
+      | B = TCell.block
+      | when B:
+        | less B.speed: | R <= 1; _goto end
+        | when not U.damage and U.owner.is_enemy{B.owner}: | R <= 1; _goto end
+  | _label end
+  | R
+| $pathfind{MaxCost U StartCell &check}
+| Best
 
 world.find MaxCost U StartCell Check =
 | Found = $pathfind{MaxCost U StartCell Check}
