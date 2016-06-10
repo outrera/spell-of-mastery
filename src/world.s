@@ -6,42 +6,41 @@ NoteLife = 1.0
 
 type efx when name amount params
 
-CELL_ELTS = 5
-Cells =
+CellsTile =
+CellsUnits =
+CellsGfxes =
+CellsBlock =
+CellsVisited =
 WorldSize = 1 //max world size
 WorldDepth = 1
 CellsLineSize = 1
-CellsPilarSize = 1
 
 //FIXME: such structs could be defined with a macro
-int.tile = Cells.Me
-int.`!tile` V = Cells.Me <= V
-int.units = Cells.(Me+1)
-int.`!units` V = Cells.(Me+1) <= V
-int.gfx = Cells.(Me+2)
-int.`!gfx` V = Cells.(Me+2) <= V
-int.block = Cells.(Me+3) //unit blocking the tile
-int.`!block` V = Cells.(Me+3) <= V
-int.visited = Cells.(Me+4)
-int.`!visited` V = Cells.(Me+4) <= V
-int.up N = Me+N*CELL_ELTS
-int.up1 = Me+CELL_ELTS
-int.down1 = Me-CELL_ELTS
-int.xyz =
-| N = Me/CELL_ELTS
-| [N/WorldDepth%WorldSize Me/CellsLineSize N%WorldDepth]
+int.tile = CellsTile.Me
+int.`!tile` V = CellsTile.Me <= V
+int.units = CellsUnits.Me
+int.`!units` V = CellsUnits.Me <= V
+int.gfx = CellsGfxes.Me
+int.`!gfx` V = CellsGfxes.Me <= V
+int.block = CellsBlock.Me //unit blocking the tile
+int.`!block` V = CellsBlock.Me <= V
+int.visited = CellsVisited.Me
+int.`!visited` V = CellsVisited.Me <= V
+int.xyz = [Me/WorldDepth%WorldSize Me/CellsLineSize Me%WorldDepth]
+int.up N = Me+N
+int.up1 = Me+1
+int.down1 = Me-1
 int.north = Me-CellsLineSize
 int.south = Me+CellsLineSize
-int.west = Me-CellsPilarSize
-int.east = Me+CellsPilarSize
-int.neibs = [Me-CellsLineSize Me+CellsLineSize
-             Me-CellsPilarSize Me+CellsPilarSize]
+int.west = Me-WorldDepth
+int.east = Me+WorldDepth
+int.neibs = [Me-CellsLineSize Me+CellsLineSize Me-WorldDepth Me+WorldDepth]
 int.fix_z =
 | Cell = Me
-| till Cell.tile.empty: Cell <= Cell.up1
-| Cell <= Cell.down1
-| while Cell.tile.empty: Cell <= Cell.down1
-| Cell <= Cell.up1
+| till Cell.tile.empty: !Cell+1
+| !Cell-1
+| while Cell.tile.empty: !Cell-1
+| !Cell+1
 | Cell
 
 
@@ -94,8 +93,7 @@ world.init =
 | WorldDepth <= $d
 | $maxSize <= WParam.max_size+12 //FIXME: get rid of this 12 margin
 | WorldSize <= $maxSize
-| CellsPilarSize <= WorldDepth*CELL_ELTS
-| CellsLineSize <= WorldSize*CellsPilarSize
+| CellsLineSize <= WorldSize*WorldDepth
 | MaxUnits <= WParam.max_units
 | NoteSize = WParam.note_size
 | NoteLife <= WParam.note_life
@@ -105,13 +103,13 @@ world.init =
 | $c <= WParam.cell_size
 | init_unit_module $c
 | $void <= $main.tiles.void
-| Cells <= dup $maxSize*$maxSize*$d*CELL_ELTS 0
+| NCells = $maxSize*$maxSize*$d
 | Void = $void
-| for I Cells.size/CELL_ELTS:
-  | Cell = CELL_ELTS*I
-  | Cell.tile <= Void
-  | Cell.units <= []
-  | Cell.visited <= #FFFFFFFFFFFF
+| CellsTile <= dup NCells Void
+| CellsUnits <= dup NCells []
+| CellsGfxes <= dup NCells 0
+| CellsBlock <= dup NCells 0
+| CellsVisited <= dup NCells #FFFFFFFFFFFF
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -129,9 +127,7 @@ world.init =
 world.new_visit =
 | !$visited - 1
 | less $visited:
-  | for I Cells.size/CELL_ELTS
-    | Cell = CELL_ELTS*I
-    | Cell.visited <= #FFFFFFFFFFFF
+  | CellsVisited.clear{#FFFFFFFFFFFF}
   | $visited <= #FFFFFF
 | $visited*#1000000
 
@@ -235,25 +231,25 @@ world.free_unit U =
 world.picked = $player.picked
 world.`!picked` Us = $player.picked <= Us
 
-world.cell X Y Z = ((Y*$maxSize+X)*$d+Z)*CELL_ELTS
+world.cell X Y Z = (Y*$maxSize+X)*$d+Z
 world.at X Y Z = $cell{X Y Z}.tile
 world.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
-world.set_ X Y Z V = $cell{X Y Z}.tile <= V
+world.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V
 
 world.pilar X Y =
 | H = $height{X Y}
 | Cell = $cell{X Y 0}
-| map Z H: Cell.up{Z}.tile
+| map Z H: (Cell+Z).tile
 
 world.set_pilar X Y Ts =
 | Cell = $cell{X Y 0}
 | for T Ts:
-  | Cell.tile <= T
-  | !Cell + CELL_ELTS
+  | CellsTile.Cell <= T
+  | !Cell + 1
 | Void = $void
 | times I $d-Ts.size
-  | Cell.tile <= Void
-  | !Cell + CELL_ELTS
+  | CellsTile.Cell <= Void
+  | !Cell + 1
 
 world.clear_tile_ X Y Z =
 | Filler = $void
@@ -403,7 +399,7 @@ world.set X Y Z Tile =
   | update_deco Me Tile Z DecoTs
 | $upd_column{X Y}
 
-world.fix_z XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.fix_z/CELL_ELTS%WorldDepth
+world.fix_z XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.fix_z%WorldDepth
 
 world.fix_z_void XYZ =
 | X,Y,Z = XYZ
