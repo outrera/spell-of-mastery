@@ -571,14 +571,14 @@ view.draw_indicators =
   | $fb.blit{100+IndicUp.w $h-4-IndicDown.h IndicDown}
 | TileName = "[$world.at{X Y Z-1}.type]"
 | Font = font small
-| Font.draw{$fb IX+210 IY+2 "[X],[Y],[Z]:[TileName]"}
+| Font.draw{$fb IX+600 IY+2+32 "[X],[Y],[Z]:[TileName]"}
 | Us = $world.units_get{X,Y,Z}.skip{?empty}
 | less Us.end:
   | U = Us.0
   | S = "[U.type]"
   | when U.goal:
     | S <= "[S] ([U.goal_act.name] at [U.goal.xyz])"
-  | Font.draw{$fb IX+210 IY+2+16 "[S]"}
+  | Font.draw{$fb IX+600 IY+2+48 "[S]"}
 
 view.render_frame =
 | IsNight = $world.params.night><1

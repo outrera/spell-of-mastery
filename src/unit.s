@@ -296,7 +296,7 @@ unit.`!backtrack` XYZ =
 unit.change_owner NewOwner =
 | FXYZ = 0
 | less $removed:
-  | FXYZ = $fxyz
+  | FXYZ <= $fxyz
   | $remove
 | $owner.lost_unit{Me}
 | $owner <= NewOwner
@@ -512,14 +512,17 @@ unit_moved_in Me =
   | U.effect{U.item Me Me.xyz}
 | Below = (C-1).tile
 | when Below.storage
-  | Ts = $world.linked_cells2d{C-1 | Cell => Cell.tile.type><Below.type}
-  | for T Ts{?+1}:
+  | Ts = $world.linked_cells2d{C-1 | Cell => Cell.tile.type><Below.type}{?+1}
+  | O = $owner
+  | Guard = Ts.find{T=>got T.units.find{U=>U.hp and O.is_enemy{U.owner}}}
+  | less got Guard: for T Ts:
     | Flag = T.units.find{?type><special_flag}
     | less got Flag:
       | Flag <= $owner.alloc_unit{special_flag}
       | Flag.move{T.xyz}
-    | when Flag.owner.id<>$owner.id:
-      | Flag.change_owner{$owner}
+    | when Flag.owner.id<>O.id:
+      | Flag.change_owner{O}
+      | Flag.colors <= O.colors
 
 unit.fine_move FXYZ =
 | C = $world.c

@@ -318,12 +318,19 @@ do_excavate Me TargetXYZ =
     | Amount = max 1 $get_effect_value{amount}
     | $add_item{Amount ItemType}
     | Item.free
-    | Found = $find{128 | Dst => (Dst-1).tile.type><storage}
-    | when Found:
+    | StorageType = \storage
+    | Found = $find{128
+      | Dst => (Dst-1).tile.type >< StorageType
+               and got Dst.units.find{U => U.type><special_flag  
+                                       and U.owner.id >< $owner.id}}
+    | if Found then
       | $strip_effect{store_}
       | $add_effect{store_ 0 [ItemType Amount TargetXYZ]}
       | $order_at{Found.xyz act/store}
-      | leave
+      else
+      | $owner.notify{"[$title] cant find [StorageType] room."}
+      | $reset_goal
+    | leave
 | less Mark: when ExcavateGoal:
   | Ds = Dirs4{X,Y => [X Y 0]}
   | Marked = $find{16 (Dst =>
@@ -362,6 +369,9 @@ effect build Where:
   | Work <= No
   | when Tile.embed: Z-1
   | $world.set{X Y Z-1 Tile}
+  | when Tile.storage:
+    | Flag = $owner.alloc_unit{special_flag}
+    | Flag.move{X,Y,Z}
 | less got Work:
   | OID = $owner.id
   | Found = $find{16 (Dst =>
