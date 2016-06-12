@@ -146,11 +146,6 @@ unit.update_move_method =
                else if $swimmer then &swimmer_can_move
                else &land_can_move
 
-unit.move_in State =
-| when $ai <> unit: leave
-| for U $world.units_get{$xyz}: when U.item.is_list:
-  | U.effect{U.item Me Me.xyz}
-
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
@@ -511,6 +506,21 @@ unit.harm Attacker Damage =
 | $die
 | $action.cycles <= 1
 
+unit_moved_in Me =
+| C = $cell
+| for U C.units: when U.item.is_list:
+  | U.effect{U.item Me Me.xyz}
+| Below = (C-1).tile
+| when Below.storage
+  | Ts = $world.linked_cells2d{C-1 | Cell => Cell.tile.type><Below.type}
+  | for T Ts{?+1}:
+    | Flag = T.units.find{?type><special_flag}
+    | less got Flag:
+      | Flag <= $owner.alloc_unit{special_flag}
+      | Flag.move{T.xyz}
+    | when Flag.owner.id<>$owner.id:
+      | Flag.change_owner{$owner}
+
 unit.fine_move FXYZ =
 | C = $world.c
 | XYZ = [FXYZ.0/C FXYZ.1/C FXYZ.2/C]
@@ -522,7 +532,7 @@ unit.fine_move FXYZ =
 | $world.place_unit{Me}
 | $floor <= $cell.floor
 | $environment_updated
-| $move_in{1}
+| when $ai >< unit: unit_moved_in Me
 | Me
 
 unit.move XYZ =
@@ -533,7 +543,6 @@ unit.move XYZ =
 
 unit.remove =
 | when $removed: leave
-| $move_in{0}
 | $world.remove_unit{Me}
 | $xyz.2 <= -1
 

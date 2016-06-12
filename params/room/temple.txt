@@ -1,4 +1,3 @@
 sprite: tiles_room_temple
-excavate: 1
 embed: 1
 1111: 0

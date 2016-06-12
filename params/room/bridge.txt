@@ -1,4 +1,3 @@
 sprite: tiles_room_bridge
-1111: 0
 embed: 1
-build: 100
+1111: 0

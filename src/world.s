@@ -343,17 +343,15 @@ DecoDirs = list
     [ 1 1] [ 1 0] [ 1 -1]
     [ 2 1] [ 2 0] [ 2 -1]]
 
-linked_tiles2dS Me Cost X Y Check =
-| Cell = $cell{X Y 0}
+linked_cells2dS Cell Cost Check =
 | when Cell.cost><Cost: leave []
 | Cell.cost <= Cost
-| less Check X Y: leave []
-| Rs = [[X Y]]
-| for DX,DY Dirs4: for R linked_tiles2dS{Me Cost X+DX Y+DY Check}: push R Rs
+| less Check Cell: leave []
+| Rs = [Cell]
+| for N Cell.neibs: for R linked_cells2dS{N Cost Check}: push R Rs
 | Rs
 
-linked_tiles2d Me X Y Check =
-| linked_tiles2dS Me $new_cost X Y Check
+world.linked_cells2d Cell Check = linked_cells2dS{Cell $new_cost Check}
 
 points_rect Ps =
 | X = Ps{?0}.min
@@ -367,7 +365,7 @@ update_deco Me Tile Z Ps =
 | Single = 0
 | when Params: for P Params: case P
   single | Single <= 1
-| MX,MY,W,H = points_rect Ps
+| MX,MY,W,H = points_rect Ps{?xyz}
 | XYs = points{MX MY W H}
 | for X,Y XYs:
   | D = $units_get{X,Y,ZH}.find{?type><DecoType}
@@ -387,14 +385,15 @@ update_deco Me Tile Z Ps =
   | !Y + OY.2
 
 world.set X Y Z Tile =
-| Removed = $at{X Y Z}
+| Cell = $cell{X Y Z}
+| Removed = Cell.tile
 | DecoTs = 0
 | when Removed.deco and Removed.type<>Tile.type:
-  | DecoTs <= linked_tiles2d Me X Y: X Y => $at{X Y Z}.type><Removed.type
+  | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Removed.type}
 | $dirty_set{X Y Z Tile}
 | when DecoTs: update_deco Me Removed Z DecoTs
 | when Tile.deco:
-  | DecoTs <= linked_tiles2d Me X Y: X Y => $at{X Y Z}.type><Tile.type
+  | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Tile.type}
   | update_deco Me Tile Z DecoTs
 | $upd_neibs{X Y}
 

@@ -365,6 +365,10 @@ handle_picked Me Rect Units = //Me is view
   | Target = if Units.end then 0 else Units.0
   | XYZ = if Target and Affects><unit then Target.xyz else $cursor
   | Below = $world.at{XYZ.0 XYZ.1 XYZ.2-1}
+  | when IsRoom and Below.unit:
+    | $player.notify{"Cannot target unit."}
+    | $main.sound{illegal}
+    | leave
   | when LandOnly and (Below.liquid or Below.type><void):
     | $player.notify{"Can target only land."}
     | $main.sound{illegal}
