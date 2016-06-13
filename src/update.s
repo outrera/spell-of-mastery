@@ -45,6 +45,12 @@ world.new_game =
 | for P $players:
   | P.lore <= 10
   | P.mana <= StartMana
+  | Param = P.params
+  | Param.item_gold <= 0
+  | Param.item_wood <= 0
+  | Param.item_stone <= 0
+  | Param.item_iron <= 0
+  | Param.item_houses <= 0
   | Us = P.units
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
@@ -157,10 +163,14 @@ world.update =
     | $blink.1.picked <= 0
     | $blink.1<=0
     | for U $human.picked: U.picked <= 1
-| for Player $players: when Player.total_units: Player.update
 | when EventActions.end: $process_events
 | when update_events Me: leave
+| for Player $players: when Player.total_units: //reset counters
+  | Param = Player.params
+  | for K,V Param: when K.size>5 and K.take{5}><item_:
+    | Param.K <= 0
 | update_units Me
+| for Player $players: when Player.total_units: Player.update
 | !$cycle + 1
 | $view.ui.update
 
@@ -179,7 +189,6 @@ update_anim Me =
     | leave
   | $pick_facing{$facing}
   | $anim_wait <= Step.1
-
 
 find_path_around_busy_units Me XYZ = //Me is unit
 | OID = $owner.id
@@ -435,6 +444,12 @@ unit.update =
     | leave
 | when $paralyzed and $alive: leave
 | update_anim Me
+| when $ai><flag:
+  | Param = $owner.params
+  | for Item $cell.units.keep{?item><1}
+    | Es = if Item.type >< item_pile then Item.items
+           else Item.type, 1
+    | for K,V Es: Param.K <= Param.K^~{0} + V
 | when $idle:
   | less $empty:
     | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}

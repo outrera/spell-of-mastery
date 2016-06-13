@@ -296,14 +296,7 @@ effect store How:
 | less S: leave
 | $strip_effect{store_}
 | [ItemType Amount BackXYZ] = S
-| Amount <= min $get_item{ItemType} Amount
-| Pile = $world.units_get{TargetXYZ}.find{(?type><pile)}
-| less got Pile:
-  | Pile <= $owner.alloc_unit{item_pile}
-  | Pile.move{TargetXYZ}
-| $add_item{-Amount ItemType}
-| Pile.add_item{Amount ItemType}
-| $order_at{BackXYZ act/excavate}
+| $order_at{BackXYZ act/excavate} //moving in into storage room auto drops
 
 do_excavate Me TargetXYZ =
 | X,Y,Z = TargetXYZ
@@ -315,12 +308,13 @@ do_excavate Me TargetXYZ =
   | Item = $world.units_get{TargetXYZ}.find{(?item><resource)}
   | when got Item:
     | ItemType = Item.type
+    | ItemName = Item.type.drop{5}
     | Amount = max 1 $get_effect_value{amount}
     | $add_item{Amount ItemType}
     | Item.free
     | StorageType = \storage
     | Found = $find{128
-      | Dst => (Dst-1).tile.type >< StorageType
+      | Dst => (Dst-1).tile.storage and (Dst-1).tile.storage.find{ItemName}
                and got Dst.units.find{U => U.type><special_flag  
                                        and U.owner.id >< $owner.id}}
     | if Found then

@@ -555,8 +555,14 @@ view.draw_indicators =
 | Font = font medium
 | X,Y,Z = $cursor
 | $fb.blit{IX IY Indicators}
+| Param = P.params
 | Font.draw{$fb IX+36 IY+2 "[P.mana]"}
 | Font.draw{$fb IX+148 IY+2 "[P.lore]"}
+| Font.draw{$fb IX+232 IY+2 "[Param.item_gold]"}
+| Font.draw{$fb IX+332 IY+2 "[Param.item_wood]"}
+| Font.draw{$fb IX+428 IY+2 "[Param.item_stone]"}
+| Font.draw{$fb IX+522 IY+2 "[Param.item_iron]"}
+| Font.draw{$fb IX+620 IY+2 "[Param.item_houses]"}
 | Debug = $world.params.debug
 | when got Debug: Font.draw{$fb IX+148 IY+32 "[Debug]"}
 | C = 34

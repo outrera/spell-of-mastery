@@ -36,6 +36,11 @@ type player{id world}
    total_units
    unit_counts // count unit be type
    colors
+   gold
+   wood
+   stone
+   iron
+   houses
 | $unit_counts <= dup 300
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $params <= t

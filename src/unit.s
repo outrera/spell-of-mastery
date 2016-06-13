@@ -264,6 +264,15 @@ unit.items =
 | for E $effects: when E.amount<0: push [E.name -E.amount] Items
 | Items
 
+unit.drop_item ItemType Amount =
+| Amount <= min $get_item{ItemType} Amount
+| Pile = $cell.units.find{(?type><pile)}
+| less got Pile:
+  | Pile <= $owner.alloc_unit{item_pile}
+  | Pile.move{$cell.xyz}
+| $add_item{-Amount ItemType}
+| Pile.add_item{Amount ItemType}
+
 unit.acts =
 | Param = $main.params
 | ItemDefs = Param.iacts
@@ -523,6 +532,9 @@ unit_moved_in Me =
     | when Flag.owner.id<>O.id:
       | Flag.change_owner{O}
       | Flag.colors <= O.colors
+  | StoreItems = Below.storage{}{"item_[?]"}
+  | for ItemType,Amount $items:
+    | when StoreItems.find{ItemType}: $drop_item{ItemType Amount}
 
 unit.fine_move FXYZ =
 | C = $world.c
