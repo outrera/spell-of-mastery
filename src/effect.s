@@ -349,16 +349,29 @@ effect idle_void How:
 
 effect excavate How: do_excavate Me TargetXYZ
 
-
 effect build Where:
 | X,Y,Z = TargetXYZ
 | Work = $world.units_get{X,Y,Z}.find{(?type><unit_work and ?goal)}
 | when got Work:
   | TileType = Work.kills
   | Tile = $main.tiles.TileType
+  | Cost = Tile.cost
+  | TimeCost = 0
+  | for K,V Cost:
+    if K><item_time then TimeCost <= V
+    else
+    | Amount = Work.get_item{K}
+    | when Amount < V:
+      | less $owner.add_item{-1 K}:
+        | $owner.notify{"not enough [K.drop{5}] to continue work"}
+        | $reset_goal
+        | leave
+      | Work.add_item{1 K}
+      | $sound{hammer}
+      | leave
   | !Work.hp + $worker
   | $sound{hammer}
-  | when Work.hp < Tile.build: leave
+  | when Work.hp < TimeCost: leave
   | Work.free
   | Work <= No
   | when Tile.embed: Z-1

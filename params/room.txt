@@ -11,4 +11,4 @@ lineup: 1 // affected by by above heavy tiles
 excavate: 0 //true if can be cleared physically or magically during gameplay
 opaque: No //transparent see-through tile, No=decide based on `invisible`
 hp: 0 //how long it takes to excavate this tile
-build: 100 //how long it takes to build this
+build: () //how long it takes to build this

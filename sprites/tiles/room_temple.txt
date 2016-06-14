@@ -1,4 +1,4 @@
-author: `JNeoZ7 (http://neoz7.deviantart.com/)`
-license: `CC-BY`
-origin: `http://neoz7.deviantart.com/art/NEW-Iso-Tiles-Free-487740820`
+author: `RLTiles Contributors`
+license: `Public Domain`
+origin: `http://rltiles.sf.net`
 frames: 64*64

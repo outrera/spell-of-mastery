@@ -192,4 +192,22 @@ player.work_at XYZ =
 | W = $world.units_get{XYZ}
     .find{(?type><unit_work and ?owner.id><$id and ?goal)}
 | if got W then W else 0
+
+player.add_item Amount Name =
+| when Amount > 0: bad "player.remove_item implement positive amount"
+| Amount <= -Amount
+| Piles = []
+| for U $units: when U.ai><flag: 
+  | Pile = U.cell.units.find{?item><pile}
+  | when got Pile:
+    | Available = Pile.get_item{Name}
+    | when Available: push [Pile Available] Piles
+| when Piles{?1}.sum<Amount: leave 0
+| for Pile,Avail Piles:
+  | Count = min Amount Avail
+  | Pile.add_item{-Count Name}
+  | !Amount - Count
+  | when Amount < 0: leave 1
+| 1
+
 export player
