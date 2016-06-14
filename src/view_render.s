@@ -325,6 +325,18 @@ order_act Me Act XYZ Target =
   | $goal <= Target
   | $goal_serial <= Target.serial
 
+room_relinquish Me C =
+| Flag = C.units.find{?ai><flag}
+| when no Flag or Flag.owner.id<>$player.id:
+  | $player.notify{"Relinquish can only target your flag."}
+  | $main.sound{illegal}
+  | leave
+| BelowType = (C-1).tile.type
+| Ts = $world.linked_cells2d{C-1 | CC => CC.tile.type><BelowType}
+| for T Ts{?+1}:
+  | Flag = T.units.find{?ai><flag}
+  | when Flag.owner.id><$player.id: Flag.free
+
 handle_picked Me Rect Units = //Me is view
 | $ui.on_unit_pick{$picked}
 | Player = $player
@@ -389,11 +401,15 @@ handle_picked Me Rect Units = //Me is view
     | Work = $player.work_at{XYZ}
     | when Work:
       | when Act.name >< room_demolish:
+        | Work.drop_all
         | Work.free
         | leave
       | $player.notify{"This place is already occupied."}
       | $main.sound{illegal}
       | Proceed <= 0
+    | when Act.name >< room_relinquish:
+      | room_relinquish Me $world.cell{@XYZ}
+      | leave
   | when Act.name >< room_demolish:
     | $player.notify{"Cant demolish this."}
     | $main.sound{illegal}

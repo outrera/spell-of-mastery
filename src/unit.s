@@ -276,6 +276,9 @@ unit.drop_item ItemType Amount =
 | $add_item{-Amount ItemType}
 | $world.drop_item{$cell ItemType Amount}
 
+unit.drop_all =
+| for K,V $items: $drop_item{K V}
+
 unit.acts =
 | Param = $main.params
 | ItemDefs = Param.iacts
