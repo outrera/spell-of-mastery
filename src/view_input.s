@@ -55,7 +55,14 @@ place_object Me Bank Type =
     | Place <= H.list.all{I=>$world.get{X,Y,Z+I}.empty}
     | less Place: $main.sound{illegal}
 | when Place
+  | Cell = $world.cell{X Y Z}
   | U = $player.alloc_unit{ClassName}
+  | when U.item and U.item<>pile:
+    | U.free
+    | $world.drop_item{Cell ClassName 1}
+    | Flag = Cell.units.find{?ai><flag}
+    | when got Flag: Flag.owner.recount
+    | leave
   | Facing = if Mirror then 5 else 3
   | Reverse = $key{edit_place_reversed}
   | when Reverse: Facing <= if Mirror then 1 else 6
@@ -64,6 +71,8 @@ place_object Me Bank Type =
   | U.move{X,Y,Z}
   | U.run_effects{?><place U U.xyz}
   | U.animate{idle}
+  | Flag = Cell.units.find{?ai><flag}
+  | when got Flag: Flag.owner.recount
 
 world_place_tile_walls Me X Y Z Tile =
 | Wall = $main.tiles.(Tile.wall)
@@ -89,7 +98,6 @@ world_place_tile_deco Me X Y Z Tile =
     | world_place_tile Me X+DX Y+DY Z+H RoofTile
 | when Tile.wall: world_place_tile_walls Me X Y Z Tile
 
-
 place_tile Me Type =
 | $cursor.2 <= $floor{$cursor}
 | X,Y,Z = $cursor
@@ -113,7 +121,8 @@ place_tile Me Type =
   | if Tile.embed then
       | when Tile.wall
         | Below = $world.at{X Y $cursor.2-1}
-        | while $cursor.2 > 1 and (Below.around or Below.roof or Below.type><void):
+        | while $cursor.2 > 1 and (Below.around or Below.roof
+                                   or Below.type><void):
           | H = $world.at{X Y $cursor.2-1}.height
           | !$cursor.2-H
           | $anchor.2 <= $cursor.2
@@ -162,7 +171,10 @@ remove_object_or_tile Me =
     | leave
 | case Brush
   [obj Type]
+    | Cell = $world.cell{X Y Z}
+    | Flag = Cell.units.find{?ai><flag}
     | for U Us: U.free
+    | when got Flag: Flag.owner.recount
   [tile Type]
     | less $world.at{X Y Z}.empty: when Z>1
       | $world.clear_tile{X Y Z-1}

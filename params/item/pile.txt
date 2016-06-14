@@ -1,3 +1,4 @@
 sprite: item_goods
 height: 4
 box_xy: (-1 -1)
+item: pile

@@ -185,6 +185,7 @@ world.load Saved =
   | U.ordered.load{IdMap Ordered}
   | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
+| for P $players: P.recount
 | for P $players: P.picked <= (P.params.picked){IdMap.?}
 | AEs = Saved.actions_enabled
 | when got AEs: for Name,Enabled AEs:

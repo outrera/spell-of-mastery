@@ -264,14 +264,17 @@ unit.items =
 | for E $effects: when E.amount<0: push [E.name -E.amount] Items
 | Items
 
+world.drop_item Cell ItemType Amount =
+| Pile = Cell.units.find{(?item><pile)}
+| when no Pile:
+  | Pile <= $players.0.alloc_unit{item_pile}
+  | Pile.move{Cell.xyz}
+| Pile.add_item{Amount ItemType}
+
 unit.drop_item ItemType Amount =
 | Amount <= min $get_item{ItemType} Amount
-| Pile = $cell.units.find{(?type><pile)}
-| less got Pile:
-  | Pile <= $owner.alloc_unit{item_pile}
-  | Pile.move{$cell.xyz}
 | $add_item{-Amount ItemType}
-| Pile.add_item{Amount ItemType}
+| $world.drop_item{$cell ItemType Amount}
 
 unit.acts =
 | Param = $main.params

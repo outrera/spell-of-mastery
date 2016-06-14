@@ -13,6 +13,7 @@ reinit_units Us =
   | Facing = U.facing
   | XYZ = U.xyz.deep_copy
   | FXYZ = U.fxyz.deep_copy
+  | Items = U.items
   | when U.leader: U.hp <= U.class.hp
   | U.free
   | less U.ordered.type><die:
@@ -20,6 +21,7 @@ reinit_units Us =
     | U.move{XYZ}
     | U.pick_facing{Facing}
     | U.fxyz.init{FXYZ}
+    | when Items: for Item,Amount Items: U.add_item{Amount Item}
     | push U InitedUnits
 | InitedUnits
 
@@ -30,6 +32,31 @@ handle_attack_triggers Us =
   | when got AttackTrigger and U.ai<>attack:
     | U.attacker <= 1
     | AttackTrigger.free
+
+player.reset_counters =
+| Param = $params
+| Param.item_gold <= 0
+| Param.item_wood <= 0
+| Param.item_stone <= 0
+| Param.item_iron <= 0
+| Param.item_houses <= 0
+| for K,V Param: when K.size>5 and K.take{5}><item_:
+  | Param.K <= 0
+
+player.init StartMana =
+| $lore <= 10
+| $mana <= StartMana
+| $reset_counters
+
+count_flag_resources Me =
+| Pile = $cell.units.find{?item><pile}
+| when no Pile: leave
+| Param = $owner.params
+| for K,V Pile.items: Param.K <= Param.K^~{0} + V
+
+player.recount =
+| $reset_counters
+| for U $units: when U.ai><flag: less U.removed: count_flag_resources U
 
 world.new_game =
 | for K,V $main.params.world: $params.K <= V
@@ -43,14 +70,7 @@ world.new_game =
 | InitedUnits = reinit_units $active
 | PAI = $main.params.ai
 | for P $players:
-  | P.lore <= 10
-  | P.mana <= StartMana
-  | Param = P.params
-  | Param.item_gold <= 0
-  | Param.item_wood <= 0
-  | Param.item_stone <= 0
-  | Param.item_iron <= 0
-  | Param.item_houses <= 0
+  | P.init{StartMana}
   | Us = P.units
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
@@ -166,9 +186,7 @@ world.update =
 | when EventActions.end: $process_events
 | when update_events Me: leave
 | for Player $players: when Player.total_units: //reset counters
-  | Param = Player.params
-  | for K,V Param: when K.size>5 and K.take{5}><item_:
-    | Param.K <= 0
+  | Player.reset_counters
 | update_units Me
 | for Player $players: when Player.total_units: Player.update
 | !$cycle + 1
@@ -426,7 +444,6 @@ unit_sink Me =
 | $move{[$world.w+1 $world.h+1 1]} //move it out of sight
 | $harm{Me 6000}
 
-
 unit.update =
 | when $removed or $active<>1:
   | $active <= 0
@@ -444,12 +461,7 @@ unit.update =
     | leave
 | when $paralyzed and $alive: leave
 | update_anim Me
-| when $ai><flag:
-  | Param = $owner.params
-  | for Item $cell.units.keep{?item><1}
-    | Es = if Item.type >< item_pile then Item.items
-           else Item.type, 1
-    | for K,V Es: Param.K <= Param.K^~{0} + V
+| when $ai><flag: count_flag_resources Me
 | when $idle:
   | less $empty:
     | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}
