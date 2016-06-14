@@ -245,7 +245,7 @@ unit.strip_effect Name =
   | $flags <= $flags^set_bit{Flag 0}
   | $update_move_method
 
-unit.add_item Amount Name =
+unit.add_item Name Amount =
 | less Amount: leave
 | for E $effects: when E.name><Name:
   | !E.amount-Amount
@@ -269,11 +269,11 @@ world.drop_item Cell ItemType Amount =
 | when no Pile:
   | Pile <= $players.0.alloc_unit{item_pile}
   | Pile.move{Cell.xyz}
-| Pile.add_item{Amount ItemType}
+| Pile.add_item{ItemType Amount}
 
 unit.drop_item ItemType Amount =
 | Amount <= min $get_item{ItemType} Amount
-| $add_item{-Amount ItemType}
+| $add_item{ItemType -Amount}
 | $world.drop_item{$cell ItemType Amount}
 
 unit.drop_all =

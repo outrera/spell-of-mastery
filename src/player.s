@@ -193,7 +193,7 @@ player.work_at XYZ =
     .find{(?type><unit_work and ?owner.id><$id and ?goal)}
 | if got W then W else 0
 
-player.add_item Amount Name =
+player.add_item Name Amount =
 | when Amount > 0: bad "player.remove_item implement positive amount"
 | Amount <= -Amount
 | Piles = []
@@ -205,7 +205,7 @@ player.add_item Amount Name =
 | when Piles{?1}.sum<Amount: leave 0
 | for Pile,Avail Piles:
   | Count = min Amount Avail
-  | Pile.add_item{-Count Name}
+  | Pile.add_item{Name -Count}
   | !Amount - Count
   | when Amount < 0: leave 1
 | 1

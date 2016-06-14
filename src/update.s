@@ -21,7 +21,7 @@ reinit_units Us =
     | U.move{XYZ}
     | U.pick_facing{Facing}
     | U.fxyz.init{FXYZ}
-    | when Items: for Item,Amount Items: U.add_item{Amount Item}
+    | when Items: for Item,Amount Items: U.add_item{Item Amount}
     | push U InitedUnits
 | InitedUnits
 

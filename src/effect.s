@@ -26,7 +26,7 @@ effect add_effect Name Duration Params: Target.add_effect{Name Duration Params}
 
 effect strip Name: Target.strip_effect{Name}
 
-effect add_item Name Amount: Target.add_item{Amount Name}
+effect add_item Name Amount: Target.add_item{Name Amount}
 
 effect mod Arg: Target.mod <= Arg
 
@@ -305,13 +305,16 @@ do_excavate Me TargetXYZ =
 | when Mark and $world.excavate{X Y Z 2 (max $worker 1)}:
   | Mark.free
   | Mark <= 0
-  | Item = $world.units_get{TargetXYZ}.find{(?item><resource)}
-  | when got Item:
-    | ItemType = Item.type
-    | ItemName = Item.type.drop{5}
-    | Amount = max 1 $get_effect_value{amount}
-    | $add_item{Amount ItemType}
-    | Item.free
+  | Cell = $world.cell{@TargetXYZ}
+  | ItemType = 0
+  | ItemCount = 0
+  | for It,Amount Cell.items: when $main.classes.It.item><resource:
+    | ItemType <= It
+    | ItemCount <= Amount
+  | when ItemType:
+    | ItemName = ItemType.drop{5}
+    | $add_item{ItemType ItemCount}
+    | Cell.add_item{ItemType -ItemCount}
     | StorageType = \storage
     | Found = $find{128
       | Dst => (Dst-1).tile.storage and (Dst-1).tile.storage.find{ItemName}
@@ -319,7 +322,7 @@ do_excavate Me TargetXYZ =
                                        and U.owner.id >< $owner.id}}
     | if Found then
       | $strip_effect{store_}
-      | $add_effect{store_ 0 [ItemType Amount TargetXYZ]}
+      | $add_effect{store_ 0 [ItemType ItemCount TargetXYZ]}
       | $order_at{Found.xyz act/store}
       else
       | $owner.notify{"[$title] cant find [StorageType] room."}
@@ -362,11 +365,11 @@ effect build Where:
     else
     | Amount = Work.get_item{K}
     | when Amount < V:
-      | less $owner.add_item{-1 K}:
+      | less $owner.add_item{K -1}:
         | $owner.notify{"not enough [K.drop{5}] to continue work"}
         | $reset_goal
         | leave
-      | Work.add_item{1 K}
+      | Work.add_item{K 1}
       | $sound{hammer}
       | leave
   | !Work.hp + $worker
@@ -437,6 +440,8 @@ effect spawn What:
   | S.alpha <= 255
   | S.delta <= -50
 | S.move{TargetXYZ}
+
+effect drop ItemType Amount: $world.drop_item{$cell ItemType Amount}
 
 effect morph ClassName:
 | Class = $main.classes.ClassName

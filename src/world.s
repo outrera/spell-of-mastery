@@ -47,6 +47,21 @@ int.path =
   | Cell <= Cell.prev
 | Path.tail.list
 list.cell = (Me.1*WorldSize+Me.0)*WorldDepth+Me.2
+int.pile =
+| R = $units.find{?item><pile}
+| if got R then R else 0
+int.items =
+| Pile = $pile
+| if Pile then Pile.items else []
+int.get_item Name =
+| Pile = $pile
+| if Pile then Pile.get_item{Name} else 0
+int.add_item Name Amount =
+| Pile = $pile
+| when Pile:
+  | Pile.add_item{Name Amount}
+  | Is = Pile.items
+  | when Is.end: Pile.free
 
 
 type world{main}
