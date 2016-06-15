@@ -377,6 +377,12 @@ effect build Where:
   | when Work.hp < TimeCost: leave
   | Work.free
   | Work <= No
+  | when Tile.type><demolish:
+    | Cell = $world.cell{X Y Z}
+    | Room = (Cell-1).tile
+    | for K,V Room.cost: when K<>item_time: Cell.add_item{K V}
+    | $world.set{X Y Z-1 $main.tiles.soil}
+    | leave
   | when Tile.embed: Z-1
   | $world.set{X Y Z-1 Tile}
   | when Tile.storage:

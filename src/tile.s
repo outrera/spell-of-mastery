@@ -6,7 +6,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
           height/1 empty/0 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 excavate/0
           parts/0 box/[64 64 h] wallShift/0 indoor/0 liquid/0 opaque/No
-          around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/[]
+          around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
           hit/0 death/0 embed/0 deco/0 storage/0}
      id/Id
      main/Main
@@ -46,7 +46,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      hit/Hit //on hit effect
      death/Death //on death effect
      storage/Storage
-| when Cost.size: $cost <= Cost.group{2}{K,V=>"item_[K]",V}
+| when Cost and Cost.size: $cost <= Cost.group{2}{K,V=>"item_[K]",V}
 | when no $opaque: $opaque <= not $invisible
 | when $box.2><h: $box.2 <= $height*CellSize
 | less $parts:

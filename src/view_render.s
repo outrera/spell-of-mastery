@@ -410,7 +410,7 @@ handle_picked Me Rect Units = //Me is view
     | when Act.name >< room_relinquish:
       | room_relinquish Me $world.cell{@XYZ}
       | leave
-  | when Act.name >< room_demolish:
+  | when Act.name >< room_demolish and not Below.cost:
     | $player.notify{"Cant demolish this."}
     | $main.sound{illegal}
     | Proceed <= 0

@@ -1,0 +1,4 @@
+sprite: tiles_room_storage
+aux: 1
+embed: 1
+1111: 0
