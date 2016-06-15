@@ -49,10 +49,8 @@ player.init StartMana =
 | $reset_counters
 
 count_flag_resources Me =
-| Pile = $cell.units.find{?item><pile}
-| when no Pile: leave
 | Param = $owner.params
-| for K,V Pile.items: Param.K <= Param.K^~{0} + V
+| for K,V $cell.items: Param.K <= Param.K^~{0} + V
 
 player.recount =
 | $reset_counters

@@ -16,6 +16,7 @@ CellsFloor =
 WorldSize = 1 //max world size
 WorldDepth = 1
 CellsLineSize = 1
+World =
 
 //FIXME: such structs could be defined with a macro
 int.tile = CellsTile.Me
@@ -58,10 +59,11 @@ int.get_item Name =
 | if Pile then Pile.get_item{Name} else 0
 int.add_item Name Amount =
 | Pile = $pile
-| when Pile:
-  | Pile.add_item{Name Amount}
-  | Is = Pile.items
-  | when Is.end: Pile.free
+| less Pile:
+  | Pile <= World.players.0.alloc_unit{item_pile}
+  | Pile.move{$xyz}
+| Pile.add_item{Name Amount}
+| when Amount<<0 and Pile.items.end: Pile.free
 
 
 type world{main}
@@ -107,6 +109,7 @@ type world{main}
 
 world.init =
 | $main.world <= Me
+| World <= Me
 | $minimap <= gfx 128 128
 | WParam = $main.params.world
 | $d <= WParam.depth

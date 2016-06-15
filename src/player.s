@@ -198,14 +198,12 @@ player.add_item Name Amount =
 | Amount <= -Amount
 | Piles = []
 | for U $units: when U.ai><flag: 
-  | Pile = U.cell.units.find{?item><pile}
-  | when got Pile:
-    | Available = Pile.get_item{Name}
-    | when Available: push [Pile Available] Piles
+  | Available = U.cell.get_item{Name}
+  | when Available: push [U.cell Available] Piles
 | when Piles{?1}.sum<Amount: leave 0
-| for Pile,Avail Piles:
+| for Cell,Avail Piles:
   | Count = min Amount Avail
-  | Pile.add_item{Name -Count}
+  | Cell.add_item{Name -Count}
   | !Amount - Count
   | when Amount < 0: leave 1
 | 1

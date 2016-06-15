@@ -44,6 +44,11 @@ place_object Me Bank Type =
 | when ClassName><special_flag:
   | $player.capture{Cell-1}
   | leave
+| when Class.item and Class.item<>pile:
+  | Cell.add_item{ClassName 1}
+  | Flag = Cell.units.find{?ai><flag}
+  | when got Flag: Flag.owner.recount
+  | leave
 | when Z+Class.height>>$world.d: leave
 | Place = 1
 | for XX,YY,ZZ Class.form: when Place:
@@ -60,12 +65,6 @@ place_object Me Bank Type =
     | less Place: $main.sound{illegal}
 | when Place
   | U = $player.alloc_unit{ClassName}
-  | when U.item and U.item<>pile:
-    | U.free
-    | $world.drop_item{Cell ClassName 1}
-    | Flag = Cell.units.find{?ai><flag}
-    | when got Flag: Flag.owner.recount
-    | leave
   | Facing = if Mirror then 5 else 3
   | Reverse = $key{edit_place_reversed}
   | when Reverse: Facing <= if Mirror then 1 else 6
