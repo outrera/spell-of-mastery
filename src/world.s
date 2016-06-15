@@ -44,7 +44,7 @@ int.path =
 | Cell = Me
 | Path = []
 | while Cell
-  | push Cell.xyz Path
+  | push Cell Path
   | Cell <= Cell.prev
 | Path.tail.list
 list.cell = (Me.1*WorldSize+Me.0)*WorldDepth+Me.2

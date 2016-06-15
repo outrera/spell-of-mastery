@@ -153,7 +153,7 @@ ai_cast_teleport Me U =
 | Found = $world.closest_reach{1000 U E.xyz U.xyz}
 | less Found: leave 0
 | !U.owner.mana + $main.params.acts.cast_teleport.cost
-| U.order_act{cast_teleport target/Found.path.last}
+| U.order_act{cast_teleport target/Found.xyz}
 | 1
 
 ai.update_units =

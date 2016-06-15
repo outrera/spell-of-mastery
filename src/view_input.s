@@ -241,7 +241,7 @@ world.update_picked =
 | when $act and $act.range <> any: leave
 | Marks = []
 | for U $human.picked: less U.path.end:
-  | PathGoal = U.path{}.last.unheap
+  | PathGoal = U.path.last.xyz
   | Mark = $human.alloc_unit{"mark_goal"}
   | Mark.move{PathGoal}
   | Wave = @int 20.0*(@sin: ($cycle%100).float/100.0*PI)

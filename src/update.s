@@ -333,14 +333,14 @@ update_path Me =
     | leave 0
   | LastPathLife = $path_life
   | $set_path{Path}
-  | when Path.last<>$goal.xyz: //cant reach goal from here?
+  | when Path.last.xyz<>$goal.xyz: //cant reach goal from here?
     | when LastPathLife>0: //got stuck?
       | $goal <= 0
       | leave 0
     | $path_life <= Path.size+1 //ensure it gets as close as possible
 | Path = $path
 | when Path.end: leave
-| XYZ = Path.head.unheap
+| XYZ = Path.head.xyz
 | $path <= Path.heapfree1
 | update_path_move Me XYZ
 

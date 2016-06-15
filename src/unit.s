@@ -420,7 +420,7 @@ unit.order_at XYZ act/0 =
     | Ms = $list_moves{$cell -1}
     | less Ms.end:
       | set_goal Me Act $xyz
-      | $set_path{[Ms.0.xyz $xyz]}
+      | $set_path{[Ms.0 $cell]}
       | leave
   | $goal <= 0
   | $goal_act <= 0 //if Act then Act else $main.params.acts.idle

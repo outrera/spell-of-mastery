@@ -142,7 +142,7 @@ dact swap.start
 | move_start Me
 | T = $target
 | O = T.order
-| less T.path.end: T.set_path{[T.xyz @T.path.list]}
+| less T.path.end: T.set_path{[T.cell @T.path.list]}
 | O.init{move U.from}
 | O.priority <= 100
 | less T.goal: less U.goal and U.goal.xyz >< T.xyz:
