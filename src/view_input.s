@@ -34,12 +34,16 @@ AnchorHack = -1
 place_object Me Bank Type =
 | X,Y,Z = $cursor
 | less Z << $anchor.2: leave
+| Cell = $world.cell{X Y Z}
 | Mirror = $key{edit_place_mirrored}
 | PlaceRandom = $key{edit_place_random}
 | ClassName = if PlaceRandom
               then "[Bank]_[$main.classes_banks.Bank.rand]"
               else "[Bank]_[Type]"
 | Class = $main.classes.ClassName
+| when ClassName><special_flag:
+  | $player.capture{Cell-1}
+  | leave
 | when Z+Class.height>>$world.d: leave
 | Place = 1
 | for XX,YY,ZZ Class.form: when Place:
@@ -55,7 +59,6 @@ place_object Me Bank Type =
     | Place <= H.list.all{I=>$world.get{X,Y,Z+I}.empty}
     | less Place: $main.sound{illegal}
 | when Place
-  | Cell = $world.cell{X Y Z}
   | U = $player.alloc_unit{ClassName}
   | when U.item and U.item<>pile:
     | U.free

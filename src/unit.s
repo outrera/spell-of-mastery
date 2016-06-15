@@ -527,17 +527,7 @@ unit_moved_in Me =
   | U.effect{U.item Me Me.xyz}
 | Below = (C-1).tile
 | when Below.storage
-  | Ts = $world.linked_cells2d{C-1 | Cell => Cell.tile.type><Below.type}{?+1}
-  | O = $owner
-  | Guard = Ts.find{T=>got T.units.find{U=>U.hp and O.is_enemy{U.owner}}}
-  | less got Guard: for T Ts:
-    | Flag = T.units.find{?type><special_flag}
-    | less got Flag:
-      | Flag <= $owner.alloc_unit{special_flag}
-      | Flag.move{T.xyz}
-    | when Flag.owner.id<>O.id:
-      | Flag.change_owner{O}
-      | Flag.colors <= O.colors
+  | less $owner.capture{C-1}: leave
   | StoreItems = Below.storage{}{"item_[?]"}
   | for ItemType,Amount $items:
     | when StoreItems.find{ItemType}: $drop_item{ItemType Amount}
