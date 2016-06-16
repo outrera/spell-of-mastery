@@ -308,7 +308,7 @@ do_excavate Me TargetXYZ =
   | Cell = $world.cell{@TargetXYZ}
   | ItemType = 0
   | ItemCount = 0
-  | for It,Amount Cell.items: when $main.classes.It.item><resource:
+  | for It,Amount Cell.items: when $main.classes.It.ai><resource:
     | ItemType <= It
     | ItemCount <= Amount
   | when ItemType:

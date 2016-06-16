@@ -41,7 +41,9 @@ world.save =
     | Active <= list U.from U.anim U.anim_step U.anim_wait
                      U.kills U.cooldown Effects Host Goal Path
                      U.action.save U.ordered.save U.next_action.save
-  | list U.type U.id U.serial U.owner.id U.xyz U.fxyz U.facing
+  | Facing = U.facing
+  | when U.sprite.id <> U.default_sprite.id: Facing <= [U.sprite.id Facing]
+  | list U.type U.id U.serial U.owner.id U.xyz U.fxyz Facing
          U.flags U.hp Active
 | $params.view_zlock <= $view.zlock
 | list version(0.2) w($w) h($h) serial($serial) cycle($cycle)
@@ -124,6 +126,7 @@ world.load Saved =
         else for J WH: Dst.J <= Src.J
 | $human <= $players.(Saved.player)
 | Acts = $main.params.acts
+| Sprites = $main.sprites
 | for X Saved.units
   | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active]=X
   | U = $players.Owner.alloc_unit{Type}
@@ -135,6 +138,9 @@ world.load Saved =
   | U.hp <= HP
   | U.move{XYZ}
   | U.fxyz.init{FXYZ}
+  | when Facing.is_list:
+    | U.sprite <= Sprites.(Facing.0)
+    | Facing <= Facing.1
   | U.pick_facing{Facing}
   | when Active:
     | [From Anim AnimStep AnimWait Kills Cool Efx Host Goal Path
@@ -161,7 +167,7 @@ world.load Saved =
       | U.goal <= U.unit_goal
       | U.goal.xyz.init{XYZ}
       | U.goal_act <= Acts.ActName
-      | U.sprite <= $main.sprites.special_construction
+      | U.sprite <= Sprites.special_construction
       | U.goal_act <= Acts.ActName
       | U.host <= 0
       | U.animate{idle}

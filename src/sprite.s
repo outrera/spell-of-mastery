@@ -10,6 +10,7 @@ type sprite{Bank Name xy/[0 0]
             class/0 margins/0 pick_height/0
             font/Font icon/0 shadow/0 form/[`|` [4]]
             rect/[40 76 -4] size/[37 37 70]}
+  id/0
   bank/Bank
   name/Name
   frames/Frames
@@ -111,6 +112,7 @@ init_sprites Me =
   | if S.frames >< folder
     then init_frames_from_folder S "[Params.filepath]/"
     else init_frames S gfx."[Params.filepath].png"
+  | S.id <= SpriteName
   | $sprites.SpriteName <= S
 | for Name,Sprite $sprites: when!it Sprite.shadow: Sprite.shadow <= $img{it}
 

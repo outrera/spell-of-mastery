@@ -44,7 +44,7 @@ place_object Me Bank Type =
 | when ClassName><special_flag:
   | $player.capture{Cell-1}
   | leave
-| when Class.item and Class.item<>pile:
+| when Class.item><1:
   | Cell.add_item{ClassName 1}
   | Flag = Cell.units.find{?ai><flag}
   | when got Flag: Flag.owner.recount

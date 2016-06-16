@@ -9,7 +9,7 @@ Click Modifiers:
 B - creates roof/bridge over empty space.
 N - place sprite rotated 180 degrees
 M - place sprite mirrored
-R - pick random object from selected sprite bank. Useful for placing decorations, like bushes
+R - pick random object from selected object bank. Useful for placing decorations, like bushes
 T - pick facing at random
 
 Scripting:

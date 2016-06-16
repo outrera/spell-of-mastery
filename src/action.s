@@ -117,6 +117,7 @@ respawn_leader Me XYZ =
 
 dact die.start
 | U = $unit
+| U.drop_all
 | U.animate{death}
 | less not (U.class.hp-U.hp)>0 or got U.sprite.anims.death:
   | U.free

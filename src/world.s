@@ -49,7 +49,7 @@ int.path =
 | Path.tail.list
 list.cell = (Me.1*WorldSize+Me.0)*WorldDepth+Me.2
 int.pile =
-| R = $units.find{?item><pile}
+| R = $units.find{?ai><pile}
 | if got R then R else 0
 int.items =
 | Pile = $pile
@@ -57,14 +57,25 @@ int.items =
 int.get_item Name =
 | Pile = $pile
 | if Pile then Pile.get_item{Name} else 0
+unit.update_pile =
+| Items = $items
+| when Items.end:
+  | $free
+  | leave
+| if Items.tail.end then
+  | Item = Items.0
+  | Cl = World.main.classes.(Item.0)
+  | $sprite <= Cl.default_sprite
+  else
+  | $sprite <= $default_sprite
+| $animate{idle}
 int.add_item Name Amount =
 | Pile = $pile
 | less Pile:
   | Pile <= World.players.0.alloc_unit{item_pile}
   | Pile.move{$xyz}
 | Pile.add_item{Name Amount}
-| when Amount<<0 and Pile.items.end: Pile.free
-
+| Pile.update_pile
 
 type world{main}
    w //width

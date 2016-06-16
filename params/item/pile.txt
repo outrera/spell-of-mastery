@@ -1,5 +1,7 @@
 sprite: item_goods
+item: 0
+ai: pile
 aux: 1
 height: 4
 box_xy: (-1 -1)
-item: pile
+
