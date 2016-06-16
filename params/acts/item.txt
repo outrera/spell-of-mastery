@@ -2,4 +2,6 @@
 icon: "icons_nil"
 range: 0
 affects: any
+before: animate{idle},sound{impact},drop{_ all}
+after: ()
 tab: bag

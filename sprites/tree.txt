@@ -5,4 +5,4 @@ class: empty,0
       ,health,100
       ,hit,((effect spell) (sound (tree_hit1 tree_hit2)))
       ,death,((effect spell) (sound (tree_hit1 tree_hit2)) (sound tree_death)
-             (drop (item_wood 10)))
+             (spawn_item (item_wood 10)))

@@ -447,7 +447,12 @@ effect spawn What:
   | S.delta <= -50
 | S.move{TargetXYZ}
 
-effect drop ItemType Amount: $cell.add_item{ItemType Amount}
+effect spawn_item ItemType Amount: $cell.add_item{ItemType Amount}
+
+effect drop ItemType Amount:
+| when ItemType><_: ItemType <= $action.type
+| when Amount><all: Amount <= $get_item{ItemType}
+| $drop_item{ItemType Amount}
 
 effect morph ClassName:
 | Class = $main.classes.ClassName
