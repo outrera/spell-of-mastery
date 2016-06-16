@@ -324,7 +324,6 @@ create_view_ui Me =
 | PlayerWidget <= hidden: layH PlayerPickers
 | BankList,ItemList = create_bank_list Me
 | BrushPicker <= hidden: layH: BankList,ItemList
-| for K,V $params.acts: V.icon_gfx <= $img{"icons_[V.icon]"}
 | UnitPanel <= unit_panel Me
 | IconsPanelTabs = create_icons_panel_tabs Me
 | EditorTabs <= create_editor_tabs Me

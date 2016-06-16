@@ -79,6 +79,7 @@ main.load_classes =
   | when V.item><1:
     | Item = ItemProto.deep_copy
     | Item.name <= K
+    | Item.icon_gfx <= V.default_sprite.frames.0
     | Acts.K <= Item
     | Item.title <= K.replace{_ ' '}
   | when V.active:

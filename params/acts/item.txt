@@ -1,5 +1,5 @@
 //item prototype
-icon: nil
+icon: "icons_nil"
 range: 0
 affects: any
 tab: bag

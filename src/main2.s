@@ -26,6 +26,10 @@ type main{Data}
 | $load_sounds
 | $load_tiles
 | $load_classes
+| for K,V $params.acts: when no V.icon_gfx:
+  | IName = V.icon
+  | IName = if IName.is_text then "icons_[IName]" else IName.1
+  | V.icon_gfx <= $img{IName}
 | $tid_map <= dup $last_tid+1 0
 | for [Type Tile] $tiles: $tid_map.(Tile.id) <= Tile
 | $bank_names <= $classes{}{?1}{?bank}.uniq.sort
