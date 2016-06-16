@@ -307,7 +307,7 @@ create_icons_panel_tabs Me =
   | PanelTab <= Icon.data
   | ActIconsLay.show <= no [brush menu].find{PanelTab}
   | MenuTab.show <= PanelTab><menu
-| Icons = map Name [spell summon build unit brush menu]:
+| Icons = map Name [spell summon build unit bag brush menu]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
   | when Name><menu: Icon.picked<=1
   | Icon.picked_overlay <= PickedIconOverlay
@@ -458,6 +458,11 @@ ui.on_unit_pick Units =
          | Unit <= Player.leader
          | less Unit: leave
          | As <= Unit.acts.keep{?tab><build}
+       else if PanelTab >< bag then
+         | when Units.size<>1: leave
+         | Unit <= Units.0
+         | Acts = $main.params.acts
+         | As <= map K,A Unit.items: Acts.K
        else leave
 | ui_update_panel_buttons Me Unit As
 

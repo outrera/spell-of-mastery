@@ -73,8 +73,15 @@ main.load_classes =
   | C = class S.bank S.name Me @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
+| Acts = $params.acts
+| ItemProto = Acts.item
 | for K,V $classes:
-  | when V.hp:
+  | when V.item><1:
+    | Item = ItemProto.deep_copy
+    | Item.name <= K
+    | Acts.K <= Item
+    | Item.title <= K.replace{_ ' '}
+  | when V.active:
     | As = []
     | when V.speed: As <= [recall @As]
     | when V.damage:
@@ -83,7 +90,6 @@ main.load_classes =
     | As <= [@As @V.acts]
     | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]
     | V.acts <= As
-| Acts = $params.acts
 | for K,Act $params.acts.list:
   | less Act.needs.end:
     | Act.needs <= map N Act.needs:
