@@ -24,6 +24,7 @@ GameUnitUI =
 UnitPanel =
 BankList =
 HotKeyInvoke = 0
+ResourceCounters =
 
 MenuBG =
 IconsPanelBG =
@@ -340,8 +341,10 @@ create_view_ui Me =
                      layH{s/4 UnitActIcons.drop{UnitActIcons.size/2}}
                     ,layH{s/4 UnitActIcons.take{UnitActIcons.size/2}}
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
+| ResourceCounters <= resource_counters $view
 | dlg: mtx
   |  0   0| $view
+  |  0   0| ResourceCounters
   |  0 $height-136-UnitPanel.bg.h| GameUnitUI
   |  0   0| BrushPicker
   |  0 IPY| IconsPanelBG
@@ -408,9 +411,14 @@ ui.update = //called by world.update each game cycle
 ui_update_panel_buttons Me Unit As GAs =
 | Acts = $main.params.acts
 | As = As.i.take{min{MaxUnitActIcons As.size}}
+| As = As.keep{Act=>Act.is_list or Act.enabled^get_bit{Unit.owner.id}}
 | GAs = GAs.i.map{I,Act=>[-I-1 Act]}.take{min{MaxGroundActIcons GAs.size}}
 | Player = Unit.owner
-| for I,Act @As,@GAs: when Act.enabled^get_bit{Unit.owner.id}:
+| for I,Act @As,@GAs:
+  | Count = No
+  | when Act.is_list:
+    | Count <= Act.0
+    | Act <= Act.1
   | Preqs = Act.needs.all{Ns=>Ns.any{N=>Player.research_remain{Acts.N}<<0}}
   | Icons = if I<0 then | I <= -(I+1); GroundActIcons 
             else UnitActIcons
@@ -427,6 +435,7 @@ ui_update_panel_buttons Me Unit As GAs =
     | when Cool and Cool.0:
       | Icon.grayed <= 100-((Cool.1-Cool.0)*100+Cool.1-1)/Cool.1
     | Number = if ResearchRemain <> 0 then ResearchRemain else No
+    | when got Count: Number <= Count
     | Icon.text.init{[0 0 Number]}
     | Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'
     | Icon.frame.init{[3 3 Frame]}
@@ -473,8 +482,8 @@ ui.on_unit_pick Units =
          | when Units.size<>1: leave
          | Unit <= Units.0
          | Acts = $main.params.acts
-         | As <= map K,A Unit.items: Acts."drop_[K]"
-         | GAs <= map K,A Unit.cell.items: Acts."take_[K]"
+         | As <= map K,A Unit.items: [A Acts."drop_[K]"]
+         | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
        else leave
 | ui_update_panel_buttons Me Unit As GAs
 

@@ -554,61 +554,12 @@ view.render_iso =
 | BlitItems <= 0
 | UnitRects <= 0
 
-
-
-Indicators = 0
-IndicUp = 0
-IndicDown = 0
-
-view.draw_indicators =
-| less Indicators:
-  | Indicators <= $main.img{ui_indicators}
-  | IndicUp <= $main.img{ui_arr_up}
-  | IndicDown <= $main.img{ui_arr_down}
-| IX = ($w-Indicators.w)/2
-| IY = 0
-| P = $player
-| Font = font medium
-| X,Y,Z = $cursor
-| $fb.blit{IX IY Indicators}
-| Param = P.params
-| Font.draw{$fb IX+36 IY+2 "[P.mana]"}
-| Font.draw{$fb IX+148 IY+2 "[P.lore]"}
-| Font.draw{$fb IX+232 IY+2 "[Param.item_gold]"}
-| Font.draw{$fb IX+332 IY+2 "[Param.item_wood]"}
-| Font.draw{$fb IX+428 IY+2 "[Param.item_stone]"}
-| Font.draw{$fb IX+522 IY+2 "[Param.item_iron]"}
-| Font.draw{$fb IX+620 IY+2 "[Param.item_houses]"}
-| Debug = $world.params.debug
-| when got Debug: Font.draw{$fb IX+148 IY+32 "[Debug]"}
-| C = 34
-| Notes = $world.notes
-| Clock = clock
-| for [Expires Chars] $world.notes: when Clock < Expires:
-  | Font.draw{$fb 150 IY+C "* [Chars.text]"}
-  | !C+16
-| when $world.up{$cursor}:
-  | $fb.blit{100 $h-4-IndicUp.h IndicUp}
-| when $world.down{$cursor}:
-  | $fb.blit{100+IndicUp.w $h-4-IndicDown.h IndicDown}
-| TileName = "[$world.at{X Y Z-1}.type]"
-| Font = font small
-| Font.draw{$fb IX+600 IY+2+32 "[X],[Y],[Z]:[TileName]"}
-| Us = $world.units_get{X,Y,Z}.skip{?empty}
-| less Us.end:
-  | U = Us.0
-  | S = "[U.type]"
-  | when U.goal:
-    | S <= "[S] ([U.goal_act.name] at [U.goal.xyz])"
-  | Font.draw{$fb IX+600 IY+2+48 "[S]"}
-
 view.render_frame =
 | IsNight = $world.params.night><1
 | BrightFactor <= if IsNight then 10 else 0
 //| $fb.clear{#929292/*#00A0C0*/}
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
-| $draw_indicators
 | InfoText = []
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText

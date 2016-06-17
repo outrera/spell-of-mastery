@@ -99,6 +99,62 @@ world_props.update =
 | $height.value <= "[W.h]"
 
 
+
+
+Indicators = 0
+IndicUp = 0
+IndicDown = 0
+
+type resource_counters.widget{view} world w/0 h/0
+| $world <= $view.world
+
+resource_counters.main = $world.main
+
+resource_counters.draw G X Y =
+| less Indicators:
+  | Indicators <= $main.img{ui_indicators}
+  | IndicUp <= $main.img{ui_arr_up}
+  | IndicDown <= $main.img{ui_arr_down}
+| Cursor = 
+| IX = ($view.w-Indicators.w)/2
+| IY = 0
+| P = $world.human
+| Font = font medium
+| Cursor = $view.cursor
+| X,Y,Z = Cursor
+| G.blit{IX IY Indicators}
+| Param = P.params
+| Font.draw{G IX+36 IY+2 "[P.mana]"}
+| Font.draw{G IX+148 IY+2 "[P.lore]"}
+| Font.draw{G IX+232 IY+2 "[Param.item_gold]"}
+| Font.draw{G IX+332 IY+2 "[Param.item_wood]"}
+| Font.draw{G IX+428 IY+2 "[Param.item_stone]"}
+| Font.draw{G IX+522 IY+2 "[Param.item_iron]"}
+| Font.draw{G IX+620 IY+2 "[Param.item_houses]"}
+| Debug = $world.params.debug
+| when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
+| C = 34
+| Notes = $world.notes
+| Clock = clock
+| for [Expires Chars] $world.notes: when Clock < Expires:
+  | Font.draw{G 150 IY+C "* [Chars.text]"}
+  | !C+16
+| when $world.up{Cursor}:
+  | G.blit{100 $view.h-4-IndicUp.h IndicUp}
+| when $world.down{Cursor}:
+  | G.blit{100+IndicUp.w $view.h-4-IndicDown.h IndicDown}
+| TileName = "[$world.at{X Y Z-1}.type]"
+| Font = font small
+| Font.draw{G IX+600 IY+2+32 "[X],[Y],[Z]:[TileName]"}
+| Us = $world.units_get{X,Y,Z}.skip{?empty}
+| less Us.end:
+  | U = Us.0
+  | S = "[U.type]"
+  | when U.goal:
+    | S <= "[S] ([U.goal_act.name] at [U.goal.xyz])"
+  | Font.draw{G IX+600 IY+2+48 "[S]"}
+
+
 type info_line.widget{ui} info_text/txt{small ''}
 
 info_line.render =
@@ -195,4 +251,4 @@ player_picker.input In =
                     | $pressed <= 0
 
 export message_box unit_panel world_props info_line credits_roll
-       player_picker save_dlg load_dlg
+       player_picker save_dlg load_dlg resource_counters
