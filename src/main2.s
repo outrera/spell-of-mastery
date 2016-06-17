@@ -1,4 +1,4 @@
-use world gfx sprite_dump unit_flags
+use world gfx sprite_dump unit_flags enheap
 
 type main{Data}
      world
@@ -19,6 +19,7 @@ type main{Data}
      ui
      credits
      effect
+| enheap_init 64000
 | $credits <= t
 | $load_params
 | for K,V $params.main: $params.K <= V

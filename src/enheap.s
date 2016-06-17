@@ -1,16 +1,21 @@
 use stack
 
-_.enheap = Me
-_.heapfree =
+//FIXME: this should be supported by runtime for efficiency
+
+MAXConses =
+SEXPConses = 
 
 type sexp.list{head tail}
 sexp.end = 0
 sexp.as_text = "[$list]"
 sexp.is_list = 1
 
-MAXConses = 64000 //FIXME: should be dynamic or user-provided
+enheap_init Size =
+| MAXConses <= Size
+| SEXPConses <= stack: dup MAXConses: sexp 0 []
 
-SEXPConses = stack: dup MAXConses: sexp 0 []
+_.enheap = Me
+_.heapfree =
 
 sexp.cons Head =
 | C = SEXPConses.pop
@@ -60,3 +65,5 @@ sexp.heapfree1 =
 | H.heapfree
 | SEXPConses.push{Me}
 | T
+
+export enheap_init
