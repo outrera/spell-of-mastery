@@ -296,7 +296,8 @@ effect store How:
 | less S: leave
 | $strip_effect{store_}
 | [ItemType Amount BackXYZ] = S
-| $order_at{BackXYZ act/excavate} //moving in into storage room auto drops
+| $drop_item{ItemType Amount}
+| $order_at{BackXYZ act/excavate}
 
 do_excavate Me TargetXYZ =
 | X,Y,Z = TargetXYZ

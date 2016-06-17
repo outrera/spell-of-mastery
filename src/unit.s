@@ -518,12 +518,7 @@ unit_moved_in Me =
 | C = $cell
 | for U C.units: when U.item.is_list:
   | U.effect{U.item Me Me.xyz}
-| Below = (C-1).tile
-| when Below.storage
-  | less $owner.capture{C-1}: leave
-  | StoreItems = Below.storage{}{"item_[?]"}
-  | for ItemType,Amount $items:
-    | when StoreItems.find{ItemType}: $drop_item{ItemType Amount}
+| when (C-1).tile.storage: $owner.capture{C-1}
 
 unit.fine_move FXYZ =
 | C = $world.c

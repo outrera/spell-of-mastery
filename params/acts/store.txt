@@ -1,5 +1,5 @@
 icon: recall
-before: animate{idle},store{0}
+before: animate{idle},sound{item_drop},store{0}
 after: ()
 range: 0
 affects: any
