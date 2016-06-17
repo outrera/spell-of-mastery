@@ -361,5 +361,10 @@ type folder_widget.$lay{Root F} lay base
 folder_widget.folder = $base.root
 folder_widget.`!folder` NewFolder = $base.cd{NewFolder}
 
+type infoline.widget{} info_text/txt{small ''}
+infoline.render =
+| $info_text.value <= (get_gui).mice_widget.infoline
+| $info_text.render
+
 export set_main skin font txt button litem droplist slider folder_widget 
-       litems txt_input img
+       litems txt_input img infoline

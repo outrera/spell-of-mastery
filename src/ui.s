@@ -352,7 +352,7 @@ create_view_ui Me =
   | 640 IPY-28| EditorTabs
   | 142 $height-110| UnitActIconsLay
   | 142 $height-110| MenuTab
-  | 164 $height-10 | info_line Me
+  | 164 $height-10 | infoline
   | $width-50 80 | GroundActIconsLay
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0 IPY | PlayerWidget

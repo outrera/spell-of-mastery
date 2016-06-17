@@ -99,29 +99,19 @@ world_props.update =
 | $height.value <= "[W.h]"
 
 
-
-
 Indicators = 0
-IndicUp = 0
-IndicDown = 0
-
 type resource_counters.widget{view} world w/0 h/0
 | $world <= $view.world
 
 resource_counters.main = $world.main
 
 resource_counters.draw G X Y =
-| less Indicators:
-  | Indicators <= $main.img{ui_indicators}
-  | IndicUp <= $main.img{ui_arr_up}
-  | IndicDown <= $main.img{ui_arr_down}
+| less Indicators: Indicators <= $main.img{ui_indicators}
 | Cursor = 
 | IX = ($view.w-Indicators.w)/2
 | IY = 0
 | P = $world.human
 | Font = font medium
-| Cursor = $view.cursor
-| X,Y,Z = Cursor
 | G.blit{IX IY Indicators}
 | Param = P.params
 | Font.draw{G IX+36 IY+2 "[P.mana]"}
@@ -139,43 +129,6 @@ resource_counters.draw G X Y =
 | for [Expires Chars] $world.notes: when Clock < Expires:
   | Font.draw{G 150 IY+C "* [Chars.text]"}
   | !C+16
-| when $world.up{Cursor}:
-  | G.blit{100 $view.h-4-IndicUp.h IndicUp}
-| when $world.down{Cursor}:
-  | G.blit{100+IndicUp.w $view.h-4-IndicDown.h IndicDown}
-| TileName = "[$world.at{X Y Z-1}.type]"
-| Font = font small
-| Font.draw{G IX+600 IY+2+32 "[X],[Y],[Z]:[TileName]"}
-| Us = $world.units_get{X,Y,Z}.skip{?empty}
-| less Us.end:
-  | U = Us.0
-  | S = "[U.type]"
-  | when U.goal:
-    | S <= "[S] ([U.goal_act.name] at [U.goal.xyz])"
-  | Font.draw{G IX+600 IY+2+48 "[S]"}
-
-
-type info_line.widget{ui} info_text/txt{small ''}
-
-info_line.render =
-| $info_text.value <= ""
-| case $ui.act_icons.keep{(?.show and ?.over)} [Icon@_]
-  | ActName = Icon.data
-  | Unit = Icon.unit
-  | Act = $ui.params.acts.ActName
-  | Info = Act.title
-  | Number = Icon.text.2
-  | Cool = Unit.cooldown_of{ActName}
-  | ResearchRemain = Unit.owner.research_remain{Act}
-  | Cost = Act.cost
-  | if Cool then
-      | Info <= "[Info] ([Cool.0/24] SECONDS TO RECHARGE)"
-    else if ResearchRemain then
-      | Info <= "research [Info] ([Act.lore.0] LORE, [Act.lore.1] MANA)"
-    else when got Cost and Cost:
-      | Info <= "cast [Info] ([Cost] MANA)"
-  | $info_text.value <= Info.upcase
-| $info_text.render
 
 type save_dlg.$base{world start cancelCB loadCB}
   base picked title filename button widget
@@ -233,8 +186,6 @@ credits_roll.draw G PX PY =
 
 credits_roll.reset = $cycle <= 0
 
-
-
 type player_picker.widget{name index color on_click}
   w/16 h/16 pressed over picked
 
@@ -250,5 +201,5 @@ player_picker.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
-export message_box unit_panel world_props info_line credits_roll
+export message_box unit_panel world_props credits_roll
        player_picker save_dlg load_dlg resource_counters

@@ -42,6 +42,7 @@ type icon.widget{fg data/0 click/(Icon=>)}
    on_click/Click
    group //use for exclusive widgets, like radio buttons or tabs
    //popup/icon_popup{}
+
 icon.draw G PX PY =
 | less $fg: leave
 | X = PX
@@ -69,6 +70,7 @@ icon.draw G PX PY =
 | when $hotkey
   | Font = font small
   | Font.draw{G X+$fg.w-8 Y+$fg.h-8 "[$hotkey]"}
+
 icon.input In =
 | when $disabled: leave
 | case In
@@ -82,5 +84,24 @@ icon.input In =
            | $picked <= 1
          | $on_click{}{Me}
        | $pressed <= 0
+
+icon.infoline =
+| ActName = $data
+| Unit = $unit
+| less Unit: leave ''
+| Act = Unit.main.params.acts.ActName
+| when no Act: leave ''
+| Info = Act.title
+| Number = $text.2
+| Cool = Unit.cooldown_of{ActName}
+| ResearchRemain = Unit.owner.research_remain{Act}
+| Cost = Act.cost
+| if Cool then
+    | Info <= "[Info] ([Cool.0/24] SECONDS TO RECHARGE)"
+  else if ResearchRemain then
+    | Info <= "research [Info] ([Act.lore.0] LORE, [Act.lore.1] MANA)"
+  else when got Cost and Cost:
+    | Info <= "cast [Info] ([Cost] MANA)"
+| Info.upcase
 
 export minimap icon
