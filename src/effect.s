@@ -450,9 +450,19 @@ effect spawn What:
 effect spawn_item ItemType Amount: $cell.add_item{ItemType Amount}
 
 effect drop ItemType Amount:
-| when ItemType><_: ItemType <= $action.type
-| when Amount><all: Amount <= $get_item{ItemType}
+| when ItemType><_: ItemType <= $action.type.drop{5}
+| MaxAmount = $get_item{ItemType}
+| when Amount><all: Amount <= MaxAmount
+| Amount <= min{MaxAmount Amount}
 | $drop_item{ItemType Amount}
+
+effect take ItemType Amount:
+| when ItemType><_: ItemType <= $action.type.drop{5}
+| MaxAmount = $cell.get_item{ItemType}
+| when Amount><all: Amount <= MaxAmount
+| Amount <= min{MaxAmount Amount}
+| $add_item{ItemType Amount}
+| $cell.add_item{ItemType -Amount}
 
 effect morph ClassName:
 | Class = $main.classes.ClassName

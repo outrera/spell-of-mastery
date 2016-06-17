@@ -6,8 +6,11 @@ SavesFolder = 'work/saves/'
 
 PanelW = 200 //FIXME: hardcoded stuff is bad
 
-MaxActIcons = 24
-ActIcons = []
+AllActIcons = []
+MaxUnitActIcons = 24
+UnitActIcons = []
+MaxGroundActIcons = 10
+GroundActIcons = []
 ActIcon = 0
 
 MenuButtonsX = 0
@@ -52,7 +55,7 @@ ui.load File =
 | $view.clear
 ui.save File = $main.save{File}
 ui.params = $main.params
-ui.act_icons = ActIcons
+ui.act_icons = AllActIcons
 ui.pause =
 | InputBlocker.show <= 1
 | $view.pause
@@ -273,7 +276,8 @@ handle_brush_tab Me Picked =
        | $view.set_brush{LastBrush}
 
 MenuTab = 
-ActIconsLay =
+UnitActIconsLay =
+GroundActIconsLay =
 
 create_menu_tab Me =
 | WorldIcon = icon $img{icons_menu_world} click: Icon =>
@@ -305,7 +309,9 @@ create_icons_panel_tabs Me =
   | $main.sound{ui_click}
   | when PanelTab><brush or Icon.data><brush: handle_brush_tab Me Icon.data
   | PanelTab <= Icon.data
-  | ActIconsLay.show <= no [brush menu].find{PanelTab}
+  | ShowActIcons = no [brush menu].find{PanelTab}
+  | UnitActIconsLay.show <= ShowActIcons
+  | GroundActIconsLay.show <= ShowActIcons
   | MenuTab.show <= PanelTab><menu
 | Icons = map Name [spell summon build unit bag brush menu]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
@@ -330,9 +336,10 @@ create_view_ui Me =
 | GameUnitUI <= hidden: dlg: mtx
   | 0  0 | UnitPanel
 | IPY = $height-IconsPanelBG.h
-| ActIconsLay <= hidden: layV s/4 
-                     layH{s/4 ActIcons.drop{ActIcons.size/2}}
-                    ,layH{s/4 ActIcons.take{ActIcons.size/2}}
+| UnitActIconsLay <= hidden: layV s/4 
+                     layH{s/4 UnitActIcons.drop{UnitActIcons.size/2}}
+                    ,layH{s/4 UnitActIcons.take{UnitActIcons.size/2}}
+| GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
 | dlg: mtx
   |  0   0| $view
   |  0 $height-136-UnitPanel.bg.h| GameUnitUI
@@ -340,9 +347,10 @@ create_view_ui Me =
   |  0 IPY| IconsPanelBG
   | 140 IPY-28| IconsPanelTabs
   | 640 IPY-28| EditorTabs
-  | 142 $height-110| ActIconsLay
+  | 142 $height-110| UnitActIconsLay
   | 142 $height-110| MenuTab
   | 134 $height-10 | info_line Me
+  | $width-50 80 | GroundActIconsLay
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0 IPY | PlayerWidget
 
@@ -397,15 +405,18 @@ ui.update = //called by world.update each game cycle
     | $load{"[MapsFolder][NextWorld].txt"}
     | $world.new_game
 
-ui_update_panel_buttons Me Unit As =
+ui_update_panel_buttons Me Unit As GAs =
 | Acts = $main.params.acts
-| As = As.i.take{min{MaxActIcons As.size}}
+| As = As.i.take{min{MaxUnitActIcons As.size}}
+| GAs = GAs.i.map{I,Act=>[-I-1 Act]}.take{min{MaxGroundActIcons GAs.size}}
 | Player = Unit.owner
-| for I,Act As: when Act.enabled^get_bit{Unit.owner.id}:
+| for I,Act @As,@GAs: when Act.enabled^get_bit{Unit.owner.id}:
   | Preqs = Act.needs.all{Ns=>Ns.any{N=>Player.research_remain{Acts.N}<<0}}
+  | Icons = if I<0 then | I <= -(I+1); GroundActIcons 
+            else UnitActIcons
   | when Preqs:
     | Active = 1
-    | Icon = ActIcons.I.widget
+    | Icon = Icons.I.widget
     | ResearchRemain = Player.research_remain{Act}
     | ActName = Act.name
     | Icon.data <= ActName
@@ -423,7 +434,7 @@ ui_update_panel_buttons Me Unit As =
     | Icon.h <= Icon.fg.h
     | HK = Act.hotkey
     | Icon.hotkey <= if got HK then HK else 0
-    | ActIcons.I.show <= Active
+    | Icons.I.show <= Active
 
 ui.on_unit_pick Units =
 | if Units.size><1
@@ -431,9 +442,10 @@ ui.on_unit_pick Units =
        | UnitPanel.set_unit{Units.0}
   else | GameUnitUI.show <= 0
        | UnitPanel.set_unit{0}
-| for Icon ActIcons: Icon.show <= 0
+| for Icon AllActIcons: Icon.show <= 0
 | Unit = 0
 | As = 0
+| GAs = []
 | Player = $world.human
 |  if PanelTab >< unit then
      | less Units.size: leave
@@ -461,9 +473,10 @@ ui.on_unit_pick Units =
          | when Units.size<>1: leave
          | Unit <= Units.0
          | Acts = $main.params.acts
-         | As <= map K,A Unit.items: Acts.K
+         | As <= map K,A Unit.items: Acts."drop_[K]"
+         | GAs <= map K,A Unit.cell.items: Acts."take_[K]"
        else leave
-| ui_update_panel_buttons Me Unit As
+| ui_update_panel_buttons Me Unit As GAs
 
 create_act_icons Me =
 | actClick Icon =
@@ -496,13 +509,13 @@ create_act_icons Me =
                 | if PanelTab><unit then $world.act_unit.init{0,0}
                   else $world.act_unit.init{Unit,Unit.serial}
                 | when HKI: $view.mice_click <= \leftup //FIXME: kludge
-| map I MaxActIcons: hidden: icon 0 click/&actClick
+| map I MaxUnitActIcons+MaxGroundActIcons: hidden: icon 0 click/&actClick
 
 ui_input Me Base In =
 | Base.input{In}
 | when InputBlocker.show: leave 
 | case In [key Key 1]
-  | for Icon ActIcons: when Icon.show: when Icon.hotkey><Key:
+  | for Icon AllActIcons: when Icon.show: when Icon.hotkey><Key:
     | HotKeyInvoke <= 1
     | Icon.on_click{}{Icon}
 
@@ -521,7 +534,9 @@ ui.init =
 | WorldProperties <= create_world_props Me
 | SaveWorldDlg <= create_save_world_dlg Me
 | LoadWorldDlg <= create_load_world_dlg Me
-| ActIcons <= create_act_icons Me
+| AllActIcons <= create_act_icons Me
+| UnitActIcons <= AllActIcons.take{MaxUnitActIcons}
+| GroundActIcons <= AllActIcons.drop{MaxUnitActIcons}
 | Tabs = create_dialog_tabs Me
 | $tabs <= input_split Tabs: Base In => ui_input Me Base In
 | BankList.pick{0}

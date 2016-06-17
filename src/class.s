@@ -74,14 +74,16 @@ main.load_classes =
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
 | Acts = $params.acts
-| ItemProto = Acts.item
+| ItemDrop = Acts.item_drop
+| ItemTake = Acts.item_take
 | for K,V $classes:
-  | when V.item><1:
-    | Item = ItemProto.deep_copy
-    | Item.name <= K
-    | Item.icon_gfx <= V.default_sprite.frames.0
-    | Acts.K <= Item
-    | Item.title <= K.replace{_ ' '}
+  | when V.item><1: //FIXME: have act icons extract name/gfx from unit classes
+    | for Pref,Item [`drop_`,ItemDrop `take_`,ItemTake]{?deep_copy}
+      | Name = "[Pref][K]"
+      | Item.name <= Name
+      | Item.icon_gfx <= V.default_sprite.frames.0
+      | Acts.Name <= Item
+      | Item.title <= Name.replace{_ ' '}
   | when V.active:
     | As = []
     | when V.speed: As <= [recall @As]
