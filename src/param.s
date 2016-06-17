@@ -69,19 +69,47 @@ params_handle_prototypes Me =
   | for K,V Params: less K><proto: Proto.K <= V
   | Bank.PName <= Proto
 
+type act{name title/0 icon/No hotkey/0 hint/0 tab/0
+         lore/[0 0] cost/0 cool/0 needs/[]
+         priority/50 range/0 speed/4 repeat/0
+         affects/unit targets/seen before/[] impact/Impact after/[]}
+  title/Title
+  icon/Icon
+  hotkey/Hotkey //keyboard shortcut
+  hint/Hint //hint for AI: harm (single unit), harm_all (all units)
+            //             boost(single unit), boost_allies(all allies),
+            //             heal_allies, morph
+  tab/Tab //UI tab where this action appears
+  lore/Lore //research requirements [mana lore] pair
+  cost/Cost //how much to cast it
+  cool/Cool //action cooldown
+  needs/Needs //list of dependencies
+  priority/Priority
+  range/Range //cross (4dirs near), neib (8dirs near) or a number
+  speed/Speed //number of cycles before unit can act again
+  repeat/Repeat //repeat action, while possible (i.e. tree is not chopped)
+  affects/Affects //what it can target: self, unit, tile, any
+                  //also allows prefixes: `(outdoor),` `(water),`
+  targets/Targets //seen=requires line of sight, any=any explored cell
+  before/Before
+  impact/Impact
+  after/After
+  enabled/#FFFFFF //which players have access to this action
+  flags //unit flags this actions sets up
+  before_table
+  after_table
+  icon_gfx //icon graphics for fast access
+| $before_table <= $before.table
+| $after_table <= $after.table
+| when $cool>0: $before <= [@$before [cool $cool]]
+| less $title: $title <= $name.replace{_ ' '}
+| Flags = []
+| for E [@$before @$after]: case E [add_effect [Name Dur As]]: push Name Flags
+| $flags <= Flags
+
 params_handle_acts Me =
-| for ActName,Act $params.acts:
-  | Act.name <= ActName
-  | Act.enabled <= #FFFFFF
-  | Act.before_table <= Act.before.table
-  | Act.after_table <= Act.after.table
-  | C = Act.cool
-  | when got C: Act.before <= [@Act.before [cool C]]
-  | when no Act.title: Act.title <= ActName.replace{_ ' '}
-  | Flags = []
-  | for E [@Act.before @Act.after]:
-    | case E [add_effect [Name Dur As]]: push Name Flags
-  | Act.flags <= Flags
+| Acts = $params.acts
+| for Name,Act Acts: Acts.Name <= act Name @Act.list.join
 
 main.load_params =
 | $params <= load_params "[$data]params/"

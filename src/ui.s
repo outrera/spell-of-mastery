@@ -441,8 +441,7 @@ ui_update_panel_buttons Me Unit As GAs =
     | Icon.frame.init{[3 3 Frame]}
     | Icon.w <= Icon.fg.w
     | Icon.h <= Icon.fg.h
-    | HK = Act.hotkey
-    | Icon.hotkey <= if got HK then HK else 0
+    | Icon.hotkey <= Act.hotkey
     | Icons.I.show <= Active
 
 ui.on_unit_pick Units =

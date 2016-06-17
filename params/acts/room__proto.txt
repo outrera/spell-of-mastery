@@ -2,6 +2,6 @@ icon: room_bridge
 room: 1
 range: 9000
 affects: any
-targets: any //tile,water
+targets: any
 impact: mark{bridge},impact{spell},sound{impact}
 tab: build

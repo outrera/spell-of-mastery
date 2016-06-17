@@ -1,7 +1,6 @@
 icon: spell_excavate
 //lore: misc.tier1_lcost
 //cost: 100
-fix_z: caster
 range: cross
 repeat: 1
 affects: any

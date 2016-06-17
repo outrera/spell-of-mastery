@@ -26,7 +26,7 @@ type main{Data}
 | $load_sounds
 | $load_tiles
 | $load_classes
-| for K,V $params.acts: when no V.icon_gfx:
+| for K,V $params.acts: less V.icon_gfx:
   | IName = V.icon
   | IName = if IName.is_text then "icons_[IName]" else IName.1
   | V.icon_gfx <= $img{IName}
