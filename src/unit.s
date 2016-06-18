@@ -466,33 +466,52 @@ heal_unit Me Amount =
 | less $class.hp: leave
 | !$hp + | min Amount $class.hp-$health
 
-unit.harm Attacker Damage =
+unit.assault Combat Target =
+| Hit = 0
+| Magic = 0
+| Damage = No
+| while Combat.is_list:
+  | case Combat
+    [_ unavoid C]
+      | Damage <= C
+      | Hit <= 1
+    [_ magic C]
+      | Damage <= C
+      | Hit <= 1
+      | Magic <= 1
+    [_ damage C]
+      | Combat <= C.0
+      | Damage <= C.1
+| less Hit
+  | when Combat<<0: leave
+  | Roll = $world.rand{Combat+Target.armor*2}
+  | Hit <= Roll<Combat
+| less Hit: leave
+| when no Damage: Damage <= max 1 $health/2
+| less Magic:
+  | $run_effects{?><attack Me $xyz}
+  | Mod = $mod
+  | $mod <= 0
+  | case Mod [`.` boost [N M]]: Damage <= max 1 Damage*N/M
+| if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
+
+unit.harm Attacker Damage @Magic =
 | when $removed: leave
 | less $alive: leave
 | when Attacker and $leader><1 and $owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}
     | leave //roaming neutral units wont harm AI leader
-| Piercing = 0
-| Magic = 0
-| case Damage
-  [_ piercing D]
-    | Damage <= D
-    | Piercing <= 1
-  [_ magic D]
-    | Damage <= D
-    | Piercing <= 1
-    | Magic <= 1
-| when Damage>0:
-  | $run_effects{?><harm Me $xyz}
-  | if Magic then $run_effects{?><magic_harm Me $xyz}
-    else $run_effects{?><phys_harm Me $xyz}
-| Mod = $mod
-| $mod <= 0
 | when Damage << 0:
   | heal_unit Me -Damage
   | leave
-| less Piercing: Damage <= max 1 Damage-$armor
+| Mg = not Magic.end
+| when Damage>0:
+  | $run_effects{?><harm Me $xyz}
+  | if Mg then $run_effects{?><magic_harm Me $xyz}
+    else $run_effects{?><phys_harm Me $xyz}
+| Mod = $mod
+| $mod <= 0
 | case Mod
   [`.` block [N M]]
      | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M

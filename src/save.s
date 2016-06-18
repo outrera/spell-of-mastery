@@ -46,7 +46,7 @@ world.save =
   | list U.type U.id U.serial U.owner.id U.xyz U.fxyz Facing
          U.flags U.hp Active
 | $params.view_zlock <= $view.zlock
-| list version(0.2) w($w) h($h) serial($serial) cycle($cycle)
+| list version(0.2) w($w) h($h) serial($serial) cycle($cycle) seed($seed)
     filename | $filename
     name | $name
     description | $description
@@ -94,6 +94,8 @@ world.load Saved =
 | $description <= Saved.description
 | $events <= if got Saved.events then Saved.events.i else []
 | $serial <= 0
+| Seed = 
+| when got!it Saved.seed: $seed <= it
 | when got!it Saved.params: for [K V] it: $params.K <= V
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}

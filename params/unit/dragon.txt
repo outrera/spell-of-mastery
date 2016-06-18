@@ -7,7 +7,7 @@ cooldown: 4
 speed: 20
 inborn: (upkeep4 heals organic flyer)
 //attack: sound{dragon_hit}
-impact: harm{piercing.13},impact{fire_ring}, sound{explosion}
+impact: harm{unavoid.13},impact{fire_ring}, sound{explosion}
 hit: effect{blood},sound{dragon_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

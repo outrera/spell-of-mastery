@@ -2,7 +2,7 @@ sprite: unit_ratman
 tier: 1
 health: 60
 damage: 6
-armor: 0
+armor: 10
 inborn: (upkeep1 heals organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{rat_death}

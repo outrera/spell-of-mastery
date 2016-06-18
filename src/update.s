@@ -4,34 +4,6 @@ use util
 main.update =
 | $world.update
 
-// force reset of all unit effects and health
-reinit_units Us =
-| InitedUnits = []
-| for U Us: less U.removed
-  | Type = U.type
-  | Owner = U.owner
-  | Facing = U.facing
-  | XYZ = U.xyz.deep_copy
-  | FXYZ = U.fxyz.deep_copy
-  | Items = U.items
-  | when U.leader: U.hp <= U.class.hp
-  | U.free
-  | less U.ordered.type><die:
-    | U = Owner.alloc_unit{Type}
-    | U.move{XYZ}
-    | U.pick_facing{Facing}
-    | U.fxyz.init{FXYZ}
-    | when Items: for Item,Amount Items: U.add_item{Item Amount}
-    | push U InitedUnits
-| InitedUnits
-
-handle_attack_triggers Us =
-| for U Us
-  | Os = U.world.units_get{U.xyz}
-  | AttackTrigger = Os.find{?ai><attack}
-  | when got AttackTrigger and U.ai<>attack:
-    | U.attacker <= 1
-    | AttackTrigger.free
 
 player.reset_counters =
 | Param = $params
@@ -55,38 +27,6 @@ count_flag_resources Me =
 player.recount =
 | $reset_counters
 | for U $units: when U.ai><flag: less U.removed: count_flag_resources U
-
-world.new_game =
-| for K,V $main.params.world: $params.K <= V
-| for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
-| $human <= $players.1
-| $human.human <= 1
-| $cycle <= 0
-| if $params.explored then $explore{1} else $explore{0}
-| ActNames = $main.params.acts{}{?0}
-| StartMana = $main.params.world.start_mana
-| InitedUnits = reinit_units $active
-| PAI = $main.params.ai
-| for P $players:
-  | P.init{StartMana}
-  | Us = P.units
-  | less P.human: when Us.size:
-    | for ActName ActNames: P.research_item{ActName}
-  | L = P.leader
-  | C = P.pentagram
-  | when L and not C:
-    | C = P.alloc_unit{L.class.pentagram}
-    | C.move{L.xyz}
-    | L.move{C.xyz}
-    | L.alpha <= 255
-    | L.delta <= -50
-    | $effect{C.xyz teleport}
-    | C.alpha <= 255
-    | C.delta <= -10
-    | $effect{C.xyz pentagram_appearance}
-  | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
-| when got!it $players.find{?human}: $human <= it
-| handle_attack_triggers InitedUnits
 
 EventActions = []
 

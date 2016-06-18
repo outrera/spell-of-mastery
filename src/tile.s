@@ -174,7 +174,7 @@ m_any_stairs Me X Y Z Tile =
 BelowSlope = 0
 ColumnHeight = 0
 
-tile.render X Y Z Below Above Seed =
+tile.render X Y Z Below Above Variation =
 | when $invisible
   | BelowSlope <= #@1111
   | leave 0
@@ -236,7 +236,7 @@ tile.render X Y Z Below Above Seed =
            | R
 | BelowSlope <= NeibSlope
 | when Limpid: leave 0
-| less $anim_wait: G <= G.(Seed%G.size)
+| less $anim_wait: G <= G.(Variation%G.size)
 | leave G
 
 main.tile_names Bank =

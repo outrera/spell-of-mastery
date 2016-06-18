@@ -6,7 +6,7 @@ armor: 2
 speed: 22
 inborn: (upkeep3 heals organic fireaura flyer)
 //attack: sound{explosion}
-impact: harm{piercing.5},sound{explosion}
+impact: harm{unavoid.5},sound{explosion}
 hit: effect{blood},sound{ifrit_hit}
 death: sound{ifrit_death}
 moves: sound{ifrit_move}

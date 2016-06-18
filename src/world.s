@@ -95,7 +95,6 @@ type world{main}
    active // active units
    players
    human // human controlled player
-   seed
    tid_map/Main.tid_map
    void
    shadow
@@ -116,7 +115,18 @@ type world{main}
    blink/[0 0]
    minimap/0
    cost/#FFFFFF //cost for pathfinder
+   variation //used to randomize tiles and make them less repetitive
+   seed //PRNG running value
 | $init
+
+LCG_M = 2147483647
+LCG_M_F = LCG_M.float
+LCG_A = 16807
+LCG_B = 0
+
+world.rand Size =
+| $seed <= ($seed*LCG_A + LCG_B) % LCG_M
+| @int: @round: $seed.float*Size.float/LCG_M_F
 
 world.init =
 | $main.world <= Me
@@ -155,7 +165,7 @@ world.init =
 | $shadow <= $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
 | MaxSize = $maxSize
-| $seed <= MaxSize{_=>MaxSize{_=>SS.rand}}
+| $variation <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $players.0.alloc_unit{unit_nil}
 | $main.params.unit_setters_ <=
   | ($nil)^methods_.keep{?0.0 >< '!'}{[?0.tail ?1]}.table
@@ -199,6 +209,7 @@ world.create_borders = // draws maps borders in clockwise order
 
 world.clear =
 | $paused <= 1
+| $seed <= LCG_M.rand
 | $minimap.clear{#000000}
 | $act <= 0
 | for U $units: less U.removed: U.free
@@ -213,6 +224,68 @@ world.clear =
 | $active.clear
 | for [K V] $sound_cycles: $sound_cycles.K <= 0
 | $blink.init{[0 0]}
+
+// force reset of all unit effects and health
+reinit_units Us =
+| InitedUnits = []
+| for U Us: less U.removed
+  | Type = U.type
+  | Owner = U.owner
+  | Facing = U.facing
+  | XYZ = U.xyz.deep_copy
+  | FXYZ = U.fxyz.deep_copy
+  | Items = U.items
+  | when U.leader: U.hp <= U.class.hp
+  | U.free
+  | less U.ordered.type><die:
+    | U = Owner.alloc_unit{Type}
+    | U.move{XYZ}
+    | U.pick_facing{Facing}
+    | U.fxyz.init{FXYZ}
+    | when Items: for Item,Amount Items: U.add_item{Item Amount}
+    | push U InitedUnits
+| InitedUnits
+
+handle_attack_triggers Us =
+| for U Us
+  | Os = U.world.units_get{U.xyz}
+  | AttackTrigger = Os.find{?ai><attack}
+  | when got AttackTrigger and U.ai<>attack:
+    | U.attacker <= 1
+    | AttackTrigger.free
+
+world.new_game =
+| $seed <= LCG_M.rand
+| for K,V $main.params.world: $params.K <= V
+| for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
+| $human <= $players.1
+| $human.human <= 1
+| $cycle <= 0
+| if $params.explored then $explore{1} else $explore{0}
+| ActNames = $main.params.acts{}{?0}
+| StartMana = $main.params.world.start_mana
+| InitedUnits = reinit_units $active
+| PAI = $main.params.ai
+| for P $players:
+  | P.init{StartMana}
+  | Us = P.units
+  | less P.human: when Us.size:
+    | for ActName ActNames: P.research_item{ActName}
+  | L = P.leader
+  | C = P.pentagram
+  | when L and not C:
+    | C = P.alloc_unit{L.class.pentagram}
+    | C.move{L.xyz}
+    | L.move{C.xyz}
+    | L.alpha <= 255
+    | L.delta <= -50
+    | $effect{C.xyz teleport}
+    | C.alpha <= 255
+    | C.delta <= -10
+    | $effect{C.xyz pentagram_appearance}
+  | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
+| when got!it $players.find{?human}: $human <= it
+| handle_attack_triggers InitedUnits
 
 world.notify Text =
 | Clock = clock
@@ -635,7 +708,7 @@ world.updPilarGfxes X Y =
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
 | $heighmap.X.Y <= (Cell+$d-2).floor.z
-| Seed = $seed.Y.X
+| Var = $variation.Y.X
 | Z = 0
 | H = $height{X Y}
 | Below = $tid_map.0
@@ -647,7 +720,7 @@ world.updPilarGfxes X Y =
   | when Above.parts.is_int: //multi-height tile
     | Above <= (Next-Above.parts).tile
   // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
-  | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Seed}
+  | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Var}
   | Below <= T
   | T <= Above
   | Cell <= Next

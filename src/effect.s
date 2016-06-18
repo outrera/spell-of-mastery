@@ -108,21 +108,18 @@ effect effect1 Effect:
 
 effect sound Sound: $sound{Sound}
 
+effect heal Damage: Target.harm{Me -Damage}
+
 effect harm As:
-| Damage = 1
+| Combat = 1
 | Whom = \target
 | case As
-  [D W] | Damage <= D
+  [A W] | Combat <= A
         | Whom <= W
-  D | Damage <= D
-| when Damage><user: Damage <= Me.damage
-| when Damage.is_int
-  | $run_effects{?><attack Me $xyz}
-  | Mod = $mod
-  | $mod <= 0
-  | case Mod [`.` boost [N M]]: Damage <= max 1 Damage*N/M
+  A | Combat <= A
+| when Combat><user: Combat <= Me.damage
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
-| T.harm{Me Damage}
+| $assault{Combat T}
 
 effect area As:
 | [Whom [W H D] @Args] = As

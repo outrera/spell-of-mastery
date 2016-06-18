@@ -4,6 +4,6 @@ lore: misc.tier1_lcost
 cost: 300
 cool: 2880
 affects: unit
-before: owner_units,harm{-50},strip{poison},strip{slowed},strip{paralyzed},impact{heal},sound{heal}
+before: owner_units,heal{50},strip{poison},strip{slowed},strip{paralyzed},impact{heal},sound{heal}
 hint: heal_allies
 tab: spell
