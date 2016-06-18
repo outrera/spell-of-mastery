@@ -39,7 +39,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      opaque/Opaque
      fallback/Fallback
      roof/Roof
-     embed/Embed //embed into ground
+     embed/Embed //embed into what type of other tile
      deco/Deco
      hp/Hp
      cost/Cost

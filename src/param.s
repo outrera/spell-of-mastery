@@ -69,7 +69,7 @@ params_handle_prototypes Me =
   | for K,V Params: less K><proto: Proto.K <= V
   | Bank.PName <= Proto
 
-type act{name title/0 icon/No hotkey/0 hint/0 tab/0
+type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
          lore/[0 0] cost/0 cool/0 needs/[]
          priority/50 range/0 speed/4 repeat/0
          affects/unit targets/seen before/[] impact/Impact after/[]}
@@ -80,6 +80,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0
             //             boost(single unit), boost_allies(all allies),
             //             heal_allies, morph
   tab/Tab //UI tab where this action appears
+  room/Room // this act places room scaffolds
   lore/Lore //research requirements [mana lore] pair
   cost/Cost //how much to cast it
   cool/Cool //action cooldown

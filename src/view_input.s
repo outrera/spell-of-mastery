@@ -76,7 +76,7 @@ handle_picked Me Rect Units = //Me is view
     | leave
   | $mice_click <= 0
   | when Affects><unit and Units.end: leave
-  | IsRoom = Act.room><1
+  | IsRoom = Act.room
   | less IsRoom: $world.act <= 0
   | Proceed = 1
   | Target = if Units.end then 0 else Units.0
@@ -469,6 +469,10 @@ world.update_cursor =
 | $marks <= Marks.enheap
 
 view.update =
+| case $key{pause} 1:
+  | $paused <= not $paused
+  | $key_set{pause 0}
+  | $main.sound{pause}
 | case $key{up} 1: $center_at{$center-[1 1 0]}
 | case $key{down} 1: $center_at{$center+[1 1 0]}
 | case $key{left} 1: $center_at{$center-[1 -1 0]}

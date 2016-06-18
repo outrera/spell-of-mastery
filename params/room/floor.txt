@@ -1,5 +1,5 @@
 sprite: tiles_castle
-embed: 1
+embed: soil
 0110: 14
 0011: 14
 1001: 14

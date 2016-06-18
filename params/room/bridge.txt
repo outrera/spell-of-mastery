@@ -1,4 +1,4 @@
 sprite: tiles_room_bridge
 cost: wood,5
-embed: 1
+embed: water
 1111: 0

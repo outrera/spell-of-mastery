@@ -5,6 +5,7 @@ down: s
 right: d
 floor_up: `e`
 floor_down: `q`
+pause: ` `
 
 /*up: up
 left: left

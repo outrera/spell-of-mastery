@@ -300,6 +300,9 @@ effect store How:
 | $order_at{BackXYZ act/excavate}
 
 do_excavate Me TargetXYZ =
+| less $worker: //shouldnt happen
+  | $reset_goal
+  | leave
 | X,Y,Z = TargetXYZ
 | Mark = $owner.excavate_mark{X Y Z}
 | ExcavateGoal = $goal and $goal_act and $goal_act.name><excavate
@@ -354,6 +357,9 @@ effect idle_void How:
 effect excavate How: do_excavate Me TargetXYZ
 
 effect build Where:
+| less $worker: //shouldnt happen
+  | $reset_goal
+  | leave
 | X,Y,Z = TargetXYZ
 | Work = $world.units_get{X,Y,Z}.find{(?type><unit_work and ?goal)}
 | when got Work:
@@ -381,8 +387,14 @@ effect build Where:
   | when Tile.type><demolish:
     | Cell = $world.cell{X Y Z}
     | Room = (Cell-1).tile
-    | for K,V Room.cost: when K<>item_time: Cell.add_item{K V}
-    | $world.set{X Y Z-1 $main.tiles.soil}
+    | Embed = Room.embed
+    | Block = Cell.block
+    | when Block and Block.id <> $id:
+      | $owner.notify{"[$title] cant demolish occupied room."}
+      | $reset_goal
+      | leave
+    | for K,V Room.cost: when K<>item_time: $add_item{K V}
+    | when Embed.is_text: $world.set{X Y Z-1 $main.tiles.Embed}
     | leave
   | when Tile.embed: Z-1
   | $world.set{X Y Z-1 Tile}
