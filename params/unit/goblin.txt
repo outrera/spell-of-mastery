@@ -1,8 +1,8 @@
 sprite: unit_goblin
 tier: 1
-health: 40
+health: 60
 damage: 5
-armor: 0
+armor: 4
 range: 3
 inborn: (upkeep1 heals organic)
 impact: harm{user},sound{cut}

@@ -473,21 +473,26 @@ unit.assault Combat Target =
 | while Combat.is_list:
   | case Combat
     [_ unavoid C]
+      | Combat <= 1
       | Damage <= C
       | Hit <= 1
     [_ magic C]
+      | Combat <= 1
       | Damage <= C
       | Hit <= 1
       | Magic <= 1
     [_ damage C]
       | Combat <= C.0
       | Damage <= C.1
+    Else
+      | bad "Unknown comband modifier [Combat]"
 | less Hit
   | when Combat<<0: leave
   | Roll = $world.rand{Combat+Target.armor*2}
   | Hit <= Roll<Combat
 | less Hit: leave
-| when no Damage: Damage <= max 1 $health/2
+  //FIXME: health factor must per unit overridable
+| when no Damage: Damage <= $world.rand{$health}+1 //max 1 $health/2
 | less Magic:
   | $run_effects{?><attack Me $xyz}
   | Mod = $mod
