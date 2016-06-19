@@ -1,7 +1,7 @@
 sprite: unit_ifrit
 tier: 3
 health: 90
-damage: 5
+combat: 5
 armor: 2
 speed: 22
 inborn: (upkeep3 heals organic fireaura flyer)

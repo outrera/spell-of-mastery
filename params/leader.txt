@@ -7,8 +7,8 @@ height: 8
 tier: 5
 health: 100 // hit points - number of hits, before this unit is dead
 range: 3
-damage: 4 // amount of damage this unit deals
-armor: 0 // amount of damage this unit can absorb, without losing health
+combat: 4 // chance to hit
+armor: 6 // chance to evade a hit
 cooldown: 24
 sight: 3
 speed: 28
@@ -19,7 +19,7 @@ leader: 1
 ai: unit
 item: 0
 inborn: (heals organic resist_magic)
-impact: missile{effect_bolt},harm{user},impact{bolt_impact},sound{explosion}
+impact: missile{effect_bolt},harm{magic_base.12},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}

@@ -1,7 +1,7 @@
 sprite: unit_beetle
 tier: 1
 health: 100
-damage: 1
+combat: 1
 armor: 1
 speed: 48
 inborn: (upkeep1 heals organic)

@@ -1,7 +1,7 @@
 sprite: unit_lizard
 tier: 2
 health: 60
-damage: 10
+combat: 10
 armor: 0
 speed: 18
 inborn: (upkeep2 heals organic)

@@ -1,7 +1,7 @@
 sprite: unit_cyclops
 tier: 4
 health: 200
-damage: 12
+combat: 12
 armor: 0
 inborn: (upkeep4 heals organic)
 //attack: sound{cyclops_club}

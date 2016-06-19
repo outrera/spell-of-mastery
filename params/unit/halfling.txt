@@ -1,8 +1,8 @@
 sprite: unit_halfling
 tier: 1
 health: 40
-damage: 6
-armor: 0
+combat: 11
+armor: 14
 inborn: (upkeep1 heals organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{halfling_hit}

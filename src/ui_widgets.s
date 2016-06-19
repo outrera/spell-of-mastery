@@ -66,7 +66,7 @@ unit_panel.draw G X Y =
 //| Font.draw{G X+85 Y+48 "[$unit.owner.name]"}
 | Font.draw{G X+4 Y+75 "[$unit.title]"}
 | Font.draw{G X+27 Y+14"[max 0 $unit.health]"}
-| Font.draw{G X+67 Y+28"[$unit.damage]"}
+| Font.draw{G X+67 Y+28"[$unit.combat]"}
 | Font.draw{G X+67 Y+57"[$unit.armor]"}
 | when Main.params.ui.debug><1:
   | Font.draw{G X+3 Y-16 "sn:[max 0 $unit.serial]"}

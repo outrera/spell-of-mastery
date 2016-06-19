@@ -10,7 +10,7 @@ init_unit_module CS =
 cell_goal.id = -1
 cell_goal.type = \goal
 cell_goal.fxyz = [$xyz.0*CellSize $xyz.1*CellSize $xyz.2*CellSize]
-cell_goal.damage = 0
+cell_goal.combat = 0
 cell_goal.leader = 0
 cell_goal.removed = 0
 cell_goal.alive = 1
@@ -452,12 +452,12 @@ retaliate Me Enemy Range =
 | when Enemy.empty: leave
 | when Range:
   | for U $targets_in_range{Range}:
-    | when U.id<>$id and U.damage and U.owner.id><$owner.id:
+    | when U.id<>$id and U.combat and U.owner.id><$owner.id:
       | retaliate U Enemy 0
-| when $goal and ($goal.damage or $goal.leader):
+| when $goal and ($goal.combat or $goal.leader):
   | when ($goal.xyz-Me.xyz).abs << (Enemy.xyz-Me.xyz).abs:
     | leave
-| less $damage: leave
+| less $combat: leave
 | $order_at{Enemy.xyz}
 | $backtrack <= $xyz
 | leave
@@ -482,6 +482,11 @@ unit.assault Combat Target =
       | Damage <= C
       | Hit <= 1
       | Magic <= 1
+    [_ magic_base C]
+      | Combat <= 1
+      | Base <= C
+      | Hit <= 1
+      | Magic <= 1
     [_ damage C]
       | Combat <= C.0
       | Damage <= C.1
@@ -490,6 +495,7 @@ unit.assault Combat Target =
       | Base <= C.1
     Else
       | bad "Unknown combat modifier [Combat]"
+| when Combat><user: Combat <= $combat
 | less Hit:
   | when Combat<<0: leave
   | Roll = $world.rand{Combat+Target.armor*2}

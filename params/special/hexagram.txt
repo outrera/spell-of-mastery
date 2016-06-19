@@ -2,7 +2,7 @@ title: `Hexagram`
 sprite: special_hexagram
 icon: spell_hexagram
 tier: 2
-damage: 0
+combat: 0
 armor: 0
 range: 3
 empty: 1

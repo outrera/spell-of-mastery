@@ -1,7 +1,7 @@
 sprite: unit_devil
 tier: 3
 health: 60
-damage: 2
+combat: 2
 armor: 10
 inborn: (upkeep3 heals organic)
 impact: harm{user},when{kills.1},harm{50},impact{lifedrain},endwhen,sound{devil_attack}

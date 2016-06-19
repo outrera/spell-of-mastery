@@ -5,7 +5,7 @@ ClassIdCounter = 1
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 speed/0 sight/No
            active/0 range/0 leader/0
-           health/0 damage/0 armor/0 cooldown/24
+           health/0 combat/0 armor/0 cooldown/24
            acts/[] spells/0 rooms/0 icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
@@ -26,7 +26,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   range/Range
   leader/Leader
   hp/Health
-  damage/Damage
+  combat/Combat
   armor/Armor
   cooldown/Cooldown
   acts/Acts
@@ -87,8 +87,8 @@ main.load_classes =
   | when V.active:
     | As = []
     | when V.speed: As <= [recall @As]
-    | when V.damage:
-      | when V.damage><impact: V.damage<=0
+    | when V.combat:
+      | when V.combat><impact: V.combat<=0
       | As <= [attack @As]
     | As <= [@As @V.acts]
     | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]

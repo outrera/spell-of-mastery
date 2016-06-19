@@ -191,7 +191,7 @@ unit_check_move Me Dst =
 | B = $world.block_at{Dst}
 | less B: leave move
 | if $owner.id <> B.owner.id
-  then when B.alive and $damage: leave attack
+  then when B.alive and $combat: leave attack
   else when B.speed and B.can_move{}{B Dst.cell Src.cell}:
        | leave swap
 | 0
@@ -412,7 +412,7 @@ unit.update =
 | update_fade Me
 | update_action Me
 | when $removed: leave //unit can be removed as a result of an action
-| when $damage and $action.type><idle and not $goal:
+| when $combat and $action.type><idle and not $goal:
   | when not $invisible or not $owner.human:
     | attack_nearby_enemy Me
 | 1 // 1 means we are still alive

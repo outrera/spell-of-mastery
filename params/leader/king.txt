@@ -2,9 +2,9 @@ sprite: unit_king
 icon: unit_king
 range: cross
 health: 140
-armor: 4
+armor: 20
 range: 0
-damage: 10 // amount of damage this unit deals
+combat: 14
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{king_hit}
 death: sound{male_die},sound{mage_die}

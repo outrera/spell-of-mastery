@@ -1,7 +1,7 @@
 sprite: unit_spider
 tier: 3
 health: 70
-damage: 4
+combat: 4
 armor: 2
 speed: 20
 inborn: (upkeep3 heals organic)

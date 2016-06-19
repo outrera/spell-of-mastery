@@ -170,7 +170,7 @@ ai.update_units =
        | !U.ai_wait-10 //ai.update_units gets called every 10th cycle
        | Handled <= 1
      | less Handled:
-       | Attacker = U.damage and U.attacker
+       | Attacker = U.combat and U.attacker
        | when Attacker:
          | Os = U.world.units_get{U.xyz}
          | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
@@ -213,7 +213,7 @@ ai_leader_harmed Me Attacker Victim =
 | PParams = $player.params
 | LHC = $params.aiLeaderHarmCycle
 | when LHC+24*120>Cycle:
-  | when Attacker: for U OwnedUnits: when U.damage and U.idle:
+  | when Attacker: for U OwnedUnits: when U.combat and U.idle:
     | U.order_at{Attacker.xyz}
   | leave
 | Bonus = max 0 LHC

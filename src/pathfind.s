@@ -12,7 +12,7 @@ unit.list_moves Src Cost =
     | B = Dst.block
     | if B then
         | if $owner.id <> B.owner.id
-          then if B.alive and $damage and (Src.z-Dst.z).abs<<1
+          then if B.alive and $combat and (Src.z-Dst.z).abs<<1
                then push Dst Ms //attack
                else
           else when B.speed and B.can_move{}{B Dst Src}:
@@ -72,7 +72,7 @@ world.closest_reach MaxCost U StartCell TargetXYZ =
       | B = TCell.block
       | when B:
         | less B.speed: | R <= 1; _goto end
-        | when not U.damage and U.owner.is_enemy{B.owner}: | R <= 1; _goto end
+        | when not U.combat and U.owner.is_enemy{B.owner}: | R <= 1; _goto end
   | _label end
   | R
 | $pathfind{MaxCost U StartCell &check}

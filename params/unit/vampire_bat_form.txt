@@ -3,7 +3,7 @@ title: `Vampire`
 icon: unit_bat
 tier: 3
 health: 60
-damage: 2
+combat: 2
 armor: 2
 range: 3
 cool: 10

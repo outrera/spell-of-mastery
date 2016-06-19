@@ -117,7 +117,6 @@ effect harm As:
   [A W] | Combat <= A
         | Whom <= W
   A | Combat <= A
-| when Combat><user: Combat <= Me.damage
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | $assault{Combat T}
 
