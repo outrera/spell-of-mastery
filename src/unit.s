@@ -517,7 +517,7 @@ unit.assault Combat Target =
   | $mod <= 0
   | case Mod [`.` boost [N M]]: Damage <= max 1 Damage*N/M
 | if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
-| when Target.alive and Target.class.health < $health: knockback Me Target
+| when Target.alive and Target.class.hp < $health: knockback Me Target
 
 
 unit.harm Attacker Damage @Magic =
