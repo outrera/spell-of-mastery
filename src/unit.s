@@ -478,6 +478,7 @@ unit.assault Combat Target =
 | Magic = 0
 | Base = No //base damage range
 | Damage = No
+| Boost = 0
 | while Combat.is_list:
   | case Combat
     [_ unavoid C]
@@ -503,6 +504,15 @@ unit.assault Combat Target =
     Else
       | bad "Unknown combat modifier [Combat]"
 | when Combat><user: Combat <= $combat
+| less Magic:
+  | $run_effects{?><attack Me $xyz}
+  | Mods = $mod
+  | $mod <= 0
+  | when Mods: for Mod Mods: case Mod
+    [boost N M] | Boost <= N,M
+    [combat N] | Combat <= max 0 Combat+N
+    [hit N] | Hit <= 1
+    Else | bad "bad attack modifier [Mod]"
 | less Hit:
   | when Combat<<0: leave
   | Roll = $world.rand{Combat+Target.armor*2}
@@ -511,14 +521,9 @@ unit.assault Combat Target =
 | when no Damage: //FIXME: health factor must per unit overridable
   | when no Base: Base <= $health //max 1 $health/2
   | Damage <= $world.rand{Base}+1
-| less Magic:
-  | $run_effects{?><attack Me $xyz}
-  | Mod = $mod
-  | $mod <= 0
-  | case Mod [`.` boost [N M]]: Damage <= max 1 Damage*N/M
+| when Boost: Damage <= max 1 Damage*Boost.0/Boost.1
 | if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
 | when Target.alive and Target.class.hp < $health: knockback Me Target
-
 
 unit.harm Attacker Damage @Magic =
 | when $removed: leave
@@ -535,12 +540,11 @@ unit.harm Attacker Damage @Magic =
   | $run_effects{?><harm Me $xyz}
   | if Mg then $run_effects{?><magic_harm Me $xyz}
     else $run_effects{?><phys_harm Me $xyz}
-| Mod = $mod
+| Mods = $mod
 | $mod <= 0
-| case Mod
-  [`.` block [N M]]
-     | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M
-  [`.` block N] | when Damage>1: Damage <= max 1 Damage-N
+| when Mods: for Mod Mods: case Mod
+  [block N M] | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M
+  [block N] | when Damage>1: Damage <= max 1 Damage-N
 | !$hp - Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:

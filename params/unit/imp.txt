@@ -1,0 +1,12 @@
+sprite: unit_imp
+tier: 2
+health: 80
+combat: 10
+armor: 14
+speed: 28
+worker: 200//20
+inborn: (upkeep2 heals organic)
+impact: harm{user},sound{cut}
+hit: effect{blood},sound{dwarf_hit}
+death: sound{dwarf_die}
+moves: sound{step}

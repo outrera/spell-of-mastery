@@ -28,7 +28,7 @@ effect strip Name: Target.strip_effect{Name}
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
-effect mod Arg: Target.mod <= Arg
+effect mod Args: Target.mod <= [Args @(Target.mod or [])]
 
 effect tenant_mark Type:
 | Block = $world.block_at{TargetXYZ}
