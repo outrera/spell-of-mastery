@@ -14,6 +14,14 @@ order_at Me XYZ Target =
 | Used = []
 | less Target and Target.owner.is_enemy{Player}: Target <= 0
 | Cell = $world.cell{@XYZ}
+| when Us.size><1: less Target:
+  | Below = (Cell-1).tile
+  | when Below.unit and (Cell-Below.height).block.ai><remove:
+    | U = Us.0
+    | XYZ = Cell.xyz
+    | place_dig_mark_at U.owner XYZ
+    | U.order_at{XYZ}
+    | leave
 | for U Us:
   | P = Cell
   | less Target: less Used.end:
@@ -42,93 +50,97 @@ room_relinquish Me C =
   | Flag = T.units.find{?ai><flag}
   | when Flag.owner.id><$player.id: Flag.free
 
+handle_picked_act Me Rect Units Act =
+| ActUnits = $picked
+| ActUnit = $world.act_unit
+| when ActUnit.0
+  | when ActUnit.0.serial<>ActUnit.1
+    | $world.act <= 0
+    | leave
+  | ActUnits <= [ActUnit.0]
+| Affects = Act.affects
+| Outdoor = 0
+| NonLeader = 0
+| LandOnly = 0
+| WaterOnly = 0
+| when Affects.is_list and Affects.0.is_list:
+  | Ms = Affects.0
+  | Affects <= Affects.1
+  | for Mod Ms
+    | if Mod >< outdoor then Outdoor <= 1
+      else if Mod >< non_leader then NonLeader <= 1
+      else if Mod >< land  then LandOnly <= 1
+      else if Mod >< water then WaterOnly <= 1
+      else
+| less $mice_click><pick:
+  | when Affects><unit:
+    | Cur = if Units.end then \ui_cursor_target else \ui_cursor_target2
+    | get_gui{}.cursor <= $main.img{Cur}
+  | leave
+| $mice_click <= 0
+| when Affects><unit and Units.end: leave
+| IsRoom = Act.room
+| less IsRoom: $world.act <= 0
+| Proceed = 1
+| Target = if Units.end then 0 else Units.0
+| XYZ = if Target and Affects><unit then Target.xyz else $cursor
+| Below = $world.at{XYZ.0 XYZ.1 XYZ.2-1}
+| when IsRoom and Below.unit:
+  | $player.notify{"Cannot target unit."}
+  | $main.sound{illegal}
+  | leave
+| when LandOnly and (Below.liquid or Below.type><void):
+  | $player.notify{"Can target only land."}
+  | $main.sound{illegal}
+  | leave
+| when WaterOnly and Below.type <> water:
+  | $player.notify{"Can target only water."}
+  | $main.sound{illegal}
+  | leave
+| when Outdoor and not $world.outdoor{XYZ}:
+  | $player.notify{"Target should be outdoors."}
+  | $main.sound{illegal}
+  | Proceed <= 0
+| when NonLeader and Target and Target.leader><1:
+  | $player.notify{"Cant target leader."}
+  | $main.sound{illegal}
+  | Proceed <= 0
+| when IsRoom:
+  | Work = $player.work_at{XYZ}
+  | when Work:
+    | when Act.name >< room_demolish:
+      | Work.drop_all
+      | Work.free
+      | leave
+    | $player.notify{"This place is already occupied."}
+    | $main.sound{illegal}
+    | Proceed <= 0
+  | when Act.name >< room_relinquish:
+    | room_relinquish Me $world.cell{@XYZ}
+    | leave
+| when Act.name >< room_demolish and not Below.cost:
+  | $player.notify{"Cant demolish this."}
+  | $main.sound{illegal}
+  | Proceed <= 0
+| when Proceed:
+  | Blink = 1
+  | for U ActUnits
+    | when $player.seen{XYZ}:
+      | when Target and Blink:
+        | $world.blink.init{[4 Target]}
+        | Blink <= 0
+      | if IsRoom
+        then U.effect{Act.impact 0 XYZ}
+        else order_act U Act XYZ Target
+| leave
+
 handle_picked Me Rect Units = //Me is view
 | $ui.on_unit_pick{$picked}
 | Player = $player
 | Units = Units.keep{U=>Player.seen{U.xyz}}
 | Act = $world.act
 | when Act:
-  | ActUnits = $picked
-  | ActUnit = $world.act_unit
-  | when ActUnit.0
-    | when ActUnit.0.serial<>ActUnit.1
-      | $world.act <= 0
-      | leave
-    | ActUnits <= [ActUnit.0]
-  | Affects = Act.affects
-  | Outdoor = 0
-  | NonLeader = 0
-  | LandOnly = 0
-  | WaterOnly = 0
-  | when Affects.is_list and Affects.0.is_list:
-    | Ms = Affects.0
-    | Affects <= Affects.1
-    | for Mod Ms
-      | if Mod >< outdoor then Outdoor <= 1
-        else if Mod >< non_leader then NonLeader <= 1
-        else if Mod >< land  then LandOnly <= 1
-        else if Mod >< water then WaterOnly <= 1
-        else
-  | less $mice_click><pick:
-    | when Affects><unit:
-      | Cur = if Units.end then \ui_cursor_target else \ui_cursor_target2
-      | get_gui{}.cursor <= $main.img{Cur}
-    | leave
-  | $mice_click <= 0
-  | when Affects><unit and Units.end: leave
-  | IsRoom = Act.room
-  | less IsRoom: $world.act <= 0
-  | Proceed = 1
-  | Target = if Units.end then 0 else Units.0
-  | XYZ = if Target and Affects><unit then Target.xyz else $cursor
-  | Below = $world.at{XYZ.0 XYZ.1 XYZ.2-1}
-  | when IsRoom and Below.unit:
-    | $player.notify{"Cannot target unit."}
-    | $main.sound{illegal}
-    | leave
-  | when LandOnly and (Below.liquid or Below.type><void):
-    | $player.notify{"Can target only land."}
-    | $main.sound{illegal}
-    | leave
-  | when WaterOnly and Below.type <> water:
-    | $player.notify{"Can target only water."}
-    | $main.sound{illegal}
-    | leave
-  | when Outdoor and not $world.outdoor{XYZ}:
-    | $player.notify{"Target should be outdoors."}
-    | $main.sound{illegal}
-    | Proceed <= 0
-  | when NonLeader and Target and Target.leader><1:
-    | $player.notify{"Cant target leader."}
-    | $main.sound{illegal}
-    | Proceed <= 0
-  | when IsRoom:
-    | Work = $player.work_at{XYZ}
-    | when Work:
-      | when Act.name >< room_demolish:
-        | Work.drop_all
-        | Work.free
-        | leave
-      | $player.notify{"This place is already occupied."}
-      | $main.sound{illegal}
-      | Proceed <= 0
-    | when Act.name >< room_relinquish:
-      | room_relinquish Me $world.cell{@XYZ}
-      | leave
-  | when Act.name >< room_demolish and not Below.cost:
-    | $player.notify{"Cant demolish this."}
-    | $main.sound{illegal}
-    | Proceed <= 0
-  | when Proceed:
-    | Blink = 1
-    | for U ActUnits
-      | when Player.seen{XYZ}:
-        | when Target and Blink:
-          | $world.blink.init{[4 Target]}
-          | Blink <= 0
-        | if IsRoom
-          then U.effect{Act.impact 0 XYZ}
-          else order_act U Act XYZ Target
+  | handle_picked_act Me Rect Units Act
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | less $mice_click:
@@ -384,6 +396,13 @@ view.update_brush =
 
 Unmarking = No
 
+place_dig_mark_at Player XYZ =
+| X,Y,Z = XYZ
+| Work = Player.alloc_unit{unit_dig}
+| Work.move{X,Y,0}
+| Work.hp <= 0
+| Player.world.main.sound{dig}
+
 mark_tile Me =
 | X,Y,Z = $cursor
 | Work = $world.column_units_get{X Y}.find{?type><unit_dig}
@@ -396,10 +415,7 @@ mark_tile Me =
 | when Unmarking><1: leave
 | Unmarking <= 0
 | when Z < 2: leave
-| Work <= $world.human.alloc_unit{unit_dig}
-| Work.move{X,Y,0}
-| Work.hp <= 0
-| $main.sound{dig}
+| place_dig_mark_at $world.human X,Y,Z
 
 view.update_play =
 | less $brush.0: case $mice_click
