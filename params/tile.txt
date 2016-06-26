@@ -8,6 +8,6 @@ shadow: 1
 height: 1 // height in world units (8 pixels/unit by default)
 heavy: 1 //true if tile compresses the shape of tile below of it into cube
 lineup: 1 // affected by by above heavy tiles
-excavate: 0 //true if can be cleared physically or magically during gameplay
+dig: 0 //true if can be cleared physically or magically during gameplay
 opaque: No //transparent see-through tile, No=decide based on `invisible`
 hp: 0 //how long it takes to excavate this tile

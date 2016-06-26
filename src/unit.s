@@ -428,11 +428,11 @@ unit.order_at XYZ act/0 =
   | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
-| if not $goal or ($worker and $goal.ai><remove and $owner.excavate_mark{@XYZ})
+| if not $goal or ($worker and $goal.ai><remove and $owner.dig_mark{@XYZ})
   then | $goal <= $unit_goal
        | less Act: when $worker:
          | X,Y,Z = XYZ
-         | when $owner.excavate_mark{X Y Z}: Act <= \excavate
+         | when $owner.dig_mark{X Y Z}: Act <= \dig
          | when $owner.work_at{XYZ}: Act <= \build
   else | Enemy = $owner.is_enemy{$goal.owner}
        | less Act or Enemy: $goal <= $unit_goal

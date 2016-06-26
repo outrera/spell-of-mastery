@@ -1,7 +1,7 @@
 role: dirt
 match: any,cornerside
 lineup: 0
-excavate: 1
+dig: 1
 indoor: dirt
 box: (64 64 39)
 hp: 100

@@ -5,4 +5,4 @@ range: cross
 repeat: 1
 affects: any
 before: same_z,idle_void{0} //kludge: idle if goal is void
-impact: same_z,excavate{target}
+impact: same_z,dig{target}

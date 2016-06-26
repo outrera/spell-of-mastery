@@ -293,16 +293,16 @@ effect store How:
 | $strip_effect{store_}
 | [ItemType Amount BackXYZ] = S
 | $drop_item{ItemType Amount}
-| $order_at{BackXYZ act/excavate}
+| $order_at{BackXYZ act/dig}
 
-do_excavate Me TargetXYZ =
+do_dig Me TargetXYZ =
 | less $worker: //shouldnt happen
   | $reset_goal
   | leave
 | X,Y,Z = TargetXYZ
-| Mark = $owner.excavate_mark{X Y Z}
-| ExcavateGoal = $goal and $goal_act and $goal_act.name><excavate
-| when Mark and $world.excavate{X Y Z 2 (max $worker 1)}:
+| Mark = $owner.dig_mark{X Y Z}
+| DigGoal = $goal and $goal_act and $goal_act.name><dig
+| when Mark and $world.dig{X Y Z 2 (max $worker 1)}:
   | Mark.free
   | Mark <= 0
   | Cell = $world.cell{@TargetXYZ}
@@ -328,14 +328,14 @@ do_excavate Me TargetXYZ =
       | $owner.notify{"[$title] cant find [StorageType] room."}
       | $reset_goal
     | leave
-| less Mark: when ExcavateGoal:
+| less Mark: when DigGoal:
   | Ds = Dirs4{X,Y => [X Y 0]}
   | Marked = $find{16 (Dst =>
     | R = 0
     | for Neib Dst.neibs
       | XYZ = Neib.xyz
-      | when $owner.excavate_mark{@XYZ}:
-        | $order_at{XYZ act/excavate}
+      | when $owner.dig_mark{@XYZ}:
+        | $order_at{XYZ act/dig}
         | R <= 1
         | _goto loop_end
     | _label loop_end
@@ -348,16 +348,16 @@ do_excavate Me TargetXYZ =
 effect idle_void How:
 | when $world.get{TargetXYZ}.type><void:
   | $animate{idle}
-  | do_excavate Me TargetXYZ
+  | do_dig Me TargetXYZ
 
-effect excavate How: do_excavate Me TargetXYZ
+effect dig How: do_dig Me TargetXYZ
 
 effect build Where:
 | less $worker: //shouldnt happen
   | $reset_goal
   | leave
 | X,Y,Z = TargetXYZ
-| Work = $world.units_get{X,Y,Z}.find{(?type><unit_work and ?goal)}
+| Work = $world.units_get{X,Y,Z}.find{?type><unit_build}
 | when got Work:
   | TileType = Work.kills
   | Tile = $main.tiles.TileType
@@ -418,7 +418,7 @@ effect mark TileType:
 | X,Y,Z = TargetXYZ
 | Tile = $main.tiles.TileType
 | when no Tile: bad "effect mark: undefined tile `[TileType]`"
-| Work = $owner.alloc_unit{unit_work}
+| Work = $owner.alloc_unit{unit_build}
 | Work.move{X,Y,Z}
 | Work.hp <= 0
 | Work.kills <= TileType

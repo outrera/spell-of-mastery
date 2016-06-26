@@ -29,7 +29,7 @@ world.save =
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
   | Active = 0
-  | when U.active or (U.type><unit_work and U.goal):
+  | when U.active or U.type><unit_build:
     | Effects = if U.effects.end then 0
                 else U.effects.map{E=>[E.when E.name E.amount E.params]}
     | Host = if U.host then U.host.id else 0
@@ -132,7 +132,7 @@ world.load Saved =
 | for X Saved.units
   | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active]=X
   | U = $players.Owner.alloc_unit{Type}
-  | less Active or U.type><unit_work: U.change_owner{$players.0}
+  | less Active or U.type><unit_build: U.change_owner{$players.0}
   | U.serial <= Serial
   | case XYZ A,B:
     | XYZ <= A
@@ -164,7 +164,7 @@ world.load Saved =
       | U.path <= P
       | U.path_life <= Path.1
     | U.host <= [Host Goal Action Ordered NextAction]
-    | when Type><unit_work and Goal: //kludge!
+    | when Type><unit_build: //kludge!
       | Target,ActName = Goal
       | U.goal <= U.unit_goal
       | U.goal.xyz.init{XYZ}

@@ -1,5 +1,5 @@
 sprite: tiles_room_bridge
-excavate: 1
+dig: 1
 embed: 1
 wall: house_wall
 roof: 2,house_roof

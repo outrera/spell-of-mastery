@@ -251,7 +251,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | B.ly <= LY
         | B.brighten <= if DrawMark and not U.active then 100 else Br
         | push B BlitItems
-    else if not U.xyz.2 and U.type><unit_work
+    else if not U.xyz.2 and U.type><unit_dig
             and U.owner.id><$world.human.id then
      | DrawMark <= 1 //marked for excavation
     else

@@ -1,6 +1,6 @@
 sprite: tiles_dirt1
 aux: 1
-excavate: 1
+dig: 1
 heavy: 1
 opaque: 1
 filler: 0

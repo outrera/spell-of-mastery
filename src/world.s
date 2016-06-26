@@ -389,10 +389,10 @@ world.respawn_tile XYZ Type Delay =
 | S.move{XYZ}
 | S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
 
-world.excavate X Y Z PassageH Amount =
-| Work = $units_get{X,Y,Z}.find{?type><unit_work}
+world.dig X Y Z PassageH Amount =
+| Work = $units_get{X,Y,Z}.find{?type><unit_dig}
 | when no Work:
-  | Work <= $players.0.alloc_unit{unit_work}
+  | Work <= $players.0.alloc_unit{unit_dig}
   | Work.move{X,Y,Z}
   | Work.hp <= 0
 | !Work.hp+Amount
@@ -415,7 +415,7 @@ world.excavate X Y Z PassageH Amount =
 | H = min $floor{X,Y,Z} Z+PassageH
 | ZZ = Z
 | while Z<H:
-  | less $at{X Y Z}.excavate: H<=Z
+  | less $at{X Y Z}.dig: H<=Z
   | !Z+1
 | Z <= ZZ
 | while Z<H:

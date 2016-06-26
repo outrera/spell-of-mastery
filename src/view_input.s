@@ -264,7 +264,7 @@ world_place_tile_walls Me X Y Z Tile =
   | XX = X+DX
   | YY = Y+DY
   | DTile = $at{XX YY Z}
-  | when DTile.excavate or DTile.empty:
+  | when DTile.dig or DTile.empty:
     | when $at{XX YY Z-1}.type <> Wall.around:
       | $clear_tile{XX YY Z}
       | world_place_tile Me XX YY Z Wall
@@ -386,8 +386,7 @@ Unmarking = No
 
 mark_tile Me =
 | X,Y,Z = $cursor
-| Work = $world.column_units_get{X Y}.find{
-    (?type><unit_work and not ?goal)}
+| Work = $world.column_units_get{X Y}.find{?type><unit_dig}
 | when got Work:
   | when Unmarking<>0:
     | Unmarking <= 1
@@ -397,7 +396,7 @@ mark_tile Me =
 | when Unmarking><1: leave
 | Unmarking <= 0
 | when Z < 2: leave
-| Work <= $world.human.alloc_unit{unit_work}
+| Work <= $world.human.alloc_unit{unit_dig}
 | Work.move{X,Y,0}
 | Work.hp <= 0
 | $main.sound{dig}

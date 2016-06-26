@@ -180,10 +180,10 @@ unit_check_move Me Dst =
 | Tile = $world.at{X Y Z}
 | less Tile.empty
   | when $worker:
-    | when Tile.excavate: leave excavate
+    | when Tile.dig: leave dig
     | when Tile.unit
       | B = $world.block_at{X,Y,Z}
-      | when B and B.ai><remove: leave excavate
+      | when B and B.ai><remove: leave dig
   | leave 0
 | Below = $world.at{X Y $world.floor{X,Y,Z}-1}
 | when Below.type><water:
