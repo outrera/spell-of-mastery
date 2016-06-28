@@ -295,17 +295,57 @@ effect store How:
 | $drop_item{ItemType Amount}
 | $order_at{BackXYZ act/dig}
 
+
+world_dig Me X Y Z PassageH Amount =
+| Cell = $cell{X Y Z}
+| Work = Cell.units.find{?type><unit_dig}
+| when Cell.empty:
+  | when got Work: Work.free
+  | leave 1 //already excavated
+| when no Work:
+  | Work <= $players.0.alloc_unit{unit_dig}
+  | Work.move{X,Y,Z}
+  | Work.hp <= 0
+| !Work.hp+Amount
+| Tile = $at{X Y Z}
+| when $at{X Y Z}.unit:
+  | B = $block_at{X,Y,Z}
+  | less B: leave 1
+  | when Work.hp >> B.class.hp:
+    | when B.death: Work.effect{B.death Work X,Y,Z}
+    | B.free
+    | Work.free
+    | leave 1
+  | when B.hit: Work.effect{B.hit Work X,Y,Z}
+  | leave 0
+| when Work.hp < Tile.hp:
+  | when Tile.hit: Work.effect{Tile.hit Work X,Y,Z}
+  | leave 0
+| when Tile.death: Work.effect{Tile.death Work X,Y,Z}
+| Work.free
+| H = min $floor{X,Y,Z} Z+PassageH
+| ZZ = Z
+| while Z<H:
+  | less $at{X Y Z}.dig: H<=Z
+  | !Z+1
+| Z <= ZZ
+| while Z<H:
+  | $set{X Y Z $main.tiles.void}
+  | !Z+1
+| 1
+
 do_dig Me TargetXYZ =
 | less $worker: //shouldnt happen
   | $reset_goal
   | leave
 | X,Y,Z = TargetXYZ
+| Cell = $world.cell{X Y Z}
+| when Cell.empty:
 | Mark = $owner.dig_mark{X Y Z}
 | DigGoal = $goal and $goal_act and $goal_act.name><dig
-| when Mark and $world.dig{X Y Z 2 (max $worker 1)}:
+| when Mark and world_dig $world X Y Z 2 (max $worker 1):
   | Mark.free
   | Mark <= 0
-  | Cell = $world.cell{@TargetXYZ}
   | ItemType = 0
   | ItemCount = 0
   | for It,Amount Cell.items: when $main.classes.It.ai><resource:

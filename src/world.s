@@ -21,6 +21,8 @@ World =
 //FIXME: such structs could be defined with a macro
 int.tile = CellsTile.Me
 int.`!tile` V = CellsTile.Me <= V
+int.empty = $tile.empty
+int.type = $tile.type
 int.units = CellsUnits.Me
 int.`!units` V = CellsUnits.Me <= V
 int.gfx = CellsGfxes.Me
@@ -388,41 +390,6 @@ world.respawn_tile XYZ Type Delay =
 | S = $players.0.alloc_unit{unit_dummy}
 | S.move{XYZ}
 | S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
-
-world.dig X Y Z PassageH Amount =
-| Work = $units_get{X,Y,Z}.find{?type><unit_dig}
-| when no Work:
-  | Work <= $players.0.alloc_unit{unit_dig}
-  | Work.move{X,Y,Z}
-  | Work.hp <= 0
-| !Work.hp+Amount
-| Tile = $at{X Y Z}
-| when $at{X Y Z}.unit:
-  | B = $block_at{X,Y,Z}
-  | less B: leave 1
-  | when Work.hp >> B.class.hp:
-    | when B.death: Work.effect{B.death Work X,Y,Z}
-    | B.free
-    | Work.free
-    | leave 1
-  | when B.hit: Work.effect{B.hit Work X,Y,Z}
-  | leave 0
-| when Work.hp < Tile.hp:
-  | when Tile.hit: Work.effect{Tile.hit Work X,Y,Z}
-  | leave 0
-| when Tile.death: Work.effect{Tile.death Work X,Y,Z}
-| Work.free
-| H = min $floor{X,Y,Z} Z+PassageH
-| ZZ = Z
-| while Z<H:
-  | less $at{X Y Z}.dig: H<=Z
-  | !Z+1
-| Z <= ZZ
-| while Z<H:
-  | Type = $at{X Y Z}.type
-  | $set{X Y Z $main.tiles.void}
-  | !Z+1
-| 1
 
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =
