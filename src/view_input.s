@@ -398,10 +398,12 @@ Unmarking = No
 
 place_dig_mark_at Player XYZ =
 | X,Y,Z = XYZ
+| World = Player.world
+| when got World.cell{X Y 0}.units.find{?type><unit_dig}: leave
 | Work = Player.alloc_unit{unit_dig}
 | Work.move{X,Y,0}
 | Work.hp <= 0
-| Player.world.main.sound{dig}
+| World.main.sound{dig}
 
 mark_tile Me =
 | X,Y,Z = $cursor
