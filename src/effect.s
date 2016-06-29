@@ -298,31 +298,31 @@ effect store How:
 
 world_dig Me X Y Z PassageH Amount =
 | Cell = $cell{X Y Z}
+| Tile = Cell.tile
 | Work = Cell.units.find{?type><unit_dig}
-| when Cell.empty:
+| when 0:
+  | _label done
   | when got Work: Work.free
-  | leave 1 //already excavated
+  | leave 1
+| when Cell.empty: _goto done //already excavated
 | when no Work:
   | Work <= $players.0.alloc_unit{unit_dig}
   | Work.move{X,Y,Z}
   | Work.hp <= 0
 | !Work.hp+Amount
-| Tile = $at{X Y Z}
-| when $at{X Y Z}.unit:
-  | B = $block_at{X,Y,Z}
-  | less B: leave 1
+| when Tile.unit:
+  | B = Cell.block
+  | less B and B.ai><remove: _goto done
   | when Work.hp >> B.class.hp:
     | when B.death: Work.effect{B.death Work X,Y,Z}
     | B.free
-    | Work.free
-    | leave 1
+    | _goto done
   | when B.hit: Work.effect{B.hit Work X,Y,Z}
   | leave 0
 | when Work.hp < Tile.hp:
   | when Tile.hit: Work.effect{Tile.hit Work X,Y,Z}
   | leave 0
 | when Tile.death: Work.effect{Tile.death Work X,Y,Z}
-| Work.free
 | H = min $floor{X,Y,Z} Z+PassageH
 | ZZ = Z
 | while Z<H:
@@ -332,7 +332,7 @@ world_dig Me X Y Z PassageH Amount =
 | while Z<H:
   | $set{X Y Z $main.tiles.void}
   | !Z+1
-| 1
+| _goto done 
 
 do_dig Me TargetXYZ =
 | less $worker: //shouldnt happen
