@@ -14,6 +14,7 @@ sight: 3
 speed: 28
 pickable: 1
 passable: 0
+researcher: 1
 flyer: 0 // can it fly
 leader: 1
 ai: unit

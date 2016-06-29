@@ -10,7 +10,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
            inborn/[] pentagram/0
-           attack/0 impact/0 hit/0 death/0 moves/0 worker/0}
+           attack/0 impact/0 hit/0 death/0 moves/0 worker/0 researcher/0}
   id
   type/"[Bank]_[Class_name]"
   block/0
@@ -48,6 +48,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   moves/Moves
   pentagram/Pentagram
   worker/Worker
+  researcher/Researcher
 | when Spells: $acts <= [@$acts @Spells].list
 | when Rooms: $acts <= [@$acts @Rooms].list
 | when $active:

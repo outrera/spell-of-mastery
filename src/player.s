@@ -207,18 +207,18 @@ player.add_item Name Amount =
 | 1
 
 player.capture Cell = //captures room pointer by a cell
-| CaptType = Cell.tile.type
+| Tile = Cell.tile
+| less Tile.deco: leave 1
+| DSize,OX,OY,Params,DecoType = Tile.deco
+| CaptType = Tile.type
 | Ts = $world.linked_cells2d{Cell | Cell => Cell.tile.type><CaptType}{?+1}
 | Guard = Ts.find{T=>got T.units.find{U=>U.hp and $is_enemy{U.owner}}}
 | when got Guard: leave 0 //room is guarded, cant capture it
 | for T Ts:
-  | Flag = T.units.find{?type><special_flag}
-  | less got Flag:
-    | Flag <= $alloc_unit{special_flag}
-    | Flag.move{T.xyz}
-  | when Flag.owner.id<>$id:
-    | Flag.change_owner{Me}
-    | Flag.colors <= $colors
+  | D = T.units.find{?type><DecoType}
+  | when got D and D.owner.id<>$id:
+    | D.change_owner{Me}
+    | D.colors <= $colors
 | 1
 
 export player

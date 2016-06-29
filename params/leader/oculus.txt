@@ -6,6 +6,7 @@ combat: 0
 armor: 10
 range: 0
 leader: 2
+researcher: :0
 inborn: (upkeep1 flyer)
 death: sound{mage_die}
 hit: effect{blood},sound{devil_hit}

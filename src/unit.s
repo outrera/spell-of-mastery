@@ -566,7 +566,7 @@ unit_moved_in Me =
 | C = $cell
 | for U C.units: when U.item.is_list:
   | U.effect{U.item Me Me.xyz}
-| when (C-1).tile.storage: $owner.capture{C-1}
+| when (C-1).tile.deco: $owner.capture{C-1}
 
 unit.fine_move FXYZ =
 | C = $world.c
