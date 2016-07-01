@@ -427,7 +427,7 @@ points_rect Ps =
 | Y = Ps{?1}.min
 | [X Y Ps{?0}.max+1-X Ps{?1}.max+1-Y]
 
-update_deco Me Tile Z Ps =
+update_deco Me Owner Tile Z Ps = //Me=world
 | Type = Tile.type
 | ZH = Z+Tile.height
 | DSize,OX,OY,Params,DecoType = Tile.deco
@@ -447,23 +447,23 @@ update_deco Me Tile Z Ps =
   | EX = X + W-OX.1
   | while X < EX:
     | when Ds.all{DX,DY => $at{X+DX Y+DY Z}.type><Type}
-      | Deco = $players.0.alloc_unit{DecoType}
+      | Deco = (Owner or $players.0).alloc_unit{DecoType}
       | Deco.move{X,Y,ZH}
       //| Deco.fxyz.init{Deco.fxyz-[FOff.0 FOff.1 0]}
     | !X + OX.2
   | !Y + OY.2
 
-world.set X Y Z Tile =
+world.set X Y Z Tile owner/0 =
 | Cell = $cell{X Y Z}
 | Removed = Cell.tile
 | DecoTs = 0
 | when Removed.deco and Removed.type<>Tile.type:
   | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Removed.type}
 | $dirty_set{X Y Z Tile}
-| when DecoTs: update_deco Me Removed Z DecoTs
+| when DecoTs: update_deco Me Owner Removed Z DecoTs
 | when Tile.deco:
   | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Tile.type}
-  | update_deco Me Tile Z DecoTs
+  | update_deco Me Owner Tile Z DecoTs
 | $upd_neibs{X Y}
 
 world.floor XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.floor%WorldDepth

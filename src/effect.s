@@ -430,10 +430,10 @@ effect build Where:
       | $reset_goal
       | leave
     | for K,V Room.cost: when K<>item_time: $add_item{K V}
-    | when Embed.is_text: $world.set{X Y Z-1 $main.tiles.Embed}
+    | when Embed.is_text: $world.set{X Y Z-1 $main.tiles.Embed owner/$owner}
     | leave
   | when Tile.embed: Z-1
-  | $world.set{X Y Z-1 Tile}
+  | $world.set{X Y Z-1 Tile owner/$owner}
   | when Tile.storage:
     | Flag = $owner.alloc_unit{special_flag}
     | Flag.move{X,Y,Z}

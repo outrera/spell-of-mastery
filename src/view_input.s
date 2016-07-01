@@ -327,7 +327,7 @@ place_tile Me Type =
       | when $cursor.2<<$anchor.2:
         | Below = $world.at{X Y $cursor.2-1}
         | less Below.empty
-          | $world.set{X Y $cursor.2-1 Tile}
+          | $world.set{X Y $cursor.2-1 Tile owner/$world.human}
           | world_place_tile_deco $world X Y $cursor.2 Tile
           | leave
     else
@@ -337,7 +337,7 @@ place_tile Me Type =
           | $anchor.2 <= Z
           | AnchorHack <= LMB_Count
         | while Z>>0 and $world.at{X Y Z}.embed:
-          | $world.set{X Y Z Tile}
+          | $world.set{X Y Z Tile owner/$world.human}
           | !Z-1
         | leave
   | AnchorHack <= LMB_Count
