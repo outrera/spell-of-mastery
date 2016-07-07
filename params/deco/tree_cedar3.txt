@@ -1,3 +1,0 @@
-sprite: tree_cedar3
-height: 12
-1111: 0

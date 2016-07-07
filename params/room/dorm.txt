@@ -1,5 +1,5 @@
 sprite: tiles_room_bridge
 embed: soil
-deco: 5,(0 0 2),(0 1 1),(),indoor_bed
+deco: 5,(0 0 2),(0 1 1),(),deco_bed
 // ((0 1) (0 0) (1 1) (1 0))
 1111: 0
