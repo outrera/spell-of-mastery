@@ -560,6 +560,11 @@ effect research Arg:
 | !O.mana - Act.lore.1
 | O.research_item{What}
 
+effect researches Amount:
+| O = $owner
+| less O.params.libs_left>0: leave
+| !O.lore + Amount
+
 effect lore Amount:
 | !Target.owner.lore + Amount
 
@@ -597,6 +602,7 @@ check_when Me Target C =
   [`.` got_child Type] | leave: got Target.child{Type}
   [`.` no_child Type] | leave: no Target.child{Type}
   [`.` kills N] | less Target.kills>>N: leave 0
+  [`.` below Type] | less (Target.cell-1).type><Type: leave 0
 | 1
 
 unit.effect Effect Target XYZ =

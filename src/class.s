@@ -11,7 +11,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            passable/1 movable/0 counter/0 tier/0
            inborn/[] pentagram/0
            attack/0 impact/0 hit/0 death/0 moves/0 worker/0 researcher/0}
-  id
+  id //for unit counts table
   type/"[Bank]_[Class_name]"
   block/0
   pickable/Pickable

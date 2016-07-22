@@ -34,14 +34,14 @@ type player{id world}
    picked_ //picked units
    sight // fog of war
    total_units
-   unit_counts // count unit be type
+   unit_counts // counts uwned units for each unit type
    colors
    gold
    wood
    stone
    iron
    houses
-| $unit_counts <= dup 300
+| $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $params <= t
 | MaxSize = $world.maxSize
@@ -100,6 +100,7 @@ player.clear =
 | $lore <= 0
 | $params.lossage <= 0
 | $params.mana <= 0
+| $params.libs_left <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 player.got_unit U =
@@ -172,6 +173,9 @@ update_income Me =
 
 player.update =
 | Cycle = $world.cycle
+| Id = $main.classes.deco_bookshelf.id
+| LibCount = $unit_counts.Id
+| $params.libs_left <= LibCount
 | when Cycle><0 and $human and $leader:
   | $world.view.center_at{$leader.xyz cursor/1}
 | update_units Me
