@@ -1,8 +1,8 @@
 sprite: unit_skeleton
 tier: 1
-health: 50
+health: 55
 combat: 5
-armor: 0
+armor: 10
 //speed: 24
 inborn: (upkeep1 heals regen resist_magic)
 impact: harm{user},sound{cut}

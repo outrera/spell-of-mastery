@@ -1,8 +1,8 @@
 sprite: unit_blob
 tier: 1
-health: 50
-combat: 6
-armor: 3
+health: 100
+combat: 8
+armor: 10
 range: 3
 speed: 96
 inborn: (upkeep1 heals ttl{1440})

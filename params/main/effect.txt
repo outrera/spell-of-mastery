@@ -3,7 +3,10 @@ flags: attacker{0,-1},picked{1,-1},nonguard{2,-1}
       /*,unused{9,-1}*/,swimmer{10,-1},amphibian{11,-1},invisible{12,-1}
       ,paralyzed{13,3},slowed{14,-1},bloodlust{15,1},mark{16,-1}
 
-
+//FIXME: this crap needs complete redesign and proper DSL.
+//       all unit fields should be expressed here.
+//       Think of these entries as of DNA genes or ECS components.
+//       Some AI stuff, like spellcasting can be moved here too.
 haste: on{static}
 flyer: on{static}
 swimmer: on{static}

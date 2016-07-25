@@ -1,8 +1,8 @@
 sprite: unit_lizard
 tier: 2
-health: 60
+health: 80
 combat: 10
-armor: 0
+armor: 8
 speed: 18
 inborn: (upkeep2 heals organic)
 attack: sound{lizard_attack}

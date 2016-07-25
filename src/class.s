@@ -46,7 +46,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   hit/Hit
   death/Death
   moves/Moves
-  pentagram/Pentagram
+  pentagram/Pentagram //pentagram this unit casts
   worker/Worker
   researcher/Researcher
 | when Spells: $acts <= [@$acts @Spells].list
