@@ -468,6 +468,7 @@ heal_unit Me Amount =
 
 knockback Me Target =
 | Dir = Target.xyz-$xyz
+| less Dir.all{?abs<<1}: leave
 | Dir.2 <= 0
 | DXYZ = Target.xyz+Dir
 | DC = $world.cell{@DXYZ}
