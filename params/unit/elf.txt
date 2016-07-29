@@ -1,8 +1,8 @@
 sprite: unit_elf
 tier: 2
-health: 40
-combat: 7
-armor: 0
+health: 60
+combat: 8
+armor: 2
 range: 4
 inborn: (upkeep2 heals organic)
 //attack: sound{arrow_hit}
