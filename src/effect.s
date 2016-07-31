@@ -141,7 +141,8 @@ effect neibs Args:
   | when B: $effect{Es B B.xyz}
 
 effect counter Arg:
-| when $range><cross or not $range:
+| R = $range
+| when R><neib or R><cross or not R:
   | Target.run_effects{?><counter Me Me.xyz}
 
 effect lifedrain Amount:

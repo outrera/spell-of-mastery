@@ -480,6 +480,7 @@ unit.assault Combat Target =
 | Base = No //base damage range
 | Damage = No
 | Boost = 0
+| Lifedrain = 0
 | while Combat.is_list:
   | case Combat
     [_ unavoid C]
@@ -502,6 +503,9 @@ unit.assault Combat Target =
     [_ base C]
       | Combat <= C.0
       | Base <= C.1
+    [_ lifedrain C]
+      | Combat <= C
+      | Lifedrain <= 1
     Else
       | bad "Unknown combat modifier [Combat]"
 | when Combat><user: Combat <= $combat
@@ -519,10 +523,13 @@ unit.assault Combat Target =
   | Roll = $world.rand{Combat+Target.armor*2}
   | Hit <= Roll<Combat
   | less Hit: leave
+| ImpactHit = $class.impact_hit
+| when ImpactHit: $effect{ImpactHit Target Target.xyz}
 | when no Damage: //FIXME: health factor must per unit overridable
   | when no Base: Base <= $health //max 1 $health/2
   | Damage <= $world.rand{Base}+1
 | when Boost: Damage <= max 1 Damage*Boost.0/Boost.1
+| when Lifedrain and Damage>0: heal_unit Me Damage
 | if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
 | when Target.alive and Target.class.hp < $health: knockback Me Target
 

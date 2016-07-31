@@ -1,8 +1,8 @@
 sprite: unit_spider
 tier: 3
-health: 70
-combat: 4
-armor: 2
+health: 60
+combat: 10
+armor: 25
 speed: 20
 inborn: (upkeep3 heals organic)
 //attack: sound{spider_attack}

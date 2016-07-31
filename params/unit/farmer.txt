@@ -1,8 +1,8 @@
 sprite: unit_farmer
 tier: 1
-health: 30
-combat: 3
-armor: 0
+health: 50
+combat: 6
+armor: 2
 inborn: (income1 heals organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{male_hit}

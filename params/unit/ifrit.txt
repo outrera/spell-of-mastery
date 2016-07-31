@@ -1,12 +1,12 @@
 sprite: unit_ifrit
 tier: 3
-health: 90
-combat: 5
-armor: 2
+health: 140
+combat: 10
+armor: 8
 speed: 22
 inborn: (upkeep3 heals organic fireaura flyer)
 //attack: sound{explosion}
-impact: harm{unavoid.5},sound{explosion}
+impact: harm{unavoid.15},sound{explosion}
 hit: effect{blood},sound{ifrit_hit}
 death: sound{ifrit_death}
 moves: sound{ifrit_move}

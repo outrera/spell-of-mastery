@@ -1,11 +1,11 @@
 sprite: unit_gargoyle
 tier: 3
-health: 50
-combat: 10
-armor: 0
+health: 150
+combat: -1
+armor: 10
 inborn: (upkeep2 heals organic flyer)
 //attack: sound{impact}
-impact: harm{user},sound{impact}
+impact: harm{user},harm{unavoid.20},sound{impact}
 hit: effect{blood_undead},sound{devil_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

@@ -2,9 +2,9 @@ sprite: unit_bat
 title: `Vampire` 
 icon: unit_bat
 tier: 3
-health: 60
-combat: 2
-armor: 2
+health: 30
+combat: 4
+armor: 30
 range: 3
 cool: 10
 inborn: (upkeep3 flyer resist_magic)
