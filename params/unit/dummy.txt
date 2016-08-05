@@ -10,3 +10,4 @@ show: 0
 aux: 1
 item: 0
 invincible: 1
+pickable: 0

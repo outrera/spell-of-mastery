@@ -5,6 +5,6 @@ cost: 500
 cool: 1920
 needs: (cast_lightning)
 affects: area
-before: sound{blizzard},spawn_field{1920,8,world,(outdoors_cell 1),missile{effect_shard,height_div,(target -32 0 96)},area{any,(64 64 64),harm{magic.7}},impact{shard_impact},sound{impact}}
+before: sound{blizzard},spawn_field{1000,8,world,(outdoors_cell 1),missile{effect_shard,height_div,(target -32 0 96)},area{any,(64 64 64),harm{magic.7}},impact{shard_impact},sound{impact}}
 hint: harm_all
 tab: spell

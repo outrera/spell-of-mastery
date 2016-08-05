@@ -481,34 +481,40 @@ unit.assault Combat Target =
 | Damage = No
 | Boost = 0
 | Lifedrain = 0
-| while Combat.is_list:
-  | case Combat
-    [_ unavoid C]
+| Mods = []
+| case Combat
+  [`.` Ms C]
+    | Mods <= Combat^| @r [_ Ms M]=>[M @(if Ms.is_list then Ms^r else [Ms])]
+    | Combat <= Mods.head
+    | Mods <= Mods.tail
+  Else
+    | when Combat.is_list: bad "Unknown combat modifier [Combat]"
+| when Combat><user: Combat <= $combat
+| till Mods.end:
+  | Mod = Mods^pop
+  | case Mod
+    unavoid
+      | Damage <= Combat
       | Combat <= 1
-      | Damage <= C
       | Hit <= 1
-    [_ magic C]
+    magic
+      | Damage <= Combat
       | Combat <= 1
-      | Damage <= C
       | Hit <= 1
       | Magic <= 1
-    [_ magic_base C]
+    magic_base
+      | Base <= Combat
       | Combat <= 1
-      | Base <= C
       | Hit <= 1
       | Magic <= 1
-    [_ damage C]
-      | Combat <= C.0
-      | Damage <= C.1
-    [_ base C]
-      | Combat <= C.0
-      | Base <= C.1
-    [_ lifedrain C]
-      | Combat <= C
+    [damage D]
+      | Damage <= D
+    [base B]
+      | Base <= B
+    lifedrain
       | Lifedrain <= 1
     Else
-      | bad "Unknown combat modifier [Combat]"
-| when Combat><user: Combat <= $combat
+      | bad "Unknown combat modifier [Mod]"
 | less Magic:
   | $run_effects{?><attack Me $xyz}
   | Mods = $mod

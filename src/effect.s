@@ -158,7 +158,7 @@ effect spawn_field Args:
 | S.move{TargetXYZ}
 | Es = As{?^normalize_curly}
 | S.add_effect{field TTL [[effect [on [`.` cycle Freq]] [field [Param R Es]]]]}
-
+| S.add_effect{field TTL [[effect [on timeout] [remove self]]]}
 
 range_points World XYZ R FixTop =
 | Ps = points_in_circle{R}{P=>[P.0 P.1 0]+XYZ}
