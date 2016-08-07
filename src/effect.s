@@ -435,9 +435,6 @@ effect build Where:
     | leave
   | when Tile.embed: Z-1
   | $world.set{X Y Z-1 Tile owner/$owner}
-  | when Tile.storage:
-    | Flag = $owner.alloc_unit{special_flag}
-    | Flag.move{X,Y,Z}
 | less got Work:
   | OID = $owner.id
   | Found = $find{16 (Dst =>
