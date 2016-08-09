@@ -1,4 +1,4 @@
-sprite: tiles_library
+sprite: tiles_room_library
 cost: wood,1
 embed: soil
 match: same,corner
