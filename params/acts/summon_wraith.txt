@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_wraith
-lore: (8 600)
+lore: misc.tier2_lcost
 cost: 700
 cool: misc.tier2_cool
 needs: (summon_skeleton)

@@ -1,6 +1,9 @@
 sprite: tiles_grass
+match: same,corner
 height: 1
-empty: 1
+filler: 0
+invisible: 0
+opaque: 0
 1111: 16
 1000: 0
 1100: 1

@@ -78,11 +78,11 @@ pick_main_menu Me pause/1 =
 
 research_act Me Unit Act =
 | O = Unit.owner
-| Needs = $player.lore-Act.lore.0
+| Needs = $player.lore-Act.lore
 | when Needs < 0:
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
-| Needs = $player.mana-Act.lore.1
+| Needs = $player.mana-Act.lore
 | when Needs < 0:
   | O.notify{"Not enough mana for `[Act.title]` (collect [-Needs])"}
   | leave

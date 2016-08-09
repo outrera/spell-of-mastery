@@ -283,7 +283,7 @@ ai.script =
 
 ai_update Me =
 | Player = $player
-| Player.lore <= 9000
+| Player.lore <= 90000
 | when Player.id: while $script><1:
 | $update_units
 

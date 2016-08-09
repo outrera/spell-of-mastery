@@ -1,7 +1,7 @@
 icon: spell_hexagram
 title: `Hexagram`
 cost: misc.tier1_scost
-lore: (2 400)
+lore: 0
 hint: pentagram
 affects: any
 before: impact{pentagram_appearance},sound{pentagram}

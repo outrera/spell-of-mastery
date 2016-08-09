@@ -1,19 +1,19 @@
 spawn: impact{teleport},sound{summon},caster{leader}
-tier0_lcost: (2 100)
+tier0_lcost: 300
 tier0_scost: 200
 tier0_cool: 500
-tier1_lcost: (5 400)
+tier1_lcost: 600
 tier1_scost: 400
 tier1_cool: 1000
-tier2_lcost: (10 600)
+tier2_lcost: 1200
 tier2_scost: 600
 tier2_cool: 2000
-tier3_lcost: (15 800)
+tier3_lcost: 2400
 tier3_scost: 800
 tier3_cool: 4000
-tier4_lcost: (20 1000)
+tier4_lcost: 4800
 tier4_scost: 1000
 tier4_cool: 8000
-tier5_lcost: (20 1000)
+tier5_lcost: 7000
 tier5_scost: 1400
 tier5_cool: 16000

@@ -546,16 +546,11 @@ effect research Arg:
 | O = Target.owner
 | What = O.researching
 | Act = $main.params.acts.What
-| Needs = O.lore-Act.lore.0
+| Needs = O.lore-Act.lore
 | when Needs < 0:
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
-| Needs = O.mana-Act.lore.1
-| when Needs < 0:
-  | O.notify{"Not enough mana for `[Act.title]` (collect [-Needs])"}
-  | leave
-| !O.lore - Act.lore.0
-| !O.mana - Act.lore.1
+| !O.lore - Act.lore
 | O.research_item{What}
 
 effect researches Amount:

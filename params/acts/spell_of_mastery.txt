@@ -1,5 +1,5 @@
 icon: spell_of_mastery
-lore: (40 400)
+lore: 20000
 cost: 1000
 affects: any
 before: misc.spawn

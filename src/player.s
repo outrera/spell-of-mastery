@@ -118,12 +118,12 @@ player.lost_unit U =
 
 player.research_item What =
 | Act = $main.params.acts.What
-| $research.What <= Act.lore.1
+| $research.What <= Act.lore
 | $notify{"Acquired [Act.title]"}
 
 player.research_remain Act =
 | ResearchSpent = $research.(Act.name)
-| ResearchRemain = Act.lore.1 - ResearchSpent
+| ResearchRemain = Act.lore - ResearchSpent
 | ResearchRemain
 
 player.units =

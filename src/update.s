@@ -49,7 +49,7 @@ check_event_condition Me When =
     | Act = $main.params.acts.ActName
     | less got ActName: "World events references unknown act [ActName]"
     | ResearchSpent = $players.Player.research.(Act.name)
-    | ResearchRemain = Act.lore.1 - ResearchSpent
+    | ResearchRemain = Act.lore - ResearchSpent
     | ResearchRemain << 0
   [`not` X] | not: check_event_condition Me X
   [`and` A B] | check_event_condition Me A and check_event_condition Me B
