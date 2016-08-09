@@ -99,7 +99,7 @@ icon.infoline =
 | if Cool then
     | Info <= "[Info] ([Cool.0/24] SECONDS TO RECHARGE)"
   else if ResearchRemain then
-    | Info <= "research [Info] ([Act.lore.0] LORE, [Act.lore.1] MANA)"
+    | Info <= "research [Info] ([Act.lore] LORE)"
   else when got Cost and Cost:
     | Info <= "cast [Info] ([Cost] MANA)"
 | Info.upcase

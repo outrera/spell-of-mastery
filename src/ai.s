@@ -205,7 +205,7 @@ ai_leader_harmed Me Attacker Victim =
   | when R><cross or R><1 or (Attacker.xyz-Victim.xyz).abs<2.0:
       | F = Victim.find{8 | D => (D.xyz-Attacker.xyz).abs >> 2.0
                                  and (D.xyz-Victim.xyz).abs < 3.0}
-      | when F: Victim.order_at{F}
+      | when F: Victim.order_at{F.xyz}
 | when Pent:
   | SAct = $main.params.acts.summon_blob
   | when Pent.can_do{SAct}: Pent.order_act{SAct}
