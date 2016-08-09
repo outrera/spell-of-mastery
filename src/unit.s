@@ -416,7 +416,7 @@ set_goal Me Act Target =
 
 unit.order_at XYZ act/0 =
 | when $xyz >< XYZ:
-  | when Act and normalize_act{Me Act}.type<>move:
+  | when Act and normalize_act{Me Act}.title<>move:
     | Ms = $list_moves{$cell -1}
     | less Ms.end:
       | set_goal Me Act $xyz
