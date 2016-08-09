@@ -1,6 +1,6 @@
 sprite: unit_imp
 tier: 2
-health: 40
+health: 4
 combat: 2
 armor: 10
 speed: 24

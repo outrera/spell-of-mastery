@@ -1,6 +1,6 @@
 sprite: unit_test
 tier: 2
-health: 50
+health: 5
 combat: 10
 armor: 0
 inborn: (flyer)

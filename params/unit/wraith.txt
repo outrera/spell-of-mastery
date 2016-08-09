@@ -1,6 +1,6 @@
 sprite: unit_wraith
 tier: 2
-health: 80
+health: 8
 combat: 6
 armor: 20
 speed: 28

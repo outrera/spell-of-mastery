@@ -1,6 +1,6 @@
 sprite: unit_spider
 tier: 3
-health: 60
+health: 6
 combat: 10
 armor: 25
 speed: 20

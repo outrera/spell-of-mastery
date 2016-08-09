@@ -1,6 +1,6 @@
 sprite: unit_lizard
 tier: 2
-health: 80
+health: 8
 combat: 10
 armor: 8
 speed: 18

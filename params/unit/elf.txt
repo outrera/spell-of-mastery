@@ -1,6 +1,6 @@
 sprite: unit_elf
 tier: 2
-health: 60
+health: 6
 combat: 8
 armor: 2
 range: 4

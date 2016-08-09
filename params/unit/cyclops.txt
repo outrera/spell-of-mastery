@@ -1,6 +1,6 @@
 sprite: unit_cyclops
 tier: 4
-health: 600
+health: 60
 combat: 8
 armor: 6
 inborn: (upkeep4 heals organic)

@@ -1,6 +1,6 @@
 sprite: unit_observer
 tier: 4
-health: 200
+health: 20
 combat: 8
 armor: 4
 cooldown: 4

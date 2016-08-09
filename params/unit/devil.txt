@@ -1,6 +1,6 @@
 sprite: unit_devil
 tier: 3
-health: 80
+health: 8
 combat: 50
 armor: 15
 inborn: (upkeep3 heals organic)

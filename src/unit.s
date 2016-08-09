@@ -484,7 +484,7 @@ unit.assault Combat Target =
 | Mods = []
 | case Combat
   [`.` Ms C]
-    | Mods <= Combat^| @r [_ Ms M]=>[M @(if Ms.is_list then Ms^r else [Ms])]
+    | Mods <= Combat^| @r [_ Ms M]=>[M @(case Ms [_ _ _] Ms^r Else [Ms])]
     | Combat <= Mods.head
     | Mods <= Mods.tail
   Else
@@ -502,7 +502,7 @@ unit.assault Combat Target =
       | Combat <= 1
       | Hit <= 1
       | Magic <= 1
-    magic_base
+    magic_rand
       | Base <= Combat
       | Combat <= 1
       | Hit <= 1
@@ -537,7 +537,8 @@ unit.assault Combat Target =
 | when Boost: Damage <= max 1 Damage*Boost.0/Boost.1
 | when Lifedrain and Damage>0: heal_unit Me Damage
 | if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
-| when Target.alive and Target.class.hp < $health: knockback Me Target
+| when Target.alive and Target.class.hp < $health and $world.rand{2}>0:
+  | knockback Me Target
 
 unit.harm Attacker Damage @Magic =
 | when $removed: leave

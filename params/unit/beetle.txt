@@ -1,6 +1,6 @@
 sprite: unit_beetle
 tier: 1
-health: 100
+health: 10
 combat: 1
 armor: 1
 speed: 48

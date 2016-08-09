@@ -1,6 +1,6 @@
 sprite: unit_minotaur
 tier: 3
-health: 260
+health: 26
 combat: 8
 armor: 6
 inborn: (upkeep3 heals organic researcher1)

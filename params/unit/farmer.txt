@@ -1,6 +1,6 @@
 sprite: unit_farmer
 tier: 1
-health: 50
+health: 5
 combat: 6
 armor: 2
 inborn: (income1 heals organic researcher1)

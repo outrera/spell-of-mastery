@@ -5,6 +5,6 @@ cool: misc.tier4_cool
 needs: (cast_banish cast_lightning)
 affects: unit
 before: impact{pentagram_appearance},sound{pentagram}
-after: all_alive,harm{50},impact{fire_ring},sound{armageddon}
+after: all_alive,harm{10},impact{fire_ring},sound{armageddon}
 hint: harm_all
 tab: spell

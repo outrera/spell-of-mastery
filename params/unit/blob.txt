@@ -1,6 +1,6 @@
 sprite: unit_blob
 tier: 1
-health: 100
+health: 10
 combat: 8
 armor: 10
 range: 3

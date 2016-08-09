@@ -1,6 +1,6 @@
 sprite: unit_hydra
 tier: 4
-health: 170
+health: 80
 combat: 12
 armor: 1
 cooldown: 4

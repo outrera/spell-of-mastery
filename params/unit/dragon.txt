@@ -1,13 +1,13 @@
 sprite: unit_dragon
 tier: 4
-health: 700
+health: 70
 combat: 10
 armor: 8
 cooldown: 4
 speed: 20
 inborn: (upkeep4 heals organic flyer researcher4)
 //attack: sound{dragon_hit}
-impact: harm{user},harm{unavoid.10},impact{fire_ring},sound{explosion}
+impact: harm{user},harm{unavoid.2},impact{fire_ring},sound{explosion}
 hit: effect{blood},sound{dragon_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

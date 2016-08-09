@@ -1,6 +1,6 @@
 sprite: unit_gargoyle
 tier: 3
-health: 150
+health: 15
 combat: -1
 armor: 10
 inborn: (upkeep2 heals organic flyer researcher2)

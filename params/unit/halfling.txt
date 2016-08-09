@@ -1,6 +1,6 @@
 sprite: unit_halfling
 tier: 1
-health: 40
+health: 4
 combat: 11
 armor: 14
 inborn: (upkeep1 heals organic researcher1)

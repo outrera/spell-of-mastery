@@ -1,7 +1,7 @@
 sprite: unit_king
 icon: unit_king
 range: cross
-health: 140
+health: 40
 armor: 20
 range: 0
 combat: 14

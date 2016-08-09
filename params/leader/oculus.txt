@@ -1,7 +1,7 @@
 sprite: unit_oculus
 icon: unit_oculus
 tier: 2
-health: 40
+health: 10
 combat: 0
 armor: 10
 range: 0
