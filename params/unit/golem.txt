@@ -4,7 +4,7 @@ health: 900
 combat: 6
 armor: 2
 speed: 34
-inborn: (upkeep4 heals)
+inborn: (upkeep4 heals researcher1)
 impact: harm{user},sound{golem_attack}
 hit: sound{golem_hit},effect{blood_undead}
 death: sound{golem_die}

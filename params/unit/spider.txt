@@ -4,7 +4,7 @@ health: 60
 combat: 10
 armor: 25
 speed: 20
-inborn: (upkeep3 heals organic)
+inborn: (upkeep3 heals organic researcher1)
 //attack: sound{spider_attack}
 impact: harm{user},macro{poison},sound{spider_attack}
 hit: effect{blood},sound{spider_hit}

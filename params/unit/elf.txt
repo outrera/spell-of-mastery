@@ -4,7 +4,7 @@ health: 60
 combat: 8
 armor: 2
 range: 4
-inborn: (upkeep2 heals organic)
+inborn: (upkeep2 heals organic researcher2)
 //attack: sound{arrow_hit}
 impact: harm{user},sound{arrow_hit}
 hit: effect{blood},sound{elf_hit}

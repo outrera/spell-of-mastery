@@ -4,8 +4,8 @@ health: 80
 combat: 6
 armor: 25
 speed: 28
-worker: 200//20
-inborn: (upkeep2 heals organic)
+worker: 3
+inborn: (upkeep2 heals organic researcher1)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{dwarf_hit}
 death: sound{dwarf_die}

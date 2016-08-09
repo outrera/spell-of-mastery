@@ -3,5 +3,4 @@ icon: unit_skeleton
 lore: misc.tier1_lcost
 cost: 300
 cool: misc.tier0_cool
-needs: (summon_bat)
 after: spawn{unit_skeleton}

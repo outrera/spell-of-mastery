@@ -266,10 +266,11 @@ world.new_game =
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana
+| StartLore = $main.params.world.start_lore
 | InitedUnits = reinit_units $active
 | PAI = $main.params.ai
 | for P $players:
-  | P.init{StartMana}
+  | P.init{StartMana StartLore}
   | Us = P.units
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}

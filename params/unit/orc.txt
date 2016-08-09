@@ -3,7 +3,8 @@ tier: 2
 health: 120
 combat: 10
 armor: 6
-inborn: (upkeep2 heals organic worker)
+worker: 2
+inborn: (upkeep2 heals organic researcher1)
 //attack: sound{cut}
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{orc_hit}

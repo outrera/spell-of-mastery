@@ -15,11 +15,6 @@ player.reset_counters =
 | for K,V Param: when K.size>5 and K.take{5}><item_:
   | Param.K <= 0
 
-player.init StartMana =
-| $lore <= 10
-| $mana <= StartMana
-| $reset_counters
-
 count_flag_resources Me =
 | Param = $owner.params
 | for K,V $cell.items: Param.K <= Param.K^~{0} + V

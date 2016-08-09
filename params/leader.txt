@@ -19,7 +19,7 @@ flyer: 0 // can it fly
 leader: 1
 ai: unit
 item: 0
-inborn: (heals organic resist_magic researches)
+inborn: (heals organic resist_magic researcher1)
 impact: missile{effect_bolt},harm{magic_base.user},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}
 //impact: sound{attack2}

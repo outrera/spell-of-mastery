@@ -5,7 +5,7 @@ combat: 6
 armor: 15
 range: 3
 cool: 10
-inborn: (upkeep3 resist_magic)
+inborn: (upkeep3 resist_magic researcher1)
 //attack: sound{lifedrain}
 impact: harm{lifedrain.user},sound{lifedrain}
 impact_hit: impact{lifedrain}

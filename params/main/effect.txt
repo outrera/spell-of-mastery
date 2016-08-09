@@ -35,7 +35,10 @@ upkeep2: on{cycle.50},set{inc,owner,mana,-1}
 upkeep3: on{cycle.40},set{inc,owner,mana,-1}
 upkeep4: on{cycle.30},set{inc,owner,mana,-1}
 income1: on{tenant_cycle.8},set{inc,towner,mana,1}
-researches: on{cycle.24},when{below.library},researches{1}
+researcher4: on{cycle.12},when{below.library},researches{1}
+researcher3: on{cycle.24},when{below.library},researches{1}
+researcher2: on{cycle.48},when{below.library},researches{1}
+researcher1: on{cycle.72},when{below.library},researches{1}
 door_align: on{place},align{door}
 
 //when{harmed,has_mana.50}

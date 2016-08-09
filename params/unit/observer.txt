@@ -6,7 +6,7 @@ armor: 4
 cooldown: 4
 range: 4
 speed: 28
-inborn: (upkeep4 heals organic flyer resist_magic)
+inborn: (upkeep4 heals organic flyer resist_magic researcher4)
 attack: sound{observer_attack}
 impact: harm{user}
 impact_hit: impact{energy_ring},decimate{3 10},macro{poison},sound{observer_impact}

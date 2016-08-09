@@ -103,6 +103,11 @@ player.clear =
 | $params.libs_left <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
+player.init StartMana StartLore =
+| $lore <= StartLore
+| $mana <= StartMana
+| $reset_counters
+
 player.got_unit U =
 | CID = U.class.id
 | when CID:

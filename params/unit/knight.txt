@@ -4,7 +4,7 @@ health: 100
 combat: 6
 armor: 20
 speed: 30
-inborn: (upkeep2 heals organic)
+inborn: (upkeep2 heals organic researcher1)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{knight_hit}
 death: sound{male_die}

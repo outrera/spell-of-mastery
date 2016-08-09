@@ -16,6 +16,7 @@ income_cycle: 4
 defeat_threshold: -1000 //negative mana forcing player defeat
 death_cost: 500 //mana lost when leader dies
 start_mana: 1000 //400
+start_lore: 600
 bounding_boxes: 0
 excavate_ttl: 1440 //24*60=1440
 build_ttl: 1440 //24*60=1440
