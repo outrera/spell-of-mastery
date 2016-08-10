@@ -1,4 +1,4 @@
-author: `Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
+author: `Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`, `Daniil Perlovsky (dancher)`
 copyright: `Nikita Sadkov`
 //xy: 0,32
 //frames: folder
