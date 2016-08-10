@@ -555,8 +555,19 @@ effect research Arg:
 
 effect researches Amount:
 | O = $owner
-| less O.params.libs_left>0: leave
+| Pr = O.params
+| less Pr.libs_left>0: leave
+| !Pr.libs_left-1
 | !O.lore + Amount
+
+effect upkeep Amount:
+| O = $owner
+| when (Target.cell-1).type><temple:
+  | Pr = O.params
+  | when Pr.temples_left>0:
+    | !Pr.temples_left-1
+    | leave
+| !O.mana - Amount
 
 effect lore Amount:
 | !Target.owner.lore + Amount
@@ -588,6 +599,8 @@ check_when Me Target C =
   confirmed | less $main.dialog_result><yes: leave 0
   harmed | less Target.health<>Target.class.hp: leave 0
   idle | when Target.goal: leave 0
+  [`+` not C] | when check_when Me Target C: leave 0
+  [`.` below Type] | less (Target.cell-1).type><Type: leave 0
   [`.` has_health A] | less Target.health>>A: leave 0
   [`.` has_mana A] | less $owner.mana>>A: leave 0
   [`.` has Effect] | less Target.has{Effect}: leave 0
@@ -595,7 +608,6 @@ check_when Me Target C =
   [`.` got_child Type] | leave: got Target.child{Type}
   [`.` no_child Type] | leave: no Target.child{Type}
   [`.` kills N] | less Target.kills>>N: leave 0
-  [`.` below Type] | less (Target.cell-1).type><Type: leave 0
 | 1
 
 unit.effect Effect Target XYZ =
@@ -614,7 +626,7 @@ unit.effect Effect Target XYZ =
   | if got F then F{Me T XYZ Args}
     else if Name >< when then
       | When = Args
-      | Cs = if When.is_list and not When.end and When.0<>`.`
+      | Cs = if When.is_list and not When.end and When.0<>`.` and When.0<>`+`
              then When
              else [When]
       | less Cs.all{C => check_when Me T C}:

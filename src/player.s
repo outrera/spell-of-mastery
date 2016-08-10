@@ -101,6 +101,7 @@ player.clear =
 | $params.lossage <= 0
 | $params.mana <= 0
 | $params.libs_left <= 0
+| $params.temples_left <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 player.init StartMana StartLore =
@@ -178,9 +179,12 @@ update_income Me =
 
 player.update =
 | Cycle = $world.cycle
-| Id = $main.classes.deco_bookshelf.id
-| LibCount = $unit_counts.Id
+| LibId = $main.classes.deco_bookshelf.id
+| TempleId = $main.classes.deco_templepit.id
+| LibCount = $unit_counts.LibId
+| TempleCount = $unit_counts.TempleId
 | $params.libs_left <= LibCount
+| $params.temples_left <= TempleCount
 | when Cycle><0 and $human and $leader:
   | $world.view.center_at{$leader.xyz cursor/1}
 | update_units Me

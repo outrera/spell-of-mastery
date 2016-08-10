@@ -29,11 +29,11 @@ enemy_removes: on{tenant_cycle.12},when{enemy},effect{pickup},remove{self}
 node_aura: on{cycle.12},tenant_mark{effect_aura}
 ttl: on{timeout},effect{teleport},sound{summon},remove{self}
 ttl_s: on{timeout},remove{self} //silent ttl
-upkeep0: on{cycle.160},set{inc,owner,mana,-1}
-upkeep1: on{cycle.60},set{inc,owner,mana,-1}
-upkeep2: on{cycle.50},set{inc,owner,mana,-1}
-upkeep3: on{cycle.40},set{inc,owner,mana,-1}
-upkeep4: on{cycle.30},set{inc,owner,mana,-1}
+upkeep0: on{cycle.160},upkeep{1}
+upkeep1: on{cycle.60},upkeep{1}
+upkeep2: on{cycle.50},upkeep{1}
+upkeep3: on{cycle.40},upkeep{1}
+upkeep4: on{cycle.30},upkeep{1}
 income1: on{tenant_cycle.8},set{inc,towner,mana,1}
 researcher4: on{cycle.12},when{below.library},researches{1}
 researcher3: on{cycle.24},when{below.library},researches{1}
