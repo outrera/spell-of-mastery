@@ -3,7 +3,7 @@
 unit: 1
 active: 1
 draw_order: 4
-height: 8
+height: 2
 tier: 5
 health: 10 // hit points - number of hits, before this unit is dead
 range: 3

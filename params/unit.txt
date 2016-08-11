@@ -1,8 +1,7 @@
 unit: 1
-entity: 1
 active: 1
 tier: 1
-height: 8
+height: 2
 health: 1 // hit points - number of hits, before this unit is dead
 combat: 0 // chance to hit
 armor: 0 // chance to evade a hit
