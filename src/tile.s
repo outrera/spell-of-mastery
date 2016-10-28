@@ -59,7 +59,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
 transparentize Base Alpha =
 | Empty = 255
 | as R Base.copy
-  | for [X Y] points{0 0 64 64}: when X^^1 >< Y^^1: R.set{X Y Empty}
+  | for [X Y] points{0 0 64 64}: when X*,1 >< Y*,1: R.set{X Y Empty}
 
 DummyGfx = gfx 1 1
 

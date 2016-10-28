@@ -165,7 +165,7 @@ tile.draw FB BlitItem =
 //| leave
 | B = BlitItem
 | G = B.data
-| when B.flags^^#40: G.dither{1}
+| when B.flags*,#40: G.dither{1}
 | G.brighten{B.brighten}
 //| G.light{B.lx B.ly}
 | FB.blit{B.sx B.sy G}
@@ -175,7 +175,7 @@ type gfx_item
 gfx_item.draw FB BlitItem =
 | B = BlitItem
 | G = B.data
-| when B.flags^^#40: G.dither{1}
+| when B.flags*,#40: G.dither{1}
 | FB.blit{B.sx B.sy G}
 
 type special_blit{what}

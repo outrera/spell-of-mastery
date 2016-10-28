@@ -632,7 +632,7 @@ world.color_at X Y =
 | while Z > 0 and not (Cell+Z).gfx: !Z-1
 | G = (Cell+Z).gfx
 | less G: leave 0
-| G.get{G.w/2 (min G.h/2 16)} ^^ #FFFFFF
+| G.get{G.w/2 (min G.h/2 16)} *, #FFFFFF
 
 world.update_minimap X Y =
 | Color = $color_at{X Y}
