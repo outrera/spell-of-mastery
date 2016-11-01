@@ -34,8 +34,8 @@ font.draw G X Y Text =
     | I = C.code-CodePoint
     | W = Ws.I
     | G.blit{CX CY Gs.I}
-    | W+1+!CX
-  | !CY + H
+    | CX += W+1
+  | CY += H
 font.format MaxLineWidth Text =
 | SpaceWidth = $width{' '}
 | Words = Text.replace{'\n' ' '}.split{' '}{Word=>[Word $width{Word}]}
@@ -44,7 +44,7 @@ font.format MaxLineWidth Text =
 | LineWidth = 0
 | till Words.end
   | Word,Width = pop Words
-  | less Line.end: !Width+SpaceWidth
+  | less Line.end: Width += SpaceWidth
   | when Word >< ' '
     | Word <= ''
     | Width <= 0
@@ -59,7 +59,7 @@ font.format MaxLineWidth Text =
     | Line <= []
     | LineWidth <= 0
   | less Word >< '': push Word Line
-  | !LineWidth+Width
+  | LineWidth += Width
 | less Line.end: push Line Lines
 | Lines{?flip.text{' '}}.flip.text{'\n'}
 
@@ -171,7 +171,7 @@ droplist.draw G PX PY =
   | Y = 0
   | for R $rs
     | G.blit{PX PY+Y R}
-    | !Y + R.h
+    | Y += R.h
 | less $drop
   | G.blit{PX PY $rs.$picked}
   | A = Main.spr{"ui_arrow"}.frames.down_normal.0
@@ -251,8 +251,8 @@ slider_.render =
 | $h <= S.h
 | if $dir >< v then $h <= $size else $w <= $size
 | Me
-slider_.inc = !$value + $delta
-slider_.dec = !$value - $delta
+slider_.inc = $value += $delta
+slider_.dec = $value -= $delta
 slider_.draw G PX PY =
 | BG = skin "slider-[$dir]-normal"
 | K = skin "slider-knob"
@@ -260,12 +260,12 @@ slider_.draw G PX PY =
 | when $dir >< v
   | while I < $size
     | G.blit{PX PY+I BG.rect{0 0 BG.w (min BG.h $size-I)}}
-    | !I + BG.h
+    | I += BG.h
   | G.blit{PX+1 PY+$pos.int*($size-K.h)/$size+1 K}
 | when $dir >< h
   | while I < $size
     | G.blit{PX+I PY BG.rect{0 0 (min BG.w $size-I) BG.h}}
-    | !I + BG.w
+    | I += BG.w
   | G.blit{PX+$pos.int*($size-K.w)/$size+1 PY+1 K}
 slider_.input In = case In
   [mice_move _ P] | when $state >< pressed
@@ -298,7 +298,7 @@ slider D @Rest =
 | S = slider_ D @Rest
 | if D >< v
   then layV [(arrow up (=>S.dec)) S (arrow down (=>S.inc))]
-  else layH [(arrow left (=>!S.dec)) S (arrow right (=>S.inc))]
+  else layH [(arrow left (=>S.dec)) S (arrow right (=>S.inc))]
 
 type txt_input.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init

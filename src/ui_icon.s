@@ -48,8 +48,8 @@ icon.draw G PX PY =
 | X = PX
 | Y = PY
 | when $pressed:
-  | !X+1
-  | !Y+1
+  | X++
+  | Y++
 | when $frame.2
   | IconFrame = skin{$frame.2}
   | G.blit{X-$frame.0 Y-$frame.1 IconFrame}

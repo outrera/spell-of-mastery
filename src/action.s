@@ -93,7 +93,7 @@ respawn_leader Me XYZ =
 | when Block and $owner.is_enemy{Block.owner}: leave 0
 | when $owner.mana << 0: leave 0
 | Cost = $main.params.world.death_cost
-| !$owner.mana - Cost
+| $owner.mana -= Cost
 | $owner.notify{"death cost you [Cost] mana"}
 | when got $owner.params.spell_of_mastery:
   | $owner.params.spell_of_mastery <= No
@@ -290,7 +290,7 @@ action.start =
 
 action.update =
 | $act_update{}{Me}
-| !$cycles - 1
+| $cycles--
 
 action.finish =
 | $act_finish{}{Me}

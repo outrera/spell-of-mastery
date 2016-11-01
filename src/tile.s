@@ -289,7 +289,7 @@ main.load_tiles =
 | $tiles <= t size/1024
 | for K,V Tiles
   | Id = if K >< void then 0
-         else | !$last_tid + 1
+         else | $last_tid++
               | $last_tid
   | As = V.list.join
   | Tile = tile As Me K V.role^~{K} Id @As

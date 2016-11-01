@@ -168,7 +168,7 @@ handle_picked Me Rect Units = //Me is view
     | leave
   | when NewPicked.size>1:
     | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
-    | !PickCount+1
+    | PickCount++
   | less NewPicked.end: $main.sound{ui_click}
   | $picked <= [@NewPicked @Picked]
   | leave
@@ -310,8 +310,8 @@ place_tile Me Type =
   | while Z<$anchor.2:
     | when $world.at{X Y Z}.type >< void:
       | $world.set{X Y Z EmptyTile}
-    | !Z+1
-  | till $world.at{X Y Z}.empty: !Z+1
+    | Z++
+  | till $world.at{X Y Z}.empty: Z++
   | $cursor.2 <= Z
 | less IsBridge
   | if Tile.embed then
@@ -320,7 +320,7 @@ place_tile Me Type =
         | while $cursor.2 > 1 and (Below.around or Below.roof
                                    or Below.type><void):
           | H = $world.at{X Y $cursor.2-1}.height
-          | !$cursor.2-H
+          | $cursor.2 -= H
           | $anchor.2 <= $cursor.2
           | $world.clear_tile{@$cursor}
           | Below <= $world.at{X Y $cursor.2-1}
@@ -337,8 +337,7 @@ place_tile Me Type =
           | $anchor.2 <= Z
           | AnchorHack <= LMB_Count
         | while Z>>0 and $world.at{X Y Z}.embed:
-          | $world.set{X Y Z Tile owner/$world.human}
-          | !Z-1
+          | $world.set{X Y Z-- Tile owner/$world.human}
         | leave
   | AnchorHack <= LMB_Count
 | while 1
@@ -358,7 +357,7 @@ remove_object_or_tile Me =
 | T = $world.at{X Y Z-1}
 | Us = $units_get{X,Y,Z}
 | when T.unit and not Us.size:
-  | while $world.at{X Y Z}.type >< T.type: !Z+1
+  | while $world.at{X Y Z}.type >< T.type: Z++
   | ZZ = Z - T.height
   | BelowUs = $units_get{X,Y,ZZ}
   | when BelowUs.size:
@@ -444,7 +443,7 @@ world.update_picked =
   | Mark = $human.alloc_unit{"mark_goal"}
   | Mark.move{PathGoal}
   | Wave = @int 20.0*(@sin: ($cycle%100).float/100.0*PI)
-  | !Mark.fxyz.2+Wave
+  | Mark.fxyz.2 += Wave
   | push Mark Marks
 | $marks <= Marks.enheap
 
@@ -511,11 +510,11 @@ view.update =
 | when $brush.0:
   | case $key{edit_down} 1:
     | $zfix <= 0
-    | when $cursor.2>1: !$cursor.2 - 1
+    | when $cursor.2>1: $cursor.2--
     | $key_set{edit_down 0}
   | case $key{edit_up} 1:
     | $zfix <= 0
-    | when $cursor.2<$world.d-2: !$cursor.2 + 1
+    | when $cursor.2<$world.d-2: $cursor.2++
     | $key_set{edit_up 0}
   | case $key{edit_zfix} 1:
     | $zfix <= 1
@@ -556,9 +555,9 @@ view.input In =
         | while NewZ>$zlock+1:
           | less Ds.all{[XD YD] => $world.at{X+XD Y+YD NewZ}.empty}:
             | $cursor.2 <= NewZ
-          | !NewZ-1
+          | NewZ--
   [mice left State XY]
-    | !LMB_Count+1
+    | LMB_Count++
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
     | if State then $anchor.init{$cursor}

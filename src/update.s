@@ -89,7 +89,7 @@ update_units_effects Me Units =
     | Remove = 0
     | RunEs = []
     | for E U.effects: when E.amount>0:
-      | !E.amount-1
+      | E.amount--
       | less E.amount > 0:
         | when E.when >< timeout: push [E.name E.params.unheap] RunEs
         | Remove <= 1
@@ -110,8 +110,8 @@ update_units Me =
 world.update =
 | $main.music{playlist_advance}
 | when $blink.0>0 and not $cycle%12:
-  | !$blink.0-1
-  | when $blink.1: not !$blink.1.picked
+  | $blink.0--
+  | when $blink.1: $blink.1.picked <= not $blink.1.picked
   | less $blink.0:
     | $blink.1.picked <= 0
     | $blink.1<=0
@@ -122,11 +122,11 @@ world.update =
   | Player.reset_counters
 | update_units Me
 | for Player $players: when Player.total_units: Player.update
-| !$cycle + 1
+| $cycle++
 | $view.ui.update
 
 update_anim Me =
-| !$anim_wait - 1
+| $anim_wait--
 | less $anim_wait > 0:
   | when $anim_step+1 >< $anim_seq.size:
     | when $anim >< death: leave
@@ -220,7 +220,7 @@ update_path_move Me XYZ =
     | when Wait>Cycle: leave
     | find_path_around_busy_units Me $goal.xyz
     | less $path.end:
-      | !UpdatePathHangTrap+1
+      | UpdatePathHangTrap++
       | update_path Me
     | $strip_effect{stuck}
     | $add_effect{stuck 0 [$xyz $goal.xyz Cycle+12 Tries-1]}
@@ -257,7 +257,7 @@ update_path Me =
     | goal_in_range Me
     | leave
 | Path = $path
-| !$path_life-1
+| $path_life--
 | when $path_life<<0 or Path.end:
   | when $xyz >< $goal.xyz:
     | goal_in_range Me
@@ -287,7 +287,7 @@ update_order Me =
 
 update_fade Me =
 | less $delta: leave
-| !$alpha+$delta
+| $alpha+=$delta
 | when $alpha > 255:
   | $alpha <= 255
   | $delta <= 0
@@ -302,7 +302,7 @@ update_next_action Me =
 | Cost = $next_action.cost
 | if     $next_action.type and $next_action.valid
      and (not Cost or $owner.mana>>Cost)
-  then | !$owner.mana-$next_action.cost
+  then | $owner.mana -= $next_action.cost
   else
   | if not $next_action.type
       then
@@ -323,7 +323,7 @@ update_action Me =
 | when T and (T.removed or not T.alive): $action.cycles <= 0
 | till $action.cycles > 0 // action is done?
   | when $cooldown>0:
-    | !$cooldown-1
+    | $cooldown--
     | leave
   | when $anim<>idle and $anim<>move and $next_action.type <> die and
          and $anim<>hit and
@@ -365,7 +365,7 @@ attack_nearby_enemy Me =
 
 GravAcc = 9.807*0.2
 update_fall Me =
-| !$velocity.2 - GravAcc
+| $velocity.2 -= GravAcc
 | FZ = $floor.z
 | FDst = $fxyz+$velocity{}{?int}
 | if FDst.2 > FZ*$world.c then $fine_move{FDst}

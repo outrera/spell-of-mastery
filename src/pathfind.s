@@ -26,7 +26,7 @@ world.pathfind MaxCost U StartCell Check =
 | less U.speed: leave 0
 | X,Y,Z = StartCell.xyz
 | StartCost = $new_cost
-| !MaxCost+StartCost
+| MaxCost+=StartCost
 | StartCell.cost <= StartCost
 | StartCell.prev <= 0
 | PFQueue.reset

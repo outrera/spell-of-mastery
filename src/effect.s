@@ -199,7 +199,7 @@ effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
 
-effect mana Amount: !Target.owner.mana+Amount
+effect mana Amount: Target.owner.mana+=Amount
 
 type unit_setter{unit}
 
@@ -242,10 +242,10 @@ effect set @Args:
   | if Value.is_list
     then | when no Params.Name: Params.Name <= dup Value.size
          | Params.Name.init{Value}
-    else | if Inc then !Params.Name + Value
+    else | if Inc then Params.Name += Value
            else Params.Name <= Value
   | when Player and Name >< mana:
-    | if Inc then !Player.mana + Value
+    | if Inc then Player.mana += Value
       else Player.mana <= Value
 
 effect swap Arg:
@@ -310,7 +310,7 @@ world_dig Me X Y Z PassageH Amount =
   | Work <= $players.0.alloc_unit{unit_dig}
   | Work.move{X,Y,Z}
   | Work.hp <= 0
-| !Work.hp+Amount
+| Work.hp+=Amount
 | when Tile.unit:
   | B = Cell.block
   | less B and B.ai><remove: _goto done
@@ -328,11 +328,11 @@ world_dig Me X Y Z PassageH Amount =
 | ZZ = Z
 | while Z<H:
   | less $at{X Y Z}.dig: H<=Z
-  | !Z+1
+  | Z++
 | Z <= ZZ
 | while Z<H:
   | $set{X Y Z $main.tiles.void}
-  | !Z+1
+  | Z++
 | _goto done 
 
 do_dig Me TargetXYZ =
@@ -416,7 +416,7 @@ effect build Where:
       | Work.add_item{K 1}
       | $sound{hammer}
       | leave
-  | !Work.hp + $worker
+  | Work.hp += $worker
   | $sound{hammer}
   | when Work.hp < TimeCost: leave
   | Work.free
@@ -550,27 +550,27 @@ effect research Arg:
 | when Needs < 0:
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
-| !O.lore - Act.lore
+| O.lore -= Act.lore
 | O.research_item{What}
 
 effect researches Amount:
 | O = $owner
 | Pr = O.params
 | less Pr.libs_left>0: leave
-| !Pr.libs_left-1
-| !O.lore + Amount
+| Pr.libs_left--
+| O.lore += Amount
 
 effect upkeep Amount:
 | O = $owner
 | when (Target.cell-1).type><temple:
   | Pr = O.params
   | when Pr.temples_left>0:
-    | !Pr.temples_left-1
+    | Pr.temples_left--
     | leave
-| !O.mana - Amount
+| O.mana -= Amount
 
 effect lore Amount:
-| !Target.owner.lore + Amount
+| Target.owner.lore += Amount
 
 effect victory Player Reason:
 | WP = $world.params

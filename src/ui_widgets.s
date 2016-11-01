@@ -128,7 +128,7 @@ resource_counters.draw G X Y =
 | Clock = clock
 | for [Expires Chars] $world.notes: when Clock < Expires:
   | Font.draw{G 150 IY+C "* [Chars.text]"}
-  | !C+16
+  | C+=16
 
 type save_dlg.$base{world start cancelCB loadCB}
   base picked title filename button widget
@@ -182,7 +182,7 @@ type credits_roll.widget{ui text} cycle txt
 credits_roll.draw G PX PY =
 | R = $txt.render
 | R.draw{G PX+10 PY+$ui.height-$cycle/5}
-| !$cycle+1
+| $cycle++
 
 credits_roll.reset = $cycle <= 0
 

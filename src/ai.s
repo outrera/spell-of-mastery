@@ -42,11 +42,11 @@ cast_spell_sub Me Spell Force =
 | less Ts.size: leave 0
 | Target = Ts.0
 | Cost = Act.cost
-| !Me.owner.mana+Cost
+| Me.owner.mana+=Cost
 | when $can_do{Act}
   | $order_act{Act target/Target}
   | leave 1
-| !Me.owner.mana-Cost //havent casted the spell
+| Me.owner.mana-=Cost //havent casted the spell
 | 0
 
 cast_spell Me =
@@ -152,7 +152,7 @@ ai_cast_teleport Me U =
 | E = Es.0
 | Found = $world.closest_reach{1000 U E.xyz U.xyz}
 | less Found: leave 0
-| !U.owner.mana + $main.params.acts.cast_teleport.cost
+| U.owner.mana += $main.params.acts.cast_teleport.cost
 | U.order_act{cast_teleport target/Found.xyz}
 | 1
 
@@ -167,7 +167,7 @@ ai.update_units =
   | Handled = cast_spell U
   | less Handled: if U.idle and not U.goal then
      | when U.ai_wait:
-       | !U.ai_wait-10 //ai.update_units gets called every 10th cycle
+       | U.ai_wait-=10 //ai.update_units gets called every 10th cycle
        | Handled <= 1
      | less Handled:
        | Attacker = U.combat and U.attacker
@@ -217,7 +217,7 @@ ai_leader_harmed Me Attacker Victim =
     | U.order_at{Attacker.xyz}
   | leave
 | Bonus = max 0 LHC
-| !$player.mana + ((Cycle-Bonus)/24*$main.params.ai.leader_defense_bonus)
+| $player.mana += (Cycle-Bonus)/24*$main.params.ai.leader_defense_bonus
 | $params.aiLeaderHarmCycle <= Cycle
 | for U OwnedUnits: when U.id <> Victim.id: when U.speed:
   | U.attacker <= 1
@@ -261,22 +261,22 @@ ai.script =
 | case Command
   [attack @Types]
     | less $group_attack{Types{"unit_[?]"}}: leave 0
-    | !PParams.aiStep+1
+    | PParams.aiStep++
   [wait Cycles]
     | PParams.aiWait <= $world.cycle+Cycles
-    | !PParams.aiStep+1
+    | PParams.aiStep++
   [goto NewAIType when @Condition]
     | if case Condition [[`>>` lossage X]]
               Player.params.lossage+PParams.difficulty*2>>X
       then | PParams.aiType <= NewAIType
            | PParams.aiStep <= 0
-      else | !PParams.aiStep+1
+      else | PParams.aiStep++
   [goto NewAIType]
     | PParams.aiType <= NewAIType
     | PParams.aiStep <= 0
   [set Var Value]
     | PParams.Var <= Value
-    | !PParams.aiStep+1
+    | PParams.aiStep++
   Else
     | bad 'invalid AI command: [Command]'
 | leave 1

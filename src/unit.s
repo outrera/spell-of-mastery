@@ -155,7 +155,7 @@ unit.init Class =
 | $facing <= 3
 | $mirror <= 0
 | $serial <= $world.serial
-| !$world.serial + 1
+| $world.serial++
 | $animate{idle}
 | $hp <= $class.hp
 | $flags <= 0
@@ -248,7 +248,7 @@ unit.strip_effect Name =
 unit.add_item Name Amount =
 | less Amount: leave
 | for E $effects: when E.name><Name:
-  | !E.amount-Amount
+  | E.amount-=Amount
   | when E.amount >> 0:
     | $strip_effect{Name}
     | leave
@@ -464,7 +464,7 @@ retaliate Me Enemy Range =
 
 heal_unit Me Amount =
 | less $class.hp: leave
-| !$hp + | min Amount $class.hp-$health
+| $hp += min Amount $class.hp-$health
 
 knockback Me Target =
 | Dir = Target.xyz-$xyz
@@ -560,7 +560,7 @@ unit.harm Attacker Damage @Magic =
 | when Mods: for Mod Mods: case Mod
   [block N M] | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M
   [block N] | when Damage>1: Damage <= max 1 Damage-N
-| !$hp - Damage
+| $hp -= Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
   | Effect = $class.hit
@@ -571,9 +571,9 @@ unit.harm Attacker Damage @Magic =
   | leave
 | when Attacker:
   | AO = Attacker.owner
-  | when $owner.id <> AO.id: !AO.lore+$tier*$main.params.world.kill_xp
-  | !$owner.params.lossage+$tier
-  | !Attacker.kills+1
+  | when $owner.id <> AO.id: AO.lore += $tier*$main.params.world.kill_xp
+  | $owner.params.lossage += $tier
+  | Attacker.kills++
 | $die
 | $action.cycles <= 1
 

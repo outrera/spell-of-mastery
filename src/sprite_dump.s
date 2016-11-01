@@ -16,8 +16,8 @@ sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 uniform/0 =
     | for Dir,G [3,G0 6,G1]: when G:
       | X,Y,W,H = G.margins
       | less StaticFrame
-        | max !WW W
-        | max !HH H
+        | WW <= max WW W
+        | HH <= max HH H
       | R = G.cut{X Y W H}
       | GX,GY = G.xy
       | push [R AnimName Dir [GX-G.w/2 GY-G.h]+[X Y]+[W/2 H]] Rs
@@ -29,7 +29,7 @@ sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 uniform/0 =
 | for O Order: for D 3,6:
   | Xs = Rs.keep{?2><D}
   | Xs = Xs.keep{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}
-  | max !MaxCol Xs.size
+  | MaxCol <= max MaxCol Xs.size
 | W = Order.size*2*WW
 | H = MaxCol*HH
 | G = gfx W H
@@ -45,7 +45,7 @@ sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 uniform/0 =
     | Y = BY + Row*HH
     | G.blit{X Y R}
     | push ["[Dir]-[AnimName]+[XX]+[YY]" [X Y R.w R.h]] Ls
-  | !Col+1
+  | Col++
 //| say Ls.flip
 | "[DstPath]/[Name].txt".set{Ls.flip.as_text}
 | when Sheet: G.save{"[DstPath]/[Name].png"}

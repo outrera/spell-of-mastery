@@ -8,7 +8,7 @@ rle_encode Xs =
          | less Y.is_list
            | Y <= [1 Y]
            | Ys <= [Y @Ys.tail]
-         | !Y.0+1
+         | Y.0++
     else
       | push X Ys
       | Last <= X
@@ -16,16 +16,13 @@ rle_encode Xs =
 
 rle_decode Xs =
 | L = 0
-| for X Xs: !L + if X.is_list then X.0 else 1
+| for X Xs: if X.is_list then L+=X.0 else L++
 | Ys = dup L 0
 | J = 0
 | for X Xs: if X.is_list
   then | V = X.1
-       | times K X.0
-         | Ys.J <= V
-         | !J+1
-  else | Ys.J <= X
-       | !J+1
+       | times K X.0: Ys.(J++) <= V
+  else Ys.(J++) <= X
 | Ys
 
 export rle_encode rle_decode

@@ -461,7 +461,7 @@ ui.on_unit_pick Units =
      | As <= Unit.acts
      | when Unit.leader: As <= As.skip{?tab}
      | T = As{[?name 1]}.table
-     | for U Units.tail: for A U.acts: when got T.(A.name): !T.(A.name)+1
+     | for U Units.tail: for A U.acts: when got T.(A.name): T.(A.name)++
      | NUnits = Units.size
      | As = As.keep{A=>T.(A.name)><NUnits}
    else

@@ -80,8 +80,8 @@ blit_item_from_unit Me =
 | DX,DY = $box_xy
 | DDX = (DX+2*DY)/2
 | DDY = 2*DY-DDX
-| !X+DDX
-| !Y+DDY
+| X += DDX
+| Y += DDY
 | XD,YD,ZD = $size
 | when $mirror: swap XD YD
 | make_blit_item X Y Z+7 XD YD ZD Me //Z+7 is a hack to avoid cursor cluttering
@@ -97,7 +97,7 @@ unit.draw FB B =
 | XX = X+XUnit2-GW/2
 | YY = Y-YUnit2-G.h
 | when $mirror:
-  | !XX - GW%2
+  | XX -= GW%2
   | G.flop
 | S = $sprite
 | when S.shadow:
@@ -117,8 +117,8 @@ unit.draw FB B =
       | R = Rs.I
       | when got R: _ffi_set uint32_t CM R Colors.I
 | when $flyer
-  | !YY-16
-  | !Y-16
+  | YY -= 16
+  | Y -= 16
 | G.brighten{B.brighten}
 //| G.light{B.lx B.ly}
 | G.alpha{$alpha}
@@ -159,7 +159,7 @@ draw_picked_rects FB PickedRects =
     | for I Icons
       | F = Fs.I
       | FB.blit{XX YY F}
-      | !XX+16
+      | XX += 16
 
 tile.draw FB BlitItem =
 //| leave
@@ -195,7 +195,7 @@ render_cursor Me Wr BX BY CursorXYZ =
   | G = Cell.gfx
   | T = Cell.tile
   | TH = T.height
-  | !Cell+TH
+  | Cell += TH
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
   | TH = T.height
@@ -225,7 +225,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | UnitZ = 0
 | Fog = Explored><1
 | Br = @int -([CurX CurY]-[X Y]).abs
-| !Br*BrightFactor
+| Br *= BrightFactor
 | LXY = (to_iso{X*8 Y*8 0}-to_iso{CurX*8 CurY*8 0}){?float}
 | LXY = LXY{?int} ///(LXY*256.0/LXY.abs){?int}
 | LX,LY = LXY
@@ -261,7 +261,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
   | G = Cell.gfx
   | T = Cell.tile
   | TH = T.height
-  | !Cell+TH
+  | Cell += TH
   | ZZ = Z*ZUnit
   | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
@@ -390,10 +390,10 @@ view.calc_fps StartTime FinishTime =
 | when $frame%24 >< 0
   | T = StartTime
   | $fps <= @int 24.0/(T - $fpsT)
-  | when $fps < $fpsGoal and $fpsD < $fpsGoal.float*2.0: !$fpsD+1.0
-  | when $fps > $fpsGoal and $fpsD > $fpsGoal.float/2.0: !$fpsD-1.0
+  | when $fps < $fpsGoal and $fpsD < $fpsGoal.float*2.0: $fpsD += 1.0
+  | when $fps > $fpsGoal and $fpsD > $fpsGoal.float/2.0: $fpsD -= 1.0
   | $fpsT <= T
-| !$frame + 1
+| $frame++
 | SleepTime = 1.0/$fpsD - (FinishTime-StartTime)
 | when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
 

@@ -112,14 +112,14 @@ player.init StartMana StartLore =
 player.got_unit U =
 | CID = U.class.id
 | when CID:
-  | !$unit_counts.CID+1
-  | !$total_units+1
+  | $unit_counts.CID++
+  | $total_units++
 
 player.lost_unit U =
 | CID = U.class.id
 | when CID:
-  | !$unit_counts.CID-1
-  | !$total_units-1
+  | $unit_counts.CID--
+  | $total_units--
 | when U.ai >< pentagram: $pentagram <= 0
 
 player.research_item What =
@@ -156,7 +156,7 @@ update_spell_of_mastery Me P =
     | P.notify{"[Q.name] will finish Spell of Mastery in [S/24] seconds"}
 | SOM = P.params.spell_of_mastery
 | when got SOM:
-  | !SOM-1
+  | SOM--
   | less SOM > 0:
     | $params.winner <= P.id
     | $params.victory_type <= 'Victory by casting the Spell of Mastery'
@@ -167,8 +167,8 @@ update_spell_of_mastery Me P =
 update_income Me =
 | IC = $main.params.world.income_cycle
 | Cycle = $world.cycle
-| when Cycle%IC><0: !$mana + 1
-| less $human: when Cycle%24><0: !$mana+($params.difficulty-5)
+| when Cycle%IC><0: $mana++
+| less $human: when Cycle%24><0: $mana += $params.difficulty-5
 | Leader = $leader
 | when $mana < $main.params.world.defeat_threshold and Leader:
   | $main.show_message{'Wizard has Lost Too Much Mana'
@@ -215,7 +215,7 @@ player.add_item Name Amount =
 | for Cell,Avail Piles:
   | Count = min Amount Avail
   | Cell.add_item{Name -Count}
-  | !Amount - Count
+  | Amount -= Count
   | when Amount < 0: leave 1
 | 1
 

@@ -96,7 +96,7 @@ init_frames S G =
         | G.free
         | Xs
   Else | [G]
-| for F Frames: !F.xy + S.xy
+| for F Frames: F.xy += S.xy
 | S.frames <= if S.faces then map F Frames [0 0 0 F 0 0 0 F] else Frames
 
 

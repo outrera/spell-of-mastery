@@ -173,7 +173,7 @@ world.init =
   | ($nil)^methods_.keep{?0.0 >< '!'}{[?0.tail ?1]}.table
 
 world.new_cost =
-| !$cost - 1
+| $cost--
 | less $cost:
   | CellsCost.clear{#FFFFFFFFFFFF}
   | $cost <= #FFFFFF
@@ -182,19 +182,19 @@ world.new_cost =
 world.create W H =
 | $w <= W
 | $h <= H
-| !$w+1
-| !$h+1
+| $w++
+| $h++
 | $clear
 | Filler = [$main.tiles.soil]
 | for Y $h: for X $w: $set_pilar{X Y Filler}
-| !$w-1
-| !$h-1
+| $w--
+| $h--
 | $create_borders
-| !$w+1
-| !$h+1
+| $w++
+| $h++
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
-| !$w-1
-| !$h-1
+| $w--
+| $h--
 
 // add movement blocking walls
 world.create_borders = // draws maps borders in clockwise order
@@ -347,19 +347,15 @@ world.pilar X Y =
 
 world.set_pilar X Y Ts =
 | Cell = $cell{X Y 0}
-| for T Ts:
-  | CellsTile.Cell <= T
-  | !Cell + 1
+| for T Ts: CellsTile.(Cell++) <= T
 | Void = $void
-| times I $d-Ts.size
-  | CellsTile.Cell <= Void
-  | !Cell + 1
+| times I $d-Ts.size: CellsTile.(Cell++) <= Void
 
 world.clear_tile_ X Y Z =
 | Filler = $void
 | Tile = $cell{X Y Z}.tile
 | when Tile.parts.is_int
-  | !Z-Tile.parts
+  | Z -= Tile.parts
   | Tile <= $cell{X Y Z}.tile
 | less Tile.id: leave
 | times I Tile.height
@@ -451,8 +447,8 @@ update_deco Me Owner Tile Z Ps = //Me=world
       | Deco = (Owner or $players.0).alloc_unit{DecoType}
       | Deco.move{X,Y,ZH}
       //| Deco.fxyz.init{Deco.fxyz-[FOff.0 FOff.1 0]}
-    | !X + OX.2
-  | !Y + OY.2
+    | X += OX.2
+  | Y += OY.2
 
 world.set X Y Z Tile owner/0 =
 | Cell = $cell{X Y Z}
@@ -471,15 +467,14 @@ world.floor XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.floor%WorldDepth
 
 world.floor_void XYZ =
 | X,Y,Z = XYZ
-| while $at{X Y Z}.id: !Z+1
-| !Z-1
-| till $at{X Y Z}.id: !Z-1
-| !Z+1
-| Z
+| while $at{X Y Z}.id: Z++
+| Z--
+| till $at{X Y Z}.id: Z--
+| Z+1
 
 world.roof XYZ =
 | X,Y,Z = XYZ
-| while $at{X Y Z}.empty and Z < $d-1: !Z+1
+| while $at{X Y Z}.empty and Z < $d-1: Z++
 | Z
 
 
@@ -525,14 +520,14 @@ unit.explore V =
 | for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
   | E = Explored.Y
   | less E.X: E.X <= 1
-  | !E.X+V
+  | E.X += V
 
 world.explore State = for P $players: P.explore{State}
 
 world.place_unitS U X Y Z =
 | Cell = $cell{X Y 0}
 | Cell.units <= Cell.units.cons{U}
-| !Cell+Z
+| Cell += Z
 | Cell.units <= Cell.units.cons{U}
 | less U.empty: Cell.block <= U
 
@@ -553,7 +548,7 @@ world.remove_unitS U X Y Z =
 | K = Cell.units
 | Cell.units <= K.unheap.skip{?id><U.id}.enheap
 | K.heapfree
-| !Cell+Z
+| Cell += Z
 | K = Cell.units
 | Us = K.unheap.skip{?id><U.id}
 | Cell.units <= Us.enheap
@@ -629,7 +624,7 @@ world.color_at X Y =
 | Z = $height{X Y}-1
 | when Z<0: Z <= 0
 | Cell = $cell{X Y 0}
-| while Z > 0 and not (Cell+Z).gfx: !Z-1
+| while Z > 0 and not (Cell+Z).gfx: Z--
 | G = (Cell+Z).gfx
 | less G: leave 0
 | G.get{G.w/2 (min G.h/2 16)} &&& #FFFFFF
@@ -658,7 +653,7 @@ upd_floor Me Bottom =
   | when Empty
     | less LastEmpty: Floor <= Cell
     | Cell.floor <= Floor
-  | !Cell+1
+  | Cell++
   | LastEmpty <= Empty
 | Cell = Bottom+$d-1
 | Floor = Cell
@@ -668,7 +663,7 @@ upd_floor Me Bottom =
   | less Empty
     | when LastEmpty: Floor <= Cell+1
     | Cell.floor <= Floor
-  | !Cell-1
+  | Cell--
   | LastEmpty <= Empty
 
 world.updPilarGfxes X Y =
@@ -692,7 +687,7 @@ world.updPilarGfxes X Y =
   | Below <= T
   | T <= Above
   | Cell <= Next
-  | !Z+TH
+  | Z += TH
 | for U $column_units_get{X Y}: U.environment_updated
 | $update_minimap{X Y}
 
@@ -708,19 +703,19 @@ world.up XYZ = //finds Z of the floor above
 | X,Y,Z = XYZ
 | H = $height{X Y}
 | when Z>>H: leave 0
-| while Z<H and $at{X Y Z}.empty: !Z+1
-| till Z>>H or $at{X Y Z}.empty: !Z+1
-| leave Z
+| while Z<H and $at{X Y Z}.empty: Z++
+| till Z>>H or $at{X Y Z}.empty: Z++
+| Z
 
 world.down XYZ = //finds Z of the floor below
 | X,Y,Z = XYZ
 | B = 1
-| till $at{X Y B}.empty: !B+1
+| till $at{X Y B}.empty: B++
 | when Z<<B: leave 0
-| while Z>B and $at{X Y Z}.empty: !Z-1
-| till Z<<B or $at{X Y Z}.empty: !Z-1
-| while Z>B and $at{X Y Z-1}.empty: !Z-1
-| leave Z
+| while Z>B and $at{X Y Z}.empty: Z--
+| till Z<<B or $at{X Y Z}.empty: Z--
+| while Z>B and $at{X Y Z-1}.empty: Z--
+| Z
 
 world.valid X Y Z =
 | X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < $d

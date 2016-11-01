@@ -54,8 +54,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
 | when Rooms: $acts <= [@$acts @Rooms].list
 | when $active:
   | less $title: $title <= $class_name.title
-  | $id <= ClassIdCounter
-  | !ClassIdCounter+1
+  | $id <= ClassIdCounter++
 | less $empty
   | Block = Main.tiles."h[$height]_"
   | when got Block: $block <= Block
