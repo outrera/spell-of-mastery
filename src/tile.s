@@ -277,7 +277,7 @@ main.load_tiles =
   | Frames = Sprite.frames
   | NFrames = Frames.size
   | Tile.gfxes <= dup 16 No
-  | for CornersElevation Es: when got!it Tile.CornersElevation:
+  | for CornersElevation Es: when got@@it Tile.CornersElevation:
     | E = CornersElevation.digits.digits{2}
     | Is = if it.is_list then it else [it]
     | Gs = map I Is

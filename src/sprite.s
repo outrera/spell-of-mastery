@@ -114,7 +114,7 @@ init_sprites Me =
     else init_frames S gfx."[Params.filepath].png"
   | S.id <= SpriteName
   | $sprites.SpriteName <= S
-| for Name,Sprite $sprites: when!it Sprite.shadow: Sprite.shadow <= $img{it}
+| for Name,Sprite $sprites: when@@it Sprite.shadow: Sprite.shadow <= $img{it}
 
 join_banks Bs =
 | @table: @join: map BankName,Bank Bs:
