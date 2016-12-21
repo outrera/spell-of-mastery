@@ -284,7 +284,8 @@ main.load_tiles =
            | less I < NFrames:
              | bad "Tile `[Type]` wants missing frame [I] in `[SpriteName]`"
            | Frames.I
-    | when got!a Tile.alpha: Gs <= Gs{(transparentize ? a)}
+    | It = Tile.alpha
+    | when got It: Gs <= Gs{(transparentize ? It)}
     | when Gs.size: Tile.gfxes.E <= Gs
 | $tiles <= t size/1024
 | for K,V Tiles
