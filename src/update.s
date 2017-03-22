@@ -7,17 +7,17 @@ main.update =
 
 player.reset_counters =
 | Param = $params
-| Param.item_gold <= 0
-| Param.item_wood <= 0
-| Param.item_stone <= 0
-| Param.item_iron <= 0
-| Param.item_houses <= 0
+| Param.item_gold == 0
+| Param.item_wood == 0
+| Param.item_stone == 0
+| Param.item_iron == 0
+| Param.item_houses == 0
 | for K,V Param: when K.size>5 and K.take{5}><item_:
-  | Param.K <= 0
+  | Param.K == 0
 
 count_flag_resources Me =
 | Param = $owner.params
-| for K,V $cell.items: Param.K <= Param.K^~{0} + V
+| for K,V $cell.items: Param.K == Param.K^~{0} + V
 
 player.recount =
 | $reset_counters
@@ -56,22 +56,22 @@ world.process_events =
 | for [Id [When @Actions]] $events: when no DisabledEvents.find{Id}:
   | Repeat = 0
   | case When [repeat @RealWhen]
-    | When <= RealWhen
-    | Repeat <= 1
+    | When == RealWhen
+    | Repeat == 1
   | True = check_event_condition Me When
-  | less True: Repeat <= 1
+  | less True: Repeat == 1
   | less Repeat: push Id $params.disabled_events
   | when True: push Actions EventActions
-| EventActions <= EventActions.flip.join
+| EventActions == EventActions.flip.join
 
 update_events Me =
 | till EventActions.end
   | Effect = EventActions^pop
   | case Effect
     [`{}` EffectName Args @Rest]
-      | if Rest.size then Args <= [Args @Rest]
+      | if Rest.size then Args == [Args @Rest]
         else case Args [`,` @_]
-             | Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
+             | Args == Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
       | $nil.effect{[EffectName,Args] $nil [0 0 0]}
       | when EffectName >< msg: leave 1 //hack to show message before victory
     Else | bad "bad event effect ([Effect])"
@@ -92,8 +92,8 @@ update_units_effects Me Units =
       | E.amount--
       | less E.amount > 0:
         | when E.when >< timeout: push [E.name E.params.unheap] RunEs
-        | Remove <= 1
-        | E.amount <= No
+        | Remove == 1
+        | E.amount == No
     | when Remove: U.strip_effect{No} //strip effects with zero duration
     | for Name,Params RunEs: U.run_effect{Name Params U U.xyz}
 
@@ -111,11 +111,11 @@ world.update =
 | $main.music{playlist_advance}
 | when $blink.0>0 and not $cycle%12:
   | $blink.0--
-  | when $blink.1: $blink.1.picked <= not $blink.1.picked
+  | when $blink.1: $blink.1.picked == not $blink.1.picked
   | less $blink.0:
-    | $blink.1.picked <= 0
-    | $blink.1<=0
-    | for U $human.picked: U.picked <= 1
+    | $blink.1.picked == 0
+    | $blink.1==0
+    | for U $human.picked: U.picked == 1
 | when EventActions.end: $process_events
 | when update_events Me: leave
 | for Player $players: when Player.total_units: //reset counters
@@ -132,14 +132,14 @@ update_anim Me =
     | when $anim >< death: leave
     | when $anim >< attack or $anim><hit:
       | $animate{idle}
-  | $anim_step <= ($anim_step+1)%$anim_seq.size
+  | $anim_step == ($anim_step+1)%$anim_seq.size
   | Step = $anim_seq.$anim_step
   | when Step.0><impact:
     | when $anim><attack: $action.impact
     | update_anim Me
     | leave
   | $pick_facing{$facing}
-  | $anim_wait <= Step.1
+  | $anim_wait == Step.1
 
 find_path_around_busy_units Me XYZ = //Me is unit
 | OID = $owner.id
@@ -152,15 +152,15 @@ find_path_around_busy_units Me XYZ = //Me is unit
            | U = Us.0
            | when U.owner.id><OID:
              | when not U.path.end or U.action.type><attack:
-               | R <= \block
+               | R == \block
          | R
 | Found = $pathfind{10 &check}
 | if Found
   then | Path = Found.path
        | $set_path{Path}
-       | $path_life <= Path.size
+       | $path_life == Path.size
   else | $set_path{[]}
-       | $path_life <= 0
+       | $path_life == 0
 
 UpdatePathHangTrap = 0
 
@@ -210,11 +210,11 @@ update_path_move Me XYZ =
     | less Stuck and Stuck.0.list><$xyz and Stuck.1.list><$goal.xyz:
       | when got Stuck: $strip_effect{stuck}
       | $add_effect{stuck 0 [$xyz $goal.xyz Cycle 4]}
-      | Stuck <= $get_effect_value{stuck}
+      | Stuck == $get_effect_value{stuck}
     | [Src Dst Wait Tries] = Stuck
     | when Tries<<0:
       | $strip_effect{stuck}
-      | $goal <= 0 //FIXME: let AI know that we cant reach the goal
+      | $goal == 0 //FIXME: let AI know that we cant reach the goal
       | $set_path{[]}
       | leave
     | when Wait>Cycle: leave
@@ -231,18 +231,18 @@ update_path_move Me XYZ =
 goal_in_range Me =
 | Act = $goal_act
 | $order.init{Act $goal}
-| less Act.repeat><1: $goal <= 0
+| less Act.repeat><1: $goal == 0
 
 update_path Me =
 | when not $goal or $goal.serial <> $goal_serial or $goal.removed
        or not $goal.alive:
-  | $goal <= 0
+  | $goal == 0
   | $set_path{[]}
   | leave
 | Act = $goal_act
 | R = $goal_act.range
 | when R:
-  | when R><user: R <= $range
+  | when R><user: R == $range
   | GXYZ = $goal.xyz
   | Reach = if R><neib
               then (GXYZ-$xyz).take{2}{?abs}.sum><1 and (GXYZ.2-$xyz.2).abs<<1
@@ -264,36 +264,36 @@ update_path Me =
     | leave
   | Path = $path_to{$goal.xyz}
   | when Path.end:
-    | $goal <= 0
+    | $goal == 0
     | leave 0
   | LastPathLife = $path_life
   | $set_path{Path}
   | when Path.last.xyz<>$goal.xyz: //cant reach goal from here?
     | when LastPathLife>0: //got stuck?
-      | $goal <= 0
+      | $goal == 0
       | leave 0
-    | $path_life <= Path.size+1 //ensure it gets as close as possible
+    | $path_life == Path.size+1 //ensure it gets as close as possible
 | Path = $path
 | when Path.end: leave
 | XYZ = Path.head.xyz
-| $path <= Path.heapfree1
+| $path == Path.heapfree1
 | update_path_move Me XYZ
 
 update_order Me =
 | when $ordered.type
   | when $ordered.valid and $ordered.priority >> $next_action.priority:
     | swap $ordered $next_action
-  | $ordered.type <= 0
+  | $ordered.type == 0
 
 update_fade Me =
 | less $delta: leave
 | $alpha+=$delta
 | when $alpha > 255:
-  | $alpha <= 255
-  | $delta <= 0
+  | $alpha == 255
+  | $delta == 0
 | when $alpha < 0:
-  | $alpha <= 0
-  | $delta <= 0
+  | $alpha == 0
+  | $delta == 0
 
 update_next_action Me =
 | less $next_action.type: less $path.end:
@@ -313,14 +313,14 @@ update_next_action Me =
     else
   | $next_action.init{idle $xyz}
 | swap $action $next_action
-| $next_action.type <= 0
-| $next_action.priority <= 0
+| $next_action.type == 0
+| $next_action.priority == 0
 | $action.start
 | when $anim><move: $pick_facing{$facing}
 
 update_action Me =
 | T = $action.target
-| when T and (T.removed or not T.alive): $action.cycles <= 0
+| when T and (T.removed or not T.alive): $action.cycles == 0
 | till $action.cycles > 0 // action is done?
   | when $cooldown>0:
     | $cooldown--
@@ -332,7 +332,7 @@ update_action Me =
   | $action.finish
   | update_next_action Me
   | when $action.type><attack:
-    | $cooldown <= $class.cooldown
+    | $cooldown == $class.cooldown
 | $action.update
 
 find_in_circle CX CY R F =
@@ -356,12 +356,12 @@ attack_nearby_enemy Me =
            and (UXY-[X Y]).abs.int << SightF
            and not B.invisible
            and $world.seen_from{$xyz B.xyz}:
-      | R <= B
+      | R == B
   | R
 | Found = find_in_circle $xyz.0 $xyz.1 $sight &check
 | less Found: leave
 | $order_at{Found.xyz}
-| $backtrack <= $xyz
+| $backtrack == $xyz
 
 GravAcc = 9.807*0.2
 update_fall Me =
@@ -379,7 +379,7 @@ unit_sink Me =
 
 unit.update =
 | when $removed or $active<>1:
-  | $active <= 0
+  | $active == 0
   | leave
 | when $host:
   | if $host.serial >< $host_serial and not $host.removed
@@ -388,7 +388,7 @@ unit.update =
     else $die
 | if $cell > $floor then | update_fall Me; leave
   else when $velocity.2<0.0:
-  | $velocity.2 <= 0.0
+  | $velocity.2 == 0.0
   | when $world.at{$xyz.0 $xyz.1 $xyz.2-1}.liquid and not $flyer: 
     | unit_sink Me
     | leave
@@ -401,7 +401,7 @@ unit.update =
     | less B.end: when B.0.idle:
       | Found = $world.find{100 Me $cell | Dst => not Dst.block}
       | when Found: $order_at{Found.xyz}
-  | UpdatePathHangTrap <= 0
+  | UpdatePathHangTrap == 0
   | update_path Me
 | update_order Me
 | update_fade Me

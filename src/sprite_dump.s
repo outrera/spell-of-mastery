@@ -7,8 +7,8 @@ sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 uniform/0 =
 | WW = 1
 | HH = 1
 | when StaticFrame
-  | WW <= StaticFrame
-  | HH <= StaticFrame
+  | WW == StaticFrame
+  | HH == StaticFrame
 | for F S.frames:
     | AnimName = F.0
     | G0 = F.1.3
@@ -16,8 +16,8 @@ sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 uniform/0 =
     | for Dir,G [3,G0 6,G1]: when G:
       | X,Y,W,H = G.margins
       | less StaticFrame
-        | WW <= max WW W
-        | HH <= max HH H
+        | WW == max WW W
+        | HH == max HH H
       | R = G.cut{X Y W H}
       | GX,GY = G.xy
       | push [R AnimName Dir [GX-G.w/2 GY-G.h]+[X Y]+[W/2 H]] Rs
@@ -29,7 +29,7 @@ sprite_dump Me DstPath Name staticFrame/128 bX/10 bY/10 sheet/1 uniform/0 =
 | for O Order: for D 3,6:
   | Xs = Rs.keep{?2><D}
   | Xs = Xs.keep{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}
-  | MaxCol <= max MaxCol Xs.size
+  | MaxCol == max MaxCol Xs.size
 | W = Order.size*2*WW
 | H = MaxCol*HH
 | G = gfx W H

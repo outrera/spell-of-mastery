@@ -50,30 +50,30 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   moves/Moves
   pentagram/Pentagram //pentagram this unit casts
   worker/Worker
-| when Spells: $acts <= [@$acts @Spells].list
-| when Rooms: $acts <= [@$acts @Rooms].list
+| when Spells: $acts == [@$acts @Spells].list
+| when Rooms: $acts == [@$acts @Rooms].list
 | when $active:
-  | less $title: $title <= $class_name.title
-  | $id <= ClassIdCounter++
+  | less $title: $title == $class_name.title
+  | $id == ClassIdCounter++
 | less $empty
   | Block = Main.tiles."h[$height]_"
-  | when got Block: $block <= Block
+  | when got Block: $block == Block
 
 class.form = $default_sprite.form
 
 main.load_classes =
 | BankNames = case $params.world.class_banks [@Xs](Xs) X[X]
-| $classes <= @table: @join: map BankName BankNames
+| $classes == @table: @join: map BankName BankNames
   | map Name,Params $params.BankName
     | R = class BankName Name Me @Params.list.join
     | S = $sprites.(R.default_sprite)
     | less got S: bad "missing sprite `[R.default_sprite]`"
-    | R.default_sprite <= S
+    | R.default_sprite == S
     | "[BankName]_[Name]",R
 | for S $sprites{}{?1}.keep{?class}
   | C = class S.bank S.name Me @S.class
-  | C.default_sprite <= S
-  | $classes."[S.bank]_[S.name]" <= C
+  | C.default_sprite == S
+  | $classes."[S.bank]_[S.name]" == C
 | Acts = $params.acts
 | ItemDrop = Acts.item_drop
 | ItemTake = Acts.item_take
@@ -81,26 +81,26 @@ main.load_classes =
   | when V.item><1: //FIXME: have act icons extract name/gfx from unit classes
     | for Pref,Item [`drop_`,ItemDrop `take_`,ItemTake]{?deep_copy}
       | Name = "[Pref][K]"
-      | Item.name <= Name
-      | Item.icon_gfx <= V.default_sprite.frames.0
-      | Acts.Name <= Item
-      | Item.title <= Name.replace{_ ' '}
+      | Item.name == Name
+      | Item.icon_gfx == V.default_sprite.frames.0
+      | Acts.Name == Item
+      | Item.title == Name.replace{_ ' '}
   | when V.active:
     | As = []
-    | when V.speed: As <= [recall @As]
+    | when V.speed: As == [recall @As]
     | when V.combat:
-      | when V.combat><impact: V.combat<=0
-      | As <= [attack @As]
-    | As <= [@As @V.acts]
-    | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]
-    | V.acts <= As
+      | when V.combat><impact: V.combat==0
+      | As == [attack @As]
+    | As == [@As @V.acts]
+    | when V.leader<>1 and V.ai<>pentagram: As == [@As disband]
+    | V.acts == As
 | for K,Act $params.acts.list:
   | less Act.needs.end:
-    | Act.needs <= map N Act.needs:
+    | Act.needs == map N Act.needs:
       | if N.is_list then N else [N]
   | for NAs Act.needs: for NeededAct NAs: when no Acts.NeededAct: 
     | bad "act [K] needs undefined act [NeededAct]"
-| for K,V $classes: V.acts <= map ActName V.acts
+| for K,V $classes: V.acts == map ActName V.acts
   | Act = Acts.ActName
   | less got Act: bad "[K] references undefined act [ActName]"
   | Act

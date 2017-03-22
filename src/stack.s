@@ -1,13 +1,13 @@
 type stack{Init} xs used
-| if Init.is_int then $xs <= dup{Init}
-  else | $xs <= dup{Init.size}
+| if Init.is_int then $xs == dup{Init}
+  else | $xs == dup{Init.size}
        | $init{Init}
 
 stack.init Xs =
 | $clear
 | for X Xs: $push{X}
 
-stack.push X = $xs.($used++) <= X
+stack.push X = $xs.($used++) == X
 
 stack.pop =
 | $used--
@@ -20,7 +20,7 @@ stack.alloc @Xs =
 
 stack.size = $xs.size
 
-stack.clear = $used <= 0
+stack.clear = $used == 0
 
 stack.remove Item =
 | Xs = []

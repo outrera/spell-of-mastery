@@ -33,20 +33,20 @@ type sprite{Bank Name xy/[0 0]
 | FormH = Form.size
 | FormW = Form.0.size
 | when FormH+FormW>2:
-  | $xy <= $xy + worldToSprite{FormW-1 FormH-1}
+  | $xy == $xy + worldToSprite{FormW-1 FormH-1}
 | for Y,Hs Form.i: for X,H Hs.i: when H: push [X -Y 0] XYs
-| $form <= XYs.list
-| $anims <= @table: map [Name@Frames] Anims.tail
-  | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}
+| $form == XYs.list
+| $anims == @table: map [Name@Frames] Anims.tail
+  | case Frames [[`-` time N]@Fs]: Frames == Fs{[? N]}
   | [Name Frames]
 | when got $anims.death and no $anims.hit:
-  | $anims.hit <= [[$anims.idle.0.0 24]] //supply default hit anim
+  | $anims.hit == [[$anims.idle.0.0 24]] //supply default hit anim
 | Attack = $anims.attack
 | when no Attack:
-  | Attack <= $anims.idle
-  | $anims.attack <= Attack
+  | Attack == $anims.idle
+  | $anims.attack == Attack
 | when no Attack.find{?0><impact}:
-  | $anims.attack <= if Attack.size>1
+  | $anims.attack == if Attack.size>1
                      then [@Attack.lead [impact 0] Attack.last]
                      else [Attack.head [impact 0]]
 
@@ -61,18 +61,18 @@ init_frames_from_list S List =
   | Name = FName
   | Angle = 0
   | case Name "[A]-[N]"
-    | Angle <= A.int
-    | Name <= N
+    | Angle == A.int
+    | Name == N
   | X = 0
   | Y = 0
   | case Name "[N]+[XX]+[YY]"
-    | X <= XX.int
-    | Y <= YY.int
-    | Name <= N
-  | G.xy <= S.xy + [X Y]
+    | X == XX.int
+    | Y == YY.int
+    | Name == N
+  | G.xy == S.xy + [X Y]
   | have Frames.Name [0 0 0 0 0 0 0 0]
-  | Frames.Name.Angle <= G
-| S.frames <= Frames
+  | Frames.Name.Angle == G
+| S.frames == Frames
 
 init_frames S G =
 | Rs = S.recolors
@@ -80,7 +80,7 @@ init_frames S G =
 | when Rs and CM:
   | Rs = map R Rs: CM.locate{R}
   | Default = Rs.find{?<>No}
-  | when got Default: S.colors <= map R Rs: if R<>No then R else No
+  | when got Default: S.colors == map R Rs: if R<>No then R else No
   //| say [S.name CM.size S.colors]
 | Frames = case S.frames
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
@@ -91,13 +91,13 @@ init_frames S G =
      | leave: init_frames_from_list S Xs
   [@Fs] | Xs = map [X Y W H @Disp] Fs
           | R = @cut X Y W H G
-          | R.xy <= Disp^($_ []=> [0 0])
+          | R.xy == Disp^($_ []=> [0 0])
           | R
         | G.free
         | Xs
   Else | [G]
 | for F Frames: F.xy += S.xy
-| S.frames <= if S.faces then map F Frames [0 0 0 F 0 0 0 F] else Frames
+| S.frames == if S.faces then map F Frames [0 0 0 F 0 0 0 F] else Frames
 
 
 init_frames_from_folder S Folder =
@@ -112,9 +112,9 @@ init_sprites Me =
   | if S.frames >< folder
     then init_frames_from_folder S "[Params.filepath]/"
     else init_frames S gfx."[Params.filepath].png"
-  | S.id <= SpriteName
-  | $sprites.SpriteName <= S
-| for Name,Sprite $sprites: when@@it Sprite.shadow: Sprite.shadow <= $img{it}
+  | S.id == SpriteName
+  | $sprites.SpriteName == S
+| for Name,Sprite $sprites: when@@it Sprite.shadow: Sprite.shadow == $img{it}
 
 join_banks Bs =
 | @table: @join: map BankName,Bank Bs:
@@ -122,10 +122,10 @@ join_banks Bs =
 
 main.load_sprites =
 | Params = load_params "[$data]/sprites/"
-| $credits.graphics <= extract_params_authors Params
-| $sprites <= join_banks Params
+| $credits.graphics == extract_params_authors Params
+| $sprites == join_banks Params
 | init_sprites Me
-| $effect <= $spr{ui_unit_effects}
+| $effect == $spr{ui_unit_effects}
 
 main.img Name =
 | S = $sprites."[Name]"

@@ -20,21 +20,21 @@ World =
 
 //FIXME: such structs could be defined with a macro
 int.tile = CellsTile.Me
-int.`!tile` V = CellsTile.Me <= V
+int.`=tile` V = CellsTile.Me == V
 int.empty = $tile.empty
 int.type = $tile.type
 int.units = CellsUnits.Me
-int.`!units` V = CellsUnits.Me <= V
+int.`=units` V = CellsUnits.Me == V
 int.gfx = CellsGfxes.Me
-int.`!gfx` V = CellsGfxes.Me <= V
+int.`=gfx` V = CellsGfxes.Me == V
 int.block = CellsBlock.Me //unit blocking the tile
-int.`!block` V = CellsBlock.Me <= V
+int.`=block` V = CellsBlock.Me == V
 int.cost = CellsCost.Me
-int.`!cost` V = CellsCost.Me <= V
+int.`=cost` V = CellsCost.Me == V
 int.prev = CellsPrev.Me
-int.`!prev` V = CellsPrev.Me <= V
+int.`=prev` V = CellsPrev.Me == V
 int.floor = CellsFloor.Me
-int.`!floor` V = CellsFloor.Me <= V
+int.`=floor` V = CellsFloor.Me == V
 int.xyz = [Me/WorldDepth%WorldSize Me/CellsLineSize Me%WorldDepth]
 int.z = Me%WorldDepth
 int.north = Me-CellsLineSize
@@ -47,7 +47,7 @@ int.path =
 | Path = []
 | while Cell
   | push Cell Path
-  | Cell <= Cell.prev
+  | Cell == Cell.prev
 | Path.tail.list
 list.cell = (Me.1*WorldSize+Me.0)*WorldDepth+Me.2
 int.pile =
@@ -67,14 +67,14 @@ unit.update_pile =
 | if Items.tail.end then
   | Item = Items.0
   | Cl = World.main.classes.(Item.0)
-  | $sprite <= Cl.default_sprite
+  | $sprite == Cl.default_sprite
   else
-  | $sprite <= $default_sprite
+  | $sprite == $default_sprite
 | $animate{idle}
 int.add_item Name Amount =
 | Pile = $pile
 | less Pile:
-  | Pile <= World.players.0.alloc_unit{item_pile}
+  | Pile == World.players.0.alloc_unit{item_pile}
   | Pile.move{$xyz}
 | Pile.add_item{Name Amount}
 | Pile.update_pile
@@ -127,61 +127,61 @@ LCG_A = 16807
 LCG_B = 0
 
 world.rand Size =
-| $seed <= ($seed*LCG_A + LCG_B) % LCG_M
+| $seed == ($seed*LCG_A + LCG_B) % LCG_M
 | @int: @round: $seed.float*Size.float/LCG_M_F
 
 world.init =
-| $main.world <= Me
-| World <= Me
-| $minimap <= gfx 128 128
+| $main.world == Me
+| World == Me
+| $minimap == gfx 128 128
 | WParam = $main.params.world
-| $d <= WParam.depth
-| WorldDepth <= $d
-| $maxSize <= WParam.max_size+12 //FIXME: get rid of this 12 margin
-| WorldSize <= $maxSize
-| CellsLineSize <= WorldSize*WorldDepth
-| MaxUnits <= WParam.max_units
+| $d == WParam.depth
+| WorldDepth == $d
+| $maxSize == WParam.max_size+12 //FIXME: get rid of this 12 margin
+| WorldSize == $maxSize
+| CellsLineSize == WorldSize*WorldDepth
+| MaxUnits == WParam.max_units
 | NoteSize = WParam.note_size
-| NoteLife <= WParam.note_life
-| $notes <= dup WParam.max_notes
+| NoteLife == WParam.note_life
+| $notes == dup WParam.max_notes
   | [0.0 (dup NoteSize ``)]
-| $players <= map Id WParam.max_players: player Id Me
-| $c <= WParam.cell_size
+| $players == map Id WParam.max_players: player Id Me
+| $c == WParam.cell_size
 | init_unit_module $c
-| $void <= $main.tiles.void
+| $void == $main.tiles.void
 | NCells = $maxSize*$maxSize*$d
 | Void = $void
-| CellsTile <= dup NCells Void
-| CellsUnits <= dup NCells []
-| CellsGfxes <= dup NCells 0
-| CellsBlock <= dup NCells 0
-| CellsCost <= dup NCells #FFFFFFFFFFFF
-| CellsPrev <= dup NCells 0
-| CellsFloor <= dup NCells 0
-| $heighmap <= dup $maxSize: @bytes $maxSize
-| $units <= MaxUnits{(unit ? Me)}
-| $free_units <= stack $units.flip
-| $effects <= (MaxUnits*2){N=>(efx)}
-| $free_effects <= stack $effects
-| $active <= stack MaxActiveUnits
-| $shadow <= $main.sprites.system_shadow.frames
+| CellsTile == dup NCells Void
+| CellsUnits == dup NCells []
+| CellsGfxes == dup NCells 0
+| CellsBlock == dup NCells 0
+| CellsCost == dup NCells #FFFFFFFFFFFF
+| CellsPrev == dup NCells 0
+| CellsFloor == dup NCells 0
+| $heighmap == dup $maxSize: @bytes $maxSize
+| $units == MaxUnits{(unit ? Me)}
+| $free_units == stack $units.flip
+| $effects == (MaxUnits*2){N=>(efx)}
+| $free_effects == stack $effects
+| $active == stack MaxActiveUnits
+| $shadow == $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
 | MaxSize = $maxSize
-| $variation <= MaxSize{_=>MaxSize{_=>SS.rand}}
-| $nil <= $players.0.alloc_unit{unit_nil}
-| $main.params.unit_setters_ <=
-  | ($nil)^methods_.keep{?0.0 >< '!'}{[?0.tail ?1]}.table
+| $variation == MaxSize{_=>MaxSize{_=>SS.rand}}
+| $nil == $players.0.alloc_unit{unit_nil}
+| $main.params.unit_setters_ ==
+  | ($nil)^methods_.keep{?0.0 >< '='}{[?0.tail ?1]}.table
 
 world.new_cost =
 | $cost--
 | less $cost:
   | CellsCost.clear{#FFFFFFFFFFFF}
-  | $cost <= #FFFFFF
+  | $cost == #FFFFFF
 | $cost*#1000000
 
 world.create W H =
-| $w <= W
-| $h <= H
+| $w == W
+| $h == H
 | $w++
 | $h++
 | $clear
@@ -203,28 +203,28 @@ world.create_borders = // draws maps borders in clockwise order
 | Pilar = dup H Border
 | create_border_pilar X Y =
   | $set_pilar{X Y Pilar}
-  | $heighmap.X.Y <= H 
+  | $heighmap.X.Y == H 
 | for X,Y points{0    0    $w+1 1   }: create_border_pilar X Y
 | for X,Y points{$w+1 0    1    $h+1}: create_border_pilar X Y
 | for X,Y points{1    $h+1 $w+1 1   }: create_border_pilar X Y
 | for X,Y points{0    1    1    $h+1}: create_border_pilar X Y
 
 world.clear =
-| $paused <= 1
-| $seed <= LCG_M.rand
+| $paused == 1
+| $seed == LCG_M.rand
 | $minimap.clear{#000000}
-| $act <= 0
+| $act == 0
 | for U $units: less U.removed: U.free
 | for H $heighmap: H.clear{0}
 | for P $players: P.clear
-| $human <= $players.1
-| $human.human <= 1
+| $human == $players.1
+| $human.human == 1
 | $marks.heapfree
-| $marks <= []
-| for K,V $params: $params.K <= No
-| for U $active.list: U.active <= 0
+| $marks == []
+| for K,V $params: $params.K == No
+| for U $active.list: U.active == 0
 | $active.clear
-| for [K V] $sound_cycles: $sound_cycles.K <= 0
+| for [K V] $sound_cycles: $sound_cycles.K == 0
 | $blink.init{[0 0]}
 
 // force reset of all unit effects and health
@@ -237,7 +237,7 @@ reinit_units Us =
   | XYZ = U.xyz.deep_copy
   | FXYZ = U.fxyz.deep_copy
   | Items = U.items
-  | when U.leader: U.hp <= U.class.hp
+  | when U.leader: U.hp == U.class.hp
   | U.free
   | less U.ordered.type><die:
     | U = Owner.alloc_unit{Type}
@@ -253,16 +253,16 @@ handle_attack_triggers Us =
   | Os = U.world.units_get{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}
   | when got AttackTrigger and U.ai<>attack:
-    | U.attacker <= 1
+    | U.attacker == 1
     | AttackTrigger.free
 
 world.new_game =
-| $seed <= LCG_M.rand
-| for K,V $main.params.world: $params.K <= V
-| for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
-| $human <= $players.1
-| $human.human <= 1
-| $cycle <= 0
+| $seed == LCG_M.rand
+| for K,V $main.params.world: $params.K == V
+| for ActName,Act $main.params.acts: Act.enabled == #FFFFFF
+| $human == $players.1
+| $human.human == 1
+| $cycle == 0
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana
@@ -280,14 +280,14 @@ world.new_game =
     | C = P.alloc_unit{L.class.pentagram}
     | C.move{L.xyz}
     | L.move{C.xyz}
-    | L.alpha <= 255
-    | L.delta <= -50
+    | L.alpha == 255
+    | L.delta == -50
     | $effect{C.xyz teleport}
-    | C.alpha <= 255
-    | C.delta <= -10
+    | C.alpha == 255
+    | C.delta == -10
     | $effect{C.xyz pentagram_appearance}
-  | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
-| when got@@it $players.find{?human}: $human <= it
+  | when L and got PAI.(L.type): P.params.aiType == L.type //got specialized AI
+| when got@@it $players.find{?human}: $human == it
 | handle_attack_triggers InitedUnits
 
 world.notify Text =
@@ -296,31 +296,31 @@ world.notify Text =
 | Free = $notes.skip{?0 > Clock}
 | less Free.size: push Used^pop Free
 | N = Free.0
-| N.0 <= Clock + NoteLife
+| N.0 == Clock + NoteLife
 | Chars = N.1
 | Chars.clear{``}
-| for I Text.size: Chars.I <= Text.I
+| for I Text.size: Chars.I == Text.I
 | $notes.init{[@Used @Free]}
 
 world.alloc_unit ClassName Owner =
 | Class = $main.classes.ClassName
 | less got Class:
   | $notify{"Missing class `[ClassName]`"}
-  | Class <= $main.classes.trigger_missing
+  | Class == $main.classes.trigger_missing
 | U = $free_units.pop
 | when Class.leader and Class.leader><1:
   | when Owner.leader: Owner.leader.free
-  | Owner.leader <= U
+  | Owner.leader == U
 | when Class.ai >< pentagram
   | Pentagram = Owner.pentagram
   | when Pentagram
     | $free_units.push{U}
     | leave Pentagram
-  | Owner.pentagram <= U
-| till U.removed: U <= $free_units.pop
+  | Owner.pentagram == U
+| till U.removed: U == $free_units.pop
 | U.init{Class}
-| U.owner <= Owner
-| U.colors <= Owner.colors
+| U.owner == Owner
+| U.colors == Owner.colors
 | U.owner.got_unit{U}
 | U
 
@@ -333,12 +333,12 @@ world.free_unit U =
   | $free_units.push{U}
 
 world.picked = $player.picked
-world.`!picked` Us = $player.picked <= Us
+world.`=picked` Us = $player.picked == Us
 
 world.cell X Y Z = (Y*$maxSize+X)*$d+Z
 world.at X Y Z = $cell{X Y Z}.tile
 world.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
-world.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V
+world.set_ X Y Z V = CellsTile.($cell{X Y Z}) == V
 
 world.pilar X Y =
 | H = $height{X Y}
@@ -347,16 +347,16 @@ world.pilar X Y =
 
 world.set_pilar X Y Ts =
 | Cell = $cell{X Y 0}
-| for T Ts: CellsTile.(Cell++) <= T
+| for T Ts: CellsTile.(Cell++) == T
 | Void = $void
-| times I $d-Ts.size: CellsTile.(Cell++) <= Void
+| times I $d-Ts.size: CellsTile.(Cell++) == Void
 
 world.clear_tile_ X Y Z =
 | Filler = $void
 | Tile = $cell{X Y Z}.tile
 | when Tile.parts.is_int
   | Z -= Tile.parts
-  | Tile <= $cell{X Y Z}.tile
+  | Tile == $cell{X Y Z}.tile
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
@@ -365,9 +365,9 @@ world.clear_tile_ X Y Z =
   | RT = 0
   | when Tile.roof.is_list:
     | H,RoofTile = Tile.roof
-    | RT <= RoofTile
-    | ZZ <= Z+H+1
-    | less ZZ < $d: ZZ <= 0
+    | RT == RoofTile
+    | ZZ == Z+H+1
+    | less ZZ < $d: ZZ == 0
     | when ZZ and $at{X Y ZZ}.type><RT.type: $clear_tile{X Y ZZ}
   | for DX,DY Dirs: //tile has associated walls
     | XX = X+DX
@@ -411,7 +411,7 @@ DecoDirs = list
 
 linked_cells2dS Cell Cost Check =
 | when Cell.cost><Cost: leave []
-| Cell.cost <= Cost
+| Cell.cost == Cost
 | less Check Cell: leave []
 | Rs = [Cell]
 | for N Cell.neibs: for R linked_cells2dS{N Cost Check}: push R Rs
@@ -430,7 +430,7 @@ update_deco Me Owner Tile Z Ps = //Me=world
 | DSize,OX,OY,Params,DecoType = Tile.deco
 | Single = 0
 | when Params: for P Params: case P
-  single | Single <= 1
+  single | Single == 1
 | MX,MY,W,H = points_rect Ps{?xyz}
 | XYs = points{MX MY W H}
 | for X,Y XYs:
@@ -455,11 +455,11 @@ world.set X Y Z Tile owner/0 =
 | Removed = Cell.tile
 | DecoTs = 0
 | when Removed.deco and Removed.type<>Tile.type:
-  | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Removed.type}
+  | DecoTs == $linked_cells2d{Cell | Cell => Cell.tile.type><Removed.type}
 | $dirty_set{X Y Z Tile}
 | when DecoTs: update_deco Me Owner Removed Z DecoTs
 | when Tile.deco:
-  | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Tile.type}
+  | DecoTs == $linked_cells2d{Cell | Cell => Cell.tile.type><Tile.type}
   | update_deco Me Owner Tile Z DecoTs
 | $upd_neibs{X Y}
 
@@ -492,9 +492,9 @@ world.seen_from A B =
   | DY = Y-PY
   | when DX*DX><1 and DY*DY><1:
     | less $at{PX+DX PY Z}.empty or $at{PX PY+DY Z}.empty: _goto end
-  | PX <= X
-  | PY <= Y
-  | R <= $at{X Y Z}.empty
+  | PX == X
+  | PY == Y
+  | R == $at{X Y Z}.empty
   | _label end
   | R
 
@@ -519,17 +519,17 @@ unit.explore V =
 | UY = XYZ.1
 | for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
   | E = Explored.Y
-  | less E.X: E.X <= 1
+  | less E.X: E.X == 1
   | E.X += V
 
 world.explore State = for P $players: P.explore{State}
 
 world.place_unitS U X Y Z =
 | Cell = $cell{X Y 0}
-| Cell.units <= Cell.units.cons{U}
+| Cell.units == Cell.units.cons{U}
 | Cell += Z
-| Cell.units <= Cell.units.cons{U}
-| less U.empty: Cell.block <= U
+| Cell.units == Cell.units.cons{U}
+| less U.empty: Cell.block == U
 
 world.place_unit U =
 | XYZ = U.xyz
@@ -539,23 +539,23 @@ world.place_unit U =
   | XX,YY,ZZ = XYZ + if Mirror then [-DY DX DZ] else [DX -DY DZ]
   | $place_unitS{U XX YY ZZ}
   | when Blocker: $set{XX YY ZZ U.block}
-| U.cell <= $cell{XYZ.0 XYZ.1 XYZ.2}
+| U.cell == $cell{XYZ.0 XYZ.1 XYZ.2}
 | U.explore{1}
 
 world.remove_unitS U X Y Z =
 | U.explore{-1}
 | Cell = $cell{X Y 0}
 | K = Cell.units
-| Cell.units <= K.unheap.skip{?id><U.id}.enheap
+| Cell.units == K.unheap.skip{?id><U.id}.enheap
 | K.heapfree
 | Cell += Z
 | K = Cell.units
 | Us = K.unheap.skip{?id><U.id}
-| Cell.units <= Us.enheap
+| Cell.units == Us.enheap
 | K.heapfree
 | less U.empty:
-  | Cell.block <= 0
-  | for U Us: less U.empty: Cell.block <= U
+  | Cell.block == 0
+  | for U Us: less U.empty: Cell.block == U
 
 world.remove_unit U =
 | when U.removed: leave
@@ -566,7 +566,7 @@ world.remove_unit U =
   | XX,YY,ZZ = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
   | $remove_unitS{U XX YY ZZ}
   | when Blocker: $clear_tile{XX YY ZZ}
-| U.cell <= 0
+| U.cell == 0
 | U.xyz.init{XYZ}
 
 world.effect XYZ What =
@@ -622,7 +622,7 @@ world.getSidesSame X Y Z Role = `[]`
 
 world.color_at X Y =
 | Z = $height{X Y}-1
-| when Z<0: Z <= 0
+| when Z<0: Z == 0
 | Cell = $cell{X Y 0}
 | while Z > 0 and not (Cell+Z).gfx: Z--
 | G = (Cell+Z).gfx
@@ -651,26 +651,26 @@ upd_floor Me Bottom =
 | times I $d:
   | Empty = Cell.tile.empty
   | when Empty
-    | less LastEmpty: Floor <= Cell
-    | Cell.floor <= Floor
+    | less LastEmpty: Floor == Cell
+    | Cell.floor == Floor
   | Cell++
-  | LastEmpty <= Empty
+  | LastEmpty == Empty
 | Cell = Bottom+$d-1
 | Floor = Cell
 | LastEmpty = 0
 | times I $d:
   | Empty = Cell.tile.empty
   | less Empty
-    | when LastEmpty: Floor <= Cell+1
-    | Cell.floor <= Floor
+    | when LastEmpty: Floor == Cell+1
+    | Cell.floor == Floor
   | Cell--
-  | LastEmpty <= Empty
+  | LastEmpty == Empty
 
 world.updPilarGfxes X Y =
 | when X < 0 or Y < 0: leave 0
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
-| $heighmap.X.Y <= (Cell+$d-2).floor.z
+| $heighmap.X.Y == (Cell+$d-2).floor.z
 | Var = $variation.Y.X
 | Z = 0
 | H = $height{X Y}
@@ -681,12 +681,12 @@ world.updPilarGfxes X Y =
   | Next = Cell+TH
   | Above = Next.tile
   | when Above.parts.is_int: //multi-height tile
-    | Above <= (Next-Above.parts).tile
+    | Above == (Next-Above.parts).tile
   // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
-  | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Var}
-  | Below <= T
-  | T <= Above
-  | Cell <= Next
+  | Cell.gfx == T.render{X Y Z+TH-1 Below Above Var}
+  | Below == T
+  | T == Above
+  | Cell == Next
   | Z += TH
 | for U $column_units_get{X Y}: U.environment_updated
 | $update_minimap{X Y}
@@ -748,10 +748,10 @@ world.pop XY =
 
 world.new_effect When Name Amount Params =
 | E = $free_effects.pop
-| E.when <= When
-| E.name <= Name
-| E.amount <= Amount
-| E.params <= Params.enheap
+| E.when == When
+| E.name == Name
+| E.amount == Amount
+| E.params == Params.enheap
 | E
 
 world.free_effect E =

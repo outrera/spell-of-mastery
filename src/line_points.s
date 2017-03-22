@@ -24,16 +24,16 @@ line_points_sub SX SY DX DY F =
 | XLen = 0
 | Incr = 0
 | if SX > DX
-  then | XLen <= SX - DX
-       | Incr <= -1
-  else | XLen <= DX - SX
-       | Incr <= 1
+  then | XLen == SX - DX
+       | Incr == -1
+  else | XLen == DX - SX
+       | Incr == 1
 | X = SX
 | Y = SY
 | when YLen < XLen:
   | when SX > DX:
     | swap SX DX
-    | Y <= DY
+    | Y == DY
   | P = YLen*2 - XLen
   | X = SX
   | while X < DX:
@@ -184,7 +184,7 @@ line_points SX SY DX DY =
 | line_calls SX SY DX DY: X Y => | push X,Y Ps; 1
 | when Ps.end: leave []
 | Ps = Ps.list
-| when Ps.head <> [SX SY]: Ps <= Ps.flip
+| when Ps.head <> [SX SY]: Ps == Ps.flip
 | Ps
 
 export line_points line_calls line_calls3d

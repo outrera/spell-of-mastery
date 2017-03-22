@@ -3,21 +3,21 @@ use util effect_ macros
 Effects = t
 
 set_act_enabled Me State Players ActNames =
-| when Players >< all: Players <= 16{(?)}
-| when ActNames >< all: ActNames <= $params.acts{}{?0}
-| when Players.is_int: Players <= [Players]
-| when ActNames.is_text: ActNames <= [ActNames]
+| when Players >< all: Players == 16{(?)}
+| when ActNames >< all: ActNames == $params.acts{}{?0}
+| when Players.is_int: Players == [Players]
+| when ActNames.is_text: ActNames == [ActNames]
 | Acts = $params.acts
 | for ActName ActNames:
   | Act = Acts.ActName
   | less got Act: bad "missing act [ActName]"
   | Es = Act.enabled
-  | for Id Players: Es <= Es^set_bit{Id State}
-  | Act.enabled <= Es
+  | for Id Players: Es == Es^set_bit{Id State}
+  | Act.enabled == Es
 
 effect enable State Players ActNames:
-| when Players >< owner: Players <= [$owner.id] 
-| when Players >< target_owner: Players <= [Target.owner.id]
+| when Players >< owner: Players == [$owner.id] 
+| when Players >< target_owner: Players == [Target.owner.id]
 | set_act_enabled $main State Players ActNames
 
 effect on When: No
@@ -28,21 +28,21 @@ effect strip Name: Target.strip_effect{Name}
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
-effect mod Args: Target.mod <= [Args @(Target.mod or [])]
+effect mod Args: Target.mod == [Args @(Target.mod or [])]
 
 effect tenant_mark Type:
 | Block = $world.block_at{TargetXYZ}
 | S = $world.units_get{TargetXYZ}.find{?type><Type}
 | less Block:
   | when got S:
-    | S.delta <= 50
+    | S.delta == 50
     | when S.alpha><255
       | S.die
   | leave
 | when got S: leave
 | S = $owner.alloc_unit{Type}
-| S.alpha <= 255
-| S.delta <= -50
+| S.alpha == 255
+| S.delta == -50
 | S.move{TargetXYZ}
 
 metric A B = (B-A).take{2}.abs
@@ -55,7 +55,7 @@ effect btrack XYZ:
   | LB = metric $xyz XYZ
   | less LA>10.0: leave
 | when $xyz><XYZ:
-  | $backtrack <= 0
+  | $backtrack == 0
   | leave
 | B = $world.block_at{XYZ}
 | when B and not B.idle: leave
@@ -65,11 +65,11 @@ effect gain @Args:
 | ActNames = []
 | Player = 0
 | case Args
-   [ANs] | ActNames <= ANs
+   [ANs] | ActNames == ANs
          | Player = Target.owner
-   [PId ANs] | ActNames <= ANs
-             | Player <= $world.players.PId
-| when ActNames >< all: ActNames <= $main.params.acts{}{?0}
+   [PId ANs] | ActNames == ANs
+             | Player == $world.players.PId
+| when ActNames >< all: ActNames == $main.params.acts{}{?0}
 | for ActName ActNames:
   | when ActNames.size><1 and Target.owner.human:
     | Title = ActName.replace{'_' ' '}
@@ -114,9 +114,9 @@ effect harm As:
 | Combat = 1
 | Whom = \target
 | case As
-  [A W] | Combat <= A
-        | Whom <= W
-  A | Combat <= A
+  [A W] | Combat == A
+        | Whom == W
+  A | Combat == A
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | $assault{Combat T}
 
@@ -126,10 +126,10 @@ effect area As:
 | Range = W/$world.c-1
 | Ts = $world.targets_in_range{TargetXYZ Range}.skip{?empty}
 | case Whom [exclude_self W]:
-  | Whom <= W
-  | Ts <= Ts.skip{?id><$id}
-| when Whom><ally: Ts <= Ts.skip{?is_enemy{Me}}
-| when Whom><enemy: Ts <= Ts.keep{?is_enemy{Me}}
+  | Whom == W
+  | Ts == Ts.skip{?id><$id}
+| when Whom><ally: Ts == Ts.skip{?is_enemy{Me}}
+| when Whom><enemy: Ts == Ts.keep{?is_enemy{Me}}
 | for T Ts: $effect{Es T T.xyz}
 
 effect neibs Args:
@@ -165,8 +165,8 @@ range_points World XYZ R FixTop =
 | WW = World.w 
 | WH = World.h
 | Ps = Ps.keep{(?0>0 and ?1>0 and ?0<<WW and ?1<<WH)}
-| if FixTop then for P Ps: P.2 <= World.height{P.0 P.1}
-  else for P Ps: P.2 <= World.floor{P}
+| if FixTop then for P Ps: P.2 == World.height{P.0 P.1}
+  else for P Ps: P.2 == World.floor{P}
 | Ps
 
 effect field Param R Es:
@@ -174,20 +174,20 @@ effect field Param R Es:
 | Type,Count = Param
 | if Type><cell then
     | Ps = range_points{$world $xyz R 0}
-    | Ts <= dup Count Ps.rand
+    | Ts == dup Count Ps.rand
   else if Type><outdoors_cell and R><world then
     | WW = $world.w 
     | WH = $world.h
     | WD = $world.d
-    | Count <= (WH*WW+WD-1)/WD*Count
-    | Ts <= dup Count
+    | Count == (WH*WW+WD-1)/WD*Count
+    | Ts == dup Count
       | X = WW.rand+1
       | Y = WH.rand+1
       | Z = $world.height{X Y}
       | [X Y Z]
   else if Type><outdoors_cell then
     | Ps = range_points{$world $xyz R 1}
-    | Ts <= dup Count Ps.rand
+    | Ts == dup Count Ps.rand
   else if Type><world_outdoors_cell then
   else bad "field: invalid param `[Param]`"
 | less Ts: leave
@@ -203,7 +203,7 @@ effect mana Amount: Target.owner.mana+=Amount
 
 type unit_setter{unit}
 
-unit_setter.`!` K V =
+unit_setter.`=` K V =
 | Setter = $unit.main.params.unit_setters_.K
 | when no Setter: bad "unknown unit field [K]"
 | Setter $unit V
@@ -216,37 +216,37 @@ effect set @Args:
 | Players = 0
 | Inc = 0
 | case Args [inc @As]:
-  | Inc <= 1
-  | Args <= As
+  | Inc == 1
+  | Args == As
 | case Args
-  [A B C] | What <= A
-          | Name <= B
-          | Value <= C
-  [A B] | Name <= A
-        | Value <= B
-  [A] | Name <= A
+  [A B C] | What == A
+          | Name == B
+          | Value == C
+  [A B] | Name == A
+        | Value == B
+  [A] | Name == A
   Else | bad "invalid arglist [Args]"
 | Ps = if What >< world then [0,$world.params]
-       else if What.is_int then Players <= [$world.players.What]
-       else if What >< owner then Players <= [$owner]
-       else if What >< towner then Players <= [Target.owner]
-       else if What >< all then Players <= $world.players
+       else if What.is_int then Players == [$world.players.What]
+       else if What >< owner then Players == [$owner]
+       else if What >< towner then Players == [Target.owner]
+       else if What >< all then Players == $world.players
        else if What >< target then [0,(unit_setter Target)]
        else if What >< self then [0,(unit_setter Me)]
        else
-| when Players: Ps <= Players{?,?.params}
-| when Value >< `?owner`: Value <= $owner.id
-| when Value >< `?self`: Value <= $id
-| when Value >< `?self_type`: Value <= $type
+| when Players: Ps == Players{?,?.params}
+| when Value >< `?owner`: Value == $owner.id
+| when Value >< `?self`: Value == $id
+| when Value >< `?self_type`: Value == $type
 | for Player,Params Ps
   | if Value.is_list
-    then | when no Params.Name: Params.Name <= dup Value.size
+    then | when no Params.Name: Params.Name == dup Value.size
          | Params.Name.init{Value}
     else | if Inc then Params.Name += Value
-           else Params.Name <= Value
+           else Params.Name == Value
   | when Player and Name >< mana:
     | if Inc then Player.mana += Value
-      else Player.mana <= Value
+      else Player.mana == Value
 
 effect swap Arg:
 | XYZ = $xyz.copy
@@ -264,7 +264,7 @@ effect recall Where:
   else leave
 | Target.remove
 | Target.move{XYZ}
-| Target.backtrack <= 0
+| Target.backtrack == 0
 | Target.reset_goal
 | Target.reset_followers
 
@@ -307,9 +307,9 @@ world_dig Me X Y Z PassageH Amount =
   | leave 1
 | when Cell.empty: _goto done //already excavated
 | when no Work:
-  | Work <= $players.0.alloc_unit{unit_dig}
+  | Work == $players.0.alloc_unit{unit_dig}
   | Work.move{X,Y,Z}
-  | Work.hp <= 0
+  | Work.hp == 0
 | Work.hp+=Amount
 | when Tile.unit:
   | B = Cell.block
@@ -327,9 +327,9 @@ world_dig Me X Y Z PassageH Amount =
 | H = min $floor{X,Y,Z} Z+PassageH
 | ZZ = Z
 | while Z<H:
-  | less $at{X Y Z}.dig: H<=Z
+  | less $at{X Y Z}.dig: H==Z
   | Z++
-| Z <= ZZ
+| Z == ZZ
 | while Z<H:
   | $set{X Y Z $main.tiles.void}
   | Z++
@@ -346,12 +346,12 @@ do_dig Me TargetXYZ =
 | DigGoal = $goal and $goal_act and $goal_act.name><dig
 | when Mark and world_dig $world X Y Z 2 (max $worker 1):
   | Mark.free
-  | Mark <= 0
+  | Mark == 0
   | ItemType = 0
   | ItemCount = 0
   | for It,Amount Cell.items: when $main.classes.It.ai><resource:
-    | ItemType <= It
-    | ItemCount <= Amount
+    | ItemType == It
+    | ItemCount == Amount
   | when ItemType:
     | ItemName = ItemType.drop{5}
     | $add_item{ItemType ItemCount}
@@ -377,7 +377,7 @@ do_dig Me TargetXYZ =
       | XYZ = Neib.xyz
       | when $owner.dig_mark{@XYZ}:
         | $order_at{XYZ act/dig}
-        | R <= 1
+        | R == 1
         | _goto loop_end
     | _label loop_end
     | R
@@ -405,7 +405,7 @@ effect build Where:
   | Cost = Tile.cost
   | TimeCost = 0
   | for K,V Cost:
-    if K><item_time then TimeCost <= V
+    if K><item_time then TimeCost == V
     else
     | Amount = Work.get_item{K}
     | when Amount < V:
@@ -420,7 +420,7 @@ effect build Where:
   | $sound{hammer}
   | when Work.hp < TimeCost: leave
   | Work.free
-  | Work <= No
+  | Work == No
   | when Tile.type><demolish:
     | Cell = $world.cell{X Y Z}
     | Room = (Cell-1).tile
@@ -443,7 +443,7 @@ effect build Where:
       | XYZ = Neib.xyz
       | when $owner.work_at{XYZ}:
         | $order_at{XYZ act/build}
-        | R <= 1
+        | R == 1
         | _goto loop_end
     | _label loop_end
     | R
@@ -458,12 +458,12 @@ effect mark TileType:
 | when no Tile: bad "effect mark: undefined tile `[TileType]`"
 | Work = $owner.alloc_unit{unit_build}
 | Work.move{X,Y,Z}
-| Work.hp <= 0
-| Work.kills <= TileType
-| Work.goal <= Work.unit_goal
+| Work.hp == 0
+| Work.kills == TileType
+| Work.goal == Work.unit_goal
 | Work.goal.xyz.init{X,Y,Z}
-| Work.goal_act <= $main.params.acts.build
-| Work.sprite <= $main.sprites.special_construction
+| Work.goal_act == $main.params.acts.build
+| Work.sprite == $main.sprites.special_construction
 | Work.animate{idle}
 
 effect set_tile [X Y Z] Type:
@@ -486,28 +486,28 @@ effect retile [X Y Z] Type:
 effect spawn What:
 | when What><pentagram:
   | L = $owner.leader
-  | What <= if L then L.pentagram else \special_pentagram
+  | What == if L then L.pentagram else \special_pentagram
 | S = $owner.alloc_unit{What}
-| S.nonguard <= 1
+| S.nonguard == 1
 | less S.alpha:
-  | S.alpha <= 255
-  | S.delta <= -50
+  | S.alpha == 255
+  | S.delta == -50
 | S.move{TargetXYZ}
 
 effect spawn_item ItemType Amount: $cell.add_item{ItemType Amount}
 
 effect drop ItemType Amount:
-| when ItemType><_: ItemType <= $action.type.drop{5}
+| when ItemType><_: ItemType == $action.type.drop{5}
 | MaxAmount = $get_item{ItemType}
-| when Amount><all: Amount <= MaxAmount
-| Amount <= min{MaxAmount Amount}
+| when Amount><all: Amount == MaxAmount
+| Amount == min{MaxAmount Amount}
 | $drop_item{ItemType Amount}
 
 effect take ItemType Amount:
-| when ItemType><_: ItemType <= $action.type.drop{5}
+| when ItemType><_: ItemType == $action.type.drop{5}
 | MaxAmount = $cell.get_item{ItemType}
-| when Amount><all: Amount <= MaxAmount
-| Amount <= min{MaxAmount Amount}
+| when Amount><all: Amount == MaxAmount
+| Amount == min{MaxAmount Amount}
 | $add_item{ItemType Amount}
 | $cell.add_item{ItemType -Amount}
 
@@ -519,17 +519,17 @@ effect morph ClassName:
 effect charm NewOwner:
 | XYZ = Target.xyz.deep_copy
 | Target.remove
-| Target.owner <= $owner
-| Target.colors <= $owner.colors
+| Target.owner == $owner
+| Target.colors == $owner.colors
 | Target.move{XYZ}
 
 effect child What Effects:
 | S = $owner.alloc_unit{What}
-| S.alpha <= 255
-| S.delta <= -50
+| S.alpha == 255
+| S.delta == -50
 | S.move{TargetXYZ}
-| S.host <= Target
-| S.host_serial <= Target.serial
+| S.host == Target
+| S.host_serial == Target.serial
 | for Name,Duration,Params Effects: S.add_effect{Name Duration Params}
 
 effect caster Who:
@@ -574,9 +574,9 @@ effect lore Amount:
 
 effect victory Player Reason:
 | WP = $world.params
-| when Player >< owner: Player <= $owner.id
-| WP.winner <= Player
-| WP.victory_type <= Reason
+| when Player >< owner: Player == $owner.id
+| WP.winner == Player
+| WP.victory_type == Reason
 
 effect align How:
 | less How><door: bad "effect align: cant [How]-align"
@@ -612,7 +612,7 @@ check_when Me Target C =
 
 unit.effect Effect Target XYZ =
 | when XYZ.2 >< -1: leave
-| case Effect [on,When @Es]: Effect <= Es
+| case Effect [on,When @Es]: Effect == Es
 | T = Target
 | when T.is_unit and T.id<>$id and $invisible:
   | $strip_effect{invisible}
@@ -620,7 +620,7 @@ unit.effect Effect Target XYZ =
 | Es = Effect.list
 | till Es.end
   | E = pop Es
-  | less E.is_list: E <= [E []]
+  | less E.is_list: E == [E []]
   | Name,Args = E
   | F = Effects.Name
   | if got F then F{Me T XYZ Args}
@@ -640,11 +640,11 @@ unit.effect Effect Target XYZ =
       | Speed = 2
       | case Args
          [T S O]
-           | Type <= T
-           | if S><height_div then Speed <= 1
-             else Speed <= S
-           | Offset <= O
-         T | Type <= T
+           | Type == T
+           | if S><height_div then Speed == 1
+             else Speed == S
+           | Offset == O
+         T | Type == T
       | S = $owner.alloc_unit{Type}
       | case Offset
         user | S.move{$xyz}
@@ -657,19 +657,19 @@ unit.effect Effect Target XYZ =
       | S.add_effect{missile 0 [[payload $id $serial Es]]}
       | Or = S.order
       | Or.init{missile |Target or XYZ}
-      | Or.priority <= 1500
+      | Or.priority == 1500
       | C = Speed.float*(XYZ-$xyz).abs*1.5
-      | Or.cycles <= @int C
-      | Es <= []
-    else if Name >< target then T <= Target
-    else if Name >< host then T <= $host
-    else if Name >< self then T <= Me
-    else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
+      | Or.cycles == @int C
+      | Es == []
+    else if Name >< target then T == Target
+    else if Name >< host then T == $host
+    else if Name >< self then T == Me
+    else if Name >< same_z then | XYZ == XYZ.deep_copy; XYZ.2 == Me.xyz.2
     else if Name >< pentagram then
      | P = $owner.pentagram
      | less P: leave
      | XYZ.init{P.xyz}
-     | Target <= P
+     | Target == P
     else if Name >< all_alive then
       | for U $world.active: when U.alive:
         | when U.ai><unit: $effect{Es U U.xyz}

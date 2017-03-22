@@ -1,26 +1,26 @@
 use bits
 
 type ai{player} world
-| $world <= $player.world
-| $params.view <= [0 0 0]
-| $params.cursor <= [0 0 1]
+| $world == $player.world
+| $params.view == [0 0 0]
+| $params.cursor == [0 0 1]
 
 ai.main = $player.main
 ai.params = $player.params
 
 ai.picked = $player.picked
-ai.`!picked` V = $player.picked <= V
+ai.`=picked` V = $player.picked == V
 
 ai.clear =
-| $params.aiType <= 'default'
-| $params.aiStep <= 0
-| $params.aiWait <= 0
-| $params.aiSpellWait <= 0  //hack to stop AI from spamming spells
-| $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
-| $params.aiLeaderHarmCycle <= -24*100000
-| $params.aiCastFlight <= 0
-| $params.aiCastFlightCycle <= -24*100000
-| $params.ai_spells <= []
+| $params.aiType == 'default'
+| $params.aiStep == 0
+| $params.aiWait == 0
+| $params.aiSpellWait == 0  //hack to stop AI from spamming spells
+| $params.difficulty == 5 // 0=easy, 5=normal, 10=hard
+| $params.aiLeaderHarmCycle == -24*100000
+| $params.aiCastFlight == 0
+| $params.aiCastFlightCycle == -24*100000
+| $params.ai_spells == []
 
 type player{id world}
    name
@@ -41,24 +41,24 @@ type player{id world}
    stone
    iron
    houses
-| $unit_counts <= dup 300 //FIXME: should not be hardcoded
-| $name <= if $id >< 0 then "Independents" else "Player[$id]"
-| $params <= t
+| $unit_counts == dup 300 //FIXME: should not be hardcoded
+| $name == if $id >< 0 then "Independents" else "Player[$id]"
+| $params == t
 | MaxSize = $world.maxSize
-| $sight <= dup MaxSize: MaxSize.bytes
-| $ai <= ai Me
+| $sight == dup MaxSize: MaxSize.bytes
+| $ai == ai Me
 | Cs = $main.img{ui_colors}
-| when $id<Cs.h: $colors <= map I 5: Cs.get{I $id}
+| when $id<Cs.h: $colors == map I 5: Cs.get{I $id}
 | $clear
 
 player.picked = $picked_.unheap{}.keep{?0><?1.serial}{?1}.skip{?removed}
 
-player.`!picked` Us =
-| for U $picked_: U.1.picked <= 0
-| for U Us: U.picked <= 1
+player.`=picked` Us =
+| for U $picked_: U.1.picked == 0
+| for U Us: U.picked == 1
 | Us = Us{[?serial ?]}.enheap
 | $picked_.heapfree
-| $picked_ <= Us
+| $picked_ == Us
 
 player.is_enemy P = $id <> P.id
 
@@ -69,10 +69,10 @@ player.notify Text =
 player.main = $world.main
 
 player.researching = $params.researching
-player.`!researching` R = $params.researching <= R
+player.`=researching` R = $params.researching == R
 
 player.lore = $params.lore
-player.`!lore` R = $params.lore <= R
+player.`=lore` R = $params.lore == R
 
 player.explore State =
 | when State
@@ -89,24 +89,24 @@ player.explored X,Y,Z = $sight.Y.X
 
 player.clear =
 | for Xs $sight: Xs.clear{3}
-| $total_units <= 0
+| $total_units == 0
 | $unit_counts.clear{0}
 | $ai.clear
-| $picked <= []
-| $leader <= 0
-| $pentagram <= 0
-| $researching <= 0
-| $mana <= 0
-| $lore <= 0
-| $params.lossage <= 0
-| $params.mana <= 0
-| $params.libs_left <= 0
-| $params.temples_left <= 0
-| for Type,Act $main.params.acts: $research.Type <= 0
+| $picked == []
+| $leader == 0
+| $pentagram == 0
+| $researching == 0
+| $mana == 0
+| $lore == 0
+| $params.lossage == 0
+| $params.mana == 0
+| $params.libs_left == 0
+| $params.temples_left == 0
+| for Type,Act $main.params.acts: $research.Type == 0
 
 player.init StartMana StartLore =
-| $lore <= StartLore
-| $mana <= StartMana
+| $lore == StartLore
+| $mana == StartMana
 | $reset_counters
 
 player.got_unit U =
@@ -120,11 +120,11 @@ player.lost_unit U =
 | when CID:
   | $unit_counts.CID--
   | $total_units--
-| when U.ai >< pentagram: $pentagram <= 0
+| when U.ai >< pentagram: $pentagram == 0
 
 player.research_item What =
 | Act = $main.params.acts.What
-| $research.What <= Act.lore
+| $research.What == Act.lore
 | $notify{"Acquired [Act.title]"}
 
 player.research_remain Act =
@@ -158,10 +158,10 @@ update_spell_of_mastery Me P =
 | when got SOM:
   | SOM--
   | less SOM > 0:
-    | $params.winner <= P.id
-    | $params.victory_type <= 'Victory by casting the Spell of Mastery'
+    | $params.winner == P.id
+    | $params.victory_type == 'Victory by casting the Spell of Mastery'
     | leave
-  | P.params.spell_of_mastery <= SOM
+  | P.params.spell_of_mastery == SOM
 
 //FIXME:calculate income per second here
 update_income Me =
@@ -183,8 +183,8 @@ player.update =
 | TempleId = $main.classes.deco_templepit.id
 | LibCount = $unit_counts.LibId
 | TempleCount = $unit_counts.TempleId
-| $params.libs_left <= LibCount
-| $params.temples_left <= TempleCount
+| $params.libs_left == LibCount
+| $params.temples_left == TempleCount
 | when Cycle><0 and $human and $leader:
   | $world.view.center_at{$leader.xyz cursor/1}
 | update_units Me
@@ -206,7 +206,7 @@ player.work_at XYZ =
 
 player.add_item Name Amount =
 | when Amount > 0: bad "player.remove_item implement positive amount"
-| Amount <= -Amount
+| Amount == -Amount
 | Piles = []
 | for U $units: when U.ai><flag: 
   | Available = U.cell.get_item{Name}
@@ -231,7 +231,7 @@ player.capture Cell = //captures room pointer by a cell
   | D = T.units.find{?type><DecoType}
   | when got D and D.owner.id<>$id:
     | D.change_owner{Me}
-    | D.colors <= $colors
+    | D.colors == $colors
 | 1
 
 export player

@@ -17,7 +17,7 @@ cast_spell_sub Me Spell Force =
 | less Spell and got Spell: leave 0
 | Act = Spell
 | when Act.is_text:
-  | Act <= $main.params.acts.Spell
+  | Act == $main.params.acts.Spell
   | when no Act: bad "AI: cant find spell `[Spell]`"
 | Hint = Act.hint
 | when Hint<>boost and Hint<>harm: less Force: leave 0
@@ -29,16 +29,16 @@ cast_spell_sub Me Spell Force =
     else $world.targets_in_range{Me.xyz Act.range}
 | Ts = Targets.skip{?empty}.keep{?alive}
 | if Hint><harm
-  then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}
-  else Ts <= Ts.skip{U=>U.owner.is_enemy{$owner}}
+  then Ts == Ts.keep{U=>U.owner.is_enemy{$owner}}
+  else Ts == Ts.skip{U=>U.owner.is_enemy{$owner}}
 | when Act.affects<>unit:
   | case Act.affects [[@As] _]
     | for A As: case A
-      non_leader | Ts <= Ts.skip{?leader><1}
-      outdoor | Ts <= Ts.keep{U => $world.outdoor{U.xyz}}
+      non_leader | Ts == Ts.skip{?leader><1}
+      outdoor | Ts == Ts.keep{U => $world.outdoor{U.xyz}}
 | for Flag Act.flags //avoid overriding
   | FlagN = getUnitFlagsTable{}.Flag
-  | when got FlagN: Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
+  | when got FlagN: Ts == Ts.skip{T => T.flags^get_bit{FlagN}}
 | less Ts.size: leave 0
 | Target = Ts.0
 | Cost = Act.cost
@@ -59,14 +59,14 @@ cast_spell Me =
     | when cast_pentagram Me: leave 1
   | when PP.aiCastFlight:
     | when cast_spell_sub{Me cast_flight 1}:
-      | PP.aiCastFlight <= 0 //wake up all units that previously could reach goal
+      | PP.aiCastFlight == 0 //wake up all units that previously could reach goal
       | leave 1
   | Cycle = $world.cycle
   | when PP.aiSpellWait>>Cycle /*and Cycle>10000*/: leave 0
   | for Act PP.ai_spells
     | when cast_spell_sub{Me Act 0}:
       | D = max 1 10-PP.difficulty
-      | PP.aiSpellWait <= Cycle+D*24
+      | PP.aiSpellWait == Cycle+D*24
       | leave 1
   | leave 0
 | for Act Acts: when cast_spell_sub{Me Act 0}: leave 1
@@ -112,18 +112,18 @@ roam Me =
       | Block = Dst.block
       | if AI><unit and Block and Owner.is_enemy{Block.owner}
            and not Block.invisible then
-           | MoveIn <= 1
+           | MoveIn == 1
         else if AI><hold and not Block and no Vs.find{?ai><unhold}
-           then MoveIn <= 1
+           then MoveIn == 1
         else if AI><pentagram and Owner.is_enemy{V.owner} then
-           | when not Block or Owner.is_enemy{Block}: MoveIn <= 1
+           | when not Block or Owner.is_enemy{Block}: MoveIn == 1
         else if AI><avoid and not Block then //FIXME: blocking code is broken
            | block Dst.xyz
-           | MoveIn <= \block
+           | MoveIn == \block
            | _goto end 
         else if AI><block then
-           | MoveIn <= \block
-           | MoveIn <= 0
+           | MoveIn == \block
+           | MoveIn == 0
            | _goto end 
         else
   | _label end
@@ -133,16 +133,16 @@ roam Me =
   | free_blockers
   | leave 0
 | TargetXYZ = TargetNode.xyz
-| $backtrack <= 0
+| $backtrack == 0
 | $order_at{TargetXYZ}
 | leave 1
 
 ai_cast_flight Me =
 | PP = $owner.params
 | less PP.aiCastFlightCycle+(60*24*4)<$world.cycle: leave 0
-| PP.aiCastFlightCycle <= $world.cycle
+| PP.aiCastFlightCycle == $world.cycle
 | when no PP.ai_spells.find{cast_flight}: leave 0 //are we allowed to fly?
-| PP.aiCastFlight <= 1
+| PP.aiCastFlight == 1
 | 1
 
 ai_cast_teleport Me U =
@@ -159,8 +159,8 @@ ai_cast_teleport Me U =
 ai.update_units =
 | Units = OwnedUnits
 | when $player.params.attack_with_guards >< 1:
-  | for U Units: U.attacker <= 1
-  | $player.params.attack_with_guards <= 0
+  | for U Units: U.attacker == 1
+  | $player.params.attack_with_guards == 0
 | Pentagram = $player.pentagram
 | when Pentagram and Pentagram.idle and $player.mana>500: ai_update_build Me
 | for U Units:
@@ -168,23 +168,23 @@ ai.update_units =
   | less Handled: if U.idle and not U.goal then
      | when U.ai_wait:
        | U.ai_wait-=10 //ai.update_units gets called every 10th cycle
-       | Handled <= 1
+       | Handled == 1
      | less Handled:
        | Attacker = U.combat and U.attacker
        | when Attacker:
          | Os = U.world.units_get{U.xyz}
          | when no Os.find{?ai><hold} or got Os.find{?ai><unhold}:
            | less U.flyer: when ai_cast_flight U:
-             | U.ai_wait <= 40
-             | Handled <= 1
+             | U.ai_wait == 40
+             | Handled == 1
            | less Handled:
-             | Handled <= roam U
+             | Handled == roam U
              | less Handled:
                | less ai_cast_teleport Me U:
                  | CD = U.cooldown_of{cast_teleport}
                  | W = if CD then CD.0 else 0
-                 | when W<<0: W <= 1000
-                 | U.ai_wait <= W
+                 | when W<<0: W == 1000
+                 | U.ai_wait == W
     else
      | when U.type><unit_spider and U.goal.is_unit: //FIXME: hack
        | G = U.goal
@@ -218,13 +218,13 @@ ai_leader_harmed Me Attacker Victim =
   | leave
 | Bonus = max 0 LHC
 | $player.mana += (Cycle-Bonus)/24*$main.params.ai.leader_defense_bonus
-| $params.aiLeaderHarmCycle <= Cycle
+| $params.aiLeaderHarmCycle == Cycle
 | for U OwnedUnits: when U.id <> Victim.id: when U.speed:
-  | U.attacker <= 1
+  | U.attacker == 1
   | U.order_act{recall target/U}
 
 ai.harm Attacker Victim =
-| Victim.ai_wait <= 0
+| Victim.ai_wait == 0
 | when Victim.leader><1: ai_leader_harmed Me Attacker Victim
 
 ai.group_attack Types =
@@ -236,10 +236,10 @@ ai.group_attack Types =
   if UTs.T^~{[]}.size then push UTs.T^pop As
   else push T Missing
 | when Missing.size:
-  | PerCycle.missing <= Missing.flip
+  | PerCycle.missing == Missing.flip
   | leave 0
-| PerCycle.missing <= No
-| for A As: A.attacker <= 1
+| PerCycle.missing == No
+| for A As: A.attacker == 1
 | leave 1
 
 ai.script =
@@ -255,27 +255,27 @@ ai.script =
   | leave 0
 | AISteps = AISteps.tail
 | less AIStep<AISteps.size:
-  | AIStep <= 0
-  | PParams.aiStep <= 0
+  | AIStep == 0
+  | PParams.aiStep == 0
 | Command = AISteps.AIStep
 | case Command
   [attack @Types]
     | less $group_attack{Types{"unit_[?]"}}: leave 0
     | PParams.aiStep++
   [wait Cycles]
-    | PParams.aiWait <= $world.cycle+Cycles
+    | PParams.aiWait == $world.cycle+Cycles
     | PParams.aiStep++
   [goto NewAIType when @Condition]
     | if case Condition [[`>>` lossage X]]
               Player.params.lossage+PParams.difficulty*2>>X
-      then | PParams.aiType <= NewAIType
-           | PParams.aiStep <= 0
+      then | PParams.aiType == NewAIType
+           | PParams.aiStep == 0
       else | PParams.aiStep++
   [goto NewAIType]
-    | PParams.aiType <= NewAIType
-    | PParams.aiStep <= 0
+    | PParams.aiType == NewAIType
+    | PParams.aiStep == 0
   [set Var Value]
-    | PParams.Var <= Value
+    | PParams.Var == Value
     | PParams.aiStep++
   Else
     | bad 'invalid AI command: [Command]'
@@ -283,23 +283,23 @@ ai.script =
 
 ai_update Me =
 | Player = $player
-| Player.lore <= 90000
+| Player.lore == 90000
 | when Player.id: while $script><1:
 | $update_units
 
 ai.update =
-| PerCycle <= t
+| PerCycle == t
 | Player = $player
-| SeenUnits <= $world.active.list.keep{U=>Player.seen{U.xyz}}
+| SeenUnits == $world.active.list.keep{U=>Player.seen{U.xyz}}
                      .keep{(?unit and not ?removed)}
 | PID = Player.id
-| OwnedUnits <= SeenUnits.keep{?owner.id><PID}
-| SeenEnemies <= SeenUnits.keep{?owner.is_enemy{Player}}.skip{?invisible}
+| OwnedUnits == SeenUnits.keep{?owner.id><PID}
+| SeenEnemies == SeenUnits.keep{?owner.is_enemy{Player}}.skip{?invisible}
 | ai_update Me
-| SeenUnits <= 0
-| OwnedUnits <= 0
-| SeenEnemies <= 0
-| PerCycle <= 0
+| SeenUnits == 0
+| OwnedUnits == 0
+| SeenEnemies == 0
+| PerCycle == 0
 
 
 export

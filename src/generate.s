@@ -18,7 +18,7 @@ room.draw W SX SY SZ =
   | Tile = case C '+'(Bricks) '.'(Wall) Else(Void)
   | when Tile.id: W.dirty_set{SX+X SY+Y SZ Tile}
 
-Rooms <= map R Rooms
+Rooms == map R Rooms
          | Ls = R.skip{' '}.lines
          | W = Ls.0.size
          | H = Ls.size
@@ -27,8 +27,8 @@ Rooms <= map R Rooms
 
 world.generate W H =
 | $clear
-| $w <= W
-| $h <= H
+| $w == W
+| $h == H
 | for P points{0 0 $w $h}: $push_{P $filler}
 | Rooms.0.draw{Me 1 1 1}
 | Rooms.0.draw{Me 1 1 5}

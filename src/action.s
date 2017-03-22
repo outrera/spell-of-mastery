@@ -14,20 +14,20 @@ move_start Me =
 | U = $unit
 | when $xyz><U.xyz:
   | $toXYZ.init{U.fxyz}
-  | $cycles <= 0
+  | $cycles == 0
   | leave
 | X,Y,Z = $xyz - U.xyz
 | $fromXYZ.init{U.fxyz}
 | U.move{$xyz}
 | $toXYZ.init{U.fxyz}
 | U.fxyz.init{$fromXYZ}
-| U.facing <= Dirs.locate{X,Y}
+| U.facing == Dirs.locate{X,Y}
 | when U.anim<>move: U.animate{move}
-| $cycles <= U.speed
-| when U.slowed: $cycles <= U.speed*2
-| when U.hasted: $cycles <= max 2 U.speed/2
-| when X >< -Y: $cycles <= max 1 $cycles*3/2
-| $start_cycles <= $cycles
+| $cycles == U.speed
+| when U.slowed: $cycles == U.speed*2
+| when U.hasted: $cycles == max 2 U.speed/2
+| when X >< -Y: $cycles == max 1 $cycles*3/2
+| $start_cycles == $cycles
 | Effect = U.class.moves
 | when Effect: U.effect{Effect U U.xyz}
 
@@ -57,8 +57,8 @@ dact missile.start
 | U.move{$xyz}
 | $toXYZ.init{U.fxyz}
 | U.fxyz.init{$fromXYZ}
-| less $cycles: $cycles <= 1
-| $start_cycles <= $cycles
+| less $cycles: $cycles == 1
+| $start_cycles == $cycles
 
 dact missile.update
 | U = $unit
@@ -69,7 +69,7 @@ dact missile.finish
 | U = $unit
 | _,UId,USerial,Es = U.get_effect_value{missile}.0
 | Source = U.world.units.UId
-| less Source.serial >< USerial: Source <= $world.nil
+| less Source.serial >< USerial: Source == $world.nil
 | Source.effect{Es $target $xyz}
 | U.free
 
@@ -80,11 +80,11 @@ player_lost_leader Me Leader =
   | when U.leader><1: push U Leaders
   | when U.owner.id >< $id: push U RemainingUnits
 | case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
-  | $world.params.winner <= L.owner.id
-  | $world.params.victory_type <= 'Victory by defeating other leaders.'
+  | $world.params.winner == L.owner.id
+  | $world.params.victory_type == 'Victory by defeating other leaders.'
 | when Leader.owner.human: less Leaders.any{?owner.human}:
-  | $world.params.winner <= 0
-  | $world.params.victory_type <= 'Defeat by losing your leader.'
+  | $world.params.winner == 0
+  | $world.params.victory_type == 'Defeat by losing your leader.'
 | $world.notify{"[$name] was defeated."}
 | less RemainingUnits.any{?leader><1}: for U RemainingUnits: U.free
 
@@ -96,18 +96,18 @@ respawn_leader Me XYZ =
 | $owner.mana -= Cost
 | $owner.notify{"death cost you [Cost] mana"}
 | when got $owner.params.spell_of_mastery:
-  | $owner.params.spell_of_mastery <= No
+  | $owner.params.spell_of_mastery == No
   | $owner.notify{"Your Spell of Mastery was broken!"}
 | S = Me
 | S.strip_effect{poison}
 | S.strip_effect{flight}
-| S.backtrack <= 0
+| S.backtrack == 0
 | S.reset_goal
 | S.reset_followers
-| S.hp <= S.class.hp
-| S.nonguard <= 0
-| S.alpha <= 255
-| S.delta <= -25
+| S.hp == S.class.hp
+| S.nonguard == 0
+| S.alpha == 255
+| S.delta == -25
 | $world.effect{$xyz teleport}
 | S.move{XYZ}
 | when $owner.human:
@@ -121,7 +121,7 @@ dact die.start
 | U.animate{death}
 | less not (U.class.hp-U.hp)>0 or got U.sprite.anims.death:
   | U.free
-  | $cycles <= 1000
+  | $cycles == 1000
 
 dact die.finish
 | U = $unit
@@ -145,10 +145,10 @@ dact swap.start
 | O = T.order
 | less T.path.end: T.set_path{[T.cell @T.path.list]}
 | O.init{move U.from}
-| O.priority <= 100
+| O.priority == 100
 | less T.goal: less U.goal and U.goal.xyz >< T.xyz:
   | less T.has{btrack}:
-    | T.backtrack <= T.xyz
+    | T.backtrack == T.xyz
 
 dact swap.update | move_update Me
 
@@ -162,7 +162,7 @@ custom_valid Me =
 | Affects = $affects
 | when Affects.is_list and Affects.0.is_list:
   | Ms = Affects.0
-  | Affects <= Affects.1
+  | Affects == Affects.1
   | for Mod Ms
     | if Mod >< outdoor then
         | less $unit.world.outdoor{$xyz}: leave 0
@@ -248,37 +248,37 @@ action.after = $act.after
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 action.init Act Target =
-| $type <= if Act.is_text then Act else Act.name
+| $type == if Act.is_text then Act else Act.name
 | XYZ = if Target.is_list then Target
         else if Target then Target.xyz
         else $unit.xyz
 | $xyz.init{XYZ}
-| $target <= if Target.is_list then 0 else Target
+| $target == if Target.is_list then 0 else Target
 | A = Acts.$type
 | if got A then
-    | $act <= 0
-    | $range <= 1
-    | $cycles <= 4
-    | $priority <= 50
-    | $act_init <= A.init
-    | $act_valid <= A.valid
-    | $act_start <= A.start
-    | $act_update <= A.update
-    | $act_finish <= A.finish
+    | $act == 0
+    | $range == 1
+    | $cycles == 4
+    | $priority == 50
+    | $act_init == A.init
+    | $act_valid == A.valid
+    | $act_start == A.start
+    | $act_update == A.update
+    | $act_finish == A.finish
   else
-    | $act <= if Act.is_text then $main.params.acts.$type else Act
+    | $act == if Act.is_text then $main.params.acts.$type else Act
     | less got $act:
       | bad "unknown action type [$type]"
       | $init{idle 0}
       | leave
-    | $range <= $act.range
-    | $cycles <= $act.speed
-    | $priority <= $act.priority
-    | $act_init <= &custom_init
-    | $act_valid <= &custom_valid
-    | $act_start <= &custom_start
-    | $act_update <= &custom_update
-    | $act_finish <= &custom_finish
+    | $range == $act.range
+    | $cycles == $act.speed
+    | $priority == $act.priority
+    | $act_init == &custom_init
+    | $act_valid == &custom_valid
+    | $act_start == &custom_start
+    | $act_update == &custom_update
+    | $act_finish == &custom_finish
 | $act_init{}{Me}
 | Me
 

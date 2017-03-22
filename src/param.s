@@ -6,12 +6,12 @@ load_params2 File =
 | map Key,Value Xs{?1.0,?2.0}
   | case Value
     [`,` A B]
-      | Value <= Value^| @r [`,` A B] => [@A^r B]
+      | Value == Value^| @r [`,` A B] => [@A^r B]
                        | X => [X]
-      | Value <= Value{(normalize_curly ?)}
+      | Value == Value{(normalize_curly ?)}
     [`{}` Name Args @Rest]
-      | Value <= normalize_curly Value
-      | Value <= [Value]
+      | Value == normalize_curly Value
+      | Value == [Value]
     Else | Value
   | Key,Value
 
@@ -26,12 +26,12 @@ load_params Folder =
     | Params = RootParams.deep_copy
     | KVs = load_params2 "[BankFolder][Name].txt"
     | case KVs
-      [[proto _] @_] | Params <= KVs.table
-      Else | Params <= RootParams.deep_copy
-           | for K,V KVs: Params.K <= V
-    | Params.bank <= BankName
-    | Params.name <= Name
-    | Params.filepath <= "[BankFolder][Name]"
+      [[proto _] @_] | Params == KVs.table
+      Else | Params == RootParams.deep_copy
+           | for K,V KVs: Params.K == V
+    | Params.bank == BankName
+    | Params.name == Name
+    | Params.filepath == "[BankFolder][Name]"
     | Name,Params
   | BankName,Bank
 
@@ -41,13 +41,13 @@ extract_params_authors Params =
   | Author = Item.author
   | Origin = Item.origin
   | when got Author:
-    | /*when no Origin:*/ Origin <= "[BankName]/[Name]"
-    | less Author.is_list: Author <= [Author]
-    | less Origin.is_list: Origin <= [Origin]
+    | /*when no Origin:*/ Origin == "[BankName]/[Name]"
+    | less Author.is_list: Author == [Author]
+    | less Origin.is_list: Origin == [Origin]
     | for A Author
-      | when no Authors.A: Authors.A <= []
+      | when no Authors.A: Authors.A == []
       | for O Origin: push O Authors.A
-| for K,V Authors: Authors.K <= V.uniq
+| for K,V Authors: Authors.K == V.uniq
 | Authors
 
 params_handle_vars Me =
@@ -56,18 +56,18 @@ params_handle_vars Me =
   | case Value [`.` SPName SKey]
     | less got Main.SPName and got Main.SPName.SKey:
       | bad "[BName]/[PName].txt/[Key]: missing main/[SPName].txt/[SKey]"
-    | $params.BName.PName.Key <= Main.SPName.SKey
+    | $params.BName.PName.Key == Main.SPName.SKey
 
 params_handle_prototypes Me =
 | for BName,Bank $params: for PName,Params Bank: when got Params.proto:
   | SBName = BName
   | SPName = Params.proto
   | case SPName B,P:
-    | SBName <= B
-    | SPName <= P
+    | SBName == B
+    | SPName == P
   | Proto = $params.SBName.SPName.deep_copy
-  | for K,V Params: less K><proto: Proto.K <= V
-  | Bank.PName <= Proto
+  | for K,V Params: less K><proto: Proto.K == V
+  | Bank.PName == Proto
 
 type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
          lore/0 cost/0 cool/0 needs/[]
@@ -100,20 +100,20 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   before_table
   after_table
   icon_gfx //icon graphics for fast access
-| $before_table <= $before.table
-| $after_table <= $after.table
-| when $cool>0: $before <= [@$before [cool $cool]]
-| less $title: $title <= $name.replace{_ ' '}
+| $before_table == $before.table
+| $after_table == $after.table
+| when $cool>0: $before == [@$before [cool $cool]]
+| less $title: $title == $name.replace{_ ' '}
 | Flags = []
 | for E [@$before @$after]: case E [add_effect [Name Dur As]]: push Name Flags
-| $flags <= Flags
+| $flags == Flags
 
 params_handle_acts Me =
 | Acts = $params.acts
-| for Name,Act Acts: Acts.Name <= act Name @Act.list.join
+| for Name,Act Acts: Acts.Name == act Name @Act.list.join
 
 main.load_params =
-| $params <= load_params "[$data]params/"
+| $params == load_params "[$data]params/"
 | params_handle_vars Me
 | params_handle_prototypes Me
 | params_handle_acts Me

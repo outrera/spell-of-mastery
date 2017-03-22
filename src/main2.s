@@ -20,9 +20,9 @@ type main{Data}
      credits
      effect
 | enheap_init 64000
-| $credits <= t
+| $credits == t
 | $load_params
-| for K,V $params.main: $params.K <= V
+| for K,V $params.main: $params.K == V
 | $load_sprites
 | $load_sounds
 | $load_tiles
@@ -30,17 +30,17 @@ type main{Data}
 | for K,V $params.acts: less V.icon_gfx:
   | IName = V.icon
   | IName = if IName.is_text then "icons_[IName]" else IName.1
-  | V.icon_gfx <= $img{IName}
-| $tid_map <= dup $last_tid+1 0
-| for [Type Tile] $tiles: $tid_map.(Tile.id) <= Tile
-| $bank_names <= $classes{}{?1}{?bank}.uniq.sort
-| $classes_banks <= @table: map N $bank_names
+  | V.icon_gfx == $img{IName}
+| $tid_map == dup $last_tid+1 0
+| for [Type Tile] $tiles: $tid_map.(Tile.id) == Tile
+| $bank_names == $classes{}{?1}{?bank}.uniq.sort
+| $classes_banks == @table: map N $bank_names
   | N,$classes{}{?1}.keep{(?bank >< N and not ?aux)}{?class_name}.sort
 | GCredits = $credits.graphics.list.sort{?0<??0}
 | SCredits = $credits.sound.list.sort{?0<??0}
 | GCreditsT = @text: map K,Vs GCredits: "  [K]\n"
 | SCreditsT = @text: map K,Vs SCredits: "  [K]\n"
-| $credits <= @text:
+| $credits == @text:
               ["SPELL OF MASTERY CREDITS\n\n"
                "Designed and Programmed by Nikita Sadkov\n\n\n"
                "GRAPHICS:\n" GCreditsT

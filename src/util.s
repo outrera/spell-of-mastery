@@ -32,8 +32,8 @@ points_in_matrix Ms =
 normalize_curly E =
 | case E
   [`{}` Name Args @Rest]
-    | if Rest.size then Args <= [Args @Rest]
-      else case Args [`,` @_]: Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
+    | if Rest.size then Args == [Args @Rest]
+      else case Args [`,` @_]: Args == Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
     | [Name Args]
   Else | E
 
