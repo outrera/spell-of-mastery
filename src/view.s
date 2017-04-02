@@ -34,19 +34,19 @@ type view.widget{M UI W H}
   zunit
   d //cell edge size
   keymap
-| $keymap == $main.params.keymap
-| $fpsGoal == $main.params.ui.fps
-| $fpsD == $fpsGoal.float+8.0
-| $param == $main.params.ui
+| $keymap <= $main.params.keymap
+| $fpsGoal <= $main.params.ui.fps
+| $fpsD <= $fpsGoal.float+8.0
+| $param <= $main.params.ui
 | Wr = $world
-| Wr.view == Me
+| Wr.view <= Me
 | WParam = $main.params.world
 | TS = WParam.tile_size
-| $xunit == TS.0
-| $yunit == TS.1
-| $zunit == TS.2
-| $d == WParam.cell_size
-| $fpsT == clock
+| $xunit <= TS.0
+| $yunit <= TS.1
+| $zunit <= TS.2
+| $d <= WParam.cell_size
+| $fpsT <= clock
 
 view.key Name =
 | K = $keymap.Name
@@ -54,31 +54,31 @@ view.key Name =
 
 view.key_set Name Value =
 | K = $keymap.Name
-| $keys.K == Value
+| $keys.K <= Value
 
 view.paused = $world.paused
-view.`=paused` V = $world.paused == V
+view.`=paused` V = $world.paused <= V
 
 view.player = $world.human //view deals with human player
 
 view.picked = $player.picked
-view.`=picked` Us = $player.picked == Us
+view.`=picked` Us = $player.picked <= Us
 
 view.clear =
-| $zlock == 0
-| $zfix == 1
+| $zlock <= 0
+| $zfix <= 1
 | $center_at{[0 0 0]}
 | $blit_origin.init{[$w/2 $h/2-170]-[32 $view_size/4*$zunit]}
 | $mice_xy.init{[0 0]}
 | $mice_xy_anchor.init{[0 0]}
 | $cursor.init{[1 1 1]}
 | $anchor.init{[1 1 1]}
-| $mice_click == 0
-| $pick_count == 0
+| $mice_click <= 0
+| $pick_count <= 0
 | Leader = $player.units.find{?leader}
 | when got Leader: $center_at{Leader.xyz}
-| $zlock == $world.params.view_zlock
-| when no $zlock: $zlock == $world.d-2
+| $zlock <= $world.params.view_zlock
+| when no $zlock: $zlock <= $world.d-2
 
 view.center_at XYZ cursor/0 =
 | X,Y,Z = XYZ
@@ -86,7 +86,7 @@ view.center_at XYZ cursor/0 =
 | Y = Y.clip{1 $world.h}
 | Z = Z.clip{1 $world.d}
 | $center.init{X,Y,Z}
-| when Cursor: $zlock == Z
+| when Cursor: $zlock <= Z
 | when Cursor: $cursor.init{X,Y,Z}
 | VO = -[$h/$yunit $h/$yunit]+[X Y]-[Z/$zunit Z/$zunit]+[6 6]
 | when Z > 31: VO += [2 2] //hack to improve high altitude centering
@@ -106,8 +106,8 @@ view.infoline =
   | U = Us.0
   | S = U.title
   | when U.goal:
-    | S == "[S] ([U.goal_act.name] at [U.goal.xyz])"
-  | Text == "[Text]; [S]"
+    | S <= "[S] ([U.goal_act.name] at [U.goal.xyz])"
+  | Text <= "[Text]; [S]"
 | Text
 
 export view

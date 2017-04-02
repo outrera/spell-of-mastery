@@ -17,9 +17,9 @@ Unexplored = 0
 draw_text FB X Y Msg =
 | Font = font small
 | ZB = FB.zbuffer
-| FB.zbuffer == 0
+| FB.zbuffer <= 0
 | Font.draw{FB X Y Msg}
-| FB.zbuffer == ZB
+| FB.zbuffer <= ZB
 
 type blit_item{object x y z x2 y2 z2}
   id
@@ -137,7 +137,7 @@ draw_picked_rects FB PickedRects =
 | for [RX RY RW RH],Me PickedRects
   //| FB.rectangle{#FFFFFF 0 RX RY RW RH}
   | less PickCorner:
-    | PickCorner == $main.img{ui_picked_corner}
+    | PickCorner <= $main.img{ui_picked_corner}
   | PW = PickCorner.w
   | PH = PickCorner.h
   | FB.blit{RX RY PickCorner}
@@ -196,22 +196,22 @@ render_cursor Me Wr BX BY CursorXYZ =
   | T = Cell.tile
   | TH = T.height
   | Cell += TH
-  | when G.is_list: G == G.((Wr.cycle/T.anim_wait)%G.size)
-  | UnitZ == Z + TH
+  | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
+  | UnitZ <= Z + TH
   | TH = T.height
   | ZZ = Z*ZUnit
   | GH = if G then G.h else YUnit
   | B = make_blit_item X*CS-2 Y*CS-2 Z*CS CS2 CS2 TH*CS
                        special_blit{box_back}
-  | B.sx == BX
-  | B.sy == BY-GH-ZZ
+  | B.sx <= BX
+  | B.sy <= BY-GH-ZZ
   | push B BlitItems
   | B = make_blit_item X*CS Y*CS Z*CS+2 CS2 CS2 TH*CS
                        special_blit{box_front}
-  | B.sx == BX
-  | B.sy == BY-GH-ZZ
+  | B.sx <= BX
+  | B.sy <= BY-GH-ZZ
   | push B BlitItems
-  | Z == UnitZ
+  | Z <= UnitZ
 
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
@@ -233,7 +233,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | LY = LY.clip{-127 127}
 | SkipZ = -1//if $brush.0 then -1 else 0
 | Us = Wr.column_units_get{X Y}
-| when Fog: Us == Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
+| when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
 //| draw_text FB BX+XUnit2 BY-ZUnit*Z-20 "[Explored]"
 | for U Us:
   | if U.frame.w > 1 then
@@ -245,15 +245,15 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | B = blit_item_from_unit U
         | FX,FY,FZ = U.fxyz
         | BX,BY = ScreenXY + to_iso{FX FY FZ}
-        | B.sx == BX - XUnit2
-        | B.sy == BY
-        | B.lx == LX
-        | B.ly == LY
-        | B.brighten == if DrawMark and not U.active then 100 else Br
+        | B.sx <= BX - XUnit2
+        | B.sy <= BY
+        | B.lx <= LX
+        | B.ly <= LY
+        | B.brighten <= if DrawMark and not U.active then 100 else Br
         | push B BlitItems
     else if not U.xyz.2 and U.type><unit_dig
             and U.owner.id><$world.human.id then
-     | DrawMark == 1 //marked for excavation
+     | DrawMark <= 1 //marked for excavation
     else
 | Cell = Wr.cell{X Y 0}
 | EndZ = min RoofZ Wr.height{X Y}
@@ -263,35 +263,35 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
   | TH = T.height
   | Cell += TH
   | ZZ = Z*ZUnit
-  | when G.is_list: G == G.((Wr.cycle/T.anim_wait)%G.size)
-  | UnitZ == Z + TH
+  | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
+  | UnitZ <= Z + TH
   | TZ = UnitZ - 1
   | less T.invisible
     | G = G
     | if AboveCursor or TZ << ZCut then
       else if not DrawnFold then
-        | DrawnFold == 1
-        | G == Folded
-      else G == 0
+        | DrawnFold <= 1
+        | G <= Folded
+      else G <= 0
     | when G and Z>SkipZ:
       | Box = T.box
       | B = make_blit_item X*CS Y*CS Z*CS Box.0 Box.1 Box.2 T
-      | B.data == G
-      | B.sx == BX
-      | B.sy == BY-G.h-ZZ
-      | B.lx == LX
-      | B.ly == LY
-      | B.brighten == if DrawMark then 100 else Br
-      //| B.brighten == LM.at{X Y Z}
-      | when Fog: B.flags == #40 //dither
+      | B.data <= G
+      | B.sx <= BX
+      | B.sy <= BY-G.h-ZZ
+      | B.lx <= LX
+      | B.ly <= LY
+      | B.brighten <= if DrawMark then 100 else Br
+      //| B.brighten <= LM.at{X Y Z}
+      | when Fog: B.flags <= #40 //dither
       | push B BlitItems
-  | Z == UnitZ
+  | Z <= UnitZ
 
 render_unexplored Me Wr X Y BX BY =
 | B = make_blit_item X*CS Y*CS 0 CS2 CS2 CS gfx_item{}
-| B.data == Unexplored
-| B.sx == BX
-| B.sy == BY-$zunit-Unexplored.h
+| B.data <= Unexplored
+| B.sx <= BX
+| B.sy <= BY-$zunit-Unexplored.h
 | push B BlitItems
 
 // still needs true 3d pipeline interpolate xyz across texture
@@ -299,21 +299,21 @@ view_to_z X Y Z = (X+Y+Z)*-256 + Z
 
 view.render_iso =
 | Wr = $world
-| BlitItems == []
-| PickedRects == stack 256
-| UnitRects == stack 1024
+| BlitItems <= []
+| PickedRects <= stack 256
+| UnitRects <= stack 1024
 | Explored = Wr.human.sight
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
 | CurX,CurY,CurZ = $cursor
-| XUnit == $xunit
-| YUnit == $yunit
-| ZUnit == $zunit
-| XUnit2 == XUnit/2
-| YUnit2 == YUnit/2
-| CS == $d
-| CS2 == CS*2
+| XUnit <= $xunit
+| YUnit <= $yunit
+| ZUnit <= $zunit
+| XUnit2 <= XUnit/2
+| YUnit2 <= YUnit/2
+| CS <= $d
+| CS2 <= CS*2
 | TX,TY = $blit_origin + [0 YUnit] + [0 Z]*ZUnit
 | VX,VY = $view_origin
 | ScreenXY.init{[TX+XUnit2 TY]+to_iso{-VX*XUnit2 -VY*YUnit 0}}
@@ -321,9 +321,9 @@ view.render_iso =
 | WH = Wr.h
 | VS = $view_size
 | less Folded:
-  | Folded == Wr.main.img{ui_cell_folded}
-  | Marked == Wr.main.img{ui_cell_marked}
-  | Unexplored == Wr.main.img{ui_cell_unexplored}
+  | Folded <= Wr.main.img{ui_cell_folded}
+  | Marked <= Wr.main.img{ui_cell_marked}
+  | Unexplored <= Wr.main.img{ui_cell_unexplored}
 | times YY VS
   | Y = YY + VY
   | when 0<Y and Y<<WH: times XX VS:
@@ -340,7 +340,7 @@ view.render_iso =
   | render_cursor Me Wr BX BY $cursor
 /*| less BlitItems.end
   | Xs = BlitItems{B=>[(view_to_z B.x B.y B.z+B.z2) B]}
-  | Xs == Xs.sort{A B => A.0>B.0} //could be replaced with z-buffer
+  | Xs <= Xs.sort{A B => A.0>B.0} //could be replaced with z-buffer
   | for X,B Xs
     | O = B.object
     | O.draw{FB B}*/
@@ -368,12 +368,12 @@ view.render_iso =
   | isort_free_result
 | draw_picked_rects FB PickedRects.list.flip
 | less $brush.0: $handle_pick{UnitRects.list.flip}
-| BlitItems == 0
-| UnitRects == 0
+| BlitItems <= 0
+| UnitRects <= 0
 
 view.render_frame =
 | IsNight = $world.params.night><1
-| BrightFactor == if IsNight then 10 else 0
+| BrightFactor <= if IsNight then 10 else 0
 //| $fb.clear{#929292/*#00A0C0*/}
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
@@ -381,30 +381,30 @@ view.render_frame =
 | when $param.show_frame: push "frame=[$frame]" InfoText
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
-| $infoText.value == InfoText.infix{'; '}.text
+| $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.render.draw{$fb 200 ($h-10)}
-| $infoText.value == ''
+| $infoText.value <= ''
 
 // calculates current framerate and adjusts sleeping accordingly
 view.calc_fps StartTime FinishTime =
 | when $frame%24 >< 0
   | T = StartTime
-  | $fps == @int 24.0/(T - $fpsT)
+  | $fps <= @int 24.0/(T - $fpsT)
   | when $fps < $fpsGoal and $fpsD < $fpsGoal.float*2.0: $fpsD += 1.0
   | when $fps > $fpsGoal and $fpsD > $fpsGoal.float/2.0: $fpsD -= 1.0
-  | $fpsT == T
+  | $fpsT <= T
 | $frame++
 | SleepTime = 1.0/$fpsD - (FinishTime-StartTime)
 | when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
 
 view.draw FB X Y =
-| $fb == FB
+| $fb <= FB
 | GUI = get_gui
 | StartTime = GUI.ticks
 | $update
 | $render_frame
 | FinishTime = GUI.ticks
 | $calc_fps{StartTime FinishTime}
-| $fb == 0 //no framebuffer outside of view.draw
+| $fb <= 0 //no framebuffer outside of view.draw
 
 view.render = Me

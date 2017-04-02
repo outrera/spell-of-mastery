@@ -6,12 +6,12 @@ rle_encode Xs =
   | if X><Last
     then | Y = Ys.0
          | less Y.is_list
-           | Y == [1 Y]
-           | Ys == [Y @Ys.tail]
+           | Y <= [1 Y]
+           | Ys <= [Y @Ys.tail]
          | Y.0++
     else
       | push X Ys
-      | Last == X
+      | Last <= X
 | Ys.flip
 
 rle_decode Xs =
@@ -21,8 +21,8 @@ rle_decode Xs =
 | J = 0
 | for X Xs: if X.is_list
   then | V = X.1
-       | times K X.0: Ys.(J++) == V
-  else Ys.(J++) == X
+       | times K X.0: Ys.(J++) <= V
+  else Ys.(J++) <= X
 | Ys
 
 export rle_encode rle_decode

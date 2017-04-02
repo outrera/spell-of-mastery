@@ -7,7 +7,7 @@ unit.list_moves Src Cost =
 | Ms = []
 | CanMove = $can_move
 | for Dst Src.neibs
-  | Dst == Dst.floor
+  | Dst <= Dst.floor
   | when Cost < Dst.cost and CanMove{Me Src Dst}:
     | B = Dst.block
     | if B then
@@ -27,8 +27,8 @@ world.pathfind MaxCost U StartCell Check =
 | X,Y,Z = StartCell.xyz
 | StartCost = $new_cost
 | MaxCost+=StartCost
-| StartCell.cost == StartCost
-| StartCell.prev == 0
+| StartCell.cost <= StartCost
+| StartCell.prev <= 0
 | PFQueue.reset
 | PFQueue.push{StartCell}
 | R = 0
@@ -38,14 +38,14 @@ world.pathfind MaxCost U StartCell Check =
   | Cost = Src.cost
   | NextCost = Cost+1
   | for Dst U.list_moves{Src NextCost}:
-    | Dst.prev == Src
+    | Dst.prev <= Src
     | C = Check Dst
     | when C:
-      | if C><block then NextCost == Dst.cost
-        else | Dst.prev == Src
-             | R == Dst
+      | if C><block then NextCost <= Dst.cost
+        else | Dst.prev <= Src
+             | R <= Dst
              | _goto end
-    | Dst.cost == NextCost
+    | Dst.cost <= NextCost
     | when NextCost<MaxCost: PFQueue.push{Dst}
 | _label end
 //| EndTime = clock
@@ -64,15 +64,15 @@ world.closest_reach MaxCost U StartCell TargetXYZ =
   | DX,DY,DZ = Dst.xyz
   | NewL = [TX-DX TY-DY].abs
   | when BestL>>NewL and (BestL>NewL or TZ><DZ):
-    | BestL == NewL
-    | Best == Dst
+    | BestL <= NewL
+    | Best <= Dst
     | when BestL < 1.4:
-      | when Best><TCell: | R == 1; _goto end
-      | less TCell.tile.empty: | R == 1; _goto end
+      | when Best><TCell: | R <= 1; _goto end
+      | less TCell.tile.empty: | R <= 1; _goto end
       | B = TCell.block
       | when B:
-        | less B.speed: | R == 1; _goto end
-        | when not U.combat and U.owner.is_enemy{B.owner}: | R == 1; _goto end
+        | less B.speed: | R <= 1; _goto end
+        | when not U.combat and U.owner.is_enemy{B.owner}: | R <= 1; _goto end
   | _label end
   | R
 | $pathfind{MaxCost U StartCell &check}
