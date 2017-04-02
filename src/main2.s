@@ -19,14 +19,21 @@ type main{Data}
      ui
      credits
      effect
+| say 'init heap'
 | enheap_init 64000
 | $credits <= t
+| say 'loading params'
 | $load_params
 | for K,V $params.main: $params.K <= V
+| say 'loading sprites'
 | $load_sprites
+| say 'loading sounds'
 | $load_sounds
+| say 'loading tiles'
 | $load_tiles
+| say 'loading classes'
 | $load_classes
+| say 'post init'
 | for K,V $params.acts: less V.icon_gfx:
   | IName = V.icon
   | IName = if IName.is_text then "icons_[IName]" else IName.1
