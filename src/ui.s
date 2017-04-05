@@ -342,6 +342,7 @@ create_view_ui Me =
                     ,layH{s/4 UnitActIcons.take{UnitActIcons.size/2}}
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
 | ResourceCounters <= resource_counters $view
+| EndTurnButton = button 'END TURN' skin/hourglass: => say 'end turn'
 | dlg: mtx
   |  0   0| $view
   |  0   0| ResourceCounters
@@ -354,6 +355,7 @@ create_view_ui Me =
   | 142 $height-110| MenuTab
   | 164 $height-10 | infoline
   | $width-50 80 | GroundActIconsLay
+  | $width-80 48 | EndTurnButton
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0 IPY | PlayerWidget
 

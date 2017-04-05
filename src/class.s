@@ -12,43 +12,43 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            inborn/[] pentagram/0
            attack/0 impact/0 impact_hit/0
            hit/0 death/0 moves/0 worker/0}
-  id //for unit counts table
+  id                    //for unit counts table
   type/"[Bank]_[Class_name]"
-  block/0
-  pickable/Pickable
-  empty/Empty
+  block/0               //acts as map block
+  pickable/Pickable     //can be picked?
+  empty/Empty           //other units can move through this one
   default_sprite/Sprite
-  unit/Unit
-  box_xy/Box_xy // bounding box x,y correction
-  aux/Aux
-  speed/Speed // number of cycles it has to wait, before moving again
-  sight/Sight
-  active/Active // non-zero if unit should be updated
-  range/Range
-  leader/Leader
-  hp/Health
-  combat/Combat
-  armor/Armor
-  cooldown/Cooldown
-  acts/Acts
-  icon/Icon
-  title/Title
-  item/Item
-  ai/Ai
-  show/Show
-  height/Height
-  passable/Passable // other units can move on top of this one
-  movable/Movable
-  counter/Counter //counterattack
-  tier/Tier
-  inborn/Inborn
-  attack/Attack
-  impact/Impact
-  impact_hit/Impact_hit
-  hit/Hit
-  death/Death
-  moves/Moves
-  pentagram/Pentagram //pentagram this unit casts
+  unit/Unit             //is creature or leader?
+  box_xy/Box_xy         //bounding box x,y correction
+  aux/Aux               //auxilary unit, like mark
+  speed/Speed           //cycles to move between cells
+  sight/Sight           //scout range
+  active/Active         //update unit each cycle?
+  range/Range           //attack range
+  leader/Leader         //is this unit a leader?
+  hp/Health             //health points
+  combat/Combat         //damage this unit deals on attack
+  armor/Armor           //
+  cooldown/Cooldown     //number of cycles between unit attacks
+  acts/Acts             //acts this unit can perform
+  icon/Icon             //icon for this unit
+  title/Title           //proper unit name shown ingame
+  item/Item             //for item units
+  ai/Ai                 //how AI treats this unit
+  show/Show             //show this unit ingame
+  height/Height         //height in tiles
+  passable/Passable     //other units can move on top of this one
+  movable/Movable       //can move
+  counter/Counter       //counterattack
+  tier/Tier             //unit power-level
+  inborn/Inborn         //inborn abilities
+  attack/Attack         //on attack script
+  impact/Impact         //on impact script
+  impact_hit/Impact_hit //on impact hit script
+  hit/Hit               //on hurt script
+  death/Death           //on death script
+  moves/Moves           //on movement script
+  pentagram/Pentagram   //pentagram this unit casts
   worker/Worker
 | when Spells: $acts <= [@$acts @Spells].list
 | when Rooms: $acts <= [@$acts @Rooms].list
