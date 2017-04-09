@@ -432,12 +432,20 @@ view.update_play =
     | Unmarking <= No
     | $mice_click <= 0
 
+MovementTypes = [[] [[1 0] [0 1] [-1 0] [0 -1]]]
+
 world.update_picked =
 | for M $marks: M.free
 | $marks.heapfree
 | $marks <= []
 | when $act and $act.range <> any: leave
 | Marks = []
+| for U $human.picked:
+  | MT = MovementTypes.1
+  | for D MT:
+    | Mark = $human.alloc_unit{"mark_move"}
+    | Mark.move{U.xyz+[@D 0]}
+    | push Mark Marks
 | for U $human.picked: less U.path.end:
   | PathGoal = U.path.last.xyz
   | Mark = $human.alloc_unit{"mark_goal"}

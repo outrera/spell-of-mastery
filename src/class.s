@@ -9,7 +9,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            acts/[] spells/0 rooms/0 icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
-           inborn/[] pentagram/0
+           movement/0 inborn/[] pentagram/0
            attack/0 impact/0 impact_hit/0
            hit/0 death/0 moves/0 worker/0}
   id                    //for unit counts table
@@ -41,6 +41,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   movable/Movable       //can move
   counter/Counter       //counterattack
   tier/Tier             //unit power-level
+  movement/Movement     //movement type (0=cant move, 1=single cell)
   inborn/Inborn         //inborn abilities
   attack/Attack         //on attack script
   impact/Impact         //on impact script
