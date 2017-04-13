@@ -434,6 +434,24 @@ view.update_play =
 
 MovementTypes = [[] [[1 0] [0 1] [-1 0] [0 -1]]]
 
+unit.reachable_cells =
+| Xs = []
+| MT = MovementTypes.1
+| XYZ = $xyz
+| $find{4
+  | Dst =>
+    | R = \block
+    | when got MT.find{(Dst.xyz-XYZ).take{2}}:
+      | Type = \move
+      | B = Dst.block
+      | if not B then R <= 0
+        else if not B.movement then Type <= 0
+        else if $owner.is_enemy{B.owner} then Type <= \attack
+        else Type <= \swap
+      | when Type: push [Type Dst] Xs
+    | R}
+| Xs
+
 world.update_picked =
 | for M $marks: M.free
 | $marks.heapfree
@@ -441,10 +459,9 @@ world.update_picked =
 | when $act and $act.range <> any: leave
 | Marks = []
 | for U $human.picked:
-  | MT = MovementTypes.1
-  | for D MT:
-    | Mark = $human.alloc_unit{"mark_move"}
-    | Mark.move{U.xyz+[@D 0]}
+  | for What,Cell U.reachable_cells:
+    | Mark = $human.alloc_unit{"mark_[What]"}
+    | Mark.move{Cell.xyz}
     | push Mark Marks
 | for U $human.picked: less U.path.end:
   | PathGoal = U.path.last.xyz
