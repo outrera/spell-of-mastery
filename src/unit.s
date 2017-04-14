@@ -416,8 +416,8 @@ set_goal Me Act Target =
 | $goal_act <= normalize_act Me Act
 | $set_path{[]}
 
-unit.order_at XYZ act/0 =
-| when $xyz >< XYZ:
+unit.order_at XYZ act/0 goal/0 =
+| when $xyz >< XYZ and not Goal:
   | when Act and normalize_act{Me Act}.title<>move:
     | Ms = $list_moves{$cell -1}
     | less Ms.end:
@@ -436,8 +436,9 @@ unit.order_at XYZ act/0 =
   | $order.init{Act Me}
   | leave
 | $unit_goal.xyz.init{XYZ}
-| $goal <= $world.block_at{XYZ}
-| if not $goal or ($worker and $goal.ai><remove and $owner.dig_mark{@XYZ})
+| $goal <= if Goal then Goal else $world.block_at{XYZ}
+| if Goal then
+  else if not $goal or ($worker and $goal.ai><remove and $owner.dig_mark{@XYZ})
   then | $goal <= $unit_goal
        | less Act: when $worker:
          | X,Y,Z = XYZ

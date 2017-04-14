@@ -31,12 +31,6 @@ order_at Me XYZ Target =
   | U.order_at{P.xyz}
   | push P Used
 
-order_act Me Act XYZ Target =
-| $order_at{XYZ}
-| $goal_act <= Act
-| when Target:
-  | $goal <= Target
-  | $goal_serial <= Target.serial
 
 room_relinquish Me C =
 | Flag = C.units.find{?ai><flag}
@@ -131,7 +125,7 @@ handle_picked_act Me Rect Units Act =
         | Blink <= 0
       | if IsRoom
         then U.effect{Act.impact 0 XYZ}
-        else order_act U Act XYZ Target
+        else U.order_at{XYZ act/Act goal/Target}
 | leave
 
 handle_picked Me Rect Units = //Me is view
