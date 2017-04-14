@@ -428,7 +428,13 @@ unit.order_at XYZ act/0 =
   | $goal_act <= 0 //if Act then Act else $main.params.acts.idle
   | $set_path{[]}
   | leave
+| when $moved >< $world.turn:
+  | $owner.notify{'Unit has already acted this turn.'}
+  | leave
 | $moved <= $world.turn
+| when XYZ >< self:
+  | $order.init{Act Me}
+  | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
 | if not $goal or ($worker and $goal.ai><remove and $owner.dig_mark{@XYZ})

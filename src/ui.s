@@ -514,7 +514,7 @@ create_act_icons Me =
          | if Act.range >< 0 
            then 
             | Us = if PanelTab><unit then $main.ui.view.picked else [Unit]
-            | for U Us: U.order.init{Act U}
+            | for U Us: U.order_at{self act/Act}
            else | $world.act <= Act
                 | if PanelTab><unit then $world.act_unit.init{0,0}
                   else $world.act_unit.init{Unit,Unit.serial}

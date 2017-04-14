@@ -301,7 +301,7 @@ world.notify Text =
 | N.0 <= Clock + NoteLife
 | Chars = N.1
 | Chars.clear{``}
-| for I Text.size: Chars.I <= Text.I
+| for I min{Chars.size Text.size}: Chars.I <= Text.I
 | $notes.init{[@Used @Free]}
 
 world.alloc_unit ClassName Owner =
