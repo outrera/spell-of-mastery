@@ -101,6 +101,7 @@ type world{main}
    void
    shadow
    cycle // counts calls to world.update
+   turn // current turn
    serial
    nil // null unit with id >< 0
    vars/t{} // variables
@@ -263,6 +264,7 @@ world.new_game =
 | $human <= $players.1
 | $human.human <= 1
 | $cycle <= 0
+| $turn <= 0
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana

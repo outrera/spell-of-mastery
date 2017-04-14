@@ -342,7 +342,7 @@ create_view_ui Me =
                     ,layH{s/4 UnitActIcons.take{UnitActIcons.size/2}}
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
 | ResourceCounters <= resource_counters $view
-| EndTurnButton = button 'END TURN' skin/hourglass: => say 'end turn'
+| EndTurnButton = button 'END TURN' skin/hourglass: => $world.end_turn
 | dlg: mtx
   |  0   0| $view
   |  0   0| ResourceCounters

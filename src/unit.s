@@ -48,7 +48,7 @@ type unit.$class{Id World}
   active // true if this unit resides in the list of active units
   path/[] // path to goal
   path_life //cycles before updating path
-  goal
+  goal //target of this unit
   goal_serial //in case goal gets killed
   goal_act //what to do with the goal
   host //what unit hosts this sprite
@@ -59,6 +59,7 @@ type unit.$class{Id World}
   flags //various flags (mostly effects)
   effects/[] //active effects
   mod //set by various effects to modify some contextual behavior
+  moved //last turn this unit moved
   can_move //movement function
 | $action <= $world.action{Me}
 | $next_action <= $world.action{Me}
@@ -168,6 +169,7 @@ unit.init Class =
   | less $active
     | $world.active.push{Me}
   | $active <= 1
+  | $moved <= -1
   | $ordered.type <= 0
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
@@ -426,6 +428,7 @@ unit.order_at XYZ act/0 =
   | $goal_act <= 0 //if Act then Act else $main.params.acts.idle
   | $set_path{[]}
   | leave
+| $moved <= $world.turn
 | $unit_goal.xyz.init{XYZ}
 | $goal <= $world.block_at{XYZ}
 | if not $goal or ($worker and $goal.ai><remove and $owner.dig_mark{@XYZ})

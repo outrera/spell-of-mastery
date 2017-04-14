@@ -125,6 +125,9 @@ world.update =
 | $cycle++
 | $view.ui.update
 
+world.end_turn =
+| $turn++ 
+
 update_anim Me =
 | $anim_wait--
 | less $anim_wait > 0:
@@ -406,8 +409,8 @@ unit.update =
 | update_order Me
 | update_fade Me
 | update_action Me
-| when $removed: leave //unit can be removed as a result of an action
-| when $combat and $action.type><idle and not $goal:
+| when $removed: leave //unit can be removed as a result of update_action
+/*| when $combat and $action.type><idle and not $goal:
   | when not $invisible or not $owner.human:
-    | attack_nearby_enemy Me
+    | attack_nearby_enemy Me*/
 | 1 // 1 means we are still alive

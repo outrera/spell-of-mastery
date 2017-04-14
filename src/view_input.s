@@ -458,7 +458,7 @@ world.update_picked =
 | $marks <= []
 | when $act and $act.range <> any: leave
 | Marks = []
-| for U $human.picked:
+| for U $human.picked: less U.moved >< $turn:
   | for What,Cell U.reachable_cells:
     | Mark = $human.alloc_unit{"mark_[What]"}
     | Mark.move{Cell.xyz}
