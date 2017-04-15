@@ -14,7 +14,7 @@ flyer: 0 // can it fly
 range: neib //1
 ai: unit
 item: 0
-movement: 1
+movement: 3
 impact: sound{attack2}
 moves: sound{step}
 spells: (cast_teleport)

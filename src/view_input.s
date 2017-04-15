@@ -426,23 +426,19 @@ view.update_play =
     | Unmarking <= No
     | $mice_click <= 0
 
-MovementTypes = [[] [[1 0] [0 1] [-1 0] [0 -1]]]
-
 unit.reachable_cells =
 | Xs = []
-| MT = MovementTypes.1
 | XYZ = $xyz
-| $find{4
+| $find{$movement
   | Dst =>
     | R = \block
-    | when got MT.find{(Dst.xyz-XYZ).take{2}}:
-      | Type = \move
-      | B = Dst.block
-      | if not B then R <= 0
-        else if not B.movement then Type <= 0
-        else if $owner.is_enemy{B.owner} then Type <= \attack
-        else Type <= \swap
-      | when Type: push [Type Dst] Xs
+    | Type = \move
+    | B = Dst.block
+    | if not B then R <= 0
+      else if not B.movement then Type <= 0
+      else if $owner.is_enemy{B.owner} then Type <= \attack
+      else Type <= \swap
+    | when Type: push [Type Dst] Xs
     | R}
 | Xs
 

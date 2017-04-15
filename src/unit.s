@@ -417,8 +417,10 @@ set_goal Me Act Target =
 | $set_path{[]}
 
 unit.order_at XYZ act/0 goal/0 =
+| OAct = Act
+| Act <= normalize_act Me Act
 | when $xyz >< XYZ and not Goal:
-  | when Act and normalize_act{Me Act}.title<>move:
+  | when OAct and Act.title<>move:
     | Ms = $list_moves{$cell -1}
     | less Ms.end:
       | set_goal Me Act $xyz
@@ -431,6 +433,11 @@ unit.order_at XYZ act/0 goal/0 =
 | when $moved >< $world.turn:
   | $owner.notify{'Unit has already acted this turn.'}
   | leave
+| when $owner.human and Act.title><move:
+  | Move = $world.cell{@XYZ}.units.keep{U=>U.type><mark_move}
+  | less Move.size
+    | $owner.notify{'Cant move here'}
+    | leave
 | $moved <= $world.turn
 | when XYZ >< self:
   | $order.init{Act Me}
@@ -447,7 +454,7 @@ unit.order_at XYZ act/0 goal/0 =
   else | Enemy = $owner.is_enemy{$goal.owner}
        | less Act or Enemy: $goal <= $unit_goal
        | when Enemy: Act <= $main.params.acts.attack
-| $goal_act <= normalize_act Me Act
+| $goal_act <= Act
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
 
