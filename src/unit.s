@@ -419,7 +419,7 @@ set_goal Me Act Target =
 unit.order_at XYZ act/0 goal/0 =
 | OAct = Act
 | Act <= normalize_act Me Act
-| when $xyz >< XYZ and not Goal:
+/*| when $xyz >< XYZ and not Goal:
   | when OAct and Act.title<>move:
     | Ms = $list_moves{$cell -1}
     | less Ms.end:
@@ -429,21 +429,22 @@ unit.order_at XYZ act/0 goal/0 =
   | $goal <= 0
   | $goal_act <= 0 //if Act then Act else $main.params.acts.idle
   | $set_path{[]}
-  | leave
+  | leave*/
 | when $moved >< $world.turn:
   | $owner.notify{'Unit has already acted this turn.'}
   | leave
-| when $owner.human and Act.title><move:
+/*| when $owner.human and Act.title><move:
   | Move = $world.cell{@XYZ}.units.keep{U=>U.type><mark_move}
   | less Move.size
     | $owner.notify{'Cant move here'}
-    | leave
+    | leave*/
 | $moved <= $world.turn
 | when XYZ >< self:
   | $order.init{Act Me}
   | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= if Goal then Goal else $world.block_at{XYZ}
+| when Act.title><move: $goal <= 0 //otherwise it will cycle in swap
 | if Goal then
   else if not $goal or ($worker and $goal.ai><remove and $owner.dig_mark{@XYZ})
   then | $goal <= $unit_goal
@@ -465,7 +466,7 @@ in_range Me XYZ =
 unit.targets_in_range Range = $world.targets_in_range{Me.xyz Range}
 
 retaliate Me Enemy Range =
-| when $owner.human and not $idle: leave
+/*| when $owner.human and not $idle: leave
 | when Enemy.empty: leave
 | when Range:
   | for U $targets_in_range{Range}:
@@ -477,7 +478,7 @@ retaliate Me Enemy Range =
 | less $combat: leave
 | $order_at{Enemy.xyz}
 | $backtrack <= $xyz
-| leave
+| leave*/
 
 heal_unit Me Amount =
 | less $class.hp: leave

@@ -41,12 +41,13 @@ world.pathfind MaxCost U StartCell Check =
     | Dst.prev <= Src
     | C = Check Dst
     | when C:
-      | if C><block then NextCost <= Dst.cost
+      | if C><block then _goto skip //NextCost <= Dst.cost
         else | Dst.prev <= Src
              | R <= Dst
              | _goto end
     | Dst.cost <= NextCost
     | when NextCost<MaxCost: PFQueue.push{Dst}
+    | _label skip
 | _label end
 //| EndTime = clock
 //| say EndTime-StartTime
