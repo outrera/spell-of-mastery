@@ -167,6 +167,12 @@ handle_picked Me Rect Units = //Me is view
   | $picked <= [@NewPicked @Picked]
   | leave
 
+view.handle_pick UnitRects =
+| Units = []
+| when@@it $world.cell{@$cursor}.block: Units <= [it]
+| handle_picked Me 0 Units
+
+/*
 handle_rect_picking Me UnitRects MR = 
 | RX,RY,RW,RH = MR
 | when $mice_click><left: $fb.rectangle{#00FF00 0 RX RY RW RH}
@@ -186,7 +192,7 @@ view.handle_pick UnitRects =
 | for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
   | when not Unit.invisible or Unit.owner.id><$player.id:
     | push Unit Units
-| handle_picked Me 0 Units 
+| handle_picked Me 0 Units*/
 
 view.worldToView P =
 | X,Y = P - $view_origin

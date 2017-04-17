@@ -433,11 +433,11 @@ unit.order_at XYZ act/0 goal/0 =
 | when $moved >< $world.turn:
   | $owner.notify{'Unit has already acted this turn.'}
   | leave
-/*| when $owner.human and Act.title><move:
+| when $owner.human and Act.title><move:
   | Move = $world.cell{@XYZ}.units.keep{U=>U.type><mark_move}
   | less Move.size
     | $owner.notify{'Cant move here'}
-    | leave*/
+    | leave
 | $moved <= $world.turn
 | when XYZ >< self:
   | $order.init{Act Me}
