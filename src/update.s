@@ -189,7 +189,7 @@ unit_check_move Me Dst =
 | B = $world.block_at{Dst}
 | less B: leave move
 | if $owner.id <> B.owner.id
-  then when B.alive and $combat: leave attack
+  then //when B.alive and $combat: leave attack
   else when B.speed and B.can_move{}{B Dst.cell Src.cell}:
        | leave swap
 | 0
@@ -243,7 +243,7 @@ update_path Me =
   | $set_path{[]}
   | leave
 | Act = $goal_act
-| R = $goal_act.range
+| R = Act.range
 | when R:
   | when R><user: R <= $range
   | GXYZ = $goal.xyz

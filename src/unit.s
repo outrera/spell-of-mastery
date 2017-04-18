@@ -403,58 +403,39 @@ unit.set_path Path =
 | $path.heapfree
 | $path <= P
 
-normalize_act Me Act =
-| if Act.is_text then $main.params.acts.Act
-  else if Act then Act
-  else $main.params.acts.move
-
 set_goal Me Act Target =
 | if Target.is_unit then $goal <= Target
   else | $unit_goal.xyz.init{Target}
        | $goal <= $unit_goal
        | $goal_serial <= $goal.serial
-| $goal_act <= normalize_act Me Act
+| $goal_act <= Act
 | $set_path{[]}
 
 unit.order_at XYZ act/0 goal/0 =
-| OAct = Act
-| Act <= normalize_act Me Act
-/*| when $xyz >< XYZ and not Goal:
-  | when OAct and Act.title<>move:
-    | Ms = $list_moves{$cell -1}
-    | less Ms.end:
-      | set_goal Me Act $xyz
-      | $set_path{[Ms.0 $cell]}
-      | leave
-  | $goal <= 0
-  | $goal_act <= 0 //if Act then Act else $main.params.acts.idle
-  | $set_path{[]}
-  | leave*/
 | when $moved >< $world.turn:
   | $owner.notify{'Unit has already acted this turn.'}
   | leave
-| when $owner.human and Act.title><move:
-  | Move = $world.cell{@XYZ}.units.keep{U=>U.type><mark_move}
+| when XYZ >< self:
+  | $order.init{Act Me}
+  | $moved <= $world.turn
+  | leave
+| OAct = Act
+| less Goal: Goal <= $world.block_at{XYZ}
+| Act <= if Act.is_text then $main.params.acts.Act
+         else if Act then Act
+         else if Goal and $owner.is_enemy{Goal.owner} then
+          $main.params.acts.attack
+         else $main.params.acts.move
+| when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
+| $unit_goal.xyz.init{XYZ}
+| $goal <= if Goal then Goal else $unit_goal
+| when $owner.human and (Act.title><move or Act.title><attack):
+  | Mark = "mark_[Act.title]"
+  | Move = $world.cell{@XYZ}.units.keep{U=>U.type><Mark}
   | less Move.size
     | $owner.notify{'Cant move here'}
     | leave
 | $moved <= $world.turn
-| when XYZ >< self:
-  | $order.init{Act Me}
-  | leave
-| $unit_goal.xyz.init{XYZ}
-| $goal <= if Goal then Goal else $world.block_at{XYZ}
-| when Act.title><move: $goal <= 0 //otherwise it will cycle in swap
-| if Goal then
-  else if not $goal or ($worker and $goal.ai><remove and $owner.dig_mark{@XYZ})
-  then | $goal <= $unit_goal
-       | less Act: when $worker:
-         | X,Y,Z = XYZ
-         | when $owner.dig_mark{X Y Z}: Act <= \dig
-         | when $owner.work_at{XYZ}: Act <= \build
-  else | Enemy = $owner.is_enemy{$goal.owner}
-       | less Act or Enemy: $goal <= $unit_goal
-       | when Enemy: Act <= $main.params.acts.attack
 | $goal_act <= Act
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}
@@ -542,21 +523,12 @@ unit.assault Combat Target =
     [combat N] | Combat <= max 0 Combat+N
     [hit N] | Hit <= 1
     Else | bad "bad attack modifier [Mod]"
-| less Hit:
-  | when Combat<<0: leave
-  | Roll = $world.rand{Combat+Target.armor*2}
-  | Hit <= Roll<Combat
-  | less Hit: leave
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
-| when no Damage: //FIXME: health factor must per unit overridable
-  | when no Base: Base <= $health //max 1 $health/2
-  | Damage <= $world.rand{Base}+1
-| when Boost: Damage <= max 1 Damage*Boost.0/Boost.1
-| when Lifedrain and Damage>0: heal_unit Me Damage
+| when no Damage: Damage <= Combat
+| when Lifedrain: heal_unit Me 1
 | if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
-| when Target.alive and Target.class.hp < $health and $world.rand{2}>0:
-  | knockback Me Target
+//| when Knockback: knockback Me Target
 
 unit.harm Attacker Damage @Magic =
 | when $removed: leave
