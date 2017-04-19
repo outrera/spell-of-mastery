@@ -291,6 +291,7 @@ world.new_game =
   | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
+| $new_turn
 
 world.notify Text =
 | Clock = clock

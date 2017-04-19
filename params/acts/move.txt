@@ -1,4 +1,7 @@
 icon: nil
-range: 0
+priority: 50
+range: 1
+speed: 4
+ap: 1
 affects: any
 

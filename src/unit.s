@@ -59,7 +59,7 @@ type unit.$class{Id World}
   flags //various flags (mostly effects)
   effects/[] //active effects
   mod //set by various effects to modify some contextual behavior
-  moved //last turn this unit moved
+  ap //action points = movement remain
   can_move //movement function
 | $action <= $world.action{Me}
 | $next_action <= $world.action{Me}
@@ -169,7 +169,7 @@ unit.init Class =
   | less $active
     | $world.active.push{Me}
   | $active <= 1
-  | $moved <= -1
+  | $ap <= $movement
   | $ordered.type <= 0
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
@@ -412,13 +412,9 @@ set_goal Me Act Target =
 | $set_path{[]}
 
 unit.order_at XYZ act/0 goal/0 =
-| when $moved >< $world.turn:
-  | $owner.notify{'Unit has already acted this turn.'}
-  | leave
 | when XYZ >< self:
-  | $order.init{Act Me}
-  | $moved <= $world.turn
-  | leave
+  | Goal <= Me
+  | XYZ <= Me.xyz
 | OAct = Act
 | less Goal: Goal <= $world.block_at{XYZ}
 | Act <= if Act.is_text then $main.params.acts.Act
@@ -426,16 +422,18 @@ unit.order_at XYZ act/0 goal/0 =
          else if Goal and $owner.is_enemy{Goal.owner} then
           $main.params.acts.attack
          else $main.params.acts.move
+| when $ap < Act.ap:
+  | $owner.notify{'not enough action points'}
+  | leave
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
-| $unit_goal.xyz.init{XYZ}
-| $goal <= if Goal then Goal else $unit_goal
 | when $owner.human and (Act.title><move or Act.title><attack):
   | Mark = "mark_[Act.title]"
   | Move = $world.cell{@XYZ}.units.keep{U=>U.type><Mark}
   | less Move.size
-    | $owner.notify{'Cant move here'}
+    | $owner.notify{'Cant move there'}
     | leave
-| $moved <= $world.turn
+| $unit_goal.xyz.init{XYZ}
+| $goal <= if Goal then Goal else $unit_goal
 | $goal_act <= Act
 | $goal_serial <= $goal.serial
 | $set_path{$path_to{$goal.xyz}}

@@ -125,9 +125,6 @@ world.update =
 | $cycle++
 | $view.ui.update
 
-world.end_turn =
-| $turn++ 
-
 update_anim Me =
 | $anim_wait--
 | less $anim_wait > 0:
@@ -318,6 +315,7 @@ update_next_action Me =
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0
+| $ap -= $action.act.ap
 | $action.start
 | when $anim><move: $pick_facing{$facing}
 

@@ -435,14 +435,14 @@ view.update_play =
 unit.reachable_cells =
 | Xs = []
 | XYZ = $xyz
-| $find{$movement
+| $find{$ap
   | Dst =>
     | R = \block
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
-      else if not B.movement then Type <= 0
       else if $owner.is_enemy{B.owner} then Type <= \attack
+      else if not B.ap then Type <= 0
       else | Type <= \swap
            | R <= 0
     | when Type: push [Type Dst] Xs
@@ -455,7 +455,7 @@ world.update_picked =
 | $marks <= []
 | when $act and $act.range <> any: leave
 | Marks = []
-| for U $human.picked: less U.moved >< $turn:
+| for U $human.picked: when U.ap > 0:
   | for What,Cell U.reachable_cells:
     | Mark = $human.alloc_unit{"mark_[What]"}
     | Mark.move{Cell.xyz}

@@ -41,7 +41,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   movable/Movable       //can move
   counter/Counter       //counterattack
   tier/Tier             //unit power-level
-  movement/Movement     //movement speed
+  movement/Movement     //action points per turn
   inborn/Inborn         //inborn abilities
   attack/Attack         //on attack script
   impact/Impact         //on impact script

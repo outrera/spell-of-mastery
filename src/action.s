@@ -255,25 +255,18 @@ action.init Act Target =
 | $xyz.init{XYZ}
 | $target <= if Target.is_list then 0 else Target
 | A = Acts.$type
+| $act <= if Act.is_text then $main.params.acts.$type else Act
+| less got $act: bad "unknown action type [$type]"
+| $range <= $act.range
+| $cycles <= $act.speed
+| $priority <= $act.priority
 | if got A then
-    | $act <= 0
-    | $range <= 1
-    | $cycles <= 4
-    | $priority <= 50
     | $act_init <= A.init
     | $act_valid <= A.valid
     | $act_start <= A.start
     | $act_update <= A.update
     | $act_finish <= A.finish
   else
-    | $act <= if Act.is_text then $main.params.acts.$type else Act
-    | less got $act:
-      | bad "unknown action type [$type]"
-      | $init{idle 0}
-      | leave
-    | $range <= $act.range
-    | $cycles <= $act.speed
-    | $priority <= $act.priority
     | $act_init <= &custom_init
     | $act_valid <= &custom_valid
     | $act_start <= &custom_start
