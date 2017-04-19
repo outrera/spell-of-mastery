@@ -37,7 +37,7 @@ world.save =
     | Goal = if not G then 0
              else if G.type><goal then [G.xyz U.goal_act.name]
              else [G.id U.goal_act.name]
-    | Path = if U.path.end then 0 else [U.path U.path_life]
+    | Path = if U.path.end then 0 else [U.path 0]
     | Active <= list U.from U.anim U.anim_step U.anim_wait
                      U.kills U.cooldown Effects Host Goal Path
                      U.action.save U.ordered.save U.next_action.save
@@ -162,7 +162,6 @@ world.load Saved =
       | P = Path.0.enheap
       | U.path.heapfree
       | U.path <= P
-      | U.path_life <= Path.1
     | U.host <= [Host Goal Action Ordered NextAction]
     | when Type><unit_build: //kludge!
       | Target,ActName = Goal

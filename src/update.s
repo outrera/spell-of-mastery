@@ -158,12 +158,7 @@ find_path_around_busy_units Me XYZ = //Me is unit
 | if Found
   then | Path = Found.path
        | $set_path{Path}
-       | $path_life <= Path.size
   else | $set_path{[]}
-       | $path_life <= 0
-
-UpdatePathHangTrap = 0
-
 
 unit_check_move Me Dst =
 | less $speed: leave 0
@@ -196,35 +191,6 @@ update_path_move Me XYZ =
 | less M: leave 0
 | Us = $world.units_get{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
-| when Target and Target.owner.id >< $owner.id
-       // good idea would be pushing ranged unit forward, so other rangers
-       // get a chance to attack too
-       and (not $flyer or Target.flyer) //flyer has precedence over non-flyer
-       and (not Target.idle
-            or ($range><Target.range
-                and Target.goal and Target.path.end)):
-  | when Target.xyz<>$goal.xyz:
-    | when UpdatePathHangTrap>0: leave
-    | Stuck = $get_effect_value{stuck}
-    | Cycle = $world.cycle
-    | less Stuck and Stuck.0.list><$xyz and Stuck.1.list><$goal.xyz:
-      | when got Stuck: $strip_effect{stuck}
-      | $add_effect{stuck 0 [$xyz $goal.xyz Cycle 4]}
-      | Stuck <= $get_effect_value{stuck}
-    | [Src Dst Wait Tries] = Stuck
-    | when Tries<<0:
-      | $strip_effect{stuck}
-      | $goal <= 0 //FIXME: let AI know that we cant reach the goal
-      | $set_path{[]}
-      | leave
-    | when Wait>Cycle: leave
-    | find_path_around_busy_units Me $goal.xyz
-    | less $path.end:
-      | UpdatePathHangTrap++
-      | update_path Me
-    | $strip_effect{stuck}
-    | $add_effect{stuck 0 [$xyz $goal.xyz Cycle+12 Tries-1]}
-    | leave
 | $order.init{M | Target or XYZ}
 
 
@@ -257,22 +223,15 @@ update_path Me =
     | goal_in_range Me
     | leave
 | Path = $path
-| $path_life--
-| when $path_life<<0 or Path.end:
+| when Path.end:
   | when $xyz >< $goal.xyz:
     | goal_in_range Me
     | leave
   | Path = $path_to{$goal.xyz}
-  | when Path.end:
+  | when Path.end: //cant reach goal from here?
     | $goal <= 0
     | leave 0
-  | LastPathLife = $path_life
   | $set_path{Path}
-  | when Path.last.xyz<>$goal.xyz: //cant reach goal from here?
-    | when LastPathLife>0: //got stuck?
-      | $goal <= 0
-      | leave 0
-    | $path_life <= Path.size+1 //ensure it gets as close as possible
 | Path = $path
 | when Path.end: leave
 | XYZ = Path.head.xyz
@@ -402,7 +361,6 @@ unit.update =
     | less B.end: when B.0.idle:
       | Found = $world.find{100 Me $cell | Dst => not Dst.block}
       | when Found: $order_at{Found.xyz}
-  | UpdatePathHangTrap <= 0
   | update_path Me
 | update_order Me
 | update_fade Me

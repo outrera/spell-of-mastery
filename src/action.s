@@ -233,7 +233,7 @@ world.action Unit = action Unit
 
 action.main = $unit.main
 
-action.cost = if $act then $act.cost else 0
+action.cost = $act.cost
 action.affects = $act.affects
 action.before = $act.before
 action.impact =

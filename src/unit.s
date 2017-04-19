@@ -47,7 +47,6 @@ type unit.$class{Id World}
   ai_wait //cycles for ai to wait
   active // true if this unit resides in the list of active units
   path/[] // path to goal
-  path_life //cycles before updating path
   goal //target of this unit
   goal_serial //in case goal gets killed
   goal_act //what to do with the goal
@@ -176,7 +175,6 @@ unit.init Class =
   | $velocity.init{[0.0 0.0 0.0]}
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
-  | $path_life <= 0
   | $ai_wait <= 0
   | for E $inborn: case E
       [`{}` Name Duration @Args] | $add_effect{Name Duration Args}
@@ -398,7 +396,6 @@ unit.die =
 | $cooldown <= 0
 
 unit.set_path Path =
-| $path_life <= max 2 Path.size/4
 | P = Path.enheap
 | $path.heapfree
 | $path <= P
@@ -428,7 +425,7 @@ unit.order_at XYZ act/0 goal/0 =
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $owner.human and (Act.title><move or Act.title><attack):
   | Mark = "mark_[Act.title]"
-  | Move = $world.cell{@XYZ}.units.keep{U=>U.type><Mark}
+  | Move = $world.cell{@XYZ}.units.keep{U=>U.type^~{mark_swap mark_move}><Mark}
   | less Move.size
     | $owner.notify{'Cant move there'}
     | leave
@@ -436,7 +433,17 @@ unit.order_at XYZ act/0 goal/0 =
 | $goal <= if Goal then Goal else $unit_goal
 | $goal_act <= Act
 | $goal_serial <= $goal.serial
-| $set_path{$path_to{$goal.xyz}}
+| less $owner.human:
+  | $set_path{$path_to{$goal.xyz}}
+  | leave
+  //avoid swapping, unless explicitly ordered
+| TCell = $world.cell{@$goal.xyz}
+| check Dst =
+  | if Dst >< TCell then 1
+    else if Dst.block then \block
+    else 0
+| Cell = $pathfind{1000 &check}
+| $set_path{if Cell then Cell.path else []}
 
 in_range Me XYZ =
 | less (XYZ.take{2}-$xyz.take{2}).abs<<$range.float: leave 0

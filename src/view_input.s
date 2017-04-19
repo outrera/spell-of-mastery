@@ -443,8 +443,7 @@ unit.reachable_cells =
     | if not B then R <= 0
       else if $owner.is_enemy{B.owner} then Type <= \attack
       else if not B.ap then Type <= 0
-      else | Type <= \swap
-           | R <= 0
+      else Type <= \swap
     | when Type: push [Type Dst] Xs
     | R}
 | Xs

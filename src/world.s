@@ -7,10 +7,10 @@ NoteLife = 1.0
 type efx when name amount params
 
 CellsTile =
-CellsUnits =
-CellsGfxes =
-CellsBlock =
-CellsCost =
+CellsUnits = //units residing in the cell
+CellsGfxes = //sprite used to draw cell on screen
+CellsBlock = //blocking unit residing in cell
+CellsCost =  //movement cost to reach this cell
 CellsPrev =
 CellsFloor =
 WorldSize = 1 //max world size
