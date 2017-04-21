@@ -1,7 +1,7 @@
 sprite: unit_elf
 tier: 2
-health: 6
-combat: 8
+health: 4
+combat: 3
 armor: 2
 range: 4
 inborn: (upkeep2 heals organic researcher2)

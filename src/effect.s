@@ -124,7 +124,7 @@ effect area As:
 | [Whom [W H D] @Args] = As
 | Es = Args{?^normalize_curly}
 | Range = W/$world.c-1
-| Ts = $world.targets_in_range{TargetXYZ Range}.skip{?empty}
+| Ts = $world.units_in_range{TargetXYZ Range}.skip{?empty}
 | case Whom [exclude_self W]:
   | Whom <= W
   | Ts <= Ts.skip{?id><$id}

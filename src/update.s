@@ -295,34 +295,6 @@ update_action Me =
     | $cooldown <= $class.cooldown
 | $action.update
 
-find_in_circle CX CY R F =
-| for PX,PY points_in_circle{R}
-  | X = CX + PX
-  | Y = CY + PY
-  | when X > 0 and Y > 0:
-    | Found = F X Y
-    | when Found: leave Found
-| 0
-
-attack_nearby_enemy Me =
-| O = $owner
-| SightF = $sight
-| UXY = $xyz.take{2}
-| check X Y =
-  | R = 0
-  | for B $world.column_units_get{X Y}.skip{?empty}
-    | when O.is_enemy{B.owner}
-           and B.health
-           and (UXY-[X Y]).abs.int << SightF
-           and not B.invisible
-           and $world.seen_from{$xyz B.xyz}:
-      | R <= B
-  | R
-| Found = find_in_circle $xyz.0 $xyz.1 $sight &check
-| less Found: leave
-| $order_at{Found.xyz}
-| $backtrack <= $xyz
-
 GravAcc = 9.807*0.2
 update_fall Me =
 | $velocity.2 -= GravAcc
@@ -366,7 +338,4 @@ unit.update =
 | update_fade Me
 | update_action Me
 | when $removed: leave //unit can be removed as a result of update_action
-/*| when $combat and $action.type><idle and not $goal:
-  | when not $invisible or not $owner.human:
-    | attack_nearby_enemy Me*/
 | 1 // 1 means we are still alive

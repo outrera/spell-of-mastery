@@ -449,13 +449,13 @@ in_range Me XYZ =
 | less (XYZ.take{2}-$xyz.take{2}).abs<<$range.float: leave 0
 | $world.seen_from{$xyz $goal.xyz}
 
-unit.targets_in_range Range = $world.targets_in_range{Me.xyz Range}
+unit.units_in_range Range = $world.units_in_range{Me.xyz Range}
 
 retaliate Me Enemy Range =
 /*| when $owner.human and not $idle: leave
 | when Enemy.empty: leave
 | when Range:
-  | for U $targets_in_range{Range}:
+  | for U $units_in_range{Range}:
     | when U.id<>$id and U.combat and U.owner.id><$owner.id:
       | retaliate U Enemy 0
 | when $goal and ($goal.combat or $goal.leader):

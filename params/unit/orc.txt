@@ -1,7 +1,7 @@
 sprite: unit_orc
 tier: 2
-health: 12
-combat: 10
+health: 6
+combat: 4
 armor: 6
 worker: 2
 inborn: (upkeep2 heals organic researcher1)

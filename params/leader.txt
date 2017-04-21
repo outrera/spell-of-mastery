@@ -8,6 +8,7 @@ tier: 5
 health: 10 // hit points - number of hits, before this unit is dead
 range: 3
 combat: 10 // chance to hit
+movement: 2
 armor: 6 // chance to evade a hit
 cooldown: 24
 sight: 3
@@ -19,7 +20,6 @@ flyer: 0 // can it fly
 leader: 1
 ai: unit
 item: 0
-movement: 2
 inborn: (heals organic resist_magic researcher4)
 impact: missile{effect_bolt},harm{magic.1},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}

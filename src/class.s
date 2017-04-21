@@ -24,7 +24,9 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   speed/Speed           //cycles to move between cells
   sight/Sight           //scout range
   active/Active         //update unit each cycle?
-  range/Range           //attack range
+  range/Range           //attack range: neib=neighboring cells
+                        //              cross=cells this cell shares enges with
+                        //              any integer=range in cells
   leader/Leader         //is this unit a leader?
   hp/Health             //health points
   combat/Combat         //damage this unit deals on attack

@@ -1,7 +1,8 @@
 sprite: unit_lizard
 tier: 2
-health: 8
-combat: 10
+health: 4
+combat: 3
+movement: 4
 armor: 8
 speed: 18
 inborn: (upkeep2 heals organic researcher1)

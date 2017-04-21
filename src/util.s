@@ -29,6 +29,18 @@ points_in_matrix Ms =
 | R = Ms.size/2
 | points_in_square{R}.keep{X,Y=>Ms.(R+Y).(R+X)}
 
+points_in_diamond R =
+| Ps = []
+| RR = R*2+1
+| for Y R:
+  | C = Y*2+1
+  | X = (RR-C)/2
+  | for I C:
+    | push [X+I-R Y-R] Ps
+    | push [X+I-R R-Y] Ps
+| for I RR: push [I-R 0] Ps
+| Ps
+
 normalize_curly E =
 | case E
   [`{}` Name Args @Rest]
@@ -40,4 +52,4 @@ normalize_curly E =
 
 export points Dirs Dirs4 dirN add_border_to_matrix
        points_in_square points_in_circle
-       points_in_matrix normalize_curly
+       points_in_matrix points_in_diamond normalize_curly

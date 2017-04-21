@@ -26,7 +26,7 @@ cast_spell_sub Me Spell Force =
 | Targets =
     if R>>9000 then SeenUnits
     else if R><0 then [Me]
-    else $world.targets_in_range{Me.xyz Act.range}
+    else $world.units_in_range{Me.xyz Act.range}
 | Ts = Targets.skip{?empty}.keep{?alive}
 | if Hint><harm
   then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}
@@ -189,7 +189,7 @@ ai.update_units =
      | when U.type><unit_spider and U.goal.is_unit: //FIXME: hack
        | G = U.goal
        | when got G.child{effect_poison}:
-         | Ts = U.targets_in_range{1}.skip{?.child{effect_poison}^got}
+         | Ts = U.units_in_range{1}.skip{?.child{effect_poison}^got}
          | Ts = Ts.skip{?empty}
          | Ts = Ts.keep{?is_enemy{U}}
          | when Ts.size: U.order_at{Ts.0.xyz}

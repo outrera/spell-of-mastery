@@ -1,7 +1,7 @@
 sprite: unit_farmer
 tier: 1
-health: 5
-combat: 6
+health: 4
+combat: 2
 armor: 2
 inborn: (income1 heals organic researcher1)
 impact: harm{user},sound{cut}
