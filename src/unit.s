@@ -433,6 +433,7 @@ unit.order_at XYZ act/0 goal/0 =
 | $goal <= if Goal then Goal else $unit_goal
 | $goal_act <= Act
 | $goal_serial <= $goal.serial
+| $world.actors.set{[Me @$world.actors.get]}
 | less $owner.human:
   | $set_path{$path_to{$goal.xyz}}
   | leave
