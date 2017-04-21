@@ -4,7 +4,7 @@ health: 5
 combat: 5
 armor: 10
 //speed: 24
-inborn: (upkeep1 heals regen resist_magic researcher1)
+inborn: (upkeep1 heals regen resist_magic)
 impact: harm{user},sound{cut}
 hit: effect{blood_undead},sound{skeleton_hit}
 death: sound{skeleton_die}

@@ -1,4 +1,4 @@
-use gfx stack heap util line_points unit player
+use enheap gfx stack heap util line_points unit player
 
 MaxUnits = No
 MaxActiveUnits = 4096
@@ -95,6 +95,7 @@ type world{main}
    effects
    free_effects
    active // active units
+   actors/heapval{[]} // currently acting unit
    players
    human // human controlled player
    tid_map/Main.tid_map
@@ -102,6 +103,7 @@ type world{main}
    shadow
    cycle // counts calls to world.update
    turn // current turn
+   player //turn player
    serial
    nil // null unit with id >< 0
    vars/t{} // variables
@@ -258,6 +260,7 @@ handle_attack_triggers Us =
     | AttackTrigger.free
 
 world.new_game =
+| $actors.set{[]}
 | $seed <= LCG_M.rand
 | for K,V $main.params.world: $params.K <= V
 | for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
@@ -265,6 +268,7 @@ world.new_game =
 | $human.human <= 1
 | $cycle <= 0
 | $turn <= 0
+| $player <= 0
 | if $params.explored then $explore{1} else $explore{0}
 | ActNames = $main.params.acts{}{?0}
 | StartMana = $main.params.world.start_mana
@@ -291,7 +295,7 @@ world.new_game =
   | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
-| $new_turn
+| $end_turn
 
 world.notify Text =
 | Clock = clock

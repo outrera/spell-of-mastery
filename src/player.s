@@ -22,6 +22,8 @@ ai.clear =
 | $params.aiCastFlightCycle <= -24*100000
 | $params.ai_spells <= []
 
+PlayerColors = [red blue teal purple orange black white yellow]
+
 type player{id world}
    name
    ai
@@ -100,14 +102,11 @@ player.clear =
 | $lore <= 0
 | $params.lossage <= 0
 | $params.mana <= 0
-| $params.libs_left <= 0
-| $params.temples_left <= 0
 | for Type,Act $main.params.acts: $research.Type <= 0
 
 player.init StartMana StartLore =
 | $lore <= StartLore
 | $mana <= StartMana
-| $reset_counters
 
 player.got_unit U =
 | CID = U.class.id
@@ -138,17 +137,6 @@ player.units =
 
 player.seen XYZ = $sight.(XYZ.1).(XYZ.0)>1
 
-update_units Me =
-
-alloc_ai_blockers Me =
-| for U $units: less U.removed: when U.ai >< avoid:
-  | B = U.owner.alloc_unit{unit_block}
-  | B.move{U.xyz}
-
-free_ai_blockers Me =
-| for U $units: less U.removed: when U.type >< unit_block:
-  | U.free
-
 update_spell_of_mastery Me P =
 | when P.human: for Q $players:
   | S = Q.params.spell_of_mastery
@@ -163,37 +151,39 @@ update_spell_of_mastery Me P =
     | leave
   | P.params.spell_of_mastery <= SOM
 
-//FIXME:calculate income per second here
-update_income Me =
-| IC = $main.params.world.income_cycle
-| Cycle = $world.cycle
-| when Cycle%IC><0: $mana++
-| less $human: when Cycle%24><0: $mana += $params.difficulty-5
-| Leader = $leader
-| when $mana < $main.params.world.defeat_threshold and Leader:
-  | $main.show_message{'Wizard has Lost Too Much Mana'
-       "[$name] is too exhausted and cannot continue his life."}
-  | Leader.harm{Leader 1000}
-  | Leader.harm{Leader 1000} //in case leade has shell
-  | $world.effect{Leader.xyz electrical}
-
 player.update =
 | Cycle = $world.cycle
-| LibId = $main.classes.deco_bookshelf.id
-| TempleId = $main.classes.deco_templepit.id
-| LibCount = $unit_counts.LibId
-| TempleCount = $unit_counts.TempleId
-| $params.libs_left <= LibCount
-| $params.temples_left <= TempleCount
 | when Cycle><0 and $human and $leader:
   | $world.view.center_at{$leader.xyz cursor/1}
-| update_units Me
-| update_income Me
 | update_spell_of_mastery $world Me
-| less $human: when Cycle%10><$id:
-  //|alloc_ai_blockers $world
-  | $ai.update
-  //|free_ai_blockers $world
+
+
+alloc_ai_blockers Me =
+| for U $units: less U.removed: when U.ai >< avoid:
+  | B = U.owner.alloc_unit{unit_block}
+  | B.move{U.xyz}
+
+free_ai_blockers Me =
+| for U $units: less U.removed: when U.type >< unit_block:
+  | U.free
+
+EndTurnLoop = 0
+player.new_turn =
+| less $total_units:
+  | if EndTurnLoop++ > 16
+    then | say "caught in end turn loop"
+    else | $world.end_turn //no units, skip his turn
+         | leave
+| EndTurnLoop <= 0
+| say "[$name] ([PlayerColors.$id]) begins its turn [$world.turn]"
+  
+player.make_move =
+| when $human:
+  | leave
+| $world.end_turn
+//|alloc_ai_blockers $world
+//| $ai.update
+//|free_ai_blockers $world
 
 player.dig_mark X Y Z =
 | W = $world.column_units_get{X Y}.find{(?type><unit_dig and ?owner.id><$id)}

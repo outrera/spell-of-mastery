@@ -5,7 +5,7 @@ combat: 12
 armor: 1
 cooldown: 4
 speed: 28
-inborn: (upkeep4 heals organic regen amphibian researcher1)
+inborn: (upkeep4 heals organic regen amphibian)
 //attack: sound{hydra_attack}
 impact: harm{user},macro{poison},sound{hydra_attack},neibs{harm{8},macro{poison}}
 hit: effect{blood},sound{hydra_hit}

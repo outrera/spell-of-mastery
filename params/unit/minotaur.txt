@@ -3,7 +3,7 @@ tier: 3
 health: 26
 combat: 8
 armor: 6
-inborn: (upkeep3 heals organic researcher1)
+inborn: (upkeep3 heals organic)
 impact: harm{user},sound{minotaur_attack}
 hit: effect{blood},sound{minotaur_hit}
 death: sound{minotaur_die}

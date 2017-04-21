@@ -3,7 +3,7 @@ tier: 1
 health: 4
 combat: 3
 armor: 10
-inborn: (upkeep1 heals organic researcher1)
+inborn: (upkeep1 heals organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{rat_death}
 death: sound{rat_death}

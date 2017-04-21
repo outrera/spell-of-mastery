@@ -382,7 +382,7 @@ view.render_frame =
 | when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
-| $infoText.render.draw{$fb 200 ($h-10)}
+| $infoText.render.draw{$fb 200 ($h-50)}
 | $infoText.value <= ''
 
 // calculates current framerate and adjusts sleeping accordingly

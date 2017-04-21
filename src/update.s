@@ -4,25 +4,6 @@ use util
 main.update =
 | $world.update
 
-
-player.reset_counters =
-| Param = $params
-| Param.item_gold <= 0
-| Param.item_wood <= 0
-| Param.item_stone <= 0
-| Param.item_iron <= 0
-| Param.item_houses <= 0
-| for K,V Param: when K.size>5 and K.take{5}><item_:
-  | Param.K <= 0
-
-count_flag_resources Me =
-| Param = $owner.params
-| for K,V $cell.items: Param.K <= Param.K^~{0} + V
-
-player.recount =
-| $reset_counters
-| for U $units: when U.ai><flag: less U.removed: count_flag_resources U
-
 EventActions = []
 
 check_event_condition Me When =
@@ -118,10 +99,11 @@ world.update =
     | for U $human.picked: U.picked <= 1
 | when EventActions.end: $process_events
 | when update_events Me: leave
-| for Player $players: when Player.total_units: //reset counters
-  | Player.reset_counters
 | update_units Me
 | for Player $players: when Player.total_units: Player.update
+| $actors.set{$actors.get.skip{A=>A.idle or not $health}}
+| less $actors.get.size or $paused:
+  | $players.$player.make_move
 | $cycle++
 | $view.ui.update
 
@@ -326,7 +308,6 @@ unit.update =
     | leave
 | when $paralyzed and $alive: leave
 | update_anim Me
-| when $ai><flag: count_flag_resources Me
 | when $idle:
   | less $empty:
     | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}

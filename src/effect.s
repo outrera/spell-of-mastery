@@ -553,21 +553,8 @@ effect research Arg:
 | O.lore -= Act.lore
 | O.research_item{What}
 
-effect researches Amount:
-| O = $owner
-| Pr = O.params
-| less Pr.libs_left>0: leave
-| Pr.libs_left--
-| O.lore += Amount
-
 effect upkeep Amount:
-| O = $owner
-| when (Target.cell-1).type><temple:
-  | Pr = O.params
-  | when Pr.temples_left>0:
-    | Pr.temples_left--
-    | leave
-| O.mana -= Amount
+| $owner.mana -= Amount
 
 effect lore Amount:
 | Target.owner.lore += Amount

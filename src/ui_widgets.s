@@ -67,7 +67,8 @@ unit_panel.draw G X Y =
 | Font.draw{G X+4 Y+75 "[$unit.title]"}
 | Font.draw{G X+27 Y+14"[max 0 $unit.health]"}
 | Font.draw{G X+67 Y+28"[$unit.combat]"}
-| Font.draw{G X+67 Y+57"[$unit.armor]"}
+| Range = if $unit.range.is_text then 1 else $unit.range
+| Font.draw{G X+67 Y+57"[Range]"}
 | when Main.params.ui.debug><1:
   | Font.draw{G X+3 Y-16 "sn:[max 0 $unit.serial]"}
   | Font.draw{G X+3 Y-32 "id:[max 0 $unit.id]"}
@@ -116,11 +117,11 @@ resource_counters.draw G X Y =
 | Param = P.params
 | Font.draw{G IX+36 IY+2 "[P.mana]"}
 | Font.draw{G IX+148 IY+2 "[P.lore]"}
-| Font.draw{G IX+232 IY+2 "[Param.item_gold]"}
-| Font.draw{G IX+332 IY+2 "[Param.item_wood]"}
-| Font.draw{G IX+428 IY+2 "[Param.item_stone]"}
-| Font.draw{G IX+522 IY+2 "[Param.item_iron]"}
-| Font.draw{G IX+620 IY+2 "[Param.item_houses]"}
+| Font.draw{G IX+232 IY+2 "[$world.turn]"}
+| Font.draw{G IX+332 IY+2 "[$world.player]"}
+//| Font.draw{G IX+428 IY+2 "[Param.item_stone]"}
+//| Font.draw{G IX+522 IY+2 "[Param.item_iron]"}
+//| Font.draw{G IX+620 IY+2 "[Param.item_houses]"}
 | Debug = $world.params.debug
 | when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
 | C = 34

@@ -4,7 +4,7 @@ health: 22
 combat: 10
 armor: 4
 speed: 18
-inborn: (upkeep3 heals organic flyer researcher1)
+inborn: (upkeep3 heals organic flyer)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{griffin_hit}
 death: sound{griffin_die}

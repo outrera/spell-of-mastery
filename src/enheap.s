@@ -66,4 +66,11 @@ sexp.heapfree1 =
 | SEXPConses.push{Me}
 | T
 
-export enheap_init
+type heapval{Init} state/Init.enheap
+heapval.get = $state.unheap
+heapval.set V =
+| P = V.enheap
+| $state.heapfree
+| $state <= P
+
+export heapval enheap_init

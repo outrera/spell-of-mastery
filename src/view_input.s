@@ -240,8 +240,6 @@ place_object Me Bank Type =
   | leave
 | when Class.item><1:
   | Cell.add_item{ClassName 1}
-  | Flag = Cell.units.find{?ai><flag}
-  | when got Flag: Flag.owner.recount
   | leave
 | when Z+Class.height>>$world.d: leave
 | Place = 1
@@ -267,8 +265,6 @@ place_object Me Bank Type =
   | U.move{X,Y,Z}
   | U.run_effects{?><place U U.xyz}
   | U.animate{idle}
-  | Flag = Cell.units.find{?ai><flag}
-  | when got Flag: Flag.owner.recount
 
 world_place_tile_walls Me X Y Z Tile =
 | Wall = $main.tiles.(Tile.wall)
@@ -366,10 +362,7 @@ remove_object_or_tile Me =
     | leave
 | case Brush
   [obj Type]
-    | Cell = $world.cell{X Y Z}
-    | Flag = Cell.units.find{?ai><flag}
     | for U Us: U.free
-    | when got Flag: Flag.owner.recount
   [tile Type]
     | less $world.at{X Y Z}.empty: when Z>1
       | $world.clear_tile{X Y Z-1}

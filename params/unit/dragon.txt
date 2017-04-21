@@ -5,7 +5,7 @@ combat: 10
 armor: 8
 cooldown: 4
 speed: 20
-inborn: (upkeep4 heals organic flyer researcher4)
+inborn: (upkeep4 heals organic flyer)
 //attack: sound{dragon_hit}
 impact: harm{user},harm{unavoid.2},impact{fire_ring},sound{explosion}
 hit: effect{blood},sound{dragon_hit}

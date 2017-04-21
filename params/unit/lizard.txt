@@ -5,7 +5,7 @@ combat: 3
 movement: 4
 armor: 8
 speed: 18
-inborn: (upkeep2 heals organic researcher1)
+inborn: (upkeep2 heals organic)
 attack: sound{lizard_attack}
 impact: harm{user}//,sound{cut}
 hit: effect{blood},sound{lizard_hit}

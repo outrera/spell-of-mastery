@@ -3,7 +3,7 @@ tier: 3
 health: 15
 combat: -1
 armor: 10
-inborn: (upkeep2 heals organic flyer researcher2)
+inborn: (upkeep2 heals organic flyer)
 //attack: sound{impact}
 impact: harm{user},harm{unavoid.20},sound{impact}
 hit: effect{blood_undead},sound{devil_hit}

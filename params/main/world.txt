@@ -12,8 +12,6 @@ tile_size: 64,32,32 //width,height,depthm; typical isometric tile cube is 64x32x
 tile_banks: tile,room//,deco
 class_banks: unit,leader,item,special,trigger
 explored: 1 //all maps are explored from the beginning
-income_cycle: 4
-defeat_threshold: -1000 //negative mana forcing player defeat
 death_cost: 500 //mana lost when leader dies
 start_mana: 1000 //400
 start_lore: 600

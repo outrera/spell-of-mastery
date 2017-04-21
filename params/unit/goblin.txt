@@ -4,7 +4,7 @@ health: 5
 combat: 5
 armor: 4
 range: 3
-inborn: (upkeep1 heals organic researcher1)
+inborn: (upkeep1 heals organic)
 impact: harm{user},sound{cut}
 hit: sound{goblin_hit}
 death: sound{goblin_die}
