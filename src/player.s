@@ -178,11 +178,9 @@ player.new_turn =
 | say "[$name] ([PlayerColors.$id]) begins its turn [$world.turn]"
   
 player.make_move =
-| when $human:
-  | leave
-| $world.end_turn
+| when $human: leave
 //|alloc_ai_blockers $world
-//| $ai.update
+| $ai.update
 //|free_ai_blockers $world
 
 player.dig_mark X Y Z =

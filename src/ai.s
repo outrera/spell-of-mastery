@@ -224,7 +224,6 @@ ai_leader_harmed Me Attacker Victim =
   | U.order_act{recall target/U}
 
 ai.harm Attacker Victim =
-| Victim.ai_wait <= 0
 | when Victim.leader><1: ai_leader_harmed Me Attacker Victim
 
 ai.group_attack Types =
@@ -287,7 +286,7 @@ ai_update Me =
 | when Player.id: while $script><1:
 | $update_units
 
-ai.update =
+ai.update_cycle =
 | PerCycle <= t
 | Player = $player
 | SeenUnits <= $world.active.list.keep{U=>Player.seen{U.xyz}}
@@ -301,5 +300,40 @@ ai.update =
 | SeenEnemies <= 0
 | PerCycle <= 0
 
+PerTurn = 0
+
+ai_update_units Me =
+| Pentagram = $player.pentagram
+| Leader = $player.leader
+//| when Pentagram and Leader and Leader.ap>>2: ai_update_build Me
+| for U OwnedUnits: less U.handled:
+  | U.handled <= 1
+  | when U.combat:
+    | Cs = U.reachable_cells.keep{?0><attack}
+    | case Cs [[Type Cell]@_]: U.order_at{Cell.xyz}
+    | leave 0
+| 1 //return true, that we have handled all units
+
+
+ai_update_turn Me =
+| when $player.params.attack_with_guards >< 1:
+  | for U OwnedUnits: U.attacker <= 1
+  | $player.params.attack_with_guards <= 0
+| when ai_update_units Me:
+  | $world.end_turn
+
+ai.update =
+| PerTurn <= t
+| Player = $player
+| SeenUnits <= $world.active.list.keep{U=>Player.seen{U.xyz}}
+                     .keep{(?unit and not ?removed)}
+| PID = Player.id
+| OwnedUnits <= SeenUnits.keep{?owner.id><PID}
+| SeenEnemies <= SeenUnits.keep{?owner.is_enemy{Player}}.skip{?invisible}
+| ai_update_turn Me
+| SeenUnits <= 0
+| OwnedUnits <= 0
+| SeenEnemies <= 0
+| PerTurn <= 0
 
 export

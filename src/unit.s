@@ -44,7 +44,7 @@ type unit.$class{Id World}
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
   cooldown //cooldown before the unit can attack again
-  ai_wait //cycles for ai to wait
+  handled //unit was already processed
   active // true if this unit resides in the list of active units
   path/[] // path to goal
   goal //target of this unit
@@ -169,13 +169,13 @@ unit.init Class =
     | $world.active.push{Me}
   | $active <= 1
   | $ap <= $movement
+  | $handled <= 0
   | $ordered.type <= 0
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $velocity.init{[0.0 0.0 0.0]}
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
-  | $ai_wait <= 0
   | for E $inborn: case E
       [`{}` Name Duration @Args] | $add_effect{Name Duration Args}
       Else | $add_effect{E 0 []}

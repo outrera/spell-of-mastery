@@ -425,34 +425,6 @@ view.update_play =
     | Unmarking <= No
     | $mice_click <= 0
 
-enemies_in_range Me =
-| O = $owner
-| check B =
-  | when O.is_enemy{B.owner} and B.health and not B.invisible:
-    | leave 1
-  | 0
-| $units_in_range{$range}.skip{?empty}.keep{&check}
-
-unit.reachable_cells =
-| Xs = []
-| XYZ = $xyz
-| $find{$ap
-  | Dst =>
-    | R = \block
-    | Type = \move
-    | B = Dst.block
-    | if not B then R <= 0
-      else if $owner.is_enemy{B.owner} then
-        | if $range.is_int then Type <= 0
-          else Type <= \attack
-      else if not B.ap then Type <= 0
-      else Type <= \swap
-    | when Type: push [Type Dst] Xs
-    | R}
-| when $range.is_int:
-  | for E Me^enemies_in_range: push [attack E] Xs
-| Xs
-
 world.update_picked =
 | for M $marks: M.free
 | $marks.heapfree
