@@ -101,7 +101,7 @@ world.update =
 | when update_events Me: leave
 | update_units Me
 | for Player $players: when Player.total_units: Player.update
-| $actors.set{$actors.get.skip{A=>A.idle or not $health}}
+| $actors.set{$actors.get.skip{A=>A.idle or not A.health}}
 | less $actors.get.size or $paused:
   | $players.$player.make_move
 | $cycle++
