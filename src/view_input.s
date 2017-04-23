@@ -27,7 +27,6 @@ order_at Me XYZ Target =
   | less Target: less Used.end:
     | Found = $world.find{1000 U Cell | Dst => no Used.find{Dst}}
     | when Found: P <= Found
-  | U.backtrack <= 0
   | U.order_at{P.xyz}
   | push P Used
 

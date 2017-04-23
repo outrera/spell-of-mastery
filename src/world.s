@@ -584,8 +584,7 @@ world.effect XYZ What =
 
 world.units_in_range Center R =
 | Units = []
-| Points = points_in_diamond R
-| for X,Y Points
+| for X,Y points_in_diamond{R}
   | XYZ = Center+[X Y 0]
   | X = XYZ.0
   | Y = XYZ.1

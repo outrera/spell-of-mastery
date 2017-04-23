@@ -99,7 +99,7 @@ unit.child Type =
 | $world.units_get{$xyz}
         .find{(?host and ?type><Type and ?host.serial><$serial)}
 
-unit.is_enemy Target = $owner.is_enemy{Target.owner}
+unit.is_enemy Target = $owner.is_enemy{Target.owner} and Target.health
 
 unit.size =
 | S = $sprite.size
@@ -195,13 +195,12 @@ get_named_effect Me Name Params =
 | Effect = $main.params.effect.Name
 | when no Effect:
   | E = Params.find{P => case P [effect @_] 1}
-  | when no E: E <= [effect [on never]] // supply dummy
-  | Effect <= E.tail.unheap //do unheap because Params could reside on heap
+  | when no E: leave [[on never]] // supply dummy
+  | leave E.tail.unheap //do unheap because Params could reside on heap
 | Effect
 
 unit.add_effect Name Duration Params =
 | Effect = get_named_effect Me Name Params
-| less Effect: leave
 | On = Effect.0
 | when On.0 <> `on`:
   | $world.notify{"unit.add_effect: missing `on{When}` for effect [Name]"}
@@ -225,7 +224,7 @@ unit.get_effect Name = $effects.find{?name><Name}
 
 unit.get_effect_value Name =
 | E = $effects.find{?name><Name}
-| if got E then E.params else 0
+| if got E then E.params.unheap else 0
 
 unit.strip_effect Name =
 | FreeEs =
@@ -293,13 +292,6 @@ unit.run_effect Name Params Target TargetXYZ =
 | Es = []
 | Effect = get_named_effect Target Name Params
 | when Effect: $effect{Effect Target TargetXYZ}
-
-unit.`=backtrack` XYZ =
-| less XYZ:
-  | $strip_effect{btrack}
-  | leave
-| when $has{btrack}: leave
-| $add_effect{btrack 0 [[effect [on [`.` cycle 24]] [btrack XYZ]]]}
 
 unit.change_owner NewOwner =
 | FXYZ = 0

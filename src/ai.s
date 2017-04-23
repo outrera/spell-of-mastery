@@ -302,6 +302,40 @@ ai.update_cycle =
 
 PerTurn = 0
 
+/*
+effect btrack XYZ:
+| when not $idle or $goal:
+  | less $goal: leave
+  | LA = metric $goal.xyz XYZ
+  | less LA>16.0: leave
+  | LB = metric $xyz XYZ
+  | less LA>10.0: leave
+| when $xyz><XYZ:
+  | $backtrack <= 0
+  | leave
+| B = $world.block_at{XYZ}
+| when B and not B.idle: leave
+| $order_at{XYZ}*/
+
+unit.`=backtrack` XYZ =
+| less XYZ:
+  | $strip_effect{btrack}
+  | leave
+| when $has{btrack}: leave
+//| $add_effect{btrack 0 [[effect [on [`.` cycle 24]] [btrack XYZ]]]}
+| $add_effect{btrack 0 XYZ}
+
+unit.advance_to GoalXYZ =
+| when $xyz >< GoalXYZ: leave 1
+| Path = $path_to{GoalXYZ}
+| less Path.size: leave 2
+| Moves = map C $reachable_cells: C.1
+| Cell = No
+| while Path.size and Moves.find{Path.0}: Cell <= pop Path
+| when no Cell: leave 2
+| $order_at{Cell.xyz}
+| 0
+
 ai_update_units Me =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
@@ -310,10 +344,20 @@ ai_update_units Me =
   | U.handled <= 1
   | when U.combat:
     | Cs = U.reachable_cells.keep{?0><attack}
-    | case Cs [[Type Cell]@_]: U.order_at{Cell.xyz}
-    | leave 0
-| 1 //return true, that we have handled all units
-
+    | case Cs [[Type Cell]@_]:
+      | U.backtrack <= U.xyz
+      | U.order_at{Cell.xyz}
+      | leave 0
+    | Es = U.units_in_range{U.sight}.keep{X=>U.is_enemy{X}}
+    | Es = Es.keep{E => U.path_to{E.xyz}.size<10}
+    | case Es [E@_]:
+      | U.backtrack <= U.xyz
+      | U.order_at{E.xyz}
+      | leave 0
+    | less U.attacker:
+      | BtXYZ = U.get_effect_value{btrack}
+      | when BtXYZ and U.advance_to{BtXYZ}: U.backtrack <= 0
+| 1 //return true, meaning that we have handled all units
 
 ai_update_turn Me =
 | when $player.params.attack_with_guards >< 1:

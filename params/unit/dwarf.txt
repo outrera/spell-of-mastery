@@ -1,6 +1,6 @@
 sprite: unit_dwarf
 tier: 2
-health: 8
+health: 1//8
 combat: 3
 armor: 25
 speed: 28

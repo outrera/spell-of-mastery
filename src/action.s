@@ -146,9 +146,6 @@ dact swap.start
 | less T.path.end: T.set_path{[T.cell @T.path.list]}
 | O.init{move U.from}
 | O.priority <= 100
-//| less T.goal: less U.goal and U.goal.xyz >< T.xyz:
-//  | less T.has{btrack}:
-//    | T.backtrack <= T.xyz
 
 dact swap.update | move_update Me
 

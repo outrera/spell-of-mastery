@@ -47,20 +47,6 @@ effect tenant_mark Type:
 
 metric A B = (B-A).take{2}.abs
 
-effect btrack XYZ:
-| when not $idle or $goal:
-  | less $goal: leave
-  | LA = metric $goal.xyz XYZ
-  | less LA>16.0: leave
-  | LB = metric $xyz XYZ
-  | less LA>10.0: leave
-| when $xyz><XYZ:
-  | $backtrack <= 0
-  | leave
-| B = $world.block_at{XYZ}
-| when B and not B.idle: leave
-| $order_at{XYZ}
-
 effect gain @Args:
 | ActNames = []
 | Player = 0
