@@ -445,19 +445,6 @@ in_range Me XYZ =
 unit.units_in_range Range = $world.units_in_range{Me.xyz Range}
 
 retaliate Me Enemy Range =
-/*| when $owner.human and not $idle: leave
-| when Enemy.empty: leave
-| when Range:
-  | for U $units_in_range{Range}:
-    | when U.id<>$id and U.combat and U.owner.id><$owner.id:
-      | retaliate U Enemy 0
-| when $goal and ($goal.combat or $goal.leader):
-  | when ($goal.xyz-Me.xyz).abs << (Enemy.xyz-Me.xyz).abs:
-    | leave
-| less $combat: leave
-| $order_at{Enemy.xyz}
-| $backtrack <= $xyz
-| leave*/
 
 heal_unit Me Amount =
 | less $class.hp: leave

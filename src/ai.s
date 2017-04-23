@@ -341,7 +341,6 @@ ai_update_units Me =
 | Leader = $player.leader
 //| when Pentagram and Leader and Leader.ap>>2: ai_update_build Me
 | for U OwnedUnits: less U.handled:
-  | U.handled <= 1
   | when U.combat:
     | Cs = U.reachable_cells.keep{?0><attack}
     | case Cs [[Type Cell]@_]:
@@ -353,10 +352,12 @@ ai_update_units Me =
     | case Es [E@_]:
       | U.backtrack <= U.xyz
       | U.order_at{E.xyz}
+      | U.handled <= 1
       | leave 0
     | less U.attacker:
       | BtXYZ = U.get_effect_value{btrack}
       | when BtXYZ and U.advance_to{BtXYZ}: U.backtrack <= 0
+  | U.handled <= 1
 | 1 //return true, meaning that we have handled all units
 
 ai_update_turn Me =
