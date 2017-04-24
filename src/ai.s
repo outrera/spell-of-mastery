@@ -331,7 +331,7 @@ unit.advance_to GoalXYZ =
 | less Path.size: leave 2
 | Moves = map C $reachable_cells: C.1
 | Cell = No
-| while Path.size and Moves.find{Path.0}: Cell <= pop Path
+| while Path.size and got Moves.find{Path.0}: Cell <= pop Path
 | when no Cell: leave 2
 | $order_at{Cell.xyz}
 | 0
@@ -342,16 +342,18 @@ ai_update_units Me =
 //| when Pentagram and Leader and Leader.ap>>2: ai_update_build Me
 | for U OwnedUnits: less U.handled:
   | when U.combat:
-    | Cs = U.reachable_cells.keep{?0><attack}
-    | case Cs [[Type Cell]@_]:
+    | Cs = U.reachable_cells
+    | case Cs.keep{?0><attack} [[Type Cell]@_]:
       | U.backtrack <= U.xyz
       | U.order_at{Cell.xyz}
       | leave 0
     | Es = U.units_in_range{U.sight}.keep{X=>U.is_enemy{X}}
+    | Flt = Cs{[?1 1]}.table //filtering table
+    | Es = Es.skip{E=>Flt.(E.cell)><1}
     | Es = Es.keep{E => U.path_to{E.xyz}.size<10}
     | case Es [E@_]:
       | U.backtrack <= U.xyz
-      | U.order_at{E.xyz}
+      | U.advance_to{E.xyz}
       | U.handled <= 1
       | leave 0
     | less U.attacker:
