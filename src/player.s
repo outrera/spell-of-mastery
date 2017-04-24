@@ -175,7 +175,7 @@ player.new_turn =
     else | $world.end_turn //no units, skip his turn
          | leave
 | EndTurnLoop <= 0
-| say "[$name] ([PlayerColors.$id]) begins its turn [$world.turn]"
+| say "[$name] ([PlayerColors.$id]) begins turn [$world.turn]"
   
 player.make_move =
 | when $human: leave
