@@ -87,7 +87,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   cool/Cool //action cooldown
   needs/Needs //list of dependencies
   priority/Priority
-  range/Range //cross (4dirs near), neib (8dirs near) or a number
+  range/Range //range
   speed/Speed //number of cycles before unit can act again
   repeat/Repeat //repeat action, while possible (i.e. tree is not chopped)
   affects/Affects //what it can target: self, unit, tile, any

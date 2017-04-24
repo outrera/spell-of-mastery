@@ -1,7 +1,8 @@
 use util
 
 unit.end_turn =
-| $ap <= $movement
+| $steps <= $class.steps
+| $acted <= 0
 | $handled <= 0
 
 world.new_turn =

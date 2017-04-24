@@ -58,7 +58,8 @@ type unit.$class{Id World}
   flags //various flags (mostly effects)
   effects/[] //active effects
   mod //set by various effects to modify some contextual behavior
-  ap //action points = movement remain
+  steps //movement points remained this turn
+  acted //has this units acted this turn
   can_move //movement function
 | $action <= $world.action{Me}
 | $next_action <= $world.action{Me}
@@ -168,7 +169,8 @@ unit.init Class =
   | less $active
     | $world.active.push{Me}
   | $active <= 1
-  | $ap <= $movement
+  | $steps <= $class.steps
+  | $acted <= 0
   | $handled <= 0
   | $ordered.type <= 0
   | $next_action.type <= 0
@@ -411,8 +413,8 @@ unit.order_at XYZ act/0 goal/0 =
          else if Goal and $owner.is_enemy{Goal.owner} then
           $main.params.acts.attack
          else $main.params.acts.move
-| when $ap < Act.ap:
-  | $owner.notify{'not enough action points'}
+| when Act.ap><acted and $acted:
+  | $owner.notify{'The unit has already acted this turn'}
   | leave
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $owner.human and (Act.title><move or Act.title><attack):

@@ -256,7 +256,8 @@ update_next_action Me =
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0
-| $ap -= $action.act.ap
+| APCost = $action.act.ap
+| if APCost><acted then $acted <= 1 else $steps -= APCost
 | $action.start
 | when $anim><move: $pick_facing{$facing}
 

@@ -4,7 +4,7 @@ tier: 1
 height: 2
 health: 1 // hit points - number of hits, before this unit is dead
 combat: 0 // chance to hit
-movement: 3
+steps: 3
 armor: 0 // chance to evade a hit
 cooldown: 16
 sight: 5
@@ -12,7 +12,7 @@ speed: 24 // cycles required to move between game world cells
 pickable: 1
 passable: 0 // other units can move on top of this one
 flyer: 0 // can it fly
-range: neib //1
+range: 1
 ai: unit
 item: 0
 impact: sound{attack2}

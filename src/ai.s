@@ -202,7 +202,7 @@ ai_leader_harmed Me Attacker Victim =
   | leave
 | when Attacker:
   | R = Attacker.range
-  | when R><cross or R><1 or (Attacker.xyz-Victim.xyz).abs<2.0:
+  | when R><1 or (Attacker.xyz-Victim.xyz).abs<2.0:
       | F = Victim.find{8 | D => (D.xyz-Attacker.xyz).abs >> 2.0
                                  and (D.xyz-Victim.xyz).abs < 3.0}
       | when F: Victim.order_at{F.xyz}
@@ -329,7 +329,7 @@ unit.advance_to GoalXYZ =
 | when $xyz >< GoalXYZ: leave 1
 | Path = $path_to{GoalXYZ}
 | less Path.size: leave 2
-| Moves = map C $reachable_cells: C.1
+| Moves = map C $reachable: C.1
 | Cell = No
 | while Path.size and got Moves.find{Path.0}: Cell <= pop Path
 | when no Cell: leave 2
@@ -339,14 +339,17 @@ unit.advance_to GoalXYZ =
 ai_update_units Me =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
-//| when Pentagram and Leader and Leader.ap>>2: ai_update_build Me
+//| when Pentagram and Leader and Leader.ap: ai_update_build Me
 | for U OwnedUnits: less U.handled:
   | when U.combat:
-    | Cs = U.reachable_cells
+    | Cs = U.reachable
     | case Cs.keep{?0><attack} [[Type Cell]@_]:
       | U.backtrack <= U.xyz
       | U.order_at{Cell.xyz}
       | leave 0
+| for U OwnedUnits: less U.handled:
+  | when U.combat:
+    | Cs = U.reachable
     | Es = U.units_in_range{U.sight}.keep{X=>U.is_enemy{X}}
     | Flt = Cs{[?1 1]}.table //filtering table
     | Es = Es.skip{E=>Flt.(E.cell)><1}

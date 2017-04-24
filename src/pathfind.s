@@ -100,22 +100,20 @@ enemies_in_range Me =
   | 0
 | $units_in_range{$range}.skip{?empty}.keep{&check}
 
-unit.reachable_cells =
+unit.reachable =
 | Xs = []
 | XYZ = $xyz
-| $find{$ap
+| when $steps: $find{$steps
   | Dst =>
     | R = \block
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
-      else if $owner.is_enemy{B.owner} then
-        | if $range.is_int then Type <= 0
-          else Type <= \attack
-      else if not B.ap then Type <= 0
+      else if $owner.id <> B.owner.id then Type <= 0
+      else if not B.steps then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | R}
-| when $range.is_int:
+| less $acted: when $range.is_int:
   | for E Me^enemies_in_range: push [attack E] Xs
 | Xs
