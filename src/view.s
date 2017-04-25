@@ -90,7 +90,7 @@ view.center_at XYZ cursor/0 =
 | when Cursor: $cursor.init{X,Y,Z}
 | VO = -[$h/$yunit $h/$yunit]+[X Y]-[Z/$zunit Z/$zunit]+[6 6]
 | when Z > 31: VO += [2 2] //hack to improve high altitude centering
-| $view_origin.init{VO}
+| $view_origin.init{VO-[6 6]}
 
 view.set_brush NewBrush = $brush.init{NewBrush}
 

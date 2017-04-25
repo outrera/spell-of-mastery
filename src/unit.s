@@ -415,7 +415,7 @@ unit.order_at XYZ act/0 goal/0 =
   | $owner.notify{'The unit has already moved this turn.'}
   | leave
 | when Act.ap.is_int and $steps < Act.ap:
-  | $owner.notify{'Not enough action points ([Act.ap] required)'}
+  | $owner.notify{"Not enough action points ([Act.ap] required)"}
   | leave
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $owner.human and (Act.title><move or Act.title><attack):

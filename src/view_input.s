@@ -137,9 +137,7 @@ handle_picked Me Rect Units = //Me is view
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | less $mice_click:
-  | less Units.end:
-    | get_gui{}.cursor <= $main.img{ui_cursor_glass}
-    //| $on_unit_pick{}{[Units.0]}
+  //| less Units.end: get_gui{}.cursor <= $main.img{ui_cursor_glass}
   | leave
 | when $mice_click >< rightup: leave
 | when $mice_click >< left: leave

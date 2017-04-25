@@ -117,8 +117,8 @@ resource_counters.draw G X Y =
 | Param = P.params
 | Font.draw{G IX+36 IY+2 "[P.mana]"}
 | Font.draw{G IX+148 IY+2 "[P.lore]"}
-| Font.draw{G IX+232 IY+2 "[$world.turn]"}
-| Font.draw{G IX+332 IY+2 "[$world.player]"}
+| Font.draw{G IX+232 IY+2 "[$world.turn]:[$world.player]"}
+//| Font.draw{G IX+332 IY+2 "[$world.player]"}
 //| Font.draw{G IX+428 IY+2 "[Param.item_stone]"}
 //| Font.draw{G IX+522 IY+2 "[Param.item_iron]"}
 //| Font.draw{G IX+620 IY+2 "[Param.item_houses]"}
