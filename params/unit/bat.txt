@@ -4,7 +4,7 @@ health: 3
 combat: 1
 armor: 14
 speed: 20
-inborn: (upkeep1 heals flyer organic)
+inborn: (flyer organic)
 attack: sound{bat_attack}
 impact: harm{user}
 hit: effect{blood},sound{bat_hit}

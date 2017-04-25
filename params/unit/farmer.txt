@@ -3,7 +3,7 @@ tier: 1
 health: 4
 combat: 2
 armor: 2
-inborn: (income1 heals organic)
+inborn: (organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{male_hit}
 death: sound{male_die}

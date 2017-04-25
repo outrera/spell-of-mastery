@@ -4,7 +4,7 @@ health: 6
 combat: 4
 armor: 6
 worker: 2
-inborn: (upkeep2 heals organic)
+inborn: (organic)
 //attack: sound{cut}
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{orc_hit}

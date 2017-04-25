@@ -177,7 +177,13 @@ unit.init Class =
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
   | for E $inborn: case E
-      [`{}` Name Duration @Args] | $add_effect{Name Duration Args}
+      [`{}` Head @Args]
+        | Args = map A Args: case A
+           [`@` [`.` turns T]] | $world.turn+T
+           Arg | Arg
+        | case Head
+           [`.` Name Life] | $add_effect{Name Life Args}
+           Name | $add_effect{Name 0 Args}
       Else | $add_effect{E 0 []}
   | $update_move_method
 
@@ -282,16 +288,15 @@ unit.acts =
 
 unit.run_effects Selector Target TargetXYZ =
 | Es = []
-| for E $effects: when Selector E.when:
+| for E $effects: when Selector E:
   | Effect = get_named_effect Target E.name E.params
-  | when Effect:
-    | push Effect Es //cuz invoking it right here may clobber $effects
+  | push Effect Es //cuz invoking it right here may clobber $effects
 | for Effect Es: $effect{Effect Target TargetXYZ}
 
 unit.run_effect Name Params Target TargetXYZ =
 | Es = []
 | Effect = get_named_effect Target Name Params
-| when Effect: $effect{Effect Target TargetXYZ}
+| $effect{Effect Target TargetXYZ}
 
 unit.change_owner NewOwner =
 | FXYZ = 0
@@ -493,7 +498,7 @@ unit.assault Combat Target =
     Else
       | bad "Unknown combat modifier [Mod]"
 | less Magic:
-  | $run_effects{?><attack Me $xyz}
+  | $run_effects{?when><attack Me $xyz}
   | Mods = $mod
   | $mod <= 0
   | when Mods: for Mod Mods: case Mod
@@ -520,9 +525,9 @@ unit.harm Attacker Damage @Magic =
   | leave
 | Mg = not Magic.end
 | when Damage>0:
-  | $run_effects{?><harm Me $xyz}
-  | if Mg then $run_effects{?><magic_harm Me $xyz}
-    else $run_effects{?><phys_harm Me $xyz}
+  | $run_effects{?when><harm Me $xyz}
+  | if Mg then $run_effects{?when><magic_harm Me $xyz}
+    else $run_effects{?when><phys_harm Me $xyz}
 | Mods = $mod
 | $mod <= 0
 | when Mods: for Mod Mods: case Mod
@@ -568,7 +573,7 @@ unit.fine_move FXYZ =
 unit.move XYZ =
 | C = $world.c
 | $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
-| when $class.active: $run_effects{?><move Me $xyz}
+| when $class.active: $run_effects{?when><move Me $xyz}
 | Me
 
 unit.remove =

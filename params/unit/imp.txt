@@ -5,7 +5,7 @@ combat: 2
 armor: 10
 speed: 24
 worker: 1
-inborn: (upkeep2 heals organic)
+inborn: (organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{imp_hit}
 death: sound{imp_die}

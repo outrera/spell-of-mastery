@@ -3,7 +3,7 @@ tier: 4
 health: 60
 combat: 8
 armor: 6
-inborn: (upkeep4 heals organic)
+inborn: (organic)
 //attack: sound{cyclops_club}
 impact: harm{user},sound{cyclops_club}
 hit: effect{blood},sound{cyclops_hit}

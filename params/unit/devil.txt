@@ -3,7 +3,7 @@ tier: 3
 health: 8
 combat: 50
 armor: 15
-inborn: (upkeep3 heals organic)
+inborn: (regen organic)
 impact: harm{user},when{kills.1},harm{400},impact{lifedrain},endwhen,sound{devil_attack}
 hit: effect{blood},sound{devil_hit}
 death: sound{devil_hit}

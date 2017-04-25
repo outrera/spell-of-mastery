@@ -5,7 +5,7 @@ combat: 8
 armor: 10
 range: 3
 speed: 96
-inborn: (upkeep1 heals ttl{1440})
+inborn: (ttl{@turns.2})
 //attack: sound{blob_attack}
 impact: harm{user},sound{blob_attack}
 hit: effect{blood_undead},sound{blob_hit}
