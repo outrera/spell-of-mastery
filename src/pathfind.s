@@ -91,6 +91,14 @@ unit.path_to XYZ =
 | Found = $world.closest_reach{1000 Me $cell XYZ}
 | if Found then Found.path else []
 
+unit.path_around_to Range XYZ = //Me is unit
+| Target = $world.cell{@XYZ}
+| check Dst =
+  | if Dst><Target then 1
+    else if Dst.block then \block
+    else 0
+| Found = $pathfind{Range &check}
+| if Found then Found.path else []
 
 enemies_in_range Me =
 | O = $owner
@@ -111,7 +119,7 @@ unit.reachable =
     | if not B then R <= 0
       else if $range><1 and $is_enemy{B} then Type <= Type <= \attack
       else if $owner.id <> B.owner.id then Type <= 0
-      else if not B.steps then Type <= 0
+      else if B.steps<1 then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | R}

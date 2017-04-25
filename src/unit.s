@@ -414,6 +414,9 @@ unit.order_at XYZ act/0 goal/0 =
 | when Act.ap><full and $steps<$class.steps:
   | $owner.notify{'The unit has already moved this turn.'}
   | leave
+| when Act.ap.is_int and $steps < Act.ap:
+  | $owner.notify{'Not enough action points ([Act.ap] required)'}
+  | leave
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $owner.human and (Act.title><move or Act.title><attack):
   | Mark = "mark_[Act.title]"
@@ -426,17 +429,7 @@ unit.order_at XYZ act/0 goal/0 =
 | $goal_act <= Act
 | $goal_serial <= $goal.serial
 | $world.actors.set{[Me @$world.actors.get]}
-| less $owner.human:
-  | $set_path{$path_to{$goal.xyz}}
-  | leave
-  //avoid swapping, unless explicitly ordered
-| TCell = $world.cell{@$goal.xyz}
-| check Dst =
-  | if Dst >< TCell then 1
-    else if Dst.block then \block
-    else 0
-| Cell = $pathfind{1000 &check}
-| $set_path{if Cell then Cell.path else []}
+| $set_path{$path_around_to{1000 $goal.xyz}}
 
 in_range Me XYZ =
 | less (XYZ.take{2}-$xyz.take{2}).abs<<$range.float: leave 0

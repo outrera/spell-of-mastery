@@ -310,25 +310,15 @@ unit.`=backtrack` XYZ =
 //| $add_effect{btrack 0 [[effect [on [`.` cycle 24]] [btrack XYZ]]]}
 | $add_effect{btrack 0 XYZ}
 
-find_path_around_busy_units Me XYZ = //Me is unit
-| OID = $owner.id
+path_around_busy_units Me XYZ = //Me is unit
 | Target = $world.cell{@XYZ}
 | check Dst =
   | if Dst><Target then 1
-    else | Us = Dst.units.skip{?empty}
-         | R = 0
-         | when Us.size
-           | U = Us.0
-           | when U.owner.id><OID:
-             | when not U.path.end or U.action.type><attack:
-               | R <= \block
-         | R
+    else if Dst.block then \block
+    else 0
 | Found = $pathfind{10 &check}
-| if Found
-  then | Path = Found.path
-       | $set_path{Path}
-  else | $set_path{[]}
-  
+| if Found then Found.path else []
+
 unit.advance_to GoalXYZ =
 | when $xyz >< GoalXYZ: leave 1
 | Path = $path_to{GoalXYZ}
@@ -336,37 +326,51 @@ unit.advance_to GoalXYZ =
 | Moves = map C $reachable: C.1
 | Cell = No
 | while Path.size and got Moves.find{Path.0}: Cell <= pop Path
-| when no Cell: leave 2
+| when no Cell:
+  | Path = $path_around_to{10 GoalXYZ}
+  | while Path.size and got Moves.find{Path.0}: Cell <= pop Path
+  | when no Cell: leave 2
+| B = Cell.block
+| when B and not B.handled and not $is_enemy{B}:
+  | less $handled:
+    | $handled <= \wait //try to avoid swapping
+    | leave 0
 | $order_at{Cell.xyz}
 | 0
+
+ai_update_unit Me =
+| when $combat:
+  | Cs = $reachable
+  | case Cs.keep{?0><attack} [[Type Cell]@_]:
+    | $backtrack <= $xyz
+    | $order_at{Cell.xyz}
+    | $handled <= 1
+    | leave break
+  | when $steps:
+    | Es = $units_in_range{$sight}.keep{X=>$is_enemy{X}}
+    | Flt = Cs{[?1 1]}.table //filtering table
+    | Es = Es.skip{E=>Flt.(E.cell)><1}
+    | Es = Es.keep{E => $path_to{E.xyz}.size<10}
+    | case Es [E@_]:
+      | $backtrack <= $xyz
+      | $advance_to{E.xyz}
+      | leave break
+| less $attacker:
+  | BtXYZ = $get_effect_value{btrack}
+  | when BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
+| $handled <= 1
+| \next
 
 ai_update_units Me =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 //| when Pentagram and Leader and Leader.ap: ai_update_build Me
-| for U OwnedUnits:
-  | when U.combat:
-    | Cs = U.reachable
-    | case Cs.keep{?0><attack} [[Type Cell]@_]:
-      | U.backtrack <= U.xyz
-      | U.order_at{Cell.xyz}
-      | leave 0
 | for U OwnedUnits: less U.handled:
-  | when U.combat:
-    | Cs = U.reachable
-    | Es = U.units_in_range{U.sight}.keep{X=>U.is_enemy{X}}
-    | Flt = Cs{[?1 1]}.table //filtering table
-    | Es = Es.skip{E=>Flt.(E.cell)><1}
-    | Es = Es.keep{E => U.path_to{E.xyz}.size<10}
-    | case Es [E@_]:
-      | U.backtrack <= U.xyz
-      | U.advance_to{E.xyz}
-      | U.handled <= 1
-      | leave 0
-    | less U.attacker:
-      | BtXYZ = U.get_effect_value{btrack}
-      | when BtXYZ and U.advance_to{BtXYZ}: U.backtrack <= 0
-  | U.handled <= 1
+  | R = ai_update_unit U
+  | when R >< break: leave 0
+| for U OwnedUnits: when U.handled><wait:
+  | R = ai_update_unit U
+  | when R >< break: leave 0
 | 1 //return true, meaning that we have handled all units
 
 ai_update_turn Me =
