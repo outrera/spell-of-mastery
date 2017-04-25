@@ -88,33 +88,6 @@ player_lost_leader Me Leader =
 | $world.notify{"[$name] was defeated."}
 | less RemainingUnits.any{?leader><1}: for U RemainingUnits: U.free
 
-respawn_leader Me XYZ =
-| Block = $world.block_at{XYZ}
-| when Block and $owner.is_enemy{Block.owner}: leave 0
-| when $owner.mana << 0: leave 0
-| Cost = $main.params.world.death_cost
-| $owner.mana -= Cost
-| $owner.notify{"death cost you [Cost] mana"}
-| when got $owner.params.spell_of_mastery:
-  | $owner.params.spell_of_mastery <= No
-  | $owner.notify{"Your Spell of Mastery was broken!"}
-| S = Me
-| S.strip_effect{poison}
-| S.strip_effect{flight}
-| S.backtrack <= 0
-| S.reset_goal
-| S.reset_followers
-| S.hp <= S.class.hp
-| S.nonguard <= 0
-| S.alpha <= 255
-| S.delta <= -25
-| $world.effect{$xyz teleport}
-| S.move{XYZ}
-| when $owner.human:
-  | S.main.ui.view.center_at{XYZ}
-| $world.effect{XYZ teleport}
-| 1
-
 dact die.start
 | U = $unit
 | U.drop_all
@@ -125,10 +98,7 @@ dact die.start
 
 dact die.finish
 | U = $unit
-| when U.leader><1 and U.hp << 0:
-  | P = U.owner.pentagram
-  | when P and respawn_leader U P.xyz: leave
-  | player_lost_leader U.owner U
+| when U.leader><1 and U.hp << 0: player_lost_leader U.owner U
 | U.free
 
 

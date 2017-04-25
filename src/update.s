@@ -236,6 +236,9 @@ update_fade Me =
   | $alpha <= 0
   | $delta <= 0
 
+LastMovedUnit = -1
+LastMovedTurn = -1
+
 update_next_action Me =
 | less $next_action.type: less $path.end:
   | update_path Me
@@ -258,6 +261,11 @@ update_next_action Me =
 | $next_action.priority <= 0
 | APCost = $action.act.ap
 | if APCost><acted then $acted <= 1 else $steps -= APCost
+| less $owner.human: when $action.type<>idle and $world.human.seen{$xyz}:
+  | when LastMovedUnit <> $serial or LastMovedTurn <> $world.turn:
+    | $main.ui.view.center_at{$xyz+[-3 -3 0]}
+  | LastMovedUnit = $serial
+  | LastMovedTurn = $world.turn
 | $action.start
 | when $anim><move: $pick_facing{$facing}
 
