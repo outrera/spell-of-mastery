@@ -109,11 +109,12 @@ unit.reachable =
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
+      else if $range><1 and $is_enemy{B} then Type <= Type <= \attack
       else if $owner.id <> B.owner.id then Type <= 0
       else if not B.steps then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | R}
-| less $acted: when $range.is_int:
-  | for E Me^enemies_in_range: push [attack E] Xs
+| when $range>1 and $steps><$class.steps:
+  | for E Me^enemies_in_range: push [attack E.cell] Xs
 | Xs

@@ -302,21 +302,6 @@ ai.update_cycle =
 
 PerTurn = 0
 
-/*
-effect btrack XYZ:
-| when not $idle or $goal:
-  | less $goal: leave
-  | LA = metric $goal.xyz XYZ
-  | less LA>16.0: leave
-  | LB = metric $xyz XYZ
-  | less LA>10.0: leave
-| when $xyz><XYZ:
-  | $backtrack <= 0
-  | leave
-| B = $world.block_at{XYZ}
-| when B and not B.idle: leave
-| $order_at{XYZ}*/
-
 unit.`=backtrack` XYZ =
 | less XYZ:
   | $strip_effect{btrack}
@@ -325,6 +310,25 @@ unit.`=backtrack` XYZ =
 //| $add_effect{btrack 0 [[effect [on [`.` cycle 24]] [btrack XYZ]]]}
 | $add_effect{btrack 0 XYZ}
 
+find_path_around_busy_units Me XYZ = //Me is unit
+| OID = $owner.id
+| Target = $world.cell{@XYZ}
+| check Dst =
+  | if Dst><Target then 1
+    else | Us = Dst.units.skip{?empty}
+         | R = 0
+         | when Us.size
+           | U = Us.0
+           | when U.owner.id><OID:
+             | when not U.path.end or U.action.type><attack:
+               | R <= \block
+         | R
+| Found = $pathfind{10 &check}
+| if Found
+  then | Path = Found.path
+       | $set_path{Path}
+  else | $set_path{[]}
+  
 unit.advance_to GoalXYZ =
 | when $xyz >< GoalXYZ: leave 1
 | Path = $path_to{GoalXYZ}
@@ -340,7 +344,7 @@ ai_update_units Me =
 | Pentagram = $player.pentagram
 | Leader = $player.leader
 //| when Pentagram and Leader and Leader.ap: ai_update_build Me
-| for U OwnedUnits: less U.handled:
+| for U OwnedUnits:
   | when U.combat:
     | Cs = U.reachable
     | case Cs.keep{?0><attack} [[Type Cell]@_]:

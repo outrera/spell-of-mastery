@@ -123,25 +123,6 @@ update_anim Me =
   | $pick_facing{$facing}
   | $anim_wait <= Step.1
 
-find_path_around_busy_units Me XYZ = //Me is unit
-| OID = $owner.id
-| Target = $world.cell{@XYZ}
-| check Dst =
-  | if Dst><Target then 1
-    else | Us = Dst.units.skip{?empty}
-         | R = 0
-         | when Us.size
-           | U = Us.0
-           | when U.owner.id><OID:
-             | when not U.path.end or U.action.type><attack:
-               | R <= \block
-         | R
-| Found = $pathfind{10 &check}
-| if Found
-  then | Path = Found.path
-       | $set_path{Path}
-  else | $set_path{[]}
-
 unit_check_move Me Dst =
 | less $speed: leave 0
 | Src = $xyz
@@ -192,7 +173,7 @@ update_path Me =
 | when R:
   | when R><user: R <= $range
   | GXYZ = $goal.xyz
-  | Reach = if R><neib
+  | Reach = if R><1 //FIXME: use points_in_diamond
               then (GXYZ-$xyz).take{2}{?abs}.sum><1 and (GXYZ.2-$xyz.2).abs<<1
             else if R><cross then (GXYZ-$xyz).take{2}{?abs}.sum><1
             else (GXYZ-$xyz).take{2}.abs.int<<R
@@ -239,6 +220,13 @@ update_fade Me =
 LastMovedUnit = -1
 LastMovedTurn = -1
 
+center_on_actor Me =
+| less $owner.human: when $action.type<>idle and $world.human.seen{$xyz}:
+  | when LastMovedUnit <> $serial or LastMovedTurn <> $world.turn:
+    | $main.ui.view.center_at{$xyz+[-3 -3 0]}
+  | LastMovedUnit = $serial
+  | LastMovedTurn = $world.turn
+
 update_next_action Me =
 | less $next_action.type: less $path.end:
   | update_path Me
@@ -260,12 +248,10 @@ update_next_action Me =
 | $next_action.type <= 0
 | $next_action.priority <= 0
 | APCost = $action.act.ap
-| if APCost><acted then $acted <= 1 else $steps -= APCost
-| less $owner.human: when $action.type<>idle and $world.human.seen{$xyz}:
-  | when LastMovedUnit <> $serial or LastMovedTurn <> $world.turn:
-    | $main.ui.view.center_at{$xyz+[-3 -3 0]}
-  | LastMovedUnit = $serial
-  | LastMovedTurn = $world.turn
+| if APCost><all then $steps <= 0
+  else if APCost><full then $steps <= 0
+  else $steps -= APCost
+| center_on_actor Me
 | $action.start
 | when $anim><move: $pick_facing{$facing}
 

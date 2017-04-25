@@ -1,6 +1,6 @@
 lore: 0
 cost: 0
-ap: acted
+ap: all
 priority: 50
 range: 0 //0=target self
 speed: 4
