@@ -434,8 +434,10 @@ ui_update_panel_buttons Me Unit As GAs =
     | Icon.fg <= Act.icon_gfx
     | Icon.grayed <= 0
     | Cool = Unit.cooldown_of{ActName}
-    | when Cool and Cool.0:
-      | Icon.grayed <= 100-((Cool.1-Cool.0)*100+Cool.1-1)/Cool.1
+    | when Cool and Cool.1:
+      | TurnsDone = Unit.world.turn - Cool.0
+      | TurnsTotal = Cool.1
+      | Icon.grayed <= 100-(TurnsDone*100)/TurnsTotal
     | Number = if ResearchRemain <> 0 then ResearchRemain else No
     | when got Count: Number <= Count
     | Icon.text.init{[0 0 Number]}
@@ -505,7 +507,8 @@ create_act_icons Me =
   | Cool = Unit.cooldown_of{ActName}
   | O = Unit.owner
   | if Cool then
-      | O.notify{"[Act.title] needs [Cool.0/24] seconds to recharge"}
+      | TurnsLeft = Cool.0 + Cool.1 - Unit.world.turn
+      | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
     else if ResearchRemain then
       | research_act Me Unit Act
     else if got Cost and Cost>0 and Cost>O.mana then

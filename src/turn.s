@@ -11,6 +11,7 @@ unit.new_turn =
     | V.run_effects{(E=>case E.when [`.`tenant_turn N] Turn%N><0) Me $xyz}
 | $run_effects{(E=>case E.when [`.`turn N] Turn%N><0) Me $xyz}
 | $run_effects{(E=>case E.when [`.`ttl 0] | E.params.0><Turn) Me $xyz}
+| $strip_effect{E=>E.name><cool and E.params.1+E.params.2<<Turn} 
 
 world.new_turn =
 | for U $active.list: less U.removed: U.new_turn

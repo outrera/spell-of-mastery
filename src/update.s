@@ -75,7 +75,7 @@ update_units_effects Me Units =
         | when E.when >< timeout: push [E.name E.params.unheap] RunEs
         | Remove <= 1
         | E.amount <= No
-    | when Remove: U.strip_effect{No} //strip effects with zero duration
+    | when Remove: U.strip_effect{?amount><0} //strip effects with zero duration
     | for Name,Params RunEs: U.run_effect{Name Params U U.xyz}
 
 update_units Me =

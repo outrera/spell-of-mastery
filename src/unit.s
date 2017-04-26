@@ -223,8 +223,8 @@ unit.add_effect Name Duration Params =
 unit.has Name = got $effects.find{?name><Name}
 
 unit.cooldown_of ActName =
-| E = $effects.find{E => E.name><cool and E.params.0.1.0><ActName}
-| if got E then [E.amount E.params.0.1.1] else 0
+| E = $effects.find{E => E.name><cool and E.params.0><ActName}
+| if got E then [E.params.1 E.params.2] else 0
 
 unit.get_effect Name = $effects.find{?name><Name}
 
@@ -232,23 +232,23 @@ unit.get_effect_value Name =
 | E = $effects.find{?name><Name}
 | if got E then E.params.unheap else 0
 
-unit.strip_effect Name =
+unit.strip_effect What =
+| Check = if What.is_fn then What else E => E.name><What
 | FreeEs =
 | Es =
-| if got Name
-  then | FreeEs <= $effects.keep{?name><Name}
-       | when FreeEs.end: leave
-       | Es <= $effects.skip{?name><Name}
-  else | FreeEs <= $effects.keep{?amount><No}
-       | Es <= $effects.skip{?amount><No}
-| for E FreeEs: $world.free_effect{E}
+| FreeEs <= $effects.keep{Check}
+| when FreeEs.end: leave
+| Es <= $effects.skip{Check}
+| for E FreeEs:
+  | Name = E.name
+  | $world.free_effect{E}
+  | Flag = getUnitFlagsTable{}.Name
+  | when got Flag:
+    | when Name><invisible: $alpha <= 0
+    | $flags <= $flags^set_bit{Flag 0}
+    | $update_move_method
 | $effects.heapfree
 | $effects <= Es.enheap
-| Flag = getUnitFlagsTable{}.Name
-| when got Flag:
-  | when Name><invisible: $alpha <= 0
-  | $flags <= $flags^set_bit{Flag 0}
-  | $update_move_method
 
 unit.add_item Name Amount =
 | less Amount: leave

@@ -28,6 +28,7 @@ enemy_removes: on{tenant_cycle.12},when{enemy},effect{pickup},remove{self}
 node_aura: on{cycle.12},tenant_mark{effect_aura}
 ttl: on{ttl.0},effect{teleport},sound{summon},remove{self}
 ttl_s: on{timeout},remove{self} //silent ttl
+income1: on{tenant_turn.1},set{inc,towner,mana,1}
 door_align: on{place},align{door}
 
 //when{harmed,has_mana.50}

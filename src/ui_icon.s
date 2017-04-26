@@ -97,7 +97,7 @@ icon.infoline =
 | ResearchRemain = Unit.owner.research_remain{Act}
 | Cost = Act.cost
 | if Cool then
-    | Info <= "[Info] ([Cool.0/24] SECONDS TO RECHARGE)"
+    | Info <= "[Info] ([Cool.0+Cool.1-Unit.world.turn] TURNS TO RECHARGE)"
   else if ResearchRemain then
     | Info <= "research [Info] ([Act.lore] LORE)"
   else when got Cost and Cost:
