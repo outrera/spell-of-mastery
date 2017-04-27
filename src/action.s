@@ -148,10 +148,14 @@ custom_valid Me =
      | when HasTarget and not $unit.owner.is_enemy{T.owner}: leave 1
     else if A >< empty then
      | less $unit.world.block_at{$xyz}: leave 1
-    else if A >< ally_block then
-     | Block = $unit.world.block_at{$xyz}
-     | when Block and not $unit.owner.is_enemy{Block.owner}: leave 1
     else if A >< area then leave 1
+    else if A >< self then leave 1
+    else if A >< pentagram then
+      | P = $unit.owner.pentagram
+      | if P
+        then | less $unit.world.block_at{P.xyz}: leave 1
+             | $unit.owner.notify{"Pentagram is blocked"}
+        else $unit.owner.notify{"This action requires pentagram."}
     else $unit.owner.notify{"custom.valid: bad affects specifier - [A]"}
 | 0
 

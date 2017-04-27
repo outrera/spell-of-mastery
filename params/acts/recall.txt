@@ -1,9 +1,9 @@
 icon: recall
-affects: ally
+affects: pentagram
 hotkey: r
 before: effect{teleport},sound{summon},impact{teleport},recall{pentagram}
        ,pentagram,impact{teleport}
 after: ()
 range: 0
 //lore: misc.tier1_lcost
-cost: 20
+cost: 1

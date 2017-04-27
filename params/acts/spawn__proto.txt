@@ -2,7 +2,7 @@ icon: unit_devil
 lore: 0
 cost: 0
 speed: -1
-affects: ally_block,empty
+affects: pentagram
 before: misc.spawn
 after: ()
 hint: spawn

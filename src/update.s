@@ -303,13 +303,7 @@ unit.update =
     | leave
 | when $paralyzed and $alive: leave
 | update_anim Me
-| when $idle:
-  | less $empty:
-    | B = $world.units_get{$xyz}.skip{U => U.empty or U.id><$id}
-    | less B.end: when B.0.idle:
-      | Found = $world.find{100 Me $cell | Dst => not Dst.block}
-      | when Found: $order_at{Found.xyz}
-  | update_path Me
+| when $idle: update_path Me
 | update_order Me
 | update_fade Me
 | update_action Me

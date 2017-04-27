@@ -7,7 +7,7 @@ height: 2
 tier: 5
 health: 10 // hit points - number of hits, before this unit is dead
 range: 3
-combat: 10 // chance to hit
+combat: 1 // chance to hit
 steps: 2
 armor: 6 // chance to evade a hit
 cooldown: 24
