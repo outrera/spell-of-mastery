@@ -5,7 +5,7 @@ active: 1
 draw_order: 4
 height: 2
 tier: 5
-health: 10 // hit points - number of hits, before this unit is dead
+health: 16 // hit points - number of hits, before this unit is dead
 range: 3
 combat: 1 // chance to hit
 steps: 2

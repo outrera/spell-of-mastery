@@ -82,12 +82,8 @@ research_act Me Unit Act =
 | when Needs < 0:
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
-| Needs = $player.mana-Act.lore
-| when Needs < 0:
-  | O.notify{"Not enough mana for `[Act.title]` (collect [-Needs])"}
-  | leave
 | $main.show_message{'Research?' buttons/[yes,'Yes' no,'No']
-                     'Are you sure want to spent lore on this?'}
+                     'Are you sure want to spend lore on this?'}
 | O.researching <= Act.name
 | Research = $main.params.acts.research
 | Unit.order.init{Research Unit}
