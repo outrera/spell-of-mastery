@@ -221,7 +221,7 @@ LastMovedUnit = -1
 LastMovedTurn = -1
 
 center_on_actor Me =
-| less $owner.human: when $action.type<>idle and $world.human.seen{$xyz}:
+| less $owner.human: when $action.type<>idle and $health and $world.human.seen{$xyz}:
   | when LastMovedUnit <> $serial or LastMovedTurn <> $world.turn:
     | $main.ui.view.center_at{$xyz+[-3 -3 0]}
   | LastMovedUnit = $serial

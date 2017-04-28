@@ -44,7 +44,6 @@ type ui.$tabs{main} tabs width height world message_box view
 | $height <= $params.ui.height
 
 ui.render =
-| PlayIcon.picked <= not $world.paused
 | HumanName = $world.human.name
 | for PP PlayerPickers: PP.picked <= PP.name >< HumanName
 | $tabs.render
@@ -60,11 +59,9 @@ ui.act_icons = AllActIcons
 ui.pause =
 | InputBlocker.show <= 1
 | $view.pause
-| PlayIcon.picked <= 0
 ui.unpause =
 | InputBlocker.show <= 0
-| less $world.editor: $view.unpause
-| PlayIcon.picked <= not $world.paused
+| $view.unpause
 
 ui.img File = $main.img{File}
 ui.create W H =
@@ -247,15 +244,7 @@ create_bank_list Me =
 | BankList,ItemList
 
 create_editor_tabs Me =
-| PlayIconClick = Icon =>
-  | Icon.picked <= not Icon.picked
-  | if Icon.picked
-    then | when $world.editor
-           | less $world.params.init><1
-             | $world.new_game
-             | $world.params.init <= 1
-         | $view.unpause
-    else $view.pause
+| PlayIconClick = Icon => $world.new_game
 | PlayIcon <= icon data/play $img{icons_tab_play} click/PlayIconClick
 | PlayIcon.picked_fg <= $img{icons_tab_pause}
 | hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon

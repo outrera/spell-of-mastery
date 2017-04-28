@@ -2,6 +2,7 @@ sprite: unit_bat
 tier: 1
 health: 3
 combat: 1
+steps: 4
 armor: 14
 speed: 20
 inborn: (flyer organic)

@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_skeleton
 lore: misc.tier1_lcost
-cost: 300
+cost: misc.tier1_cost
 cool: misc.tier0_cool
 after: spawn{unit_skeleton}

@@ -3,6 +3,7 @@ icon: unit_oculus
 tier: 2
 health: 10
 combat: 0
+steps: 3
 armor: 10
 range: 0
 leader: 2
