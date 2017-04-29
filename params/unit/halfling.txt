@@ -1,8 +1,8 @@
 sprite: unit_halfling
 tier: 1
 health: 4
-combat: 11
-armor: 14
+combat: 1
+armor: 0
 inborn: (organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{halfling_hit}

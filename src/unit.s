@@ -458,9 +458,8 @@ knockback Me Target =
 
 unit.assault Combat Target =
 | Hit = 0
+| Unavoid = 0
 | Magic = 0
-| Base = No //base damage range
-| Damage = No
 | Boost = 0
 | Lifedrain = 0
 | Mods = []
@@ -471,28 +470,15 @@ unit.assault Combat Target =
     | Mods <= Mods.tail
   Else
     | when Combat.is_list: bad "Unknown combat modifier [Combat]"
-| when Combat><user: Combat <= $combat
+| Damage = if Combat><user then $combat else Combat
 | till Mods.end:
   | Mod = Mods^pop
   | case Mod
     unavoid
-      | Damage <= Combat
-      | Combat <= 1
-      | Hit <= 1
+      | Unavoid <= 1
     magic
-      | Damage <= Combat
-      | Combat <= 1
-      | Hit <= 1
+      | Unavoid <= 1
       | Magic <= 1
-    magic_rand
-      | Base <= Combat
-      | Combat <= 1
-      | Hit <= 1
-      | Magic <= 1
-    [damage D]
-      | Damage <= D
-    [base B]
-      | Base <= B
     lifedrain
       | Lifedrain <= 1
     Else
@@ -502,13 +488,13 @@ unit.assault Combat Target =
   | Mods = $mod
   | $mod <= 0
   | when Mods: for Mod Mods: case Mod
-    [boost N M] | Boost <= N,M
-    [combat N] | Combat <= max 0 Combat+N
-    [hit N] | Hit <= 1
+    [mul A B] | Damage <= max 1 Damage*A/B
+    [add N] | Damage <= Damage+N
     Else | bad "bad attack modifier [Mod]"
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
-| when no Damage: Damage <= Combat
+| less Unavoid: Damage -= Target.armor
+| Damage <= max 1 Damage
 | when Lifedrain: heal_unit Me 1
 | if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
 //| when Knockback: knockback Me Target
@@ -531,8 +517,8 @@ unit.harm Attacker Damage @Magic =
 | Mods = $mod
 | $mod <= 0
 | when Mods: for Mod Mods: case Mod
-  [block N M] | when Damage>1: Damage <= max 1 | Damage - | max 1 Damage*N/M
-  [block N] | when Damage>1: Damage <= max 1 Damage-N
+  [mul N M] | Damage <= max 1 | Damage - | max 1 Damage*N/M
+  [sub N] | Damage <= max 1 Damage-N
 | $hp -= Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
