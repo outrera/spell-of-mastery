@@ -38,12 +38,15 @@ PlayIcon =
 
 LastBrush = [0 0]
 
-type ui.$tabs{main} tabs width height world message_box view
+type ui.$tabs{main} tabs width height world message_box view paused
 | $world <= $main.world
 | $width <= $params.ui.width
 | $height <= $params.ui.height
 
 ui.render =
+| InputBlocker.show <= $paused or $world.actors.get.size
+                     or not ($world.players.($world.player).human
+                             or $world.editor)
 | HumanName = $world.human.name
 | for PP PlayerPickers: PP.picked <= PP.name >< HumanName
 | $tabs.render
@@ -57,9 +60,11 @@ ui.save File = $main.save{File}
 ui.params = $main.params
 ui.act_icons = AllActIcons
 ui.pause =
+| $paused <= 1
 | InputBlocker.show <= 1
 | $view.pause
 ui.unpause =
+| $paused <= 0
 | InputBlocker.show <= 0
 | $view.unpause
 
@@ -381,7 +386,6 @@ create_dialog_tabs Me =
           credits(Credits)
 
 ui.update = //called by world.update each game cycle
-| InputBlocker.show <= 0
 | WinnerId = $world.params.winner
 | when got WinnerId:
   | Winner = $world.players.WinnerId
