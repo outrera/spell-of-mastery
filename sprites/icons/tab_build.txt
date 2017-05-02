@@ -1,3 +1,0 @@
-author: `Manuel Riecke 'MrBeast' (http://opengameart.org/users/mrbeast)`, Nikita Sadkov
-license: `CC-BY-SA`
-origin: `http://opengameart.org/content/tools-icons`

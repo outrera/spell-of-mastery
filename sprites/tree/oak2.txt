@@ -1,3 +1,0 @@
-author: `Tim Jonsson`
-height: 16
-xy: -8,8

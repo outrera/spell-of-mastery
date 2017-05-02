@@ -1,2 +1,0 @@
-author: Yar
-height: 12

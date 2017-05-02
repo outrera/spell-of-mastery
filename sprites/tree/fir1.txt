@@ -1,3 +1,2 @@
-author: `Carl Olsson 'surt'`, `Nikita Sadkov`
-origin: `http://opengameart.org/forumtopic/cc0-scraps`
-height: 1
+author: Yar
+height: 8
