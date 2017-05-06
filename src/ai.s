@@ -307,7 +307,6 @@ unit.`=backtrack` XYZ =
   | $strip_effect{btrack}
   | leave
 | when $has{btrack}: leave
-//| $add_effect{btrack 0 [[effect [on [`.` cycle 24]] [btrack XYZ]]]}
 | $add_effect{btrack 0 XYZ}
 
 path_around_busy_units Me XYZ = //Me is unit
@@ -335,6 +334,7 @@ unit.advance_to GoalXYZ =
   | less $handled:
     | $handled <= \wait //try to avoid swapping
     | leave 0
+  | B.backtrack <= B.xyz
 | $order_at{Cell.xyz}
 | 0
 
