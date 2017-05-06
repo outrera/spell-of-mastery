@@ -5,5 +5,5 @@ after: spawn{special_pentagram_king}
 icon: special_pentagram
 cost: misc.tier1_scost
 //lore: misc.tier1_lcost
-cool: 240
+cool: 24
 hint: pentagram
