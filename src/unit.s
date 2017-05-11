@@ -372,11 +372,17 @@ unit.reset_followers =
 
 unit.removed = $xyz.2 >< -1
 
+unit.set_path Path =
+| P = Path.enheap
+| $path.heapfree
+| $path <= P
+
 unit.order = $ordered
 
 unit.order_act Act target/0 =
 | less Target: Target <= Me
 | $order.init{Act Target}
+| $world.actors.set{[Me @$world.actors.get]}
 
 // order taking over any other order
 unit.forced_order Act Target =
@@ -391,19 +397,6 @@ unit.die =
 | $forced_order{die 0}
 | $order.priority <= 2000
 | $cooldown <= 0
-
-unit.set_path Path =
-| P = Path.enheap
-| $path.heapfree
-| $path <= P
-
-set_goal Me Act Target =
-| if Target.is_unit then $goal <= Target
-  else | $unit_goal.xyz.init{Target}
-       | $goal <= $unit_goal
-       | $goal_serial <= $goal.serial
-| $goal_act <= Act
-| $set_path{[]}
 
 unit.order_at XYZ act/0 goal/0 =
 | when XYZ >< self:
