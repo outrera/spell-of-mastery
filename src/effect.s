@@ -474,7 +474,7 @@ effect spawn What:
   | L = $owner.leader
   | What <= if L then L.pentagram else \special_pentagram
 | S = $owner.alloc_unit{What}
-| S.nonguard <= 1
+| S.aistate <= \spawned
 | less S.alpha:
   | S.alpha <= 255
   | S.delta <= -50

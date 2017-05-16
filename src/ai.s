@@ -13,22 +13,6 @@ unit.can_do Act =
 
 PerTurn = 0
 
-unit.`=backtrack` XYZ =
-| less XYZ:
-  | $strip_effect{btrack}
-  | leave
-| when $has{btrack}: leave
-| $add_effect{btrack 0 XYZ}
-
-path_around_busy_units Me XYZ = //Me is unit
-| Target = $world.cell{@XYZ}
-| check Dst =
-  | if Dst><Target then 1
-    else if Dst.block then \block
-    else 0
-| Found = $pathfind{10 &check}
-| if Found then Found.path else []
-
 unit.advance_to GoalXYZ =
 | when $xyz >< GoalXYZ: leave 1
 | Path = $path_to{GoalXYZ}
@@ -84,7 +68,7 @@ ai_update_unit Me =
       | $backtrack <= $xyz
       | $advance_to{E.xyz}
       | leave break
-| less $attacker:
+| when $aistate >< guard:
   | BtXYZ = $get_effect_value{btrack}
   | when BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
 | $handled <= 1
@@ -97,7 +81,7 @@ ai_update_units Me =
   | R = ai_update_unit U
   | when R >< break: leave 0
 | for U OwnedUnits: when U.handled><wait:
-  | R = ai_update_unit U
+  | R = ai_update_unit U //handle units with delayed movement
   | when R >< break: leave 0
 | when Pentagram:
   | B = Pentagram.cell.block
@@ -111,7 +95,7 @@ ai_update_units Me =
 
 ai_update_turn Me =
 | when $player.params.attack_with_guards >< 1:
-  | for U OwnedUnits: U.attacker <= 1
+  | for U OwnedUnits: U.aistate <= \attack
   | $player.params.attack_with_guards <= 0
 | when ai_update_units Me:
   | $world.end_turn

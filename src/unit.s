@@ -60,6 +60,7 @@ type unit.$class{Id World}
   mod //set by various effects to modify some contextual behavior
   steps //movement points remained this turn
   can_move //movement function
+  aistate //how AI processes this unit
 | $action <= $world.action{Me}
 | $next_action <= $world.action{Me}
 | $ordered <= $world.action{Me}
@@ -71,14 +72,8 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
 
-unit.attacker = $flags^get_bit{0}
-unit.`=attacker` State = $flags <= $flags^set_bit{0 State}
-
 unit.picked = $flags^get_bit{1}
 unit.`=picked` State = $flags <= $flags^set_bit{1 State}
-
-unit.nonguard = $flags^get_bit{2}
-unit.`=nonguard` State = $flags <= $flags^set_bit{2 State}
 
 unit.hasted = $flags^get_bit{3}
 
@@ -94,6 +89,13 @@ unit.slowed = $flags^get_bit{14}
 // this unit is a temporary mark (i.e. cursor); dont save it
 unit.mark = $flags^get_bit{16}
 unit.`=mark` State = $flags <= $flags^set_bit{16 State}
+
+unit.`=backtrack` XYZ =
+| less XYZ:
+  | $strip_effect{btrack}
+  | leave
+| when $has{btrack}: leave
+| $add_effect{btrack 0 XYZ}
 
 unit.child Type =
 | $world.units_get{$xyz}
@@ -170,6 +172,7 @@ unit.init Class =
   | $active <= 1
   | $steps <= $class.steps
   | $handled <= 0
+  | $aistate <= \initial
   | $ordered.type <= 0
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}

@@ -255,9 +255,10 @@ handle_attack_triggers Us =
 | for U Us
   | Os = U.world.units_get{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}
-  | when got AttackTrigger and U.ai<>attack:
-    | U.attacker <= 1
-    | AttackTrigger.free
+  | if got AttackTrigger and U.ai<>attack
+    then | U.aistate <= \attack
+         | AttackTrigger.free
+    else | U.aistate <= \guard
 
 world.new_game =
 | $actors.set{[]}
