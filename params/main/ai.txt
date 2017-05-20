@@ -1,7 +1,3 @@
-leader_defense_bonus: 10
-
-nop_loop: | wait 5
-
 leader_katzard: | goto leader_mage
 leader_mime: | goto default
 
@@ -10,103 +6,103 @@ leader_mage:
   | goto mage0
 
 mage0:
-  | attack halfling bat
-  | attack halfling halfling
+  | roam halfling bat
+  | roam halfling halfling
   | goto mage1
 
 mage1:
-  | attack bat halfling elf halfling
+  | roam bat halfling elf halfling
   | goto mage2 when lossage >> 14
 
 mage2:
   | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
-  | attack dwarf halfling elf halfling
+  | roam dwarf halfling elf halfling
   | goto mage3 when lossage >> 32
 
 mage3:
   | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
-  | attack dwarf ifrit elf halfling elf minotaur
+  | roam dwarf ifrit elf halfling elf minotaur
   | goto mage4 when lossage >> 64
 
 mage4:
-  | attack dwarf hydra ifrit elf halfling elf minotaur
+  | roam dwarf hydra ifrit elf halfling elf minotaur
 
 leader_king:
   | goto king0
 
 king0:
-  | attack bat farmer
-  | attack farmer farmer
+  | roam bat farmer
+  | roam farmer farmer
   | goto king1
 
 king1:
-  | attack bat farmer lizard farmer
+  | roam bat farmer lizard farmer
   | goto king2 when lossage >> 14
 
 king2:
   | set ai_spells (cast_shell)
-  | attack lizard knight lizard farmer
+  | roam lizard knight lizard farmer
   | goto king3 when lossage >> 32
 
 king3:
-  | attack knight knight lizard farmer griffin
+  | roam knight knight lizard farmer griffin
   | goto king4 when lossage >> 64
 
 king4:
-  | attack knight knight lizard farmer griffin griffin golem
+  | roam knight knight lizard farmer griffin griffin golem
 
 leader_witch:
   | set ai_spells (cast_fireball)
   | goto witch0
 
 witch0:
-  | attack bat ratman
-  | attack ratman ratman
+  | roam bat ratman
+  | roam ratman ratman
   | goto witch1
 
 witch1:
-  | attack bat ratman ratman goblin goblin
+  | roam bat ratman ratman goblin goblin
   | goto witch2 when lossage >> 14
 
 witch2:
   | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
-  | attack orc goblin ratman
-  | attack orc orc goblin goblin
+  | roam orc goblin ratman
+  | roam orc orc goblin goblin
   | goto witch3 when lossage >> 32
 
 witch3:
   | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
-  | attack ratman orc devil spider goblin
+  | roam ratman orc devil spider goblin
   | goto witch4 when lossage >> 64
 
 witch4:
-  | attack ratman spider orc goblin devil cyclops
+  | roam ratman spider orc goblin devil cyclops
 
 leader_heretic:
   | set ai_spells (cast_fireball)
   | goto heretic0
 
 heretic0:
-  | attack bat skeleton
-  | attack skeleton skeleton
+  | roam bat skeleton
+  | roam skeleton skeleton
   | goto heretic1
 
 heretic1:
-  | attack skeleton wraith skeleton bat
+  | roam skeleton wraith skeleton bat
   | goto heretic2 when lossage >> 14
 
 heretic2:
   | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
-  | attack skeleton wraith wraith bat gargoyle
+  | roam skeleton wraith wraith bat gargoyle
   | goto heretic3 when lossage >> 32
 
 heretic3:
   | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
-  | attack skeleton wraith skeleton bat gargoyle vampire
+  | roam skeleton wraith skeleton bat gargoyle vampire
   | goto heretic4 when lossage >> 64
 
 heretic4:
-  | attack skeleton wraith skeleton wraith gargoyle vampire observer
+  | roam skeleton wraith skeleton wraith gargoyle vampire observer
 
 
 default:
@@ -114,37 +110,33 @@ default:
   | goto tier0
 
 tier0:
-  | attack bat ratman
-  | attack ratman ratman
+  | roam bat ratman
+  | roam ratman ratman
   | goto tier1
 
 tier1:
-  | attack bat ratman ratman goblin
-  | attack ratman goblin goblin
+  | roam bat ratman ratman goblin
+  | roam ratman goblin goblin
   | goto tier2 when lossage >> 14
 
 tier2:
   | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
-  | attack dwarf dwarf elf
-  | attack orc orc
-  | attack wraith
-  | attack orc dwarf orc
+  | roam dwarf dwarf elf
+  | roam orc orc
+  | roam wraith
+  | roam orc dwarf orc
   | goto tier3 when lossage >> 32
 
 tier3:
   | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
-  | attack minotaur vampire
-  | attack devil
-  | attack spider ifrit
+  | roam minotaur vampire
+  | roam devil
+  | roam spider ifrit
   | goto tier4 when lossage >> 64
 
 tier4:
-  | attack observer
-  | attack cyclops
-  | attack hydra
-  | attack dragon
+  | roam observer
+  | roam cyclops
+  | roam hydra
+  | roam dragon
 
-l2: //level2 AI
- | set ai_spells (cast_shell)
- | wait 2880 //two minutes
- | attack ratman ratman goblin

@@ -17,9 +17,9 @@ ai.clear =
 | $params.aiWait <= 0
 | $params.aiSpellWait <= 0  //hack to stop AI from spamming spells
 | $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
-| $params.aiLeaderHarmCycle <= -24*100000
+| $params.aiLeaderHarmTurn <= -24*100000
 | $params.aiCastFlight <= 0
-| $params.aiCastFlightCycle <= -24*100000
+| $params.aiCastFlightTurn <= -24*100000
 | $params.ai_spells <= []
 
 PlayerColors = [red blue teal purple orange black white yellow]

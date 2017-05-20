@@ -256,7 +256,7 @@ handle_attack_triggers Us =
   | Os = U.world.units_get{U.xyz}
   | AttackTrigger = Os.find{?ai><attack}
   | if got AttackTrigger and U.ai<>attack
-    then | U.aistate <= \attack
+    then | U.aistate <= \roam
          | AttackTrigger.free
     else | U.aistate <= \guard
 
