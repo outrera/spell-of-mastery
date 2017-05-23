@@ -2,8 +2,7 @@ sprite: unit_orc
 tier: 2
 health: 6
 combat: 4
-armor: 6
-worker: 2
+armor: 0
 inborn: (organic)
 //attack: sound{cut}
 impact: harm{user},sound{cut}

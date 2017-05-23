@@ -516,7 +516,7 @@ effect child What Effects:
 | S.move{TargetXYZ}
 | S.host <= Target
 | S.host_serial <= Target.serial
-| for Name,Duration,Params Effects: S.add_effect{Name Duration Params}
+| S.add_effects{Effects}
 
 effect caster Who:
 | Leader = $owner.leader

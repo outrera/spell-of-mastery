@@ -179,15 +179,7 @@ unit.init Class =
   | $velocity.init{[0.0 0.0 0.0]}
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
-  | for E $inborn: case E
-      [`{}` Head @Args]
-        | Args = map A Args: case A
-           [`@` [`.` turns T]] | $world.turn+T
-           Arg | Arg
-        | case Head
-           [`.` Name Life] | $add_effect{Name Life Args}
-           Name | $add_effect{Name 0 Args}
-      Else | $add_effect{E 0 []}
+  | $add_effects{$inborn}
   | $update_move_method
 
 unit.morph Class =
@@ -209,6 +201,9 @@ get_named_effect Me Name Params =
 | Effect
 
 unit.add_effect Name Duration Params =
+| Params = map A Params: case A
+   [`@` [`.` turns T]] | $world.turn+T
+   Arg | Arg
 | Effect = get_named_effect Me Name Params
 | On = Effect.0
 | when On.0 <> `on`:
@@ -222,6 +217,14 @@ unit.add_effect Name Duration Params =
   | $update_move_method
 | When = On.1
 | $effects <= $effects.cons{$world.new_effect{When Name Duration Params}}
+
+unit.add_effects Effects =
+| for E Effects: case E
+    [`{}` Head @Args]
+      | case Head
+         [`.` Name Life] | $add_effect{Name Life Args}
+         Name | $add_effect{Name 0 Args}
+    Else | $add_effect{E 0 []}
 
 unit.has Name = got $effects.find{?name><Name}
 

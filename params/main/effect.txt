@@ -17,7 +17,7 @@ paralyzed: on{static}
 bloodlust: on{attack},mod{add,1}
 invisible_bonus: on{attack},mod{add,2},strip{invisible_bonus}
 fireaura: on{counter},harm{1},impact{fire_ring}
-poison: on{turn.1},host,when{has_health.1},harm{magic.1}
+poison: on{turn.1},host,when{has_health.2},harm{magic.1}
 shell: on{phys_harm},mod{mul,1,3},/*sound{shell},*/impact{shell}
 resist_magic: on{magic_harm},mod{mul,1,2},/*sound{shell},*/impact{resist}
 regen: on{turn.1},when{harmed},strip{poison},heal{1},effect{heal}
