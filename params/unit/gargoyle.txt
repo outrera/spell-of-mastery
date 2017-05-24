@@ -1,11 +1,11 @@
 sprite: unit_gargoyle
 tier: 3
-health: 15
-combat: -1
-armor: 10
+health: 10
+combat: 3
+armor: 0
 inborn: (organic flyer)
 //attack: sound{impact}
-impact: harm{user},harm{unavoid.20},sound{impact}
+impact: harm{user},harm{unavoid.user},sound{impact}
 hit: effect{blood_undead},sound{devil_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

@@ -3,5 +3,5 @@ icon: unit_elf
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
-needs: (summon_halfling)
+needs: ((summon_halfling summon_imp))
 after: spawn{unit_elf}

@@ -9,7 +9,9 @@ starts: still // initial animation
 ai: pentagram
 inborn: (enemy_removes removes_firewall)
 
-acts: summon_imp, summon_blob, summon_oculus, summon_bat,
-      summon_skeleton, summon_wraith, summon_gargoyle,
-        summon_vampire, summon_observer,
+acts: summon_blob, summon_oculus,
+      summon_skeleton, summon_bat,
+      summon_wraith,
+      summon_gargoyle, summon_vampire,
+      summon_observer,
       summon_dragon

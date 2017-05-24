@@ -1,6 +1,6 @@
 sprite: unit_farmer
 tier: 1
-health: 4
+health: 3
 combat: 2
 armor: 0
 inborn: (organic)

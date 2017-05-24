@@ -1,8 +1,8 @@
 sprite: unit_cyclops
 tier: 4
-health: 60
+health: 16
 combat: 8
-armor: 6
+armor: 0
 inborn: (organic)
 //attack: sound{cyclops_club}
 impact: harm{user},sound{cyclops_club}

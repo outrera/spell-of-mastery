@@ -1,7 +1,7 @@
 sprite: unit_golem
 tier: 4
-health: 90
-combat: 6
+health: 14
+combat: 7
 armor: 2
 speed: 34
 inborn: ()

@@ -1,12 +1,12 @@
 sprite: unit_ifrit
 tier: 3
-health: 14
-combat: 10
-armor: 8
+health: 7
+combat: 4
+armor: 1
 speed: 22
 inborn: (organic fireaura flyer)
 //attack: sound{explosion}
-impact: harm{unavoid.1},sound{explosion}
+impact: harm{unavoid.user},sound{explosion}
 hit: effect{blood},sound{ifrit_hit}
 death: sound{ifrit_death}
 moves: sound{ifrit_move}

@@ -1,8 +1,8 @@
 sprite: unit_griffin
 tier: 3
-health: 22
-combat: 10
-armor: 4
+health: 9
+combat: 4
+armor: 0
 speed: 18
 inborn: (organic flyer)
 impact: harm{user},sound{cut}

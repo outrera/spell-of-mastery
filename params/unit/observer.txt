@@ -1,15 +1,14 @@
 sprite: unit_observer
 tier: 4
-health: 20
-combat: 8
-armor: 4
-cooldown: 4
-range: 4
+health: 10
+combat: 6
+armor: 1
+range: 2
 speed: 28
-inborn: (organic flyer resist_magic)
+inborn: (organic flyer)
 attack: sound{observer_attack}
 impact: harm{user}
-impact_hit: impact{energy_ring},decimate{3 10},macro{poison},sound{observer_impact}
+impact_hit: impact{energy_ring},macro{poison},sound{observer_impact}
 hit: effect{blood},sound{observer_hit}
 death: sound{observer_die}
 moves: sound{observer_move}

@@ -1,13 +1,13 @@
 sprite: unit_dragon
 tier: 4
-health: 70
+health: 18
 combat: 10
-armor: 8
+armor: 2
 cooldown: 4
 speed: 20
 inborn: (organic flyer)
 //attack: sound{dragon_hit}
-impact: harm{user},harm{unavoid.2},impact{fire_ring},sound{explosion}
+impact: harm{user},harm{unavoid.10},impact{fire_ring},sound{explosion}
 hit: effect{blood},sound{dragon_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

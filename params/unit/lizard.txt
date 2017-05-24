@@ -3,7 +3,7 @@ tier: 2
 health: 4
 combat: 3
 steps: 4
-armor: 8
+armor: 0
 speed: 18
 inborn: (organic)
 attack: sound{lizard_attack}

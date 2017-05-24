@@ -131,13 +131,6 @@ effect counter Arg:
 | R = $range
 | when R<<1: Target.run_effects{?when><counter Me Me.xyz}
 
-effect lifedrain Amount:
-| when Target and Target.has{organic}: Me.harm{Me -Amount}
-
-effect decimate A B:
-| Harm = Target.health*A/B
-| when Harm: Target.harm{Me Harm}
-
 effect spawn_field Args:
 | [TTL Freq R Param @As] = Args
 | S = $owner.alloc_unit{unit_dummy}

@@ -6,12 +6,12 @@ leader_mage:
   | goto mage0
 
 mage0:
-  | roam halfling bat
-  | roam halfling halfling
+  | roam imp
+  | roam halfling imp
   | goto mage1
 
 mage1:
-  | roam bat halfling elf halfling
+  | roam imp halfling elf halfling
   | goto mage2 when lossage >> 14
 
 mage2:
@@ -31,12 +31,12 @@ leader_king:
   | goto king0
 
 king0:
-  | roam bat farmer
   | roam farmer farmer
+  | roam farmer farmer farmer
   | goto king1
 
 king1:
-  | roam bat farmer lizard farmer
+  | roam lizard farmer lizard farmer
   | goto king2 when lossage >> 14
 
 king2:
@@ -56,12 +56,12 @@ leader_witch:
   | goto witch0
 
 witch0:
-  | roam bat ratman
-  | roam ratman ratman
+  | roam ratman
+  | roam ratman goblin
   | goto witch1
 
 witch1:
-  | roam bat ratman ratman goblin goblin
+  | roam ratman ratman goblin goblin
   | goto witch2 when lossage >> 14
 
 witch2:
@@ -111,7 +111,7 @@ default:
 
 tier0:
   | roam bat ratman
-  | roam ratman ratman
+  | roam ratman goblin
   | goto tier1
 
 tier1:

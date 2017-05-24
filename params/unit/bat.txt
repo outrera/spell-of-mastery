@@ -1,9 +1,9 @@
 sprite: unit_bat
 tier: 1
-health: 3
+health: 2
 combat: 1
 steps: 4
-armor: 14
+armor: 5
 speed: 20
 inborn: (flyer organic)
 attack: sound{bat_attack}
