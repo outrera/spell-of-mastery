@@ -99,12 +99,14 @@ ai_update_unit Me =
 | when $combat:
   | Cs = $reachable
   | case Cs.keep{?0><attack} [[Type Cell]@_]:
-    | $backtrack <= $xyz
-    | $order_at{Cell.xyz}
-    | $handled <= 1
-    | leave break
+    | Block = Cell.block
+    | when Block and not Block.invisible:
+      | $backtrack <= $xyz
+      | $order_at{Cell.xyz}
+      | $handled <= 1
+      | leave break
   | when $steps:
-    | Es = $units_in_range{$sight}.keep{X=>$is_enemy{X}}
+    | Es = $units_in_range{$sight}.keep{X=>$is_enemy{X} and not X.invisible}
     | Flt = Cs{[?1 1]}.table //filtering table
     | Es = Es.skip{E => Flt.(E.cell)><1}
     | Es = Es.keep{E => $path_to{E.xyz}.size<10}
