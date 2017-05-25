@@ -131,13 +131,7 @@ unit_check_move Me Dst =
 | X,Y,Z = Dst
 | when (X-SX).abs>1 or (Y-SY).abs>1: leave 0
 | Tile = $world.at{X Y Z}
-| less Tile.empty
-  | when $worker:
-    | when Tile.dig: leave dig
-    | when Tile.unit
-      | B = $world.block_at{X,Y,Z}
-      | when B and B.ai><remove: leave dig
-  | leave 0
+| less Tile.empty: leave 0
 | Below = $world.at{X Y $world.floor{X,Y,Z}-1}
 | when Below.type><water:
   | less $flyer or $amphibian or $swimmer: leave 0

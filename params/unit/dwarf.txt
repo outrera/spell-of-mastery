@@ -4,7 +4,6 @@ health: 6
 combat: 3
 armor: 1
 speed: 28
-worker: 3
 inborn: (organic)
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{dwarf_hit}
