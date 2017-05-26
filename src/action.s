@@ -10,6 +10,7 @@ dact idle.start
 
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 
+// Following movement code handles movement between cells
 move_start Me =
 | U = $unit
 | when $xyz><U.xyz:
@@ -39,6 +40,7 @@ move_update Me =
 move_finish Me =
 | U = $unit
 | U.fxyz.init{$toXYZ}
+| U.on_entry
 
 dact move.valid
 | U = $unit
@@ -122,7 +124,9 @@ dact swap.update | move_update Me
 dact swap.finish | move_finish Me
 
 
-dact teleport.start | $unit.move{$xyz}
+dact teleport.start
+| $unit.move{$xyz}
+| $unit.on_entry
 
 custom_init Me =
 custom_valid Me =

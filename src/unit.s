@@ -535,11 +535,14 @@ unit.harm Attacker Damage @Magic =
 | $die
 | $action.cycles <= 1
 
-unit_moved_in Me =
+//called when unit enters cell ingame, not in editor or game-init
+unit.on_entry =
 | C = $cell
-| for U C.units: when U.item.is_list:
-  | U.effect{U.item Me Me.xyz}
-| when (C-1).tile.deco: $owner.capture{C-1}
+| for U C.units: U.run_effects{?when><entry Me $xyz}
+
+unit_pickup_items Me =
+| C = $cell
+| for U C.units: when U.item.is_list: U.effect{U.item Me $xyz}
 
 unit.fine_move FXYZ =
 | C = $world.c
@@ -552,7 +555,7 @@ unit.fine_move FXYZ =
 | $world.place_unit{Me}
 | $floor <= $cell.floor
 | $environment_updated
-| when $ai >< unit: unit_moved_in Me
+| when $ai >< unit: unit_pickup_items Me
 | Me
 
 unit.move XYZ =

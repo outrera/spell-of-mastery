@@ -434,6 +434,7 @@ check_when Me Target C =
   confirmed | less $main.dialog_result><yes: leave 0
   harmed | less Target.health<>Target.class.hp: leave 0
   idle | when Target.goal: leave 0
+  rested | less $steps><$class.steps: leave 0
   [`+` not C] | when check_when Me Target C: leave 0
   [`.` below Type] | less (Target.cell-1).type><Type: leave 0
   [`.` has_health A] | less Target.health>>A: leave 0

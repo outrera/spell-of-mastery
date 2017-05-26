@@ -53,6 +53,8 @@ type player{id world}
 | when $id<Cs.h: $colors <= map I 5: Cs.get{I $id}
 | $clear
 
+player.color = PlayerColors.$id
+
 player.picked = $picked_.unheap{}.keep{?0><?1.serial}{?1}.skip{?removed}
 
 player.`=picked` Us =
@@ -157,7 +159,6 @@ player.update =
   | $world.view.center_at{$leader.xyz cursor/1}
 | update_spell_of_mastery $world Me
 
-
 alloc_ai_blockers Me =
 | for U $units: less U.removed: when U.ai >< avoid:
   | B = U.owner.alloc_unit{unit_block}
@@ -166,16 +167,6 @@ alloc_ai_blockers Me =
 free_ai_blockers Me =
 | for U $units: less U.removed: when U.type >< unit_block:
   | U.free
-
-EndTurnLoop = 0
-player.new_turn =
-| less $total_units:
-  | if EndTurnLoop++ > 16
-    then | say "caught in end turn loop"
-    else | $world.end_turn //no units, skip his turn
-         | leave
-| EndTurnLoop <= 0
-| say "[$name] ([PlayerColors.$id]) begins turn [$world.turn]"
   
 player.make_move =
 | when $human: leave
@@ -186,7 +177,6 @@ player.make_move =
 player.dig_mark X Y Z =
 | W = $world.column_units_get{X Y}.find{(?type><unit_dig and ?owner.id><$id)}
 | if got W then W else 0
-
 
 player.work_at XYZ =
 | W = $world.units_get{XYZ}.find{(?type><unit_build and ?owner.id><$id)}
