@@ -63,10 +63,10 @@ update_units_effects Me Units =
 | for U Units: less U.removed:
   | less U.empty: when U.class.hp>0:
     | for V $units_get{U.xyz}: less V.effects.end:
-      | V.run_effects{(E=>case E.when [`.`tenant_cycle N] Cycle%N><0) U U.xyz}
+      | V.run_effects{E=>case E.when [`.`tenant_cycle N] Cycle%N><0}
   | less U.effects.end:
-    | U.run_effects{(E=>case E.when [`.`cycle N] Cycle%N><0) U U.xyz}
-    | when U.idle: U.run_effects{(E=>case E.when [`.`idle N] Cycle%N><0) U U.xyz}
+    | U.run_effects{E=>case E.when [`.`cycle N] Cycle%N><0}
+    | when U.idle: U.run_effects{E=>case E.when [`.`idle N] Cycle%N><0}
     | Remove = 0
     | RunEs = []
     | for E U.effects: when E.amount>0:

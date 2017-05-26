@@ -292,12 +292,15 @@ unit.acts =
   | when got Item: for ActName Item: push Param.acts.ActName ItemActs
 | [@$class.acts @ItemActs]
 
-unit.run_effects Selector Target TargetXYZ =
+unit.run_effects Selector target/0 xyz/0 =
+| less Target: Target <= Me
+| less Xyz: Xyz <= Target.xyz
+| Sel = if Selector.is_text then X => X.when><Selector else Selector
 | Es = []
-| for E $effects: when Selector E:
+| for E $effects: when Sel E:
   | Effect = get_named_effect Target E.name E.params
   | push Effect Es //cuz invoking it right here may clobber $effects
-| for Effect Es: $effect{Effect Target TargetXYZ}
+| for Effect Es: $effect{Effect Target Xyz}
 
 unit.run_effect Name Params Target TargetXYZ =
 | Es = []
@@ -483,7 +486,7 @@ unit.assault Combat Target =
     Else
       | bad "Unknown combat modifier [Mod]"
 | less Magic:
-  | $run_effects{?when><attack Me $xyz}
+  | $run_effects{attack}
   | Mods = $mod
   | $mod <= 0
   | when Mods: for Mod Mods: case Mod
@@ -510,9 +513,9 @@ unit.harm Attacker Damage @Magic =
   | leave
 | Mg = not Magic.end
 | when Damage>0:
-  | $run_effects{?when><harm Me $xyz}
-  | if Mg then $run_effects{?when><magic_harm Me $xyz}
-    else $run_effects{?when><phys_harm Me $xyz}
+  | $run_effects{harm}
+  | if Mg then $run_effects{magic_harm}
+    else $run_effects{phys_harm}
 | Mods = $mod
 | $mod <= 0
 | when Mods: for Mod Mods: case Mod
@@ -537,12 +540,10 @@ unit.harm Attacker Damage @Magic =
 
 //called when unit enters cell ingame, not in editor or game-init
 unit.on_entry =
-| C = $cell
-| for U C.units: U.run_effects{?when><entry Me $xyz}
+| for U $cell.units: U.run_effects{entry}
 
 unit_pickup_items Me =
-| C = $cell
-| for U C.units: when U.item.is_list: U.effect{U.item Me $xyz}
+| for U $cell.units: when U.item.is_list: U.effect{U.item Me $xyz}
 
 unit.fine_move FXYZ =
 | C = $world.c
@@ -561,7 +562,7 @@ unit.fine_move FXYZ =
 unit.move XYZ =
 | C = $world.c
 | $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
-| when $class.active: $run_effects{?when><move Me $xyz}
+| when $class.active: $run_effects{move}
 | Me
 
 unit.remove =

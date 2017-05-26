@@ -260,7 +260,7 @@ place_object Me Bank Type =
   | U.pick_facing{Facing}
   | when $key{edit_random_facing}: U.facing <= 3.rand
   | U.move{X,Y,Z}
-  | U.run_effects{?when><place U U.xyz}
+  | U.run_effects{place}
   | U.animate{idle}
 
 world_place_tile_walls Me X Y Z Tile =

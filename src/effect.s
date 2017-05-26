@@ -128,8 +128,7 @@ effect neibs Args:
   | when B: $effect{Es B B.xyz}
 
 effect counter Arg:
-| R = $range
-| when R<<1: Target.run_effects{?when><counter Me Me.xyz}
+| when $range<<1: Target.run_effects{counter target/Me xyz/Me.xyz}
 
 effect spawn_field Args:
 | [TTL Freq R Param @As] = Args
@@ -446,7 +445,8 @@ check_when Me Target C =
   [`.` kills N] | less Target.kills>>N: leave 0
 | 1
 
-unit.effect Effect Target XYZ =
+unit.effect Effect Target TargetXYZ =
+| XYZ = Target.xyz.deep_copy
 | when XYZ.2 >< -1: leave
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
@@ -500,12 +500,16 @@ unit.effect Effect Target XYZ =
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me
+    else if Name >< tenant then
+      | Block = $world.block_at{XYZ}
+      | less Block: leave
+      | T <= Block
     else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
     else if Name >< pentagram then
-     | P = $owner.pentagram
-     | less P: leave
-     | XYZ.init{P.xyz}
-     | Target <= P
+      | P = $owner.pentagram
+      | less P: leave
+      | XYZ.init{P.xyz}
+      | Target <= P
     else if Name >< all_alive then
       | for U $world.active: when U.alive:
         | when U.ai><unit: $effect{Es U U.xyz}
