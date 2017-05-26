@@ -215,7 +215,6 @@ render_cursor Me Wr BX BY CursorXYZ =
 
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | DrawnFold = 0
-| DrawMark = 0
 | CurX,CurY,CurZ = CursorXYZ
 | CurH = (CurX+CurY)/2
 | XY2 = (X+Y)/2
@@ -249,11 +248,8 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | B.sy <= BY
         | B.lx <= LX
         | B.ly <= LY
-        | B.brighten <= if DrawMark and not U.active then 100 else Br
+        | B.brighten <= Br
         | push B BlitItems
-    else if not U.xyz.2 and U.type><unit_dig
-            and U.owner.id><$world.human.id then
-     | DrawMark <= 1 //marked for excavation
     else
 | Cell = Wr.cell{X Y 0}
 | EndZ = min RoofZ Wr.height{X Y}
@@ -281,7 +277,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       | B.sy <= BY-G.h-ZZ
       | B.lx <= LX
       | B.ly <= LY
-      | B.brighten <= if DrawMark then 100 else Br
+      | B.brighten <= Br
       //| B.brighten <= LM.at{X Y Z}
       | when Fog: B.flags <= #40 //dither
       | push B BlitItems

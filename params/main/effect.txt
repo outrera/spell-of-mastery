@@ -20,8 +20,8 @@ fireaura: on{counter},harm{magic.2},impact{fire_ring}
 poison: on{endturn},host,when{has_health.2},harm{magic.1}
 shell: on{phys_harm},mod{mul,1,3},/*sound{shell},*/impact{shell}
 resist_magic: on{magic_harm},mod{mul,1,2},/*sound{shell},*/impact{resist}
-regen: on{endturn},when{harmed rested},strip{poison},heal{1},effect{heal}
-regen_tenant: on{tenant_endturn},tenant,when{harmed rested},strip{poison},heal{1},effect{heal}
+regen: on{endturn},when{harmed safe},strip{poison},heal{1},effect{heal}
+regen_tenant: on{tenant_endturn},tenant,when{harmed safe},strip{poison},heal{1},effect{heal}
 burning: on{entry},tenant,harm{1},effect1{fire_ring}
 enemy_removes: on{entry},tenant,when{enemy},effect{pickup},remove{self}
 removes_firewall: on{cycle.4},remove{(neib special_firewall)}

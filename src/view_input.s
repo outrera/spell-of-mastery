@@ -19,7 +19,6 @@ order_at Me XYZ Target =
   | when Below.unit and (Cell-Below.height).block.ai><remove:
     | U = Us.0
     | XYZ = Cell.xyz
-    | place_dig_mark_at U.owner XYZ
     | U.order_at{XYZ}
     | leave
 | for U Us:
@@ -29,19 +28,6 @@ order_at Me XYZ Target =
     | when Found: P <= Found
   | U.order_at{P.xyz}
   | push P Used
-
-
-room_relinquish Me C =
-| Flag = C.units.find{?ai><flag}
-| when no Flag or Flag.owner.id<>$player.id:
-  | $player.notify{"Relinquish can only target your flag."}
-  | $main.sound{illegal}
-  | leave
-| BelowType = (C-1).tile.type
-| Ts = $world.linked_cells2d{C-1 | CC => CC.tile.type><BelowType}
-| for T Ts{?+1}:
-  | Flag = T.units.find{?ai><flag}
-  | when Flag.owner.id><$player.id: Flag.free
 
 handle_picked_act Me Rect Units Act =
 | ActUnits = $picked
@@ -98,19 +84,6 @@ handle_picked_act Me Rect Units Act =
   | $player.notify{"Cant target leader."}
   | $main.sound{illegal}
   | Proceed <= 0
-| when IsRoom:
-  | Work = $player.work_at{XYZ}
-  | when Work:
-    | when Act.name >< room_demolish:
-      | Work.drop_all
-      | Work.free
-      | leave
-    | $player.notify{"This place is already occupied."}
-    | $main.sound{illegal}
-    | Proceed <= 0
-  | when Act.name >< room_relinquish:
-    | room_relinquish Me $world.cell{@XYZ}
-    | leave
 | when Act.name >< room_demolish and not Below.cost:
   | $player.notify{"Cant demolish this."}
   | $main.sound{illegal}
@@ -232,9 +205,6 @@ place_object Me Bank Type =
               then "[Bank]_[$main.classes_banks.Bank.rand]"
               else "[Bank]_[Type]"
 | Class = $main.classes.ClassName
-| when ClassName><special_flag:
-  | $player.capture{Cell-1}
-  | leave
 | when Class.item><1:
   | Cell.add_item{ClassName 1}
   | leave
@@ -383,43 +353,15 @@ view.update_brush =
   [tile Type] | place_tile Me Type
 | when $mice_click><right: remove_object_or_tile Me
 
-Unmarking = No
-
-place_dig_mark_at Player XYZ =
-| X,Y,Z = XYZ
-| World = Player.world
-| when got World.cell{X Y 0}.units.find{?type><unit_dig}: leave
-| Work = Player.alloc_unit{unit_dig}
-| Work.move{X,Y,0}
-| Work.hp <= 0
-| World.main.sound{dig}
-
-mark_tile Me =
-| X,Y,Z = $cursor
-| Work = $world.column_units_get{X Y}.find{?type><unit_dig}
-| when got Work:
-  | when Unmarking<>0:
-    | Unmarking <= 1
-    | $main.sound{dig}
-    | when Work.free
-  | leave
-| when Unmarking><1: leave
-| Unmarking <= 0
-| when Z < 2: leave
-| place_dig_mark_at $world.human X,Y,Z
-
 view.update_play =
 | less $brush.0: case $mice_click
   leftup | $mice_click <= \pick
-  right | less $picked.size or $world.act:
-          | mark_tile Me
-        | when $picked.size:
+  right | when $picked.size:
           | $mice_click <= \order
         | when $world.act:
           | $world.act <= 0
           | $mice_click <= 0
   rightup
-    | Unmarking <= No
     | $mice_click <= 0
 
 world.update_picked =

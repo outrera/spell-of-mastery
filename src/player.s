@@ -174,14 +174,6 @@ player.make_move =
 | $ai.update
 //|free_ai_blockers $world
 
-player.dig_mark X Y Z =
-| W = $world.column_units_get{X Y}.find{(?type><unit_dig and ?owner.id><$id)}
-| if got W then W else 0
-
-player.work_at XYZ =
-| W = $world.units_get{XYZ}.find{(?type><unit_build and ?owner.id><$id)}
-| if got W then W else 0
-
 player.add_item Name Amount =
 | when Amount > 0: bad "player.remove_item implement positive amount"
 | Amount <= -Amount
@@ -195,21 +187,6 @@ player.add_item Name Amount =
   | Cell.add_item{Name -Count}
   | Amount -= Count
   | when Amount < 0: leave 1
-| 1
-
-player.capture Cell = //captures room pointer by a cell
-| Tile = Cell.tile
-| less Tile.deco: leave 1
-| DSize,OX,OY,Params,DecoType = Tile.deco
-| CaptType = Tile.type
-| Ts = $world.linked_cells2d{Cell | Cell => Cell.tile.type><CaptType}{?+1}
-| Guard = Ts.find{T=>got T.units.find{U=>U.hp and $is_enemy{U.owner}}}
-| when got Guard: leave 0 //room is guarded, cant capture it
-| for T Ts:
-  | D = T.units.find{?type><DecoType}
-  | when got D and D.owner.id<>$id:
-    | D.change_owner{Me}
-    | D.colors <= $colors
 | 1
 
 export player

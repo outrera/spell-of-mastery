@@ -266,53 +266,6 @@ effect clear Where:
   Else | bad "effect clear: invalid target ([Where])"
 | $world.clear_tile{X Y Z}
 
-effect store How:
-| S = $get_effect_value{store_}.unheap
-| less S: leave
-| $strip_effect{store_}
-| [ItemType Amount BackXYZ] = S
-| $drop_item{ItemType Amount}
-| $order_at{BackXYZ act/dig}
-
-
-world_dig Me X Y Z PassageH Amount =
-| Cell = $cell{X Y Z}
-| Tile = Cell.tile
-| Work = Cell.units.find{?type><unit_dig}
-| when 0:
-  | _label done
-  | when got Work: Work.free
-  | leave 1
-| when Cell.empty: _goto done //already excavated
-| when no Work:
-  | Work <= $players.0.alloc_unit{unit_dig}
-  | Work.move{X,Y,Z}
-  | Work.hp <= 0
-| Work.hp+=Amount
-| when Tile.unit:
-  | B = Cell.block
-  | less B and B.ai><remove: _goto done
-  | when Work.hp >> B.class.hp:
-    | when B.death: Work.effect{B.death Work X,Y,Z}
-    | B.free
-    | _goto done
-  | when B.hit: Work.effect{B.hit Work X,Y,Z}
-  | leave 0
-| when Work.hp < Tile.hp:
-  | when Tile.hit: Work.effect{Tile.hit Work X,Y,Z}
-  | leave 0
-| when Tile.death: Work.effect{Tile.death Work X,Y,Z}
-| H = min $floor{X,Y,Z} Z+PassageH
-| ZZ = Z
-| while Z<H:
-  | less $at{X Y Z}.dig: H<=Z
-  | Z++
-| Z <= ZZ
-| while Z<H:
-  | $set{X Y Z $main.tiles.void}
-  | Z++
-| _goto done 
-
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type
 | when no Tile:
@@ -427,23 +380,24 @@ effect align How:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 check_when Me Target C =
-| case C
-  ally | when $owner.is_enemy{Target.owner}: leave 0
-  enemy | less $owner.is_enemy{Target.owner}: leave 0
-  confirmed | less $main.dialog_result><yes: leave 0
-  harmed | less Target.health<>Target.class.hp: leave 0
-  idle | when Target.goal: leave 0
-  rested | less $steps><$class.steps: leave 0
-  [`+` not C] | when check_when Me Target C: leave 0
-  [`.` below Type] | less (Target.cell-1).type><Type: leave 0
-  [`.` has_health A] | less Target.health>>A: leave 0
-  [`.` has_mana A] | less $owner.mana>>A: leave 0
-  [`.` has Effect] | less Target.has{Effect}: leave 0
-  [`.` hasnt Effect] | less Target.has{Effect}: leave 0
-  [`.` got_child Type] | leave: got Target.child{Type}
-  [`.` no_child Type] | leave: no Target.child{Type}
-  [`.` kills N] | less Target.kills>>N: leave 0
-| 1
+| leave: case C
+  ally | not $owner.is_enemy{Target.owner}
+  enemy | $owner.is_enemy{Target.owner}
+  confirmed | $main.dialog_result><yes
+  harmed | Target.health<>Target.class.hp
+  idle | not Target.goal
+  rested | $steps><$class.steps
+  safe | Dirs4.all{D=>|B=$world.block_at{$xyz+[D.0 D.1 0]}; not B or not $is_enemy{B}}
+  [`+` not C] | not: check_when Me Target C
+  [`.` below Type] | (Target.cell-1).type><Type
+  [`.` has_health A] | Target.health>>A
+  [`.` has_mana A] | $owner.mana>>A
+  [`.` has Effect] | Target.has{Effect}
+  [`.` hasnt Effect] | not Target.has{Effect}
+  [`.` got_child Type] | got Target.child{Type}
+  [`.` no_child Type] | no Target.child{Type}
+  [`.` kills N] | Target.kills>>N
+  Else | 0
 
 unit.effect Effect Target TargetXYZ =
 | XYZ = Target.xyz.deep_copy
