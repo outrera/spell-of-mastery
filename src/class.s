@@ -11,7 +11,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            passable/1 movable/0 counter/0 tier/0
            steps/0 inborn/[] pentagram/0
            attack/0 impact/0 impact_hit/0
-           hit/0 death/0 moves/0}
+           hit/0 death/0 moves/0 platform/0}
   id                    //for unit counts table
   type/"[Bank]_[Class_name]"
   block/0               //acts as map block
@@ -50,6 +50,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   death/Death           //on death script
   moves/Moves           //on movement script
   pentagram/Pentagram   //pentagram this unit casts
+  platform/Platform     //increased tenants position on screen
 | when Spells: $acts <= [@$acts @Spells].list
 | when Rooms: $acts <= [@$acts @Rooms].list
 | when $active:

@@ -25,6 +25,7 @@ type unit.$class{Id World}
   owner // player controlling this unit
   fxyz/[0 0 0] // fine X,Y,Z
   xyz/[0 0 -1] // world cell X,Y,Z
+  zhack // used to make unit appear standing on platform
   cell/0 //cell this unit resides in
   floor/0 // ground cell under this unit
   from/[0 0 0] //where this unit moved from
@@ -553,7 +554,16 @@ unit.fine_move FXYZ =
 | $xyz.init{XYZ}
 | C = $world.c
 | $fxyz.init{FXYZ}
+| $zhack <= 0
+| when $ai >< unit:
+  | Platform = $world.units_get{$xyz}.find{?platform}
+  | when got Platform: $zhack <= -Platform.platform
+| RUs = []
+| when $platform:
+  | RUs <= $world.units_get{$xyz}{[? ?fxyz]}
+  | RUs{?0.remove}
 | $world.place_unit{Me}
+| RUs{U,F=>U.fine_move{F}}
 | $floor <= $cell.floor
 | $environment_updated
 | when $ai >< unit: unit_pickup_items Me

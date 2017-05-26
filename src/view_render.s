@@ -96,6 +96,7 @@ unit.draw FB B =
 | GW = G.w
 | XX = X+XUnit2-GW/2
 | YY = Y-YUnit2-G.h
+| YY += $zhack
 | when $mirror:
   | XX -= GW%2
   | G.flop
