@@ -4,12 +4,12 @@ unit.new_turn =
 
 unit.end_turn =
 | Turn = $world.turn
+| $steps <= $class.steps
 | when not $empty and $class.hp>0:
   | for V $world.units_get{$xyz}: V.run_effects{tenant_endturn}
 | $run_effects{endturn}
 | $run_effects{E => E.when><ttl0 and E.params.0><Turn}
 | $strip_effect{E => E.name><cool and E.params.1+E.params.2<<Turn} 
-| $steps <= $class.steps
 | $handled <= 0
 
 world.new_turn =

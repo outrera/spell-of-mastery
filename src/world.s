@@ -133,6 +133,11 @@ world.rand Size =
 | $seed <= ($seed*LCG_A + LCG_B) % LCG_M
 | @int: @round: $seed.float*Size.float/LCG_M_F
 
+setters_ O = O^methods_.keep{?0.0 >< '='}{[?0.tail ?1]}.table
+getters_ O =
+| Setters = setters_ O
+| O^methods_.keep{K,V => got Setters.K}.table
+
 world.init =
 | $main.world <= Me
 | World <= Me
@@ -172,8 +177,8 @@ world.init =
 | MaxSize = $maxSize
 | $variation <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $players.0.alloc_unit{unit_nil}
-| $main.params.unit_setters_ <=
-  | ($nil)^methods_.keep{?0.0 >< '='}{[?0.tail ?1]}.table
+| $main.params.unit_getters_ <= getters_ $nil
+| $main.params.unit_setters_ <= setters_ $nil
 
 world.new_cost =
 | $cost--

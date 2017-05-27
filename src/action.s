@@ -25,8 +25,6 @@ move_start Me =
 | U.facing <= Dirs.locate{X,Y}
 | when U.anim<>move: U.animate{move}
 | $cycles <= U.speed
-| when U.slowed: $cycles <= U.speed*2
-| when U.hasted: $cycles <= max 2 U.speed/2
 | when X >< -Y: $cycles <= max 1 $cycles*3/2
 | $start_cycles <= $cycles
 | Effect = U.class.moves
