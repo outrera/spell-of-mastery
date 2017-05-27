@@ -661,7 +661,7 @@ upd_floor Me Bottom =
 | Floor = Cell
 | LastEmpty = 0
 | times I $d:
-  | Empty = Cell.tile.empty
+  | Empty = Cell.empty
   | when Empty
     | less LastEmpty: Floor <= Cell
     | Cell.floor <= Floor
@@ -671,7 +671,7 @@ upd_floor Me Bottom =
 | Floor = Cell
 | LastEmpty = 0
 | times I $d:
-  | Empty = Cell.tile.empty
+  | Empty = Cell.empty
   | less Empty
     | when LastEmpty: Floor <= Cell+1
     | Cell.floor <= Floor

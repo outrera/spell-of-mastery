@@ -432,6 +432,11 @@ unit.order_at XYZ act/0 goal/0 =
   | less Move.size
     | $owner.notify{'Cant move there'}
     | leave
+| when $owner.human and Act.range>1 and Act.range<9000 and Act.tab><spell:
+  | Move = $world.cell{@XYZ}.units.keep{?type><mark_cast}
+  | less Move.size
+    | $owner.notify{'Cant cast there'}
+    | leave
 | $unit_goal.xyz.init{XYZ}
 | $goal <= if Goal then Goal else $unit_goal
 | $goal_act <= Act

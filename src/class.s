@@ -89,9 +89,7 @@ main.load_classes =
   | when V.active:
     | As = []
     | when V.speed: As <= [recall @As]
-    | when V.combat:
-      | when V.combat><impact: V.combat<=0
-      | As <= [attack @As]
+    | when V.combat and V.combat><impact: V.combat<=0
     | As <= [@As @V.acts]
     | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]
     | V.acts <= As

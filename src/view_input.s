@@ -361,19 +361,30 @@ world.update_picked =
 | for M $marks: M.free
 | $marks.heapfree
 | $marks <= []
-| when $act and $act.range <> any: leave
+| less $human.picked.size: leave
+| U = $human.picked.0
 | Marks = []
-| for U $human.picked:
-  | for What,Cell U.reachable:
-    | Mark = $human.alloc_unit{"mark_[What]"}
-    | Mark.move{Cell.xyz}
-    | push Mark Marks
-| for U $human.picked: less U.path.end:
-  | PathGoal = U.path.last.xyz
-  | Mark = $human.alloc_unit{"mark_goal"}
-  | Mark.move{PathGoal}
-  | Wave = @int 20.0*(@sin: ($cycle%100).float/100.0*PI)
-  | Mark.fxyz.2 += Wave
+| when $act:
+  | when $act.range >< 9000: leave
+  | UX,UY,UZ = U.xyz
+  | for X,Y points_in_diamond{$act.range}
+    | XX = UX+X
+    | YY = UY+Y
+    | when XX >> 1 and YY >> 1:
+      | Cell = $cell{XX YY 1}
+      | while Cell.z < $d-1:
+        | if Cell.empty then
+            | Mark = $human.alloc_unit{"mark_cast"}
+            | Mark.move{Cell.xyz}
+            | push Mark Marks
+            | while Cell.z < $d-1 and Cell.empty: Cell++
+          else
+            | while Cell.z < $d-1 and not Cell.empty: Cell++
+  | $marks <= Marks.enheap
+  | leave
+| for What,Cell U.reachable:
+  | Mark = $human.alloc_unit{"mark_[What]"}
+  | Mark.move{Cell.xyz}
   | push Mark Marks
 | $marks <= Marks.enheap
 
