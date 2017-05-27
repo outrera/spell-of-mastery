@@ -1,11 +1,11 @@
 icon: spell_banish
 hotkey: b
-lore: misc.tier2_lcost
-cost: 400
-cool: 480
+lore: misc.tier3_lcost
+cost: misc.tier2_scost
+cool: misc.tier5_cool
 needs: (cast_implosion)
 range: 5
 affects: (non_leader),unit
-before: harm{1000},impact{reaper},sound{armageddon}
+before: harm{100},impact{reaper},sound{armageddon}
 hint: harm
 tab: spell

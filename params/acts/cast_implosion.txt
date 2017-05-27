@@ -1,10 +1,10 @@
 icon: spell_implosion
-lore:  misc.tier2_lcost
-cost: 400
-cool: 480
+lore: misc.tier2_lcost
+cost: misc.tier1_scost
+cool: misc.tier3_cool
 needs: (cast_fireball)
 range: 5
 affects: unit
-before: decimate{1 2},impact{implosion},sound{lifedrain}
+before: reduce_health_to{3},impact{implosion},sound{lifedrain}
 hint: harm
 tab: spell

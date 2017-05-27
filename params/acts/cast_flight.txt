@@ -1,9 +1,9 @@
 icon: spell_flight
-lore: misc.tier1_lcost
-cost: 1000
-cool: 5760
+lore: misc.tier2_lcost
+cost: misc.tier1_scost
+cool: misc.tier3_cool
+range: 9000
 affects: unit
-//two minutes should be enough to traverse 128x128 map
-before: owner_units,add_effect{flyer,2880,()},impact{heal},sound{flight}
+before: owner_units,add_effect{flyer,0,()},impact{heal},sound{flight}
 hint: boost_allies
 tab: spell

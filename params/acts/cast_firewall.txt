@@ -1,8 +1,9 @@
 icon: spell_firewall
-lore: misc.tier1_lcost
-cost: 200
+lore: misc.tier0_lcost
+cost: misc.tier0_scost
+cool: misc.tier0_cool
 needs: (cast_fireball)
-range: 2
+range: 5
 affects: any
 before: impact{fire_ring},sound{summon},spawn{special_firewall}
 //ai: boost_allies

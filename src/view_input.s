@@ -58,16 +58,11 @@ handle_picked_act Me Rect Units Act =
   | leave
 | $mice_click <= 0
 | when Affects><unit and Units.end: leave
-| IsRoom = Act.room
-| less IsRoom: $world.act <= 0
+| $world.act <= 0
 | Proceed = 1
 | Target = if Units.end then 0 else Units.0
 | XYZ = if Target and Affects><unit then Target.xyz else $cursor
 | Below = $world.at{XYZ.0 XYZ.1 XYZ.2-1}
-| when IsRoom and Below.unit:
-  | $player.notify{"Cannot target unit."}
-  | $main.sound{illegal}
-  | leave
 | when LandOnly and (Below.liquid or Below.type><void):
   | $player.notify{"Can target only land."}
   | $main.sound{illegal}
@@ -95,9 +90,7 @@ handle_picked_act Me Rect Units Act =
       | when Target and Blink:
         | $world.blink.init{[4 Target]}
         | Blink <= 0
-      | if IsRoom
-        then U.effect{Act.impact 0 XYZ}
-        else U.order_at{XYZ act/Act goal/Target}
+      | U.order_at{XYZ act/Act goal/Target}
 | leave
 
 handle_picked Me Rect Units = //Me is view

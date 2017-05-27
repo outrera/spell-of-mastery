@@ -1,8 +1,0 @@
-icon: recall
-//lore: misc.tier1_lcost
-//cost: 100
-range: 9000
-affects: ally
-before: effect{teleport},sound{summon},impact{teleport},recall{self}
-after: ()
-tab: spell

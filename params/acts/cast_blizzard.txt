@@ -1,10 +1,10 @@
 icon: spell_blizzard
 hotkey: i
 lore: misc.tier2_lcost
-cost: 500
-cool: 1920
+cost: misc.tier2_scost
+cool: misc.tier3_cool
 needs: (cast_lightning)
-affects: area
-before: sound{blizzard},spawn_field{800,8,world,(outdoors_cell 1),missile{effect_shard,height_div,(target -32 0 96)},area{any,(64 64 64),harm{magic.1}},impact{shard_impact},sound{impact}}
+affects: unit
+before: sound{blizzard},all_alive,missile{effect_shard,height_div,(target -32 0 96)},harm{magic.1},impact{shard_impact},sound{impact}
 hint: harm_all
 tab: spell

@@ -1,12 +1,12 @@
 icon: spell_lightning
 hotkey: l
-lore:  misc.tier1_lcost
-cost: 400
-cool: 1920
+lore: misc.tier1_lcost
+cost: misc.tier1_scost
+cool: misc.tier3_cool
 needs: (cast_fireball)
 range: 9000
-affects: (outdoor),unit
+affects: (outdoor non_leader),unit
 targets: any
-before: harm{magic.10},impact{lightning},sound{lightning}
+before: harm{magic.5},impact{lightning},sound{lightning}
 hint: harm
 tab: spell

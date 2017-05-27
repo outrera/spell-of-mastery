@@ -107,10 +107,13 @@ effect harm As:
 | T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
 | $assault{Combat T}
 
-effect area As:
-| [Whom [W H D] @Args] = As
+effect reduce_health_to Health:
+| when Target.health << Health: leave
+| $assault{[`.` unavoid Target.health-Health] Target}
+
+effect area As: //area{any,3,harm{magic.2}}
+| [Whom Range @Args] = As
 | Es = Args{?^normalize_curly}
-| Range = W/$world.c-1
 | Ts = $world.units_in_range{TargetXYZ Range}.skip{?empty}
 | case Whom [exclude_self W]:
   | Whom <= W

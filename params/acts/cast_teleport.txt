@@ -1,8 +1,8 @@
 icon: spell_teleport
 hotkey: p
 lore: misc.tier1_lcost
-cost: 200
-cool: 4320
+cost: misc.tier3_scost
+cool: misc.tier4_cool
 needs: (cast_telekinesis cast_haste cast_flight)
 range: 9000
 affects: empty
