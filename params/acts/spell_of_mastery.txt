@@ -3,5 +3,5 @@ lore: 200
 cost: 10
 affects: any
 before: impact{teleport},sound{summon}
-after: spell_of_mastery{}
+after: (spell_of_mastery)
 tab: spell

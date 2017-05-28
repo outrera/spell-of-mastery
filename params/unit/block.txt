@@ -5,6 +5,5 @@ aux: 1
 armor: 999
 show: 0
 item: 0
-starts: 0
 ai: block
 pickable: 0

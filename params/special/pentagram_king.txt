@@ -5,7 +5,6 @@ empty: 1
 health: 120 // two minutes
 pickable: 0
 sight: 1
-starts: still // initial animation
 ai: pentagram
 inborn: (enemy_removes removes_firewall)
 

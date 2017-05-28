@@ -130,7 +130,7 @@ effect neibs Args:
   | B = $world.block_at{XYZ}
   | when B: $effect{Es B B.xyz}
 
-effect counter Arg:
+effect counter:
 | when $range<<1: Target.run_effects{counter target/Me xyz/Me.xyz}
 
 effect spawn_field Args:
@@ -223,14 +223,7 @@ effect recall Where:
 | Target.reset_goal
 | Target.reset_followers
 
-effect remove Whom: case Whom
-  target | Target.free
-  self | Me.free
-  X,Y,Z | U = $world.block_at{X,Y,Z}
-        | when U: U.free
-  neib,Type | for U $world.units_get{$xyz}: when U.type><Type: U.free
-  Serial | U = $world.units.find{?serial><Serial}
-         | when got U and not U.removed: U.free
+effect remove: Target.free
 
 effect die Whom:
 | T = if Whom >< self then Me else Target

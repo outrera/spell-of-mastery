@@ -5,9 +5,8 @@ empty: 1
 health: 120 // two minutes
 pickable: 0
 sight: 1
-starts: still // initial animation
 ai: pentagram
-inborn: (enemy_removes removes_firewall)
+inborn: (enemy_removes)
 
 acts: summon_imp, summon_blob, summon_oculus, summon_bat,
       summon_halfling, summon_elf, summon_dwarf, summon_ifrit,

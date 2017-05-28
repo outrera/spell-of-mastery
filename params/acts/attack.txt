@@ -2,7 +2,7 @@ icon: attack
 hotkey: t
 affects: unit
 before: (user_attack)
-impact: counter{1},user_impact
+impact: counter,user_impact
 range: user
 repeat: 0
 ///hint: harm
