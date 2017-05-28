@@ -111,7 +111,7 @@ enemies_in_range Me =
 unit.reachable =
 | Xs = []
 | XYZ = $xyz
-| when $steps: $find{$steps
+| when $steps>0: $find{$steps
   | Dst =>
     | R = \block
     | Type = \move

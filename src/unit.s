@@ -84,7 +84,6 @@ unit.`=flyer` State = $flags <= $flags^set_bit{5 State}
 unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
-unit.paralyzed = $flags^get_bit{13}
 unit.slowed = $flags^get_bit{14}
 
 // this unit is a temporary mark (i.e. cursor); dont save it
@@ -491,14 +490,10 @@ unit.assault Combat Target =
       | Lifedrain <= 1
     Else
       | bad "Unknown combat modifier [Mod]"
+| when $mod: | Damage += $mod; $mod <= 0
 | less Magic:
   | $run_effects{attack}
-  | Mods = $mod
-  | $mod <= 0
-  | when Mods: for Mod Mods: case Mod
-    [mul A B] | Damage <= max 1 Damage*A/B
-    [add N] | Damage <= Damage+N
-    Else | bad "bad attack modifier [Mod]"
+  | when $mod: | Damage += $mod; $mod <= 0
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
 | less Unavoid: Damage -= Target.armor
@@ -517,16 +512,13 @@ unit.harm Attacker Damage @Magic =
 | when Damage << 0:
   | heal_unit Me -Damage
   | leave
-| Mg = not Magic.end
-| when Damage>0:
-  | $run_effects{harm}
-  | if Mg then $run_effects{magic_harm}
-    else $run_effects{phys_harm}
-| Mods = $mod
-| $mod <= 0
-| when Mods: for Mod Mods: case Mod
-  [mul N M] | Damage <= max 1 | Damage - | max 1 Damage*N/M
-  [sub N] | Damage <= max 1 Damage-N
+| $run_effects{harm}
+| when $mod: | Damage += $mod; $mod <= 0
+| Mg = not Magic.end //is magic harm?
+| if Mg then $run_effects{magic_harm}
+  else $run_effects{phys_harm}
+| when $mod: | Damage += $mod; $mod <= 0
+| Damage <= max 1 Damage
 | $hp -= Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:

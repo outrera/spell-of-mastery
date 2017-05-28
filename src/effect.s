@@ -22,7 +22,7 @@ effect enable State Players ActNames:
 
 effect on When: No
 
-effect add_effect Name Duration Params: Target.add_effect{Name Duration Params}
+effect add Name: Target.add_effect{Name 0 []}
 
 effect strip Name: Target.strip_effect{Name}
 
@@ -412,9 +412,7 @@ unit.effect Effect Target TargetXYZ =
 | when XYZ.2 >< -1: leave
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
-| when T.is_unit and T.id<>$id and $invisible:
-  | $strip_effect{invisible}
-  | $add_effect{invisible_bonus 240 []}
+| when T.is_unit and T.id<>$id: $run_effects{act}
 | Es = Effect.list
 | till Es.end
   | E = pop Es
@@ -464,26 +462,28 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< self then T <= Me
     else if Name >< tenant then
       | Block = $world.block_at{XYZ}
-      | less Block: leave
+      | less Block: _goto end
       | T <= Block
     else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
     else if Name >< pentagram then
       | P = $owner.pentagram
-      | less P: leave
+      | less P: _goto end
       | XYZ.init{P.xyz}
       | Target <= P
     else if Name >< all_alive then
       | for U $world.active: when U.alive:
         | when U.ai><unit: $effect{Es U U.xyz}
-      | leave
+      | _goto end
     else if Name >< owner_units then
       | OID = $owner.id
       | for U $world.active: when U.owner.id><OID:
         | when U.ai><unit: $effect{Es U U.xyz}
-      | leave
+      | _goto end
     else if Name >< enemy_units then
       | OID = $owner.id
       | for U $world.active: when $is_enemy{U}:
         | when U.ai><unit: $effect{Es U U.xyz}
-      | leave
+      | _goto end
     else bad "no effect handler for [Name]{[Args]} of [Me]"
+| _label end
+| $mod <= 0

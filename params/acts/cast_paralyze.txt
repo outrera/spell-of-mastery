@@ -1,13 +1,11 @@
 icon: spell_paralyze
-hotkey: p
-lore: misc.tier2_lcost
-cost: 500
-cool: 1920
+lore: misc.tier1_lcost
+cost: misc.tier0_scost
+cool: misc.tier1_cool
 range: 9000
-needs: (cast_haste)
+needs: (cast_haste cast_slow)
 affects: unit
 targets: any
-// stops unit for 30 seconds
-before: add_effect{paralyzed,720,()},impact{cold_ring},sound{slowed}
+before: set{inc,target,steps,-100},impact{cold_ring},sound{slowed}
 hint: harm
 tab: spell

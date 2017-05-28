@@ -1,10 +1,10 @@
 icon: spell_bloodlust
-hotkey: o
 lore: misc.tier1_lcost
-cost: 200
-cool: 2880
-needs: (cast_heal)
+cost: misc.tier0_scost
+cool: misc.tier2_cool
+range: 9000
+needs: (cast_shell)
 affects: unit
-before: owner_units,add_effect{bloodlust,1000,()},impact{heal},sound{bloodlust}
+before: owner_units,add{bloodlust},impact{heal},sound{bloodlust}
 hint: boost_allies
 tab: spell

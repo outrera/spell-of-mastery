@@ -295,7 +295,6 @@ unit.update =
   | when $world.at{$xyz.0 $xyz.1 $xyz.2-1}.liquid and not $flyer: 
     | unit_sink Me
     | leave
-| when $paralyzed and $alive: leave
 | update_anim Me
 | when $idle: update_path Me
 | update_order Me
