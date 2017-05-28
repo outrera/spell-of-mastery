@@ -5,6 +5,6 @@ cost: misc.tier0_scost
 cool: misc.tier1_cool
 range: 9000
 affects: unit
-before: when{hasnt.slow},add{slowed},strip{hasted},set{inc,target,steps,-1},impact{slow},sound{slowed}
+before: when{hasnt.slow},add{slowed},strip{hasted},inc{steps,-1},impact{slow},sound{slowed}
 hint: deboost
 tab: spell

@@ -6,6 +6,6 @@ range: 9000
 needs: (cast_haste cast_slow)
 affects: unit
 targets: any
-before: set{inc,target,steps,-100},impact{cold_ring},sound{slowed}
+before: set{steps,-100},impact{cold_ring},sound{slowed}
 hint: harm
 tab: spell

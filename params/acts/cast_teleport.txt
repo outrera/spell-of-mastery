@@ -7,6 +7,6 @@ needs: (cast_telekinesis cast_haste cast_flight)
 range: 9000
 affects: empty
 targets: any
-before: effect{teleport},sound{summon},set{self alpha 0},set{self delta 10}
-after: impact{teleport},teleport{self},set{self alpha 255},set{self delta -10}
+before: effect{teleport},sound{summon},self,set{alpha 0},set{delta 10}
+after: impact{teleport},teleport{self},self,set{alpha 255},set{delta -10}
 hint: teleport

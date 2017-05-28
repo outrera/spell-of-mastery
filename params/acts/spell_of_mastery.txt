@@ -1,7 +1,7 @@
 icon: spell_of_mastery
-lore: 20000
-cost: 1000
+lore: 200
+cost: 10
 affects: any
-before: misc.spawn
-after: set{owner spell_of_mastery 7200}
+before: impact{teleport},sound{summon}
+after: spell_of_mastery{}
 tab: spell

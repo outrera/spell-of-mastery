@@ -14,8 +14,8 @@ amphibian: on{static}
 organic: on{static}
 fireaura: on{counter},harm{magic.2},impact{fire_ring}
 poison: on{endturn},host,when{has_health.2},harm{magic.1}
-hasted: on{endturn},set{inc,self,steps,1}
-slowed: on{endturn},set{inc,self,steps,-1}
+hasted: on{endturn},inc{steps,1}
+slowed: on{endturn},inc{steps,-1}
 bloodlust: on{attack},mod{2},self,harm{1}
 invisible: on{act},mod{2},strip{invisible}
 shell: on{phys_harm},mod{-1},sound{shell},impact{shell}
@@ -28,7 +28,7 @@ removes_firewall: on{cycle.4},remove{(neib special_firewall)}
 node_aura: on{cycle.12},tenant_mark{effect_aura}
 ttl: on{ttl0},effect{teleport},sound{summon},remove{self}
 ttl_s: on{timeout},remove{self} //silent ttl
-income1: on{tenant_endturn},tenant,set{inc,towner,mana,1}
+income1: on{tenant_endturn},tenant,mana{1}
 door_align: on{place},align{door}
 
 //when{harmed,has_mana.50}

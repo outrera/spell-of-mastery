@@ -194,45 +194,14 @@ unit_getset.`=` K V =
 | when no Setter: bad "unit_getset: unknown unit field [K]"
 | Setter $unit V
 
-// sets world param
-effect set @Args:
-| What = \world
-| Name = No
-| Value = 1
-| Players = 0
-| Inc = 0
-| case Args [inc @As]:
-  | Inc <= 1
-  | Args <= As
-| case Args
-  [A B C] | What <= A
-          | Name <= B
-          | Value <= C
-  [A B] | Name <= A
-        | Value <= B
-  [A] | Name <= A
-  Else | bad "invalid arglist [Args]"
-| Ps = if What >< world then [0,$world.params]
-       else if What.is_int then Players <= [$world.players.What]
-       else if What >< owner then Players <= [$owner]
-       else if What >< towner then Players <= [Target.owner]
-       else if What >< all then Players <= $world.players
-       else if What >< target then [0,(unit_getset Target)]
-       else if What >< self then [0,(unit_getset Me)]
-       else
-| when Players: Ps <= Players{?,?.params}
-| when Value >< `?owner`: Value <= $owner.id
-| when Value >< `?self`: Value <= $id
-| when Value >< `?self_type`: Value <= $type
-| for Player,Params Ps
-  | if Value.is_list
-    then | when no Params.Name: Params.Name <= dup Value.size
-         | Params.Name.init{Value}
-    else | if Inc then Params.Name += Value
-           else Params.Name <= Value
-  | when Player and Name >< mana:
-    | if Inc then Player.mana += Value
-      else Player.mana <= Value
+effect set Name Value: unit_getset{Target}.Name <= Value
+
+effect inc Name Value: unit_getset{Target}.Name += Value
+
+effect world_set Name Value: $world.params.Name <= Value
+
+effect spell_of_mastery: say 'Casted Spell of Mastery'
+
 
 effect swap Arg:
 | XYZ = $xyz.copy
