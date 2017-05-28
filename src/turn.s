@@ -11,6 +11,18 @@ unit.end_turn =
 | $run_effects{E => E.when><ttl0 and E.params.0><Turn}
 | $strip_effect{E => E.name><cool and E.params.1+E.params.2<<Turn} 
 | $handled <= 0
+| Remove = 0
+| RunEs = []
+| for E $effects: when E.amount>0:
+  | say E.amount
+  | E.amount--
+  | less E.amount > 0:
+    | when E.when >< timeout: push [E.name E.params.unheap] RunEs
+    | Remove <= 1
+    | E.amount <= No
+| when Remove: $strip_effect{?amount><No} //strip effects with zero duration
+| for Name,Params RunEs: $run_effect{Name Params Me $xyz}
+
 
 world.new_turn =
 

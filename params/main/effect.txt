@@ -25,7 +25,7 @@ regen_tenant: on{tenant_endturn},tenant,when{harmed safe},strip{poison},heal{1},
 burning: on{entry},tenant,harm{1},effect1{fire_ring}
 enemy_removes: on{entry},tenant,when{enemy},effect{pickup},self,remove
 node_aura: on{cycle.12},tenant_mark{effect_aura}
-ttl: on{ttl0},effect{teleport},sound{summon},remove
+ttl: on{timeout},effect{teleport},sound{summon},remove
 ttl_s: on{timeout},remove //silent ttl
 income1: on{tenant_endturn},tenant,mana{1}
 door_align: on{place},align{door}

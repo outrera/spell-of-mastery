@@ -66,17 +66,6 @@ update_units_effects Me Units =
       | V.run_effects{E=>case E.when [`.`tenant_cycle N] Cycle%N><0}
   | less U.effects.end:
     | U.run_effects{E=>case E.when [`.`cycle N] Cycle%N><0}
-    | when U.idle: U.run_effects{E=>case E.when [`.`idle N] Cycle%N><0}
-    | Remove = 0
-    | RunEs = []
-    | for E U.effects: when E.amount>0:
-      | E.amount--
-      | less E.amount > 0:
-        | when E.when >< timeout: push [E.name E.params.unheap] RunEs
-        | Remove <= 1
-        | E.amount <= No
-    | when Remove: U.strip_effect{?amount><0} //strip effects with zero duration
-    | for Name,Params RunEs: U.run_effect{Name Params U U.xyz}
 
 update_units Me =
 | ActiveList = $active.list
