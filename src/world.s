@@ -288,17 +288,10 @@ world.new_game =
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
   | L = P.leader
-  | C = P.pentagram
-  | when L and not C:
-    | C = P.alloc_unit{L.class.pentagram}
-    | C.move{L.xyz}
-    | L.move{C.xyz}
+  | when L:
     | L.alpha <= 255
     | L.delta <= -50
-    | $effect{C.xyz teleport}
-    | C.alpha <= 255
-    | C.delta <= -10
-    | $effect{C.xyz pentagram_appearance}
+    | $effect{L.xyz teleport}
   | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
