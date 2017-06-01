@@ -134,7 +134,8 @@ create_scenario_menu Me =
 create_load_menu_dlg Me =
 | loadScenarioBack = $pick{new_game_menu}
 | LoadScenarioDlg = load_dlg $world SavesFolder &loadScenarioBack: X =>
-  | load_game Me 1 X
+  | load_game Me 0 X
+  | $world.paused <= 0
 | LoadScenarioDlg.folder <= SavesFolder
 | dlg: mtx
   |   0   0 | MenuBG

@@ -530,7 +530,7 @@ unit.harm Attacker Damage @Magic =
   | leave
 | when Attacker:
   | AO = Attacker.owner
-  | when $owner.id <> AO.id: AO.lore += $tier*$main.params.world.kill_xp
+  | when $owner.id <> AO.id: AO.lore += $tier
   | $owner.params.lossage += $tier
   | Attacker.kills++
 | $die
