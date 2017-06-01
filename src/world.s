@@ -203,6 +203,7 @@ world.create W H =
 | for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
 | $w--
 | $h--
+| $paused <= 1
 
 // add movement blocking walls
 world.create_borders = // draws maps borders in clockwise order
@@ -302,6 +303,7 @@ world.new_game =
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
 | $end_turn
+| $paused <= 0
 
 world.notify Text =
 | Clock = clock

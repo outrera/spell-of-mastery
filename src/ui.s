@@ -62,11 +62,9 @@ ui.act_icons = AllActIcons
 ui.pause =
 | $paused <= 1
 | InputBlocker.show <= 1
-| $view.pause
 ui.unpause =
 | $paused <= 0
 | InputBlocker.show <= 0
-| $view.unpause
 
 ui.img File = $main.img{File}
 ui.create W H =
@@ -256,7 +254,6 @@ create_editor_tabs Me =
 | PlayIcon.picked_fg <= $img{icons_tab_pause}
 | hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon
 
-
 handle_brush_tab Me Picked =
 | if PanelTab><brush
   then when Picked<>brush:
@@ -329,7 +326,7 @@ create_view_ui Me =
 | GameUnitUI <= hidden: dlg: mtx
   | 0  0 | UnitPanel
 | IPY = $height-IconsPanelBG.h
-| UnitActIconsLay <= hidden: layV s/4 
+| UnitActIconsLay <= hidden: layV s/4
                      layH{s/4 UnitActIcons.drop{UnitActIcons.size/2}}
                     ,layH{s/4 UnitActIcons.take{UnitActIcons.size/2}}
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip

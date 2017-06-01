@@ -12,8 +12,8 @@ tile_size: 64,32,32 //width,height,depthm; typical isometric tile cube is 64x32x
 tile_banks: tile,room//,deco
 class_banks: unit,leader,item,special,trigger
 explored: 1 //all maps are explored from the beginning
-start_mana: 1000
-start_lore: 1000
+start_mana: 10
+start_lore: 0
 bounding_boxes: 0
 excavate_ttl: 1440 //24*60=1440
 build_ttl: 1440 //24*60=1440

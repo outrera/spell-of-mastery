@@ -10,6 +10,7 @@ type message_box.$base{ui} base title text buttons width margin/[0 0] click
 | button_click Result = 
   | DialogResult <= Result
   | $ui.unpause
+  | $ui.world.paused <= 0
   | $show <= 0
   | when $click: $click{}{DialogResult}
 | Buttons =
@@ -38,6 +39,7 @@ message_box.display Buttons Title Text Click =
   | B.value <= Value
 | $show <= 1
 | $ui.pause
+| $ui.world.paused <= 1
 
 main.show_message Title Text buttons/[ok,'Ok'] click/0 =
 | $ui.message_box.display{Buttons Title Text Click}
