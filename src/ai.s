@@ -40,13 +40,19 @@ cast_pentagram Me =
   | leave 1
 | leave 0
 
-cast_spell Me =
+cast_spell Me = //Me is unit
 | Acts = $acts
 | less Acts.size: leave 0
 | PP = $owner.params
 | when $leader:
   | Pentagram = $owner.pentagram
-  | less Pentagram: when cast_pentagram Me: leave 1
+  | less Pentagram:
+    | if $cell.is_floor_empty
+      then | when cast_pentagram Me: leave 1
+      else | TargetNode = $pathfind{1000 |Dst=>Dst.is_floor_empty}
+           | when TargetNode:
+             | $advance_to{TargetNode.xyz}
+             | leave 1
 | 0
 
 ai_leader_harmed Me Attacker Victim =

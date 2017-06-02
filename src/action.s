@@ -152,6 +152,9 @@ custom_valid Me =
      | less $unit.world.block_at{$xyz}: leave 1
     else if A >< area then leave 1
     else if A >< self then leave 1
+    else if A >< empty_floor then
+      | if $unit.world.cell{@$xyz}.is_floor_empty then leave 1
+        else $unit.owner.notify{"This action requires empty floor."}
     else if A >< pentagram then
       | P = $unit.owner.pentagram
       | if P

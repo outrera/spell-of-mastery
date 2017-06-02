@@ -49,6 +49,7 @@ int.path =
   | push Cell Path
   | Cell <= Cell.prev
 | Path.tail.list
+int.is_floor_empty = $units.all{U=>U.ai<>pentagram and U.type<>special_node}
 list.cell = (Me.1*WorldSize+Me.0)*WorldDepth+Me.2
 int.pile =
 | R = $units.find{?ai><pile}
