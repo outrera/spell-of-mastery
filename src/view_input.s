@@ -363,6 +363,7 @@ world.update_picked =
 | $marks <= []
 | less $human.picked.size: leave
 | U = $human.picked.0
+| less U.idle: leave
 | Marks = []
 | when $act:
   | when $act.range >< 9000: leave
