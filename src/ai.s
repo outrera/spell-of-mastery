@@ -154,6 +154,11 @@ ai_clean_pentagram Me =
   | B = Pentagram.cell.block
   | when B and B.steps and B.owner.id><$player.id:
     | Cs = B.reachable.keep{?0><move}
+    | Cs = Cs.sort{A B => (A.1.xyz-B.1.xyz).take{2}{?abs}.sum}.flip
+    | for Type,Cell Cs:
+      | when not Cell.block and got Cell.units.find{?ai><hold}:
+        | B.order_at{Cell.xyz} //move unit out of pentagram
+        | leave 1
     | case Cs [[Type Cell]@_]:
       | B.order_at{Cell.xyz} //move unit out of pentagram
       | leave 1
