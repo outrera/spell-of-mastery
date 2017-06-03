@@ -41,11 +41,15 @@ world.save =
     | Active <= list U.from U.anim U.anim_step U.anim_wait
                      U.kills U.cooldown Effects Host Goal Path
                      U.action.save U.ordered.save U.next_action.save
+                     U.steps
   | Facing = U.facing
   | when U.sprite.id <> U.default_sprite.id: Facing <= [U.sprite.id Facing]
   | list U.type U.id U.serial U.owner.id U.xyz U.fxyz Facing
          U.flags U.hp Active
 | $params.view_zlock <= $view.zlock
+| $params.turn <= $turn
+| $params.player <= $player
+| $params.paused <= $paused
 | list version(0.2) w($w) h($h) serial($serial) cycle($cycle) seed($seed)
     filename | $filename
     name | $name
@@ -97,6 +101,9 @@ world.load Saved =
 | Seed = 
 | when got@@it Saved.seed: $seed <= it
 | when got@@it Saved.params: for [K V] it: $params.K <= V
+| $turn <= $params.turn
+| $player <= $params.player
+| $paused <= $params.paused
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
 | Tilemap = remap_tids Me LookupTable Saved.tilemap
@@ -146,7 +153,8 @@ world.load Saved =
   | U.pick_facing{Facing}
   | when Active:
     | [From Anim AnimStep AnimWait Kills Cool Efx Host Goal Path
-       Action Ordered NextAction @More] = Active
+       Action Ordered NextAction Steps @More] = Active
+    | U.steps <= Steps
     | U.from.init{From}
     | U.animate{Anim}
     | U.anim_step <= AnimStep
