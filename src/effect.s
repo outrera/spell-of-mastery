@@ -223,6 +223,17 @@ effect recall Where:
 | Target.reset_goal
 | Target.reset_followers
 
+effect gateway:
+| B = $cell.block
+| less B: leave
+| GateN = $ai.1
+| for U $world.active: when U.id<>$id: case U.ai [gate &GateN]:
+  | $world.effect{B.xyz teleport}
+  | B.move{U.xyz}
+  | B.reset_goal
+  | $world.effect{U.xyz teleport}
+  | $sound{summon}
+
 effect remove: Target.free
 
 effect die Whom:

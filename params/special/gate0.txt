@@ -1,0 +1,4 @@
+sprite: effect_gate
+box_xy: (0 0)
+inborn: (gateway)
+ai: (gate 0)
