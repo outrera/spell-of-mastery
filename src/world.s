@@ -293,6 +293,12 @@ world.new_game =
     | L.alpha <= 255
     | L.delta <= -50
     | $effect{L.xyz teleport}
+    | C = P.pentagram
+    | when C:
+      | XYZ = C.xyz.copy
+      | C.free
+      | C = P.alloc_unit{L.class.pentagram}
+      | C.move{XYZ}
   | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits

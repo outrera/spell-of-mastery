@@ -7,6 +7,7 @@ pickable: 0
 sight: 1
 ai: pentagram
 inborn: (enemy_removes removes_firewall)
+aux: 1
 
 acts: summon_blob, summon_oculus,
       summon_skeleton, summon_bat,
