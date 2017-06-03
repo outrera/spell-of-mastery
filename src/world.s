@@ -406,70 +406,10 @@ world.dirty_set X Y Z Tile =
 | times I H: $set_{X Y Z+I Ps.I} // push padding
 | $set_{X Y Z+H Tile}
 
-DecoDirs = list
-   [[0 0]]
-   [[0 0]]
-   [[0 0] [-1 -1] [-1 0] [0 -1]]
-   [[-1 1] [-1 0] [-1 -1]
-    [ 0 1] [ 0 0] [ 0 -1]
-    [ 1 1] [ 1 0] [ 1 -1]]
-   [[0 0]]
-   [[ 0 1] [ 0 0] [ 0 -1]
-    [ 1 1] [ 1 0] [ 1 -1]
-    [ 2 1] [ 2 0] [ 2 -1]]
-
-linked_cells2dS Cell Cost Check =
-| when Cell.cost><Cost: leave []
-| Cell.cost <= Cost
-| less Check Cell: leave []
-| Rs = [Cell]
-| for N Cell.neibs: for R linked_cells2dS{N Cost Check}: push R Rs
-| Rs
-
-world.linked_cells2d Cell Check = linked_cells2dS{Cell $new_cost Check}
-
-points_rect Ps =
-| X = Ps{?0}.min
-| Y = Ps{?1}.min
-| [X Y Ps{?0}.max+1-X Ps{?1}.max+1-Y]
-
-update_deco Me Owner Tile Z Ps = //Me=world
-| Type = Tile.type
-| ZH = Z+Tile.height
-| DSize,OX,OY,Params,DecoType = Tile.deco
-| Single = 0
-| when Params: for P Params: case P
-  single | Single <= 1
-| MX,MY,W,H = points_rect Ps{?xyz}
-| XYs = points{MX MY W H}
-| for X,Y XYs:
-  | D = $units_get{X,Y,ZH}.find{?type><DecoType}
-  | when got D: D.free
-| Ds = if DSize.is_list then DSize else DecoDirs.DSize
-| Y = MY + OY.0
-| EY = Y + H-OY.1
-| while Y < EY:
-  | X = MX + OX.0
-  | EX = X + W-OX.1
-  | while X < EX:
-    | when Ds.all{DX,DY => $at{X+DX Y+DY Z}.type><Type}
-      | Deco = (Owner or $players.0).alloc_unit{DecoType}
-      | Deco.move{X,Y,ZH}
-      //| Deco.fxyz.init{Deco.fxyz-[FOff.0 FOff.1 0]}
-    | X += OX.2
-  | Y += OY.2
-
 world.set X Y Z Tile owner/0 =
 | Cell = $cell{X Y Z}
 | Removed = Cell.tile
-| DecoTs = 0
-| when Removed.deco and Removed.type<>Tile.type:
-  | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Removed.type}
 | $dirty_set{X Y Z Tile}
-| when DecoTs: update_deco Me Owner Removed Z DecoTs
-| when Tile.deco:
-  | DecoTs <= $linked_cells2d{Cell | Cell => Cell.tile.type><Tile.type}
-  | update_deco Me Owner Tile Z DecoTs
 | $upd_neibs{X Y}
 
 world.floor XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.floor%WorldDepth

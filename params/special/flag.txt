@@ -1,6 +1,0 @@
-icon: special_pentagram
-sprite: special_flag
-empty: 1
-pickable: 0
-sight: 1
-ai: flag

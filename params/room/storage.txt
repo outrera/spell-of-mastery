@@ -1,5 +1,3 @@
 sprite: tiles_room_storage
 embed: soil
-deco: 1,(0 0 1),(0 0 1),0,special_flag
-storage: (wood stone iron items)
 1111: 0
