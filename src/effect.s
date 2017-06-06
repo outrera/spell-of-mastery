@@ -226,12 +226,19 @@ effect recall Where:
 effect gateway:
 | B = $cell.block
 | less B: leave
-| for U $world.active: when U.gate><$gate and U.id<>$id:
-  | $world.effect{B.xyz teleport}
-  | B.move{U.xyz}
-  | B.reset_goal
-  | $world.effect{U.xyz teleport}
-  | $sound{summon}
+| T = $cell.gate
+| less T: leave
+| $world.effect{B.xyz teleport}
+| A = T.cell.block
+| B.move{T.xyz}
+| B.reset_goal
+| when A:
+  | AH = A.health
+  | BH = B.health
+  | B.harm{0 AH}
+  | A.harm{0 BH}
+| $world.effect{T.xyz teleport}
+| $sound{summon}
 
 effect remove: Target.free
 
