@@ -226,8 +226,7 @@ effect recall Where:
 effect gateway:
 | B = $cell.block
 | less B: leave
-| GateN = $ai.1
-| for U $world.active: when U.id<>$id: case U.ai [gate &GateN]:
+| for U $world.active: when U.gate><$gate and U.id<>$id:
   | $world.effect{B.xyz teleport}
   | B.move{U.xyz}
   | B.reset_goal

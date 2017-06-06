@@ -37,7 +37,11 @@ world.pathfind MaxCost U StartCell Check =
   | Src = PFQueue.pop
   | Cost = Src.cost
   | NextCost = Cost+1
-  | for Dst U.list_moves{Src NextCost}:
+  | Ms = U.list_moves{Src NextCost}
+  | when Src.gate:
+    | when Src.prev and (Src.prev.xyz-Src.xyz).take{2}{?abs}.sum><1:
+      | Ms <= [Src.gate.cell]
+  | for Dst Ms:
     | Dst.prev <= Src
     | C = Check Dst
     | when C:

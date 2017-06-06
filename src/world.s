@@ -13,6 +13,7 @@ CellsBlock = //blocking unit residing in cell
 CellsCost =  //movement cost to reach this cell
 CellsPrev =
 CellsFloor =
+CellsGate =
 WorldSize = 1 //max world size
 WorldDepth = 1
 CellsLineSize = 1
@@ -35,6 +36,8 @@ int.prev = CellsPrev.Me
 int.`=prev` V = CellsPrev.Me <= V
 int.floor = CellsFloor.Me
 int.`=floor` V = CellsFloor.Me <= V
+int.gate = CellsGate.Me
+int.`=gate` V = CellsGate.Me <= V
 int.xyz = [Me/WorldDepth%WorldSize Me/CellsLineSize Me%WorldDepth]
 int.z = Me%WorldDepth
 int.north = Me-CellsLineSize
@@ -95,7 +98,7 @@ type world{main}
    free_units
    effects
    free_effects
-   active // active units
+   active //active units, which are processed each cycle
    actors/heapval{[]} // currently acting unit
    players
    human // human controlled player
@@ -167,6 +170,7 @@ world.init =
 | CellsCost <= dup NCells #FFFFFFFFFFFF
 | CellsPrev <= dup NCells 0
 | CellsFloor <= dup NCells 0
+| CellsGate <= dup NCells 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -495,6 +499,12 @@ world.place_unit U =
   | $place_unitS{U XX YY ZZ}
   | when Blocker: $set{XX YY ZZ U.block}
 | U.cell <= $cell{XYZ.0 XYZ.1 XYZ.2}
+| when U.gate:
+  | Target = 0
+  | for A $active: when A.gate><U.gate and A.id<>U.id: Target <= A
+  | when Target:
+    | U.cell.gate <= Target
+    | Target.cell.gate <= U
 | U.explore{1}
 
 world.remove_unitS U X Y Z =
@@ -521,6 +531,7 @@ world.remove_unit U =
   | XX,YY,ZZ = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
   | $remove_unitS{U XX YY ZZ}
   | when Blocker: $clear_tile{XX YY ZZ}
+| when U.gate: for A $active: when A.gate><U.gate: U.cell.gate <= 0
 | U.cell <= 0
 | U.xyz.init{XYZ}
 
