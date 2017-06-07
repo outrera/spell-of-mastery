@@ -28,7 +28,7 @@ effect strip Name: Target.strip_effect{Name}
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
-effect mod Args: Target.mod <= [Args @(Target.mod or [])]
+effect mod Arg: Target.mod <= Arg
 
 effect tenant_mark Type:
 | Block = $world.block_at{TargetXYZ}
@@ -391,7 +391,8 @@ unit.effect Effect Target TargetXYZ =
 | when XYZ.2 >< -1: leave
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
-| when T.is_unit and T.id<>$id: $run_effects{act}
+| RunActEffects = 0
+| when T.is_unit and T.id<>$id: RunActEffects <= 0
 | Es = Effect.list
 | till Es.end
   | E = pop Es
@@ -465,4 +466,4 @@ unit.effect Effect Target TargetXYZ =
       | _goto end
     else bad "no effect handler for [Name]{[Args]} of [Me]"
 | _label end
-| $mod <= 0
+| when RunActEffects: $run_effects{act}

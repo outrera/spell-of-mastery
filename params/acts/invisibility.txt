@@ -3,7 +3,7 @@ icon: spell_invisibility
 cost: 0 //misc.tier0_scost
 cool: misc.tier1_cool
 affects: ally
-before: add{invisible},impact{spell},sound{invisibility}
+before: add{invisible},add{invisible_on_attack},impact{spell},sound{invisibility}
 after: ()
 range: 0
 hint: boost
