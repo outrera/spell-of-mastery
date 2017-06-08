@@ -103,10 +103,10 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   icon_gfx //icon graphics for fast access
 | $before_table <= $before.table
 | $after_table <= $after.table
-| when $cool>0: $before <= [@$before [cool $cool]]
+| when $cool>0: $before <= [[cool $cool] @$before]
 | less $title: $title <= $name.replace{_ ' '}
 | Flags = []
-| for E [@$before @$after]: case E [add_effect [Name Dur As]]: push Name Flags
+| for E [@$before @$after]: case E [add Name]: push Name Flags
 | $flags <= Flags
 
 params_handle_acts Me =

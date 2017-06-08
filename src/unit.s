@@ -513,11 +513,11 @@ unit.harm Attacker Damage @Magic =
   | heal_unit Me -Damage
   | leave
 | $run_effects{harm}
-| when $mod: | Damage += $mod; $mod <= 0
+| when $mod><block: | $mod <= 0; leave
 | Mg = not Magic.end //is magic harm?
 | if Mg then $run_effects{magic_harm}
   else $run_effects{phys_harm}
-| when $mod: | Damage += $mod; $mod <= 0
+| when $mod><block: | $mod <= 0; leave
 | Damage <= max 1 Damage
 | $hp -= Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}

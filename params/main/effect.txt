@@ -19,8 +19,8 @@ slowed: on{endturn},inc{steps,-1}
 bloodlust: on{attack},mod{2},self,harm{1}
 invisible: on{act},strip{invisible},strip{invisible_on_attack}
 invisible_on_attack: on{attack},mod{2},strip{invisible},strip{invisible_on_attack}
-shell: on{phys_harm},mod{-1},sound{shell},impact{shell}
-resist_magic: on{magic_harm},mod{-3},/*sound{shell},*/impact{resist}
+shell: on{phys_harm},mod{block},sound{shell},impact{shell},strip{shell}
+resist: on{magic_harm},mod{block},sound{resist},impact{resist},strip{resist}
 regen: on{endturn},when{harmed safe},strip{poison},heal{1},effect{heal}
 regen_tenant: on{tenant_endturn},tenant,when{harmed safe},strip{poison},heal{1},effect{heal}
 burning: on{entry},tenant,harm{1},effect1{fire_ring}

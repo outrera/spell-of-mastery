@@ -9,7 +9,7 @@ unit.end_turn =
   | for V $world.units_get{$xyz}: V.run_effects{tenant_endturn}
 | $run_effects{endturn}
 | $run_effects{E => E.when><ttl0 and E.params.0><Turn}
-| $strip_effect{E => E.name><cool and E.params.1+E.params.2<<Turn} 
+| $strip_effect{E => E.name><cool and E.params.1+E.params.2<<Turn+1}
 | $handled <= 0
 | Remove = 0
 | RunEs = []

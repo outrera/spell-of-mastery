@@ -28,6 +28,7 @@ effect strip Name: Target.strip_effect{Name}
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
+//mod should really be a function
 effect mod Arg: Target.mod <= Arg
 
 effect tenant_mark Type:
