@@ -1,0 +1,35 @@
+flags: attacker{0,-1},picked{1,-1},nonguard{2,-1}
+      ,hasted{3,5},shell{4,2},flyer{5,-1},fireaura{7,0},organic{8,-1}
+      /*,unused{9,-1}*/,swimmer{10,-1},amphibian{11,-1},invisible{12,-1}
+      /*,unused{13,3}*/,slowed{14,-1},bloodlust{15,1},mark{16,-1}
+
+//FIXME: this crap needs complete redesign and proper DSL.
+//       all unit fields should be expressed here.
+//       Think of these entries as of DNA genes or ECS components.
+//       Some AI stuff, like spellcasting can be moved here too.
+haste: on{static}
+flyer: on{static}
+swimmer: on{static}
+amphibian: on{static}
+organic: on{static}
+fireaura: on{counter},harm{magic.2},impact{fire_ring}
+poison: on{endturn},host,when{has_health.2},harm{magic.1}
+hasted: on{endturn},inc{steps,1}
+slowed: on{endturn},inc{steps,-1}
+bloodlust: on{attack},mod{2},self,harm{1}
+invisible: on{act},strip{invisible},strip{invisible_on_attack}
+invisible_on_attack: on{attack},mod{2},strip{invisible},strip{invisible_on_attack}
+shell: on{phys_harm},mod{block},sound{shell},impact{shell},strip{shell}
+resist: on{magic_harm},mod{block},sound{resist},impact{resist},strip{resist}
+regen: on{endturn},when{harmed safe},strip{poison},heal{1},effect{heal}
+regen_tenant: on{tenant_endturn},tenant,when{harmed safe},strip{poison},heal{1},effect{heal}
+burning: on{entry},tenant,harm{1},effect1{fire_ring}
+enemy_removes: on{entry},tenant,when{enemy},effect{pickup},self,remove
+gateway: on{entry},gateway
+node_aura: on{cycle.12},tenant_mark{effect_aura}
+ttl: on{timeout},effect{teleport},sound{summon},remove
+ttl_s: on{timeout},remove //silent ttl
+income1: on{tenant_endturn},tenant,mana{1}
+door_align: on{place},align{door}
+
+//when{harmed,has_mana.50}

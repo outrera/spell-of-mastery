@@ -30,8 +30,8 @@ world.save =
   | ActivePlayers.(U.owner.id) <= 1
   | Active = 0
   | when U.active or U.type><unit_build:
-    | Effects = if U.effects.end then 0
-                else U.effects.map{E=>[E.when E.name E.amount E.params]}
+    | Genes = if U.genes.end then 0
+              else U.genes.map{E=>[E.when E.name E.amount E.params]}
     | Host = if U.host then U.host.id else 0
     | G = U.goal
     | Goal = if not G then 0
@@ -39,7 +39,7 @@ world.save =
              else [G.id U.goal_act.name]
     | Path = if U.path.end then 0 else [U.path 0]
     | Active <= list U.from U.anim U.anim_step U.anim_wait
-                     U.kills U.cooldown Effects Host Goal Path
+                     U.kills U.cooldown Genes Host Goal Path
                      U.action.save U.ordered.save U.next_action.save
                      U.steps
   | Facing = U.facing
@@ -161,11 +161,11 @@ world.load Saved =
     | U.anim_wait <= AnimWait
     | U.kills <= Kills
     | U.cooldown <= Cool
-    | for E U.effects: $free_effect{E}
-    | U.effects.heapfree
-    | U.effects <= if Efx.is_list and not Efx.end
-                   then Efx{E=>$new_effect{@E}}
-                   else []
+    | for E U.genes: $free_gene{E}
+    | U.genes.heapfree
+    | U.genes <= if Efx.is_list and not Efx.end
+                 then Efx{E=>$new_gene{@E}}
+                 else []
     | when Path:
       | P = Path.0.enheap
       | U.path.heapfree

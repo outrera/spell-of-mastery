@@ -6,21 +6,21 @@ unit.end_turn =
 | Turn = $world.turn
 | $steps <= $class.steps
 | when not $empty and $class.hp>0:
-  | for V $world.units_get{$xyz}: V.run_effects{tenant_endturn}
-| $run_effects{endturn}
-| $run_effects{E => E.when><ttl0 and E.params.0><Turn}
-| $strip_effect{E => E.name><cool and E.params.1+E.params.2<<Turn+1}
+  | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
+| $run_genes{endturn}
+| $run_genes{E => E.when><ttl0 and E.params.0><Turn}
+| $strip_gene{E => E.name><cool and E.params.1+E.params.2<<Turn+1}
 | $handled <= 0
 | Remove = 0
 | RunEs = []
-| for E $effects: when E.amount>0:
+| for E $genes: when E.amount>0:
   | say E.amount
   | E.amount--
   | less E.amount > 0:
     | when E.when >< timeout: push [E.name E.params.unheap] RunEs
     | Remove <= 1
     | E.amount <= No
-| when Remove: $strip_effect{?amount><No} //strip effects with zero duration
+| when Remove: $strip_gene{?amount><No} //strip genes with zero duration
 | for Name,Params RunEs: $run_effect{Name Params Me $xyz}
 
 

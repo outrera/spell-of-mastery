@@ -22,9 +22,9 @@ effect enable State Players ActNames:
 
 effect on When: No
 
-effect add Name: Target.add_effect{Name 0 []}
+effect add Name: Target.add_gene{Name 0 []}
 
-effect strip Name: Target.strip_effect{Name}
+effect strip Name: Target.strip_gene{Name}
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
@@ -65,8 +65,7 @@ effect gain @Args:
   | set_act_enabled $main 1 Player.id ActName
   | Player.research_item{ActName}
 
-effect cool Time:
-| $add_effect{cool 0 [$action.type $world.turn Time]}
+effect cool Time: $add_gene{cool 0 [$action.type $world.turn Time]}
 
 effect explore Player State: $world.explore{State}
 
@@ -132,50 +131,7 @@ effect neibs Args:
   | when B: $effect{Es B B.xyz}
 
 effect counter:
-| when $range<<1: Target.run_effects{counter target/Me xyz/Me.xyz}
-
-effect spawn_field Args:
-| [TTL Freq R Param @As] = Args
-| S = $owner.alloc_unit{unit_dummy}
-| S.move{TargetXYZ}
-| Es = As{?^normalize_curly}
-| S.add_effect{field TTL [[effect [on [`.` cycle Freq]] [field [Param R Es]]]]}
-| S.add_effect{field TTL [[effect [on timeout] [remove self]]]}
-
-range_points World XYZ R FixTop =
-| Ps = points_in_circle{R}{P=>[P.0 P.1 0]+XYZ}
-| WW = World.w 
-| WH = World.h
-| Ps = Ps.keep{(?0>0 and ?1>0 and ?0<<WW and ?1<<WH)}
-| if FixTop then for P Ps: P.2 <= World.height{P.0 P.1}
-  else for P Ps: P.2 <= World.floor{P}
-| Ps
-
-effect field Param R Es:
-| Ts = 0
-| Type,Count = Param
-| if Type><cell then
-    | Ps = range_points{$world $xyz R 0}
-    | Ts <= dup Count Ps.rand
-  else if Type><outdoors_cell and R><world then
-    | WW = $world.w 
-    | WH = $world.h
-    | WD = $world.d
-    | Count <= (WH*WW+WD-1)/WD*Count
-    | Ts <= dup Count
-      | X = WW.rand+1
-      | Y = WH.rand+1
-      | Z = $world.height{X Y}
-      | [X Y Z]
-  else if Type><outdoors_cell then
-    | Ps = range_points{$world $xyz R 1}
-    | Ts <= dup Count Ps.rand
-  else if Type><world_outdoors_cell then
-  else bad "field: invalid param `[Param]`"
-| less Ts: leave
-| for T Ts
-  | if T.is_unit and T.alive then $effect{Es T T.xyz}
-    else $effect{Es 0 T}
+| when $range<<1: Target.run_genes{counter target/Me xyz/Me.xyz}
 
 effect notify Text: Target.owner.notify{Text}
 
@@ -261,16 +217,6 @@ effect set_tile [X Y Z] Type:
   | leave
 | $world.set{X Y Z Tile}
 
-effect retile [X Y Z] Type:
-| B = $world.block_at{[X Y Z]}
-| when B:
-  | if B.owner.pentagram
-    then B.order_act{recall target/B}
-    else B.die // crushed!
-| Tile = $main.tiles.Type
-| $world.set{X Y Z Tile}
-| $die
-
 effect spawn What:
 | when What><pentagram:
   | L = $owner.leader
@@ -318,7 +264,7 @@ effect child What Effects:
 | S.move{TargetXYZ}
 | S.host <= Target
 | S.host_serial <= Target.serial
-| S.add_effects{Effects}
+| S.add_genes{Effects}
 
 effect caster Who:
 | Leader = $owner.leader
@@ -431,7 +377,7 @@ unit.effect Effect Target TargetXYZ =
                           else $world.fxyz{XYZ}
                     | S.fxyz.init{O+D}
         Else | bad "invalid offset specifier [Offset]"
-      | S.add_effect{missile 0 [[payload $id $serial Es]]}
+      | S.add_gene{missile 0 [[payload $id $serial Es]]}
       | Or = S.order
       | Or.init{missile |Target or XYZ}
       | Or.priority <= 1500
@@ -467,4 +413,4 @@ unit.effect Effect Target TargetXYZ =
       | _goto end
     else bad "no effect handler for [Name]{[Args]} of [Me]"
 | _label end
-| when RunActEffects: $run_effects{act}
+| when RunActEffects: $run_genes{act}

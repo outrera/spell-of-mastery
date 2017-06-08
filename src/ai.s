@@ -121,7 +121,7 @@ ai_update_unit Me =
       | $advance_to{E.xyz}
       | leave break
 | when $aistate <> roam:
-  | BtXYZ = $get_effect_value{btrack}
+  | BtXYZ = $gene_param{btrack}
   | when BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
 | when $aistate >< roam and roam Me: leave break
 | $handled <= 1

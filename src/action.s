@@ -67,7 +67,7 @@ dact missile.update
 
 dact missile.finish
 | U = $unit
-| _,UId,USerial,Es = U.get_effect_value{missile}.0
+| _,UId,USerial,Es = U.gene_param{missile}.0
 | Source = U.world.units.UId
 | less Source.serial >< USerial: Source <= $world.nil
 | Source.effect{Es $target $xyz}

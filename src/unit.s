@@ -56,9 +56,9 @@ type unit.$class{Id World}
   unit_goal/cell_goal{}
   hp // hit points
   kills //how many enemies this unit has killed
-  flags //various flags (mostly effects)
-  effects/[] //active effects
-  mod //set by various effects to modify some contextual behavior
+  flags //various flags (mostly genes)
+  genes/[] //active genes
+  mod //set by various genes to modify some contextual behavior
   steps //movement points remained this turn
   can_move //movement function
   aistate //how AI processes this unit
@@ -92,10 +92,10 @@ unit.`=mark` State = $flags <= $flags^set_bit{16 State}
 
 unit.`=backtrack` XYZ =
 | less XYZ:
-  | $strip_effect{btrack}
+  | $strip_gene{btrack}
   | leave
 | when $has{btrack}: leave
-| $add_effect{btrack 0 XYZ}
+| $add_gene{btrack 0 XYZ}
 
 unit.child Type =
 | $world.units_get{$xyz}
@@ -179,7 +179,7 @@ unit.init Class =
   | $velocity.init{[0.0 0.0 0.0]}
   | $action.cycles <= 0
   | $unit_goal.serial <= $serial
-  | $add_effects{$inborn}
+  | $add_genes{$inborn}
   | $update_move_method
 
 unit.morph Class =
@@ -192,87 +192,76 @@ unit.morph Class =
 | $animate{idle}
 | $owner.got_unit{Me}
 
-get_named_effect Me Name Params =
-| Effect = $main.params.effect.Name
-| when no Effect:
-  | E = Params.find{P => case P [effect @_] 1}
-  | when no E: leave [[on never]] // supply dummy
-  | leave E.tail.unheap //do unheap because Params could reside on heap
-| Effect
+unit.find_dna Name = $main.params.gene.Name
 
-unit.add_effect Name Duration Params =
-| Params = map A Params: case A
-   [`@` [`.` turns T]] | $world.turn+T
-   Arg | Arg
-| Effect = get_named_effect Me Name Params
+unit.add_gene Name Duration Params =
+| Effect = $find_dna{Name}
 | On = Effect.0
 | when On.0 <> `on`:
-  | $world.notify{"unit.add_effect: missing `on{When}` for effect [Name]"}
+  | $world.notify{"unit.add_gene: missing `on{When}` for effect [Name]"}
   | leave
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag:
-  | when $flags^get_bit{Flag}: leave //already got this effect
+  | when $flags^get_bit{Flag}: leave //already got this gene
   | when Name><invisible: $alpha <= 127
   | $flags <= $flags^set_bit{Flag 1}
   | $update_move_method
 | When = On.1
-| $effects <= $effects.cons{$world.new_effect{When Name Duration Params}}
+| $genes <= $genes.cons{$world.new_gene{When Name Duration Params}}
 
-unit.add_effects Effects =
-| for E Effects: case E
+unit.add_genes Genes =
+| for E Genes: case E
     [`{}` Head @Args]
       | case Head
-         [`.` Name Life] | $add_effect{Name Life Args}
-         Name | $add_effect{Name 0 Args}
-    Else | $add_effect{E 0 []}
+         [`.` Name Life] | $add_gene{Name Life Args}
+         Name | $add_gene{Name 0 Args}
+    Else | $add_gene{E 0 []}
 
-unit.has Name = got $effects.find{?name><Name}
+unit.has Name = got $genes.find{?name><Name}
 
 unit.cooldown_of ActName =
-| E = $effects.find{E => E.name><cool and E.params.0><ActName}
+| E = $genes.find{E => E.name><cool and E.params.0><ActName}
 | if got E then [E.params.1 E.params.2] else 0
 
-unit.get_effect Name = $effects.find{?name><Name}
-
-unit.get_effect_value Name =
-| E = $effects.find{?name><Name}
+unit.gene_param Name =
+| E = $genes.find{?name><Name}
 | if got E then E.params.unheap else 0
 
-unit.strip_effect What =
+unit.strip_gene What =
 | Check = if What.is_fn then What else E => E.name><What
 | FreeEs =
 | Es =
-| FreeEs <= $effects.keep{Check}
+| FreeEs <= $genes.keep{Check}
 | when FreeEs.end: leave
-| Es <= $effects.skip{Check}
+| Es <= $genes.skip{Check}
 | for E FreeEs:
   | Name = E.name
-  | $world.free_effect{E}
   | Flag = getUnitFlagsTable{}.Name
   | when got Flag:
     | when Name><invisible: $alpha <= 0
     | $flags <= $flags^set_bit{Flag 0}
     | $update_move_method
-| $effects.heapfree
-| $effects <= Es.enheap
+  | $world.free_gene{E}
+| $genes.heapfree
+| $genes <= Es.enheap
 
 unit.add_item Name Amount =
 | less Amount: leave
-| for E $effects: when E.name><Name:
+| for E $genes: when E.name><Name:
   | E.amount-=Amount
   | when E.amount >> 0:
-    | $strip_effect{Name}
+    | $strip_gene{Name}
     | leave
   | leave
-| $add_effect{Name -Amount []}
+| $add_gene{Name -Amount []}
 
 unit.get_item Name =
-| for E $effects: when E.name><Name: leave -E.amount
+| for E $genes: when E.name><Name: leave -E.amount
 | 0
 
 unit.items =
 | Items = []
-| for E $effects: when E.amount<0: push [E.name -E.amount] Items
+| for E $genes: when E.amount<0: push [E.name -E.amount] Items
 | Items
 
 unit.drop_item ItemType Amount =
@@ -292,20 +281,18 @@ unit.acts =
   | when got Item: for ActName Item: push Param.acts.ActName ItemActs
 | [@$class.acts @ItemActs]
 
-unit.run_effects Selector target/0 xyz/0 =
+unit.run_genes Selector target/0 xyz/0 =
 | less Target: Target <= Me
 | less Xyz: Xyz <= Target.xyz
 | Sel = if Selector.is_text then X => X.when><Selector else Selector
 | Es = []
-| for E $effects: when Sel E:
-  | Effect = get_named_effect Target E.name E.params
-  | push Effect Es //cuz invoking it right here may clobber $effects
+| for E $genes: when Sel E:
+  | DNA = $find_dna{E.name}
+  | push DNA Es //cuz invoking it right here may clobber $genes
 | for Effect Es: $effect{Effect Target Xyz}
 
 unit.run_effect Name Params Target TargetXYZ =
-| Es = []
-| Effect = get_named_effect Target Name Params
-| $effect{Effect Target TargetXYZ}
+| $effect{$find_dna{Name} Target TargetXYZ}
 
 unit.change_owner NewOwner =
 | FXYZ = 0
@@ -365,9 +352,9 @@ unit.free =
 | $goal <= 0
 | $host <= 0
 | $colors <= 0
-| for E $effects: $world.free_effect{E}
-| $effects.heapfree
-| $effects <= []
+| for E $genes: $world.free_gene{E}
+| $genes.heapfree
+| $genes <= []
 | $world.free_unit{Me}
 
 unit.reset_goal =
@@ -492,7 +479,7 @@ unit.assault Combat Target =
       | bad "Unknown combat modifier [Mod]"
 | when $mod: | Damage += $mod; $mod <= 0
 | less Magic:
-  | $run_effects{attack}
+  | $run_genes{attack}
   | when $mod: | Damage += $mod; $mod <= 0
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
@@ -512,11 +499,11 @@ unit.harm Attacker Damage @Magic =
 | when Damage << 0:
   | heal_unit Me -Damage
   | leave
-| $run_effects{harm}
+| $run_genes{harm}
 | when $mod><block: | $mod <= 0; leave
 | Mg = not Magic.end //is magic harm?
-| if Mg then $run_effects{magic_harm}
-  else $run_effects{phys_harm}
+| if Mg then $run_genes{magic_harm}
+  else $run_genes{phys_harm}
 | when $mod><block: | $mod <= 0; leave
 | Damage <= max 1 Damage
 | $hp -= Damage
@@ -538,7 +525,7 @@ unit.harm Attacker Damage @Magic =
 
 //called when unit enters cell ingame, not in editor or game-init
 unit.on_entry =
-| for U $cell.units: U.run_effects{entry}
+| for U $cell.units: U.run_genes{entry}
 
 unit_pickup_items Me =
 | for U $cell.units: when U.item.is_list: U.effect{U.item Me $xyz}
@@ -569,7 +556,7 @@ unit.fine_move FXYZ =
 unit.move XYZ =
 | C = $world.c
 | $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
-| when $class.active: $run_effects{move}
+| when $class.active: $run_genes{move}
 | Me
 
 unit.remove =

@@ -96,8 +96,8 @@ type world{main}
    owners // unit owners
    units
    free_units
-   effects
-   free_effects
+   genes
+   free_genes
    active //active units, which are processed each cycle
    actors/heapval{[]} // currently acting unit
    players
@@ -174,8 +174,8 @@ world.init =
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
-| $effects <= (MaxUnits*2){N=>(efx)}
-| $free_effects <= stack $effects
+| $genes <= (MaxUnits*2){N=>(efx)}
+| $free_genes <= stack $genes
 | $active <= stack MaxActiveUnits
 | $shadow <= $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
@@ -241,7 +241,7 @@ world.clear =
 | for [K V] $sound_cycles: $sound_cycles.K <= 0
 | $blink.init{[0 0]}
 
-// force reset of all unit effects and health
+// force reset of all unit genes and health
 reinit_units Us =
 | InitedUnits = []
 | for U Us: less U.removed
@@ -401,11 +401,6 @@ world.clear_tile_ X Y Z =
 world.clear_tile X Y Z =
 | $clear_tile_{X Y Z}
 | $upd_neibs{X Y}
-
-world.respawn_tile XYZ Type Delay =
-| S = $players.0.alloc_unit{unit_dummy}
-| S.move{XYZ}
-| S.add_effect{retile Delay [[effect [on timeout] [retile [XYZ Type]]]]}
 
 // FIXME: remove overlapping tiles above setted tile
 world.dirty_set X Y Z Tile =
@@ -711,16 +706,17 @@ world.pop XY =
 | $pop_{XY}
 | $upd_neibs{XY.0 XY.1}
 
-world.new_effect When Name Amount Params =
-| E = $free_effects.pop
+world.new_gene When Name Amount Params =
+| E = $free_genes.pop
 | E.when <= When
-| E.name <= Name
+| E.name <= Name.enheap
 | E.amount <= Amount
 | E.params <= Params.enheap
 | E
 
-world.free_effect E =
+world.free_gene E =
+| E.name.heapfree
 | E.params.heapfree
-| $free_effects.push{E}
+| $free_genes.push{E}
 
 export world

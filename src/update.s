@@ -58,18 +58,18 @@ update_events Me =
     Else | bad "bad event effect ([Effect])"
 | 0
 
-update_units_effects Me Units =
+update_units_genes Me Units =
 | Cycle = $cycle
 | for U Units: less U.removed:
   | less U.empty: when U.class.hp>0:
-    | for V $units_get{U.xyz}: less V.effects.end:
-      | V.run_effects{E=>case E.when [`.`tenant_cycle N] Cycle%N><0}
-  | less U.effects.end:
-    | U.run_effects{E=>case E.when [`.`cycle N] Cycle%N><0}
+    | for V $units_get{U.xyz}: less V.genes.end:
+      | V.run_genes{E=>case E.when [`.`tenant_cycle N] Cycle%N><0}
+  | less U.genes.end:
+    | U.run_genes{E=>case E.when [`.`cycle N] Cycle%N><0}
 
 update_units Me =
 | ActiveList = $active.list
-| update_units_effects Me ActiveList
+| update_units_genes Me ActiveList
 | NextActive = []
 | for U ActiveList: U.update
 | while $active.used
