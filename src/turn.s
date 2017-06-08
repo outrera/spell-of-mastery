@@ -8,8 +8,6 @@ unit.end_turn =
 | when not $empty and $class.hp>0:
   | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}
-| $run_genes{E => E.when><ttl0 and E.params.0><Turn}
-| $strip_gene{E => E.name><cool and E.params.1+E.params.2<<Turn+1}
 | $handled <= 0
 | Remove = 0
 | RunEs = []
@@ -21,7 +19,7 @@ unit.end_turn =
     | Remove <= 1
     | E.amount <= No
 | when Remove: $strip_gene{?amount><No} //strip genes with zero duration
-| for Name,Params RunEs: $run_effect{Name Params Me $xyz}
+| for Name,Params RunEs: $run_gene{Name Params Me $xyz}
 
 
 world.new_turn =

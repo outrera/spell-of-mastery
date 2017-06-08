@@ -196,6 +196,7 @@ unit.find_dna Name = $main.params.gene.Name
 
 unit.add_gene Name Duration Params =
 | Effect = $find_dna{Name}
+| when no Effect: Effect <= [[on static]]
 | On = Effect.0
 | when On.0 <> `on`:
   | $world.notify{"unit.add_gene: missing `on{When}` for effect [Name]"}
@@ -291,7 +292,7 @@ unit.run_genes Selector target/0 xyz/0 =
   | push DNA Es //cuz invoking it right here may clobber $genes
 | for Effect Es: $effect{Effect Target Xyz}
 
-unit.run_effect Name Params Target TargetXYZ =
+unit.run_gene Name Params Target TargetXYZ =
 | $effect{$find_dna{Name} Target TargetXYZ}
 
 unit.change_owner NewOwner =

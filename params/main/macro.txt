@@ -1,1 +1,1 @@
-poison: when{no_child.effect_poison,has.organic},child{effect_poison (poison{} ttl{@turns.10})}/*,impact{lifedrain}*/,endwhen
+poison: when{no_child.effect_poison,has.organic},child{effect_poison (poison{} ttl.10{})}/*,impact{lifedrain}*/,endwhen

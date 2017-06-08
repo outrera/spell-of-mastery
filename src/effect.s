@@ -65,7 +65,7 @@ effect gain @Args:
   | set_act_enabled $main 1 Player.id ActName
   | Player.research_item{ActName}
 
-effect cool Time: $add_gene{cool 0 [$action.type $world.turn Time]}
+effect cool Time: $add_gene{cool Time [$action.type $world.turn Time]}
 
 effect explore Player State: $world.explore{State}
 
@@ -257,14 +257,14 @@ effect charm NewOwner:
 | Target.colors <= $owner.colors
 | Target.move{XYZ}
 
-effect child What Effects:
-| S = $owner.alloc_unit{What}
+effect child ChildType Genes:
+| S = $owner.alloc_unit{ChildType}
 | S.alpha <= 255
 | S.delta <= -50
 | S.move{TargetXYZ}
 | S.host <= Target
 | S.host_serial <= Target.serial
-| S.add_genes{Effects}
+| S.add_genes{Genes}
 
 effect caster Who:
 | Leader = $owner.leader
