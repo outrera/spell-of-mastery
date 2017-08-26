@@ -90,6 +90,10 @@ unit.slowed = $flags^get_bit{14}
 unit.mark = $flags^get_bit{16}
 unit.`=mark` State = $flags <= $flags^set_bit{16 State}
 
+unit.safe = $flags^get_bit{17}
+unit.`=safe` State = $flags <= $flags^set_bit{17 State}
+
+
 unit.`=backtrack` XYZ =
 | less XYZ:
   | $strip_gene{btrack}
@@ -491,8 +495,8 @@ unit.assault Combat Target =
 //| when Knockback: knockback Me Target
 
 unit.harm Attacker Damage @Magic =
-| when $removed: leave
-| less $alive: leave
+| when $removed or not $alive: leave
+| $safe <= 0
 | when Attacker and $leader><1 and $owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}

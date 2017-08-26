@@ -1,7 +1,7 @@
 flags: attacker{0,-1},picked{1,-1},nonguard{2,-1}
       ,hasted{3,5},shell{4,2},flyer{5,-1},fireaura{7,0},organic{8,-1}
       /*,unused{9,-1}*/,swimmer{10,-1},amphibian{11,-1},invisible{12,-1}
-      /*,unused{13,3}*/,slowed{14,-1},bloodlust{15,1},mark{16,-1}
+      /*,unused{13,3}*/,slowed{14,-1},bloodlust{15,1},mark{16,-1},safe{17,-1}
 
 //FIXME: this crap needs complete redesign and proper DSL.
 //       all unit fields should be expressed here.

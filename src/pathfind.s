@@ -127,6 +127,9 @@ unit.reachable =
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | R}
+| when $range><1:
+  | for E Me^enemies_in_range:
+    | when (E.xyz.2-$xyz.2).abs << 1: push [attack E.cell] Xs
 | when $range>1 and $steps><$class.steps:
   | for E Me^enemies_in_range: push [attack E.cell] Xs
 | Xs

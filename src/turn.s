@@ -8,6 +8,7 @@ unit.end_turn =
 | when not $empty and $class.hp>0:
   | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}
+| $safe <= 1
 | $handled <= 0
 | Remove = 0
 | RunEs = []

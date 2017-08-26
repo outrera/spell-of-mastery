@@ -321,7 +321,7 @@ check_when Me Target C =
   harmed | Target.health<>Target.class.hp
   idle | not Target.goal
   rested | $steps><$class.steps
-  safe | Dirs4.all{D=>|B=$world.block_at{$xyz+[D.0 D.1 0]}; not B or not $is_enemy{B}}
+  safe | Target.safe
   [`+` not C] | not: check_when Me Target C
   [`.` below Type] | (Target.cell-1).type><Type
   [`.` has_health A] | Target.health>>A
