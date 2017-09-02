@@ -8,6 +8,6 @@ before: ()
 after: ()
 needs: ()
 affects: unit //what it can target
-targets: seen //seen=requires line of sight, any=any explored cell
+targets: seen //seen=requires line of sight; any=any explored cell
 hint: 0
 tab: 0

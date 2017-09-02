@@ -40,6 +40,43 @@ cast_pentagram Me =
   | leave 1
 | leave 0
 
+cast_spell_sub Me Spell Force =
+| less Spell and got Spell: leave 0
+| Act = Spell
+| when Act.is_text:
+  | Act <= $main.params.acts.Spell
+  | when no Act: bad "AI: cant find spell `[Spell]`"
+| Hint = Act.hint
+| when Hint<>boost and Hint<>harm: less Force: leave 0
+| when Act.name><attack: leave 0
+| R = Act.range
+| Targets =
+    if R>>9000 then SeenUnits
+    else if R><0 then [Me]
+    else $world.units_in_range{Me.xyz Act.range}
+| Ts = Targets.skip{?empty}.keep{?alive}
+| if Hint><harm
+  then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}
+  else Ts <= Ts.skip{U=>U.owner.is_enemy{$owner}}
+| when Act.affects<>unit:
+  | case Act.affects [[@As] _]
+    | for A As: case A
+      non_leader | Ts <= Ts.skip{?leader><1}
+      outdoor | Ts <= Ts.keep{U => $world.outdoor{U.xyz}}
+| for Flag Act.flags //avoid overriding
+  | FlagN = getUnitFlagsTable{}.Flag
+  | when got FlagN: Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
+| less Ts.size: leave 0
+| Target = Ts.0
+| Cost = Act.cost
+| Me.owner.mana+=Cost
+| when $can_do{Act}
+  | $order_act{Act target/Target}
+  | leave 1
+| Me.owner.mana-=Cost //havent casted the spell
+| 0
+
+
 cast_spell Me = //Me is unit
 | Acts = $acts
 | less Acts.size: leave 0
@@ -53,6 +90,13 @@ cast_spell Me = //Me is unit
            | when TargetNode:
              | $advance_to{TargetNode.xyz}
              | leave 1
+  | PP = $owner.params
+  | Turn = $world.turn
+  | when PP.aiSpellWait>>Turn: leave 0
+  | for Spell PP.ai_spells
+    | when cast_spell_sub{Me Spell 0}:
+      | PP.aiSpellWait <= Turn + 2
+      | leave 1
 | 0
 
 ai_leader_harmed Me Attacker Victim =
