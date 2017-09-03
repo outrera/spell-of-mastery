@@ -21,6 +21,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - Instead of pentagram, allow wizard to simply summon creatures into neighboring cells. Reuse pentagram sprite as one way portal, where any unit can teleport. Include it into enemy's pathfinding.
   Pros:
     - Greatly simplilfies summoning mechanics and game code.
+- Summoning tab should be seen only when leader is selected.
 - Collectible spells, like weapons in Doom. That will greatly simplify gameplay and force wizard to explore world for new spells quickly, instead of turtling. It is also possible, that some spell be present in a single quantity, so only one wizard will ever obtain it. Some spells, like flight, could easily be disabled altogether. Spells could be presented at shrines, guarded by creatures. Only wizard can learn from such shrines. Maybe visiting shrine gives only a limited number of spellcasting. Optionally, there could be a way to steal enemy spells and a method that forces enemy to forget chosen spells.
   Pros:
     - lore gets eliminated;
