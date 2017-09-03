@@ -6,12 +6,12 @@ leader_mage:
   | goto mage0
 
 mage0:
-  | roam imp
-  | roam halfling imp
+  | roam beetle
+  | roam halfling beetle
   | goto mage1
 
 mage1:
-  | roam imp halfling elf halfling
+  | roam beetle halfling elf halfling
   | goto mage2 when lossage >> 14
 
 mage2:

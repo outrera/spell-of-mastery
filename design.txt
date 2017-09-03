@@ -1,0 +1,128 @@
+Game Links:
+https://www.facebook.com/groups/298041333699422/
+http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
+
+
+- Rethink Mage's units.
+- Implement defence tower: use the orb sprite; Either mage or oculus can summon the tower at empty space near them.
+- Some units acting as healers. Yet healers should only be able to heal directly adjanced units.
+- Other units with special abilities.
+- height advantage gives +1 to attack
+- refactor some uses of add_effect into add_param
+  should not use Params for effect's script
+- rename moves to on_move, etc..
+- Think about refactoring genes to use ECS system, where each unit has a list of systems acting on him. Like i.e. poison system and regen systems.
+- fix sound issues, where sounds are affected by height
+- AI should change vampire into bat form, before attack, and then back to vampire, when he is sees enemy and can attack
+- store map events in a separate file
+- 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
+- doors, which could be constructed by dwarf or some other creatures
+- traps
+- Instead of pentagram, allow wizard to simply summon creatures into neighboring cells. Reuse pentagram sprite as one way portal, where any unit can teleport. Include it into enemy's pathfinding.
+  Pros:
+    - Greatly simplilfies summoning mechanics and game code.
+- Collectible spells, like weapons in Doom. That will greatly simplify gameplay and force wizard to explore world for new spells quickly, instead of turtling. It is also possible, that some spell be present in a single quantity, so only one wizard will ever obtain it. Some spells, like flight, could easily be disabled altogether. Spells could be presented at shrines, guarded by creatures. Only wizard can learn from such shrines. Maybe visiting shrine gives only a limited number of spellcasting. Optionally, there could be a way to steal enemy spells and a method that forces enemy to forget chosen spells.
+  Pros:
+    - lore gets eliminated;
+    - exploration becomes fun;
+    - no annoying research dialogue;
+    - map design get more involved, where player can get dragon since beginning;
+  Cons:
+    - requires map designer to place all spells somewhere;
+    - creating an icon system;
+    - wizards lose specialization;
+    - multiplayer maps would probably require to include some spells several times;
+
+Mage's units:
+blob (cheap but timed and slow summon, defends pentagram from occupation by invader)
+oculus (flyer, used to cast spells far away from wizard and draw portal exit nodes, also acts as siege weaponry by casting long range spells)
+beetle (cheap, low attack, but sturdy unit for occupying magic nodes)
+halfling (becomes invisible, which gives bonus to attack [make sure it is displated at stats])
+elf (shooter and healer)
+dwarf (digs terrain, similarly to imp)
+ifrit (flyer, fire shield damages attackers, can throw fireballs)
+minotaur (heavy hitter, but slow)
+hydra (attacks in all four directions, regenerates out of power node)
+dragon (explodes on death, damaging all nearby creatures)
+
+All undead units regenerate out of power node.
+
+Design:
+- A unit that uses enemy's attack strength intstead of its own.
+- AI should cast spell of mastery, when his lossage gets too high
+- oculus could serve as detector of invisible units and maybe an invisible spy itself
+- reintroduce sokoban boxes pushing, lifting, falling and floating on water; units standing on top of moved objects should move with them
+- when unit drops large item, like crate, it pops under that unit, serving as elevation
+- second (rare) resource like souls or gems, required to summon powerful creatures.
+  Maybe only wizard can collect it.
+- phone/touch version should have transparent buttons
+- Some spells may require special objects. Destroying such object will deprive the wizard of the spells provided by it. Some objects can provide constant abilities or show whole map (i.e. palantir).
+- non-leader units could be able to hide inside bushes
+- elemental weakness. I.e. slimes being weak to fire
+- AI autolocks doors when enemies are nearby and open them, to allow its units to pass
+
+Spells:
+- Some units should also be able to create portal exit nodes, while wizard can create entry node. Portal should be colored into player colors. Enemy units would remove portal on entering its cell.
+- fear spell, forcing unit to return back to summoning circle;
+- firewall should make all you units leave fire trail behind them
+- duel spell, creating 3x3 arena in the center of map, where all 4 wizards get summoned.
+- chaos spell - somehow shuffling all (non-leader?) units inside of some range
+- goey blob, slowly covering entire map, unless fought
+- spell turning creature into a living bomb
+- magic block - a spell blocking all sides from using mana-consuming actions for a short time.
+- drought spell that temporary removes all water, replacing it with special empty aux tile
+- a way to save leader by teleporting him to the place of any other unit or occulus
+- spells like teleport should have no range limitation, but high cooldown time; that will make them really powerful and simplify their use by AI.
+- harm mirror, that reflects damage back to attacker
+- spell that remove ability to fly form all flyers.
+- earthquake spell that damages non-flyers or flyers that cant fly
+- toxic gas spell that damages indoor units
+- walk on water spell as a prerequisite or alternative of flight.
+
+
+Graphics:
+- New player colors: player{blue},king{purple},warlock{black},witch{red},
+                     katzard{green},mime{orange},neutral{white}
+- beetle movement frame gets cropped;
+- beetle needs attack animation;
+- dragon animation jumps horizontally during attack
+- finish house tileset, including floor and roof; dirt/plain should not align to house wall
+- better flight animation (idle and cloud under unit); use wesnoth halo/saurian-magic-halo-*; monster-elemental_air could be useful too
+- better hasted unit animation (trail after hasted creature)
+
+
+UI:
+- add some description to tabs and menu tabs buttons
+- unit profile and main menu options could be a tabs like all others
+- ui/Tempest_In_The_Aether_Interface_and_Ryzom_Core has potentially usable icons
+
+
+Symta Language Handicaps:
+- no way to quickly introduce an inplace field on a struct, like unit, propagating it to save-file.
+
+
+Bugs:
+- vampire on low health turning into bat results in bat being invincible with 0 health (enemies cant attack it)
+- when new map gets saved, folder browser should update content
+- when height>>80, column tiles and units are not drawn
+- hydra damages and poisons allied units
+- invisibility doesnt hide poison, bood and regen effects
+- flying units can possibly crash pathfinder, when they are at very high tiles, being able to cross border. Insert a check against mad dimensions.
+- blizzard projectiles have no gravity
+- player can research enemy units
+- adding and removing table from corner crashes the game, due to attempt to place outside of the map
+- multicell units, like table, react badly when drawing tiles under them. disallow drawing at all
+- `update_picked` and unit.picked should use different picking strucutre. current is error prone and had led to bugs previously
+- projectiles hung up, when their sender dies
+
+
+Graphics Editing Hints:
+- Grayscale layer can be used with "Darken" to change tile brightness.
+- "Overlay" blending mode can be used to colorize grayscale image
+- Removing transparency:
+   1) Load Transparency Mask as Selection  (While pressing the Cmd key {Ctrl Key on PC} "click on" the image icon for this Layer in the Layers Panel
+   2) Create Layer Mask from the Selection using Reveal Selection (Layer > Layer Mask > Reveal Selection)
+   3) Display B&W Layer Mask  (While pressing the Option Key {Alt Key on PC} "click on" the layer mask icon for this Layer in the Layers Panel)
+   4) Image > Adjustments > Threshold  with Threshold set to 255
+- to split image into tiles: convert input.png -crop 64x64 +repage 3-idle%d.png
+- to add missing digits: for i in *.png; do sename "\([^0-9]\)\([0-9]\)\.png" "0\0\1.png" $i; done

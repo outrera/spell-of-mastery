@@ -3,5 +3,5 @@ icon: unit_dwarf
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
-needs: ((summon_halfling summon_imp))
+needs: ((summon_halfling summon_beetle))
 after: spawn{unit_dwarf}

@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_beetle
+lore: 5
+cost: 3
+cool: 10
 after: spawn{unit_beetle}
-lore: misc.tier1_lcost
-cost: misc.tier1_scost
-cool: misc.tier1_cool

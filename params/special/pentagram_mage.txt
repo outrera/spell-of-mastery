@@ -10,7 +10,7 @@ inborn: (enemy_removes removes_firewall)
 aux: 1
 
 acts: summon_blob, summon_oculus,
-      summon_halfling, summon_imp,
+      summon_halfling, summon_beetle,
       summon_elf, summon_dwarf,
       summon_ifrit, summon_minotaur,
       summon_hydra,
