@@ -1,8 +1,8 @@
 icon: spell_heal
 hotkey: h
-lore: misc.tier1_lcost
-cost: misc.tier1_scost
-cool: misc.tier2_cool
+lore: 5
+cost: 4
+cool: 10
 range: 9000
 affects: unit
 before: heal{5},strip{poison},strip{slowed},strip{paralyzed},impact{heal},sound{heal}

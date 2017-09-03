@@ -327,7 +327,7 @@ create_view_ui Me =
 | GameUnitUI <= hidden: dlg: mtx
   | 0  0 | UnitPanel
 | IPY = $height-IconsPanelBG.h
-| UnitActIconsLay <= hidden: layV s/4
+| UnitActIconsLay <= hidden: layV s/14
                      layH{s/4 UnitActIcons.drop{UnitActIcons.size/2}}
                     ,layH{s/4 UnitActIcons.take{UnitActIcons.size/2}}
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
@@ -341,7 +341,7 @@ create_view_ui Me =
   |  0 IPY| IconsPanelBG
   | 140 IPY-28| IconsPanelTabs
   | 640 IPY-28| EditorTabs
-  | 142 $height-110| UnitActIconsLay
+  | 142 $height-118| UnitActIconsLay
   | 142 $height-110| MenuTab
   | 164 $height-10 | infoline
   | $width-50 80 | GroundActIconsLay
