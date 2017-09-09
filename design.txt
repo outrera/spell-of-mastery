@@ -50,7 +50,9 @@ All undead units regenerate out of power node.
 
 Design:
 - A unit that uses enemy's attack strength intstead of its own.
+- Monster generators, spawning monsters, that then will roam the map. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it.
 - AI should cast spell of mastery, when his lossage gets too high
+- When one players starts casting spell of mastery, all other players will get notified, so they get a chance to stop caster by allied assault.
 - oculus could serve as detector of invisible units and maybe an invisible spy itself
 - reintroduce sokoban boxes pushing, lifting, falling and floating on water; units standing on top of moved objects should move with them
 - when unit drops large item, like crate, it pops under that unit, serving as elevation
@@ -61,6 +63,11 @@ Design:
 - non-leader units could be able to hide inside bushes
 - elemental weakness. I.e. slimes being weak to fire
 - AI autolocks doors when enemies are nearby and open them, to allow its units to pass
+- Destructibe trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
+- Day-night cycle, making some creatures stronger, and other weaker.
+- Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
+- X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
+- Artifacts, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids.
 
 Spells:
 - Some units should also be able to create portal exit nodes, while wizard can create entry node. Portal should be colored into player colors. Enemy units would remove portal on entering its cell.
@@ -79,7 +86,11 @@ Spells:
 - earthquake spell that damages non-flyers or flyers that cant fly
 - toxic gas spell that damages indoor units
 - walk on water spell as a prerequisite or alternative of flight.
-
+- terraforming spells: create elevation, create/remove water pool, etc...
+- astral attack spell, where wizard spends N mana to make enemy wizard lose N/2 defending.
+- time stop spell, allowing disallowing caster's enemies from moving next turn.
+- Time travel spell, where caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
+- spells that do both good/bad to your and your enemy.
 
 Graphics:
 - New player colors: player{blue},king{purple},warlock{black},witch{red},
@@ -90,12 +101,22 @@ Graphics:
 - finish house tileset, including floor and roof; dirt/plain should not align to house wall
 - better flight animation (idle and cloud under unit); use wesnoth halo/saurian-magic-halo-*; monster-elemental_air could be useful too
 - better hasted unit animation (trail after hasted creature)
+- power node should have round bottom, so it would look more natural on rough terrain or in flight.
+- Better stones tileset. Current one don't really fit in.
+- Automate shadow placement
+- road object, which would block grass
+- grass corner sprites, which would be auto placed onto dirt in corners between two grass tiles.
 
 
 UI:
 - add some description to tabs and menu tabs buttons
 - unit profile and main menu options could be a tabs like all others
+- monster sound acks
 - ui/Tempest_In_The_Aether_Interface_and_Ryzom_Core has potentially usable icons
+- a line from the portrait of current unit to its location on minimap
+- better health indicators for selected units (use green dots - one per hit-point)
+- in editor, placing unit on top of object should not be possible.
+
 
 
 Symta Language Handicaps:
@@ -127,3 +148,13 @@ Graphics Editing Hints:
    4) Image > Adjustments > Threshold  with Threshold set to 255
 - to split image into tiles: convert input.png -crop 64x64 +repage 3-idle%d.png
 - to add missing digits: for i in *.png; do sename "\([^0-9]\)\([0-9]\)\.png" "0\0\1.png" $i; done
+
+Optimization Possibilities:
+- use cell index directly instead of unit_goal wrapper
+- when all four corners of object sprite are hidden, don't allow selecting it, also, dont draw it. requires probing pixels inside framebuffer
+- fast way to determine height to the ceiling - that way we can have large creature wont be able to move into tiny hole. One way to do it is by using special tiles in place of empty or void tiles
+- obstacles blocking sight, would require precomputed sight tree, where one blocked node would block sight to all children.
+- when updating tiles, we can also mark doorways, so that flyers and jumpers could pick between multiple Z-levels
+- mouse picking can be done in reverse on draw list
+
+
