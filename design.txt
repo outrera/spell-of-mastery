@@ -68,29 +68,56 @@ Design:
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Artifacts, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids.
+- A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
+- Global map, where player can find next destination. Collected spells are preserved between maps.
+- Observer could be able to cast all spells, just like oculus.
+- rescueable creatures, depicted with barred cage cell over them.
+- steeds: horse, lizard and gryphon
+
 
 Spells:
-- Some units should also be able to create portal exit nodes, while wizard can create entry node. Portal should be colored into player colors. Enemy units would remove portal on entering its cell.
-- fear spell, forcing unit to return back to summoning circle;
-- firewall should make all you units leave fire trail behind them
-- duel spell, creating 3x3 arena in the center of map, where all 4 wizards get summoned.
-- chaos spell - somehow shuffling all (non-leader?) units inside of some range
-- goey blob, slowly covering entire map, unless fought
-- spell turning creature into a living bomb
-- magic block - a spell blocking all sides from using mana-consuming actions for a short time.
-- drought spell that temporary removes all water, replacing it with special empty aux tile
-- a way to save leader by teleporting him to the place of any other unit or occulus
-- spells like teleport should have no range limitation, but high cooldown time; that will make them really powerful and simplify their use by AI.
-- harm mirror, that reflects damage back to attacker
-- spell that remove ability to fly form all flyers.
-- earthquake spell that damages non-flyers or flyers that cant fly
-- toxic gas spell that damages indoor units
-- walk on water spell as a prerequisite or alternative of flight.
-- terraforming spells: create elevation, create/remove water pool, etc...
-- astral attack spell, where wizard spends N mana to make enemy wizard lose N/2 defending.
-- time stop spell, allowing disallowing caster's enemies from moving next turn.
-- Time travel spell, where caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
-- spells that do both good/bad to your and your enemy.
+- Pentagram: creates a portal, to which any contolled unit can be summoned. Enemy units remove it on entering.
+- Reveal Spells: remove fog of war at places where spells are located.
+- Panacea heals all friendly units by 4 point of damage.
+- Haste: caster units can move one additional cell per turn.
+- Slow: enemy units move one cell slower.
+- Shell: caster units are immune to next attack.
+- Bloodlust: caster units now do +1 damage
+- Invisibility: caster units become invisible.
+- Paralyze/Fear/Time-Stop: enemy units lose next turn.
+- Firewall: make all you units leave fire trail behind them
+- Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
+- Chaos: shuffling (non-leader?) units inside of some range
+- Gooey Blob: slowly covers entire map in agressive blob, unless fought
+- Detonate: controlled creaute explodes, dealing damage to all neighbors, proportional to creatures health.
+- Magic Block: a spell blocking all sides from using mana-consuming actions for a short time.
+- Counter Magic: the next enemy spell fails
+- Drought: temporary removes all water, replacing it with special empty aux tile
+- Teleport: move unit to any seen location.
+- Harm Mirror: reflects damage from the next attack back to attacker.
+- Dispel: removes all magic effects from all creatures.
+- Earthquake: damage non-flyers.
+- Toxic Gas: damages indoor units.
+- Walk on Water: allows unit to walk over water.
+- Terraforming spells: raise/lower elevation, create/remove water pool, etc...
+- Astral Attack: caster spends N mana to make target wizard lose N*2.
+- Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
+- spells that do both good/bad to you and your enemy.
+- Regeneration: grant regeneration ability to all caster's units, when no enemies are attacking them.
+- Visions: see through the fog of war
+- Fly: allows target to fly
+- Descend/Ascend: move unit between layers.
+- Almagest: switches day to night and night to day
+- Subvert: gain control over the target.
+- Invisibility: caster units become invisible
+- Clone Self: creates clone of self, which will continue leading, if creator dies
+- Morph: turn caster into a monster of his choice, until his next move
+- The Spell of Mastery: banishes all competing wizards from this plane of existence
+  Requires having 2-more magic nodes than any of competing wizards and maintaining this difference for the next 10 moves
+- Armageddon: reduces all creatures down to 1 health.
+- Open Node: tears the fabric of reality to open new magic node, which should be placed 4 hexes away from an existing node
+- Close Node: closes existing magic node
+
 
 Graphics:
 - New player colors: player{blue},king{purple},warlock{black},witch{red},
@@ -106,6 +133,11 @@ Graphics:
 - Automate shadow placement
 - road object, which would block grass
 - grass corner sprites, which would be auto placed onto dirt in corners between two grass tiles.
+- design fullscreen graphics effects, like armageddon, snowstorm, fog and nighttime.
+- dummy units, that would be left instead of real one, when fog of war takes place
+- fog of war reveal animation
+- particle system
+- New tilesets: Snow, Lava, Swamp
 
 
 UI:
@@ -116,6 +148,7 @@ UI:
 - a line from the portrait of current unit to its location on minimap
 - better health indicators for selected units (use green dots - one per hit-point)
 - in editor, placing unit on top of object should not be possible.
+- simple way to temporarily transfer control to the AI, for map and AI testing.
 
 
 
@@ -157,4 +190,9 @@ Optimization Possibilities:
 - when updating tiles, we can also mark doorways, so that flyers and jumpers could pick between multiple Z-levels
 - mouse picking can be done in reverse on draw list
 
-
+Types of Creature Movement:
+- Walker
+- Flyer
+- Swimmer (can walk over water)
+- Climber (can scale walls)
+- Incorporeal (Walk through doors and 1-tile walls) can be implemented using teleport spell
