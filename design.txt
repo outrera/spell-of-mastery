@@ -4,6 +4,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 - Show all learnable spells, so player can learn requirements for getting them.
 - Allow any wizard to summon any creature.
+- Introduce tabs for different spell types.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
 - refactor some uses of add_effect into add_param

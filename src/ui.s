@@ -447,15 +447,15 @@ ui.on_unit_pick Units =
 | Unit = 0
 | As = 0
 | GAs = []
-| Player = $world.human
-|  if PanelTab >< unit then
+| if PanelTab >< unit then
      | less Units.size: leave
      | Unit <= Units.0
      | As <= Unit.acts
      | As <= As.keep{X=>not X.tab or X.tab><spell}
-   else
+  else
      | if PanelTab >< summon then
-         | Unit <= Player.leader
+         | Unit <= if Units.size then Units.0.owner.leader
+                   else $world.human.leader
          | less Unit: leave
          | As <= Unit.acts.keep{?tab><summon}
        else if PanelTab >< bag then
