@@ -2,29 +2,14 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- Collectible spells, like weapons in Doom. That will greatly simplify gameplay and force wizard to explore world for new spells quickly, instead of turtling. It is also possible, that some spell be present in a single quantity, so only one wizard will ever obtain it. Some spells, like flight, could easily be disabled altogether. Spells could be presented at shrines, guarded by creatures. Only wizard can learn from such shrines. Maybe visiting shrine gives only a limited number of spellcasting. Optionally, there could be a way to steal enemy spells and a method that forces enemy to forget chosen spells.
-  Pros:
-    - lore gets eliminated;
-    - exploration becomes fun;
-    - no annoying research dialogue;
-    - map design get more involved, where player can get dragon since beginning;
-  Cons:
-    - start could be boring;
-    - wizards lose specialization;
-    - requires map designer to place all spells somewhere;
-    - creating an icon system;
-    - multiplayer maps would probably require to include some spells several times;
-
-- Rethink Mage's units.
+- Show all learnable spells, so player can learn requirements for getting them.
+- Allow any wizard to summon any creature.
 - Include recall to pentagram into AI's pathfinding.
-- Some units acting as healers. Yet healers should only be able to heal directly adjanced units.
-- Other units with special abilities.
 - height advantage gives +1 to attack
 - refactor some uses of add_effect into add_param
   should not use Params for effect's script
 - rename moves to on_move, etc..
 - Think about refactoring genes to use ECS system, where each unit has a list of systems acting on him. Like i.e. poison system and regen systems.
-- fix sound issues, where sounds are affected by height
 - AI should change vampire into bat form, before attack, and then back to vampire, when he is sees enemy and can attack
 - store map events in a separate file
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
@@ -61,10 +46,11 @@ Design:
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
-- Steeds: horse, lizard and gryphon; For start, they rider can simply be drawn near his mount's sprite.
+- Steeds: horse, lizard and gryphon; For start, the rider can simply be drawn near his mount's sprite.
   Mount can't attack, while being rided and all actions are the actions of the rider. Rider can unmount into any of the four directions. All incoming damage goes to the mount.
 - second (rare) resource like souls or gems, required to summon powerful creatures.
   Maybe only wizard can collect it.
+- Pickupable treasures, giving lore.
 - Some spells may require special objects. Destroying such object will deprive the wizard of the spells provided by it. Some objects can provide constant abilities or show whole map (i.e. palantir).
 - potion brewing, using cauldron and ingredients, collected from map.
 - rescueable creatures, depicted with barred cage cell over them.
@@ -77,6 +63,7 @@ Creatures:
 - A unit that uses enemy's attack strength intstead of its own.
 - A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Elemental weakness. I.e. slimes being weak to fire
+- Some creatures acting as healers. Yet healers should only be able to heal directly adjanced units.
 
 
 Spells:
@@ -117,6 +104,7 @@ Spells:
 - Descend/Ascend: move unit between layers.
 - Almagest: switches day to night and night to day
 - Subvert: gain control over the target.
+- Spy: wizard learns the next unknown spell, casted by any wizard.
 - Invisibility: caster units become invisible
 - Clone Self: creates clone of self, which will continue leading, if creator dies
 - Morph: turn caster into a monster of his choice, until his next move
@@ -166,6 +154,7 @@ Symta Language Handicaps:
 
 Bugs:
 - vampire on low health turning into bat results in bat being invincible with 0 health (enemies cant attack it)
+- fix sound issues, where sounds are affected by height
 - when new map gets saved, folder browser should update content
 - when height>>80, column tiles and units are not drawn
 - hydra damages and poisons allied units
@@ -204,3 +193,22 @@ Types of Creature Movement:
 - Swimmer (can walk over water)
 - Climber (can scale walls)
 - Incorporeal (Walk through doors and 1-tile walls) can be implemented using teleport spell
+
+
+
+- Collectible spells, like weapons in Doom. That will greatly simplify gameplay and force wizard to explore world for new spells quickly, instead of turtling. It is also possible, that some spell be present in a single quantity, so only one wizard will ever obtain it. Spells could be presented at shrines, guarded by creatures. Only wizard can learn from such shrines. Maybe visiting shrine gives only a limited number of spellcasting. Optionally, there could be a way to steal enemy spells and a method that forces enemy to forget chosen spells.
+  Pros:
+    - lore gets eliminated;
+    - exploration becomes fun;
+    - easier to control what spells are available to player;
+    - no annoying research dialogue;
+    - map design get more involved, where player can get dragon since beginning;
+  Cons:
+    - start could be boring;
+    - wizards lose specialization;
+    - collectible spells could still be provided;
+    - loss of strategic depth;
+    - explorating can be encouraged through collecting map treasures, giving lore.
+    - requires map designer to place all spells somewhere;
+    - creating an icon system;
+    - multiplayer maps would probably require to include some spells several times;
