@@ -50,7 +50,7 @@ All undead units regenerate out of power node.
 
 Design:
 - A unit that uses enemy's attack strength intstead of its own.
-- Monster generators, spawning monsters, that then will roam the map. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it.
+- Monster generators, spawning monsters, that then will roam the map. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone.
 - AI should cast spell of mastery, when his lossage gets too high
 - When one players starts casting spell of mastery, all other players will get notified, so they get a chance to stop caster by allied assault.
 - oculus could serve as detector of invisible units and maybe an invisible spy itself
@@ -67,26 +67,29 @@ Design:
 - Day-night cycle, making some creatures stronger, and other weaker.
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
-- Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids.
+- Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
+- Throwing items.
 - A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
 - Observer could be able to cast all spells, just like oculus.
+- Steeds: horse, lizard and gryphon; For start, they rider can simply be drawn near his mount's sprite.
+  Mount can't attack, while being rided and all actions are the actions of the rider. Rider can unmount into any of the four directions. All incoming damage goes to the mount.
 - rescueable creatures, depicted with barred cage cell over them.
-- steeds: horse, lizard and gryphon
-- colored keys and colored doors these keys open.
-- potion brewing, using cauldron and ingredients.
+- colored keys and colored doors and chests these keys open.
+- potion brewing, using cauldron and ingredients, collected from map.
+- different types of terrain affecting movement speed.
 
 Spells:
 - Pentagram: creates a portal, to which any contolled unit can be summoned. Enemy units remove it on entering.
 - Reveal Spells: remove fog of war at places where spells are located.
-- Panacea: heals all friendly units by 4 point of damage.
+- Panacea: heals all friendly unit by 4 point of damage.
 - Haste: caster units can move one additional cell per turn.
 - Slow: enemy units move one cell slower.
 - Shell: caster units are immune to next attack.
 - Bloodlust: caster units now do +1 damage
 - Invisibility: caster units become invisible.
-- Dispel: removes all magic effects from all creatures, including invisibility.
-- Turn into Undead: target loses ability to regenerate, yet gains immunity from non-echanted weapons.
+- Dispel: removes all magic effects from target creature, including beneficial.
+- Turn into Undead: target loses ability to regenerate, yet gains immunity from non-echanted weapons. All undeads have enchanted weapons.
 - Enchant: target gains ability to harm undead.
 - Paralyze/Fear/Time-Stop: enemy units lose next turn.
 - Firewall: make all you units leave fire trail behind them
