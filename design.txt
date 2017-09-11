@@ -85,7 +85,8 @@ Spells:
 - Turn into Undead: target loses ability to regenerate, yet gains immunity from non-echanted weapons. All undeads have enchanted weapons.
 - Enchant: target gains ability to harm undead.
 - Paralyze/Fear/Time-Stop: enemy units lose next turn.
-- Firewall/Firetrail: make all you units leave fire trail behind them
+- Firewall/Firetrail: make target unit leave fire trail behind him
+- Water trail: make target unit leave water trail behind him
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
 - Chaos: shuffling (non-leader?) units inside of some range
 - Gooey Blob: slowly covers entire map in agressive blob, unless fought
