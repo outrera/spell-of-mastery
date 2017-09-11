@@ -2,9 +2,21 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
+- Collectible spells, like weapons in Doom. That will greatly simplify gameplay and force wizard to explore world for new spells quickly, instead of turtling. It is also possible, that some spell be present in a single quantity, so only one wizard will ever obtain it. Some spells, like flight, could easily be disabled altogether. Spells could be presented at shrines, guarded by creatures. Only wizard can learn from such shrines. Maybe visiting shrine gives only a limited number of spellcasting. Optionally, there could be a way to steal enemy spells and a method that forces enemy to forget chosen spells.
+  Pros:
+    - lore gets eliminated;
+    - exploration becomes fun;
+    - no annoying research dialogue;
+    - map design get more involved, where player can get dragon since beginning;
+  Cons:
+    - start could be boring;
+    - wizards lose specialization;
+    - requires map designer to place all spells somewhere;
+    - creating an icon system;
+    - multiplayer maps would probably require to include some spells several times;
 
 - Rethink Mage's units.
-- Implement defence tower: use the orb sprite; Either mage or oculus can summon the tower at empty space near them.
+- Include recall to pentagram into AI's pathfinding.
 - Some units acting as healers. Yet healers should only be able to heal directly adjanced units.
 - Other units with special abilities.
 - height advantage gives +1 to attack
@@ -18,21 +30,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - doors, which could be constructed by dwarf or some other creatures
 - traps
-- Instead of pentagram, allow wizard to simply summon creatures into neighboring cells. Reuse pentagram sprite as one way portal, where any unit can teleport. Include it into enemy's pathfinding.
-  Pros:
-    - Greatly simplilfies summoning mechanics and game code.
 - Summoning tab should be seen only when leader is selected.
-- Collectible spells, like weapons in Doom. That will greatly simplify gameplay and force wizard to explore world for new spells quickly, instead of turtling. It is also possible, that some spell be present in a single quantity, so only one wizard will ever obtain it. Some spells, like flight, could easily be disabled altogether. Spells could be presented at shrines, guarded by creatures. Only wizard can learn from such shrines. Maybe visiting shrine gives only a limited number of spellcasting. Optionally, there could be a way to steal enemy spells and a method that forces enemy to forget chosen spells.
-  Pros:
-    - lore gets eliminated;
-    - exploration becomes fun;
-    - no annoying research dialogue;
-    - map design get more involved, where player can get dragon since beginning;
-  Cons:
-    - requires map designer to place all spells somewhere;
-    - creating an icon system;
-    - wizards lose specialization;
-    - multiplayer maps would probably require to include some spells several times;
 
 Mage's units:
 blob (cheap but timed and slow summon, defends pentagram from occupation by invader)
@@ -49,38 +47,42 @@ dragon (explodes on death, damaging all nearby creatures)
 All undead units regenerate out of power node.
 
 Design:
-- A unit that uses enemy's attack strength intstead of its own.
-- Monster generators, spawning monsters, that then will roam the map. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone.
+- Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
+- Throwing items.
 - AI should cast spell of mastery, when his lossage gets too high
 - When one players starts casting spell of mastery, all other players will get notified, so they get a chance to stop caster by allied assault.
-- oculus could serve as detector of invisible units and maybe an invisible spy itself
 - reintroduce sokoban boxes pushing, lifting, falling and floating on water; units standing on top of moved objects should move with them
 - when unit drops large item, like crate, it pops under that unit, serving as elevation
-- second (rare) resource like souls or gems, required to summon powerful creatures.
-  Maybe only wizard can collect it.
 - phone/touch version should have transparent buttons
-- Some spells may require special objects. Destroying such object will deprive the wizard of the spells provided by it. Some objects can provide constant abilities or show whole map (i.e. palantir).
 - non-leader units could be able to hide inside bushes
-- elemental weakness. I.e. slimes being weak to fire
 - AI autolocks doors when enemies are nearby and open them, to allow its units to pass
-- Destructibe trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
+- Destructible trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
 - Day-night cycle, making some creatures stronger, and other weaker.
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
-- Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
-- Throwing items.
-- A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
-- Observer could be able to cast all spells, just like oculus.
 - Steeds: horse, lizard and gryphon; For start, they rider can simply be drawn near his mount's sprite.
   Mount can't attack, while being rided and all actions are the actions of the rider. Rider can unmount into any of the four directions. All incoming damage goes to the mount.
+- second (rare) resource like souls or gems, required to summon powerful creatures.
+  Maybe only wizard can collect it.
+- Some spells may require special objects. Destroying such object will deprive the wizard of the spells provided by it. Some objects can provide constant abilities or show whole map (i.e. palantir).
+- potion brewing, using cauldron and ingredients, collected from map.
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
-- potion brewing, using cauldron and ingredients, collected from map.
 - different types of terrain affecting movement speed.
 
+Creatures:
+- Observer could be able to cast all spells, just like oculus.
+- Oculus could serve as detector of invisible units and maybe an invisible spy itself
+- A unit that uses enemy's attack strength intstead of its own.
+- A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
+- Elemental weakness. I.e. slimes being weak to fire
+
+
 Spells:
-- Pentagram: creates a portal, to which any contolled unit can be summoned. Enemy units remove it on entering.
+- Pentagram: creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
+- Generators: creates a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
+- Guardian: summons a tower at empty space near caster. The tower can attack nearby enemies
 - Reveal Spells: remove fog of war at places where spells are located.
 - Panacea: heals all friendly unit by 4 point of damage.
 - Haste: caster units can move one additional cell per turn.

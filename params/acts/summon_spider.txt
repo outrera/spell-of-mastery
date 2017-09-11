@@ -4,4 +4,4 @@ lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
 needs: ((summon_goblin summon_orc))
-after: spawn{unit_spider}
+after: pentagram,impact{teleport},spawn{unit_spider}

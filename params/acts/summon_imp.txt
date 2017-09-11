@@ -3,4 +3,4 @@ icon: unit_imp
 lore: misc.tier0_lcost
 cost: misc.tier0_scost
 cool: misc.tier0_cool
-after: spawn{unit_imp}
+after: pentagram,impact{teleport},spawn{unit_imp}

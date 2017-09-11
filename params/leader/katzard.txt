@@ -4,4 +4,10 @@ hit: effect{blood},sound{male_hit}
 death: sound{mage_die}
 moves: sound{step}
 impact: harm{user},impact{fire_spiral},sound{explosion}
-pentagram: special_pentagram_mage
+summons: 
+      summon_blob, summon_oculus,
+      summon_halfling, summon_beetle,
+      summon_elf, summon_dwarf,
+      summon_ifrit, summon_minotaur,
+      summon_hydra,
+      summon_dragon

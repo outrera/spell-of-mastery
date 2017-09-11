@@ -3,4 +3,4 @@ icon: unit_farmer
 lore: misc.tier0_lcost
 cost: misc.tier0_scost
 cool: misc.tier0_cool
-after: spawn{unit_farmer}
+after: pentagram,impact{teleport},spawn{unit_farmer}

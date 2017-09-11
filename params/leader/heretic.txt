@@ -3,4 +3,10 @@ icon: unit_heretic
 hit: effect{blood},sound{male_hit}
 death: sound{mage_die}
 moves: sound{step}
-pentagram: special_pentagram_heretic
+summons:
+      summon_blob, summon_oculus,
+      summon_skeleton, summon_bat,
+      summon_wraith,
+      summon_gargoyle, summon_vampire,
+      summon_observer,
+      summon_dragon

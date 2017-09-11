@@ -2,13 +2,18 @@ sprite: unit_king
 icon: unit_king
 range: cross
 health: 40
-armor: 20
+armor: 0
 range: 0
-combat: 14
+combat: 5
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{king_hit}
 death: sound{male_die},sound{mage_die}
 moves: sound{step}
-pentagram: special_pentagram_king
 acts: (pentagram)
-spells: (cast_knowledge cast_heal cast_shell cast_bloodlust spell_of_mastery)
+summons:
+      summon_blob, summon_oculus,
+      summon_farmer,
+      summon_lizard, summon_knight,
+      summon_griffin,
+      summon_golem,
+      summon_dragon

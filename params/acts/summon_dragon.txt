@@ -4,4 +4,4 @@ lore: misc.tier5_lcost
 cost: misc.tier5_scost
 cool: misc.tier5_cool
 needs: ((summon_hydra summon_cyclops summon_observer summon_golem))
-after: spawn{unit_dragon}
+after: pentagram,impact{teleport},spawn{unit_dragon}

@@ -4,4 +4,4 @@ lore: misc.tier4_lcost
 cost: misc.tier4_scost
 cool: misc.tier4_cool
 needs: ((summon_ifrit summon_minotaur))
-after: spawn{unit_hydra}
+after: pentagram,impact{teleport},spawn{unit_hydra}

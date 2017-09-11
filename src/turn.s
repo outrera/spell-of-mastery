@@ -13,7 +13,6 @@ unit.end_turn =
 | Remove = 0
 | RunEs = []
 | for E $genes: when E.amount>0:
-  | say E.amount
   | E.amount--
   | less E.amount > 0:
     | when E.when >< timeout: push [E.name E.params.unheap] RunEs

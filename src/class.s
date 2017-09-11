@@ -6,10 +6,10 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 speed/0 sight/No
            active/0 range/0 leader/0
            health/0 combat/0 armor/0 cooldown/24
-           acts/[] spells/0 rooms/0 icon/0 title/0 item/0
+           acts/[] spells/0 summons/0 rooms/0 icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
-           steps/0 inborn/[] pentagram/0
+           steps/0 inborn/[]
            attack/0 impact/0 impact_hit/0
            hit/0 death/0 moves/0 platform/0 gate/0}
   id                    //for unit counts table
@@ -49,10 +49,10 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   hit/Hit               //on hurt script
   death/Death           //on death script
   moves/Moves           //on movement script
-  pentagram/Pentagram   //pentagram this unit casts
   platform/Platform     //increased tenants position on screen
   gate/Gate             //gateway, teleporting units to other cell
 | when Spells: $acts <= [@$acts @Spells].list
+| when Summons: $acts <= [@$acts @Summons].list
 | when Rooms: $acts <= [@$acts @Rooms].list
 | when $active:
   | less $title: $title <= $class_name.title

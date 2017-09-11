@@ -3,4 +3,4 @@ icon: unit_blob
 //lore: misc.tier1_lcost
 cost: misc.tier0_scost
 cool: misc.tier1_cool
-after: spawn{unit_blob}
+after: pentagram,impact{teleport},spawn{unit_blob}

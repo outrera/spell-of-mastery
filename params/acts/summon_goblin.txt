@@ -4,5 +4,5 @@ lore: misc.tier1_lcost
 cost: misc.tier1_scost
 cool: misc.tier1_cool
 needs: (summon_ratman)
-after: spawn{unit_goblin}
+after: pentagram,impact{teleport},spawn{unit_goblin}
 

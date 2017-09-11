@@ -3,4 +3,4 @@ icon: unit_halfling
 lore: 5
 cost: 5
 cool: 10
-after: spawn{unit_halfling}
+after: pentagram,impact{teleport},spawn{unit_halfling}

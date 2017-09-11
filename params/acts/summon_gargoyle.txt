@@ -4,5 +4,5 @@ lore: misc.tier2_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
 needs: (summon_wraith)
-after: spawn{unit_gargoyle}
+after: pentagram,impact{teleport},spawn{unit_gargoyle}
 

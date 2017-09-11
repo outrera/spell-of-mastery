@@ -1,4 +1,3 @@
-spawn: impact{teleport},sound{summon},caster{leader}
 tier0_lcost: 3
 tier0_scost: 2
 tier0_cool: 3

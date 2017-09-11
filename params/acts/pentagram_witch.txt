@@ -1,2 +1,0 @@
-proto: pentagram
-after: spawn{special_pentagram_witch}

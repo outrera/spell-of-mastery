@@ -452,15 +452,12 @@ ui.on_unit_pick Units =
      | less Units.size: leave
      | Unit <= Units.0
      | As <= Unit.acts
-     | T = As{[?name 1]}.table
-     | for U Units.tail: for A U.acts: when got T.(A.name): T.(A.name)++
-     | NUnits = Units.size
-     | As = As.keep{A=>T.(A.name)><NUnits}
+     | As <= As.keep{X=>not X.tab or X.tab><spell}
    else
      | if PanelTab >< summon then
-         | Unit <= Player.pentagram
+         | Unit <= Player.leader
          | less Unit: leave
-         | As <= Unit.acts
+         | As <= Unit.acts.keep{?tab><summon}
        else if PanelTab >< bag then
          | when Units.size<>1: leave
          | Unit <= Units.0

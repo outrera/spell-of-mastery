@@ -4,4 +4,4 @@ lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
 needs: ((summon_elf summon_dwarf))
-after: spawn{unit_minotaur}
+after: pentagram,impact{teleport},spawn{unit_minotaur}

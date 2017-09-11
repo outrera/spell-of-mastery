@@ -3,6 +3,7 @@ lore: 0
 cost: 0
 speed: -1
 affects: pentagram
-before: misc.spawn
+before: pentagram,sound{summon},caster{leader}
 after: ()
 hint: spawn
+tab: summon

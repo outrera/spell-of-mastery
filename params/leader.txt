@@ -25,7 +25,6 @@ impact: missile{effect_bolt},harm{magic.1},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}
-pentagram: special_pentagram
 acts: (pentagram)
 spells:
       (cast_knowledge

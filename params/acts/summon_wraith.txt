@@ -4,4 +4,4 @@ lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
 needs: ((summon_skeleton summon_bat))
-after: spawn{unit_wraith}
+after: pentagram,impact{teleport},spawn{unit_wraith}

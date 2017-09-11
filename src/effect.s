@@ -218,9 +218,6 @@ effect set_tile [X Y Z] Type:
 | $world.set{X Y Z Tile}
 
 effect spawn What:
-| when What><pentagram:
-  | L = $owner.leader
-  | What <= if L then L.pentagram else \special_pentagram
 | S = $owner.alloc_unit{What}
 | S.aistate <= \spawned
 | less S.alpha:
@@ -397,6 +394,7 @@ unit.effect Effect Target TargetXYZ =
       | less P: _goto end
       | XYZ.init{P.xyz}
       | Target <= P
+      | T <= Target
     else if Name >< all_alive then
       | for U $world.active: when U.alive:
         | when U.ai><unit: $effect{Es U U.xyz}
