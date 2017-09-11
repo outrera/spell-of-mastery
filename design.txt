@@ -16,7 +16,9 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - store map events in a separate file
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - traps
-- Summoning tab should be seen only when leader is selected.
+- Bluffing: summoning illusionary version of a creature, that can be banished with disbelieve.
+- Dynamic balance: casting a spell of specific type (i.e. order spell) lowers cost of casting future spells of that type and increases cost of casting spells of opposite type (i.e. chaos spells).
+
 
 Mage's units:
 blob (cheap but timed and slow summon, defends pentagram from occupation by invader)
