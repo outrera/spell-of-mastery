@@ -111,6 +111,7 @@ Observer: slow flyer, used to cast spells far away from
           wizard and draw portal exit nodes, also acts as
           siege weaponry by casting long range spells
 Blob: slow, can clone itself after some time for a little mana.
+Imp: digs terrain, places traps.
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: weakest shooter.
 Elf: shooter.
