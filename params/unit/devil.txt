@@ -1,8 +1,8 @@
 sprite: unit_devil
 tier: 3
-health: 6
-combat: 3
-armor: 1
+health: 14
+combat: 2
+armor: 0
 inborn: (regen organic)
 impact: harm{user},when{kills.1},harm{100},impact{lifedrain},endwhen,sound{devil_attack}
 hit: effect{blood},sound{devil_hit}

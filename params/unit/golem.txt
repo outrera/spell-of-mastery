@@ -1,8 +1,8 @@
 sprite: unit_golem
 tier: 4
-health: 14
-combat: 7
-armor: 2
+health: 12
+combat: 4
+armor: 10
 speed: 34
 inborn: ()
 impact: harm{user},sound{golem_attack}

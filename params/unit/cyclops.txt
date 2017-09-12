@@ -1,7 +1,7 @@
 sprite: unit_cyclops
 tier: 4
-health: 16
-combat: 8
+health: 20
+combat: 5
 armor: 0
 inborn: (organic)
 //attack: sound{cyclops_club}

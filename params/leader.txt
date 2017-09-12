@@ -6,7 +6,7 @@ draw_order: 4
 height: 2
 tier: 5
 health: 15 // hit points - number of hits, before this unit is dead
-range: 3
+range: 4
 combat: 2
 armor: 0
 cooldown: 24

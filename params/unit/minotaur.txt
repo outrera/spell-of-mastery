@@ -1,6 +1,6 @@
 sprite: unit_minotaur
 tier: 3
-health: 10
+health: 15
 combat: 5
 armor: 0
 inborn: (organic)

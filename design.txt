@@ -2,7 +2,7 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- Allow any wizard to summon any creature.
+- Instead of harm{magic.1}, use magic_harm{1}
 - Unit engagement mechanics, so enemies would block future movement.
 - Introduce tabs for different spell types.
 - Include recall to pentagram into AI's pathfinding.
@@ -84,7 +84,7 @@ Spells:
 - Harm Mirror: reflects damage from the next attack back to attacker.
 - Earthquake: damage non-flyers.
 - Toxic Gas: damages indoor units.
-- Walk on Water: allows unit to walk over water.
+- Water Walk: allows unit to walk over water.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
 - Astral Attack: caster spends N mana to make target wizard lose N*2.
 - Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
@@ -102,7 +102,7 @@ Spells:
 - The Spell of Mastery: banishes all competing wizards from this plane of existence
   Requires having 2-more magic nodes than any of competing wizards and maintaining this difference for the next 10 moves
 - Armageddon: reduces all creatures down to 1 health.
-- Open Node: tears the fabric of reality to open new magic node, which should be placed 4 hexes away from an existing node
+- Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
 - Close Node: closes existing magic node
 
 Summonable Creatures:

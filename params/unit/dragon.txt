@@ -1,9 +1,8 @@
 sprite: unit_dragon
 tier: 4
-health: 18
-combat: 10
-armor: 2
-cooldown: 4
+health: 20
+combat: 6
+armor: 1
 steps: 12
 sight: 10
 speed: 20

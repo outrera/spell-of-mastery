@@ -1,6 +1,6 @@
 sprite: unit_blob
 tier: 1
-health: 4
+health: 5
 combat: 2
 steps: 1
 armor: 0

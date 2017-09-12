@@ -1,6 +1,6 @@
 sprite: unit_vampire
 tier: 3
-health: 8
+health: 14
 combat: 4
 armor: 0
 range: 2
