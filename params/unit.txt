@@ -2,12 +2,12 @@ unit: 1
 active: 1
 tier: 1
 height: 2
-health: 1 // hit points - number of hits, before this unit is dead
-combat: 0 // chance to hit
-steps: 3
-armor: 0 // chance to evade a hit
+health: 9 // hit points - number of hits, before this unit is dead
+combat: 0
+armor: 0
 cooldown: 16
-sight: 5
+steps: 6
+sight: 7
 speed: 24 // cycles required to move between game world cells
 pickable: 1
 passable: 0 // other units can move on top of this one

@@ -5,7 +5,9 @@ tier: 3
 health: 3
 combat: 4
 armor: 30
-range: 3
+range: 1
+steps: 14
+sight: 10
 cool: 10
 inborn: (upkeep3 flyer resist_magic)
 attack: sound{bat_move}

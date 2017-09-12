@@ -1,13 +1,12 @@
 sprite: unit_blob
 tier: 1
-health: 10
+health: 4
 combat: 2
-range: 2
 steps: 1
-armor: 1
+armor: 0
 range: 3
-speed: 96
-inborn: (ttl.10{})
+speed: 60
+//inborn: (ttl.10{})
 //attack: sound{blob_attack}
 impact: harm{user},sound{blob_attack}
 hit: effect{blood_undead},sound{blob_hit}

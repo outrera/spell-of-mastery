@@ -10,10 +10,3 @@ hit: effect{blood},sound{king_hit}
 death: sound{male_die},sound{mage_die}
 moves: sound{step}
 acts: (pentagram)
-summons:
-      summon_blob, summon_oculus,
-      summon_farmer,
-      summon_lizard, summon_knight,
-      summon_griffin,
-      summon_golem,
-      summon_dragon

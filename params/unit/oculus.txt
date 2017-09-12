@@ -1,0 +1,14 @@
+sprite: unit_oculus
+tier: 1
+health: 6
+combat: 0
+steps: 14
+sight: 10
+armor: 5
+speed: 20
+inborn: (flyer organic)
+attack: sound{bat_attack}
+impact: harm{user}
+hit: effect{blood},sound{bat_hit}
+death: sound{bat_die}
+moves: sound{bat_move}

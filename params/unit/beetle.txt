@@ -3,7 +3,8 @@ tier: 1
 health: 5
 combat: 1
 armor: 0
-steps: 2
+steps: 4
+sight: 5
 speed: 48
 inborn: (organic)
 impact: harm{user},sound{spider_attack}

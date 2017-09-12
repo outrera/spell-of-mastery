@@ -1,9 +1,10 @@
 sprite: unit_elf
-tier: 2
-health: 4
-combat: 2
+tier: 1
+health: 6
+combat: 4
 armor: 0
-range: 4
+range: 6
+steps: 5
 inborn: (organic)
 //attack: sound{arrow_hit}
 impact: harm{user},sound{arrow_hit}

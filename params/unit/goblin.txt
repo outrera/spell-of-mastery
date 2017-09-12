@@ -1,9 +1,10 @@
 sprite: unit_goblin
 tier: 1
-health: 3
-combat: 2
+health: 8
+combat: 3
 armor: 0
-range: 2
+range: 3
+steps: 5
 inborn: (organic)
 impact: harm{user},sound{cut}
 hit: sound{goblin_hit}

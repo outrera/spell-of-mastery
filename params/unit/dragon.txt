@@ -4,6 +4,8 @@ health: 18
 combat: 10
 armor: 2
 cooldown: 4
+steps: 12
+sight: 10
 speed: 20
 inborn: (organic flyer)
 //attack: sound{dragon_hit}

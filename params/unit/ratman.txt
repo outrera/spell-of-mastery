@@ -1,6 +1,6 @@
 sprite: unit_ratman
 tier: 1
-health: 4
+health: 8
 combat: 3
 armor: 0
 inborn: (organic)
@@ -8,3 +8,4 @@ impact: harm{user},sound{cut}
 hit: effect{blood},sound{rat_death}
 death: sound{rat_death}
 moves: sound{step}
+acts: (invisibility)

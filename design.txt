@@ -2,9 +2,8 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- Increase creature movement speed, based from leader's movement speed of 8 cells per turn, usual humanoid moving 9 cells per turn, and bat, being the fastes, moving at 16 cells per turn.
-- Show all learnable spells, so player can learn requirements for getting them.
 - Allow any wizard to summon any creature.
+- Unit engagement mechanics, so enemies would block future movement.
 - Introduce tabs for different spell types.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
@@ -18,21 +17,6 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - traps
 - Bluffing: summoning illusionary version of a creature, that can be banished with disbelieve.
 - Dynamic balance: casting a spell of specific type (i.e. order spell) lowers cost of casting future spells of that type and increases cost of casting spells of opposite type (i.e. chaos spells).
-
-
-Mage's units:
-blob (cheap but timed and slow summon, defends pentagram from occupation by invader)
-oculus (flyer, used to cast spells far away from wizard and draw portal exit nodes, also acts as siege weaponry by casting long range spells)
-beetle (cheap, low attack, but sturdy unit for occupying magic nodes)
-halfling (becomes invisible, which gives bonus to attack [make sure stats info shows it])
-elf (shooter and healer)
-dwarf (digs terrain, similarly to imp)
-ifrit (flyer, fire shield damages attackers, can throw fireballs)
-minotaur (heavy hitter, but slow)
-hydra (attacks in all four directions, regenerates out of power node)
-dragon (explodes on death, damaging all nearby creatures)
-
-All undead units regenerate out of power node.
 
 Design:
 - Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
@@ -60,7 +44,9 @@ Design:
 - colored keys and colored doors and chests these keys open.
 - different types of terrain affecting movement speed.
 
+
 Creatures:
+- Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
 - Observer could be able to cast all spells, just like oculus.
 - Oculus could serve as detector of invisible units and maybe an invisible spy itself
 - A unit that uses enemy's attack strength intstead of its own.
@@ -73,20 +59,20 @@ Creatures:
 Spells:
 - Pentagram: creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
 - Generators: creates a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
-- Guardian: summons a tower at empty space near caster. The tower can attack nearby enemies
+- Guardian: summons a turret at empty space near caster. The turret can attack nearby enemies
 - Reveal Spells: remove fog of war at places where spells are located.
-- Panacea: heals all friendly unit by 4 point of damage.
-- Haste: caster units can move one additional cell per turn.
-- Slow: enemy units move one cell slower.
+- Panacea: heals all friendly unit by 4 point of damage and removes negative effects.
+- Haste: target unit moves two times faster.
+- Slow: target unit moves at half of its speed.
 - Shell: caster units are immune to next attack.
 - Bloodlust: caster units now do +1 damage
-- Invisibility: caster units become invisible.
+- Invisibility: target unit becomes invisible, gaining bonus to attack [make sure stats info show it].
 - Dispel: removes all magic effects from target creature, including beneficial.
 - Turn into Undead: target loses ability to regenerate, yet gains immunity from non-echanted weapons. All undeads have enchanted weapons.
 - Enchant: target gains ability to harm undead.
 - Paralyze/Fear/Time-Stop: enemy units lose next turn.
-- Firewall/Firetrail: make target unit leave fire trail behind him
-- Water trail: make target unit leave water trail behind him
+- Fire trail: make target unit leave fire trail behind him
+- Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
 - Chaos: shuffling (non-leader?) units inside of some range
 - Gooey Blob: slowly covers entire map in agressive blob, unless fought
@@ -118,6 +104,38 @@ Spells:
 - Armageddon: reduces all creatures down to 1 health.
 - Open Node: tears the fabric of reality to open new magic node, which should be placed 4 hexes away from an existing node
 - Close Node: closes existing magic node
+
+Summonable Creatures:
+Oculus: flyer, scout, clears invisibility from enemy units in sight.
+Observer: slow flyer, used to cast spells far away from
+          wizard and draw portal exit nodes, also acts as
+          siege weaponry by casting long range spells
+Blob: slow, can clone itself after some time for a little mana.
+Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
+Goblin: weakest shooter.
+Elf: shooter.
+Dwarf: defends, if dwarf haven't attacked this turn, all incoming damage is reduced to 1
+Orc: has enough health to withstand a single lightning bolt.
+Spider: poisons.
+Lizard: fast, steed, immune to magic, climbs high terrain.
+Skeleton: undead.
+Knight: can heal himself or other unit.
+Wraith: undead, flyer, becomes invisible.
+Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
+Griffin: flyer, steed, counter attacks on melee attack.
+Minotaur: can stun-attack enemy for a single turn.
+Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. Vampire: undead, shooter, turns into bat, heals on attack.
+Cyclops: heavy hitter
+Hydra: attacks in all four directions, regenerates everywhere.
+Golem: slow, stoneskin: any incoming non-magic damage is reduced to 1.
+Gargoyle: flyer, immune to magic, attacks with magic weapon.
+Dragon: flyer, explodes on death, damaging all nearby creatures.
+
+
+Neutral Creatures:
+Beetle:
+Halfling:
+Farmer:
 
 
 Graphics:

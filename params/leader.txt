@@ -5,13 +5,13 @@ active: 1
 draw_order: 4
 height: 2
 tier: 5
-health: 16 // hit points - number of hits, before this unit is dead
+health: 15 // hit points - number of hits, before this unit is dead
 range: 3
-combat: 1 // chance to hit
-steps: 2
-armor: 0 // chance to evade a hit
+combat: 2
+armor: 0
 cooldown: 24
-sight: 3
+steps: 5
+sight: 7
 speed: 28
 pickable: 1
 passable: 0
@@ -34,5 +34,31 @@ spells:
        cast_telekinesis cast_flight cast_teleport cast_charm
        cast_haste cast_slow cast_paralyze
        spell_of_mastery)
+
+summons:
+      summon_oculus,
+      summon_observer,
+      summon_blob,
+      summon_imp,
+      summon_ratman,
+      summon_goblin,
+      summon_orc,
+      summon_elf,
+      summon_dwarf,
+      summon_spider,
+      summon_lizard,
+      summon_knight,
+      summon_skeleton,
+      summon_ifrit,
+      summon_griffin,
+      summon_minotaur,
+      summon_wraith,
+      summon_devil,
+      summon_vampire,
+      summon_cyclops,
+      summon_hydra,
+      summon_golem,
+      summon_gargoyle,
+      summon_dragon
 
 rooms: ()

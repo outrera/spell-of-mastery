@@ -3,5 +3,4 @@ icon: unit_golem
 lore: misc.tier4_lcost
 cost: misc.tier4_scost
 cool: misc.tier4_cool
-needs: (summon_griffin)
 after: pentagram,impact{teleport},spawn{unit_golem}

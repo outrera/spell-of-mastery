@@ -3,5 +3,4 @@ icon: unit_dwarf
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
-needs: ((summon_halfling summon_beetle))
 after: pentagram,impact{teleport},spawn{unit_dwarf}

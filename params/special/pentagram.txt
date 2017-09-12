@@ -8,12 +8,4 @@ sight: 1
 ai: pentagram
 inborn: (enemy_removes)
 
-acts: summon_imp, summon_blob, summon_oculus, summon_bat,
-      summon_halfling, summon_elf, summon_dwarf, summon_ifrit,
-             summon_devil, summon_hydra,
-      summon_ratman, summon_goblin, summon_orc, summon_minotaur,
-             summon_spider, summon_cyclops,
-      summon_skeleton, summon_wraith, summon_gargoyle,
-             summon_vampire, summon_observer,
-      //summon_lizard, summon_griffin, summon_golem,
-      summon_dragon
+acts: ()

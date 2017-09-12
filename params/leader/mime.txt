@@ -3,11 +3,3 @@ icon: unit_mime
 hit: effect{blood}
 death: sound{mage_die}
 moves: sound{step}
-summons: 
-      summon_blob, summon_oculus,
-      summon_halfling, summon_beetle,
-      summon_elf, summon_dwarf,
-      summon_ifrit, summon_minotaur,
-      summon_hydra,
-      summon_dragon
-

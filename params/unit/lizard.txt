@@ -1,8 +1,8 @@
 sprite: unit_lizard
 tier: 2
-health: 4
-combat: 3
-steps: 4
+health: 9
+combat: 2
+steps: 8
 armor: 0
 speed: 18
 inborn: (organic)

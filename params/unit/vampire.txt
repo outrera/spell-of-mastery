@@ -4,7 +4,7 @@ health: 8
 combat: 4
 armor: 0
 range: 2
-inborn: (resist_magic)
+inborn: ()
 //attack: sound{lifedrain}
 impact: harm{lifedrain.user},sound{lifedrain}
 impact_hit: impact{lifedrain}
