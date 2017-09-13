@@ -3,8 +3,8 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 - Instead of harm{magic.1}, use magic_harm{1}
+- Break unit actions and leader spells into separate tabs.
 - Unit engagement mechanics, so enemies would block future movement.
-- Introduce tabs for different spell types.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
 - refactor some uses of add_effect into add_param
@@ -16,9 +16,12 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - traps
 - Bluffing: summoning illusionary version of a creature, that can be banished with disbelieve.
-- Dynamic balance: casting a spell of specific type (i.e. order spell) lowers cost of casting future spells of that type and increases cost of casting spells of opposite type (i.e. chaos spells).
+- Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa.
 
 Design:
+- A way to cast spell like, shell or heal, on all units for additional mana. Have a separate tab for that.
+- Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
+- Pickupable treasures, giving lore.
 - Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
 - Throwing items.
 - AI should cast spell of mastery, when his lossage gets too high
@@ -29,7 +32,7 @@ Design:
 - non-leader units could be able to hide inside bushes
 - AI autolocks doors when enemies are nearby and open them, to allow its units to pass
 - Destructible trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
-- Day-night cycle, making some creatures stronger, and other weaker.
+- Day-night cycle, with undead creatures becoming stronger at night.
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
@@ -37,79 +40,76 @@ Design:
   Mount can't attack, while being rided and all actions are the actions of the rider. Rider can unmount into any of the four directions. All incoming damage goes to the mount.
 - second (rare) resource like souls or gems, required to summon powerful creatures.
   Maybe only wizard can collect it.
-- Pickupable treasures, giving lore.
 - Some spells may require special objects. Destroying such object will deprive the wizard of the spells provided by it. Some objects can provide constant abilities or show whole map (i.e. palantir).
 - potion brewing, using cauldron and ingredients, collected from map.
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
 - different types of terrain affecting movement speed.
 
-
 Creatures:
 - Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
-- Observer could be able to cast all spells, just like oculus.
-- Oculus could serve as detector of invisible units and maybe an invisible spy itself
 - A unit that uses enemy's attack strength intstead of its own.
 - A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Elemental weakness. I.e. slimes being weak to fire
 - Some creatures acting as healers. Yet healers should only be able to heal directly adjanced units.
 - Dwarf construcing doors.
 
-
 Spells:
-- Pentagram: creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
-- Generators: creates a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
-- Guardian: summons a turret at empty space near caster. The turret can attack nearby enemies
+- Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
+- Guardian (neutral): summons a turret, that can attack nearby enemies.
+- Dispel (neutral): removes enchantments from target creature, excluding echnated weapons and undead.
+- Telekinesis (neutral): grabs treasure, mana, or operates an object from a distance.
+- Knowledge (neutral): converts mana into lore.
+- Heal (law): target regains 9 health and removes poison.
+- Lightning (chaos): target loses 9 health. Target must be outdoor.
+- Haste (law): target moves two times faster for the next turn.
+- Fear (chaos): target loses ability to attack for the next turn.
+- Shell (law): target gains immunity to the next physical attack.
+- Absorb (chaos): target gains immunity to the next magical attack.
+- Bless (law): target gains ability to harm undead.
+- Curse (chaos): target becomes undead, gaining immunity from non-echanted weapons and poison. All undeads have enchanted weapons. Undeads can't be healed with spells.
+- Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
+- Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
+- Flight (law): target gains ability to fly.
+- Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, proportional to creature's health.
+- Subvert (law): gain control over the target creature for one turn.
+- Armageddon (chaos): all units sustain 9 points of damage.
+- Teleport (neutral): teleports caster to any seen location.
+- The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires learning all other spells to be cast.
+
+
+Spell Ideas:
 - Reveal Spells: remove fog of war at places where spells are located.
-- Panacea: heals all friendly unit by 4 point of damage and removes negative effects.
-- Haste: target unit moves two times faster.
-- Slow: target unit moves at half of its speed.
-- Shell: caster units are immune to next attack.
-- Bloodlust: caster units now do +1 damage
-- Invisibility: target unit becomes invisible, gaining bonus to attack [make sure stats info show it].
-- Dispel: removes all magic effects from target creature, including beneficial.
-- Turn into Undead: target loses ability to regenerate, yet gains immunity from non-echanted weapons. All undeads have enchanted weapons.
-- Enchant: target gains ability to harm undead.
-- Paralyze/Fear/Time-Stop: enemy units lose next turn.
+- Magic Block: the next enemy spell fails.
+- Slow (chaos): target unit moves at half of its speed.
+- Bloodlust (chaos): target unit gains +1 damage
+- Protection (law): target unit gains +1 defense
 - Fire trail: make target unit leave fire trail behind him
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
 - Chaos: shuffling (non-leader?) units inside of some range
 - Gooey Blob: slowly covers entire map in agressive blob, unless fought
-- Detonate: controlled creature explodes, dealing damage to all neighbors, proportional to creatures health.
-- Magic Block: a spell blocking all sides from using mana-consuming actions for a short time.
-- Counter Magic: the next enemy spell fails
 - Drought: temporary removes all water, replacing it with special empty aux tile
-- Teleport: move unit to any seen location.
 - Harm Mirror: reflects damage from the next attack back to attacker.
 - Earthquake: damage non-flyers.
 - Toxic Gas: damages indoor units.
 - Water Walk: allows unit to walk over water.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
-- Astral Attack: caster spends N mana to make target wizard lose N*2.
+- Astral Attack: caster spends N mana to force target wizard lose N*2.
 - Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
 - Spells that do both good/bad to you and your enemy.
-- Regeneration: grant regeneration ability to all caster's units, when no enemies are attacking them.
+- Regeneration: target starts regenerating even outside of power node.
 - Visions: see through the fog of war
-- Fly: allows target to fly
 - Descend/Ascend: move unit between layers.
 - Almagest: switches day to night and night to day
-- Subvert: gain control over the target.
 - Spy: wizard learns the next unknown spell, casted by any wizard.
-- Invisibility: caster units become invisible
 - Clone Self: creates clone of self, which will continue leading, if creator dies
 - Morph: turn caster into a monster of his choice, until his next move
-- The Spell of Mastery: banishes all competing wizards from this plane of existence
-  Requires having 2-more magic nodes than any of competing wizards and maintaining this difference for the next 10 moves
-- Armageddon: reduces all creatures down to 1 health.
 - Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
 - Close Node: closes existing magic node
 
 Summonable Creatures:
 Oculus: flyer, scout, clears invisibility from enemy units in sight.
-Observer: slow flyer, used to cast spells far away from
-          wizard and draw portal exit nodes, also acts as
-          siege weaponry by casting long range spells
 Blob: slow, can clone itself after some time for a little mana.
 Imp: digs terrain, places traps.
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
@@ -117,21 +117,22 @@ Goblin: weakest shooter.
 Elf: shooter.
 Dwarf: defends, if dwarf haven't attacked this turn, all incoming damage is reduced to 1
 Orc: has enough health to withstand a single lightning bolt.
-Spider: poisons.
-Lizard: fast, steed, immune to magic, climbs high terrain.
+Spider: poisons; can set web trap, entering which opponent loses all movement points and gets paralyzed for the next turn.
+Lizard: fast, steed, immune to magic, climbs high terrain. Good for stalking wizards, who can't harm it.
 Skeleton: undead.
 Knight: can heal himself or other unit.
 Wraith: undead, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: can stun-attack enemy for a single turn.
-Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. Vampire: undead, shooter, turns into bat, heals on attack.
+Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. Otherwise its attack strength is equal to its enemy.
+Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
+Observer: slow flyer, draws pentagrams, cast spells, like fireball, teleport, curse and bless.
 Cyclops: heavy hitter
 Hydra: attacks in all four directions, regenerates everywhere.
 Golem: slow, stoneskin: any incoming non-magic damage is reduced to 1.
 Gargoyle: flyer, immune to magic, attacks with magic weapon.
 Dragon: flyer, explodes on death, damaging all nearby creatures.
-
 
 Neutral Creatures:
 Beetle:
