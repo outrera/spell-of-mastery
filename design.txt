@@ -3,6 +3,7 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 - Instead of harm{magic.1}, use magic_harm{1}
+- instead of 9-health base, used 90 health to have some space of balancing.
 - Break unit actions and leader spells into separate tabs.
 - Unit engagement mechanics, so enemies would block future movement.
 - Include recall to pentagram into AI's pathfinding.
@@ -19,7 +20,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa.
 
 Design:
-- A way to cast spell like, shell or heal, on all units for additional mana. Have a separate tab for that.
+- A way to cast spell like, shell or heal, on all units for additional mana. H+ave a separate tab for that.
 - Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
 - Pickupable treasures, giving lore.
 - Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
@@ -42,9 +43,11 @@ Design:
   Maybe only wizard can collect it.
 - Some spells may require special objects. Destroying such object will deprive the wizard of the spells provided by it. Some objects can provide constant abilities or show whole map (i.e. palantir).
 - potion brewing, using cauldron and ingredients, collected from map.
+- A quest giving place, where wizard can get some trivial quest, like killing specific monster or finding some artifact.
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
 - different types of terrain affecting movement speed.
+
 
 Creatures:
 - Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
@@ -52,13 +55,52 @@ Creatures:
 - A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Elemental weakness. I.e. slimes being weak to fire
 - Some creatures acting as healers. Yet healers should only be able to heal directly adjanced units.
-- Dwarf construcing doors.
+
+Spell Ideas:
+- Reveal Spells: remove fog of war at places where spells are located.
+- Magic Block: the next enemy spell fails.
+- Slow (chaos): target unit moves at half of its speed.
+- Bloodlust (chaos): target unit gains +1 damage
+- Protection (law): target unit gains +1 defense
+- Fire trail: make target unit leave fire trail behind him
+- Water trail: make target unit leave water trail behind him; it also slows down the unit.
+- Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
+- Chaos: shuffling (non-leader?) units inside of some range. Any implementation appears to be too random for my game design direction.
+- Area of effect spell.
+- Gooey Blob: slowly covers entire map in agressive blob, unless fought
+- Drought: temporary removes all water, replacing it with special empty aux tile
+- Harm Mirror: reflects damage from the next attack back to attacker.
+- Earthquake: damage non-flyers.
+- Toxic Gas: damages indoor units.
+- Water Walk: allows unit to walk over water.
+- Terraforming spells: raise/lower elevation, create/remove water pool, etc...
+- Free Water: freezes water, allowing units to pass over it.
+- Astral Attack: caster spends N mana to force target wizard lose N*2.
+- Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
+- Spells that do both good/bad to you and your enemy.
+- Regeneration: target starts regenerating even outside of power node.
+- Visions: see through the fog of war
+- Descend/Ascend: move unit between layers.
+- Homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
+- Almagest: switches day to night and night to day
+- Spy: wizard learns the next unknown spell, casted by any wizard.
+- Clone Self: creates clone of self, which will continue leading, if creator dies
+- Morph: turn caster into a monster of his choice, until his next move
+- Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
+- Close Node: closes existing magic node
+- Zombie Master: non undead fallen creatures get resurrected as undead.
+- Spell that affect all unit standing on a terrain of specific kind.
+- Raise Dead: resurrect recently killed unit as undead.
+- Guardian Angel: killed unit gets resurrected at pentagram.
+- Parasitic Bound: damage to one creature gets redirected to another.
+- Wind: nearby target gets displaced into one direction by N cells or until the closest height=2 block.
+- Sacrifice: creature dies and its health is transfered to heal another.
 
 Spells:
 - Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
 - Guardian (neutral): summons a turret, that can attack nearby enemies.
-- Dispel (neutral): removes enchantments from target creature, excluding echnated weapons and undead.
-- Telekinesis (neutral): grabs treasure, mana, or operates an object from a distance.
+- Dispel (neutral): removes enchantments from target creature, excluding echnated weapons and undead curse.
+- Telekinesis (neutral): grabs key, treasure, mana, frees resueable creatures, visits quest places, or operates an object from a distance.
 - Knowledge (neutral): converts mana into lore.
 - Heal (law): target regains 9 health and removes poison.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
@@ -66,7 +108,7 @@ Spells:
 - Fear (chaos): target loses ability to attack for the next turn.
 - Shell (law): target gains immunity to the next physical attack.
 - Absorb (chaos): target gains immunity to the next magical attack.
-- Bless (law): target gains ability to harm undead.
+- Bless (law): target gains ability to harm undead and break magic doors.
 - Curse (chaos): target becomes undead, gaining immunity from non-echanted weapons and poison. All undeads have enchanted weapons. Undeads can't be healed with spells.
 - Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
@@ -78,40 +120,10 @@ Spells:
 - The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires learning all other spells to be cast.
 
 
-Spell Ideas:
-- Reveal Spells: remove fog of war at places where spells are located.
-- Magic Block: the next enemy spell fails.
-- Slow (chaos): target unit moves at half of its speed.
-- Bloodlust (chaos): target unit gains +1 damage
-- Protection (law): target unit gains +1 defense
-- Fire trail: make target unit leave fire trail behind him
-- Water trail: make target unit leave water trail behind him; it also slows down the unit.
-- Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
-- Chaos: shuffling (non-leader?) units inside of some range
-- Gooey Blob: slowly covers entire map in agressive blob, unless fought
-- Drought: temporary removes all water, replacing it with special empty aux tile
-- Harm Mirror: reflects damage from the next attack back to attacker.
-- Earthquake: damage non-flyers.
-- Toxic Gas: damages indoor units.
-- Water Walk: allows unit to walk over water.
-- Terraforming spells: raise/lower elevation, create/remove water pool, etc...
-- Astral Attack: caster spends N mana to force target wizard lose N*2.
-- Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
-- Spells that do both good/bad to you and your enemy.
-- Regeneration: target starts regenerating even outside of power node.
-- Visions: see through the fog of war
-- Descend/Ascend: move unit between layers.
-- Almagest: switches day to night and night to day
-- Spy: wizard learns the next unknown spell, casted by any wizard.
-- Clone Self: creates clone of self, which will continue leading, if creator dies
-- Morph: turn caster into a monster of his choice, until his next move
-- Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
-- Close Node: closes existing magic node
-
 Summonable Creatures:
 Oculus: flyer, scout, clears invisibility from enemy units in sight.
 Blob: slow, can clone itself after some time for a little mana.
-Imp: digs terrain, places traps.
+Imp: digs terrain, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: weakest shooter.
 Elf: shooter.
@@ -120,25 +132,31 @@ Orc: has enough health to withstand a single lightning bolt.
 Spider: poisons; can set web trap, entering which opponent loses all movement points and gets paralyzed for the next turn.
 Lizard: fast, steed, immune to magic, climbs high terrain. Good for stalking wizards, who can't harm it.
 Skeleton: undead.
-Knight: can heal himself or other unit.
+Paladin: can heal himself or other unit.
 Wraith: undead, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: can stun-attack enemy for a single turn.
-Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. Otherwise its attack strength is equal to its enemy.
-Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
-Observer: slow flyer, draws pentagrams, cast spells, like fireball, teleport, curse and bless.
+Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
+Observer: slow flyer, draws pentagrams, cast spells, like fireball, teleport, curse and bless. Its attack strength is equal to its enemy.
 Cyclops: heavy hitter
-Hydra: attacks in all four directions, regenerates everywhere.
+Hydra: moves over water, attacks in all four directions, regenerates everywhere.
 Golem: slow, stoneskin: any incoming non-magic damage is reduced to 1.
 Gargoyle: flyer, immune to magic, attacks with magic weapon.
-Dragon: flyer, explodes on death, damaging all nearby creatures.
+Dragon: flyer, explodes on death (damaging all nearby creatures), can send nearby units flying into respective directions.
 
-Neutral Creatures:
+Unused Creatures:
 Beetle:
 Halfling:
 Farmer:
+Horse: fast, steed, can be captured on map
 
+Digging Mechanics:
+- only dirt is diggable.
+- digging height>>3 dirt wall creates height=2 tunnel, but only if that cell is near height=3 wall.
+- digging height=2 wall lowers it, but only if it isn't surrounded by height=3 walls.
+- floor can be digged to create height=3 mine schaft with ladder, allowing unit do descend and ascend, if enemy unit blocks path, ascending/descending would attack it.
+- digged out dirt could be restored.
 
 Graphics:
 - New player colors: player{blue},king{purple},warlock{black},witch{red},
@@ -182,7 +200,7 @@ Bugs:
 - fix sound issues, where sounds are affected by height
 - when new map gets saved, folder browser should update content
 - when height>>80, column tiles and units are not drawn
-- hydra damages and poisons allied units
+- hydra damages and poisons allied units++
 - invisibility doesnt hide poison, bood and regen effects
 - flying units can possibly crash pathfinder, when they are at very high tiles, being able to cross border. Insert a check against mad dimensions.
 - blizzard projectiles have no gravity
