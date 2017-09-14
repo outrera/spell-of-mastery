@@ -3,6 +3,7 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 - Instead of harm{magic.1}, use magic_harm{1}
+- Rename "Disband" to "Dismiss"
 - instead of 9-health base, used 90 health to have some space of balancing.
 - Break unit actions and leader spells into separate tabs.
 - Unit engagement mechanics, so enemies would block future movement.
@@ -22,7 +23,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 Design:
 - A way to cast spell like, shell or heal, on all units for additional mana. H+ave a separate tab for that.
 - Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
-- Pickupable treasures, giving lore.
+- Pickupable treasures, giving lore. I.e. wizard can buy books and access to knowledge.
 - Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
 - Throwing items.
 - AI should cast spell of mastery, when his lossage gets too high
@@ -33,7 +34,7 @@ Design:
 - non-leader units could be able to hide inside bushes
 - AI autolocks doors when enemies are nearby and open them, to allow its units to pass
 - Destructible trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
-- Day-night cycle, with undead creatures becoming stronger at night.
+- Day-night cycle, affecting creature sight. Non-undead creatures have 1/2 reduced vision during night. One turn would be equivalent to 1 hour. Total Eclipse spell, turning day into night for the next 16 turns.
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
@@ -41,23 +42,29 @@ Design:
   Mount can't attack, while being rided and all actions are the actions of the rider. Rider can unmount into any of the four directions. All incoming damage goes to the mount.
 - second (rare) resource like souls or gems, required to summon powerful creatures.
   Maybe only wizard can collect it.
-- Some spells may require special objects. Destroying such object will deprive the wizard of the spells provided by it. Some objects can provide constant abilities or show whole map (i.e. palantir).
 - potion brewing, using cauldron and ingredients, collected from map.
 - A quest giving place, where wizard can get some trivial quest, like killing specific monster or finding some artifact.
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
 - different types of terrain affecting movement speed.
-
+- Hidden doors, that only creatures with detect illusion could see.
+- Map places where creature are immune from magical damage.
+- Spending lore or building structures to improve wizard: increasing HP, lowering spell cost, boosting mana generation, cooldown, casting more spells per turn.
+- A magic that forces all apple trees to produce fruits.
+- A way to boost magic income, like building a node. I.e. by building a special mana-accumulating structure.
+- A cauldron would allow converting reagents into mana.
 
 Creatures:
+- A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
+- Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
 - Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
 - A unit that uses enemy's attack strength intstead of its own.
 - A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Elemental weakness. I.e. slimes being weak to fire
-- Some creatures acting as healers. Yet healers should only be able to heal directly adjanced units.
 
 Spell Ideas:
-- Reveal Spells: remove fog of war at places where spells are located.
+- Creates a simulacrum of wizard of creature to confuse the enemy. Simulacrum dies from a single hit.
+- Reveal Spells/Items: shows on minimap places where items are located.
 - Magic Block: the next enemy spell fails.
 - Slow (chaos): target unit moves at half of its speed.
 - Bloodlust (chaos): target unit gains +1 damage
@@ -70,7 +77,8 @@ Spell Ideas:
 - Gooey Blob: slowly covers entire map in agressive blob, unless fought
 - Drought: temporary removes all water, replacing it with special empty aux tile
 - Harm Mirror: reflects damage from the next attack back to attacker.
-- Earthquake: damage non-flyers.
+- Earthquake: damage all non-flyers.
+- Thunderstorm: damages all flyers.
 - Toxic Gas: damages indoor units.
 - Water Walk: allows unit to walk over water.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
@@ -88,19 +96,29 @@ Spell Ideas:
 - Morph: turn caster into a monster of his choice, until his next move
 - Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
 - Close Node: closes existing magic node
-- Zombie Master: non undead fallen creatures get resurrected as undead.
-- Spell that affect all unit standing on a terrain of specific kind.
+- Altar: non undead fallen creatures get resurrected as undeads here, as long as wizard stands near this structure.
+- Palantir: wizard creates a scrying ball, keeping a creature near ball allows player to see through the fog of war. Yet it doesn't explore the map and doesn't reveal invisible creatures.
+- Banish: target temporarily disappears and then returns to its caster's pentagram.
+- Spell that affect all units standing on a terrain of specific kind.
 - Raise Dead: resurrect recently killed unit as undead.
 - Guardian Angel: killed unit gets resurrected at pentagram.
-- Parasitic Bound: damage to one creature gets redirected to another.
+- Live Shield: damage to one creature gets redirected to another.
 - Wind: nearby target gets displaced into one direction by N cells or until the closest height=2 block.
 - Sacrifice: creature dies and its health is transfered to heal another.
+- Employing telekinesis spell to use items as improvised weapon, like i.e. throwing rocks at enemies.
+- Global enchantments like Zombie Mastery or See Everything could be represented by summoned/constructed map objects, that can easily be destroyed/disbanded, without introducing additional mechanics and complicating UI.
+
+
+Leader Abilities:
+- Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
+- Fireball (chaos): throws a cheap fireball.
+- Guardian (law): summons a turret, that can attack nearby enemies.
+- Teleport (neutral): teleports caster to any seen location.
+
 
 Spells:
-- Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
-- Guardian (neutral): summons a turret, that can attack nearby enemies.
 - Dispel (neutral): removes enchantments from target creature, excluding echnated weapons and undead curse.
-- Telekinesis (neutral): grabs key, treasure, mana, frees resueable creatures, visits quest places, or operates an object from a distance.
+- Telekinesis (neutral): grabs key, treasure, mana, frees rescueable creatures, visits quest places, or operates an object from a distance. Can't be used at chests.
 - Knowledge (neutral): converts mana into lore.
 - Heal (law): target regains 9 health and removes poison.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
@@ -114,16 +132,15 @@ Spells:
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, proportional to creature's health.
-- Subvert (law): gain control over the target creature for one turn.
+- Subvert (law): gain control over the target creature for one turn. Alternatively, wizard could be disallowed to do any actions while in control of subverted creature.
 - Armageddon (chaos): all units sustain 9 points of damage.
-- Teleport (neutral): teleports caster to any seen location.
 - The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires learning all other spells to be cast.
 
 
 Summonable Creatures:
 Oculus: flyer, scout, clears invisibility from enemy units in sight.
-Blob: slow, can clone itself after some time for a little mana.
-Imp: digs terrain, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
+Blob: slow, can spawn smaller blobs, that with time turn into normal blob.
+Imp: digs terrain, builds bridges, plants trees, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: weakest shooter.
 Elf: shooter.
@@ -153,7 +170,7 @@ Horse: fast, steed, can be captured on map
 
 Digging Mechanics:
 - only dirt is diggable.
-- digging height>>3 dirt wall creates height=2 tunnel, but only if that cell is near height=3 wall.
+- digging height>>3 dirt wall creates height=2 tunnel, but only if that cell is near height=3 wall. Obviously, one cannot dig under water.
 - digging height=2 wall lowers it, but only if it isn't surrounded by height=3 walls.
 - floor can be digged to create height=3 mine schaft with ladder, allowing unit do descend and ascend, if enemy unit blocks path, ascending/descending would attack it.
 - digged out dirt could be restored.
