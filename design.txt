@@ -68,7 +68,7 @@ Creatures:
 Spell Ideas:
 - Creates a simulacrum of wizard of creature to confuse the enemy. Simulacrum dies from a single hit.
 - Reveal Spells/Items: shows on minimap places where items are located.
-- Magic Block: the next enemy spell fails.
+- Magic Block: enemy loses ability to cast spells for several turns.
 - Slow (chaos): target unit moves at half of its speed.
 - Bloodlust (chaos): target unit gains +1 damage
 - Protection (law): target unit gains +1 defense
@@ -84,16 +84,23 @@ Spell Ideas:
 - Thunderstorm: damages all flyers.
 - Toxic Gas: damages indoor units.
 - Water Walk: allows unit to walk over water.
+- Lock Abilities: target is unable to use its special abilities.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
 - Free Water: freezes water, allowing units to pass over it.
 - Astral Attack: caster spends N mana to force target wizard lose N*2.
 - Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
+- Time Travel 2: return target to the cell which it occupied at the start of its previous turn.
+- Halt: target can't move, but can attack for the next turn.
+- Berserk: increases target's attack, but decreases its health.
+- Pacify: decreases target's attack, but increases its defense.
 - Scrying: once cast on enemy creature, player can track it and see area around it.
 - Detect Undead: notifies when enemy has undeads in the army.
+- Mirror Image: creates a copy of target unit, that deals the same damage, but dies in a single hit.
 - Spells that do both good/bad to you and your enemy.
 - Regeneration: target starts regenerating even outside of power node.
+- Vulnerability: decreases target's armor to 0
 - Visions: see through the fog of war
-- Mist: engulfs cell in fog, so only units near it can see what is inside. No magic can target fog cells.
+- Mist: engulfs cell in fog, so only units near it can see what is inside. No magic can target fog cells. Fog cells also slow movement.
 - Slay: kills a creature if its health is below half from max.
 - Descend/Ascend: move unit between layers.
 - Homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
