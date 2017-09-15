@@ -17,11 +17,9 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - store map events in a separate file
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - traps
-- Bluffing: summoning illusionary version of a creature, that can be banished with disbelieve.
-- Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa.
 
 Design:
-- A way to cast spell like, shell or heal, on all units for additional mana. H+ave a separate tab for that.
+- A way to cast spell, like shell or heal, on all units for additional mana. Have a separate tab for that.
 - Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
 - Pickupable treasures, giving lore. I.e. wizard can buy books and access to knowledge.
 - Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
@@ -34,7 +32,7 @@ Design:
 - non-leader units could be able to hide inside bushes
 - AI autolocks doors when enemies are nearby and open them, to allow its units to pass
 - Destructible trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
-- Day-night cycle, affecting creature sight. Non-undead creatures have 1/2 reduced vision during night. One turn would be equivalent to 1 hour. Total Eclipse spell, turning day into night for the next 16 turns.
+- Day-night cycle, affecting creature sight. Non-undead creatures have 1/2 reduced vision during night. One turn would be equivalent to 1 hour. Total Eclipse spell, turning day into night for the next 16 turns. Light spell mitigates effect of darkness. Same way, inside dungeons sight would be reduced. Day-time lowers cost of law spells and increases cost of chaos spells, while night lowers chaos spells' cost, twilight has no bonus.
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
@@ -47,15 +45,20 @@ Design:
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
 - different types of terrain affecting movement speed.
+- Winter tileset, where creatures without protection from cold, get damage each turn. Add a spell like warmth or endure cold to counter that.
 - Hidden doors, that only creatures with detect illusion could see.
 - Map places where creature are immune from magical damage.
 - Spending lore or building structures to improve wizard: increasing HP, lowering spell cost, boosting mana generation, cooldown, casting more spells per turn.
 - A magic that forces all apple trees to produce fruits.
 - A way to boost magic income, like building a node. I.e. by building a special mana-accumulating structure.
 - A cauldron would allow converting reagents into mana.
+- Bluffing: summoning illusionary version of a creature, that can be banished with disbelieve. Have separate tab for that.
+- Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa. A neutral spell to restore balance.
 
 Creatures:
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
+- A creature that is permanently invisible, unless under the sight of oculus.
+- Creature alignments: either chaotic, lawful or neutral
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
 - Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
 - A unit that uses enemy's attack strength intstead of its own.
@@ -85,15 +88,20 @@ Spell Ideas:
 - Free Water: freezes water, allowing units to pass over it.
 - Astral Attack: caster spends N mana to force target wizard lose N*2.
 - Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
+- Scrying: once cast on enemy creature, player can track it and see area around it.
+- Detect Undead: notifies when enemy has undeads in the army.
 - Spells that do both good/bad to you and your enemy.
 - Regeneration: target starts regenerating even outside of power node.
 - Visions: see through the fog of war
+- Mist: engulfs cell in fog, so only units near it can see what is inside. No magic can target fog cells.
+- Slay: kills a creature if its health is below half from max.
 - Descend/Ascend: move unit between layers.
 - Homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
 - Almagest: switches day to night and night to day
 - Spy: wizard learns the next unknown spell, casted by any wizard.
 - Clone Self: creates clone of self, which will continue leading, if creator dies
-- Morph: turn caster into a monster of his choice, until his next move
+- Morph: turn caster into a monster, that is present on map and seen, until player cancels effect.
+- Disguise: makes creature look like target creature, until it acts (simple movement doesn't break the illusion).
 - Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
 - Close Node: closes existing magic node
 - Altar: non undead fallen creatures get resurrected as undeads here, as long as wizard stands near this structure.
@@ -102,7 +110,7 @@ Spell Ideas:
 - Spell that affect all units standing on a terrain of specific kind.
 - Raise Dead: resurrect recently killed unit as undead.
 - Guardian Angel: killed unit gets resurrected at pentagram.
-- Live Shield: damage to one creature gets redirected to another.
+- Live Shield: portion of damage to one creature gets redirected to another.
 - Wind: nearby target gets displaced into one direction by N cells or until the closest height=2 block.
 - Sacrifice: creature dies and its health is transfered to heal another.
 - Employing telekinesis spell to use items as improvised weapon, like i.e. throwing rocks at enemies.
