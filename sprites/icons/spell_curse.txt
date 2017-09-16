@@ -1,3 +1,0 @@
-author: `Brent Anderson (backyardninja@dumbmanex.com)`
-license: `CC-BY`
-origin: `http://www.dumbmanex.com/bynd_freestuff.html`

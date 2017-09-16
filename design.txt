@@ -3,10 +3,9 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 - Instead of harm{magic.1}, use magic_harm{1}
-- Rename "Disband" to "Dismiss"
 - instead of 9-health base, used 90 health to have some space of balancing.
-- Break unit actions and leader spells into separate tabs.
 - Unit engagement mechanics, so enemies would block future movement.
+- Make sure all spells are implemented and work properly. Especially Raise Dead with its undead status.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
 - refactor some uses of add_effect into add_param
