@@ -1,0 +1,11 @@
+icon: spell_subvert
+hotkey: m
+lore: misc.tier2_lcost
+cost: misc.tier2_scost
+cool: misc.tier4_cool
+range: 9000
+affects: (non_leader),unit
+before: sound{subvert},impact{hypnotize},charm{owner}//,recall{self}
+after: ()
+hint: harm
+tab: spell

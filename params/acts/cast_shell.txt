@@ -2,7 +2,6 @@ icon: spell_shell
 lore: misc.tier1_lcost
 cost: misc.tier2_scost
 cool: 10
-//needs: (cast_heal)
 affects: unit
 before: owner_units,add{shell},impact{shell},sound{shell}
 hint: boost

@@ -2,7 +2,6 @@ icon: spell_flight
 lore: misc.tier2_lcost
 cost: misc.tier1_scost
 cool: misc.tier3_cool
-needs: (cast_haste)
 range: 9000
 affects: unit
 before: owner_units,add{flyer},impact{heal},sound{flight}

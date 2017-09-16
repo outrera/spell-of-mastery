@@ -304,7 +304,7 @@ create_icons_panel_tabs Me =
   | UnitActIconsLay.show <= ShowActIcons
   | GroundActIconsLay.show <= ShowActIcons
   | MenuTab.show <= PanelTab><menu
-| Icons = map Name [unit summon bag brush menu]:
+| Icons = map Name [unit spell summon bag brush menu]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
   | when Name><menu: Icon.picked<=1
   | Icon.picked_overlay <= PickedIconOverlay
@@ -450,21 +450,19 @@ ui.on_unit_pick Units =
 | if PanelTab >< unit then
      | less Units.size: leave
      | Unit <= Units.0
-     | As <= Unit.acts
-     | As <= As.keep{X=>not X.tab or X.tab><spell}
-  else
-     | if PanelTab >< summon then
-         | Unit <= if Units.size then Units.0.owner.leader
-                   else $world.human.leader
-         | less Unit: leave
-         | As <= Unit.acts.keep{?tab><summon}
-       else if PanelTab >< bag then
-         | when Units.size<>1: leave
-         | Unit <= Units.0
-         | Acts = $main.params.acts
-         | As <= map K,A Unit.items: [A Acts."drop_[K]"]
-         | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
-       else leave
+     | As <= Unit.acts.skip{?tab}
+  else if PanelTab >< summon or PanelTab >< spell then
+     | Unit <= if Units.size then Units.0.owner.leader
+               else $world.human.leader
+     | less Unit: leave
+     | As <= Unit.acts.keep{?tab><PanelTab}
+  else if PanelTab >< bag then
+     | when Units.size<>1: leave
+     | Unit <= Units.0
+     | Acts = $main.params.acts
+     | As <= map K,A Unit.items: [A Acts."drop_[K]"]
+     | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
+  else leave
 | ui_update_panel_buttons Me Unit As GAs
 
 create_act_icons Me =

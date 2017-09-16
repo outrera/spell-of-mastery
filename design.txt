@@ -70,8 +70,6 @@ Spell Ideas:
 - Reveal Spells/Items: shows on minimap places where items are located.
 - Magic Block: enemy loses ability to cast spells for several turns.
 - Slow (chaos): target unit moves at half of its speed.
-- Bloodlust (chaos): target unit gains +1 damage
-- Protection (law): target unit gains +1 defense
 - Fire trail: make target unit leave fire trail behind him
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
@@ -91,7 +89,10 @@ Spell Ideas:
 - Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
 - Time Travel 2: return target to the cell which it occupied at the start of its previous turn.
 - Halt: target can't move, but can attack for the next turn.
-- Berserk: increases target's attack, but decreases its health.
+- Bind: target's movement and cations get restricted to some area.
+- Berserk (chaos): increases target's attack, but decreases its health.
+- Bloodlust (chaos): target unit gains +1 damage
+- Protection (law): target unit gains +1 defense
 - Pacify: decreases target's attack, but increases its defense.
 - Scrying: once cast on enemy creature, player can track it and see area around it.
 - Detect Undead: notifies when enemy has undeads in the army.
@@ -109,6 +110,7 @@ Spell Ideas:
 - Clone Self: creates clone of self, which will continue leading, if creator dies
 - Morph: turn caster into a monster, that is present on map and seen, until player cancels effect.
 - Disguise: makes creature look like target creature, until it acts (simple movement doesn't break the illusion).
+- Exorcise: a costy spell that can be used to banish any undead. Should cost two times more than a vampire.
 - Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
 - Close Node: closes existing magic node
 - Altar: non undead fallen creatures get resurrected as undeads here, as long as wizard stands near this structure.
@@ -130,19 +132,22 @@ Leader Abilities:
 - Guardian (law): summons a turret, that can attack nearby enemies.
 - Teleport (neutral): teleports caster to any seen location.
 
+Status Effects:
+- Undead: unit is immune to non-echanted weapons and poison. Undeads can harm other undeads. Undeads don't regenerate normally and can only be healed with spells.
+- Poison: unit can't regenerate and loses health with time, until health drops to 1 or heal is cast.
 
 Spells:
-- Dispel (neutral): removes enchantments from target creature, excluding echnated weapons and undead curse.
-- Telekinesis (neutral): grabs key, treasure, mana, frees rescueable creatures, visits quest places, or operates an object from a distance. Can't be used at chests.
 - Knowledge (neutral): converts mana into lore.
-- Heal (law): target regains 9 health and removes poison.
+- Dispel (neutral): removes enchantments from target creature, excluding poison and undead curse.
+- Telekinesis (neutral): grabs key, treasure, mana, frees rescueable creatures, visits quest places, or operates an object from a distance. Can't be used at chests.
+- Heal (law): target regains 9 health and heals from poison.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
-- Haste (law): target moves two times faster for the next turn.
+- Haste (law): target gains 2 additional movement points.
 - Fear (chaos): target loses ability to attack for the next turn.
 - Shell (law): target gains immunity to the next physical attack.
-- Absorb (chaos): target gains immunity to the next magical attack.
-- Bless (law): target gains ability to harm undead and break magic doors.
-- Curse (chaos): target becomes undead, gaining immunity from non-echanted weapons and poison. All undeads have enchanted weapons. Undeads can't be healed with spells.
+- Resist (chaos): target gains immunity to the next magical attack.
+- Enchant (law): target gains ability to harm undead and break magic doors.
+- Raise Dead (chaos): target is resurrected as undead with half of its original health.
 - Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.
@@ -170,7 +175,7 @@ Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: can stun-attack enemy for a single turn.
 Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
-Observer: slow flyer, draws pentagrams, cast spells, like fireball, teleport, curse and bless. Its attack strength is equal to its enemy.
+Observer: slow flyer, draws pentagrams, cast spells, like slow, fireball, teleport. Its attack strength is equal to its enemy.
 Cyclops: heavy hitter
 Hydra: moves over water, attacks in all four directions, regenerates everywhere.
 Golem: slow, stoneskin: any incoming non-magic damage is reduced to 1.

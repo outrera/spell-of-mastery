@@ -2,7 +2,6 @@ icon: spell_armageddon
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier4_cool
-needs: (cast_banish)
 affects: unit
 before: impact{pentagram_appearance},sound{pentagram}
 after: all_alive,reduce_health_to{2},impact{fire_ring},sound{armageddon}

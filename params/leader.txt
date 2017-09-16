@@ -25,15 +25,28 @@ impact: missile{effect_bolt},harm{magic.1},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}
-acts: (pentagram)
+acts: (pentagram cast_fireball cast_teleport)
 spells:
-      (cast_knowledge
-       cast_fireball cast_firewall cast_lightning cast_blizzard
-       cast_implosion cast_banish cast_armageddon
-       cast_heal cast_shell cast_resist
-       cast_telekinesis cast_flight cast_teleport cast_charm
-       cast_haste cast_slow cast_paralyze
-       spell_of_mastery)
+      (
+      cast_knowledge
+      cast_telekinesis
+      cast_dispel
+      cast_heal
+      cast_lightning
+      cast_haste
+      cast_fear
+      cast_shell
+      cast_resist
+      cast_bless
+      cast_curse
+      cast_invisibility
+      cast_firewall
+      cast_flight
+      cast_detonate
+      cast_armageddon
+      cast_subvert
+      spell_of_mastery
+      )
 
 summons:
       summon_oculus,

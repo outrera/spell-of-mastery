@@ -92,7 +92,7 @@ main.load_classes =
     | when V.speed: As <= [recall @As]
     | when V.combat and V.combat><impact: V.combat<=0
     | As <= [@As @V.acts]
-    | when V.leader<>1 and V.ai<>pentagram: As <= [@As disband]
+    | when V.leader<>1 and V.ai<>pentagram: As <= [@As dismiss]
     | V.acts <= As
 | for K,Act $params.acts.list:
   | less Act.needs.end:

@@ -1,4 +1,3 @@
-icon: nil
 priority: 50
 range: 1
 speed: 4

@@ -1,3 +1,0 @@
-author: `J. W. Bjerk "eleazzaar" (www.jwbjerk.com/art)`
-license: `CC-BY`
-origin: `http://opengameart.org/content/painterly-spell-icons-part-2`

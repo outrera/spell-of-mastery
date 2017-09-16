@@ -1,4 +1,3 @@
-icon: nil
 range: 0
 ap: 0
 affects: any

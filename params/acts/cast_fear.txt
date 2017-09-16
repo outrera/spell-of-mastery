@@ -1,0 +1,10 @@
+icon: spell_fear
+//hotkey: d
+//lore: 5
+//cost: 4
+//cool: 10
+range: 9000
+affects: unit
+before: heal{5},strip{poison},impact{fear},sound{subvert}
+hint: heal_allies
+tab: spell

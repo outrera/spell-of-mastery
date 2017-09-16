@@ -1,2 +1,3 @@
-author: `Henrique Lazarini '7Soul' 'Ails'`
-origin: `http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg`
+author: `random223 (http://random223.deviantart.com/)`
+license: `CC-BY-SA 3.0`
+origin: `http://opengameart.org/content/colored-ability-icons`

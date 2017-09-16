@@ -1,4 +1,3 @@
-icon: act_disband
 speed: 4
 affects: any
 before: animate{idle}

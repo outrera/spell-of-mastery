@@ -1,2 +1,0 @@
-author: `Nikita Sadkov`
-license: `CC-BY 3.0`
