@@ -4,6 +4,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 - Instead of harm{magic.1}, use magic_harm{1}
 - instead of 9-health base, used 90 health to have some space of balancing.
+- Unit should be allowed to both act and move.
 - Unit engagement mechanics, so enemies would block future movement.
 - Make sure all spells are implemented and work properly. Especially Raise Dead with its undead status.
 - Include recall to pentagram into AI's pathfinding.
@@ -88,7 +89,7 @@ Spell Ideas:
 - Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
 - Time Travel 2: return target to the cell which it occupied at the start of its previous turn.
 - Halt: target can't move, but can attack for the next turn.
-- Bind: target's movement and cations get restricted to some area.
+- Bind/Chain: target's movement and cations get restricted to some area. Alternatively bind target to some object, so that target can only move towards that object.
 - Berserk (chaos): increases target's attack, but decreases its health.
 - Bloodlust (chaos): target unit gains +1 damage
 - Protection (law): target unit gains +1 defense
@@ -133,7 +134,16 @@ Leader Abilities:
 
 Status Effects:
 - Undead: unit is immune to non-echanted weapons and poison. Undeads can harm other undeads. Undeads don't regenerate normally and can only be healed with spells.
+- Blessed: unit can harm undead and break magic doors.
 - Poison: unit can't regenerate and loses health with time, until health drops to 1 or heal is cast.
+- Fire Aura: attackers get damaged when melee attacking this unit.
+- Hasted: unit gains additional moves per turn.
+- Invisible: unit is invisible unit its next action non-movement.
+- Shell: unit is invincible to the next physical attack.
+- Resisting: unit is invincible to the next magical attack.
+- Flying: unit can move over any terrain and gains addition sight.
+- Scared: unit can't attack.
+- Organic: non-undead organic units can be target by attacks like life stealing.
 
 Spells:
 - Knowledge (neutral): converts mana into lore.
@@ -145,8 +155,8 @@ Spells:
 - Fear (chaos): target loses ability to attack for the next turn.
 - Shell (law): target gains immunity to the next physical attack.
 - Resist (chaos): target gains immunity to the next magical attack.
-- Enchant (law): target gains ability to harm undead and break magic doors.
-- Raise Dead (chaos): target is resurrected as undead with half of its original health.
+- Bless (law): target gains ability to harm undead and break magic doors.
+- Reanimate (chaos): target is resurrected as undead with half of its original health.
 - Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.

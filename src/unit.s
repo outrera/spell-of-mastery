@@ -76,15 +76,15 @@ unit.main = $world.main
 unit.picked = $flags^get_bit{1}
 unit.`=picked` State = $flags <= $flags^set_bit{1 State}
 
-unit.hasted = $flags^get_bit{3}
-
 unit.flyer = $flags^get_bit{5}
 unit.`=flyer` State = $flags <= $flags^set_bit{5 State}
 
 unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
-unit.slowed = $flags^get_bit{14}
+unit.blessed = $flags^get_bit{13}
+unit.undead = $flags^get_bit{14}
+
 
 // this unit is a temporary mark (i.e. cursor); dont save it
 unit.mark = $flags^get_bit{16}

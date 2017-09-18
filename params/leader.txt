@@ -37,8 +37,8 @@ spells:
       cast_fear
       cast_shell
       cast_resist
-      cast_enchant
-      cast_raise_dead
+      cast_bless
+      cast_reanimate
       cast_invisibility
       cast_firewall
       cast_flight

@@ -1,0 +1,10 @@
+icon: spell_bless
+//hotkey: d
+//lore: 5
+//cost: 4
+//cool: 10
+range: 9000
+affects: unit
+before: add{bless},impact{bless},sound{heal}
+hint: bless
+tab: spell
