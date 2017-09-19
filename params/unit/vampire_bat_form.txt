@@ -9,7 +9,7 @@ range: 1
 steps: 14
 sight: 10
 cool: 10
-inborn: (upkeep3 flyer resist_magic)
+inborn: (undead flyer)
 attack: sound{bat_move}
 impact: harm{user}
 hit: effect{blood_undead},sound{bat_hit}

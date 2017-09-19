@@ -1,0 +1,3 @@
+author: `wezu`
+license: `GPL3`
+origin: `https://github.com/wezu/Avolition`

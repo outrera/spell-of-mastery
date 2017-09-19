@@ -38,7 +38,7 @@ spells:
       cast_shell
       cast_resist
       cast_bless
-      cast_reanimate
+      cast_curse
       cast_invisibility
       cast_firewall
       cast_flight

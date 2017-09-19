@@ -68,8 +68,9 @@ Creatures:
 Spell Ideas:
 - Creates a simulacrum of wizard of creature to confuse the enemy. Simulacrum dies from a single hit.
 - Reveal Spells/Items: shows on minimap places where items are located.
-- Magic Block: enemy loses ability to cast spells for several turns.
+- Magic Block: target loses ability to cast spells for several turns.
 - Slow (chaos): target unit moves at half of its speed.
+- Torment (chaos): halves targets's health.
 - Fire trail: make target unit leave fire trail behind him
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
@@ -79,6 +80,7 @@ Spell Ideas:
 - Drought: temporary removes all water, replacing it with special empty aux tile
 - Harm Mirror: reflects damage from the next attack back to attacker.
 - Earthquake: damage all non-flyers.
+- Wall: creates height=2 pilar of dirt
 - Thunderstorm: damages all flyers.
 - Toxic Gas: damages indoor units.
 - Water Walk: allows unit to walk over water.
@@ -114,6 +116,7 @@ Spell Ideas:
 - Open Node: tears the fabric of reality to open new magic node, which should be placed 4 cells away from an existing node
 - Close Node: closes existing magic node
 - Altar: non undead fallen creatures get resurrected as undeads here, as long as wizard stands near this structure.
+- Vampirism: turns unit into a vampire.
 - Palantir: wizard creates a scrying ball, keeping a creature near ball allows player to see through the fog of war. Yet it doesn't explore the map and doesn't reveal invisible creatures.
 - Banish: target temporarily disappears and then returns to its caster's pentagram.
 - Spell that affect all units standing on a terrain of specific kind.
@@ -156,7 +159,7 @@ Spells:
 - Shell (law): target gains immunity to the next physical attack.
 - Resist (chaos): target gains immunity to the next magical attack.
 - Bless (law): target gains ability to harm undead and break magic doors.
-- Reanimate (chaos): target is resurrected as undead with half of its original health.
+- Curse (chaos): turns target unit into undead with only part of its original health.
 - Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.

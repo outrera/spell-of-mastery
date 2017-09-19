@@ -4,7 +4,7 @@ health: 9
 combat: 3
 armor: 0
 speed: 28
-inborn: (flyer)
+inborn: (undead flyer)
 impact: harm{user},sound{cut}
 hit: effect{blood_undead},sound{wraith_hit}
 death: sound{wraith_die}
