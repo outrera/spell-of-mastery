@@ -4,7 +4,7 @@ health: 14
 combat: 4
 armor: 0
 range: 2
-inborn: (undead)
+inborn: (cursed)
 //attack: sound{lifedrain}
 impact: harm{lifedrain.user},sound{lifedrain}
 impact_hit: impact{lifedrain}

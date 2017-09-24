@@ -2,11 +2,11 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- Instead of harm{magic.1}, use magic_harm{1}
 - instead of 9-health base, used 90 health to have some space of balancing.
 - Unit should be allowed to both act and move.
 - Unit engagement mechanics, so enemies would block future movement.
-- Make sure all spells are implemented and work properly. Especially Raise Dead with its undead status.
+- Casting Curse should reduce target's health by half.
+- Ensure all spells are implemented and work properly.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
 - refactor some uses of add_effect into add_param
@@ -32,7 +32,7 @@ Design:
 - non-leader units could be able to hide inside bushes
 - AI autolocks doors when enemies are nearby and open them, to allow its units to pass
 - Destructible trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
-- Day-night cycle, affecting creature sight. Non-undead creatures have 1/2 reduced vision during night. One turn would be equivalent to 1 hour. Total Eclipse spell, turning day into night for the next 16 turns. Light spell mitigates effect of darkness. Same way, inside dungeons sight would be reduced. Day-time lowers cost of law spells and increases cost of chaos spells, while night lowers chaos spells' cost, twilight has no bonus.
+- Day-night cycle, affecting creature sight. Non-undead creatures have 1/2 reduced vision during night. One turn would be equivalent to 1 hour. Total Eclipse spell, turning day into night for the next 16 turns. Light spell mitigates effect of darkness. Same way, inside dungeons sight would be reduced. Day-time lowers cost of law spells and increases cost of chaos spells, while night lowers chaos spells' cost, twilight has no bonus. Use dial like WC3 for UI representation of time.
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
 - X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
@@ -41,9 +41,12 @@ Design:
 - second (rare) resource like souls or gems, required to summon powerful creatures.
   Maybe only wizard can collect it.
 - potion brewing, using cauldron and ingredients, collected from map.
-- A quest giving place, where wizard can get some trivial quest, like killing specific monster or finding some artifact.
+- A quest-giving place, where wizard can get some trivial quest, like killing specific monster or finding some artifact.
+- Spells, creatures or structures that could boost mana income or decrease opponent's income or increase opponent's mana cost.
+- Structures or artifacts that allow casting additional spells per turn.
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
+- switches, opening doors or unleashing monsters.
 - different types of terrain affecting movement speed.
 - Winter tileset, where creatures without protection from cold, get damage each turn. Add a spell like warmth or endure cold to counter that.
 - Hidden doors, that only creatures with detect illusion could see.
@@ -64,6 +67,7 @@ Creatures:
 - A unit that uses enemy's attack strength intstead of its own.
 - A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Elemental weakness. I.e. slimes being weak to fire
+- Creature whose strength is proportional to owner's mana.
 
 Spell Ideas:
 - Creates a simulacrum of wizard of creature to confuse the enemy. Simulacrum dies from a single hit.
@@ -84,6 +88,7 @@ Spell Ideas:
 - Thunderstorm: damages all flyers.
 - Toxic Gas: damages indoor units.
 - Water Walk: allows unit to walk over water.
+- Upkeep: enemy loses amount of mana proportional to the number of creatures under his control.
 - Lock Abilities: target is unable to use its special abilities.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
 - Free Water: freezes water, allowing units to pass over it.
@@ -97,14 +102,15 @@ Spell Ideas:
 - Protection (law): target unit gains +1 defense
 - Pacify: decreases target's attack, but increases its defense.
 - Scrying: once cast on enemy creature, player can track it and see area around it.
-- Detect Undead: notifies when enemy has undeads in the army.
+- Detect Curse: reveals for of war around cursed units.
+- Enrage: when target can attack, limits its actions to attack. I.e. it can't retreat or move around the enemy.
 - Mirror Image: creates a copy of target unit, that deals the same damage, but dies in a single hit.
 - Spells that do both good/bad to you and your enemy.
 - Regeneration: target starts regenerating even outside of power node.
 - Vulnerability: decreases target's armor to 0
 - Visions: see through the fog of war
 - Mist: engulfs cell in fog, so only units near it can see what is inside. No magic can target fog cells. Fog cells also slow movement.
-- Slay: kills a creature if its health is below half from max.
+- Slay: targets receives damage equal to half of its max health. Also consumes part of caster's health, proportional to target's health.
 - Descend/Ascend: move unit between layers.
 - Homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
 - Almagest: switches day to night and night to day
@@ -119,6 +125,7 @@ Spell Ideas:
 - Vampirism: turns unit into a vampire.
 - Palantir: wizard creates a scrying ball, keeping a creature near ball allows player to see through the fog of war. Yet it doesn't explore the map and doesn't reveal invisible creatures.
 - Banish: target temporarily disappears and then returns to its caster's pentagram.
+- Kill: kills target, that has less than half HP
 - Spell that affect all units standing on a terrain of specific kind.
 - Raise Dead: resurrect recently killed unit as undead.
 - Guardian Angel: killed unit gets resurrected at pentagram.
@@ -136,8 +143,8 @@ Leader Abilities:
 - Teleport (neutral): teleports caster to any seen location.
 
 Status Effects:
-- Undead: unit is immune to non-echanted weapons and poison. Undeads can harm other undeads. Undeads don't regenerate normally and can only be healed with spells.
-- Blessed: unit can harm undead and break magic doors.
+- Cursed: unit is immune to non-magical weapons and poison, but suffer additional damage from blessed units.
+- Blessed: unit can harm cursed units and break magic doors.
 - Poison: unit can't regenerate and loses health with time, until health drops to 1 or heal is cast.
 - Fire Aura: attackers get damaged when melee attacking this unit.
 - Hasted: unit gains additional moves per turn.
@@ -159,12 +166,12 @@ Spells:
 - Shell (law): target gains immunity to the next physical attack.
 - Resist (chaos): target gains immunity to the next magical attack.
 - Bless (law): target gains ability to harm undead and break magic doors.
-- Curse (chaos): turns target unit into undead with only part of its original health.
+- Curse (chaos): curses target, making it immune to non-magicl weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, proportional to creature's health.
-- Subvert (law): gain control over the target creature for one turn. Alternatively, wizard could be disallowed to do any actions while in control of subverted creature.
+- Subvert (law): gain control over the target creature for one turn. Caster cannot perform any action, while controls the creature, except the "Relinquish Control" action.
 - Armageddon (chaos): all units sustain 9 points of damage.
 - The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires learning all other spells to be cast.
 

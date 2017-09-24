@@ -97,15 +97,8 @@ effect sound Sound: $sound{Sound}
 
 effect heal Damage: Target.harm{Me -Damage}
 
-effect harm As:
-| Combat = 1
-| Whom = \target
-| case As
-  [A W] | Combat <= A
-        | Whom <= W
-  A | Combat <= A
-| T = case Whom target(Target) self(Me) Else(bad "harm recipient `[Whom]`")
-| $assault{Combat T}
+//harm can be prefixed with magic. unavoid.(ignores defense) and lifedrain.
+effect harm How: $assault{How Target}
 
 effect reduce_health_to Health:
 | when Target.health << Health: leave

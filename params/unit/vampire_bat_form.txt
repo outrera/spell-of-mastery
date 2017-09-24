@@ -9,7 +9,7 @@ range: 1
 steps: 14
 sight: 10
 cool: 10
-inborn: (undead flyer)
+inborn: (cursed flyer)
 attack: sound{bat_move}
 impact: harm{user}
 hit: effect{blood_undead},sound{bat_hit}

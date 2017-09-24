@@ -5,6 +5,6 @@ icon: spell_curse
 //cool: 10
 range: 9000
 affects: (non_leader),unit
-before: strip{poison},add{undead},impact{curse},sound{curse}
+before: strip{poison},add{curse},impact{curse},sound{curse}
 hint: curse
 tab: spell

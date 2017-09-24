@@ -83,7 +83,7 @@ unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
 unit.blessed = $flags^get_bit{13}
-unit.undead = $flags^get_bit{14}
+unit.cursed = $flags^get_bit{14}
 
 
 // this unit is a temporary mark (i.e. cursor); dont save it
@@ -456,10 +456,8 @@ knockback Me Target =
 | when DC.tile.empty and not DC.block: Target.move{DXYZ}
 
 unit.assault Combat Target =
-| Hit = 0
 | Unavoid = 0
 | Magic = 0
-| Boost = 0
 | Lifedrain = 0
 | Mods = []
 | case Combat
@@ -468,7 +466,7 @@ unit.assault Combat Target =
     | Combat <= Mods.head
     | Mods <= Mods.tail
   Else
-    | when Combat.is_list: bad "Unknown combat modifier [Combat]"
+    | when Combat.is_list: bad "harm: unknown assault specifier [Combat]"
 | Damage = if Combat><user then $combat else Combat
 | till Mods.end:
   | Mod = Mods^pop
@@ -483,7 +481,12 @@ unit.assault Combat Target =
     Else
       | bad "Unknown combat modifier [Mod]"
 | when $mod: | Damage += $mod; $mod <= 0
-| less Magic:
+| CanHarm = not Target.cursed or Magic or $blessed or $cursed
+| less CanHarm:
+  | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
+  | leave
+| when Target.cursed and $blessed: Damage <= (Damage*3+1)/2
+| lss Magic:
   | $run_genes{attack}
   | when $mod: | Damage += $mod; $mod <= 0
 | ImpactHit = $class.impact_hit
