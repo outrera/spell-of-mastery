@@ -166,7 +166,7 @@ Spells:
 - Shell (law): target gains immunity to the next physical attack.
 - Resist (chaos): target gains immunity to the next magical attack.
 - Bless (law): target gains ability to harm undead and break magic doors.
-- Curse (chaos): curses target, making it immune to non-magicl weapon, but vulnerable to blessed units.
+- Curse (chaos): makes target immune to non-magical weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.
