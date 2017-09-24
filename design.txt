@@ -2,10 +2,9 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- instead of 9-health base, used 90 health to have some space of balancing.
 - Unit should be allowed to both act and move.
 - Unit engagement mechanics, so enemies would block future movement.
-- Casting Curse should reduce target's health by half.
+- instead of 9-health base, used 90 health to have some space of balancing.
 - Ensure all spells are implemented and work properly.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
