@@ -59,6 +59,7 @@ Design:
 
 Creatures:
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
+- Creatures that prevent enemies from running away, forcing them to stay near the creature with such ability.
 - A creature that is permanently invisible, unless under the sight of oculus.
 - Creature alignments: either chaotic, lawful or neutral
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
@@ -177,7 +178,7 @@ Spells:
 
 Summonable Creatures:
 Oculus: flyer, scout, clears invisibility from enemy units in sight.
-Blob: slow, can spawn smaller blobs, that with time turn into normal blob.
+Blob: slow, when in full health, can divide into two blobs of half health.
 Imp: digs terrain, builds bridges, plants trees, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: weakest shooter.
