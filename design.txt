@@ -54,8 +54,9 @@ Design:
 - A magic that forces all apple trees to produce fruits.
 - A way to boost magic income, like building a node. I.e. by building a special mana-accumulating structure.
 - A cauldron would allow converting reagents into mana.
-- Bluffing: summoning illusionary version of a creature, that can be banished with disbelieve. Have separate tab for that.
+- Bluffing: summoning cheaper, illusionary, version of a creature, that can be banished with disbelieve. Have separate tab for that. Summoning illusion shouldn't require researching that creature.
 - Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa. A neutral spell to restore balance.
+- Power versions of spells (damage boosted or all targets) should require additional rare mana/catalyst.
 
 Creatures:
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
@@ -70,7 +71,8 @@ Creatures:
 - Creature whose strength is proportional to owner's mana.
 
 Spell Ideas:
-- Creates a simulacrum of wizard of creature to confuse the enemy. Simulacrum dies from a single hit.
+- Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
+- Simulacrum (law): creates illusionary copy of target creature to confuse the enemy. Simulacrum dies from a single hit.
 - Reveal Spells/Items: shows on minimap places where items are located.
 - Magic Block: target loses ability to cast spells for several turns.
 - Slow (chaos): target unit moves at half of its speed.
@@ -132,6 +134,7 @@ Spell Ideas:
 - Live Shield: portion of damage to one creature gets redirected to another.
 - Wind: nearby target gets displaced into one direction by N cells or until the closest height=2 block.
 - Sacrifice: creature dies and its health is transfered to heal another.
+- Amnesia: target leader forgets target spell.
 - Employing telekinesis spell to use items as improvised weapon, like i.e. throwing rocks at enemies.
 - Global enchantments like Zombie Mastery or See Everything could be represented by summoned/constructed map objects, that can easily be destroyed/disbanded, without introducing additional mechanics and complicating UI.
 
