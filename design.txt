@@ -50,7 +50,7 @@ Design:
 - Winter tileset, where creatures without protection from cold, get damage each turn. Add a spell like warmth or endure cold to counter that.
 - Hidden doors, that only creatures with detect illusion could see.
 - Map places where creature are immune from magical damage.
-- Spending lore or building structures to improve wizard: increasing HP, lowering spell cost, boosting mana generation, cooldown, casting more spells per turn.
+- Spending lore or building structures to improve wizard: increasing HP, lowering spell cost, boosting mana generation, reducing cooldown, casting more spells per turn.
 - A magic that forces all apple trees to produce fruits.
 - A way to boost magic income, like building a node. I.e. by building a special mana-accumulating structure.
 - A cauldron would allow converting reagents into mana.
@@ -102,6 +102,7 @@ Spell Ideas:
 - Berserk (chaos): increases target's attack, but decreases its health.
 - Bloodlust (chaos): target unit gains +1 damage
 - Protection (law): target unit gains +1 defense
+- Disease: unit contaminates other units, getting near him, forcing owner to desperse the forces.
 - Pacify: decreases target's attack, but increases its defense.
 - Scrying: once cast on enemy creature, player can track it and see area around it.
 - Detect Curse: reveals for of war around cursed units.
@@ -131,10 +132,12 @@ Spell Ideas:
 - Spell that affect all units standing on a terrain of specific kind.
 - Raise Dead: resurrect recently killed unit as undead.
 - Guardian Angel: killed unit gets resurrected at pentagram.
+- Passion: caster loses health, but gains mana.
 - Live Shield: portion of damage to one creature gets redirected to another.
 - Wind: nearby target gets displaced into one direction by N cells or until the closest height=2 block.
 - Sacrifice: creature dies and its health is transfered to heal another.
 - Amnesia: target leader forgets target spell.
+- Aggravate: target neutral creature attacks enemies of the caster
 - Employing telekinesis spell to use items as improvised weapon, like i.e. throwing rocks at enemies.
 - Global enchantments like Zombie Mastery or See Everything could be represented by summoned/constructed map objects, that can easily be destroyed/disbanded, without introducing additional mechanics and complicating UI.
 
