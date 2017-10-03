@@ -112,6 +112,13 @@ enemies_in_range Me =
   | 0
 | $units_in_range{$range}.skip{?empty}.keep{&check}
 
+path_len Cell =
+| C = 0
+| while Cell
+  | C += 1
+  | Cell <= Cell.prev
+| C
+
 unit.reachable =
 | Xs = []
 | XYZ = $xyz
@@ -121,7 +128,8 @@ unit.reachable =
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
-      else if $range><1 and $is_enemy{B} then Type <= Type <= \attack
+      else if $range><1 and $is_enemy{B} then
+        | when Dst^path_len << $steps: Type <= \attack
       else if $owner.id <> B.owner.id then Type <= 0
       else if B.steps<1 then Type <= 0
       else Type <= \swap
@@ -130,6 +138,6 @@ unit.reachable =
 | when $range><1:
   | for E Me^enemies_in_range:
     | when (E.xyz.2-$xyz.2).abs << 1: push [attack E.cell] Xs
-| when $range>1 and $steps><$class.steps:
+| when $range>1 and $steps>>4: //4 is the number of steps required for attack.
   | for E Me^enemies_in_range: push [attack E.cell] Xs
 | Xs

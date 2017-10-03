@@ -6,6 +6,7 @@ SeenEnemies = 0
 PerCycle = 0
 
 unit.can_do Act =
+| when Act.steps > $steps: leave 0
 | when $owner.research_remain{Act}: leave 0
 | when $owner.mana < Act.cost: leave 0
 | when $cooldown_of{Act.name}: leave 0

@@ -70,7 +70,7 @@ params_handle_prototypes Me =
   | Bank.PName <= Proto
 
 type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
-         lore/0 cost/0 ap/1 cool/0 needs/[]
+         lore/0 cost/0 steps/1 cool/0 needs/[]
          priority/50 range/0 speed/4 repeat/0
          affects/unit targets/seen before/[] impact/Impact after/[]}
   title/Title
@@ -83,7 +83,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   room/Room // this act places room scaffolds
   lore/Lore //amount of lore required to research this action
   cost/Cost //how much to cast it
-  ap/Ap //action points
+  steps/Steps //action points
   cool/Cool //action cooldown
   needs/Needs //list of dependencies
   priority/Priority

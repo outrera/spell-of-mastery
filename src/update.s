@@ -230,10 +230,7 @@ update_next_action Me =
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0
-| APCost = $action.act.ap
-| if APCost><all then $steps <= 0
-  else if APCost><full then $steps <= 0
-  else $steps -= APCost
+| $steps -= $action.act.steps
 | center_on_actor Me
 | $action.start
 | when $anim><move: $pick_facing{$facing}

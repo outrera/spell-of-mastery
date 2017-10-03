@@ -410,10 +410,7 @@ unit.order_at XYZ act/0 goal/0 =
          else if Goal and $owner.is_enemy{Goal.owner} then
           $main.params.acts.attack
          else $main.params.acts.move
-| when Act.ap><full and $steps<$class.steps:
-  | $owner.notify{'The unit has already moved this turn.'}
-  | leave
-| when Act.ap.is_int and $steps < Act.ap:
+| when $steps < Act.steps:
   | $owner.notify{"Not enough action points ([Act.ap] required)"}
   | leave
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
@@ -486,7 +483,7 @@ unit.assault Combat Target =
   | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
   | leave
 | when Target.cursed and $blessed: Damage <= (Damage*3+1)/2
-| lss Magic:
+| less Magic:
   | $run_genes{attack}
   | when $mod: | Damage += $mod; $mod <= 0
 | ImpactHit = $class.impact_hit

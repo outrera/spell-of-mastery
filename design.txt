@@ -2,9 +2,10 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- Unit should be allowed to both act and move.
 - Unit engagement mechanics, so enemies would block future movement.
-- instead of 9-health base, used 90 health to have some space of balancing.
+- Units having 4 steps intact at the end of the turn can counter attack enemies, while archers would get a shot of opportunity at sighted enemies.
+- Instead of 9-health base, used 90 health to have some space of balancing.
+- Same way with mana income, make it in the hunders per turn, so that distance based spell could be easily balanced.
 - Ensure all spells are implemented and work properly.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
@@ -18,11 +19,13 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - traps
 
 Design:
+- Distance from caster affecting spell cost, so attacking nearby targets would cost the least.
 - A way to cast spell, like shell or heal, on all units for additional mana. Have a separate tab for that.
 - Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
 - Pickupable treasures, giving lore. I.e. wizard can buy books and access to knowledge.
 - Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
 - Throwing items.
+- Units and spells gaining terrain bonuses.
 - AI should cast spell of mastery, when his lossage gets too high
 - When one players starts casting spell of mastery, all other players will get notified, so they get a chance to stop caster by allied assault.
 - reintroduce sokoban boxes pushing, lifting, falling and floating on water; units standing on top of moved objects should move with them
@@ -42,6 +45,7 @@ Design:
 - potion brewing, using cauldron and ingredients, collected from map.
 - A quest-giving place, where wizard can get some trivial quest, like killing specific monster or finding some artifact.
 - Spells, creatures or structures that could boost mana income or decrease opponent's income or increase opponent's mana cost.
+- Spells that summon enchanted items, usable by creatures.
 - Structures or artifacts that allow casting additional spells per turn.
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
@@ -85,6 +89,7 @@ Spell Ideas:
 - Gooey Blob: slowly covers entire map in agressive blob, unless fought
 - Drought: temporary removes all water, replacing it with special empty aux tile
 - Harm Mirror: reflects damage from the next attack back to attacker.
+- Return Harm: any damage target deals gets returned to it.
 - Earthquake: damage all non-flyers.
 - Wall: creates height=2 pilar of dirt
 - Thunderstorm: damages all flyers.

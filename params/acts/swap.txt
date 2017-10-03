@@ -2,5 +2,5 @@ icon: nil
 priority: 50
 range: 1
 speed: 4
-ap: 1
+steps: 1
 affects: any
