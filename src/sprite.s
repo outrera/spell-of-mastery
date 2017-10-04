@@ -5,7 +5,24 @@ worldToSprite X Y =
 | RY = (X*32 + Y*32)/2
 | [RX RY]
 
-type sprite{Bank Name xy/[0 0]
+type frames{sprite path} data/(t) ready/0
+frames.`.` Index =
+| less $ready: $init
+| $data.Index
+frames.size =
+| less $ready: $init
+| $data.size
+frames.list =
+| less $ready: $init
+| $data.list
+frames.init =
+| if $path.last >< '/'
+  then init_frames_from_folder $sprite $path
+  else init_frames $sprite gfx{$path}
+| when@@it $sprite.shadow: $sprite.shadow <= $sprite.main.img{it}
+| $ready <= 1
+
+type sprite{main Bank Name filepath/0 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]] recolors/0
             class/0 margins/0 pick_height/0
             font/Font icon/0 shadow/0 form/[`|` [4]]
@@ -13,7 +30,8 @@ type sprite{Bank Name xy/[0 0]
   id/0
   bank/Bank
   name/Name
-  frames/Frames
+  frames/0
+  frame_format/Frames
   xy/Xy
   anims
   faces/Faces
@@ -49,13 +67,15 @@ type sprite{Bank Name xy/[0 0]
   | $anims.attack <= if Attack.size>1
                      then [@Attack.lead [impact 0] Attack.last]
                      else [Attack.head [impact 0]]
+| Path = if $frame_format >< folder then "[Filepath]/" else "[Filepath].png"
+| $frames <= frames Me Path
 
 sprite.anim_speed AnimName =
 | Anim = $anims.AnimName
 | if got Anim then Anim{?1}.sum else 0
 
 init_frames_from_list S List =
-| Frames = t
+| Fs = S.frames.data
 | Anims = t
 | for FName,G List
   | Name = FName
@@ -70,9 +90,8 @@ init_frames_from_list S List =
     | Y <= YY.int
     | Name <= N
   | G.xy <= S.xy + [X Y]
-  | have Frames.Name [0 0 0 0 0 0 0 0]
-  | Frames.Name.Angle <= G
-| S.frames <= Frames
+  | have Fs.Name [0 0 0 0 0 0 0 0]
+  | Fs.Name.Angle <= G
 
 init_frames S G =
 | Rs = S.recolors
@@ -82,7 +101,7 @@ init_frames S G =
   | Default = Rs.find{?<>No}
   | when got Default: S.colors <= map R Rs: if R<>No then R else No
   //| say [S.name CM.size S.colors]
-| Frames = case S.frames
+| Fs = case S.frame_format
   [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
   [list Ls]
      | Xs = map [N Rect] Ls:
@@ -96,9 +115,9 @@ init_frames S G =
         | G.free
         | Xs
   Else | [G]
-| for F Frames: F.xy += S.xy
-| S.frames <= if S.faces then map F Frames [0 0 0 F 0 0 0 F] else Frames
-
+| for F Fs: F.xy += S.xy
+| Frames = S.frames
+| Frames.data <= if S.faces then map F Fs [0 0 0 F 0 0 0 F] else Fs
 
 init_frames_from_folder S Folder =
 | Xs = map FName Folder.urls.keep{is.[@_ png]}{?1}
@@ -108,13 +127,9 @@ init_frames_from_folder S Folder =
 init_sprites Me =
 | Sprites = $sprites
 | for SpriteName,Params Sprites
-  | S = sprite Params.bank Params.name @Params.list.join
-  | if S.frames >< folder
-    then init_frames_from_folder S "[Params.filepath]/"
-    else init_frames S gfx."[Params.filepath].png"
+  | S = sprite Me Params.bank Params.name @Params.list.join
   | S.id <= SpriteName
   | $sprites.SpriteName <= S
-| for Name,Sprite $sprites: when@@it Sprite.shadow: Sprite.shadow <= $img{it}
 
 join_banks Bs =
 | @table: @join: map BankName,Bank Bs:

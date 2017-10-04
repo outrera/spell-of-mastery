@@ -15,8 +15,8 @@ font.as_text = "#font{}"
 font N = have Fonts.N:
 | S = Main.spr{"font_[N]"}
 | [W H EX] = S.frames.0^|F => [F.w F.h F.xy.0]
-| Glyphs = S.frames{}{F<[X Y W H].margins=>| F.xy <= 0,0
-                                           | F.cut{X 0 W F.h}}
+| Glyphs = S.frames.list{}{F<[X Y W H].margins=>| F.xy <= 0,0
+                                                | F.cut{X 0 W F.h}}
 | Ws = Glyphs{[X Y W H].margins=>X+W-EX}
 | Ws.0 <= W/2
 | new_font Glyphs Ws H
@@ -90,8 +90,8 @@ bar.draw G X Y =
 type button.widget{Text Fn state/normal skin/medium_large}
   text/Text value on_click/Fn state_/State sprite over w h
 | $sprite <= Main.spr{"ui_button_[Skin]"} 
-| $w <= $sprite.frames.normal.0.w
-| $h <= $sprite.frames.normal.0.h
+| $w <= $sprite.frames.'normal'.0.w
+| $h <= $sprite.frames.'normal'.0.h
 button.state = $state_
 button.`=state` V =
 | when V><normal and $state><pressed: leave
