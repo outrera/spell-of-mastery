@@ -81,6 +81,7 @@ Spell Ideas:
 - Magic Block: target loses ability to cast spells for several turns.
 - Slow (chaos): target unit moves at half of its speed.
 - Torment (chaos): halves targets's health.
+- Awareness: caster gets know when somebody casts a spell.
 - Fire trail: make target unit leave fire trail behind him
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
