@@ -85,6 +85,7 @@ Spell Ideas:
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
 - Chaos: shuffling (non-leader?) units inside of some range. Any implementation appears to be too random for my game design direction.
+- Fire: instead of firewall, fire would come across the land in wave, burning grass, but stop on cliffs.
 - Anchor: blocks target from teleporation.
 - Exchange: swaps target and caster.
 - Area of effect spell.
