@@ -1,4 +1,4 @@
-author: `Carl Olsson 'surt'`,`Dmitrij Makovoz`,`Natalya Bugrova`, `Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
+author: `Nikita Sadkov`,`Dmitrij Makovoz`,`Natalya Bugrova`, `Alex Kool (kharagh@bk.ru, http://kharagh.deviantart.com/)`
 copyright: `Carl Olsson 'surt'`,`Nikita Sadkov`
 origin: `http://opengameart.org/content/painted-iso-roguelike-tiles`
 xy: 0,32
