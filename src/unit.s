@@ -413,7 +413,7 @@ unit.order_at XYZ act/0 goal/0 =
           $main.params.acts.attack
          else $main.params.acts.move
 | when $steps < Act.steps:
-  | $owner.notify{"Not enough action points ([Act.ap] required)"}
+  | $owner.notify{"Not enough action points ([Act.steps] required)"}
   | leave
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $owner.human and (Act.title><move or Act.title><attack):
