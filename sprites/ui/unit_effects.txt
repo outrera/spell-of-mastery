@@ -1,4 +1,3 @@
-author: `Jorge Avila (http://sumwars.org)`, `Nikita Sadkov`
-license: `CC-BY`
-origin: `http://opengameart.org/users/jorge-avila`
+author: `Nikita Sadkov`
+origin: `Spell of Mastery`
 frames: 16*16
