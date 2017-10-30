@@ -1,0 +1,3 @@
+Each piece of art (graphics and sound) is licensed under its own license, declared by its accompanying file, together with URL from where it came.
+
+Required licenses for used artwork are inside of `./licenses` folder

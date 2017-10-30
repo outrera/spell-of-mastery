@@ -34,6 +34,8 @@ int.cost = CellsCost.Me
 int.`=cost` V = CellsCost.Me <= V
 int.prev = CellsPrev.Me
 int.`=prev` V = CellsPrev.Me <= V
+//for empty cell, floor returns corresponding ground cell bellow them
+//for non-empty cell, floor retursn ground cell above them
 int.floor = CellsFloor.Me
 int.`=floor` V = CellsFloor.Me <= V
 int.gate = CellsGate.Me
@@ -355,6 +357,7 @@ world.picked = $player.picked
 world.`=picked` Us = $player.picked <= Us
 
 world.cell X Y Z = (Y*$maxSize+X)*$d+Z
+world.cellp P = (P.1*$maxSize+P.0)*$d+P.2
 world.at X Y Z = $cell{X Y Z}.tile
 world.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
 world.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V

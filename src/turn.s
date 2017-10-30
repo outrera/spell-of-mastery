@@ -10,6 +10,7 @@ unit.end_turn =
 | $run_genes{endturn}
 | $safe <= 1
 | $handled <= 0
+| $engaged <= 0
 | Remove = 0
 | RunEs = []
 | for E $genes: when E.amount>0:

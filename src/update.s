@@ -126,7 +126,7 @@ unit_check_move Me Dst =
   | less $flyer or $amphibian or $swimmer: leave 0
 | B = $world.block_at{Dst}
 | less B: leave move
-| if $owner.id <> B.owner.id
+| if $is_enemy{B}
   then //when B.alive and $combat: leave attack
   else when B.speed and B.can_move{}{B Dst.cell Src.cell}:
        | leave swap
@@ -137,6 +137,7 @@ update_path_move Me XYZ =
 | less M: leave 0
 | Us = $world.units_get{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
+| when M<>attack and $nearby_enemies_at{XYZ}.size: $engaged <= 1
 | $order.init{M | Target or XYZ}
 
 

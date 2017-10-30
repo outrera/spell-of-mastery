@@ -133,7 +133,9 @@ unit.reachable =
       else if $owner.id <> B.owner.id then Type <= 0
       else if B.steps<1 then Type <= 0
       else Type <= \swap
+    | when $engaged and Type<>attack: leave 0
     | when Type: push [Type Dst] Xs
+    | when $nearby_enemies_at{Dst.xyz}.size: R <= \block //engage
     | R}
 | when $range><1:
   | for E Me^enemies_in_range:

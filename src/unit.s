@@ -440,6 +440,13 @@ in_range Me XYZ =
 
 unit.units_in_range Range = $world.units_in_range{Me.xyz Range}
 
+unit.nearby_enemies_at XYZ =
+| Es = []
+| for D Dirs43:
+  | Us = $world.cellp{XYZ+D}.floor.units
+  | Us.skip{?empty}.keep{?is_enemy{Me}}{E=>push E Es}
+| Es
+
 retaliate Me Enemy Range =
 
 heal_unit Me Amount =

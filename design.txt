@@ -2,7 +2,7 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- Unit engagement mechanics: moving close to the enemy would block future movement this turn, limiting actions to attacking and abilities. Introduce engaged flag, into unit's flags.
+- Implement status icon (sword) for engaged units.
 - Units having 4 steps intact at the end of the turn can counter attack enemies, while archers would get a shot of opportunity at sighted enemies.
 - Instead of 9-health base, used 90 health to have some space of balancing.
 - Same way with mana income, make it in the hunders per turn, so that distance based spell could be easily balanced.
@@ -17,6 +17,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - store map events in a separate file
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - traps
+- optimize resoure engine, so graphics and sounds would be loaded only when they are needed and deallocated when they are not required.
 
 Design:
 - Distance from caster affecting spell cost, so attacking nearby targets would cost the least.
@@ -61,6 +62,7 @@ Design:
 - Bluffing: summoning cheaper, illusionary, version of a creature, that can be banished with disbelieve. Have separate tab for that. Summoning illusion shouldn't require researching that creature.
 - Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa. A neutral spell to restore balance.
 - Power versions of spells (damage boosted or all targets) should require additional rare mana/catalyst.
+- Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps.
 
 Creatures:
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
