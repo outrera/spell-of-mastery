@@ -42,12 +42,14 @@ handle_picked_act Me Rect Units Act =
 | NonLeader = 0
 | LandOnly = 0
 | WaterOnly = 0
+| Owned = 0
 | when Affects.is_list and Affects.0.is_list:
   | Ms = Affects.0
   | Affects <= Affects.1
   | for Mod Ms
     | if Mod >< outdoor then Outdoor <= 1
       else if Mod >< non_leader then NonLeader <= 1
+      else if Mod >< owned then Owned <= 1
       else if Mod >< land  then LandOnly <= 1
       else if Mod >< water then WaterOnly <= 1
       else
@@ -73,6 +75,10 @@ handle_picked_act Me Rect Units Act =
   | leave
 | when Outdoor and not $world.outdoor{XYZ}:
   | $player.notify{"Target should be outdoors."}
+  | $main.sound{illegal}
+  | Proceed <= 0
+| when Owned and Target and Target.owner.id<>ActUnit.0.owner.id:
+  | $player.notify{"Cant target enemy unit."}
   | $main.sound{illegal}
   | Proceed <= 0
 | when NonLeader and Target and Target.leader><1:

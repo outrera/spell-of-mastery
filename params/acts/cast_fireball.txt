@@ -2,9 +2,9 @@ icon: spell_fireball
 hotkey: f
 lore: 4
 cost: 1
-cool: 6
+cool: 10
 affects: unit
-range: 4
-before: missile{effect_fireball},harm{magic.2},impact{explosion},sound{explosion}
+range: 6
+before: missile{effect_fireball},harm{magic.4},impact{fbhit},sound{explosion}
 hint: harm
 tab: spell

@@ -3,6 +3,6 @@ lore: misc.tier1_lcost
 cost: misc.tier2_scost
 cool: 10
 affects: unit
-before: owner_units,add{shell},impact{shell},sound{shell}
+before: /*owner_units,*/add{shell},impact{shell},sound{shell}
 hint: boost
 tab: spell

@@ -123,6 +123,13 @@ effect neibs Args:
   | B = $world.block_at{XYZ}
   | when B: $effect{Es B B.xyz}
 
+effect detonate Args:
+| for D Dirs43
+  | B = $world.block_at{TargetXYZ+D}
+  | when B: B.harm{Me $health}
+| B = $world.block_at{TargetXYZ}
+| when B: B.harm{Me $health}
+
 effect counter:
 | when $range<<1: Target.run_genes{counter target/Me xyz/Me.xyz}
 

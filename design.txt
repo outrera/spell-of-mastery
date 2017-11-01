@@ -2,13 +2,12 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
-- Implement status icon (sword) for engaged units.
-- Units having 4 steps intact at the end of the turn can counter attack enemies, while archers would get a shot of opportunity at sighted enemies.
-- Instead of 9-health base, used 90 health to have some space of balancing.
-- Same way with mana income, make it in the hunders per turn, so that distance based spell could be easily balanced.
-- Ensure all spells are implemented and work properly.
+- Ensure all spells are working properly.
+- Ensure all unit abilities are working properly
+- Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
+- Casting time for some spells, included casting status icon and action animation for casting units. Caster could be interrupted, if attacked while casting.
 - refactor some uses of add_effect into add_param
   should not use Params for effect's script
 - rename moves to on_move, etc..
@@ -17,6 +16,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 - store map events in a separate file
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - traps
+- Some way to protect area guardians from undead units. Consider some bless fountains/pedestala, giving nearby units ability to fight undeads. 
 - optimize resoure engine, so graphics and sounds would be loaded only when they are needed and deallocated when they are not required.
 
 Design:
@@ -64,6 +64,14 @@ Design:
 - Power versions of spells (damage boosted or all targets) should require additional rare mana/catalyst.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps.
 
+
+Regarding bigger mana/health/damage numbers:
+- Huge health/damage values will make it harder for player to decide outcome.
+- Using larger values can indeed help balancing some unit aspects, like health regeneration or poison. On the other hand, slowing down health regeneration can be implemnted differently and most units already have acceptable rates.
+- Huge mana income (hundreds per turn) is not requried either, because spells could be balanced by their cooldown (or by introducing casting time) and distance-based spell could simply be rounded (i.e. each 5 cells cost additional 1 mana).
+- Even with huge numbers, units should still kill other units in a discrete number of hits (i.e. ratman would kill other ratman in 3 hits, while tier=2 fighter would kill ratman in 2 hits)
+
+
 Creatures:
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
 - Creatures that prevent enemies from running away, forcing them to stay near the creature with such ability.
@@ -87,7 +95,7 @@ Spell Ideas:
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
 - Chaos: shuffling (non-leader?) units inside of some range. Any implementation appears to be too random for my game design direction.
-- Fire: instead of firewall, fire would come across the land in wave, burning grass, but stop on cliffs.
+- Fire: alternative to firewall: a wave of fire would move across the land, burning grass and trees, but stoping at cliffs. Only the first row of trees should burn out, preventing single fire from shaving whole forest.
 - Anchor: blocks target from teleporation.
 - Exchange: swaps target and caster.
 - Area of effect spell.
