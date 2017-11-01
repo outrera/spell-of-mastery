@@ -6,5 +6,5 @@ icon: spell_detonate
 range: 9000
 affects: (owned non_leader),unit
 before: detonate{health},strip{poison},impact{explosion},sound{explosion}
-hint: heal_allies
+hint: detonate
 tab: spell
