@@ -1,9 +1,9 @@
 icon: spell_flight
-lore: misc.tier2_lcost
-cost: misc.tier1_scost
-cool: misc.tier3_cool
+lore: 10
+cost: 5
+cool: 10
 range: 9000
 affects: unit
-before: owner_units,add{flyer},impact{heal},sound{flight}
-hint: boost_allies
+before: add{flyer},impact{heal},sound{flight}
+hint: fly
 tab: spell

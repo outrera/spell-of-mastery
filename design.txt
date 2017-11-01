@@ -2,12 +2,13 @@ Game Links:
 https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
+TODO:
 - Ensure all spells are working properly.
 - Ensure all unit abilities are working properly
 - Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
-- Casting time for some spells, included casting status icon and action animation for casting units. Caster could be interrupted, if attacked while casting.
+- Casting time for some spells, including casting status icon and action animation for casting units. Caster could be interrupted, if attacked while casting.
 - refactor some uses of add_effect into add_param
   should not use Params for effect's script
 - rename moves to on_move, etc..
@@ -187,7 +188,7 @@ Spells:
 - Heal (law): target regains 9 health and heals from poison.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Haste (law): target gains 2 additional movement points.
-- Fear (chaos): target loses ability to attack for the next turn.
+- Fear (chaos): target loses ability to act for the next three turns.
 - Shell (law): target gains immunity to the next physical attack.
 - Resist (chaos): target gains immunity to the next magical attack.
 - Bless (law): target gains ability to harm undead and break magic doors.
@@ -246,7 +247,7 @@ Graphics:
 - beetle needs attack animation;
 - dragon animation jumps horizontally during attack
 - finish house tileset, including floor and roof; dirt/plain should not align to house wall
-- better flight animation (idle and cloud under unit); use wesnoth halo/saurian-magic-halo-*; monster-elemental_air could be useful too
+- better flight animation (idle-anim for floating effect and cloud under unit); use wesnoth halo/saurian-magic-halo-*; monster-elemental_air could be useful too
 - better hasted unit animation (trail after hasted creature)
 - power node should have round bottom, so it would look more natural on rough terrain or in flight.
 - Better stones tileset. Current one don't really fit in.

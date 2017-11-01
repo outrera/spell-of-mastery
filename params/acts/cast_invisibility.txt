@@ -1,8 +1,8 @@
 icon: spell_invisibility
 //hotkey: d
-//lore: 5
-//cost: 4
-//cool: 10
+lore: 5
+cost: 4
+cool: 10
 range: 9000
 affects: unit
 before: add{invisible},add{invisible_on_attack},impact{spell},sound{invisibility}

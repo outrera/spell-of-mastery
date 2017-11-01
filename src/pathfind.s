@@ -119,7 +119,7 @@ path_len Cell =
   | Cell <= Cell.prev
 | C
 
-unit.attack_cost = 4
+unit.attack_cost = if $afraid then 9000 else 4
 
 unit.reachable =
 | Xs = []

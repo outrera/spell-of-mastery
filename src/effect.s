@@ -22,7 +22,12 @@ effect enable State Players ActNames:
 
 effect on When: No
 
-effect add Name: Target.add_gene{Name 0 []}
+effect add @Args:
+| less Args.size: bad 'effect add: wrong number of arguments'
+| Name = Args.0
+| Duration = 0
+| when Args.size>1: Duration <= Args.1
+| Target.add_gene{Name Duration []}
 
 effect strip Name: Target.strip_gene{Name}
 

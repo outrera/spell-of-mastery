@@ -87,6 +87,7 @@ unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
 unit.blessed = $flags^get_bit{13}
 unit.cursed = $flags^get_bit{14}
+unit.afraid = $flags^get_bit{15}
 
 // this unit is a temporary mark (i.e. cursor); dont save it
 unit.mark = $flags^get_bit{16}
@@ -412,6 +413,9 @@ unit.order_at XYZ act/0 goal/0 =
          else if Goal and $owner.is_enemy{Goal.owner} then
           $main.params.acts.attack
          else $main.params.acts.move
+| when $afraid and Act.title<>move and Act.title<>swap:
+  | $owner.notify{"Unit is too scared to perform any action!"}
+  | leave
 | when $steps < Act.steps:
   | $owner.notify{"Not enough action points ([Act.steps] required)"}
   | leave

@@ -1,7 +1,7 @@
 icon: spell_haste
 //hotkey: z
-lore: misc.tier1_lcost
-cost: 1
+lore: 10
+cost: 4
 cool: 10
 range: 9000
 affects: unit
