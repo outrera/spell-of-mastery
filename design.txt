@@ -178,7 +178,7 @@ Status Effects:
 - Shell: unit is invincible to the next physical attack.
 - Resisting: unit is invincible to the next magical attack.
 - Flying: unit can move over any terrain and gains addition sight.
-- Scared: unit can't attack.
+- Afraid: unit can't attack.
 - Organic: non-undead organic units can be target by attacks like life stealing.
 
 Spells:
