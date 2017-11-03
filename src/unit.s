@@ -495,7 +495,7 @@ unit.assault Combat Target =
 | less CanHarm:
   | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
   | leave
-| when Target.cursed and $blessed: Damage <= (Damage*3+1)/2
+| when Target.cursed and $blessed: Damage += (Damage*100)/100
 | less Magic:
   | $run_genes{attack}
   | when $mod: | Damage += $mod; $mod <= 0

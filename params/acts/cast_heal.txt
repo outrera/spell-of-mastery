@@ -5,6 +5,6 @@ cost: 2
 cool: 10
 range: 9000
 affects: unit
-before: heal{9},strip{poison},impact{heal},sound{heal}
+before: heal{9},strip{poison},strip{fear},impact{heal},sound{heal}
 hint: heal
 tab: spell

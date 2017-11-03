@@ -3,6 +3,8 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 TODO:
+- Dispel shouldn't strip inborn statuses.
+- Resist should protect against dispel and all other status spells.
 - Ensure all spells are working properly.
 - Ensure all unit abilities are working properly
 - Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
@@ -169,10 +171,10 @@ Leader Abilities:
 - Teleport (neutral): teleports caster to any seen location.
 
 Status Effects:
-- Cursed: unit is immune to non-magical weapons and poison, but suffer additional damage from blessed units.
+- Cursed: unit is immune to non-magical weapons and poison, but suffers 100% more damage from blessed units.
 - Blessed: unit can harm cursed units and break magic doors.
 - Poison: unit can't regenerate and loses health with time, until health drops to 1 or heal is cast.
-- Fire Aura: attackers get damaged when melee attacking this unit.
+- Fire Aura: attacker gets damaged equivalent to their own damage, when melee attacking this unit.
 - Hasted: unit gains additional moves per turn.
 - Invisible: unit is invisible unit its next action non-movement.
 - Shell: unit is invincible to the next physical attack.
@@ -185,7 +187,7 @@ Spells:
 - Knowledge (neutral): converts mana into lore.
 - Dispel (neutral): removes following enchantments: fear, haste, resist, shell, .
 - Telekinesis (neutral): grabs key, treasure, mana, frees rescueable creatures, visits quest places, or operates an object from a distance. Can't be used at chests.
-- Heal (law): target regains 9 health and heals from poison.
+- Heal (law): target regains 9 health, and gets cured from poison and fear.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Haste (law): target gains 2 additional movement points.
 - Fear (chaos): target loses ability to act for the next three turns.
@@ -193,10 +195,10 @@ Spells:
 - Resist (chaos): target gains immunity to the next magical attack.
 - Bless (law): target gains ability to harm undead and break magic doors.
 - Curse (chaos): makes target immune to non-magical weapon, but vulnerable to blessed units.
-- Invisibility (law): target becomes invisible, gaining bonus to attack [make sure stats info show it].
-- Firewall (chaos): creates a wall of fire at empty space, damaging creatures enetering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
+- Invisibility (law): target becomes invisible, gaining 100% bonus to melee attack [make sure stats info show it]; attacking streaps invisibility.
+- Firewall (chaos): creates a wall of fire at empty space, damaging creatures entering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.
-- Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, proportional to creature's health.
+- Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health.
 - Subvert (law): gain control over the target creature for one turn. Caster cannot perform any action, while controls the creature, except the "Relinquish Control" action.
 - Armageddon (chaos): all units sustain 9 points of damage.
 - The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires learning all other spells to be cast.

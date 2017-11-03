@@ -1,7 +1,7 @@
 icon: spell_resist
-lore: misc.tier1_lcost
-cost: misc.tier1_scost
-cool: misc.tier2_cool
+//lore: 3
+//cost: 5
+//cool: 5
 affects: unit
 before: owner_units,add{resist},impact{resist},sound{resist}
 hint: boost
