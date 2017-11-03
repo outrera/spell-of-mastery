@@ -142,9 +142,34 @@ roam Me =
 | $advance_to{TargetXYZ}
 | leave 1
 
+unit.enemies_in_sight =
+| $units_in_range{$sight}.keep{X=>$is_enemy{X} and not X.invisible}
+
+unit.run_way Btrack =
+| Es = $enemies_in_sight
+| Rs = $reachable{}{?1}.skip{?block}
+| Best = 0
+| BestDist = 0
+| for R Rs:
+  | Dist = 9000
+  | for E Es:
+    | Found = $world.closest_reach{$sight Me R E.xyz}
+    | Path = if Found then Found.path else []
+    | when Path.size<Dist: Dist <= Path.size
+  | when BestDist<Dist:
+    | BestDist <= Dist
+    | Best <= R
+| when Best:
+  | $order_at{Best.xyz}
+  | when Btrack: less $gene_param{btrack}: $backtrack <= $xyz
+| $handled <= 1
+
 ai_update_unit Me =
 | less $steps > 0:
   | $handled <= 1
+  | leave 0
+| when $afraid:
+  | when $enemies_in_sight.size: $run_way{1}
   | leave 0
 | when cast_spell Me: leave break
 | when $combat:
@@ -157,7 +182,7 @@ ai_update_unit Me =
       | $handled <= 1
       | leave break
   | when $steps:
-    | Es = $units_in_range{$sight}.keep{X=>$is_enemy{X} and not X.invisible}
+    | Es = $enemies_in_sight
     | Flt = Cs{[?1 1]}.table //filtering table
     | Es = Es.skip{E => Flt.(E.cell)><1}
     | Es = Es.keep{E => $path_to{E.xyz}.size<10}

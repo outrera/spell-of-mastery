@@ -183,7 +183,7 @@ Status Effects:
 
 Spells:
 - Knowledge (neutral): converts mana into lore.
-- Dispel (neutral): removes enchantments from target creature, excluding poison and undead curse.
+- Dispel (neutral): removes following enchantments: fear, haste, resist, shell, .
 - Telekinesis (neutral): grabs key, treasure, mana, frees rescueable creatures, visits quest places, or operates an object from a distance. Can't be used at chests.
 - Heal (law): target regains 9 health and heals from poison.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
@@ -243,11 +243,10 @@ Digging Mechanics:
 Graphics:
 - New player colors: player{blue},king{purple},warlock{black},witch{red},
                      katzard{green},mime{orange},neutral{white}
-- beetle movement frame gets cropped;
-- beetle needs attack animation;
 - dragon animation jumps horizontally during attack
 - finish house tileset, including floor and roof; dirt/plain should not align to house wall
 - better flight animation (idle-anim for floating effect and cloud under unit); use wesnoth halo/saurian-magic-halo-*; monster-elemental_air could be useful too
+- better detonate effect, neighboring units sent flying into the air, knocked back in all directions.
 - better hasted unit animation (trail after hasted creature)
 - power node should have round bottom, so it would look more natural on rough terrain or in flight.
 - Better stones tileset. Current one don't really fit in.
@@ -259,9 +258,11 @@ Graphics:
 - fog of war reveal animation
 - particle system
 - New tilesets: Snow, Lava, Swamp
-
+- beetle movement frame gets cropped;
+- beetle needs attack animation;
 
 UI:
+- targeted units shouldn't blink
 - add some description to tabs and menu tabs buttons
 - unit profile and main menu options could be a tabs like all others
 - monster sound acks
