@@ -1,0 +1,3 @@
+author: `Paresh`
+license: `CC0 (Public Domain)`
+origin: `http://freesound.org/people/Paresh/sounds/151678/`

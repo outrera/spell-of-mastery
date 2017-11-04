@@ -96,6 +96,9 @@ unit.`=mark` State = $flags <= $flags^set_bit{16 State}
 unit.safe = $flags^get_bit{17}
 unit.`=safe` State = $flags <= $flags^set_bit{17 State}
 
+unit.resisting = $flags^get_bit{18}
+unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
+
 
 unit.`=backtrack` XYZ =
 | less XYZ:
@@ -491,8 +494,7 @@ unit.assault Combat Target =
     Else
       | bad "Unknown combat modifier [Mod]"
 | when $mod: | Damage += $mod; $mod <= 0
-| CanHarm = not Target.cursed or Magic or $blessed or $cursed
-| less CanHarm:
+| when Target.cursed: less Magic or $blessed or $cursed
   | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
   | leave
 | when Target.cursed and $blessed: Damage += (Damage*100)/100
@@ -519,9 +521,8 @@ unit.harm Attacker Damage @Magic =
   | leave
 | $run_genes{harm}
 | when $mod><block: | $mod <= 0; leave
-| Mg = not Magic.end //is magic harm?
-| if Mg then $run_genes{magic_harm}
-  else $run_genes{phys_harm}
+| if Magic.end then $run_genes{phys_harm}
+  else $run_genes{magic_harm}
 | when $mod><block: | $mod <= 0; leave
 | Damage <= max 1 Damage
 | $hp -= Damage

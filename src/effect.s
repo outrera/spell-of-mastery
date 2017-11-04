@@ -32,7 +32,9 @@ effect add Args:
   else Name <= Args
 | Target.add_gene{Name Duration []}
 
-effect strip Name: Target.strip_gene{Name}
+effect strip Name:
+| when got Target.class.inborn.find{Name}: leave
+| Target.strip_gene{Name}
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
@@ -361,6 +363,12 @@ unit.effect Effect Target TargetXYZ =
       | less Cs.all{C => check_when Me T C}:
         | while not Es.end and Es.0<>endwhen: pop Es
     else if Name >< endwhen then
+    else if Name >< resist then
+      | when $resisting:
+        | $world.effect{T.xyz resist}
+        | T.sound{resist}
+        | Target.strip_gene{resist}
+        | leave
     else if Name >< user_attack then $effect{$attack T T.xyz}
     else if Name >< user_impact then $effect{$impact T T.xyz}
     else if Name >< missile then

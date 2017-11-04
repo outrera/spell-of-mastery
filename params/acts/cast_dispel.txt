@@ -5,8 +5,8 @@ icon: spell_dispel
 //cool: 10
 range: 9000
 affects: unit
-before: strip{shell},strip{flight},strip{hasted}
+before: resist,strip{fear},strip{shell},strip{bless},strip{flyer},strip{hasted}
        ,strip{invisible},strip{invisible_on_attack}
-       ,impact{spell},sound{heal}
+       ,impact{spell},sound{dispel}
 hint: heal_allies
 tab: spell
