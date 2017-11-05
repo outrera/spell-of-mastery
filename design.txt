@@ -3,8 +3,6 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 TODO:
-- unit/*.txt units should include `shell` entry, instead of using `mod`
-  same way, cursed unit attack check can be moved there too.
 - Ensure all spells are working properly.
 - Ensure all unit abilities are working properly
 - Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
@@ -78,13 +76,12 @@ Regarding bigger mana/health/damage numbers:
 Creatures:
 - Creature that is immune to blessed attacks.
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
-- Creatures that prevent enemies from running away, forcing them to stay near the creature with such ability.
+- Creatures that prevents enemies from running away, forcing them to stay near the creature with such ability.
 - A creature that is permanently invisible, unless under the sight of oculus.
 - Creature alignments: either chaotic, lawful or neutral
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
 - Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
 - A unit that uses enemy's attack strength intstead of its own.
-- A creature that can block, instead of moving or attacking. Blocking reduces any damage to 1.
 - Elemental weakness. I.e. slimes being weak to fire
 - Creature whose strength is proportional to owner's mana.
 
@@ -218,20 +215,20 @@ Dwarf: defends, if dwarf haven't attacked this turn, all incoming damage is redu
 Orc: has enough health to withstand a single lightning bolt.
 Spider: poisons; can set web trap, entering which opponent loses all movement points and gets paralyzed for the next turn.
 Lizard: fast, steed, immune to magic, climbs high terrain. Good for stalking wizards, who can't harm it.
-Skeleton: undead.
-Paladin: has blessed attack, that harms undead.
-Wraith: undead, flyer, becomes invisible.
+Skeleton: cursed.
+Paladin: has blessed attack, that harms cursed units.
+Wraith: cursed, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: can stun-attack enemy for a single turn.
 Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed, or 1, if target haven't done any damage.
-Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
-Observer: slow flyer, draws pentagrams, cast spells, like slow, fireball, teleport. Its attack strength is equal to its enemy.
+Vampire: cursed, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
+Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy hitter
 Hydra: moves over water, attacks in all four directions, regenerates everywhere.
 Golem: slow, stoneskin: any incoming non-magic damage is reduced to 1.
-Gargoyle: flyer, immune to magic, attacks with magic weapon.
-Dragon: flyer, explodes on death (damaging all nearby creatures), can send nearby units flying into respective directions.
+Gargoyle: flyer, ignores armor.
+Dragon: flyer, can induce fear into nearby unit, harms cursed units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
 
 Unused Creatures:
 Beetle:

@@ -3,9 +3,9 @@ tier: 3
 health: 10
 combat: 4
 armor: 2
-inborn: (organic flyer)
+inborn: (organic flyer bless)
 //attack: sound{impact}
-impact: harm{user},harm{unavoid.user},sound{impact}
+impact: shell,harm{unavoid.user},sound{impact}
 hit: effect{blood_undead},sound{devil_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}

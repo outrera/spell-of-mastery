@@ -6,7 +6,7 @@ armor: 0
 range: 2
 inborn: (cursed)
 //attack: sound{lifedrain}
-impact: harm{lifedrain.user},sound{lifedrain}
+impact: shell,harm{lifedrain.user},sound{lifedrain}
 impact_hit: impact{lifedrain}
 hit: effect{blood_undead},sound{ifrit_hit}
 death: sound{wraith_die}

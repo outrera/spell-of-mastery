@@ -7,7 +7,7 @@ cooldown: 4
 speed: 28
 inborn: (organic regen amphibian)
 //attack: sound{hydra_attack}
-impact: harm{user},macro{poison},sound{hydra_attack},neibs{harm{8},macro{poison}}
+impact: shell/*neibs,when{enemy},*/,harm{user},macro{poison},sound{hydra_attack}
 hit: effect{blood},sound{hydra_hit}
 death: sound{hydra_hit}
 moves: sound{step}

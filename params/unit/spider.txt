@@ -6,7 +6,7 @@ armor: 0
 speed: 20
 inborn: (organic)
 //attack: sound{spider_attack}
-impact: harm{user},macro{poison},sound{spider_attack}
+impact: shell,harm{user},macro{poison},sound{spider_attack}
 hit: effect{blood},sound{spider_hit}
 death: sound{spider_death}
 moves: sound{step}

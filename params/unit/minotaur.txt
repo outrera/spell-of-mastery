@@ -4,7 +4,7 @@ health: 15
 combat: 5
 armor: 0
 inborn: (organic)
-impact: harm{user},sound{minotaur_attack}
+impact: shell,harm{user},sound{minotaur_attack}
 hit: effect{blood},sound{minotaur_hit}
 death: sound{minotaur_die}
 moves: sound{step}

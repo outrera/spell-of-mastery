@@ -6,7 +6,7 @@ armor: 0
 range: 3
 steps: 5
 inborn: (organic)
-impact: harm{user},sound{cut}
+impact: shell,harm{user},sound{cut}
 hit: sound{goblin_hit}
 death: sound{goblin_die}
 moves: sound{step}

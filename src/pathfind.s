@@ -124,21 +124,21 @@ unit.attack_cost = if $afraid then 9000 else 4
 unit.reachable =
 | Xs = []
 | XYZ = $xyz
-| when $steps>0: $find{$steps
+| less $engaged: when $steps>0: $find{$steps
   | Dst =>
     | R = \block
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
-      else if $range><1 and $is_enemy{B} then
-        | Type <= 0
-        | when Dst^path_len << $steps-$attack_cost: Type <= \attack
       else if $owner.id <> B.owner.id then Type <= 0
       else if B.steps<1 then Type <= 0
       else Type <= \swap
-    | when $engaged and Type<>attack: leave 0
     | when Type: push [Type Dst] Xs
-    | when $nearby_enemies_at{Dst.xyz}.size: R <= \block //engage
+    | Es = $nearby_enemies_at{Dst.xyz}
+    | when Es.size:
+      | R <= \block //engage
+      | when $range><1 and $steps >> Dst^path_len+$attack_cost:
+        | for E Es: push [attack E.cell] Xs
     | R}
 | when $range><1 and $steps>>$attack_cost:
   | for E Me^enemies_in_range:

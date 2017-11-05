@@ -6,7 +6,7 @@ armor: 1
 speed: 22
 inborn: (organic fireaura flyer)
 //attack: sound{explosion}
-impact: harm{unavoid.user},sound{explosion}
+impact: shell,harm{unavoid.user},sound{explosion}
 hit: effect{blood},sound{ifrit_hit}
 death: sound{ifrit_death}
 moves: sound{ifrit_move}

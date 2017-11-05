@@ -7,7 +7,7 @@ steps: 4
 sight: 5
 speed: 48
 inborn: (organic)
-impact: harm{user},sound{spider_attack}
+impact: shell,harm{user},sound{spider_attack}
 hit: effect{blood},sound{spider_hit}
 death: sound{spider_death}
 moves: sound{step}

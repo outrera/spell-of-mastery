@@ -79,6 +79,9 @@ unit.`=picked` State = $flags <= $flags^set_bit{1 State}
 unit.engaged = $flags^get_bit{2}
 unit.`=engaged` State = $flags <= $flags^set_bit{2 State}
 
+unit.shelled = $flags^get_bit{4}
+unit.`=shelled` State = $flags <= $flags^set_bit{4 State}
+
 unit.flyer = $flags^get_bit{5}
 unit.`=flyer` State = $flags <= $flags^set_bit{5 State}
 
@@ -451,7 +454,7 @@ unit.nearby_enemies_at XYZ =
 | Es = []
 | for D Dirs43:
   | Us = $world.cellp{XYZ+D}.floor.units
-  | Us.skip{?empty}.keep{?is_enemy{Me}}{E=>push E Es}
+  | Us.skip{?empty}.keep{?is_enemy{Me}}.keep{E=>(E.xyz.2-XYZ.2)<<1}{E=>push E Es}
 | Es
 
 retaliate Me Enemy Range =
@@ -470,7 +473,6 @@ knockback Me Target =
 
 unit.assault Combat Target =
 | Unavoid = 0
-| Magic = 0
 | Lifedrain = 0
 | Mods = []
 | case Combat
@@ -486,30 +488,22 @@ unit.assault Combat Target =
   | case Mod
     unavoid
       | Unavoid <= 1
-    magic
-      | Unavoid <= 1
-      | Magic <= 1
     lifedrain
       | Lifedrain <= 1
     Else
       | bad "Unknown combat modifier [Mod]"
-| when $mod: | Damage += $mod; $mod <= 0
-| when Target.cursed: less Magic or $blessed or $cursed
-  | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
-  | leave
 | when Target.cursed and $blessed: Damage += (Damage*100)/100
-| less Magic:
-  | $run_genes{attack}
-  | when $mod: | Damage += $mod; $mod <= 0
+| when $invisible: Damage += (Damage*100)/100
+| $run_genes{attack}
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
 | less Unavoid: Damage -= Target.armor
 | Damage <= max 1 Damage
 | when Lifedrain: heal_unit Me 1
-| if Magic then Target.harm{Me Damage 1} else Target.harm{Me Damage}
+| Target.harm{Me Damage}
 //| when Knockback: knockback Me Target
 
-unit.harm Attacker Damage @Magic =
+unit.harm Attacker Damage =
 | when $removed or not $alive: leave
 | $safe <= 0
 | when Attacker and $leader><1 and $owner.id<>0:
@@ -519,11 +513,6 @@ unit.harm Attacker Damage @Magic =
 | when Damage << 0:
   | heal_unit Me -Damage
   | leave
-| $run_genes{harm}
-| when $mod><block: | $mod <= 0; leave
-| if Magic.end then $run_genes{phys_harm}
-  else $run_genes{magic_harm}
-| when $mod><block: | $mod <= 0; leave
 | Damage <= max 1 Damage
 | $hp -= Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}

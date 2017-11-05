@@ -8,7 +8,7 @@ armor: 5
 speed: 20
 inborn: (flyer organic)
 attack: sound{bat_attack}
-impact: harm{user}
+impact: shell,harm{user}
 hit: effect{blood},sound{bat_hit}
 death: sound{bat_die}
 moves: sound{bat_move}

@@ -346,9 +346,10 @@ unit.effect Effect Target TargetXYZ =
 | when XYZ.2 >< -1: leave
 | case Effect [on,When @Es]: Effect <= Es
 | T = Target
-| RunActEffects = 0
-| when T.is_unit and T.id<>$id: RunActEffects <= 0
 | Es = Effect.list
+| RunActEffects = 1
+| when Es.size >< 0 or (T.is_unit and T.id><$id):
+  | RunActEffects <= 0 // action doesnt affect outside world
 | till Es.end
   | E = pop Es
   | less E.is_list: E <= [E []]
@@ -364,12 +365,23 @@ unit.effect Effect Target TargetXYZ =
         | while not Es.end and Es.0<>endwhen: pop Es
     else if Name >< endwhen then
     else if Name >< resist then
-      | when $resisting:
+      | when T.resisting:
         | $world.effect{T.xyz resist}
         | T.sound{resist}
-        | Target.strip_gene{resist}
+        | less got T.class.inborn.find{resist}: T.strip_gene{resist}
         | leave
-    else if Name >< user_attack then $effect{$attack T T.xyz}
+    else if Name >< shell then
+      | when T.shelled:
+        | $world.effect{T.xyz shell}
+        | T.sound{shell}
+        | less got T.class.inborn.find{shell}: T.strip_gene{shell}
+        | leave
+      | when T.cursed: less $blessed or $cursed:
+        | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
+        | leave
+    else if Name >< user_attack then
+      | RunActEffects<=0
+      | $effect{$attack T T.xyz}
     else if Name >< user_impact then $effect{$impact T T.xyz}
     else if Name >< missile then
       | Type = 0

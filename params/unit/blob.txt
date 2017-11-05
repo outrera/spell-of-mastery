@@ -8,7 +8,7 @@ range: 3
 speed: 60
 //inborn: (ttl.10{})
 //attack: sound{blob_attack}
-impact: harm{user},sound{blob_attack}
+impact: shell,harm{user},sound{blob_attack}
 hit: effect{blood_undead},sound{blob_hit}
 death: sound{blob_hit}
 moves: sound{step}

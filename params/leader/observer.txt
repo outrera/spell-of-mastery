@@ -2,13 +2,13 @@ sprite: unit_observer
 icon: unit_observer
 tier: 2
 health: 10
-combat: 1
-leader: 2
+combat: 3
+armor: 0
 speed: 28
-inborn: (flyer)
+inborn: (organic flyer)
 attack: sound{observer_attack}
 impact: harm{user}
-impact_hit: impact{energy_ring},macro{poison},sound{observer_impact}
+impact_hit: resist,impact{energy_ring},sound{observer_impact}
 hit: effect{blood},sound{observer_hit}
 death: sound{observer_die}
 moves: sound{observer_move}

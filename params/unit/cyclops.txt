@@ -5,7 +5,7 @@ combat: 5
 armor: 0
 inborn: (organic)
 //attack: sound{cyclops_club}
-impact: harm{user},sound{cyclops_club}
+impact: shell,harm{user},sound{cyclops_club}
 hit: effect{blood},sound{cyclops_hit}
 death: sound{cyclops_die}
 moves: sound{step}

@@ -5,7 +5,7 @@ combat: 4
 armor: 10
 speed: 34
 inborn: ()
-impact: harm{user},sound{golem_attack}
+impact: shell,harm{user},sound{golem_attack}
 hit: sound{golem_hit},effect{blood_undead}
 death: sound{golem_die}
 moves: sound{step}
