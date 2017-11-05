@@ -4,7 +4,7 @@ http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 TODO:
 - Ensure all spells are working properly.
-- Ensure all unit abilities are working properly
+- Ensure all unit abilities are working properly (hydra all directions attack, dragon and explosion knocking back)
 - Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack
