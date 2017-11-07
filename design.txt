@@ -17,11 +17,12 @@ TODO:
 - store map events in a separate file
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - traps
-- Some way to protect area guardians from undead units. Consider some bless fountains/pedestala, giving nearby units ability to fight undeads. 
+- Some way to protect area guardians from undead units. Consider some bless fountains/pedestala, giving nearby units ability to fight undeads. Maybe blessed tiles, which cursed units cannot enter. Or just allow all neutral units to harm cursed units.
+- unit width and height, limiting preventing it to move tiny paths.
 - optimize resoure engine, so graphics and sounds would be loaded only when they are needed and deallocated when they are not required.
 
 Design:
-- Distance from caster affecting spell cost, so attacking nearby targets would cost the least.
+- Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
 - A way to cast spell, like shell or heal, on all units for additional mana. Have a separate tab for that.
 - Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
 - Pickupable treasures, giving lore. I.e. wizard can buy books and access to knowledge.
@@ -46,8 +47,6 @@ Design:
   Maybe only wizard can collect it.
 - potion brewing, using cauldron and ingredients, collected from map.
 - A quest-giving place, where wizard can get some trivial quest, like killing specific monster or finding some artifact.
-- Spells, creatures or structures that could boost mana income or decrease opponent's income or increase opponent's mana cost.
-- Spells that summon enchanted items, usable by creatures.
 - Structures or artifacts that allow casting additional spells per turn.
 - rescueable creatures, depicted with barred cage cell over them.
 - colored keys and colored doors and chests these keys open.
@@ -57,7 +56,6 @@ Design:
 - Hidden doors, that only creatures with detect illusion could see.
 - Map places where creature are immune from magical damage.
 - Spending lore or building structures to improve wizard: increasing HP, lowering spell cost, boosting mana generation, reducing cooldown, casting more spells per turn.
-- A magic that forces all apple trees to produce fruits.
 - A way to boost magic income, like building a node. I.e. by building a special mana-accumulating structure.
 - A cauldron would allow converting reagents into mana.
 - Bluffing: summoning cheaper, illusionary, version of a creature, that can be banished with disbelieve. Have separate tab for that. Summoning illusion shouldn't require researching that creature.
@@ -86,6 +84,7 @@ Creatures:
 - Creature whose strength is proportional to owner's mana.
 
 Spell Ideas:
+- Morph spell, that would turn caster into target creature.
 - Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
 - Simulacrum (law): creates illusionary copy of target creature to confuse the enemy. Simulacrum dies from a single hit.
 - Reveal Spells/Items: shows on minimap places where items are located.
@@ -100,12 +99,13 @@ Spell Ideas:
 - Anchor: blocks target from teleporation.
 - Exchange: swaps target and caster.
 - Area of effect spell.
-- Gooey Blob: slowly covers entire map in agressive blob, unless fought
+- Gooey Blob: slowly covers entire map in agressive blob, unless fought.
 - Drought: temporary removes all water, replacing it with special empty aux tile
 - Harm Mirror: reflects damage from the next attack back to attacker.
 - Return Harm: any damage target deals gets returned to it.
 - Earthquake: damage all non-flyers.
-- Wall: creates height=2 pilar of dirt
+- Wall (barrier, impassable vine): creates height=2 pilar of dirt.
+- Excavate: reamoves height=2 pilar of dirt.
 - Thunderstorm: damages all flyers.
 - Toxic Gas: damages indoor units.
 - Water Walk: allows unit to walk over water.
@@ -121,7 +121,8 @@ Spell Ideas:
 - Berserk (chaos): increases target's attack, but decreases its health.
 - Bloodlust (chaos): target unit gains +1 damage
 - Protection (law): target unit gains +1 defense
-- Disease: unit contaminates other units, getting near him, forcing owner to desperse the forces.
+- Disease: unit contaminates other units, getting 2-cells near him, forcing owner to desperse the forces. Undead units would still contract disease, but get no damage from it.
+- Entangle: Target is unable to move, but still can attack.
 - Pacify: decreases target's attack, but increases its defense.
 - Scrying/Tag: once cast on enemy creature, player can track it and see area around it.
 - Visions: removes fog of war for one turn.
@@ -159,6 +160,9 @@ Spell Ideas:
 - Amnesia: target leader forgets target spell.
 - Aggravate: target neutral creature attacks enemies of the caster
 - Employing telekinesis spell to use items as improvised weapon, like i.e. throwing rocks at enemies.
+- A spell that forces all apple trees to produce fruits.
+- Spells, creatures or structures that could boost mana income or decrease opponent's income or increase opponent's mana cost.
+- Spells that summon enchanted items, usable by creatures.
 - Global enchantments like Zombie Mastery or See Everything could be represented by summoned/constructed map objects, that can easily be destroyed/disbanded, without introducing additional mechanics and complicating UI.
 
 
