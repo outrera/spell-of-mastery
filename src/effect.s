@@ -110,9 +110,10 @@ effect heal Damage: Target.harm{Me -Damage}
 //harm can be prefixed with magic. unavoid.(ignores defense) and lifedrain.
 effect harm How: $assault{How Target}
 
-effect reduce_health_to Health:
-| when Target.health << Health: leave
-| $assault{[`.` unavoid Target.health-Health] Target}
+effect shake_screen Cycles: $world.shake{Cycles}
+effect color_overlay List:
+| $world.set_color_overlay{List}
+
 
 effect area As: //area{any,3,harm{magic.2}}
 | [Whom Range @Args] = As

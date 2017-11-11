@@ -128,6 +128,10 @@ type world{main}
    cost/#FFFFFF //cost for pathfinder
    variation //used to randomize tiles and make them less repetitive
    seed //PRNG running value
+   shake_start
+   shake_end
+   color_overlay
+   color_overlay_step
 | $init
 
 LCG_M = 2147483647
@@ -242,6 +246,10 @@ world.clear =
 | $active.clear
 | for [K V] $sound_cycles: $sound_cycles.K <= 0
 | $blink.init{[0 0]}
+| $shake_start <= 0
+| $shake_end <= 0
+| $color_overlay <= []
+| $color_overlay_step <= 0
 
 // force reset of all unit genes and health
 reinit_units Us =
@@ -721,5 +729,13 @@ world.free_gene E =
 | E.name.heapfree
 | E.params.heapfree
 | $free_genes.push{E}
+
+world.shake Cycles =
+| $shake_start <= $cycle
+| $shake_end <= $cycle+Cycles
+
+world.set_color_overlay List =
+| $color_overlay <= List
+| $color_overlay_step <= 0
 
 export world

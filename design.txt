@@ -3,6 +3,7 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 TODO:
+- `effect <name> @List` fails when List consits of a single element
 - Ensure all spells are working properly.
 - Ensure all unit abilities are working properly (hydra all directions attack, dragon and explosion knocking back)
 - Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
@@ -75,6 +76,7 @@ Creatures:
 - Creature that is immune to blessed attacks.
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
 - Creatures that prevents enemies from running away, forcing them to stay near the creature with such ability.
+- A creature with ability to reduce target's health by 50%
 - A creature that is permanently invisible, unless under the sight of oculus.
 - Creature alignments: either chaotic, lawful or neutral
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
@@ -98,7 +100,8 @@ Spell Ideas:
 - Fire: alternative to firewall: a wave of fire would move across the land, burning grass and trees, but stoping at cliffs. Only the first row of trees should burn out, preventing single fire from shaving whole forest.
 - Anchor: blocks target from teleporation.
 - Exchange: swaps target and caster.
-- Area of effect spell.
+- Area of effect spell (should it only affect enemies?).
+- Chain lightning, going from target to any unit in the range of 3 cells.
 - Gooey Blob: slowly covers entire map in agressive blob, unless fought.
 - Drought: temporary removes all water, replacing it with special empty aux tile
 - Harm Mirror: reflects damage from the next attack back to attacker.
@@ -127,6 +130,7 @@ Spell Ideas:
 - Scrying/Tag: once cast on enemy creature, player can track it and see area around it.
 - Visions: removes fog of war for one turn.
 - Awareness: caster gets know when somebody casts a spell.
+- Detect Illusion: target creature can now see invisible enemies, hidden doors and discern illusionary creatures.
 - Detect Curse: reveals for of war around cursed units.
 - Enrage: when target can attack, limits its actions to attack. I.e. it can't retreat or move around the enemy.
 - Mirror Image: creates a copy of target unit, that deals the same damage, but dies in a single hit.
@@ -204,7 +208,7 @@ Spells:
 - Flight (law): target gains ability to fly.
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health.
 - Subvert (law): gain control over the target creature for one turn. Caster cannot perform any action, while controls the creature, except the "Relinquish Control" action.
-- Armageddon (chaos): all units sustain 9 points of damage.
+- Armageddon (chaos): all units sustain 5 points of damage.
 - The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires learning all other spells to be cast.
 
 

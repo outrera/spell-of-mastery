@@ -294,6 +294,35 @@ render_unexplored Me Wr X Y BX BY =
 // still needs true 3d pipeline interpolate xyz across texture
 view_to_z X Y Z = (X+Y+Z)*-256 + Z
 
+colorize G Layer Color =
+| Alpha = Color >>> 24
+| Color <= Color &&& #FFFFFF
+| Layer.cmap <= dup 256 Color
+| LW = Layer.w
+| LH = Layer.h
+| WN = (G.w+LW-1)/LW
+| HN = (G.h+LH-1)/LH
+| times X LW: times Y LH:
+  | Layer.alpha{Alpha}
+  | G.blit{X*LH Y*LH Layer}
+
+draw_overlay FB Wr =
+| CO = Wr.color_overlay
+| when CO.end: leave
+| S = Wr.color_overlay_step
+| Wr.color_overlay_step <= S+1
+| K = 0
+| for (I = 0; K<CO.size; K++):
+  | D = CO.K.0
+  | when I << S and S < I+D: done
+  | I += D
+| when K><CO.size:
+  | Wr.set_color_overlay{[]}
+  | leave
+| colorize FB Wr.main.img{"ui_colorizer"} CO.K.1
+
+ShakeXY = [[10 10] [0 10] [0 -10] [0 0] [-10 -10] [10 0] [-10 0]]
+
 view.render_iso =
 | Wr = $world
 | BlitItems <= []
@@ -313,6 +342,11 @@ view.render_iso =
 | CS2 <= CS*2
 | TX,TY = $blit_origin + [0 YUnit] + [0 Z]*ZUnit
 | VX,VY = $view_origin
+| when Wr.cycle < Wr.shake_end:
+  | D = Wr.cycle - Wr.shake_start
+  | ShkX,ShkY = ShakeXY.(D%ShakeXY.size)
+  | TX += ShkX
+  | TY += ShkY
 | ScreenXY.init{[TX+XUnit2 TY]+to_iso{-VX*XUnit2 -VY*YUnit 0}}
 | WW = Wr.w
 | WH = Wr.h
@@ -364,6 +398,7 @@ view.render_iso =
       | draw_bounding_box_front Color FB B
   | isort_free_result
 | draw_picked_rects FB PickedRects.list.flip
+| draw_overlay FB Wr
 | less $brush.0: $handle_pick{UnitRects.list.flip}
 | BlitItems <= 0
 | UnitRects <= 0

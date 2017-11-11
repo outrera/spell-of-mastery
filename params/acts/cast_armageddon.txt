@@ -1,9 +1,13 @@
 icon: spell_armageddon
-lore: misc.tier2_lcost
-cost: misc.tier2_scost
-cool: misc.tier4_cool
+//lore: 15
+//cost: 10
+//cool: 20
 affects: unit
 before: impact{pentagram_appearance},sound{pentagram}
-after: all_alive,reduce_health_to{2},impact{fire_ring},sound{armageddon}
-hint: harm_all
+after: shake_screen{24},
+       color_overlay{((2 #AFFF0000) (2 #7FFF0000)
+                      (16 #3FFF0000)
+                      (2 #7FFF0000) (2 #AFFF0000))},
+       sound{armageddon},all_alive,resist,harm{9},impact{fire}
+hint: armageddon
 tab: spell
