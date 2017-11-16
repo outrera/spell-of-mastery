@@ -1,5 +1,10 @@
 use util
 
+normalize_curly E =
+| case E
+  [`{}` Name @Args] | [Name @Args{?^normalize_curly}]
+  Else | E
+
 load_params2 File =
 | less File.exists: bad "cant open [File]"
 | Xs = File.get.utf8.parse{src File}^|$_ [[]] => []
@@ -8,8 +13,8 @@ load_params2 File =
     [`,` A B]
       | Value <= Value^| @r [`,` A B] => [@A^r B]
                        | X => [X]
-      | Value <= Value{(normalize_curly ?)}
-    [`{}` Name Args @Rest]
+      | Value <= Value{?^normalize_curly}
+    [`{}` Name @Args]
       | Value <= normalize_curly Value
       | Value <= [Value]
     Else | Value

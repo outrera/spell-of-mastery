@@ -4,7 +4,7 @@ UnitFlagsTable =
 init_unit_flags Me =
 | Fs = $params.gene.flags
 | when no Fs: bad "missing params/main/gene.txt/flags"
-| UnitFlags <= Fs{[A [B C]]=>[A B C]}
+| UnitFlags <= Fs
 | UnitFlagsTable <= UnitFlags{[?0 ?1]}.table
 
 getUnitFlags = UnitFlags

@@ -5,9 +5,9 @@ icon: spell_armageddon
 affects: unit
 before: impact{pentagram_appearance},sound{pentagram}
 after: shake_screen{24},
-       color_overlay{((2 #AFFF0000) (2 #7FFF0000)
-                      (16 #3FFF0000)
-                      (2 #7FFF0000) (2 #AFFF0000))},
-       sound{armageddon},all_alive,resist,harm{9},impact{fire}
+       color_overlay{(2 #AFFF0000) (2 #7FFF0000)
+                     (16 #3FFF0000)
+                     (2 #7FFF0000) (2 #AFFF0000)},
+       sound{armageddon},all_alive,resist,harm{unavoid.9},impact{fire}
 hint: armageddon
 tab: spell

@@ -5,6 +5,6 @@ cost: 2
 cool: 5
 affects: unit
 range: 6
-before: missile{effect_fireball},impact{fbhit},sound{explosion},resist,harm{5}
+before: missile{effect_fireball},impact{fbhit},sound{explosion},resist,harm{unavoid.5}
 hint: harm
 

@@ -42,15 +42,6 @@ points_in_diamond R =
 | for I RR: push [I-R 0] Ps
 | Ps
 
-normalize_curly E =
-| case E
-  [`{}` Name Args @Rest]
-    | if Rest.size then Args <= [Args @Rest]
-      else case Args [`,` @_]: Args <= Args^|@r [`,` X Y]=>[@(r X) Y]; X => [X]
-    | [Name Args]
-  Else | E
-
-
 export points Dirs Dirs4 Dirs43 dirN add_border_to_matrix
        points_in_square points_in_circle
-       points_in_matrix points_in_diamond normalize_curly
+       points_in_matrix points_in_diamond

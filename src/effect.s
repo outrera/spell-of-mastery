@@ -111,13 +111,10 @@ effect heal Damage: Target.harm{Me -Damage}
 effect harm How: $assault{How Target}
 
 effect shake_screen Cycles: $world.shake{Cycles}
-effect color_overlay List:
-| $world.set_color_overlay{List}
-
+effect color_overlay @List: $world.set_color_overlay{List}
 
 effect area As: //area{any,3,harm{magic.2}}
-| [Whom Range @Args] = As
-| Es = Args{?^normalize_curly}
+| [Whom Range @Es] = As
 | Ts = $world.units_in_range{TargetXYZ Range}.skip{?empty}
 | case Whom [exclude_self W]:
   | Whom <= W
@@ -354,7 +351,7 @@ unit.effect Effect Target TargetXYZ =
 | till Es.end
   | E = pop Es
   | less E.is_list: E <= [E []]
-  | Name,Args = E
+  | Name,@Args = E
   | F = Effects.Name
   | if got F then F{Me T XYZ Args}
     else if Name >< when then
