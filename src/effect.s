@@ -391,7 +391,7 @@ unit.effect Effect Target TargetXYZ =
            | if S><height_div then Speed <= 1
              else Speed <= S
            | Offset <= O
-         T | Type <= T
+         [T] | Type <= T
       | S = $owner.alloc_unit{Type}
       | case Offset
         user | S.move{$xyz}
