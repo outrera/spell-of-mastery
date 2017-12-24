@@ -97,20 +97,19 @@ world.update =
 | $view.ui.update
 
 update_anim Me =
-| $anim_wait--
-| less $anim_wait > 0:
-  | when $anim_step+1 >< $anim_seq.size:
-    | when $anim >< death: leave
-    | when $anim >< attack or $anim><hit:
-      | $animate{idle}
-  | $anim_step <= ($anim_step+1)%$anim_seq.size
-  | Step = $anim_seq.$anim_step
-  | when Step.0><impact:
-    | when $anim><attack: $action.impact
-    | update_anim Me
-    | leave
-  | $pick_facing{$facing}
-  | $anim_wait <= Step.1
+| when $anim_wait-- > 1: leave
+| when $anim_step+1 >< $anim_seq.size:
+  | when $anim >< death: leave
+  | when $anim >< attack or $anim><hit:
+    | $animate{idle}
+| $anim_step <= ($anim_step+1)%$anim_seq.size
+| Step = $anim_seq.$anim_step
+| when Step.0><impact:
+  | when $anim><attack: $action.impact
+  | update_anim Me
+  | leave
+| $pick_facing{$facing}
+| $anim_wait <= Step.1
 
 unit_check_move Me Dst =
 | less $speed: leave 0

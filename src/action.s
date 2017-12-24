@@ -6,7 +6,7 @@ Acts = t
 
 dact idle.start
 | U = $unit
-| less U.anim >< idle: U.animate{idle}
+| when U.anim >< move: U.animate{idle}
 
 Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 

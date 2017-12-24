@@ -3,7 +3,6 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 TODO:
-- During armageddon all units should take hit-frame animation. Also ensure hit animations always work.
 - Ensure all spells are working properly.
 - Ensure all unit abilities are working properly (hydra all directions attack, dragon and explosion knocking back)
 - Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
@@ -21,6 +20,7 @@ TODO:
 - Some way to protect area guardians from undead units. Consider some bless fountains/pedestala, giving nearby units ability to fight undeads. Maybe blessed tiles, which cursed units cannot enter. Or just allow all neutral units to harm cursed units.
 - unit width and height, limiting preventing it to move tiny paths.
 - optimize resoure engine, so graphics and sounds would be loaded only when they are needed and deallocated when they are not required.
+- At the end of AI turn, viewport focus should change to the place before AI turn.
 
 Design:
 - Unit facing affecting defense: hitting unit from side would negate all defense, while hitting it from back would inflict additional damage.
