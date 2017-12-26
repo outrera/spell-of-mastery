@@ -1,8 +1,8 @@
 icon: spell_firewall
-lore: misc.tier0_lcost
-cost: misc.tier0_scost
-cool: misc.tier0_cool
-range: 5
+//lore: 5
+//cost: 3
+//cool: 10
+range: 9000
 affects: any
 before: impact{fire_ring},sound{summon},spawn{special_firewall}
 //ai: boost_allies
