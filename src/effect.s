@@ -22,7 +22,7 @@ effect enable State Players ActNames:
 
 effect on When: No
 
-effect add Args:
+effect add @Args:
 | less Args.size: bad 'effect add: wrong number of arguments'
 | Name = 0
 | Duration = 0
