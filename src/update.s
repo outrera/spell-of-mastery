@@ -211,6 +211,7 @@ center_on_actor Me =
   | LastMovedTurn = $world.turn
 
 update_next_action Me =
+| when $order.type: update_order Me
 | less $next_action.type: less $path.end:
   | update_path Me
   | update_order Me

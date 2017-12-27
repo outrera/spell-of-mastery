@@ -1,8 +1,8 @@
 icon: spell_lightning
 hotkey: l
-lore: 5
-cost: 4
-cool: 10
+//lore: 5
+//cost: 4
+//cool: 10
 range: 9000
 affects: (outdoor non_leader),unit
 targets: any
