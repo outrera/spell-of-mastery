@@ -166,7 +166,9 @@ effect inc Name Value: unit_getset{Target}.Name += Value
 
 effect world_set Name Value: $world.params.Name <= Value
 
-effect spell_of_mastery: say 'Casted Spell of Mastery'
+effect spell_of_mastery:
+| $world.params.winner <= $owner.id
+| $world.params.victory_type <= 'Victory by casting the Spell of Mastery'
 
 
 effect swap Arg:
