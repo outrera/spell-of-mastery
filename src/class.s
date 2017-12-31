@@ -5,7 +5,7 @@ ClassIdCounter = 1
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 speed/0 sight/No
            active/0 range/0 leader/0
-           health/0 combat/0 armor/0 cooldown/24
+           health/0 combat/0 armor/0 will/-1 cooldown/24
            acts/[] spells/0 summons/0 rooms/0 icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
@@ -29,6 +29,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   hp/Health             //health points
   combat/Combat         //damage this unit deals on attack
   armor/Armor           //
+  will/Will             //amount of mana required to subvert the unit
   cooldown/Cooldown     //number of cycles between unit attacks
   acts/Acts             //acts this unit can perform
   icon/Icon             //icon for this unit

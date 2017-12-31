@@ -1,10 +1,11 @@
 unit: 1
 active: 1
-tier: 1
 height: 2
+tier: 1
 health: 9 // hit points - number of hits, before this unit is dead
 combat: 0
 armor: 0
+will: -1
 cooldown: 16
 steps: 6
 sight: 7

@@ -43,15 +43,17 @@ handle_picked_act Me Rect Units Act =
 | LandOnly = 0
 | WaterOnly = 0
 | Owned = 0
-| when Affects.is_list and Affects.0.is_list:
-  | Ms = Affects.0
-  | Affects <= Affects.1
+| WillCost = 0
+| when Affects.is_list:
+  | Ms = Affects.lead
+  | Affects <= Affects.last
   | for Mod Ms
     | if Mod >< outdoor then Outdoor <= 1
       else if Mod >< non_leader then NonLeader <= 1
       else if Mod >< owned then Owned <= 1
       else if Mod >< land  then LandOnly <= 1
       else if Mod >< water then WaterOnly <= 1
+      else if Mod >< will then WillCost <= 1
       else
 | less $mice_click><pick:
   | when Affects><unit:
@@ -83,6 +85,10 @@ handle_picked_act Me Rect Units Act =
   | Proceed <= 0
 | when NonLeader and Target and Target.leader><1:
   | $player.notify{"Cant target leader."}
+  | $main.sound{illegal}
+  | Proceed <= 0
+| when WillCost and Target and Target.will > ActUnit.0.owner.mana:
+  | $player.notify{"Needs [Target.will] mana."}
   | $main.sound{illegal}
   | Proceed <= 0
 | when Act.name >< room_demolish and not Below.cost:

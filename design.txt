@@ -3,7 +3,8 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 TODO:
-- Implement subvert properly. Requires introducing willpower for each creature. By default creature cannot be subverted.
+- Finish subvert spell: show at the bottom subvert cost, when target is under cursor.
+- do something about both handle_picked_act and custom_valid duplicating code. Also consider using hashtable for modifiers, with hashtable values being modifier argument lists. Also refactor ActUnit, which is not required to be list anymore.
 - Ensure all spells are working properly.
 - Ensure all unit abilities are working properly (hydra all directions attack, dragon and explosion knocking back)
 - Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.

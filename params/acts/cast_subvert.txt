@@ -1,11 +1,11 @@
 icon: spell_subvert
 hotkey: m
 //lore: 10
-//cost: 5
+//cost: 0
 //cool: 10
 range: 9000
-affects: (non_leader),unit
-before: sound{subvert},impact{hypnotize},charm{owner}//,recall{self}
+affects: non_leader,will,unit
+before: impact{hypnotize},sound{subvert},resist,charm{owner}
 after: ()
-hint: harm
+hint: subvert
 tab: spell

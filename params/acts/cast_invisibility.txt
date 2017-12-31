@@ -4,7 +4,7 @@ lore: 5
 cost: 4
 cool: 10
 range: 9000
-affects: (non_leader),unit
+affects: non_leader,unit
 before: add{invisible},impact{spell},sound{invisibility}
 hint: invisibility
 tab: spell

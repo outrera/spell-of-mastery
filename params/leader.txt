@@ -2,21 +2,19 @@
 //      otherwise some leader could put more damage than the other
 unit: 1
 active: 1
-draw_order: 4
 height: 2
 tier: 5
 health: 15 // hit points - number of hits, before this unit is dead
 range: 4
 combat: 2
 armor: 0
+will: -1
 cooldown: 24
 steps: 5
 sight: 7
 speed: 28
 pickable: 1
 passable: 0
-researcher: 1
-flyer: 0 // can it fly
 leader: 1
 ai: unit
 item: 0

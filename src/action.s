@@ -129,9 +129,9 @@ dact teleport.start
 custom_init Me =
 custom_valid Me =
 | Affects = $affects
-| when Affects.is_list and Affects.0.is_list:
-  | Ms = Affects.0
-  | Affects <= Affects.1
+| when Affects.is_list:
+  | Ms = Affects.lead
+  | Affects <= Affects.last
   | for Mod Ms
     | if Mod >< outdoor then
         | less $unit.world.outdoor{$xyz}: leave 0

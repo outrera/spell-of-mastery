@@ -3,6 +3,7 @@ tier: 2
 health: 11
 combat: 3
 armor: 0
+will: 10
 inborn: (organic)
 //attack: sound{cut}
 impact: shell,harm{user},sound{cut}

@@ -259,6 +259,13 @@ effect morph ClassName:
 | $morph{Class}
 
 effect charm NewOwner:
+| when Target.will<0:
+  | $owner.notify{"Can't subvert this unit."}
+  | leave
+| when $owner.mana < Target.will:
+  | $owner.notify{"Not enough mana to subvert this unit."}
+  | leave
+| $owner.mana -= Target.will
 | XYZ = Target.xyz.deep_copy
 | Target.remove
 | Target.owner <= $owner

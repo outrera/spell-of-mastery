@@ -4,7 +4,7 @@ lore: 5
 cost: 3
 cool: 10
 range: 9000
-affects: (owned non_leader),unit
+affects: owned,non_leader,unit
 before: detonate{health},strip{poison},impact{explosion},sound{explosion}
 hint: detonate
 tab: spell
