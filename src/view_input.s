@@ -77,8 +77,7 @@ handle_picked Me Rect Units = //Me is view
   | leave
 | when $mice_click >< pick:
   | $mice_click <= 0
-  //| Shift = $keys.lshift><1 or $keys.rshift><1
-  | Picked = [] //if Shift then $picked.list else []
+  | Picked = []
   | NewPicked = Units
   | when Rect:
     | $picked <= [@NewPicked @Picked]
@@ -94,28 +93,6 @@ view.handle_pick UnitRects =
 | Units = []
 | when@@it $world.cell{@$cursor}.block: Units <= [it]
 | handle_picked Me 0 Units
-
-/*
-handle_rect_picking Me UnitRects MR = 
-| RX,RY,RW,RH = MR
-| when $mice_click><left: $fb.rectangle{#00FF00 0 RX RY RW RH}
-| Units = []
-| for UnitRect,Unit UnitRects: when rects_intersect UnitRect MR:
-  | when Unit.speed>0 and Unit.owner.id><$player.id:
-    | push Unit Units
-| handle_picked Me 1 Units
-
-view.handle_pick UnitRects =
-| MR = $mice_rect
-| when MR:
-  | handle_rect_picking Me UnitRects MR
-  | leave
-| Units = []
-| MXY = $mice_xy
-| for UnitRect,Unit UnitRects: when point_in_rect UnitRect MXY:
-  | when not Unit.invisible or Unit.owner.id><$player.id:
-    | push Unit Units
-| handle_picked Me 0 Units*/
 
 view.worldToView P =
 | X,Y = P - $view_origin
