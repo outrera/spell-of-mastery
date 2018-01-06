@@ -104,10 +104,10 @@ view.infoline =
 | Us = $world.units_get{X,Y,Z}.skip{?empty}
 | less Us.end:
   | U = Us.0
-  | S = U.title
-  | when U.goal:
-    | S <= "[S] ([U.goal_act.name] at [U.goal.xyz])"
-  | Text <= "[Text]; [S]"
+  | Goal = ""
+  | when U.goal: Goal <= " ([U.goal_act.name] at [U.goal.xyz])"
+  | Will = " will: [U.will]; "
+  | Text <= "[Text]; [U.title][Will][Goal]"
 | Text
 
 export view

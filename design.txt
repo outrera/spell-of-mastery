@@ -3,7 +3,7 @@ https://www.facebook.com/groups/298041333699422/
 http://steamcommunity.com/sharedfiles/filedetails/?id=514233906
 
 TODO:
-- Finish subvert spell: show at the bottom subvert cost, when target is under cursor.
+- Disallow drawing pentagram over water or blocked terrain.
 - do something about both handle_picked_act and custom_valid duplicating code. Also consider using hashtable for modifiers, with hashtable values being modifier argument lists. Also refactor ActUnit, which is not required to be list anymore.
 - Ensure all spells are working properly.
 - Ensure all unit abilities are working properly (hydra all directions attack, dragon and explosion knocking back)
@@ -116,6 +116,7 @@ Spell Ideas:
 - Wall (barrier, impassable vine): creates height=2 pilar of dirt.
 - Excavate: reamoves height=2 pilar of dirt.
 - Drought: temporary removes all water, replacing it with special empty aux tile
+- Water to Lava: converts all water to lava, disallowing passage over it and damagin units standing on it.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
 - Freeze Water: freezes water, allowing units to pass over it.
 - Water to Earth: targets attached to water dirt cell, turning it to water.
