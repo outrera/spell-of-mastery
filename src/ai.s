@@ -59,11 +59,9 @@ cast_spell_sub Me Spell Force =
 | if Hint><harm
   then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}
   else Ts <= Ts.skip{U=>U.owner.is_enemy{$owner}}
-| when Act.affects<>unit:
-  | case Act.affects [[@As] _]
-    | for A As: case A
-      non_leader | Ts <= Ts.skip{?leader><1}
-      outdoor | Ts <= Ts.keep{U => $world.outdoor{U.xyz}}
+| when Act.affects.unit:
+  | when Act.affects.non_leader: Ts <= Ts.skip{?leader><1}
+  | when Act.affects.outdoor: Ts <= Ts.keep{U => $world.outdoor{U.xyz}}
 | for Flag Act.flags //avoid overriding
   | FlagN = getUnitFlagsTable{}.Flag
   | when got FlagN: Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}

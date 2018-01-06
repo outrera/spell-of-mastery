@@ -30,80 +30,28 @@ order_at Me XYZ Target =
   | push P Used
 
 handle_picked_act Me Rect Units Act =
-| ActUnits = $picked
-| ActUnit = $world.act_unit
-| when ActUnit.0
-  | when ActUnit.0.serial<>ActUnit.1
+| Actor = 0
+| [ActUnit ActUnitOldSerial] = $world.act_unit
+| when ActUnit
+  | when ActUnit.serial<>ActUnitOldSerial:
     | $world.act <= 0
     | leave
-  | ActUnits <= [ActUnit.0]
-| Affects = Act.affects
-| Outdoor = 0
-| NonLeader = 0
-| LandOnly = 0
-| WaterOnly = 0
-| Owned = 0
-| WillCost = 0
-| when Affects.is_list:
-  | Ms = Affects.lead
-  | Affects <= Affects.last
-  | for Mod Ms
-    | if Mod >< outdoor then Outdoor <= 1
-      else if Mod >< non_leader then NonLeader <= 1
-      else if Mod >< owned then Owned <= 1
-      else if Mod >< land  then LandOnly <= 1
-      else if Mod >< water then WaterOnly <= 1
-      else if Mod >< will then WillCost <= 1
-      else
+  | Actor <= ActUnit.0
+| less Actor: Actor <= $picked.0
+| Target = if Units.end then 0 else Units.0
 | less $mice_click><pick:
-  | when Affects><unit:
-    | Cur = if Units.end then \ui_cursor_target else \ui_cursor_target2
+  | when Act.affects.unit:
+    | Cur = if Target then \ui_cursor_target else \ui_cursor_target2
     | get_gui{}.cursor <= $main.img{Cur}
   | leave
 | $mice_click <= 0
-| when Affects><unit and Units.end: leave
+| invalid Error =
+  | Actor.owner.notify{Error}
+  | $main.sound{illegal}
+| when Act.validate{Actor $cursor Target &invalid}:
+  | when Target: $world.blink.init{[4 Target]}
+  | Actor.order_at{$cursor act/Act goal/Target}
 | $world.act <= 0
-| Proceed = 1
-| Target = if Units.end then 0 else Units.0
-| XYZ = if Target and Affects><unit then Target.xyz else $cursor
-| Below = $world.at{XYZ.0 XYZ.1 XYZ.2-1}
-| when LandOnly and (Below.liquid or Below.type><void):
-  | $player.notify{"Can target only land."}
-  | $main.sound{illegal}
-  | leave
-| when WaterOnly and Below.type <> water:
-  | $player.notify{"Can target only water."}
-  | $main.sound{illegal}
-  | leave
-| when Outdoor and not $world.outdoor{XYZ}:
-  | $player.notify{"Target should be outdoors."}
-  | $main.sound{illegal}
-  | Proceed <= 0
-| when Owned and Target and Target.owner.id<>ActUnit.0.owner.id:
-  | $player.notify{"Cant target enemy unit."}
-  | $main.sound{illegal}
-  | Proceed <= 0
-| when NonLeader and Target and Target.leader><1:
-  | $player.notify{"Cant target leader."}
-  | $main.sound{illegal}
-  | Proceed <= 0
-| when WillCost and Target and Target.will > ActUnit.0.owner.mana:
-  | $player.notify{"Needs [Target.will] mana."}
-  | $main.sound{illegal}
-  | Proceed <= 0
-| when Act.name >< room_demolish and not Below.cost:
-  | $player.notify{"Cant demolish this."}
-  | $main.sound{illegal}
-  | Proceed <= 0
-| when Proceed:
-  | Blink = 1
-  | for U ActUnits
-    | when $player.seen{XYZ}:
-      | when Target and Blink:
-        | $world.blink.init{[4 Target]}
-        | Blink <= 0
-      | U.order_at{XYZ act/Act goal/Target}
-| leave
 
 handle_picked Me Rect Units = //Me is view
 | $ui.on_unit_pick{$picked}
@@ -407,7 +355,7 @@ world.update_cursor =
 | Marks = $marks.unheap
 | P = $human
 | if $act
-  then | when $act.affects<>unit:
+  then | when $act.affects.unit:
          | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
   else | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
        | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks

@@ -128,41 +128,11 @@ dact teleport.start
 
 custom_init Me =
 custom_valid Me =
-| Affects = $affects
-| when Affects.is_list:
-  | Ms = Affects.lead
-  | Affects <= Affects.last
-  | for Mod Ms
-    | if Mod >< outdoor then
-        | less $unit.world.outdoor{$xyz}: leave 0
-      else if Mod >< non_leader then
-        | when $target and $target.leader><1: leave 0
-      else
-| As = if Affects.is_list then Affects
-       else | when Affects >< any: leave 1
-            | [Affects]
-| T = $target
-| HasTarget = T and not T.removed
-| for A As:
-  | if A >< unit then
-     | when HasTarget: leave: not T.empty
-    else if A >< ally then
-     | when HasTarget and not $unit.owner.is_enemy{T.owner}: leave 1
-    else if A >< empty then
-     | less $unit.world.block_at{$xyz}: leave 1
-    else if A >< area then leave 1
-    else if A >< self then leave 1
-    else if A >< empty_floor then
-      | if $unit.world.cell{@$xyz}.is_floor_empty then leave 1
-        else $unit.owner.notify{"This action requires empty floor."}
-    else if A >< pentagram then
-      | P = $unit.owner.pentagram
-      | if P
-        then | less $unit.world.block_at{P.xyz}: leave 1
-             | $unit.owner.notify{"Pentagram is blocked"}
-        else $unit.owner.notify{"This action requires pentagram."}
-    else $unit.owner.notify{"custom.valid: bad affects specifier - [A]"}
-| 0
+| invalid Error =
+  | $unit.owner.notify{Error}
+  | $unit.main.sound{illegal}
+| $act.validate{$unit $xyz $target &invalid}
+
 
 custom_start Me =
 | U = $unit

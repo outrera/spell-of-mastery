@@ -113,6 +113,65 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | Flags = []
 | for E [@$before @$after]: case E [add Name]: push Name Flags
 | $flags <= Flags
+| Allowed = [land water clear outdoor owned ally non_leader will
+             any unit empty self pentagram]
+| T = Allowed{[? 0]}.table
+| As = $affects
+| less As.is_list: As <= [As]
+| for A As:
+  | when no T.A: bad "Act [$name]: illegal affects option `[A]`"
+  | T.A <= 1
+| when not T.unit and not T.any and not T.empty and not T.self and not T.pentagram: 
+  | bad "Act [$name]: missing affects target type."
+| $affects <= T
+
+act.validate Actor XYZ Target Invalid =
+| T = $affects
+| less Actor.owner.seen{XYZ}:
+  | Invalid{"Needs seen territory."}
+  | leave 0
+| when T.unit and not Target or Target.removed: leave 0
+| when T.pentagram:
+  | P = $unit.owner.pentagram
+  | less P:
+    | Invalid{"This action requires pentagram."}
+    | leave 0
+  | when Actor.world.block_at{P.xyz}:
+    | Invalid{"Pentagram is blocked"}
+    | leave 0
+| when T.clear:
+  | less Actor.cell.is_floor_empty:
+    | Invalid{"Needs clear floor"}
+    | leave 0
+| when T.empty and $unit.world.block_at{$xyz}:
+  | Invalid{"Needs empty floor"}
+  | leave 0
+| Below = Actor.world.at{XYZ.0 XYZ.1 XYZ.2-1}
+| when T.land and (Below.liquid or Below.type><void):
+  | Invalid{"Needs land."}
+  | leave 0
+| when T.ally and Actor.is_enemy{Target}:
+  | Invalid{"Needs ally."}
+  | leave 0
+| when T.owned and Target and Target.owner.id<>Actor.owner.id:
+  | Invalid{"Needs a unit you own."}
+  | leave 0 
+| when T.water and Below.type <> water:
+  | Invalid{"Needs water."}
+  | leave 0
+| when T.outdoor and not Actor.world.outdoor{XYZ}:
+  | Invalid{"Needs outdoor space."}
+  | leave 0
+| when T.non_leader and Target and Target.leader><1:
+  | Invalid{"Needs non-leader."}
+  | leave 0
+| when T.will and Target and Target.will > Actor.owner.mana:
+  | Invalid{"Needs [Target.will] mana."}
+  | leave 0
+| when $name >< room_demolish and not Below.cost:
+  | Invalid{"Cant demolish this."}
+  | leave 0
+| 1
 
 params_handle_acts Me =
 | Acts = $params.acts

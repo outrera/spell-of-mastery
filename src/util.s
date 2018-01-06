@@ -3,6 +3,8 @@ use macros
 Dirs4 = [[0 -1] [1 0] [0 1] [-1 0]]
 Dirs43 = [[0 -1 0] [1 0 0] [0 1 0] [-1 0 0]]
 
+list.has Item = got $find{Item}
+
 // take up to N elements
 list.upto N = $take{|min $size N}
 
