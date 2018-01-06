@@ -16,3 +16,17 @@ Scripting:
 
 // set player 2's mana to 100000
 ((repeat always) set{2,mana,100000})
+
+
+
+
+Graphics Editing Hints:
+- Grayscale layer can be used with "Darken" to change tile brightness.
+- "Overlay" blending mode can be used to colorize grayscale image
+- Removing transparency:
+   1) Load Transparency Mask as Selection  (While pressing the Cmd key {Ctrl Key on PC} "click on" the image icon for this Layer in the Layers Panel
+   2) Create Layer Mask from the Selection using Reveal Selection (Layer > Layer Mask > Reveal Selection)
+   3) Display B&W Layer Mask  (While pressing the Option Key {Alt Key on PC} "click on" the layer mask icon for this Layer in the Layers Panel)
+   4) Image > Adjustments > Threshold  with Threshold set to 255
+- to split image into tiles: convert input.png -crop 64x64 +repage 3-idle%d.png
+- to add missing digits: for i in *.png; do sename "\([^0-9]\)\([0-9]\)\.png" "0\0\1.png" $i; done

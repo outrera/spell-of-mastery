@@ -1,1 +1,87 @@
+THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
+
+TODO:
+- Ensure all spells are working properly.
+- Ensure all unit abilities are working properly (hydra all directions attack, dragon and explosion knocking back)
+- Unit facing affecting defense: hitting unit from side would negate all defense, while hitting it from back would inflict additional damage.
+- Units having 4 steps intact at the end of the turn can counter attack the attacker (with attacker having some defense bonus), while ranged units could get a shot of opportunity at sighted enemies. Ranged defenders can't counter attack, yet, enemies also can't react to attacks from ranged units.
+- Include recall to pentagram into AI's pathfinding.
+- height advantage gives +1 to attack to melee units, and +2 to ranged units
+- Casting time for some spells, including casting status icon and action animation for casting units. Caster could be interrupted, if attacked while casting.
+- refactor some uses of add_effect into add_param
+  should not use Params for effect's script
+- rename moves to on_move, etc..
+- Think about refactoring genes to use ECS system, where each unit has a list of systems acting on him. Like i.e. poison system and regen systems.
+- AI should change vampire into bat form, before attack, and then back to vampire, when he is sees enemy and can attack
+- store map events in a separate file
+- 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
+- traps
+- Some way to protect area guardians from undead units. Consider some bless fountains/pedestala, giving nearby units ability to fight undeads. Maybe blessed tiles, which cursed units cannot enter. Or just allow all neutral units to harm cursed units.
+- unit width and height, limiting preventing it to move tiny paths.
+- optimize resoure engine, so graphics and sounds would be loaded only when they are needed and deallocated when they are not required.
+- At the end of AI turn, viewport focus should change to the place before AI turn.
 - Move sound center to the middle of the screen (currently it is at the top).
+
+
+Bugs:
+- vampire on low health turning into bat results in bat being invincible with 0 health (enemies cant attack it)
+
+- when new map gets saved, folder browser should update content
+- when height>>80, column tiles and units are not drawn
+- hydra damages and poisons allied units++
+- invisibility doesnt hide poison, bood and regen effects
+- flying units can possibly crash pathfinder, when they are at very high tiles, being able to cross border. Insert a check against mad dimensions.
+- blizzard projectiles have no gravity
+- player can research enemy units
+- adding and removing table from corner crashes the game, due to attempt to place outside of the map
+- multicell units, like table, react badly when drawing tiles under them. disallow drawing at all
+- `update_picked` and unit.picked should use different picking strucutre. current is error prone and had led to bugs previously
+- projectiles hung up, when their sender dies
+
+Sound:
+- fix sound issues, where sounds are affected by height
+- monster sound acks
+
+
+UI:
+- targeted units shouldn't blink
+- add some description to tabs and menu tabs buttons
+- unit profile and main menu options could be a tabs like all others
+- a line from the portrait of current unit to its location on minimap
+- better health indicators for selected units (use green dots - one per hit-point)
+- in editor, placing unit on top of object should not be possible.
+- simple way to temporarily transfer control to the AI, for map and AI testing.
+
+
+Graphics:
+- New player colors: player{blue},king{purple},warlock{black},witch{red},
+                     katzard{green},mime{orange},neutral{white}
+- dragon animation jumps horizontally during attack
+- finish house tileset, including floor and roof; dirt/plain should not align to house wall
+- better flight animation (idle-anim for floating effect and cloud under unit); use wesnoth halo/saurian-magic-halo-*; monster-elemental_air could be useful too
+- better detonate effect, neighboring units sent flying into the air, knocked back in all directions.
+- better hasted unit animation (trail after hasted creature)
+- power node should have round bottom, so it would look more natural on rough terrain or in flight.
+- Better stones tileset. Current one don't really fit in.
+- Automate shadow placement
+- road object, which would block grass
+- grass corner sprites, which would be auto placed onto dirt in corners between two grass tiles.
+- design fullscreen graphics effects, like armageddon, snowstorm, fog and nighttime.
+- dummy units, that would be left instead of real one, when fog of war takes place
+- fog of war reveal animation
+- particle system
+- New tilesets: Snow, Lava, Swamp
+- beetle movement frame gets cropped;
+- beetle needs attack animation;
+
+Optimization Possibilities:
+- use cell index directly instead of unit_goal wrapper
+- when all four corners of object sprite are hidden, don't allow selecting it, also, dont draw it. requires probing pixels inside framebuffer
+- fast way to determine height to the ceiling - that way we can have large creature wont be able to move into tiny hole. One way to do it is by using special tiles in place of empty or void tiles
+- obstacles blocking sight, would require precomputed sight tree, where one blocked node would block sight to all children.
+- when updating tiles, we can also mark doorways, so that flyers and jumpers could pick between multiple Z-levels
+- mouse picking can be done in reverse on draw list
+
+Symta Language Handicaps:
+- No way to quickly introduce an efficient inplace field on a struct, like unit, propagating it to save-file.
+- No proper API for manually allocating types in shared memory.

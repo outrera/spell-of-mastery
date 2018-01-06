@@ -1,0 +1,187 @@
+THIS FILE STATES DESIGN POSSIBILITIES
+
+Leader abilities:
+- Dual-cast: allows casting two different spells on two different locations on the same turn.
+
+General:
+- Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps.
+- Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
+- A way to cast spell, like shell or heal, on all units for additional mana. Have a separate tab for that.
+- Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
+- Pickupable treasures, giving lore. I.e. wizard can buy books and access to knowledge.
+- Weapons and other items, that boost carrying creature's stats. Make sure only creatures with hands could use, say, swords. Or limit artifacts only to specific creatures, like humanoids. For examle, there can be an artifact, that grans additional mana per turn to the holder.
+- Throwing items.
+- Units and spells gaining terrain bonuses.
+- AI should cast spell of mastery, when his lossage gets too high
+- When one players starts casting spell of mastery, all other players will get notified, so they get a chance to stop caster by allied assault.
+- reintroduce sokoban boxes pushing, lifting, falling and floating on water; units standing on top of moved objects should move with them
+- when unit drops large item, like crate, it pops under that unit, serving as elevation
+- phone/touch version should have transparent buttons
+- non-leader units could be able to hide inside bushes
+- AI autolocks doors when enemies are nearby and open them, to allow its units to pass
+- Destructible trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
+- Day-night cycle, affecting creature sight. Non-undead creatures have 1/2 reduced vision during night. One turn would be equivalent to 1 hour. Total Eclipse spell, turning day into night for the next 16 turns. Light spell mitigates effect of darkness. Same way, inside dungeons sight would be reduced. Day-time lowers cost of law spells and increases cost of chaos spells, while night lowers chaos spells' cost, twilight has no bonus. Use dial like WC3 for UI representation of time.
+- Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
+- X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
+- Global map, where player can find next destination. Collected spells are preserved between maps.
+- Steeds: horse, lizard and gryphon; For start, the rider can simply be drawn near his mount's sprite.
+  Mount can't attack, while being rided and all actions are the actions of the rider. Rider can unmount into any of the four directions. All incoming damage goes to the mount.
+- second (rare) resource like souls or gems, required to summon powerful creatures.
+  Maybe only wizard can collect it.
+- potion brewing, using cauldron and ingredients, collected from map.
+- A quest-giving place, where wizard can get some trivial quest, like killing specific monster or finding some artifact.
+- Structures or artifacts that allow casting additional spells per turn.
+- rescueable creatures, depicted with barred cage cell over them.
+- colored keys and colored doors and chests these keys open.
+- switches, opening doors or unleashing monsters.
+- different types of terrain affecting movement speed.
+- Winter tileset, where creatures without protection from cold, get damage each turn. Add a spell like warmth or endure cold to counter that.
+- Hidden doors, that only creatures with detect illusion could see.
+- Map places where creature are immune from magical damage.
+- Spending lore or building structures to improve wizard: increasing HP, lowering spell cost, boosting mana generation, reducing cooldown, casting more spells per turn.
+- A way to boost magic income, like building a node. I.e. by building a special mana-accumulating structure.
+- A cauldron would allow converting reagents into mana.
+- Bluffing: summoning cheaper, illusionary, version of a creature, that can be banished with disbelieve. Have separate tab for that. Summoning illusion shouldn't require researching that creature.
+- Supply lines, breaking which would weaken the opponent.
+- Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa. A neutral spell to restore balance.
+- Power versions of spells (damage boosted or all targets) should require additional rare mana/catalyst.
+
+Creatures:
+- Creature that is immune to blessed attacks.
+- Creature ability doing damage TargetMaxHp-TargetCurHp
+- Creature abilities that trigger when unit is in critical state
+- Reaction abiltite, like counter-attack
+- A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
+- Creatures that prevents enemies from running away, forcing them to stay near the creature with such ability.
+- A creature with ability to reduce target's health by 50%
+- A creature that is permanently invisible, unless under the sight of oculus.
+- Creature alignments: either chaotic, lawful or neutral
+- Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
+- Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
+- A unit that uses enemy's attack strength intstead of its own.
+- Elemental weakness. I.e. slimes being weak to fire
+- Creature whose strength is proportional to owner's mana.
+
+Spells:
+- Morph spell, that would turn caster into target creature.
+- Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
+- Reveal Spells/Items: shows on minimap places where items are located.
+- Magic Block: target loses ability to cast spells for several turns.
+- Slow (chaos): target unit moves at half of its speed.
+- Torment (chaos): halves targets's health.
+- Fire trail: make target unit leave fire trail behind him
+- Water trail: make target unit leave water trail behind him; it also slows down the unit.
+- Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.
+- Chaos: shuffling (non-leader?) units inside of some range. Any implementation appears to be too random for my game design direction.
+- Fire: alternative to firewall: a wave of fire would move across the land, burning grass and trees, but stoping at cliffs. Only the first row of trees should burn out, preventing single fire from shaving whole forest.
+- Exchange: swaps target and caster.
+- Area of effect spell (should it only affect enemies?).
+- Chain lightning, going from target to any unit in the range of 3 cells.
+- Gooey Blob: slowly covers entire map in agressive blob, unless fought.
+- Earthquake: damage all non-flyers.
+- Thunderstorm: damages all flyers.
+- Toxic Gas: damages indoor units.
+- Wall (barrier, impassable vine): creates height=2 pilar of dirt.
+- Excavate: reamoves height=2 pilar of dirt.
+- Drought: temporary removes all water, replacing it with special empty aux tile
+- Water to Lava: converts all water to lava, disallowing passage over it and damagin units standing on it.
+- Terraforming spells: raise/lower elevation, create/remove water pool, etc...
+- Freeze Water: freezes water, allowing units to pass over it.
+- Water to Earth: targets attached to water dirt cell, turning it to water.
+- Earth to Water: targets attached to dirt water cell, turning it to dirt.
+- Water Walk: allows unit to walk over water.
+- Upkeep: enemy loses amount of mana proportional to the number of creatures under his control.
+- Anchor: blocks target from teleporation.
+- Lock Abilities: target is unable to use its special abilities.
+- Astral Attack: caster spends N mana to force target wizard lose N*2.
+- Time Travel: caster first creates a snapshot, to which it can return from the future, but only single time. Make sure cooldown time of the spell won't be carried back with the caster.
+- Time Travel 2: return target to the cell which it occupied at the start of its previous turn.
+- Halt: target can't move, but can attack for the next turn.
+- Bind/Chain: target's movement and cations get restricted to some area. Alternatively bind target to some object, so that target can only move towards that object.
+- Berserk (chaos): increases target's attack, but decreases its health.
+- Bloodlust (chaos): target unit gains +1 damage
+- Protection (law): target unit gains +1 defense
+- Disease: unit contaminates other units, getting 2-cells near him, forcing owner to desperse the forces. Undead units would still contract disease, but get no damage from it.
+- Entangle: Target is unable to move, but still can attack.
+- Pacify: decreases target's attack, but increases its defense.
+- Scrying/Tag: once cast on enemy creature, player can track it and see area around it.
+- Visions: removes fog of war for one turn.
+- Awareness: caster gets know when somebody casts a spell and reveal the location. Should be useful for tracking down enemy, trying to hide in the fog of war.
+- Detect Curse: reveals for of war around cursed units.
+- Detect Illusion: target creature can now see invisible enemies, hidden doors and discern illusionary creatures.
+- Mirror Image: creates a copy of target unit, that deals the same damage, but dies in a single hit.
+- Simulacrum (law): creates illusionary copy of target creature to confuse the enemy. Simulacrum dies from a single hit.
+- Enrage: when target can attack, limits its actions to attack. I.e. it can't retreat or move around the enemy.
+- Spells that do both good/bad to you and your enemy.
+- Regeneration: target starts regenerating even outside of power node.
+- Vulnerability: decreases target's armor to 0
+- Mist: engulfs cell in fog, so only units near it can see what is inside. No magic can target fog cells. Fog cells also slow movement.
+- Slay: targets receives damage equal to half of its max health. Also consumes part of caster's health, proportional to target's health.
+- Descend/Ascend: move unit between layers.
+- Stalker: homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
+- Almagest: switches day to night and night to day; Kalispera - sets time to evening; Kalimera - sets time to day.
+- Spy: wizard learns the next unknown spell, casted by any wizard.
+- Clone Self: creates clone of self, which will continue leading, if creator dies
+- Morph: turn caster into a monster, that is present on map and seen, until player cancels effect.
+- Disguise: makes creature look like target creature, until it acts (simple movement doesn't break the illusion).
+- Exorcise: a costy spell that can be used to banish any undead. Should cost two times more than a vampire.
+- Open Node: tears the fabric of reality to open new magic node, which should be placed several cells away from an existing node, to promote territorial control.
+- Close Node: closes existing magic node.
+- Altar: non undead fallen creatures get resurrected as undeads here, as long as wizard stands near this structure.
+- Vampirism: gives unit vampire's abilities.
+- Palantir: wizard creates a scrying ball, keeping a creature near ball allows player to see through the fog of war. Yet it doesn't explore the map and doesn't reveal invisible creatures. Also provide some cover structures to counter it, maybe disallow indoors scrying to promote creation of tunnels and buildings by players.
+- Banish: target temporarily disappears and then returns to its caster's pentagram.
+- Wind: nearby target gets displaced into one direction by N cells or until the closest height=2 block.
+- Kill: kills target, that has less than half HP
+- Spell that affect all units standing on a terrain of specific kind.
+- Raise Dead: resurrect recently killed unit as undead.
+- Guardian Angel: killed unit gets resurrected at pentagram.
+- Passion: caster loses health, but gains mana.
+- Live Shield: portion of damage to one creature gets redirected to another.
+- Harm Mirror: reflects damage from the next attack back to attacker.
+- Return Harm: any damage target deals gets returned to it.
+- Sacrifice: creature dies and its health is transfered to heal another.
+- Amnesia: target leader forgets target spell.
+- Counter Magic: the next spell enemy casts fails. Could potentially be somewhat annoying to human player.
+- Aggravate: target neutral creature attacks enemies of the caster
+- Employing telekinesis spell to use items as improvised weapon, like i.e. throwing rocks at enemies.
+- A spell that forces all apple trees to produce fruits.
+- Spells, creatures or structures that could boost mana income or decrease opponent's income or increase opponent's mana cost.
+- Spells that summon enchanted items, usable by creatures.
+- Global enchantments like Zombie Mastery or See Everything could be represented by summoned/constructed map objects, that can easily be destroyed/disbanded, without introducing additional mechanics and complicating UI.
+- Subvert: this spell can be implemented differently
+    - Each creature has its own subvert cost, called "will". Some creature are immune to subvert. This will may be equivalent to creature's cost.
+    - Limit subversion time (i.e. just N turns). make sure player can't disband it.
+    - paralyze the caster, while he/she controls the creature, allowing only the "Relinquish Control" action.
+    - Limit only to low level creatures.
+  Subvert cost seems the easiest to implement and balance. So the best approach would be combining 
+
+Unused Creatures:
+Beetle:
+Halfling:
+Farmer:
+Horse: fast, steed, can be captured on map
+
+
+- Collectible spells, like weapons in Doom. That will greatly simplify gameplay and force wizard to explore world for new spells quickly, instead of turtling. It is also possible, that some spell be present in a single quantity, so only one wizard will ever obtain it. Spells could be presented at shrines, guarded by creatures. Only wizard can learn from such shrines. Maybe visiting shrine gives only a limited number of spellcasting. Optionally, there could be a way to steal enemy spells and a method that forces enemy to forget chosen spells.
+  Pros:
+    - lore gets eliminated;
+    - exploration becomes fun;
+    - easier to control what spells are available to player;
+    - no annoying research dialogue;
+    - map design get more involved, where player can get dragon since beginning;
+  Cons:
+    - start could be boring;
+    - wizards lose specialization;
+    - collectible spells could still be provided;
+    - loss of strategic depth;
+    - explorating can be encouraged through collecting map treasures, giving lore.
+    - requires map designer to place all spells somewhere;
+    - creating an icon system;
+    - multiplayer maps would probably require to include some spells several times;
+
+Regarding bigger mana/health/damage numbers:
+- Huge health/damage values will make it harder for player to decide outcome.
+- Using larger values can indeed help balancing some unit aspects, like health regeneration or poison. On the other hand, slowing down health regeneration can be implemnted differently and most units already have acceptable rates.
+- Huge mana income (hundreds per turn) is not requried either, because spells could be balanced by their cooldown (or by introducing casting time) and distance-based spell could simply be rounded (i.e. each 5 cells cost additional 1 mana).
+- Even with huge numbers, units should still kill other units in a discrete number of hits (i.e. ratman would kill other ratman in 3 hits, while tier=2 fighter would kill ratman in 2 hits)
