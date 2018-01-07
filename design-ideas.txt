@@ -4,7 +4,7 @@ Leader abilities:
 - Dual-cast: allows casting two different spells on two different locations on the same turn.
 
 General:
-- Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps.
+- Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
 - A way to cast spell, like shell or heal, on all units for additional mana. Have a separate tab for that.
 - Generators: a place spawning monsters. Implement generators as a platform, that clones the monster standing on top of it. Player can remove it by moving its own unit on top of it. Unit standing on top of generator will have one additional action: clone, but its cooldown time should be assigned to generator. Higher level monsters will induce higher cooldown. Clones of neautral monsters will then roam the map.
@@ -22,7 +22,6 @@ General:
 - Destructible trees. By attacking and destroying trees, some creatures could clear way to some goodies or other strategic advantage.
 - Day-night cycle, affecting creature sight. Non-undead creatures have 1/2 reduced vision during night. One turn would be equivalent to 1 hour. Total Eclipse spell, turning day into night for the next 16 turns. Light spell mitigates effect of darkness. Same way, inside dungeons sight would be reduced. Day-time lowers cost of law spells and increases cost of chaos spells, while night lowers chaos spells' cost, twilight has no bonus. Use dial like WC3 for UI representation of time.
 - Allow savegame only when certain amount of turns have passed since the last load. Each save also increases the number of turns, player has to play between successive saves, that will discourage save scumming.
-- X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Global map, where player can find next destination. Collected spells are preserved between maps.
 - Steeds: horse, lizard and gryphon; For start, the rider can simply be drawn near his mount's sprite.
   Mount can't attack, while being rided and all actions are the actions of the rider. Rider can unmount into any of the four directions. All incoming damage goes to the mount.
