@@ -1,8 +1,8 @@
 sprite: unit_blob
 tier: 1
-health: 5
+health: 6
 combat: 2
-steps: 1
+steps: 2
 armor: 0
 range: 3
 speed: 60
@@ -12,3 +12,4 @@ impact: shell,harm{user},sound{blob_attack}
 hit: effect{blood_undead},sound{blob_hit}
 death: sound{blob_hit}
 moves: sound{step}
+acts: (blob_division)

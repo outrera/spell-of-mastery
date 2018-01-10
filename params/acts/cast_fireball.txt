@@ -3,8 +3,8 @@ hotkey: f
 lore: 3
 cost: 2
 cool: 5
-affects: unit
 range: 6
+affects: unit
 before: missile{effect_fireball},impact{fbhit},sound{explosion},resist,harm{unavoid.5}
 hint: harm
 

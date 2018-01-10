@@ -1,6 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- rename `affects` to `req` (requirements)
+- merge targer:seen|unseen into req, making affect only seen units by default.
+- unit.health has obsolete code, which can be simplified. Just disallow decreasinh health past 0
 - Ensure all unit abilities are working properly
   - blob dividing
   - dwarf's defence

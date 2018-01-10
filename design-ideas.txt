@@ -85,7 +85,7 @@ Spells:
 - Drought: temporary removes all water, replacing it with special empty aux tile
 - Water to Lava: converts all water to lava, disallowing passage over it and damagin units standing on it.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
-- Freeze Water: freezes water, allowing units to pass over it.
+- Freeze Water: freezes all water on the map, allowing units to pass over it.
 - Water to Earth: targets attached to water dirt cell, turning it to water.
 - Earth to Water: targets attached to dirt water cell, turning it to dirt.
 - Water Walk: allows unit to walk over water.

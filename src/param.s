@@ -114,7 +114,8 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | for E [@$before @$after]: case E [add Name]: push Name Flags
 | $flags <= Flags
 | Allowed = [land water clear outdoor owned ally non_leader will
-             any unit empty self pentagram]
+             any unit empty self pentagram
+             c_fullhp]
 | T = Allowed{[? 0]}.table
 | As = $affects
 | less As.is_list: As <= [As]
@@ -132,7 +133,7 @@ act.validate Actor XYZ Target Invalid =
   | leave 0
 | when T.unit and not Target or Target.removed: leave 0
 | when T.pentagram:
-  | P = $unit.owner.pentagram
+  | P = Actor.owner.pentagram
   | less P:
     | Invalid{"This action requires pentagram."}
     | leave 0
@@ -143,7 +144,7 @@ act.validate Actor XYZ Target Invalid =
   | less Actor.cell.is_floor_empty:
     | Invalid{"Needs clear floor"}
     | leave 0
-| when T.empty and $unit.world.block_at{$xyz}:
+| when T.empty and Actor.world.block_at{XYZ}:
   | Invalid{"Needs empty floor"}
   | leave 0
 | Below = Actor.world.at{XYZ.0 XYZ.1 XYZ.2-1}
@@ -167,6 +168,9 @@ act.validate Actor XYZ Target Invalid =
   | leave 0
 | when T.will and Target and Target.will > Actor.owner.mana:
   | Invalid{"Needs [Target.will] mana."}
+  | leave 0
+| when T.c_fullhp and Actor.hp < Actor.class.hp:
+  | Invalid{"Needs full health."}
   | leave 0
 | when $name >< room_demolish and not Below.cost:
   | Invalid{"Cant demolish this."}
