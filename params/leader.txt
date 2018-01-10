@@ -58,7 +58,7 @@ summons:
       summon_dwarf,
       summon_spider,
       summon_lizard,
-      summon_knight,
+      summon_paladin,
       summon_skeleton,
       summon_ifrit,
       summon_griffin,
