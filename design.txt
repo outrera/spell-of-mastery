@@ -26,7 +26,7 @@ Spells:
 
 Summonable Creatures:
 Oculus: flyer, scout, clears invisibility from enemy units in sight.
-Blob: slow, when in full health, can divide into two blobs of half health.
+Blob: slow, when in full health, can divide into two blobs of half the health.
 Imp: digs terrain, builds bridges, plants trees, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: weakest shooter.
