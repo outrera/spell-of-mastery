@@ -1,0 +1,6 @@
+proto: spawn__proto
+icon: unit_paladin
+lore: 10
+cost: 7
+cool: 14
+after: pentagram,impact{teleport},spawn{unit_paladin}

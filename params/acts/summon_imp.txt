@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_imp
-lore: misc.tier0_lcost
-cost: misc.tier0_scost
-cool: misc.tier0_cool
+lore: 3
+cost: 4
+cool: 5
 after: pentagram,impact{teleport},spawn{unit_imp}

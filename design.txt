@@ -33,20 +33,20 @@ Goblin: weakest shooter.
 Elf: shooter.
 Dwarf: defends, if dwarf haven't attacked this turn, all incoming damage is reduced to 1
 Orc: has enough health to withstand a single lightning bolt.
-Spider: poisons; can set web trap, entering which opponent loses all movement points and gets paralyzed for the next turn.
+Spider: poisons; can set web trap, entering which enemy unit loses all movement points and gets paralyzed for the next turn.
 Lizard: fast, steed, immune to magic, climbs high terrain. Good for stalking wizards, who can't harm it.
 Skeleton: cursed.
-Paladin: has blessed attack, that harms cursed units.
-Wraith: cursed, flyer, becomes invisible.
+Paladin: has blessed attack, that harms cursed units; immune to subversion.
+Wraith: cursed, incorporeal, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
-Minotaur: can stun-attack enemy for a single turn.
+Minotaur: has stun-attack ability, disabling enemy for a single turn.
 Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed, or 1, if target haven't done any damage.
 Vampire: cursed, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy hitter
-Hydra: moves over water, attacks in all four directions, regenerates everywhere.
-Golem: slow, stoneskin: any incoming non-magic damage is reduced to 1.
+Hydra: moves over water, attacks in all four directions, regenerates 2 points per turn.
+Golem: slow, stoneskin (any incoming non-magic damage is halved).
 Gargoyle: flyer, ignores armor.
 Dragon: flyer, can induce fear into nearby unit, harms cursed units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
 
@@ -55,7 +55,6 @@ Types of Creature Movement:
 - Flyer
 - Swimmer (can walk over water)
 - Climber (can scale walls)
-- Incorporeal (Walk through doors and 1-tile walls) can be implemented using teleport spell
 
 Leader Abilities:
 - Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
@@ -68,13 +67,15 @@ Status Effects:
 - Blessed: unit can harm cursed units and break magic doors.
 - Poison: unit can't regenerate and loses health with time, until health drops to 1 or heal is cast.
 - Fire Aura: attacker gets damaged equivalent to their own damage, when melee attacking this unit.
-- Hasted: unit gains additional moves per turn.
-- Invisible: unit is invisible unit its next action non-movement.
+- Hasted: unit gains additional 2 additional steps per turn.
+- Invisible: unit is invisible until its next non-movement action.
 - Shell: unit is invincible to the next physical attack.
 - Resisting: unit is invincible to the next harmful magical effect.
 - Flying: unit can move over any terrain and gains addition sight.
 - Afraid: unit can't attack.
-- Organic: non-undead organic units can be target by attacks like life stealing.
+- Regen: unit restores 1 hit point at the start of its turn, if it has full health and wasn't harmed this turn.
+- Organic: non-undead and non-mechanical units can be target by attacks like life stealing.
+- Incorporeal: walks through doors and 1-tile walls (implementable through special teleport ability).
 
 Digging Mechanics:
 - only dirt is diggable.
