@@ -5,7 +5,7 @@ cool: 10
 speed: -1
 range: 1
 steps: 2
-affects: c_fullhp,empty,land,any
+affects: c_fullhp,land,empty
 before: sound{summon},self,heal{-3}
 after: impact{teleport},spawn{unit_blob},tenant,heal{-3}
 hint: blob_division

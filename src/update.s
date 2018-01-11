@@ -160,10 +160,6 @@ update_path Me =
               then (GXYZ-$xyz).take{2}{?abs}.sum><1 and (GXYZ.2-$xyz.2).abs<<1
             else if R><cross then (GXYZ-$xyz).take{2}{?abs}.sum><1
             else (GXYZ-$xyz).take{2}.abs.int<<R
-                 and (| T = $goal_act.targets
-                      | if T><seen then $world.seen_from{$xyz $goal.xyz}
-                        else if T><any then 1
-                        else 0)
   | when Reach:
     | $set_path{[]}
     | goal_in_range Me

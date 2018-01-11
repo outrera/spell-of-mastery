@@ -36,7 +36,7 @@ handle_picked_act Me Rect Units Act =
   | when ActUnit.serial<>ActUnitOldSerial:
     | $world.act <= 0
     | leave
-  | Actor <= ActUnit.0
+  | Actor <= ActUnit
 | less Actor: Actor <= $picked.0
 | Target = if Units.end then 0 else Units.0
 | less $mice_click><pick:

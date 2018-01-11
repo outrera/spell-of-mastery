@@ -5,7 +5,6 @@ cost: misc.tier3_scost
 cool: misc.tier4_cool
 range: 9000
 affects: empty
-targets: any
 before: effect{teleport},sound{summon},self,set{alpha 0},set{delta 10}
 after: impact{teleport},teleport{self},self,set{alpha 255},set{delta -10}
 hint: teleport

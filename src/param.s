@@ -77,7 +77,7 @@ params_handle_prototypes Me =
 type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
          lore/0 cost/0 steps/1 cool/0 needs/[]
          priority/50 range/0 speed/4 repeat/0
-         affects/unit targets/seen before/[] impact/Impact after/[]}
+         affects/unit before/[] impact/Impact after/[]}
   title/Title
   icon/Icon
   hotkey/Hotkey //keyboard shortcut
@@ -97,7 +97,6 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   repeat/Repeat //repeat action, while possible (i.e. tree is not chopped)
   affects/Affects //what it can target: self, unit, tile, any
                   //also allows prefixes: `(outdoor),` `(water),`
-  targets/Targets //seen=requires line of sight, any=any explored cell
   before/Before
   impact/Impact
   after/After
@@ -113,7 +112,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | Flags = []
 | for E [@$before @$after]: case E [add Name]: push Name Flags
 | $flags <= Flags
-| Allowed = [land water clear outdoor owned ally non_leader will
+| Allowed = [land water clear seen outdoor owned ally non_leader will
              any unit empty self pentagram
              c_fullhp]
 | T = Allowed{[? 0]}.table
@@ -171,6 +170,9 @@ act.validate Actor XYZ Target Invalid =
   | leave 0
 | when T.c_fullhp and Actor.hp < Actor.class.hp:
   | Invalid{"Needs full health."}
+  | leave 0
+| when T.seen and not Actor.world.seen_from{Actor.xyz XYZ}:
+  | Invalid{"Needs to be in line of sight."}
   | leave 0
 | when $name >< room_demolish and not Below.cost:
   | Invalid{"Cant demolish this."}
