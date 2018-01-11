@@ -1,8 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- move unit's summon cost into it's file.
+- autogenerate summon actions for each unit, require's first having spawn{auto}
 - Ensure all unit abilities are working properly
-  - dwarf's defence
   - Devil's teleporation and one-hit kill
   - hydra all directions attack
   - dragon and explosion knocking back
@@ -65,6 +66,8 @@ UI:
 Graphics:
 - New player colors: player{blue},king{purple},warlock{black},witch{red},
                      katzard{green},mime{orange},neutral{white}
+- icon for regen stat effect
+- icon for dwarf's defend action
 - dragon animation jumps horizontally during attack
 - finish house tileset, including floor and roof; dirt/plain should not align to house wall
 - better flight animation (idle-anim for floating effect and cloud under unit); use wesnoth halo/saurian-magic-halo-*; monster-elemental_air could be useful too
