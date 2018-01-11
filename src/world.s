@@ -311,7 +311,7 @@ world.new_game =
     | when C:
       | XYZ = C.xyz.copy
       | C.free
-      | C = P.alloc_unit{L.class.pentagram}
+      | C = P.alloc_unit{special_pentagram}
       | C.move{XYZ}
   | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it

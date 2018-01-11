@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_ratman
-lore: 5
-cost: 5
-cool: 10
+//lore: 5
+//cost: 5
+//cool: 10
 after: pentagram,impact{teleport},spawn{unit_ratman}
