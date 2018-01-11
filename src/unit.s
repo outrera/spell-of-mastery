@@ -121,14 +121,7 @@ unit.size =
 | if $height then S else [S.0 S.1 0]
 
 unit.alive = $hp > 0
-unit.health =
-| CHP = $class.hp
-| less CHP: leave 0
-| UHP = $hp
-| when UHP << 0: leave 0 
-| R = UHP%CHP
-| less R: R <= CHP
-| R
+unit.health = $hp
 
 land_can_move Me Src Dst =
 | H = Dst.z-Src.z
