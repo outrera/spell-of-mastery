@@ -20,8 +20,8 @@ hasted: on{endturn},inc{steps,2}
 //bloodlust: on{attack},mod{2},self,harm{1}
 invisible: on{act},strip{invisible}
 //shell: on{phys_harm},mod{block},sound{shell},impact{shell},strip{shell}
-regen: on{endturn},when{harmed safe},strip{poison},heal{1},effect{heal}
-regen_tenant: on{tenant_endturn},tenant,when{harmed safe},strip{poison},heal{1},effect{heal}
+regen: on{endturn},when{harmed resting},strip{poison},heal{1},effect{heal}
+regen_tenant: on{tenant_endturn},tenant,when{harmed resting},strip{poison},heal{1},effect{heal}
 burning: on{entry},tenant,harm{unavoid.9},effect1{fire_ring}
 enemy_removes: on{entry},tenant,when{enemy},effect{pickup},self,remove
 gateway: on{entry},gateway

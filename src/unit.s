@@ -96,8 +96,8 @@ unit.afraid = $flags^get_bit{15}
 unit.mark = $flags^get_bit{16}
 unit.`=mark` State = $flags <= $flags^set_bit{16 State}
 
-unit.safe = $flags^get_bit{17}
-unit.`=safe` State = $flags <= $flags^set_bit{17 State}
+unit.resting = $flags^get_bit{17}
+unit.`=resting` State = $flags <= $flags^set_bit{17 State}
 
 unit.resisting = $flags^get_bit{18}
 unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
@@ -498,7 +498,7 @@ unit.assault Combat Target =
 
 unit.harm Attacker Damage =
 | when $removed or not $alive: leave
-| $safe <= 0
+| $resting <= 0
 | when Attacker and $leader><1 and $owner.id<>0:
   | when not $owner.human and Attacker.owner.id><0:
     | Attacker.harm{Me 1000}

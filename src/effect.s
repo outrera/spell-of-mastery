@@ -336,7 +336,7 @@ check_when Me Target C =
   harmed | Target.health<>Target.class.hp
   idle | not Target.goal
   rested | $steps><$class.steps
-  safe | Target.safe
+  resting | Target.resting
   [`+` not C] | not: check_when Me Target C
   [`.` below Type] | (Target.cell-1).type><Type
   [`.` has_health A] | Target.health>>A

@@ -4,11 +4,12 @@ unit.new_turn =
 
 unit.end_turn =
 | Turn = $world.turn
+| Resting = $steps >< $class.steps
 | $steps <= $class.steps
 | when not $empty and $class.hp>0:
   | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}
-| $safe <= 1
+| $resting <= Resting
 | $handled <= 0
 | $engaged <= 0
 | Remove = 0

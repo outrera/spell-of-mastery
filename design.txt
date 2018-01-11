@@ -45,7 +45,7 @@ Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), 
 Vampire: cursed, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy hitter
-Hydra: moves over water, attacks in all four directions, regenerates 2 points per turn.
+Hydra: moves over water, attacks in all four directions, regenerates 1 hp per turn.
 Golem: slow, stoneskin (any incoming non-magic damage is halved).
 Gargoyle: flyer, ignores armor.
 Dragon: flyer, can induce fear into nearby unit, harms cursed units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
