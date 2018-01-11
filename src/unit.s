@@ -102,6 +102,9 @@ unit.`=resting` State = $flags <= $flags^set_bit{17 State}
 unit.resisting = $flags^get_bit{18}
 unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
 
+unit.defending = $flags^get_bit{19}
+unit.`=defending` State = $flags <= $flags^set_bit{19 State}
+
 
 unit.`=backtrack` XYZ =
 | less XYZ:
@@ -491,6 +494,7 @@ unit.assault Combat Target =
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
 | less Unavoid: Damage -= Target.armor
+| when Target.defending: Damage <= 1
 | Damage <= max 1 Damage
 | when Lifedrain: heal_unit Me 1
 | Target.harm{Me Damage}

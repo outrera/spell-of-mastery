@@ -1,17 +1,6 @@
 use util
 
 unit.new_turn =
-
-unit.end_turn =
-| Turn = $world.turn
-| Resting = $steps >< $class.steps
-| $steps <= $class.steps
-| when not $empty and $class.hp>0:
-  | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
-| $run_genes{endturn}
-| $resting <= Resting
-| $handled <= 0
-| $engaged <= 0
 | Remove = 0
 | RunEs = []
 | for E $genes: when E.amount>0:
@@ -23,6 +12,15 @@ unit.end_turn =
 | when Remove: $strip_gene{?amount><No} //strip genes with zero duration
 | for Name,Params RunEs: $run_gene{Name Params Me $xyz}
 
+unit.end_turn =
+| Resting = $steps >< $class.steps
+| $steps <= $class.steps
+| when not $empty and $class.hp>0:
+  | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
+| $run_genes{endturn}
+| $resting <= Resting
+| $handled <= 0
+| $engaged <= 0
 
 world.new_turn =
 

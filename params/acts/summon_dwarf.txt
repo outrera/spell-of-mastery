@@ -1,6 +1,6 @@
 proto: spawn__proto
 icon: unit_dwarf
-lore: misc.tier2_lcost
-cost: misc.tier2_scost
-cool: misc.tier2_cool
+lore: 10
+cost: 7
+cool: 14
 after: pentagram,impact{teleport},spawn{unit_dwarf}

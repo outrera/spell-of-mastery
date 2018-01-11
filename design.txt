@@ -31,7 +31,7 @@ Imp: digs terrain, builds bridges, plants trees, places traps, constructs doors 
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: weakest shooter.
 Elf: shooter.
-Dwarf: defends, if dwarf haven't attacked this turn, all incoming damage is reduced to 1
+Dwarf: has defend ability, which reduces all incoming damage to 1
 Orc: has enough health to withstand a single lightning bolt.
 Spider: poisons; can set web trap, entering which enemy unit loses all movement points and gets paralyzed for the next turn.
 Lizard: fast, steed, immune to magic, climbs high terrain. Good for stalking wizards, who can't harm it.

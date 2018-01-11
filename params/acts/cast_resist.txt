@@ -1,7 +1,7 @@
 icon: spell_resist
-//lore: 3
-//cost: 5
-//cool: 5
+lore: 5
+cost: 1
+cool: 5
 check: unit
 before: owner_units,add{resist},impact{resist},sound{resist}
 hint: boost

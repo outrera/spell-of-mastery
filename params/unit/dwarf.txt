@@ -1,11 +1,13 @@
 sprite: unit_dwarf
 tier: 2
-health: 8
+health: 10
 combat: 3
-armor: 1
+armor: 0
+will: 10
 speed: 28
 inborn: (organic)
 impact: shell,harm{user},sound{cut}
 hit: effect{blood},sound{dwarf_hit}
 death: sound{dwarf_die}
 moves: sound{step}
+acts: (defend)

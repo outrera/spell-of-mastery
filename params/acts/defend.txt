@@ -1,0 +1,9 @@
+icon: spell_shell
+//lore: 2
+//cost: 4
+cool: 0
+check: owned,unit
+before: add{defending 1},impact{spell}
+after: ()
+range: 0
+hint: boost
