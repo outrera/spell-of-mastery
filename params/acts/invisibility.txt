@@ -2,7 +2,7 @@ icon: spell_invisibility
 //lore: 2
 //cost: 2
 cool: 10
-affects: owned,unit
+check: owned,unit
 before: add{invisible},impact{spell},sound{invisibility}
 after: ()
 range: 0

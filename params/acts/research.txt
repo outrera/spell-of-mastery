@@ -1,5 +1,5 @@
 speed: 4
-affects: any
+check: any
 before: animate{idle}
        //,confirm{`Research?`,`Are you sure want to spent lore on this?`}
 after: when{confirmed},sound{gong},research{1}

@@ -180,7 +180,7 @@ world.action Unit = action Unit
 action.main = $unit.main
 
 action.cost = $act.cost
-action.affects = $act.affects
+action.check = $act.check
 action.before = $act.before
 action.impact =
 | less $act: leave //in case it is just an animation

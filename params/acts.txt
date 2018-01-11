@@ -8,6 +8,6 @@ speed: 4
 before: ()
 after: ()
 needs: ()
-affects: unit //what it can target
+check: unit //what it can target
 hint: 0
 tab: 0

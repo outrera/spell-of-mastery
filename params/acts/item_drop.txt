@@ -1,7 +1,7 @@
 //item prototype
 icon: "icons_nil"
 range: 0
-affects: any
+check: any
 before: animate{idle},sound{item_drop},drop{_ all}
 after: ()
 tab: bag

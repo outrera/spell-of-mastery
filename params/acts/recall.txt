@@ -1,5 +1,5 @@
 icon: recall
-affects: pentagram
+check: pentagram
 hotkey: r
 before: effect{teleport},sound{summon},impact{teleport},recall{pentagram}
        ,pentagram,impact{teleport}

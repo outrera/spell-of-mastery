@@ -4,7 +4,7 @@ hotkey: m
 //cost: 0
 //cool: 10
 range: 9000
-affects: non_leader,will,unit
+check: non_leader,will,unit
 before: impact{hypnotize},sound{subvert},resist,charm{owner}
 after: ()
 hint: subvert

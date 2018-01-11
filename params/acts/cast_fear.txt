@@ -4,7 +4,7 @@ icon: spell_fear
 //cost: 2
 //cool: 10
 range: 9000
-affects: unit
+check: unit
 before: impact{fear},resist,add{afraid 3},sound{fear}
 hint: heal_allies
 tab: spell

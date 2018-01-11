@@ -1,7 +1,7 @@
 icon: act_switch
 hotkey: f
 speed: 4
-affects: any
+check: any
 before: sound{door_switch},morph{special_door}
 
 

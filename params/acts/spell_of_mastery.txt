@@ -1,7 +1,7 @@
 icon: spell_of_mastery
 //lore: 200
 //cost: 10
-affects: any
+check: any
 before: shake_screen{24},
        color_overlay{(2 #AFFFFFFF) (2 #7FFFFFFF)
                      (16 #3FFFFFFF)

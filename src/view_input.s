@@ -40,7 +40,7 @@ handle_picked_act Me Rect Units Act =
 | less Actor: Actor <= $picked.0
 | Target = if Units.end then 0 else Units.0
 | less $mice_click><pick:
-  | when Act.affects.unit:
+  | when Act.check.unit:
     | Cur = if Target then \ui_cursor_target else \ui_cursor_target2
     | get_gui{}.cursor <= $main.img{Cur}
   | leave
@@ -332,7 +332,7 @@ world.update_cursor =
 | Marks = $marks.unheap
 | P = $human
 | if $act
-  then | when $act.affects.unit:
+  then | when $act.check.unit:
          | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
   else | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
        | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks

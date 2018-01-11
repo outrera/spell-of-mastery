@@ -4,7 +4,7 @@ icon: spell_dispel
 //cost: 5
 //cool: 10
 range: 9000
-affects: unit
+check: unit
 before: resist,strip{fear},strip{shell},strip{bless},strip{flyer},strip{hasted}
        ,strip{invisible},strip{invisible_on_attack}
        ,impact{spell},sound{dispel}

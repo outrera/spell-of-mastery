@@ -3,7 +3,7 @@ hotkey: k
 lore: misc.tier1_lcost
 cost: 100
 range: 9000
-affects: any
+check: any
 before: sound{pentagram}
 after: spawn{unit_telekinesis}
 tab: spell

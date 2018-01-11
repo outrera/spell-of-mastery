@@ -1,7 +1,7 @@
 icon: act_dismiss
 speed: 4
 steps: 0
-affects: unit
+check: unit
 before: animate{idle}
        ,confirm{`Disband Unit?`,`Are you really want to dismiss this unit?`}
 after: when{confirmed},sound{cancel},effect{teleport},remove

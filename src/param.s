@@ -77,7 +77,7 @@ params_handle_prototypes Me =
 type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
          lore/0 cost/0 steps/1 cool/0 needs/[]
          priority/50 range/0 speed/4 repeat/0
-         affects/unit before/[] impact/Impact after/[]}
+         check/unit before/[] impact/Impact after/[]}
   title/Title
   icon/Icon
   hotkey/Hotkey //keyboard shortcut
@@ -95,8 +95,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   range/Range //range
   speed/Speed //number of cycles before unit can act again
   repeat/Repeat //repeat action, while possible (i.e. tree is not chopped)
-  affects/Affects //what it can target: self, unit, tile, any
-                  //also allows prefixes: `(outdoor),` `(water),`
+  check/Check //what it can target (see Allowed below)
   before/Before
   impact/Impact
   after/After
@@ -116,17 +115,17 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
              any unit empty self pentagram
              c_fullhp]
 | T = Allowed{[? 0]}.table
-| As = $affects
+| As = $check
 | less As.is_list: As <= [As]
 | for A As:
-  | when no T.A: bad "Act [$name]: illegal affects option `[A]`"
+  | when no T.A: bad "Act [$name]: illegal check item `[A]`"
   | T.A <= 1
 | when not T.unit and not T.any and not T.empty and not T.self and not T.pentagram: 
-  | bad "Act [$name]: missing affects target type."
-| $affects <= T
+  | bad "Act [$name]: missing check target type."
+| $check <= T
 
 act.validate Actor XYZ Target Invalid =
-| T = $affects
+| T = $check
 | less Actor.owner.seen{XYZ}:
   | Invalid{"Needs seen territory."}
   | leave 0

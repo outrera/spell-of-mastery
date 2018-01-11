@@ -4,7 +4,7 @@ lore: 5
 cost: 4
 cool: 10
 range: 9000
-affects: non_leader,unit
+check: non_leader,unit
 before: strip{poison},add{curse},impact{curse},sound{curse}
 hint: curse
 tab: spell

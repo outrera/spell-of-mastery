@@ -3,7 +3,7 @@ lore: 10
 cost: 5
 cool: 10
 range: 9000
-affects: unit
+check: unit
 before: add{flyer},impact{heal},sound{flight}
 hint: fly
 tab: spell

@@ -2,4 +2,4 @@ icon: nil
 priority: 50
 range: 1
 speed: 4
-affects: any
+check: any

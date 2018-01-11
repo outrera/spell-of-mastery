@@ -1,6 +1,6 @@
 icon: attack
 hotkey: t
-affects: unit
+check: unit
 before: (user_attack)
 impact: counter,user_impact
 range: user

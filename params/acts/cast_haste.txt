@@ -4,7 +4,7 @@ lore: 5
 cost: 4
 cool: 10
 range: 9000
-affects: unit
+check: unit
 before: when{hasnt.haste},add{hasted},strip{slowed},inc{steps,2},impact{haste},sound{hasted}
 hint: boost
 tab: spell

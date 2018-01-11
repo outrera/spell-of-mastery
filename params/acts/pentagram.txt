@@ -1,5 +1,5 @@
 title: `Pentagram`
-affects: clear,land,any
+check: clear,land,any
 before: impact{pentagram_appearance},sound{pentagram}
 after: spawn{special_pentagram}
 icon: special_pentagram

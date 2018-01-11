@@ -3,6 +3,6 @@ icon: spell_excavate
 //cost: 100
 range: 1
 repeat: 1
-affects: any
+check: any
 before: same_z,idle_void{0} //kludge: idle if goal is void
 impact: same_z,dig{target}

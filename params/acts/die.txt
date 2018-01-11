@@ -2,4 +2,4 @@ priority: 50
 range: 1
 speed: 4
 steps: 0
-affects: any
+check: any

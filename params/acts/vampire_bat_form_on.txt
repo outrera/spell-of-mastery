@@ -2,6 +2,6 @@ icon: unit_bat
 title: `Bat Form Swith`
 hotkey: b
 speed: 4
-affects: any
+check: any
 before: sound{bat_move},effect{spell},morph{unit_vampire_bat_form},add{flyer}
 hint: morph

@@ -30,3 +30,8 @@ Graphics Editing Hints:
    4) Image > Adjustments > Threshold  with Threshold set to 255
 - to split image into tiles: convert input.png -crop 64x64 +repage 3-idle%d.png
 - to add missing digits: for i in *.png; do sename "\([^0-9]\)\([0-9]\)\.png" "0\0\1.png" $i; done
+
+
+Text editing:
+- replace text in files
+  for i in *.txt; do sed -i '' -e 's/<src>/<dst>/' $i; done

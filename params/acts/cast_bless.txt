@@ -4,7 +4,7 @@ icon: spell_bless
 //cost: 4
 //cool: 10
 range: 9000
-affects: unit
+check: unit
 before: add{bless},impact{bless},sound{heal}
 hint: bless
 tab: spell
