@@ -1,14 +1,13 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- `act` to `action` is like `class` to `unit`; Refactor it: rename `act` to tact, action to `act`, class to tunit
+- Teleport should check, that unit has movement type allowing him to move into that cell.
 - Ensure all unit abilities are working properly
-  - Devil's teleporation and one-hit kill
+  - ghost seeing through walls and walking through walls (implement as an action, similar to teleport)
+  - lizard's high terrain jump (can be implemented as an action first)
   - hydra all directions attack
   - dragon and explosion knocking back
-  - griffin's counter attack
-  - ghost walking through walls
-  - lizard's high terrain jump
+  - griffin's unlimited counter attack
 - begin implementing campaign
 - Sound on failed attacking undead.
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
@@ -20,6 +19,7 @@ TODO:
 - refactor some uses of add_effect into add_param
   should not use Params for effect's script
 - rename moves to on_move, etc..
+- `act` to `action` is like `class` to `unit`; Refactor it: rename `act` to tact, action to `act`, class to tunit
 - Think about refactoring genes to use ECS system, where each unit has a list of systems acting on him. Like i.e. poison system and regen systems.
 - AI should change vampire into bat form, before attack, and then back to vampire, when he is sees enemy and can attack
 - store map events in a separate file

@@ -47,19 +47,18 @@ General:
 
 Creatures:
 - Creature that is immune to blessed attacks.
+- Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
+- A unit that uses enemy's attack strength instead of its own.
 - Creature ability doing damage TargetMaxHp-TargetCurHp
+- A creature with ability to reduce target's health by 50%
+- Creature whose strength is proportional to owner's mana.
 - Creature abilities that trigger when unit is in critical state
-- Reaction abiltite, like counter-attack
+- Reaction abilities, like counter-attack
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
 - Creatures that prevents enemies from running away, forcing them to stay near the creature with such ability.
-- A creature with ability to reduce target's health by 50%
 - A creature that is permanently invisible, unless under the sight of oculus.
-- Creature alignments: either chaotic, lawful or neutral
-- Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
-- Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
-- A unit that uses enemy's attack strength intstead of its own.
+- Creature alignments: either chaotic, lawful or neutral. Then some creatures can deal additional damage to some alignments.
 - Elemental weakness. I.e. slimes being weak to fire
-- Creature whose strength is proportional to owner's mana.
 
 Spells:
 - Morph spell, that would turn caster into target creature.
@@ -68,6 +67,7 @@ Spells:
 - Magic Block: target loses ability to cast spells for several turns.
 - Slow (chaos): target unit moves at half of its speed.
 - Torment (chaos): halves targets's health.
+- Teleport: allows teleporting any creature to any visible location.
 - Fire trail: make target unit leave fire trail behind him
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
 - Duel: create 3x3 arena in the center of map, where all 4 wizards get summoned.

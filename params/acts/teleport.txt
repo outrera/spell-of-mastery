@@ -1,0 +1,10 @@
+icon: spell_teleport
+hotkey: p
+//lore: 5
+//cost: 3
+//cool: 10
+range: 9000
+check: empty
+before: effect{teleport},sound{summon},self,set{alpha 0},set{delta 10}
+after: impact{teleport},teleport{self},self,set{alpha 255},set{delta -10}
+hint: teleport

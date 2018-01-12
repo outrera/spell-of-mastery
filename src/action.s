@@ -122,7 +122,7 @@ dact swap.update | move_update Me
 dact swap.finish | move_finish Me
 
 
-dact teleport.start
+dact fastmove.start
 | $unit.move{$xyz}
 | $unit.on_entry
 

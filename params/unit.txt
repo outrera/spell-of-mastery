@@ -22,4 +22,3 @@ summon: auto
 item: 0
 impact: sound{attack2}
 moves: sound{step}
-spells: (cast_teleport)

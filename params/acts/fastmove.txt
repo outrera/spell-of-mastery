@@ -1,0 +1,7 @@
+icon: nil
+priority: 50
+range: 0
+speed: 4
+steps: 0
+check: any
+

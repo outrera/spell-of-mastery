@@ -1,9 +1,10 @@
 tier: 3
 cost: 10,10,15
 health: 14
-combat: 2
+combat: 1
 armor: 0
-inborn: (regen organic)
+inborn: (organic)
 impact: shell,harm{user},when{kills.1},harm{100},impact{lifedrain},endwhen,sound{devil_attack}
 hit: effect{blood},sound{devil_hit}
 death: sound{devil_hit}
+acts: (teleport)

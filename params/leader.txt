@@ -24,7 +24,7 @@ impact: missile{effect_bolt},resist,harm{1},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}
-acts: (pentagram cast_fireball cast_teleport)
+acts: (pentagram fireball)
 spells:
       (
       cast_knowledge

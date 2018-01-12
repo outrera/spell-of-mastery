@@ -290,7 +290,7 @@ effect caster Who:
 
 effect teleport Arg:
 | $reset_goal
-| $forced_order{teleport TargetXYZ}
+| $forced_order{fastmove TargetXYZ}
 
 effect research Arg:
 | O = Target.owner
