@@ -3,4 +3,3 @@ icon: unit_orc
 lore: 10
 cost: 7
 cool: 14
-after: pentagram,impact{teleport},spawn{unit_orc}

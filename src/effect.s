@@ -229,6 +229,7 @@ effect set_tile [X Y Z] Type:
 | $world.set{X Y Z Tile}
 
 effect spawn What:
+| when What><auto: What <= "unit[$action.act.name.drop{6}]"
 | S = $owner.alloc_unit{What}
 | S.aistate <= \spawned
 | less S.alpha:

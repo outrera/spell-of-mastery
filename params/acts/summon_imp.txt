@@ -3,4 +3,4 @@ icon: unit_imp
 lore: 3
 cost: 4
 cool: 5
-after: pentagram,impact{teleport},spawn{unit_imp}
+

@@ -3,4 +3,4 @@ icon: unit_blob
 lore: 5
 cost: 5
 cool: 10
-after: pentagram,impact{teleport},spawn{unit_blob}
+

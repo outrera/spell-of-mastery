@@ -4,6 +4,6 @@ cost: 0
 speed: -1
 check: pentagram
 before: pentagram,sound{summon},caster{leader}
-after: ()
+after: pentagram,impact{teleport},spawn{auto}
 hint: spawn
 tab: summon

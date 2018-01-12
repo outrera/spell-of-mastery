@@ -3,4 +3,4 @@ icon: unit_beetle
 lore: 5
 cost: 3
 cool: 10
-after: pentagram,impact{teleport},spawn{unit_beetle}
+

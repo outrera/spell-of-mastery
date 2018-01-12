@@ -3,4 +3,4 @@ icon: unit_wraith
 lore: misc.tier2_lcost
 cost: misc.tier2_scost
 cool: misc.tier2_cool
-after: pentagram,impact{teleport},spawn{unit_wraith}
+

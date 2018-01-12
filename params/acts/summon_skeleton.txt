@@ -3,4 +3,4 @@ icon: unit_skeleton
 lore: misc.tier1_lcost
 cost: misc.tier1_scost
 cool: misc.tier0_cool
-after: pentagram,impact{teleport},spawn{unit_skeleton}
+

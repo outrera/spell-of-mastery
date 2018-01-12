@@ -3,4 +3,3 @@ icon: unit_spider
 lore: misc.tier3_lcost
 cost: misc.tier3_scost
 cool: misc.tier3_cool
-after: pentagram,impact{teleport},spawn{unit_spider}
