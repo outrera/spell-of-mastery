@@ -1,4 +1,3 @@
-sprite: unit_heretic
 icon: unit_heretic
 hit: effect{blood},sound{male_hit}
 death: sound{mage_die}

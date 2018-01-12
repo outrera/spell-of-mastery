@@ -1,4 +1,3 @@
-sprite: unit_king
 icon: unit_king
 range: cross
 health: 40

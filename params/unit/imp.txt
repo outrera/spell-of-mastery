@@ -1,4 +1,3 @@
-sprite: unit_imp
 tier: 2
 cost: 3,4,5
 health: 6

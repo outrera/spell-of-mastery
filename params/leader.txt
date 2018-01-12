@@ -1,6 +1,7 @@
 //NOTE: ensure all leaders have 32 frames of attack animation
 //      otherwise some leader could put more damage than the other
 unit: 1
+sprite: auto
 active: 1
 height: 2
 tier: 5

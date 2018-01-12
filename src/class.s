@@ -69,8 +69,10 @@ main.load_classes =
 | $classes <= @table: @join: map BankName BankNames
   | map Name,Params $params.BankName
     | R = class BankName Name Me @Params.list.join
-    | S = $sprites.(R.default_sprite)
-    | less got S: bad "missing sprite `[R.default_sprite]`"
+    | DS = R.default_sprite
+    | when DS><auto: DS <= "unit_[Name]"
+    | S = $sprites.DS
+    | less got S: bad "missing sprite `[DS]` for `[BankName]_[Name]`"
     | R.default_sprite <= S
     | "[BankName]_[Name]",R
 | for S $sprites{}{?1}.keep{?class}

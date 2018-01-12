@@ -1,4 +1,3 @@
-sprite: unit_witch
 icon: unit_witch
 hit: effect{blood},sound{female_hit}
 death: sound{female_die},sound{mage_die}

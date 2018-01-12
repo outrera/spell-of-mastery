@@ -1,4 +1,3 @@
-sprite: unit_beetle
 tier: 1
 cost: 5,3,10
 health: 5

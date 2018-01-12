@@ -1,4 +1,3 @@
-sprite: unit_mime
 icon: unit_mime
 hit: effect{blood}
 death: sound{mage_die}
