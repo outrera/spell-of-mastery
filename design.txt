@@ -41,7 +41,7 @@ Spider: poisons; can set web trap, entering which enemy unit loses all movement 
 Lizard: fast, steed, immune to magic, climbs high terrain. Good for stalking wizards, who can't harm it.
 Skeleton: cursed.
 Paladin: has blessed attack, that harms cursed units; immune to subversion.
-Wraith: cursed, incorporeal, flyer, becomes invisible.
+Wraith: cursed, incorporeal, sees through walls, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: has stun-attack ability, disabling enemy for a single turn.
