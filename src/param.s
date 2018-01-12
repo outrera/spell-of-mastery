@@ -76,6 +76,16 @@ params_handle_prototypes Me =
 
 params_handle_acts Me =
 | Acts = $params.acts
+| SP = Acts.spawn__proto
+| for N,U $params.unit: less U.aux: when U.summon:
+  | when U.summon<>auto: N <= U.summon
+  | A = SP.deep_copy
+  | A.icon <= "unit_[N]"
+  | Lore,Mana,Cool = U.cost
+  | A.lore <= Lore
+  | A.cost <= Mana
+  | A.cool <= Cool
+  | Acts."summon_[N]" <= A
 | for Name,Act Acts: Acts.Name <= act Name @Act.list.join
 
 main.load_params =

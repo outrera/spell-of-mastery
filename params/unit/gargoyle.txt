@@ -1,5 +1,6 @@
 sprite: unit_gargoyle
 tier: 3
+cost: 10,10,10
 health: 10
 combat: 4
 armor: 2

@@ -1,5 +1,6 @@
 sprite: unit_paladin
 tier: 2
+cost: 10,7,14
 health: 9
 combat: 3
 armor: 1

@@ -1,5 +1,6 @@
 sprite: unit_blob
 tier: 1
+cost: 5,5,10
 health: 6
 combat: 2
 steps: 2

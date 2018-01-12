@@ -1,6 +1,6 @@
 sprite: unit_observer
-icon: unit_observer
 tier: 2
+cost: 15,15,20
 health: 10
 combat: 3
 armor: 0

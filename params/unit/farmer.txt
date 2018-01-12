@@ -1,5 +1,6 @@
 sprite: unit_farmer
 tier: 1
+cost: 5,3,10
 health: 3
 combat: 2
 armor: 0

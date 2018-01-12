@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- move unit's summon cost into it's file.
-- autogenerate summon actions for each unit, require's first having spawn{auto}
+- Unit's sprite could be infered from name, if it isn't explicitly specified
 - `act` to `action` is like `class` to `unit`; Refactor it: rename `act` to tact, action to `act`, class to tunit
 - Ensure all unit abilities are working properly
   - Devil's teleporation and one-hit kill

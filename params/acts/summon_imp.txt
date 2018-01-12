@@ -1,6 +1,0 @@
-proto: spawn__proto
-icon: unit_imp
-lore: 3
-cost: 4
-cool: 5
-

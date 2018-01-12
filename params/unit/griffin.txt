@@ -1,5 +1,6 @@
 sprite: unit_griffin
 tier: 3
+cost: 10,10,10
 health: 9
 combat: 4
 armor: 0

@@ -1,5 +1,6 @@
 sprite: unit_ifrit
 tier: 3
+cost: 10,10,15
 health: 12
 combat: 3
 armor: 1

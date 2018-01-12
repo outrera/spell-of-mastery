@@ -1,5 +1,6 @@
 sprite: unit_orc
 tier: 2
+cost: 10,7,14
 health: 10
 combat: 4
 armor: 0

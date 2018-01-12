@@ -1,5 +1,6 @@
 sprite: unit_cyclops
 tier: 4
+cost: 10,10,20
 health: 20
 combat: 5
 armor: 0

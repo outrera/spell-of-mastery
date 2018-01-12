@@ -1,5 +1,6 @@
 sprite: unit_halfling
 tier: 1
+cost: 5,5,10
 health: 4
 combat: 1
 armor: 0

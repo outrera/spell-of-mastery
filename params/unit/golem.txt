@@ -1,5 +1,6 @@
 sprite: unit_golem
 tier: 4
+cost: 15,15,20
 health: 12
 combat: 4
 armor: 10

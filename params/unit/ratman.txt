@@ -1,5 +1,6 @@
 sprite: unit_ratman
 tier: 1
+cost: 5,5,10
 health: 8
 combat: 3
 armor: 0

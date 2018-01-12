@@ -1,5 +1,0 @@
-proto: spawn__proto
-icon: unit_paladin
-lore: 10
-cost: 7
-cool: 14

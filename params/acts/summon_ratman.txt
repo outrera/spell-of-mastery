@@ -1,6 +1,0 @@
-proto: spawn__proto
-icon: unit_ratman
-//lore: 5
-//cost: 5
-//cool: 10
-

@@ -1,6 +1,0 @@
-proto: spawn__proto
-icon: unit_beetle
-lore: 5
-cost: 3
-cool: 10
-

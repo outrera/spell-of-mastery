@@ -1,5 +1,6 @@
 sprite: unit_goblin
 tier: 1
+cost: 5,5,10
 health: 7
 combat: 2
 armor: 0

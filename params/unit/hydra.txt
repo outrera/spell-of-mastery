@@ -1,5 +1,6 @@
 sprite: unit_hydra
 tier: 4
+cost: 15,15,20
 health: 16
 combat: 5
 armor: 0

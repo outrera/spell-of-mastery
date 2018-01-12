@@ -1,5 +1,6 @@
 sprite: unit_minotaur
 tier: 3
+cost: 10,10,15
 health: 15
 combat: 6
 armor: 0

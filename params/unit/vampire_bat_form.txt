@@ -9,6 +9,8 @@ range: 1
 steps: 14
 sight: 10
 cool: 10
+aux: 1
+summon: 0
 inborn: (cursed flyer)
 attack: sound{bat_move}
 impact: harm{user}

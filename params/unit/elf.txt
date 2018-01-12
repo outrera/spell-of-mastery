@@ -1,5 +1,6 @@
 sprite: unit_elf
 tier: 1
+cost: 10,7,14
 health: 6
 combat: 4
 armor: 0
