@@ -1,7 +1,7 @@
 tier: 4
 cost: 20,20,30
 health: 20
-combat: 6
+combat: 8
 armor: 1
 steps: 12
 sight: 10

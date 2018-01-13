@@ -123,14 +123,6 @@ effect area As: //area{any,3,harm{magic.2}}
 | when Whom><enemy: Ts <= Ts.keep{?is_enemy{Me}}
 | for T Ts: $effect{Es T T.xyz}
 
-effect neibs Args:
-| Es = Args{|[_ N A]=>[N A];[_ N @As]=>[N As]}
-| D = (TargetXYZ-$xyz){?sign}
-| DD = D.1,D.0,D.2
-| for XYZ [$xyz+DD $xyz-DD]
-  | B = $world.block_at{XYZ}
-  | when B: $effect{Es B B.xyz}
-
 effect detonate Args:
 | B = $world.block_at{TargetXYZ}
 | Damage = Target.class.hp
@@ -435,6 +427,14 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< all_alive then
       | for U $world.active: when U.alive:
         | when U.ai><unit: $effect{Es U U.xyz}
+      | _goto end
+    else if Name >< hydra_targets then
+      | D = (TargetXYZ-$xyz){?sign}
+      | DD = D.1,D.0,D.2
+      | for XYZ [$xyz+DD $xyz-DD]
+        | B = $world.block_at{XYZ}
+        | when B: $effect{Es B B.xyz}
+      | $effect{Es T XYZ}
       | _goto end
     else if Name >< owner_units then
       | OID = $owner.id

@@ -3,7 +3,6 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 TODO:
 - Ensure all unit abilities are working properly
   - lizard's high terrain jump (can be implemented as an action first)
-  - hydra all directions attack
   - dragon and explosion knocking back
   - griffin's unlimited counter attack
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
