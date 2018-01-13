@@ -64,7 +64,6 @@ Leader Abilities:
 - Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
 - Fireball (chaos): throws a cheap fireball.
 - Guardian (law): summons a turret, that can attack nearby enemies.
-- Teleport (neutral): teleports caster to any seen location.
 
 Status Effects:
 - Cursed: unit is immune to non-magical weapons and poison, but suffers 100% more damage from blessed units.
@@ -80,6 +79,7 @@ Status Effects:
 - Regen: unit restores 1 hit point at the start of its turn, if it has full health and wasn't harmed this turn.
 - Organic: non-undead and non-mechanical units can be target by attacks like life stealing.
 - Incorporeal: walks through doors and 1-tile walls (implementable through special teleport ability).
+- Seethrough: obstacles don't block this unit's sight
 
 Digging Mechanics:
 - only dirt is diggable.

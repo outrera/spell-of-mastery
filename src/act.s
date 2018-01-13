@@ -40,7 +40,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | $flags <= Flags
 | Allowed = [land water clear seen outdoor owned ally non_leader will
              any unit empty self pentagram
-             c_fullhp]
+             placeable c_fullhp]
 | T = Allowed{[? 0]}.table
 | As = $check
 | less As.is_list: As <= [As]
@@ -99,6 +99,9 @@ act.validate Actor XYZ Target Invalid =
   | leave 0
 | when T.seen and not Actor.world.seen_from{Actor.xyz XYZ}:
   | Invalid{"Needs to be in line of sight."}
+  | leave 0
+| when T.placeable and not Actor.placeable_at{Actor.world.cellp{XYZ}}:
+  | Invalid{"Needs place where this unit can stand."}
   | leave 0
 | when $name >< room_demolish and not Below.cost:
   | Invalid{"Cant demolish this."}

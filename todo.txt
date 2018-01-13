@@ -1,9 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Teleport should check, that unit has movement type allowing him to move into that cell.
 - Ensure all unit abilities are working properly
-  - ghost seeing through walls and walking through walls (implement as an action, similar to teleport)
+  - ghost walking through walls (implement as an action, similar to teleport)
   - lizard's high terrain jump (can be implemented as an action first)
   - hydra all directions attack
   - dragon and explosion knocking back

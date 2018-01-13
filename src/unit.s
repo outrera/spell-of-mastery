@@ -157,6 +157,13 @@ unit.update_move_method =
                else if $swimmer then &swimmer_can_move
                else &land_can_move
 
+unit.placeable_at Dst =
+| less Dst.empty: leave 0
+| when $flyer: leave 1
+| when $amphibian: leave 1
+| when $swimmer: leave (Dst-1).tile.type><water
+| leave: not (Dst-1).tile.liquid
+
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
