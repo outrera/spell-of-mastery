@@ -15,7 +15,7 @@ amphibian: on{static}
 organic: on{static}
 fireaura: on{counter},harm{unavoid.2},impact{fire_ring}
 poison: on{endturn},host,when{has_health.2},harm{unavoid.1}
-hasted: on{endturn},inc{steps,2}
+hasted: on{endturn},inc{steps,4}
 //slowed: on{endturn},inc{steps,-1}
 //bloodlust: on{attack},mod{2},self,harm{1}
 invisible: on{act},strip{invisible}

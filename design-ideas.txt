@@ -48,6 +48,7 @@ General:
 Creatures:
 - Creature that is immune to blessed attacks.
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
+- Creature, that gives bonuses to nearby allies.
 - A unit that uses enemy's attack strength instead of its own.
 - Creature ability doing damage TargetMaxHp-TargetCurHp
 - A creature with ability to reduce target's health by 50%
