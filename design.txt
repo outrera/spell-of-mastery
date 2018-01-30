@@ -19,13 +19,13 @@ Spells:
 - Resist (chaos): target gains immunity to the next magical attack.
 - Bless (law): target gains ability to harm undead and break magic doors.
 - Curse (chaos): makes target immune to non-magical weapon, but vulnerable to blessed units.
-- Invisibility (law): target becomes invisible, gaining 100% bonus to melee attack [make sure stats info show it]; attacking streaps invisibility.
+- Invisibility (law): target becomes invisible, gaining 100% bonus to melee attack [make sure stats info show it]; attacking strips invisibility.
 - Firewall (chaos): creates a wall of fire at empty space, damaging creatures entering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
 - Flight (law): target gains ability to fly.
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health.
 - Subvert (law): gain control over the target creature by spending mana equivalent to creature's willpower.
 - Armageddon (chaos): all units sustain 5 points of damage.
-- The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires learning all other spells to be cast.
+- The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires exceptionally large amount of mana to be cast.
 
 
 Summonable Creatures:
@@ -80,6 +80,7 @@ Status Effects:
 - Organic: non-undead and non-mechanical units can be target by attacks like life stealing.
 - Incorporeal: walks through doors and 1-tile walls (implementable through special teleport ability).
 - Seethrough: obstacles don't block this unit's sight
+- Darkvision: this unit doesn't suffer from sight penalty at night.
 
 Digging Mechanics:
 - only dirt is diggable.

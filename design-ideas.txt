@@ -4,6 +4,8 @@ Leader abilities:
 - Dual-cast: allows casting two different spells on two different locations on the same turn.
 
 General:
+- Mana hoarding limit, which can be increased by building silos crystals, which are vulnerable to some spells. These silos could even be required to summon high-mana cost cretures.
+- Power-up structures: for example. a structure decreasing cooldown or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
 - A way to cast spell, like shell or heal, on all units for additional mana. Have a separate tab for that.
@@ -44,6 +46,7 @@ General:
 - Supply lines, breaking which would weaken the opponent.
 - Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa. A neutral spell to restore balance.
 - Power versions of spells (damage boosted or all targets) should require additional rare mana/catalyst.
+- units may be set to act out of turn at the expense of being able to act in their own turn
 
 Creatures:
 - Creature that is immune to blessed attacks.
