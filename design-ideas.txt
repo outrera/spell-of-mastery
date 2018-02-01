@@ -65,6 +65,7 @@ Creatures:
 - Elemental weakness. I.e. slimes being weak to fire
 
 Spells:
+- Genocide (chaos): kill all units of specific type, both enemy and allied.
 - Morph spell, that would turn caster into target creature.
 - Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
 - Reveal Spells/Items: shows on minimap places where items are located.
