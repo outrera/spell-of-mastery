@@ -4,7 +4,7 @@ health: 8
 combat: 2
 armor: 0
 speed: 20
-inborn: (organic)
+inborn: (organic climber)
 //attack: sound{spider_attack}
 impact: shell,harm{user},macro{poison},sound{spider_attack}
 hit: effect{blood},sound{spider_hit}

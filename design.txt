@@ -37,8 +37,8 @@ Goblin: weakest shooter.
 Elf: shooter.
 Dwarf: has defend ability, which reduces all incoming damage to 1
 Orc: has enough health to withstand a single lightning bolt.
-Spider: poisons; can set web trap, entering which enemy unit loses all movement points and gets paralyzed for the next turn.
-Lizard: fast, steed, immune to magic, climbs high terrain. Good for stalking wizards, who can't harm it.
+Spider: poisons; can set web trap, climber, entering which enemy unit loses all movement points and gets paralyzed for the next turn.
+Lizard: fast, steed, immune to magic, climber. Good for stalking wizards, who can't harm it.
 Skeleton: cursed.
 Paladin: has blessed attack, that harms cursed units; immune to subversion.
 Wraith: cursed, incorporeal, sees through walls, flyer, becomes invisible.
@@ -57,8 +57,8 @@ Dragon: flyer, can induce fear into nearby unit, harms cursed units, can send ne
 Types of Creature Movement:
 - Walker
 - Flyer
-- Swimmer (can walk over water)
-- Climber (can scale walls)
+- Swimmer: can traverse over water
+- Climber: can scale walls (less than 4 height)
 
 Leader Abilities:
 - Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.

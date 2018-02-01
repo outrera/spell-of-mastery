@@ -85,6 +85,7 @@ unit.`=shelled` State = $flags <= $flags^set_bit{4 State}
 unit.flyer = $flags^get_bit{5}
 unit.`=flyer` State = $flags <= $flags^set_bit{5 State}
 
+unit.climber = $flags^get_bit{9}
 unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
@@ -125,37 +126,6 @@ unit.size =
 
 unit.alive = $hp > 0
 unit.health = $hp
-
-land_can_move Me Src Dst =
-| H = Dst.z-Src.z
-| when H > 1 or H < -1: leave 0
-| Dst.tile.empty and not (Dst-1).tile.liquid
-
-amphibian_can_move Me Src Dst =
-| H = Dst.z-Src.z
-| when H > 1 or H < -1: leave 0
-| Dst.tile.empty
-
-swimmer_can_move Me Src Dst =
-| H = Dst.z-Src.z
-| when H > 1 or H < -1: leave 0
-| Dst.tile.empty and (Dst-1).tile.type><water
-
-flyer_can_move Me Src Dst =
-| less Dst.tile.empty: leave 0
-| SZ = Src.z
-| DZ = Dst.z
-| if SZ<DZ
-  then | when DZ > $world.d-3: leave 0
-       | times I DZ-SZ: less (Src+I).tile.empty: leave 0
-  else times I SZ-DZ: less (Dst+I).tile.empty: leave 0
-| 1
-
-unit.update_move_method =
-| $can_move <= if $flyer then &flyer_can_move
-               else if $amphibian then &amphibian_can_move
-               else if $swimmer then &swimmer_can_move
-               else &land_can_move
 
 unit.placeable_at Dst =
 | less Dst.empty: leave 0

@@ -5,7 +5,7 @@ Leader abilities:
 
 General:
 - Mana hoarding limit, which can be increased by building silos crystals, which are vulnerable to some spells. These silos could even be required to summon high-mana cost cretures.
-- Power-up structures: for example. a structure decreasing cooldown or increasing damage from units or spells.
+- Power-up structures or units: for example. a structure/unit decreasing cooldown, boosting experience gain or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
 - A way to cast spell, like shell or heal, on all units for additional mana. Have a separate tab for that.
