@@ -4,7 +4,15 @@ Leader abilities:
 - Dual-cast: allows casting two different spells on two different locations on the same turn.
 
 General:
-- Mana hoarding limit, which can be increased by building silos crystals, which are vulnerable to some spells. These silos could even be required to summon high-mana cost cretures.
+- Alternative resource system: limiting mana hoarding, proportional to the number of slow moving silos crystals, player built. Say leader starts with 10 storage, each crystal provides 5 additional mana storage. Crystals are required to cast high-cost spells.
+  Pros:
+     - nice growth limiting
+     - if leader's health is linked to mana, then destroying crystals would weaken that leader
+     - could serve as creature population limiter, encouraging using less creatures. Say each creature takes 1 storage limit, to keep its sould bound. Note that storage limit shouldn't fall to less than the requirement to summon crystal.
+     - provides tactical ways to saboutage opponent's mana reserves by destroying crystals.
+  Cons:
+    - Spawning a crystal would waste precious leader's turn, that could be spent on something cooler.
+    - Could be too complex for AI to handle.
 - Power-up structures or units: for example. a structure/unit decreasing cooldown, boosting experience gain or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
@@ -65,7 +73,7 @@ Creatures:
 - Elemental weakness. I.e. slimes being weak to fire
 
 Spells:
-- Genocide (chaos): kill all units of specific type, both enemy and allied.
+- Genocide (chaos): kill all units of specific type, both enemy and allied. Requires two times the mana, needed to subvert target creature.
 - Morph spell, that would turn caster into target creature.
 - Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
 - Reveal Spells/Items: shows on minimap places where items are located.
@@ -189,3 +197,19 @@ Regarding bigger mana/health/damage numbers:
 - Using larger values can indeed help balancing some unit aspects, like health regeneration or poison. On the other hand, slowing down health regeneration can be implemnted differently and most units already have acceptable rates.
 - Huge mana income (hundreds per turn) is not requried either, because spells could be balanced by their cooldown (or by introducing casting time) and distance-based spell could simply be rounded (i.e. each 5 cells cost additional 1 mana).
 - Even with huge numbers, units should still kill other units in a discrete number of hits (i.e. ratman would kill other ratman in 3 hits, while tier=2 fighter would kill ratman in 2 hits)
+
+
+Regarding experience coming from casting spells or other actions:
+  Pros:
+    - solves last-hitting problem, when several players or units are competing for experience.
+  Cons:
+    - discourages exploration and hunting monsters.
+    - encourages player using stupid grinding actions each turn, like healing the enemy and attacking it again.
+
+- Regarding mana producing structures or say 10 accumulated mana providing 1/mana per turn.
+  Pros:
+    -
+  Cons:
+    - Discourages exploration.
+    - Discourages territory countrol.
+    - Makes it hard to truly limit player's income.
