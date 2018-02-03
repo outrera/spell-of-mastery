@@ -76,7 +76,8 @@ Creatures:
 
 Spells:
 - Genocide (chaos): kill all units of specific type, both enemy and allied. Requires two times the mana, needed to subvert target creature.
-- Morph spell, that would turn caster into target creature.
+- Time Stop: enemy loses its turn.
+- Morph: caster is morphed into the target creature (need some way to preserve casters original health).
 - Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
 - Reveal Spells/Items: shows on minimap places where items are located.
 - Magic Block: target loses ability to cast spells for several turns.
@@ -220,3 +221,12 @@ Regarding experience coming from casting spells or other actions:
 Link leader's health to it's mana, so that any damage to the leader first subtracts from the mana:
 - A leader that got damanged receives no mana that turn, to prevent health refilling quicker than leader spends it.
 - Could be implemented as a spell instead, which would provide a lot more tactical nuances, including ability to dispel it, as well as some creatures getting support from the mana pool.
+
+Flight mode for flying units, where they are immune to land unit attack and can fly over land units:
+  Pros:
+    - Additional tactical and strategic dimensions, so that only flyers could counter flyers and flyers could pass over non-flying defenders.
+    - Bomber unit types, that are very good against ground units, but weak against flyers and ranged attackers.
+    - Would make ranged units much more useful.
+  Cons:
+    - Requires rethinking pathfinding.
+    - Hard for AI to handle.
