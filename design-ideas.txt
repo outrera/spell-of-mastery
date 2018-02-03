@@ -13,7 +13,7 @@ General:
   Cons:
     - Spawning a crystal would waste precious leader's turn, that could be spent on something cooler.
     - Could be too complex for AI to handle.
-- Reagents used to reduce spellcasting cost, in a way that mana cost first subtracted from reagent pools. Cauldron could be required to take use of reagents, or it can provide separate boost. Liquid color in cauldron would indicate it's owner.
+- Reagents used to reduce spellcasting cost, in a way that mana cost first subtracted from reagent pools. Alternatively, spells could specify reagents, that they can consume instead of mana. Simpler system would have just one reagent, say shrooms, that could be purchased with mana, and that reagent would be required to cast most powerful spells, or to pay upkeep. Cauldron could be required to make use of reagents, generate them, or it can provide separate boost. Liquid color in cauldron would indicate it's owner.
 - Power-up structures or units: for example. a structure/unit decreasing cooldown, boosting experience gain or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
@@ -186,6 +186,7 @@ Horse: fast, steed, can be captured on map
     - no annoying research dialogue;
     - map design get more involved, where player can get dragon since beginning;
   Cons:
+    - similar effect could be achieved using reagents and reagent generators, providing cheaper casting for specific spells.
     - start could be boring;
     - wizards lose specialization;
     - collectible spells could still be provided;
@@ -198,7 +199,7 @@ Horse: fast, steed, can be captured on map
 Regarding bigger mana/health/damage numbers:
 - Huge health/damage values will make it harder for player to decide outcome.
 - Using larger values can indeed help balancing some unit aspects, like health regeneration or poison. On the other hand, slowing down health regeneration can be implemnted differently and most units already have acceptable rates.
-- Huge mana income (hundreds per turn) is not requried either, because spells could be balanced by their cooldown (or by introducing casting time) and distance-based spell could simply be rounded (i.e. each 5 cells cost additional 1 mana).
+- Huge mana income (hundreds per turn) is not required either, because spells could be balanced by their cooldown (or by introducing casting time) and distance-based spell could simply be rounded (i.e. each 5 cells cost additional 1 mana).
 - Even with huge numbers, units should still kill other units in a discrete number of hits (i.e. ratman would kill other ratman in 3 hits, while tier=2 fighter would kill ratman in 2 hits)
 
 
@@ -218,7 +219,7 @@ Regarding experience coming from casting spells or other actions:
     - Makes it hard to truly limit player's income.
 
 
-Link leader's health to it's mana, so that any damage to the leader first subtracts from the mana:
+Linking leader's health to it's mana, so that any damage to the leader first subtracts from the mana:
 - A leader that got damanged receives no mana that turn, to prevent health refilling quicker than leader spends it.
 - Could be implemented as a spell instead, which would provide a lot more tactical nuances, including ability to dispel it, as well as some creatures getting support from the mana pool.
 
