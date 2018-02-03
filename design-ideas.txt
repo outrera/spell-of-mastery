@@ -13,6 +13,7 @@ General:
   Cons:
     - Spawning a crystal would waste precious leader's turn, that could be spent on something cooler.
     - Could be too complex for AI to handle.
+- Reagents used to reduce spellcasting cost, in a way that mana cost first subtracted from reagent pools. Cauldron could be required to take use of reagents, or it can provide separate boost. Liquid color in cauldron would indicate it's owner.
 - Power-up structures or units: for example. a structure/unit decreasing cooldown, boosting experience gain or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
@@ -64,6 +65,7 @@ Creatures:
 - Creature ability doing damage TargetMaxHp-TargetCurHp
 - A creature with ability to reduce target's health by 50%
 - Creature whose strength is proportional to owner's mana.
+- Creature whose health is linked to owner's mana. It would also drain reagen's of its type, if they are available.
 - Creature abilities that trigger when unit is in critical state
 - Reaction abilities, like counter-attack
 - A creature ability to pass through solid objects and enemies, but only if their movement ends in an empty cell.
@@ -213,3 +215,8 @@ Regarding experience coming from casting spells or other actions:
     - Discourages exploration.
     - Discourages territory countrol.
     - Makes it hard to truly limit player's income.
+
+
+Link leader's health to it's mana, so that any damage to the leader first subtracts from the mana:
+- A leader that got damanged receives no mana that turn, to prevent health refilling quicker than leader spends it.
+- Could be implemented as a spell instead, which would provide a lot more tactical nuances, including ability to dispel it, as well as some creatures getting support from the mana pool.

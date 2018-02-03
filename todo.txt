@@ -1,9 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Ensure all unit abilities are working properly
-  - dragon and explosion knocking back
-  - griffin's unlimited counter attack (watch for endless cycle, whe griffin attacks other griffin)
+- dragon's wind gust ability, damaging nearby enemy and sending said enemy flying 8 cells away.
+- griffin's unlimited counter attack (watch for endless cycle, whe griffin attacks other griffin)
+- climbers be able to attack unit on higher ground 
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Sound on failed attack on undead.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key.
