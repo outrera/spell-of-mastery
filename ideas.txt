@@ -236,5 +236,6 @@ Flight mode for flying units, where they are immune to land unit attack and can 
 Regarding possibility of allowing creature standing on top of another, and the arising complications:
 - If creature below starts moving, should the creature on top of it move too? If yes, then should it spend its move points? What if more creatures are standing on top?
 - How creature selection would be handled? Some way of z-axis would be needed.
+- How attacking or swapping would be processed? It opens some tactical possibilities, like some creatures could have weaknesses when attacked from above.
 - One creature could fill gaps and serve as a bridge for another.
 - How would AI handle such possibilities?
