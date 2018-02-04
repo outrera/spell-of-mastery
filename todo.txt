@@ -6,7 +6,7 @@ TODO:
 - blow-away: decide what happens when one unit ends up above another
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to get units to move.
-- griffin's unlimited counter attack (watch for endless cycle, whe griffin attacks other griffin)
+- griffin's unlimited counter attack (watch out for endless cycle, when griffin attacks other griffin)
 - climbers be able to attack unit on higher ground 
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Sound on failed attack on undead.

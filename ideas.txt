@@ -232,3 +232,9 @@ Flight mode for flying units, where they are immune to land unit attack and can 
   Cons:
     - Requires rethinking pathfinding.
     - Hard for AI to handle.
+
+Regarding possibility of allowing creature standing on top of another, and the arising complications:
+- If creature below starts moving, should the creature on top of it move too? If yes, then should it spend its move points?
+- How creature selection would be handled? Some way of z-axis would be needed.
+- One creature could fill gaps and serve as a bridge for another.
+- How would AI handle such possibilities?
