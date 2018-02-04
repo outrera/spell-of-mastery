@@ -1,7 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- dragon's wind gust ability, damaging nearby enemies flying away: closest enemy moves 6 cells, next one moves 5 cells, etc... Non-flying enemies without ground under their feet get fall damage, based on their height.
+- blow-away: ensure blown units fall and drown correctly.
+- blow-away: add wind/dust animation to all cells through which blown units are passing
+- blow-away: decide what happens when one unit ends up above another
+- int.block should be renamed to unit
+- blowaway should use `world.units_in_range` to get units to move.
 - griffin's unlimited counter attack (watch for endless cycle, whe griffin attacks other griffin)
 - climbers be able to attack unit on higher ground 
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.

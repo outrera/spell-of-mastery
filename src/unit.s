@@ -73,6 +73,9 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
 
+Facings = [[-1 -1] [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0]]
+unit.direction = Facings.$facing
+
 unit.picked = $flags^get_bit{1}
 unit.`=picked` State = $flags <= $flags^set_bit{1 State}
 

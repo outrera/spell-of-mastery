@@ -30,6 +30,7 @@ int.gfx = CellsGfxes.Me
 int.`=gfx` V = CellsGfxes.Me <= V
 int.block = CellsBlock.Me //unit blocking the tile
 int.`=block` V = CellsBlock.Me <= V
+int.vacant = $empty and not $block
 int.cost = CellsCost.Me
 int.`=cost` V = CellsCost.Me <= V
 int.prev = CellsPrev.Me
@@ -364,6 +365,9 @@ world.free_unit U =
 world.picked = $player.picked
 world.`=picked` Us = $player.picked <= Us
 
+
+world.valid X Y Z =
+| X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < $d
 world.cell X Y Z = (Y*$maxSize+X)*$d+Z
 world.cellp P = (P.1*$maxSize+P.0)*$d+P.2
 world.at X Y Z = $cell{X Y Z}.tile
@@ -472,6 +476,12 @@ world.units_get X,Y,Z = $cell{X Y Z}.units.unheap
 world.column_units_get X Y = $cell{X Y 0}.units.unheap
 
 world.block_at XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.block
+
+world.block_at_safe XYZ =
+| when XYZ.0<1: leave 0
+| when XYZ.1<1: leave 0
+| when XYZ.2<1: leave 0
+| $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
 world.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
@@ -687,9 +697,6 @@ world.down XYZ = //finds Z of the floor below
 | till Z<<B or $at{X Y Z}.empty: Z--
 | while Z>B and $at{X Y Z-1}.empty: Z--
 | Z
-
-world.valid X Y Z =
-| X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < $d
 
 world.push_ X Y Tile =
 | Z = $height{X Y}

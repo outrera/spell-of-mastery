@@ -23,13 +23,13 @@ effect enable State Players ActNames:
 effect on When: No
 
 effect add @Args:
-| less Args.size: bad 'effect add: wrong number of arguments'
 | Name = 0
 | Duration = 0
-| if Args.is_list then
-    | Name <= Args.0
-    | Duration <= Args.1
-  else Name <= Args
+| case Args
+  [N] | Name <= N
+  [N D] | Name <= N
+        | Duration <= D
+  Else | bad 'effect add: wrong number of arguments: [Args]'
 | Target.add_gene{Name Duration []}
 
 effect strip Name:
@@ -279,6 +279,25 @@ effect caster Who:
 | less Who >< leader and Leader: leave
 | Leader.animate{attack}
 | Leader.face{TargetXYZ}
+
+effect blowaway R BlowSelf:
+| for DX,DY points_in_diamond{R}:
+  | B = $world.block_at_safe{TargetXYZ+[DX DY 0]}
+  | when B and (BlowSelf or B.xyz<>TargetXYZ):
+    | N = max 0 R-(DX.abs+DY.abs)
+    | BP = B.xyz
+    | when TargetXYZ >< BP:
+      | DX <= B.direction.0
+      | DY <= B.direction.1
+    | D = if DX.abs>DY.abs then [DX.sign 0 0] else [0 DY.sign 0]
+    | TP = BP
+    | times I N:
+      | T = BP + D*(I+1)
+      | if $world.valid{@T} and $world.cellp{T}.vacant then TP <= T
+        else done
+    | when TP<>BP:
+      | B.reset_goal
+      | B.move{TP}
 
 effect teleport Arg:
 | $reset_goal

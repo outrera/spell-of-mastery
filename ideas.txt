@@ -77,6 +77,7 @@ Creatures:
 Spells:
 - Genocide (chaos): kill all units of specific type, both enemy and allied. Requires two times the mana, needed to subvert target creature.
 - Time Stop: enemy loses its turn.
+- Torando/Whirlwind: nearby units are pushed away from tornado, similarly to dragon's blow away
 - Morph: caster is morphed into the target creature (need some way to preserve casters original health).
 - Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
 - Reveal Spells/Items: shows on minimap places where items are located.

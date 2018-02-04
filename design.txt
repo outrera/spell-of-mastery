@@ -1,7 +1,7 @@
 THIS FILE STATES DESIGN DECISIONS THAT WERE MADE
 
 General:
-- Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5.
+- Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5. Casting spell or attacking requires 4 steps. Haste gives +4 steps, allowing most units to attack twice.
 - Tier 1 creature costs 5 mana, while ultimate creature, dragon, costs 20.
 
 

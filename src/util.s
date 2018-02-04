@@ -14,6 +14,7 @@ list.overlaps [BX BY BW BH] =
 | AX,AY,AW,AH = Me
 | AX<BX+BW and AY<BY+BH and BX<AX+AW and BY<AY+AH
 
+//Dirs.(Unit.facing) would give direction Unit is facing
 Dirs = 8{(?.float-2.0)*PI/4.0}{[?.cos ?.sin].round.int}
 dirN V = Dirs.locate{V.sign}
 

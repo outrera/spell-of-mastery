@@ -3,7 +3,7 @@ cost: 20,20,30
 health: 20
 combat: 8
 armor: 1
-steps: 12
+steps: 6
 sight: 10
 speed: 20
 inborn: (organic flyer)
@@ -12,3 +12,4 @@ impact: impact{fire_ring},shell,harm{user},sound{explosion}
 hit: effect{blood},sound{dragon_hit}
 death: sound{dragon_death}
 moves: sound{dragon_move}
+acts: (act_blowaway)
