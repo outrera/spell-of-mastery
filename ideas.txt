@@ -14,6 +14,7 @@ General:
     - Spawning a crystal would waste precious leader's turn, that could be spent on something cooler.
     - Could be too complex for AI to handle.
 - Reagents used to reduce spellcasting cost, in a way that mana cost first subtracted from reagent pools. Alternatively, spells could specify reagents, that they can consume instead of mana. Simpler system would have just one reagent, say shrooms, that could be purchased with mana, and that reagent would be required to cast most powerful spells, or to pay upkeep. Cauldron could be required to make use of reagents, generate them, or it can provide separate boost. Liquid color in cauldron would indicate it's owner.
+- Non flyers should be able to jump from a cliff, sustaining fall damage
 - Allow flyers to throw down unit standing near cliff, echangin place with it and inducing fall damage.
 - Power-up structures or units: for example. a structure/unit decreasing cooldown, boosting experience gain or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.

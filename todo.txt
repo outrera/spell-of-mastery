@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- fall damage for non flyers
+- fall damage for non flyers: FallHeight*3-1
 - blow-away: add wind/dust animation to all cells through which blown units are passing
 - blow-away: animation for caster
 - when AI moves unit, cursor should be centered on it, so that it won't be hidden.
