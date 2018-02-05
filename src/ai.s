@@ -181,12 +181,15 @@ ai_update_unit Me =
       | leave break
   | when $steps:
     | Es = $enemies_in_sight
+    | PursueRange = max $sight 10
     | Flt = Cs{[?1 1]}.table //filtering table
     | Es = Es.skip{E => Flt.(E.cell)><1}
-    | Es = Es.keep{E => $path_to{E.xyz}.size<10}
-    | case Es [E@_]:
+    | EsR = Es.keep{E => $path_to{E.xyz}.size<PursueRange}
+    | less EsR.size: EsR <= Es.keep{E => $path_near{E.xyz}.size<PursueRange}
+    | case EsR [E@_]:
       | $backtrack <= $xyz
       | $advance_to{E.xyz}
+      | less $handled: $handled <= 1
       | leave break
 | when $aistate <> roam:
   | BtXYZ = $gene_param{btrack}

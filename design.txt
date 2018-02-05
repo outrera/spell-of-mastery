@@ -80,7 +80,8 @@ Status Effects:
 - Organic: non-undead and non-mechanical units can be target by attacks like life stealing.
 - Incorporeal: walks through doors and 1-tile walls (implementable through special teleport ability).
 - Seethrough: obstacles don't block this unit's sight
-- Darkvision: this unit doesn't suffer from sight penalty at night.
+- Darkvision: this unit doesn't suffer sight penalty at night.
+- Heavy: cannot be lifted into air by tornado and flight spells or dragon wings blow.
 
 Digging Mechanics:
 - only dirt is diggable.

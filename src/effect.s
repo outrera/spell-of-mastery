@@ -293,7 +293,7 @@ effect blowaway R BlowSelf:
     | TP = BP
     | times I N:
       | T = BP + D*(I+1)
-      | if $world.valid{@T} and $world.cellp{T}.vacant then TP <= T
+      | if $world.valid{@T} and $world.cellp{T}.floor.vacant then TP <= T
         else done
     | when TP<>BP:
       | B.reset_goal

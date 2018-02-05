@@ -169,7 +169,7 @@ update_path Me =
   | when $xyz >< $goal.xyz:
     | goal_in_range Me
     | leave
-  | Path = $path_to{$goal.xyz}
+  | Path = $path_near{$goal.xyz}
   | when Path.end: //cant reach goal from here?
     | $goal <= 0
     | leave 0
@@ -254,8 +254,10 @@ update_fall Me =
 | $velocity.2 -= GravAcc
 | FZ = $floor.z
 | FDst = $fxyz+$velocity{}{?int}
-| if FDst.2 > FZ*$world.c then $fine_move{FDst}
+| if FDst.2 > (FZ*$world.c+31) then $fine_move{FDst}
   else $move{[$xyz.0 $xyz.1 FZ]}
+| when [$xyz.0 $xyz.1]><[5 3]:
+  | say [$xyz.2 $fxyz]
 
 unit_sink Me =
 | $sound{sink}

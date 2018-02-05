@@ -1,9 +1,10 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- blow-away: ensure blown units fall and drown correctly.
+- water should stop blow movement, so that blow attack couldn't be used to reach inappropriate locations.
 - blow-away: add wind/dust animation to all cells through which blown units are passing
-- blow-away: decide what happens when one unit ends up above another
+- when AI moves unit, cursor should be centered on it, so that it won't be hidden.
+- when unit acts, center cursor on it.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to get units to move.
 - griffin's unlimited counter attack (watch out for endless cycle, when griffin attacks other griffin)

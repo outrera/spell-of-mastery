@@ -137,6 +137,12 @@ unit.find MaxCost Check = $world.find{MaxCost Me $cell Check}
 unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $cell Check}
 
 unit.path_to XYZ =
+| Target = $world.cell{@XYZ}
+| Found = $world.pathfind{1000 Me $cell ?><Target}
+| if Found then Found.path else []
+
+// returns path to closest reachable point near XYZ
+unit.path_near XYZ =
 | Found = $world.closest_reach{1000 Me $cell XYZ}
 | if Found then Found.path else []
 
