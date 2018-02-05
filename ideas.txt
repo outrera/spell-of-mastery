@@ -14,6 +14,7 @@ General:
     - Spawning a crystal would waste precious leader's turn, that could be spent on something cooler.
     - Could be too complex for AI to handle.
 - Reagents used to reduce spellcasting cost, in a way that mana cost first subtracted from reagent pools. Alternatively, spells could specify reagents, that they can consume instead of mana. Simpler system would have just one reagent, say shrooms, that could be purchased with mana, and that reagent would be required to cast most powerful spells, or to pay upkeep. Cauldron could be required to make use of reagents, generate them, or it can provide separate boost. Liquid color in cauldron would indicate it's owner.
+- Allow flyers to throw down unit standing near cliff, echangin place with it and inducing fall damage.
 - Power-up structures or units: for example. a structure/unit decreasing cooldown, boosting experience gain or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
@@ -92,7 +93,7 @@ Spells:
 - Fire: alternative to firewall: a wave of fire would move across the land, burning grass and trees, but stoping at cliffs. Only the first row of trees should burn out, preventing single fire from shaving whole forest.
 - Exchange: swaps target and caster.
 - Area of effect spell (should it only affect enemies?).
-- Chain lightning, going from target to any unit in the range of 3 cells.
+- Chain lightning, going from target to all units in the range of 3 cells.
 - Gooey Blob: slowly covers entire map in agressive blob, unless fought.
 - Earthquake: damage all non-flyers.
 - Thunderstorm: damages all flyers.
@@ -125,7 +126,8 @@ Spells:
 - Awareness: caster gets know when somebody casts a spell and reveal the location. Should be useful for tracking down enemy, trying to hide in the fog of war.
 - Detect Curse: reveals for of war around cursed units.
 - Detect Illusion: target creature can now see invisible enemies, hidden doors and discern illusionary creatures.
-- Mirror Image: creates a copy of target unit, that deals the same damage, but dies in a single hit.
+- Spy: wizard learns the next unknown spell, casted by any wizard.
+- Phantom: creates a copy of target unit, that deals the same damage, but dies in a single hit.
 - Simulacrum (law): creates illusionary copy of target creature to confuse the enemy. Simulacrum dies from a single hit.
 - Enrage: when target can attack, limits its actions to attack. I.e. it can't retreat or move around the enemy.
 - Spells that do both good/bad to you and your enemy.
@@ -136,7 +138,6 @@ Spells:
 - Descend/Ascend: move unit between layers.
 - Stalker: homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
 - Almagest: switches day to night and night to day; Kalispera - sets time to evening; Kalimera - sets time to day.
-- Spy: wizard learns the next unknown spell, casted by any wizard.
 - Clone Self: creates clone of self, which will continue leading, if creator dies
 - Morph: turn caster into a monster, that is present on map and seen, until player cancels effect.
 - Disguise: makes creature look like target creature, until it acts (simple movement doesn't break the illusion).
@@ -146,7 +147,7 @@ Spells:
 - Altar: non undead fallen creatures get resurrected as undeads here, as long as wizard stands near this structure.
 - Vampirism: gives unit vampire's abilities.
 - Palantir: wizard creates a scrying ball, keeping a creature near ball allows player to see through the fog of war. Yet it doesn't explore the map and doesn't reveal invisible creatures. Also provide some cover structures to counter it, maybe disallow indoors scrying to promote creation of tunnels and buildings by players.
-- Banish: target temporarily disappears and then returns to its caster's pentagram.
+- Banish: target temporarily disappears and then returns to its caster's pentagram. If pentagram occupied, then banished unit dies.
 - Wind: nearby target gets displaced into one direction by N cells or until the closest height=2 block.
 - Kill: kills target, that has less than half HP
 - Spell that affect all units standing on a terrain of specific kind.
@@ -165,12 +166,7 @@ Spells:
 - Spells, creatures or structures that could boost mana income or decrease opponent's income or increase opponent's mana cost.
 - Spells that summon enchanted items, usable by creatures.
 - Global enchantments like Zombie Mastery or See Everything could be represented by summoned/constructed map objects, that can easily be destroyed/disbanded, without introducing additional mechanics and complicating UI.
-- Subvert: this spell can be implemented differently
-    - Each creature has its own subvert cost, called "will". Some creature are immune to subvert. This will may be equivalent to creature's cost.
-    - Limit subversion time (i.e. just N turns). make sure player can't disband it.
-    - paralyze the caster, while he/she controls the creature, allowing only the "Relinquish Control" action.
-    - Limit only to low level creatures.
-  Subvert cost seems the easiest to implement and balance. So the best approach would be combining 
+
 
 Unused Creatures:
 Beetle:
@@ -224,6 +220,7 @@ Linking leader's health to it's mana, so that any damage to the leader first sub
 - A leader that got damanged receives no mana that turn, to prevent health refilling quicker than leader spends it.
 - Could be implemented as a spell instead, which would provide a lot more tactical nuances, including ability to dispel it, as well as some creatures getting support from the mana pool.
 
+
 Flight mode for flying units, where they are immune to land unit attack and can fly over land units:
   Pros:
     - Additional tactical and strategic dimensions, so that only flyers could counter flyers and flyers could pass over non-flying defenders.
@@ -233,9 +230,18 @@ Flight mode for flying units, where they are immune to land unit attack and can 
     - Requires rethinking pathfinding.
     - Hard for AI to handle.
 
+
 Regarding possibility of allowing creature standing on top of another, and the arising complications:
 - If creature below starts moving, should the creature on top of it move too? If yes, then should it spend its move points? What if more creatures are standing on top?
 - How creature selection would be handled? Some way of z-axis would be needed.
 - How attacking or swapping would be processed? It opens some tactical possibilities, like some creatures could have weaknesses when attacked from above.
 - One creature could fill gaps and serve as a bridge for another.
 - How would AI handle such possibilities?
+
+
+Subvert spell can be implemented differently:
+    - Each creature has its own subvert cost, called "will". Some creature are immune to subvert. This will may be equivalent to creature's cost.
+    - Limit subversion time (i.e. just N turns). make sure player can't disband it.
+    - paralyze the caster, while he/she controls the creature, allowing only the "Relinquish Control" action.
+    - Limit only to low level creatures.
+  Subvert cost seems the easiest to implement and balance. So the best approach would be combining 

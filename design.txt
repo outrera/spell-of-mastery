@@ -74,7 +74,7 @@ Status Effects:
 - Invisible: unit is invisible until its next non-movement action.
 - Shell: unit is invincible to the next physical attack.
 - Resisting: unit is invincible to the next harmful magical effect.
-- Flying: unit can move over any terrain and gains addition sight.
+- Flying: unit can move over any terrain and gains addition sight. Flying units are unaffected by fall damage.
 - Afraid: unit can't attack.
 - Regen: unit restores 1 hit point at the start of its turn, if it has full health and wasn't harmed this turn.
 - Organic: non-undead and non-mechanical units can be target by attacks like life stealing.

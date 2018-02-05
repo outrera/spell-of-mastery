@@ -5,7 +5,9 @@ TODO:
 - blow-away: add wind/dust animation to all cells through which blown units are passing
 - blow-away: animation for caster
 - when AI moves unit, cursor should be centered on it, so that it won't be hidden.
-- climbers and flyers be able to attack units on higher ground, otherwise some units could get stuck.
+- climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck.
+  If flyer attack unit standing on a cliff, it syncs its altitude with defender, attacks defender and moves down.
+  If flyer attacks from a cliff, it moves above enemy, attacks it, then returns to its position on the cliff.
 - when unit acts, center cursor on it.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to get units to move.
