@@ -107,7 +107,8 @@ view.infoline =
   | Goal = ""
   | when U.goal: Goal <= " ([U.goal_act.name] at [U.goal.xyz])"
   | Will = " will: [U.will]; "
-  | Text <= "[Text]; [U.title][Will][Goal]"
+  | Id = if $world.editor then " ([U.id])" else ""
+  | Text <= "[Text]; [U.title][Id] [Will][Goal]"
 | Text
 
 export view

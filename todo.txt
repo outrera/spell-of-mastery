@@ -1,14 +1,15 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- water should stop blow movement, so that blow attack couldn't be used to reach inappropriate locations.
+- fall damage for non flyers
 - blow-away: add wind/dust animation to all cells through which blown units are passing
+- blow-away: animation for caster
 - when AI moves unit, cursor should be centered on it, so that it won't be hidden.
+- climbers and flyers be able to attack units on higher ground, otherwise some units could get stuck.
 - when unit acts, center cursor on it.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to get units to move.
 - griffin's unlimited counter attack (watch out for endless cycle, when griffin attacks other griffin)
-- climbers be able to attack unit on higher ground 
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Sound on failed attack on undead.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key.

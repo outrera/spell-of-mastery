@@ -281,9 +281,11 @@ effect caster Who:
 | Leader.face{TargetXYZ}
 
 effect blowaway R BlowSelf:
+| Handled = []
 | for DX,DY points_in_diamond{R}:
   | B = $world.block_at_safe{TargetXYZ+[DX DY 0]}
-  | when B and (BlowSelf or B.xyz<>TargetXYZ):
+  | when B and not Handled.has{B.id} and (BlowSelf or B.xyz<>TargetXYZ):
+    | push B.id Handled
     | N = max 0 R-(DX.abs+DY.abs)
     | BP = B.xyz
     | when TargetXYZ >< BP:
@@ -293,8 +295,14 @@ effect blowaway R BlowSelf:
     | TP = BP
     | times I N:
       | T = BP + D*(I+1)
-      | if $world.valid{@T} and $world.cellp{T}.floor.vacant then TP <= T
-        else done
+      | less $world.valid{@T}: done
+      | F = $world.cellp{T}.floor
+      | less F.vacant: done
+      | Prev = TP
+      | TP <= T
+      | less B.flyer:
+        | when (F-1).tile.liquid: done //ensure water blocks non-flyers
+        | when Prev.2 - F.xyz.2 >> 2: done //cliff stops movement
     | when TP<>BP:
       | B.reset_goal
       | B.move{TP}

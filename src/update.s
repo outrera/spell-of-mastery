@@ -256,8 +256,6 @@ update_fall Me =
 | FDst = $fxyz+$velocity{}{?int}
 | if FDst.2 > (FZ*$world.c+31) then $fine_move{FDst}
   else $move{[$xyz.0 $xyz.1 FZ]}
-| when [$xyz.0 $xyz.1]><[5 3]:
-  | say [$xyz.2 $fxyz]
 
 unit_sink Me =
 | $sound{sink}
