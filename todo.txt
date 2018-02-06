@@ -1,16 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- fall damage for non flyers: FallHeight*3-1
 - blow-away: add wind/dust animation to all cells through which blown units are passing
-- blow-away: animation for caster
 - when AI moves unit, cursor should be centered on it, so that it won't be hidden.
-- climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck.
-  If flyer attack unit standing on a cliff, it syncs its altitude with defender, attacks defender and moves down.
-  If flyer attacks from a cliff, it moves above enemy, attacks it, then returns to its position on the cliff.
+- climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck. To do that, flyer/climber syncs its altitude with defender, attacks defender and then returns to its position. Unit on the cliff should be able to throw boulder on unit below.
 - when unit acts, center cursor on it.
 - int.block should be renamed to unit
-- blowaway should use `world.units_in_range` to get units to move.
+- blowaway should use `world.units_in_range` to determine targets, so obstacles would block the windflow
 - griffin's unlimited counter attack (watch out for endless cycle, when griffin attacks other griffin)
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Sound on failed attack on undead.

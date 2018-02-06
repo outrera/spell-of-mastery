@@ -15,7 +15,7 @@ General:
     - Could be too complex for AI to handle.
 - Reagents used to reduce spellcasting cost, in a way that mana cost first subtracted from reagent pools. Alternatively, spells could specify reagents, that they can consume instead of mana. Simpler system would have just one reagent, say shrooms, that could be purchased with mana, and that reagent would be required to cast most powerful spells, or to pay upkeep. Cauldron could be required to make use of reagents, generate them, or it can provide separate boost. Liquid color in cauldron would indicate it's owner.
 - Non flyers should be able to jump from a cliff, sustaining fall damage
-- Allow flyers to throw down unit standing near cliff, echangin place with it and inducing fall damage.
+- Allow some flyers/climbers to throw down unit standing near cliff, echangin place with it and inducing fall damage.
 - Power-up structures or units: for example. a structure/unit decreasing cooldown, boosting experience gain or increasing damage from units or spells.
 - Consider idea of unit's facing direction affecting its vision through FOW and turning would require spending steps. X-com style cone FOV, opening a lot of strategic possibilities, like allowing surprise attack from back.
 - Distance from caster affecting spell cost, so casting at nearby targets would cost the least.
@@ -84,7 +84,6 @@ Spells:
 - Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
 - Reveal Spells/Items: shows on minimap places where items are located.
 - Slow (chaos): target unit moves at half of its speed.
-- Torment (chaos): halves targets's health.
 - Teleport: allows teleporting any creature to any visible location.
 - Fire trail: make target unit leave fire trail behind him
 - Water trail: make target unit leave water trail behind him; it also slows down the unit.
@@ -130,11 +129,13 @@ Spells:
 - Phantom: creates a copy of target unit, that deals the same damage, but dies in a single hit.
 - Simulacrum (law): creates illusionary copy of target creature to confuse the enemy. Simulacrum dies from a single hit.
 - Disguise: makes creature look like target creature, until it acts (simple movement doesn't break the illusion).
+- Anonymise: Target assumes generic sprite and its characteristics are hidden with `???` 
 - Enrage: when target can attack, limits its actions to attack. I.e. it can't retreat or move around the enemy.
 - Spells that do both good/bad to you and your enemy.
 - Regeneration: target starts regenerating even outside of power node.
 - Vulnerability: decreases target's armor to 0
 - Mist: engulfs cell in fog, so only units near it can see what is inside. No magic can target fog cells. Fog cells also slow movement.
+- Torment (chaos): halves targets's health.
 - Slay: targets receives damage equal to half of its max health. Also consumes part of caster's health, proportional to target's health.
 - Kill: kills target, that has less than half HP
 - Exorcise: a cheap spell that damages cursed units, but has no effect on uncursed units. Damage output is similar to lightning. Should kill most weak undeads outright.
@@ -142,7 +143,6 @@ Spells:
 - Descend/Ascend: move unit between layers.
 - Stalker: homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
 - Almagest: switches day to night and night to day; Kalispera - sets time to evening; Kalimera - sets time to day.
-- Clone Self: creates clone of self, which will continue leading, if creator dies
 - Open Node: tears the fabric of reality to open new magic node, which should be placed several cells away from an existing node, to promote territorial control.
 - Close Node: closes existing magic node.
 - Altar: non undead fallen creatures get resurrected as undeads here, as long as wizard stands near this structure.
@@ -152,6 +152,7 @@ Spells:
 - Geomancy: affect all units standing on a terrain of specific kind.
 - Raise Dead: resurrect recently killed unit as undead.
 - Guardian Angel: killed unit gets resurrected at pentagram.
+- Clone Self: creates clone of self, which will continue leading, if creator dies
 - Passion: caster loses health, but gains mana.
 - Live Shield: portion of damage to one creature gets redirected to another.
 - Harm Mirror: reflects damage from the next attack back to attacker.
@@ -161,7 +162,6 @@ Spells:
 - Counter Magic: the next spell enemy casts fails. Could potentially be somewhat annoying to human player.
 - Ability Lock: target creature loses ability to use its abilities
 - Magic Block/Silence: target loses ability to cast spells for several turns.
-- Silence: target leader loses ability to cast spells for several turns.
 - Aggravate: target neutral creature attacks enemies of the caster
 - Employing telekinesis spell to use items as improvised weapon, like i.e. throwing rocks at enemies.
 - A spell that forces all apple trees to produce fruits.

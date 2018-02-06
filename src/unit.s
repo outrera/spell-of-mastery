@@ -96,6 +96,8 @@ unit.blessed = $flags^get_bit{13}
 unit.cursed = $flags^get_bit{14}
 unit.afraid = $flags^get_bit{15}
 
+unit.can_stand_on_water = $flyer or $swimmer or $amphibian
+
 // this unit is a temporary mark (i.e. cursor); dont save it
 unit.mark = $flags^get_bit{16}
 unit.`=mark` State = $flags <= $flags^set_bit{16 State}
