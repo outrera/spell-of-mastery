@@ -58,11 +58,14 @@ General:
 - Dynamic balance: casting chaos spell increases cost of order spells by 1, then casting order spell would restore the cost, and vice versa. A neutral spell to restore balance.
 - Power versions of spells (damage boosted or all targets) should require additional rare mana/catalyst.
 - units may be set to act out of turn at the expense of being able to act in their own turn
+- Ranged units providing fire support, when standing near defending unit.
 
 Creatures:
 - Creature that is immune to blessed attacks.
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
 - Creature, that gives bonuses to nearby allies.
+- Creature that does damage based on defenders movement rate.
+- Creature that has defense base on its remaining steps: unused movement points reduce damage.
 - A unit that uses enemy's attack strength instead of its own.
 - Creature ability doing damage TargetMaxHp-TargetCurHp
 - A creature with ability to reduce target's health by 50%
@@ -99,11 +102,11 @@ Spells:
 - Toxic Gas: damages indoor units.
 - Wall (barrier, impassable vine): creates height=2 pilar of dirt.
 - Excavate: reamoves height=2 pilar of dirt.
-- Drought: temporary removes all water, replacing it with special empty aux tile
 - Water to Lava: converts all water to lava, disallowing passage over it and damagin units standing on it.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
 - Freeze Water: freezes all water on the map, allowing units to pass over it.
 - Water to Earth: targets attached to water dirt cell, turning it to water.
+- Drought: temporary removes all water, replacing it with special empty aux tile
 - Earth to Water: targets attached to dirt water cell, turning it to dirt.
 - Water Walk: allows unit to walk over water.
 - Upkeep: enemy loses amount of mana proportional to the number of creatures under his control.
@@ -168,6 +171,8 @@ Spells:
 - Spells, creatures or structures that could boost mana income or decrease opponent's income or increase opponent's mana cost.
 - Spells that summon enchanted items, usable by creatures.
 - Global enchantments like Zombie Mastery or See Everything could be represented by summoned/constructed map objects, that can easily be destroyed/disbanded, without introducing additional mechanics and complicating UI.
+- Chain: links two units together, so that one cannot move too far from another.
+- Leash: links unit to some map place, so he will be unable to move too far from it.
 
 
 Unused Creatures:
@@ -231,7 +236,8 @@ Flight mode for flying units, where they are immune to land unit attack and can 
   Cons:
     - Requires rethinking pathfinding.
     - Hard for AI to handle.
-
+  Posibilities:
+    - Flight units could attack from above unit standing below it, or other fliers near it.
 
 Regarding possibility of allowing creature standing on top of another, and the arising complications:
 - If creature below starts moving, should the creature on top of it move too? If yes, then should it spend its move points? What if more creatures are standing on top?
@@ -247,3 +253,17 @@ Subvert spell can be implemented differently:
     - paralyze the caster, while he/she controls the creature, allowing only the "Relinquish Control" action.
     - Limit only to low level creatures.
   Subvert cost seems the easiest to implement and balance. So the best approach would be combining 
+
+
+Regarding defense stat:
+  Pros:
+    - 
+  Cons:
+    - its results can be provided with higher health, regeneration and genes instead.
+    - complicates game mechanics
+
+Regarding terraforming spells, like flood: 
+- Allowing player to flood any dirt cell, would allow him to kill any land unit, including leader. Therefore flooding occupied cells should be disallowed.
+- Flooding could fill with water some cavity, beside places occupied by units. The cost of filling would be proportional to cavity size: 1 cell = 1 mana.
+- Flooding could be global, expanding all water cells
+- Populous had cool spell, called bridge, that connected two terrain points.

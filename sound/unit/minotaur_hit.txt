@@ -1,3 +1,3 @@
-author: `Wesnoth Team`
+author: `thespaceinvader`
 license: `GPL2`
-origin: `wesnoth.org`
+origin: `The_Silver_Lands-0.1.0.tar.bz2 - https://forums.wesnoth.org/viewtopic.php?t=27744`

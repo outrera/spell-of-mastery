@@ -1,3 +1,6 @@
 author: `www.freesfx.co.uk`
-license: `CC-BY`
+license: `Royalty Free (http://www.freesfx.co.uk/info/eula/)`
 origin: `http://www.freesfx.co.uk/sfx/wings`
+
+//You CAN Use Our Sound Effects and Music For
+//Games and apps (including iPhone, Android apps etc).

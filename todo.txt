@@ -3,6 +3,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 TODO:
 - blow-away: add wind/dust animation to all cells through which blown units are passing
 - when AI moves unit, cursor should be centered on it, so that it won't be hidden.
+- landing sound, for unit taking fall damage
 - climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck. To do that, flyer/climber syncs its altitude with defender, attacks defender and then returns to its position. Unit on the cliff should be able to throw boulder on unit below.
 - when unit acts, center cursor on it.
 - int.block should be renamed to unit

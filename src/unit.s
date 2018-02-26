@@ -304,7 +304,8 @@ AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]
 
 missing_frame Me =
 | Index = $anim_seq.$anim_step.0
-| bad "[$type] is missing frame `[Index]` of `[$anim]` at angle [$facing]"
+| S = $sprite
+| bad "sprite [S.bank]_[S.name] is missing frame `[Index]` of `[$anim]` at angle [$facing]"
 
 unit.pick_facing F =
 | $facing <= F
