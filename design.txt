@@ -1,10 +1,10 @@
 THIS FILE STATES DESIGN DECISIONS THAT WERE MADE
 
 General:
+- The basic idea is to design an X-Com inspired game, but in Fantasy setting, with determenistic game mechanics (i.e. game design doesn't use random dice rolls). Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters. Instead of alien bases, there would be dungeons and ruins to explore.
 - Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5. Casting spell or attacking requires 4 steps. Haste gives +4 steps, allowing most units to attack twice.
 - Tier 1 creature costs 5 mana, while ultimate creature, dragon, costs 20.
 - Fall damage equals to FallHeight*3-2
-
 
 Spells:
 - Knowledge (neutral): converts mana into lore.

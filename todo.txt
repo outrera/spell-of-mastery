@@ -73,6 +73,7 @@ Graphics:
 - icon for dwarf's defend action
 - icon for ghost's phase
 - icon for devil's teleport
+- goblin should be throwing bomb or molotov cocktrail instead of spear, as throwing spear looks too silly for such a weak creature, while bomb would contribute to that anarchist mischevous style. It would also differentiate goblin from elf by allowing his attack to have splash damage and setting ground on fire.
 - dragon animation jumps horizontally during attack
 - eye movement animation.
 - finish house tileset, including floor and roof; dirt/plain should not align to house wall

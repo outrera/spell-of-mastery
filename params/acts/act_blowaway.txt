@@ -5,7 +5,7 @@ title: `Blow Away`
 cool: 6
 steps: 2
 check: owned,unit
-before: animate{still},blowaway{6 0},impact{dustpuff},sound{blowaway}
+before: animate{still},blowaway{6 0},impact{dustbig},sound{blowaway}
 after: ()
 range: 0
 hint: boost
