@@ -293,6 +293,7 @@ effect blowaway R BlowSelf:
       | DY <= B.direction.1
     | D = if DX.abs>DY.abs then [DX.sign 0 0] else [0 DY.sign 0]
     | TP = BP
+    | Trail = []
     | times I N:
       | T = BP + D*(I+1)
       | less $world.valid{@T}: done
@@ -300,12 +301,17 @@ effect blowaway R BlowSelf:
       | less F.vacant: done
       | Prev = TP
       | TP <= T
+      | push T Trail
       | less B.flyer:
         | when (F-1).tile.liquid: done //ensure water blocks non-flyers
         | when Prev.2 - F.xyz.2 >> 2: done //cliff stops movement
     | when TP<>BP:
       | B.reset_goal
       | B.move{TP}
+      | for T Trail:
+        | less got $world.units_get{T}.find{?type><effect_dustend}:
+          | $world.effect{T dustend}
+    | $world.effect{B.xyz dust}
 
 effect teleport Arg:
 | $reset_goal
