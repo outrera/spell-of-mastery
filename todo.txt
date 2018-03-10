@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- when AI moves unit, cursor should be centered on it, so that it won't be hidden.
 - landing sound, for unit taking fall damage
 - climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck. To do that, flyer/climber syncs its altitude with defender, attacks defender and then returns to its position. Unit on the cliff should be able to throw boulder on unit below.
 - when unit acts, center cursor on it.
@@ -34,6 +33,7 @@ TODO:
 - optimize resoure engine, so graphics and sounds would be loaded only when they are needed and deallocated when they are not required.
 - At the end of AI turn, viewport focus should change to the place before AI turn.
 - Move sound center to the middle of the screen (currently it is at the top).
+- Proper player order logging for each turn, so game could be played online and player can review AI turn. Some uses would likely require copying world state.
 
 
 Bugs:
