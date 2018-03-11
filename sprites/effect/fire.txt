@@ -1,9 +1,9 @@
-author: `Martin Jelinek`, `Jinn`, `Nikita Sadkov`
-origin: `https://github.com/Andrettin/Wyrmsun`
-// taken from Wyrmsun, where it was edited by Jinn out of
-// public domain fire animation by Martin Jelinek
-//(http://opengameart.org/content/fire-fx-burning-fire-animation)
-// I've also resized it and recolored to get brighter colors
-xy: 0,8
-frames: 72*72
-anims: | idle time-2 0  1  2  3  4  5  6  7
+author: `Retimer <support@wrathgames.com> (http://wrathgames.com/blog)`
+license: `CC-BY 3.0`
+origin: `https://opengameart.org/content/wgstudio-fire-animation-loop`
+xy: 0,16
+frames: folder
+anims: | idle (idle00 3) (idle01 3) (idle02 3) (idle03 3)
+              (idle04 3) (idle05 3) (idle06 3) (idle07 3)
+              (idle08 3) (idle09 3) (idle10 3) (idle11 3)
+              (idle12 3)
