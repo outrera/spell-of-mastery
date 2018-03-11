@@ -1,0 +1,3 @@
+author: `Blender Institute`
+license: `CC-BY 3.0`
+origin: `https://apricot.blender.org/download/`

@@ -254,12 +254,21 @@ update_action Me =
 
 GravAcc = 9.807*0.2
 update_fall Me =
-| when $velocity.2>>0.0: $add_gene{fallheight 0 $cell-$floor}
+| when $velocity.2>>0.0:
+  | $sound{fall}
+  | $add_gene{fallheight 0 $cell-$floor}
 | $velocity.2 -= GravAcc
 | FZ = $floor.z
 | FDst = $fxyz+$velocity{}{?int}
 | if FDst.2 > (FZ*$world.c+31) then $fine_move{FDst}
   else $move{[$xyz.0 $xyz.1 FZ]}
+
+unit_landed Me =
+| $velocity.2 <= 0.0
+| $sound{land}
+| FH = $gene_param{fallheight}
+| $strip_gene{fallheight}
+| $harm{Me FH*3-2}
 
 unit.sink =
 | $sound{sink}
@@ -279,11 +288,7 @@ unit.update =
 | when $cell > $floor:
   | update_fall Me
   | leave
-| when $velocity.2<0.0:
-  | $velocity.2 <= 0.0
-  | FH = $gene_param{fallheight}
-  | $strip_gene{fallheight}
-  | $harm{Me FH*3-2}
+| when $velocity.2<0.0: unit_landed Me
 | when $class.hp and ($cell-1).tile.liquid and not $can_stand_on_water:
   | $sink
   | leave

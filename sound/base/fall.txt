@@ -1,0 +1,3 @@
+author: `Andreas Hundt, Denis Oliver Kropp <clanbomber@fischlustig.de>`
+license: `GPL2`
+origin: `https://sourceforge.net/projects/clanbomber/`

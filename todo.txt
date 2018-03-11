@@ -1,9 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- landing sound, for unit taking fall damage
 - climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck. To do that, flyer/climber syncs its altitude with defender, attacks defender and then returns to its position. Unit on the cliff should be able to throw boulder on unit below.
-- when unit acts, center cursor on it.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to determine targets, so obstacles would block the windflow
 - griffin's unlimited counter attack (watch out for endless cycle, when griffin attacks other griffin)
