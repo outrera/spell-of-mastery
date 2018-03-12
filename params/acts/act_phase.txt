@@ -1,4 +1,5 @@
 icon: spell_teleport
+title: `Phase Shift`
 hotkey: p
 //lore: 5
 //cost: 3

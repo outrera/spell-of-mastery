@@ -313,6 +313,11 @@ effect blowaway R BlowSelf:
           | $world.effect{T dustend}
     | $world.effect{B.xyz dust}
 
+effect jumpdown:
+| $reset_goal
+| $animate{idle}
+| $forced_order{move [@TargetXYZ.take{2} $xyz.2]}
+
 effect teleport Arg:
 | $reset_goal
 | $forced_order{fastmove TargetXYZ}

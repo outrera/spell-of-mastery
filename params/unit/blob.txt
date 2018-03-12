@@ -12,4 +12,4 @@ impact: shell,harm{user},sound{blob_attack}
 hit: effect{blood_undead},sound{blob_hit}
 death: sound{blob_hit}
 moves: sound{step}
-acts: (blob_division)
+acts: (act_blobspawn)

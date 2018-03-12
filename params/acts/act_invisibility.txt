@@ -1,0 +1,10 @@
+icon: spell_invisibility
+title: `Invisibility`
+//lore: 2
+//cost: 2
+cool: 10
+check: owned,unit
+before: add{invisible},impact{spell},sound{invisibility}
+after: ()
+range: 0
+hint: boost

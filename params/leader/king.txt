@@ -1,8 +1,7 @@
 icon: unit_king
-range: cross
+range: 1
 health: 40
 armor: 0
-range: 0
 combat: 5
 impact: harm{user},sound{cut}
 hit: effect{blood},sound{king_hit}

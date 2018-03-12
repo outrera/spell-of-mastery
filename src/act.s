@@ -38,7 +38,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | Flags = []
 | for E [@$before @$after]: case E [add Name]: push Name Flags
 | $flags <= Flags
-| Allowed = [land water clear seen outdoor owned ally non_leader will
+| Allowed = [land water clear seen below outdoor owned ally non_leader will
              any unit empty self pentagram
              placeable c_fullhp]
 | T = Allowed{[? 0]}.table
@@ -99,6 +99,9 @@ act.validate Actor XYZ Target Invalid =
   | leave 0
 | when T.seen and not Actor.world.seen_from{Actor.xyz XYZ}:
   | Invalid{"Needs to be in line of sight."}
+  | leave 0
+| when T.below and XYZ.2>>Actor.xyz.2:
+  | Invalid{"Needs lower target"}
   | leave 0
 | when T.placeable and not Actor.placeable_at{Actor.world.cellp{XYZ}}:
   | Invalid{"Needs place where this unit can stand."}

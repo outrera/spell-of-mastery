@@ -156,10 +156,7 @@ update_path Me =
 | when R:
   | when R><user: R <= $range
   | GXYZ = $goal.xyz
-  | Reach = if R><1 //FIXME: use points_in_diamond
-              then (GXYZ-$xyz).take{2}{?abs}.sum><1 and (GXYZ.2-$xyz.2).abs<<1
-            else if R><cross then (GXYZ-$xyz).take{2}{?abs}.sum><1
-            else (GXYZ-$xyz).take{2}.abs.int<<R
+  | Reach = (GXYZ-$xyz).take{2}{?abs}.sum<<R
   | when Reach:
     | $set_path{[]}
     | goal_in_range Me
@@ -285,14 +282,13 @@ unit.update =
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
     else $die
-| when $cell > $floor:
+| when $cell > $floor and $anim><idle:
   | update_fall Me
   | leave
 | when $velocity.2<0.0: unit_landed Me
 | when $class.hp and ($cell-1).tile.liquid and not $can_stand_on_water:
   | $sink
   | leave
-
 | update_anim Me
 | when $idle: update_path Me
 | update_order Me

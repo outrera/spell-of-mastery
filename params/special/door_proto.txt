@@ -9,7 +9,7 @@ speed: 24 // cycles required to move between game world cells
 pickable: 1
 passable: 0 // can be moved over
 ai: unit
-range: cross //1
+range: 1
 health: 150
 combat: 0
 armor: 3

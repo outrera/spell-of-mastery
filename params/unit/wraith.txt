@@ -9,4 +9,4 @@ impact: shell,harm{user},sound{cut}
 hit: effect{blood_undead},sound{wraith_hit}
 death: sound{wraith_die}
 moves: sound{wraith_move}
-acts: (invisibility phase)
+acts: (act_invisibility act_phase)

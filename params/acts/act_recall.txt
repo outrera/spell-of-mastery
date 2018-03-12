@@ -1,0 +1,11 @@
+icon: recall
+title: `Recall to Summoning Circle`
+check: pentagram
+hotkey: r
+before: effect{teleport},sound{summon},impact{teleport},recall{pentagram}
+       ,pentagram,impact{teleport}
+after: ()
+range: 0
+//lore: misc.tier1_lcost
+cost: misc.tier0_scost
+cool: misc.tier2_cool
