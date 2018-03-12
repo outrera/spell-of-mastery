@@ -1,0 +1,8 @@
+author: `Jordan Irwin (a.k.a. AntumDeluge)`, `Nikita Sadkov`
+license: `CC-BY 3.0`
+origin: `http://opengameart.org/content/boulder`
+xy: 4,30
+frames: folder
+anims: | idle (idle0 6) (idle1 5) (idle2 4) (idle3 3) (idle4 3) (idle5 3)
+
+//edited out of a boulder by Jordan Irwin
