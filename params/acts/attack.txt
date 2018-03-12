@@ -1,7 +1,7 @@
 icon: attack
 hotkey: t
 check: unit
-before: (user_attack)
+before: insulate,user_attack
 impact: counter,user_impact
 range: user
 repeat: 0

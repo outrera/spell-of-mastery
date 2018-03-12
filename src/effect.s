@@ -345,6 +345,9 @@ effect victory Player Reason:
 | WP.winner <= Player
 | WP.victory_type <= Reason
 
+effect throw_rock Damage:
+| $shot_missile{Target [effect_boulder] [[harm Damage] [impact explosion] [sound explosion]]}
+
 effect align How:
 | less How><door: bad "effect align: cant [How]-align"
 | X,Y,Z = $xyz
@@ -358,6 +361,35 @@ effect align How:
 | T = $world.at{X-1 Y Z}
 | when T.wallShift and not $world.at{X Y+1 Z}.type><T.around:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
+
+unit.shot_missile Target Args Effect =
+| XYZ = if Target.is_unit then Target.xyz else Target
+| Type = 0
+| Offset = \user
+| Speed = 2
+| case Args
+   [T S O]
+     | Type <= T
+     | if S><height_div then Speed <= 1
+       else Speed <= S
+     | Offset <= O
+   [T] | Type <= T
+| S = $owner.alloc_unit{Type}
+| case Offset
+  user | S.move{$xyz}
+       | S.face{XYZ}
+  [target @D] | S.move{$xyz}
+              | O = if Target.is_unit then Target.fxyz
+                    else $world.fxyz{XYZ}
+              | S.fxyz.init{O+D}
+  Else | bad "invalid offset specifier [Offset]"
+| S.add_gene{missile 0 [[payload $id $serial Effect]]}
+| Or = S.order
+| Or.init{missile Target}
+| Or.priority <= 1500
+| C = Speed.float*(XYZ-$xyz).abs*1.5
+| Or.cycles <= @int C
+
 
 check_when Me Target C =
 | leave: case C
@@ -417,36 +449,16 @@ unit.effect Effect Target TargetXYZ =
       | when T.cursed: less $blessed or $cursed:
         | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
         | leave
-    else if Name >< user_attack then
-      | RunActEffects<=0
-      | $effect{$attack T T.xyz}
-    else if Name >< user_impact then $effect{$impact T T.xyz}
+    else if Name >< insulate then RunActEffects<=0
+    else if Name >< user_attack then when $attack: $effect{$attack T T.xyz}
+    else if Name >< user_impact then
+      if $range><1 and $xyz.2-T.xyz.2>1 then
+        | $shot_missile{Target [effect_boulder]
+                        [shell [harm user] [impact explosion] [sound explosion]]}
+      else
+        | $effect{$impact T T.xyz}
     else if Name >< missile then
-      | Type = 0
-      | Offset = \user
-      | Speed = 2
-      | case Args
-         [T S O]
-           | Type <= T
-           | if S><height_div then Speed <= 1
-             else Speed <= S
-           | Offset <= O
-         [T] | Type <= T
-      | S = $owner.alloc_unit{Type}
-      | case Offset
-        user | S.move{$xyz}
-             | S.face{XYZ}
-        [target @D] | S.move{$xyz}
-                    | O = if Target then Target.fxyz
-                          else $world.fxyz{XYZ}
-                    | S.fxyz.init{O+D}
-        Else | bad "invalid offset specifier [Offset]"
-      | S.add_gene{missile 0 [[payload $id $serial Es]]}
-      | Or = S.order
-      | Or.init{missile |Target or XYZ}
-      | Or.priority <= 1500
-      | C = Speed.float*(XYZ-$xyz).abs*1.5
-      | Or.cycles <= @int C
+      | $shot_missile{(Target or XYZ) Args Es}
       | Es <= []
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host

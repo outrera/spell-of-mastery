@@ -11,7 +11,7 @@ Spells:
 - Dispel (neutral): removes all the following enchantments:
     shell, bless, fear, invisibility, flight, haste.
   This spell can be resisted, in that case it removes only the resistance enchantment. 
-- Telekinesis (neutral): grabs key, treasure, mana, gains control over rescueable creature, visits quest places, or operates an object from a distance. Can't be used at chests.
+- Telekinesis (neutral): grabs key, treasure, mana, gains control over rescueable creature, visits quest places, hurls rocks, pushes creature, or operates an object from a distance. Can't be used at chests.
 - Heal (law): target regains 9 health, and gets cured from poison and fear.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Haste (law): target gains 2 additional movement points.

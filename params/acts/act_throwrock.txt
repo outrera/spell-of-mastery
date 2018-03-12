@@ -1,0 +1,11 @@
+icon: spell_telekinesis
+title: `Throw Rock`
+//lore: 0
+//cost: 0
+cool: 3
+steps: 4
+range: 3
+check: seen,unit
+before: missile{throw_rock},resist,harm{1},impact{explosion},sound{explosion}
+after: ()
+hint: boost
