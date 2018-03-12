@@ -3,7 +3,6 @@ cost: 20,20,30
 health: 20
 combat: 8
 armor: 1
-steps: 6
 sight: 10
 speed: 20
 inborn: (organic flyer)

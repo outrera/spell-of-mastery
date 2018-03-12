@@ -57,7 +57,7 @@ unit.list_moves Src Cost =
     | B = Dst.block
     | if B then
         | if $owner.id <> B.owner.id
-          then if B.alive and $combat and (Src.z-Dst.z).abs<<1
+          then if B.alive and $combat and ($flyer or (Dst.z-Src.z) << 1)
                then push Dst Ms //attack
                else
           else when B.speed and B.can_move{}{B Dst Src}:
@@ -84,7 +84,7 @@ world.pathfind MaxCost U StartCell Check =
   | NextCost = Cost+1
   | Ms = U.list_moves{Src NextCost}
   | when Src.gate:
-    | when Src.prev and (Src.prev.xyz-Src.xyz).take{2}{?abs}.sum><1:
+    | when Src.prev and Src.prev.mdist{Src}><1:
       | Ms <= [Src.gate.cell]
   | for Dst Ms:
     | Dst.prev <= Src
@@ -193,7 +193,7 @@ unit.reachable =
     | R}
 | when $range><1 and $steps>>$attack_cost:
   | for E Me^enemies_in_range:
-    | when (E.xyz.2-$xyz.2).abs << 1: push [attack E.cell] Xs
+    | when $flyer or (E.xyz.2-$xyz.2) << 1: push [attack E.cell] Xs
 | when $range>1 and $steps>>$attack_cost:
   | for E Me^enemies_in_range: push [attack E.cell] Xs
 | Xs

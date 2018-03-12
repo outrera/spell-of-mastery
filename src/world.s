@@ -446,14 +446,19 @@ world.roof XYZ =
 | while $at{X Y Z}.empty and Z < $d-1: Z++
 | Z
 
+// manhattan distance
+list.mdist P = ($0 - P.0).abs + ($1 - P.1).abs
 
 world.seen_from A B =
+| when A.2 < B.2: swap A B //hack to accomodate for line_calls3d quirks
 | AX,AY,AZ = A
 | BX,BY,BZ = B
-| DZ = (BZ-AZ)
+| when [AX AY].mdist{[BX BY]}><1: //units near cliff should see each other
+  | Dst = $cell{BX BY BZ}
+  | times I AZ-BZ: less (Dst+I).tile.empty: leave 0
+  | leave 1
 | PX = AX //prev X
 | PY = AY
-| when DZ.abs>4: leave 0 //z-difference is too large
   //Z+1 is required, because actual units are above the ground
 | line_calls3d AX AY AZ+1 BX BY BZ+1: X Y Z =>
   | R = 0
@@ -564,9 +569,7 @@ world.units_in_range Center R =
   | X = XYZ.0
   | Y = XYZ.1
   | when X>0 and X<<$w and Y>0 and Y<<$h:
-    | for U $column_units_get{X Y}: when $seen_from{Center U.xyz}:
-      | when (U.xyz.2-XYZ.2).abs<R*2:
-        | push U Units
+    | for U $column_units_get{X Y}: when $seen_from{Center U.xyz}: push U Units
 | Units
 
 world.neibs X Y Z =

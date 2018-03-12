@@ -424,7 +424,7 @@ unit.order_at XYZ act/0 goal/0 =
 | $set_path{$path_around_to{1000 $goal.xyz}}
 
 in_range Me XYZ =
-| less (XYZ.take{2}-$xyz.take{2}).abs<<$range.float: leave 0
+| less XYZ.mdist{$xyz}<<$range: leave 0
 | $world.seen_from{$xyz $goal.xyz}
 
 unit.units_in_range Range = $world.units_in_range{Me.xyz Range}
@@ -433,7 +433,7 @@ unit.nearby_enemies_at XYZ =
 | Es = []
 | for D Dirs43:
   | Us = $world.cellp{XYZ+D}.floor.units
-  | Us.skip{?empty}.keep{?is_enemy{Me}}.keep{E=>(E.xyz.2-XYZ.2)<<1}{E=>push E Es}
+  | Us.skip{?empty}.keep{?is_enemy{Me}}{E=>push E Es} //.keep{E=>(E.xyz.2-XYZ.2)<<1}
 | Es
 
 retaliate Me Enemy Range =

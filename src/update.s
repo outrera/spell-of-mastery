@@ -156,8 +156,7 @@ update_path Me =
 | when R:
   | when R><user: R <= $range
   | GXYZ = $goal.xyz
-  | Reach = (GXYZ-$xyz).take{2}{?abs}.sum<<R
-  | when Reach:
+  | when GXYZ.mdist{$xyz}<<R: //reachable?
     | $set_path{[]}
     | goal_in_range Me
     | leave
