@@ -6,6 +6,6 @@ cool: 3
 steps: 4
 range: 3
 check: seen,unit
-before: missile{throw_rock},resist,harm{1},impact{explosion},sound{explosion}
+before: missile{boulder},resist,harm{1},impact{explosion},sound{explosion}
 after: ()
 hint: boost

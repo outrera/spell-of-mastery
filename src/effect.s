@@ -345,9 +345,6 @@ effect victory Player Reason:
 | WP.winner <= Player
 | WP.victory_type <= Reason
 
-effect throw_rock Damage:
-| $shot_missile{Target [effect_boulder] [[harm Damage] [impact explosion] [sound explosion]]}
-
 effect align How:
 | less How><door: bad "effect align: cant [How]-align"
 | X,Y,Z = $xyz
