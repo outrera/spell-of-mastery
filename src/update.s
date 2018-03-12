@@ -262,10 +262,11 @@ update_fall Me =
 
 unit_landed Me =
 | $velocity.2 <= 0.0
-| $sound{land}
 | FH = $gene_param{fallheight}
 | $strip_gene{fallheight}
-| $harm{Me FH*3-2}
+| less $flyer
+  | $sound{land}
+  | $harm{Me FH*3-2}
 
 unit.sink =
 | $sound{sink}
