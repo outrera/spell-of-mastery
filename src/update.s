@@ -224,7 +224,8 @@ update_next_action Me =
     else
   | $next_action.init{idle $xyz}
 | when $flyer or $climber:
-  | when $range><1 and $next_action.type><attack and $next_action.xyz.2-$xyz.2>1:
+  | T = $next_action.type
+  | when $range><1 and (T><attack or T><move) and $next_action.xyz.2-$xyz.2>1:
     | $face{$next_action.xyz}
     | $action.init{ascend $next_action.xyz}
     | leave
