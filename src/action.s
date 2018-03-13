@@ -122,6 +122,17 @@ dact swap.update | move_update Me
 dact swap.finish | move_finish Me
 
 
+dact ascend.start | when $unit.anim<>move: $unit.animate{move}
+
+ascend_update Me GoalZ =
+| FDst = $fxyz+[0 0 $ascendSpeed]
+| when FDst.2 < (GoalZ*$world.c)
+  | $fine_move{FDst}
+  | leave 1
+| $move{[$xyz.0 $xyz.1 GoalZ]}
+| 0
+dact ascend.update | $cycles <= ascend_update $unit $xyz.2
+
 dact fastmove.start
 | $unit.move{$xyz}
 | $unit.on_entry

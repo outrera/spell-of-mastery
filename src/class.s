@@ -11,7 +11,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            passable/1 movable/0 counter/0 tier/0
            steps/0 inborn/[]
            attack/0 impact/0 impact_hit/0
-           hit/0 death/0 moves/0 platform/0 gate/0}
+           hit/0 death/0 moves/0 platform/0 gate/0 ascendSpeed/4}
   id                    //for unit counts table
   type/"[Bank]_[Class_name]"
   block/0               //acts as map block
@@ -22,6 +22,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   box_xy/Box_xy         //bounding box x,y correction
   aux/Aux               //auxilary unit, like mark
   speed/Speed           //cycles to move between cells
+  ascendSpeed/AscendSpeed //how many pixels/cycle flyer can climb
   sight/Sight           //scout range
   active/Active         //update unit each cycle?
   range/Range           //attack range

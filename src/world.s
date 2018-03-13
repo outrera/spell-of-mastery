@@ -48,6 +48,7 @@ int.south = Me+CellsLineSize
 int.west = Me-WorldDepth
 int.east = Me+WorldDepth
 int.neibs = [Me-CellsLineSize Me+CellsLineSize Me-WorldDepth Me+WorldDepth]
+int.climbable = $neibs.any{?empty^not}
 int.path =
 | Cell = Me
 | Path = []

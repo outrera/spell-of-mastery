@@ -223,6 +223,11 @@ update_next_action Me =
       then //$owner.notify{'Cant perform action.'}
     else
   | $next_action.init{idle $xyz}
+| when $flyer or $climber:
+  | when $range><1 and $next_action.type><attack and $next_action.xyz.2-$xyz.2>1:
+    | $face{$next_action.xyz}
+    | $action.init{ascend $next_action.xyz}
+    | leave
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0
@@ -248,11 +253,18 @@ update_action Me =
     | $cooldown <= $class.cooldown
 | $action.update
 
+unit.clinging =
+| less $climber: leave 0
+| Cell = $world.cellp{$xyz}
+| Cell.climbable or (Cell-1).climbable
+
 GravAcc = 9.807*0.2
 update_fall Me =
 | when $velocity.2>>0.0:
-  | $sound{fall}
-  | $add_gene{fallheight 0 $cell-$floor}
+  | FH = $cell-$floor
+  | when $flyer or $clinging: FH <= -FH
+  | when FH>0: $sound{fall}
+  | $add_gene{fallheight 0 FH}
 | $velocity.2 -= GravAcc
 | FZ = $floor.z
 | FDst = $fxyz+$velocity{}{?int}
@@ -263,7 +275,7 @@ unit_landed Me =
 | $velocity.2 <= 0.0
 | FH = $gene_param{fallheight}
 | $strip_gene{fallheight}
-| less $flyer
+| when FH>0:
   | $sound{land}
   | $harm{Me FH*3-2}
 
@@ -282,7 +294,7 @@ unit.update =
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
     else $die
-| when $cell > $floor and $anim><idle:
+| when $cell > $floor and $action.type><idle:
   | update_fall Me
   | leave
 | when $velocity.2<0.0: unit_landed Me

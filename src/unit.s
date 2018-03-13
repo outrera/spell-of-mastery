@@ -111,7 +111,6 @@ unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
 unit.defending = $flags^get_bit{19}
 unit.`=defending` State = $flags <= $flags^set_bit{19 State}
 
-
 unit.`=backtrack` XYZ =
 | less XYZ:
   | $strip_gene{btrack}

@@ -12,6 +12,7 @@ cooldown: 16
 steps: 6
 sight: 7
 speed: 24 // cycles required to move between game world cells
+ascendSpeed: 4 //pixels/per second of vertical movement
 pickable: 1
 passable: 0 // other units can move on top of this one
 flyer: 0 // can it fly

@@ -57,7 +57,7 @@ unit.list_moves Src Cost =
     | B = Dst.block
     | if B then
         | if $owner.id <> B.owner.id
-          then if B.alive and $combat and ($flyer or (Dst.z-Src.z) << 1)
+          then if B.alive and $combat
                then push Dst Ms //attack
                else
           else when B.speed and B.can_move{}{B Dst Src}:
@@ -193,7 +193,8 @@ unit.reachable =
     | R}
 | when $range><1 and $steps>>$attack_cost:
   | for E Me^enemies_in_range:
-    | when $flyer or (E.xyz.2-$xyz.2) << 1: push [attack E.cell] Xs
+    | when (E.xyz.2-$xyz.2) << 1 or $can_move{}{Me $cell E.cell}:
+      | push [attack E.cell] Xs
 | when $range>1 and $steps>>$attack_cost:
   | for E Me^enemies_in_range: push [attack E.cell] Xs
 | Xs

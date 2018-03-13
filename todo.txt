@@ -4,6 +4,7 @@ TODO:
 - climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck. To do that, flyer/climber syncs its altitude with defender, attacks defender and then returns to its position. Unit on the cliff should be able to throw boulder on unit below.
 - proper movement for flyers and climbers, when height > 2, flyers must first achieve the same level.
 - shot_missle should auto-add `effect_` prefix
+- instead of jump command, list it with unit.reachable
 - all units with hands should have act_throw_rock ability, which will help fighting ranged units when nothing else is available.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to determine targets, so obstacles would block the windflow
@@ -35,6 +36,7 @@ TODO:
 - At the end of AI turn, viewport focus should change to the place before AI turn.
 - Move sound center to the middle of the screen (currently it is at the top).
 - Proper player order logging for each turn, so game could be played online and player can review AI turn. Some uses would likely require copying world state.
+- flying mode for flyers, where only other flyers and ranged units can harm them. Such units fly two cells above ground, only where it is possible to do. That would also allow differentiating units into floaters, like ghost, and flyers, like dragon. Same way, climbers, like spider, should stick to the walls.
 
 
 Bugs:
