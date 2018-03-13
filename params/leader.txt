@@ -20,11 +20,11 @@ leader: 1
 ai: unit
 item: 0
 inborn: (organic)
-impact: missile{effect_bolt},resist,harm{1},impact{bolt_impact},sound{explosion}
+impact: missile{bolt},resist,harm{1},impact{bolt_impact},sound{explosion}
 //attack: sound{wizard_attack}
 //impact: sound{attack2}
 moves: sound{step}
-acts: (pentagram fireball)
+acts: (pentagram act_fireball)
 spells:
       (
       cast_knowledge

@@ -371,7 +371,7 @@ unit.shot_missile Target Args Effect =
        else Speed <= S
      | Offset <= O
    [T] | Type <= T
-| S = $owner.alloc_unit{Type}
+| S = $owner.alloc_unit{"effect_[Type]"}
 | case Offset
   user | S.move{$xyz}
        | S.face{XYZ}
@@ -450,7 +450,7 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< user_attack then when $attack: $effect{$attack T T.xyz}
     else if Name >< user_impact then
       if $range><1 and $xyz.2-T.xyz.2>1 then
-        | $shot_missile{Target [effect_boulder]
+        | $shot_missile{Target [boulder]
                         [shell [harm user] [impact explosion] [sound explosion]]}
       else
         | $effect{$impact T T.xyz}

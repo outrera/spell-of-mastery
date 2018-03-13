@@ -1,8 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- shot_missle should auto-add `effect_` prefix
 - instead of jump command, list it with unit.reachable
+- display number of remaining action points on top of selected unit.
 - all units with hands should have act_throw_rock ability, which will help fighting ranged units when nothing else is available.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to determine targets, so obstacles would block the windflow

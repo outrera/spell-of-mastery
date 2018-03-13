@@ -2,7 +2,7 @@ leader_katzard: | goto leader_mage
 leader_mime: | goto default
 
 leader_mage:
-  | set ai_spells (cast_fireball)
+  | set ai_spells ()
   | goto mage0
 
 mage0:
@@ -15,12 +15,12 @@ mage1:
   | goto mage2 when lossage >> 14
 
 mage2:
-  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_lightning cast_shell)
   | roam dwarf halfling elf halfling
   | goto mage3 when lossage >> 32
 
 mage3:
-  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_banish cast_lightning cast_shell)
   | roam dwarf ifrit elf halfling elf minotaur
   | goto mage4 when lossage >> 64
 
@@ -52,7 +52,7 @@ king4:
   | roam knight knight lizard farmer griffin griffin golem
 
 leader_witch:
-  | set ai_spells (cast_fireball)
+  | set ai_spells ()
   | goto witch0
 
 witch0:
@@ -65,13 +65,13 @@ witch1:
   | goto witch2 when lossage >> 14
 
 witch2:
-  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_lightning cast_shell)
   | roam orc goblin ratman
   | roam orc orc goblin goblin
   | goto witch3 when lossage >> 32
 
 witch3:
-  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_banish cast_lightning cast_shell)
   | roam ratman orc devil spider goblin
   | goto witch4 when lossage >> 64
 
@@ -79,7 +79,7 @@ witch4:
   | roam ratman spider orc goblin devil cyclops
 
 leader_heretic:
-  | set ai_spells (cast_fireball)
+  | set ai_spells ()
   | goto heretic0
 
 heretic0:
@@ -92,12 +92,12 @@ heretic1:
   | goto heretic2 when lossage >> 14
 
 heretic2:
-  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_lightning cast_shell)
   | roam skeleton wraith wraith bat gargoyle
   | goto heretic3 when lossage >> 32
 
 heretic3:
-  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_banish cast_lightning cast_shell)
   | roam skeleton wraith skeleton bat gargoyle vampire
   | goto heretic4 when lossage >> 64
 
@@ -106,7 +106,7 @@ heretic4:
 
 
 default:
-  | set ai_spells (cast_fireball)
+  | set ai_spells ()
   | goto tier0
 
 tier0:
@@ -120,7 +120,7 @@ tier1:
   | goto tier2 when lossage >> 14
 
 tier2:
-  | set ai_spells (cast_fireball /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_lightning cast_shell)
   | roam dwarf dwarf elf
   | roam orc orc
   | roam wraith
@@ -128,7 +128,7 @@ tier2:
   | goto tier3 when lossage >> 32
 
 tier3:
-  | set ai_spells (cast_banish /*cast_lightning*/ cast_shell)
+  | set ai_spells (cast_banish cast_lightning cast_shell)
   | roam minotaur vampire
   | roam devil
   | roam spider ifrit

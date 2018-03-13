@@ -1,0 +1,11 @@
+icon: spell_fireball
+title: `Fireball`
+hotkey: f
+lore: 3
+cost: 2
+cool: 5
+range: 6
+check: seen,unit
+before: missile{fireball},impact{fbhit},sound{explosion},resist,harm{unavoid.5}
+hint: harm
+
