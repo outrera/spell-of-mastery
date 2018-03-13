@@ -1,3 +1,2 @@
-author: `Nethack Team`
-license: GPL2
+author: `Nikita Sadkov`
 xy: 0,0

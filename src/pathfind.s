@@ -171,6 +171,9 @@ path_len Cell =
 | C
 
 unit.attack_cost = if $afraid then 9000 else 4
+unit.jump_cost = 4
+
+can_jump Src Dst = Dst.empty and Dst.floor-Dst>1
 
 unit.reachable =
 | Xs = []
@@ -191,6 +194,10 @@ unit.reachable =
       | when $range><1 and $steps >> Dst^path_len+$attack_cost:
         | for E Es: push [attack E.cell] Xs
     | R}
+| less $flyer or $climber: for N $cell.neibs: when N.empty:
+  | F = N.floor
+  | less F.block:
+    | when N-F>1 and $steps>>$jump_cost: push [jump F] Xs
 | when $range><1 and $steps>>$attack_cost:
   | for E Me^enemies_in_range:
     | when (E.xyz.2-$xyz.2) << 1 or $can_move{}{Me $cell E.cell}:
