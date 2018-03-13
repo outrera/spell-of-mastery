@@ -245,6 +245,7 @@ Regarding possibility of allowing creature standing on top of another, and the a
 - How attacking or swapping would be processed? It opens some tactical possibilities, like some creatures could have weaknesses when attacked from above.
 - One creature could fill gaps and serve as a bridge for another.
 - How would AI handle such possibilities?
+- Maybe only specific creatures, with acrobatics gene could do that? But then we already have climbers.
 
 
 Subvert spell can be implemented differently:
@@ -262,8 +263,17 @@ Regarding defense stat:
     - its results can be provided with higher health, regeneration and genes instead.
     - complicates game mechanics
 
-Regarding terraforming spells, like flood: 
-- Allowing player to flood any dirt cell, would allow him to kill any land unit, including leader. Therefore flooding occupied cells should be disallowed.
-- Flooding could fill with water some cavity, beside places occupied by units. The cost of filling would be proportional to cavity size: 1 cell = 1 mana.
-- Flooding could be global, expanding all water cells
-- Populous had cool spell, called bridge, that connected two terrain points.
+
+
+Liquid dynamics:
+- Water level: really simple to implement, but doesnt give much control and looks static. Not space for cool spells, although increasing level could be used to kill all creatures at the smae level or blocking opponent from certain spaces.
+- Water emitter increasing water pressure of its tile: when pressure reaches 5 it either leaks into neiboring tiles, or into the tile above, if water reaches map edge, it goes back into emitter or falls with rain. Allows everything water level allows, gives much more granular control. Allows for more robust spells, that would generate emitter. Allows for running water and flooding caves by digging into aquafier.
+- Regarding terraforming spells, like flood: 
+  - Allowing player to flood any dirt cell, would allow him to kill any land
+    unit, including leader. Therefore flooding occupied cells should be
+    disallowed.
+  - Flooding could fill with water some cavity, beside places occupied by
+    units. The cost of filling would be proportional to cavity size:
+    1 cell = 1 mana.
+  - Flooding could be global, expanding all water cells
+- Populous 3 had cool spell, called bridge, that connected two terrain points. Although such spell would involve generation of new matter.

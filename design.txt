@@ -86,7 +86,11 @@ Status Effects:
 
 Digging Mechanics:
 - only dirt is diggable.
-- digging height>>3 dirt wall creates height=2 tunnel, but only if that cell is near height=3 wall. Obviously, one cannot dig under water.
+- player can only dig tile between two other tiles, that will avoid removing support from ceiling and limits player to creating tunnels, instead of caves.
+- digging height>>3 dirt wall creates height=2 tunnel, but only if that cell is near height=3 wall.
 - digging height=2 wall lowers it, but only if it isn't surrounded by height=3 walls.
 - floor can be digged to create height=3 mine schaft with ladder, allowing unit do descend and ascend, if enemy unit blocks path, ascending/descending would attack it.
 - digged out dirt could be restored.
+
+Liquid dynamics:
+- Water emitter increasing water pressure of its tile: when pressure reaches 5 it either leaks into neiboring tiles, or into the tile above, if water reaches map edge, it goes back into emitter or falls with rain.

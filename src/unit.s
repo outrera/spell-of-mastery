@@ -395,7 +395,9 @@ unit.order_at XYZ act/0 goal/0 =
 | Act <= if Act.is_text then $main.params.acts.Act
          else if Act then Act
          else if Goal and $owner.is_enemy{Goal.owner} then
-          $main.params.acts.attack
+           $main.params.acts.attack
+         else if got $world.cell{@XYZ}.units.find{?type><mark_jump} then
+           $main.params.acts.act_jump
          else $main.params.acts.move
 | when $afraid and Act.title<>move and Act.title<>swap:
   | $owner.notify{"Unit is too scared to perform any action!"}
