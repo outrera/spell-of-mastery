@@ -225,7 +225,11 @@ update_next_action Me =
   | $next_action.init{idle $xyz}
 | when $flyer or $climber:
   | T = $next_action.type
-  | when $range><1 and (T><attack or T><move) and $next_action.xyz.2-$xyz.2>1:
+  | NP = $next_action.xyz
+  | when T><move and $xyz.2-NP.2>1:
+    | $next_action.xyz.init{[NP.0 NP.1 $xyz.2-1]}
+    | T = 0
+  | when $range><1 and (T><attack or T><move) and NP.2-$xyz.2>1:
     | $face{$next_action.xyz}
     | $action.init{ascend $next_action.xyz}
     | leave

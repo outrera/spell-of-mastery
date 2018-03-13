@@ -1,8 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- climbers and flyers should be able to attack units on higher and lower grounds, otherwise some units could get stuck. To do that, flyer/climber syncs its altitude with defender, attacks defender and then returns to its position. Unit on the cliff should be able to throw boulder on unit below.
-- proper movement for flyers and climbers, when height > 2, flyers must first achieve the same level.
 - shot_missle should auto-add `effect_` prefix
 - instead of jump command, list it with unit.reachable
 - all units with hands should have act_throw_rock ability, which will help fighting ranged units when nothing else is available.
