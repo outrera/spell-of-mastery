@@ -2,7 +2,13 @@ THIS FILE STATES DESIGN DECISIONS THAT WERE MADE
 
 General:
 - The basic idea is to design an X-Com inspired game, but in a fantasy setting, with determenistic game mechanics (i.e. game design doesn't use random dice rolls). Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. The enchancement spells play the role of equipment, say instead of physical armor item, we we have magic shield enchantment, and instead of medkits we have guardian angel enchantment. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters. Instead of alien bases, there would be dungeons and ruins to explore.
-- Usual humanoid speed is 6 cells per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5. Casting spell or attacking requires 4 steps. Haste gives +4 steps, allowing most units to attack twice.
+- Each creature has 5 major stats: Speed, Health, Attack, Defense, Range and Will. Some magical artifacts and structures can affect these numbers.
+- Speed represent how many map squares this creature can trave per turn. The more complex is the action the more steps it will require per turn.
+- Attack represent how many health points that creature's attack removes from victim.
+- Defense represent how many steps it would cost for other creature to attack this one. While it doesn't take much strength to kill a rat, yet rat is a very agile creature, so it takes a lot of speed to hit it and really slow moving creature wont be able to catch a rat at all. At the same time, bat being fast, may bite some unarmored creature and run away.
+- Range determines how far this creature can attack.
+- Will stat determines how many caster points is required to cast a harmful spell onto this creature, for example, if somebody is trying to cast mind control spell onto your creature you will be notified and will have that creature's number of turns to counter the spell. Although enemy can invest additional mana to prevent countering the spell.
+- Usual humanoid speed is 6 steps per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5. Casting spell or attacking requires 4 steps. Haste gives +4 steps, allowing most units to attack twice.
 - Tier 1 creature costs 5 mana, while ultimate creature, dragon, costs 20.
 - Fall damage equals to FallHeight*3-2
 
@@ -26,7 +32,7 @@ Spells:
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health.
 - Subvert (law): gain control over the target creature by spending mana equivalent to creature's willpower.
 - Armageddon (chaos): all units sustain 5 points of damage.
-- The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires exceptionally large amount of mana to be cast.
+- The Spell of Mastery (neutral): banishes all competing wizards from this plane of existence. Requires overcoming the combined will of all enemy's creatures, of course player is expected to protect this enchancement by channeling additional mana into it.
 
 
 Summonable Creatures:
@@ -38,7 +44,7 @@ Goblin: weakest shooter.
 Elf: shooter.
 Dwarf: has defend ability, which reduces all incoming damage to 1
 Orc: has enough health to withstand a single lightning bolt.
-Spider: poisons; can set web trap, climber, entering which enemy unit loses all movement points and gets paralyzed for the next turn.
+Spider: poisons; can set web trap, climber, entering which enemy creature loses all movement points and gets paralyzed for the next turn.
 Lizard: fast, steed, immune to magic, climber. Good for stalking wizards, who can't harm it.
 Skeleton: cursed.
 Paladin: has blessed attack, that harms cursed units; immune to subversion.
@@ -46,14 +52,14 @@ Wraith: cursed, incorporeal, sees through walls, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: has stun-attack ability, disabling enemy for a single turn.
-Devil: teleports to a seen cell, kills in a single blow any unit (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed, or 1, if target haven't done any damage.
+Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed, or 1, if target haven't done any damage.
 Vampire: cursed, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy hitter
 Hydra: moves over water, attacks in all four directions, regenerates 1 hp per turn.
 Golem: slow, stoneskin (any incoming non-magic damage is halved).
 Gargoyle: flyer, ignores armor.
-Dragon: flyer, can induce fear into nearby unit, harms cursed units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
+Dragon: flyer, can induce fear into nearby creature, harms cursed units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
 
 Types of Creature Movement:
 - Walker
@@ -62,35 +68,38 @@ Types of Creature Movement:
 - Climber: can scale walls (less than 4 height)
 
 Leader Abilities:
-- Pentagram (neutral): creates a portal, to which any controlled unit can be summoned. Enemy units remove it on entering.
+- Pentagram (neutral): creates a portal, to which any controlled creature can be summoned. Enemy units remove it on entering.
 - Fireball (chaos): throws a cheap fireball.
 - Guardian (law): summons a turret, that can attack nearby enemies.
 
 Status Effects:
-- Cursed: unit is immune to non-magical weapons and poison, but suffers 100% more damage from blessed units.
-- Blessed: unit can harm cursed units and break magic doors.
-- Poison: unit can't regenerate and loses health with time, until health drops to 1 or heal is cast.
-- Fire Aura: attacker gets damaged equivalent to their own damage, when melee attacking this unit.
-- Hasted: unit gains additional 2 additional steps per turn.
-- Invisible: unit is invisible until its next non-movement action.
-- Shell: unit is invincible to the next physical attack.
-- Resisting: unit is invincible to the next harmful magical effect.
-- Flying: unit can move over any terrain and gains addition sight. Flying units are unaffected by fall damage.
-- Afraid: unit can't attack.
-- Regen: unit restores 1 hit point at the start of its turn, if it has full health and wasn't harmed this turn.
+- Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn.
+- Agile: creature can move near an enemy, without becoming engaged. I.e. such creature can hit and run.
+- Cursed: creature is immune to non-magical weapons and poison, but suffers 100% more damage from blessed units.
+- Blessed: creature can harm cursed units and break magic doors.
+- Poison: creature can't regenerate and loses health with time, until health drops to 1 or heal is cast.
+- Fire Aura: attacker gets damaged equivalent to their own damage, when melee attacking this creature.
+- Hasted: creature gains additional 2 additional steps per turn.
+- Invisible: creature is invisible until its next non-movement action.
+- Shell: creature is invincible to the next physical attack.
+- Resisting: creature is invincible to the next harmful magical effect.
+- Flying: creature can move over any terrain and gains addition sight. Flying units are unaffected by fall damage.
+- Afraid: creature can't attack.
+- Regen: creature restores 1 hit point at the start of its turn, if it has full health and wasn't harmed this turn.
 - Organic: non-undead and non-mechanical units can be target by attacks like life stealing.
 - Incorporeal: walks through doors and 1-tile walls (implementable through special teleport ability).
-- Seethrough: obstacles don't block this unit's sight
-- Darkvision: this unit doesn't suffer sight penalty at night.
-- Heavy: cannot be lifted into air by tornado and flight spells or dragon wings blow.
+- Seethrough: obstacles don't block this creature's sight
+- Darkvision: this creature doesn't suffer sight penalty at night.
+- Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow.
 
 Digging Mechanics:
 - only dirt is diggable.
 - player can only dig tile between two other tiles, that will avoid removing support from ceiling and limits player to creating tunnels, instead of caves.
 - digging height>>3 dirt wall creates height=2 tunnel, but only if that cell is near height=3 wall.
 - digging height=2 wall lowers it, but only if it isn't surrounded by height=3 walls.
-- floor can be digged to create height=3 mine schaft with ladder, allowing unit do descend and ascend, if enemy unit blocks path, ascending/descending would attack it.
+- floor can be digged to create height=3 mine schaft with ladder, allowing creature do descend and ascend, if enemy creature blocks path, ascending/descending would attack it.
 - digged out dirt could be restored.
 
 Liquid dynamics:
 - Water emitter increasing water pressure of its tile: when pressure reaches 5 it either leaks into neiboring tiles, or into the tile above, if water reaches map edge, it goes back into emitter or falls with rain.
+- Units standing in waster with height higher or equal to ther gets drowned, unless they have swimming ability.

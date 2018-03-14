@@ -104,11 +104,12 @@ view.infoline =
 | Us = $world.units_get{X,Y,Z}.skip{?empty}
 | less Us.end:
   | U = Us.0
+  | Stats = "s:[U.steps]/[U.class.steps] h:[U.health]/[U.class.hp]"
+  | Stats <= "[Stats] a:[U.combat] d:[U.armor] w:[U.will]; "
   | Goal = ""
   | when U.goal: Goal <= " ([U.goal_act.name] at [U.goal.xyz])"
-  | Will = " will: [U.will]; "
   | Id = if $world.editor then " ([U.id])" else ""
-  | Text <= "[Text]; [U.title][Id] [Will][Goal]"
+  | Text <= "[Text]; [U.title][Id] o:[U.owner.name] [Stats][Goal]"
 | Text
 
 export view

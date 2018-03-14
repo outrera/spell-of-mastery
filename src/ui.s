@@ -20,8 +20,6 @@ WorldProperties = No
 SaveWorldDlg =
 LoadWorldDlg =
 CreditsRoll =
-GameUnitUI =
-UnitPanel =
 BankList =
 HotKeyInvoke = 0
 ResourceCounters =
@@ -321,11 +319,8 @@ create_view_ui Me =
 | PlayerWidget <= hidden: layH PlayerPickers
 | BankList,ItemList = create_bank_list Me
 | BrushPicker <= hidden: layH: BankList,ItemList
-| UnitPanel <= unit_panel Me
 | IconsPanelTabs = create_icons_panel_tabs Me
 | EditorTabs <= create_editor_tabs Me
-| GameUnitUI <= hidden: dlg: mtx
-  | 0  0 | UnitPanel
 | IPY = $height-IconsPanelBG.h
 | UnitActIconsLay <= hidden: layV s/14
                      layH{s/4 UnitActIcons.drop{UnitActIcons.size/2}}
@@ -336,7 +331,6 @@ create_view_ui Me =
 | dlg: mtx
   |  0   0| $view
   |  0   0| ResourceCounters
-  |  0 $height-136-UnitPanel.bg.h| GameUnitUI
   |  0   0| BrushPicker
   |  0 IPY| IconsPanelBG
   | 140 IPY-28| IconsPanelTabs
@@ -438,11 +432,6 @@ ui_update_panel_buttons Me Unit As GAs =
     | Icons.I.show <= Active
 
 ui.on_unit_pick Units =
-| if Units.size><1
-  then | GameUnitUI.show <= 1
-       | UnitPanel.set_unit{Units.0}
-  else | GameUnitUI.show <= 0
-       | UnitPanel.set_unit{0}
 | for Icon AllActIcons: Icon.show <= 0
 | Unit = 0
 | As = 0

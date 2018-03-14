@@ -1,8 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- instead of jump command, list it with unit.reachable
-- display number of remaining action points on top of selected unit.
+- Rename armor to defense and combat to attack, because non-standard names would confuse and annoy gamers.
+- Implement defense stat changes.
+- Implement spellcasting points.
 - all units with hands should have act_throw_rock ability, which will help fighting ranged units when nothing else is available.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to determine targets, so obstacles would block the windflow
@@ -34,6 +35,7 @@ TODO:
 - At the end of AI turn, viewport focus should change to the place before AI turn.
 - Move sound center to the middle of the screen (currently it is at the top).
 - Proper player order logging for each turn, so game could be played online and player can review AI turn. Some uses would likely require copying world state.
+- high enough initial map level, so we have place for deepth tree water and caves.
 - flying mode for flyers, where only other flyers and ranged units can harm them. Such units fly two cells above ground, only where it is possible to do. That would also allow differentiating units into floaters, like ghost, and flyers, like dragon. Same way, climbers, like spider, should stick to the walls.
 
 
