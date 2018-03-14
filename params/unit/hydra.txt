@@ -1,14 +1,13 @@
 tier: 4
 cost: 15,15,20
 health: 20
-combat: 7
-armor: 0
-steps: 4
+atk: 7
+def: 0
+mov: 4
 cooldown: 4
 speed: 28
 inborn: (organic regen amphibian)
-//attack: sound{hydra_attack}
 impact: hydra_targets,when{enemy},shell,harm{user},macro{poison},sound{hydra_attack}
 hit: effect{blood},sound{hydra_hit}
 death: sound{hydra_hit}
-moves: sound{step}
+onMove: sound{step}

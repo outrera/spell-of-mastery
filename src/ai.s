@@ -6,7 +6,7 @@ SeenEnemies = 0
 PerCycle = 0
 
 unit.can_do Act =
-| when Act.steps > $steps: leave 0
+| when Act.mov > $mov: leave 0
 | when $owner.research_remain{Act}: leave 0
 | when $owner.mana < Act.cost: leave 0
 | when $cooldown_of{Act.name}: leave 0
@@ -163,14 +163,14 @@ unit.run_way Btrack =
 | $handled <= 1
 
 ai_update_unit Me =
-| less $steps > 0:
+| less $mov > 0:
   | $handled <= 1
   | leave 0
 | when $afraid:
   | when $enemies_in_sight.size: $run_way{1}
   | leave 0
 | when cast_spell Me: leave break
-| when $combat:
+| when $atk:
   | Cs = $reachable
   | case Cs.keep{?0><attack} [[Type Cell]@_]:
     | Block = Cell.block
@@ -179,7 +179,7 @@ ai_update_unit Me =
       | $order_at{Cell.xyz}
       | $handled <= 1
       | leave break
-  | when $steps:
+  | when $mov:
     | Es = $enemies_in_sight
     | PursueRange = max $sight 10
     | Flt = Cs{[?1 1]}.table //filtering table
@@ -223,7 +223,7 @@ ai_clean_pentagram Me =
 | Pentagram = $player.pentagram
 | when Pentagram:
   | B = Pentagram.cell.block
-  | when B and B.steps and B.owner.id><$player.id:
+  | when B and B.mov and B.owner.id><$player.id:
     | Cs = B.reachable.keep{?0><move}
     | Cs = Cs.sort{A B => (A.1.xyz-B.1.xyz).take{2}{?abs}.sum}.flip
     | for Type,Cell Cs:

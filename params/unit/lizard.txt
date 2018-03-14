@@ -1,13 +1,13 @@
 tier: 1
 cost: 5,7,10
 health: 9
-combat: 2
-steps: 8
-armor: 0
+atk: 2
+mov: 8
+def: 0
 speed: 18
 inborn: (organic climber resist)
-attack: sound{lizard_attack}
+onAttack: sound{lizard_attack}
 impact: shell,harm{user}//,sound{cut}
 hit: effect{blood},sound{lizard_hit}
 death: sound{devil_hit}
-moves: sound{lizard_move}
+onMove: sound{lizard_move}

@@ -1,13 +1,13 @@
 tier: 2
 cost: 10,7,14
 health: 10
-combat: 3
-armor: 0
+atk: 3
+def: 0
 will: 10
 speed: 28
 inborn: (organic)
 impact: shell,harm{user},sound{cut}
 hit: effect{blood},sound{dwarf_hit}
 death: sound{dwarf_die}
-moves: sound{step}
+onMove: sound{step}
 acts: (defend)

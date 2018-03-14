@@ -2,5 +2,5 @@ icon: nil
 priority: 50
 range: 1
 speed: 4
-steps: 1
+mov: 1
 check: any

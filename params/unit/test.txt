@@ -1,12 +1,11 @@
 sprite: unit_test
 tier: 2
 health: 5
-combat: 10
-armor: 0
+atk: 10
+def: 0
 summon: 0
 inborn: (flyer)
-//attack: sound{explosion}
 impact: harm{user},sound{explosion}
 hit: effect{blood},sound{devil_hit}
 death: sound{dragon_death}
-moves: sound{dragon_move}
+onMove: sound{dragon_move}

@@ -27,7 +27,7 @@ move_start Me =
 | $cycles <= U.speed
 | when X >< -Y: $cycles <= max 1 $cycles*3/2
 | $start_cycles <= $cycles
-| Effect = U.class.moves
+| Effect = U.class.onMove
 | when Effect: U.effect{Effect U U.xyz}
 
 move_update Me =

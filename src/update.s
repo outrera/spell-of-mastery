@@ -126,7 +126,7 @@ unit_check_move Me Dst =
 | B = $world.block_at{Dst}
 | less B: leave move
 | if $is_enemy{B}
-  then //when B.alive and $combat: leave attack
+  then //when B.alive and $atk: leave attack
   else when B.speed and B.can_move{}{B Dst.cell Src.cell}:
        | leave swap
 | 0
@@ -236,7 +236,7 @@ update_next_action Me =
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0
-| $steps -= $action.act.steps
+| $mov -= $action.act.mov
 | center_on_actor Me
 | $action.start
 | when $anim><move: $pick_facing{$facing}

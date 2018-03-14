@@ -57,7 +57,7 @@ unit.list_moves Src Cost =
     | B = Dst.block
     | if B then
         | if $owner.id <> B.owner.id
-          then if B.alive and $combat
+          then if B.alive and $atk
                then push Dst Ms //attack
                else
           else when B.speed and B.can_move{}{B Dst Src}:
@@ -122,7 +122,7 @@ world.closest_reach MaxCost U StartCell TargetXYZ =
       | B = TCell.block
       | when B:
         | less B.speed: | R <= 1; _goto end
-        | when not U.combat and U.owner.is_enemy{B.owner}: | R <= 1; _goto end
+        | when not U.atk and U.owner.is_enemy{B.owner}: | R <= 1; _goto end
   | _label end
   | R
 | $pathfind{MaxCost U StartCell &check}
@@ -178,31 +178,31 @@ can_jump Src Dst = Dst.empty and Dst.floor-Dst>1
 unit.reachable =
 | Xs = []
 | XYZ = $xyz
-| less $engaged: when $steps>0: $find{$steps
+| less $engaged: when $mov>0: $find{$mov
   | Dst =>
     | R = \block
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
       else if $owner.id <> B.owner.id then Type <= 0
-      else if B.steps<1 then Type <= 0
+      else if B.mov<1 then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | Es = $nearby_enemies_at{Dst.xyz}
     | when Es.size:
       | R <= \block //engage
-      | when $range><1 and $steps >> Dst^path_len+$attack_cost:
+      | when $range><1 and $mov >> Dst^path_len+$attack_cost:
         | for E Es: push [attack E.cell] Xs
     | R}
 | less $flyer or $climber: for N $cell.neibs: when N.empty:
   | F = N.floor
   | less F.block:
-    | when N-F>1 and $steps>>$jump_cost:
+    | when N-F>1 and $mov>>$jump_cost:
       | less got Xs.find{?1<>F}: push [jump F] Xs
-| when $range><1 and $steps>>$attack_cost:
+| when $range><1 and $mov>>$attack_cost:
   | for E Me^enemies_in_range:
     | when (E.xyz.2-$xyz.2) << 1 or $can_move{}{Me $cell E.cell}:
       | push [attack E.cell] Xs
-| when $range>1 and $steps>>$attack_cost:
+| when $range>1 and $mov>>$attack_cost:
   | for E Me^enemies_in_range: push [attack E.cell] Xs
 | Xs

@@ -3,7 +3,7 @@ title: `Throw Rock`
 //lore: 0
 //cost: 0
 cool: 3
-steps: 4
+mov: 4
 range: 3
 check: seen,unit
 before: missile{boulder},resist,harm{1},impact{explosion},sound{explosion}

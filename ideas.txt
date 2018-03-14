@@ -256,14 +256,16 @@ Subvert spell can be implemented differently:
   Subvert cost seems the easiest to implement and balance. So the best approach would be combining 
 
 
-Regarding defense stat:
-  Pros:
-    - 
-  Cons:
-    - its results can be provided with higher health, regeneration and genes instead.
-    - complicates game mechanics
-
-
+Approaches to defense stat implementation:
+- Just damage reduction:
+    Pros:
+      - simple
+    Cons:
+      - unrealistic and boring - everyone does it.
+      - its results can be provided with higher health, regeneration and genes instead.
+      - complicates game mechanics
+- To-hit chance: nice, but we don't use random numbers, which are known to annoy players.
+- To-hit effort: the bigger defense the more effort is required to overcome it. Similar to chance-based approach, but predictable and accumulates nicely: when several units can join the effort, - each unit would contribute to cumulative damage to defense, which regenerates when victim stops being engaged. That way even if unit has not enough moves to hit target this turn, it would still be able to hit it next turn. Also allows a lot of tactical possibilities for several units attack coordination.
 
 Liquid dynamics:
 - Water level: really simple to implement, but doesnt give much control and looks static. Not space for cool spells, although increasing level could be used to kill all creatures at the smae level or blocking opponent from certain spaces.

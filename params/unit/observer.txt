@@ -1,14 +1,14 @@
 tier: 2
 cost: 15,15,20
 health: 10
-combat: 3
-armor: 0
+atk: 3
+def: 0
 speed: 28
 inborn: (organic flyer)
-attack: sound{observer_attack}
+onAttack: sound{observer_attack}
 impact: harm{user}
 impact_hit: resist,impact{energy_ring},sound{observer_impact}
 hit: effect{blood},sound{observer_hit}
 death: sound{observer_die}
-moves: sound{observer_move}
+onMove: sound{observer_move}
 acts: (pentagram)

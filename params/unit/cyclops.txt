@@ -1,11 +1,10 @@
 tier: 4
 cost: 10,10,20
 health: 20
-combat: 5
-armor: 0
+atk: 5
+def: 0
 inborn: (organic)
-//attack: sound{cyclops_club}
 impact: shell,harm{user},sound{cyclops_club}
 hit: effect{blood},sound{cyclops_hit}
 death: sound{cyclops_die}
-moves: sound{step}
+onMove: sound{step}

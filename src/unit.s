@@ -10,7 +10,7 @@ init_unit_module CS =
 cell_goal.id = -1
 cell_goal.type = \goal
 cell_goal.fxyz = [$xyz.0*CellSize $xyz.1*CellSize $xyz.2*CellSize]
-cell_goal.combat = 0
+cell_goal.atk = 0
 cell_goal.leader = 0
 cell_goal.removed = 0
 cell_goal.alive = 1
@@ -54,12 +54,12 @@ type unit.$class{Id World}
   host //what unit hosts this sprite
   host_serial //when host dies, its serial changes
   unit_goal/cell_goal{}
+  mov //movement points remained this turn
   hp // hit points
   kills //how many enemies this unit has killed
   flags //various flags (mostly genes)
   genes/[] //active genes
   mod //set by various genes to modify some contextual behavior
-  steps //movement points remained this turn
   can_move //movement function
   aistate //how AI processes this unit
 | $action <= $world.action{Me}
@@ -160,7 +160,7 @@ unit.init Class =
   | less $active
     | $world.active.push{Me}
   | $active <= 1
-  | $steps <= $class.steps
+  | $mov <= $class.mov
   | $handled <= 0
   | $aistate <= \initial
   | $ordered.type <= 0
@@ -403,8 +403,8 @@ unit.order_at XYZ act/0 goal/0 =
 | when $afraid and Act.title<>move and Act.title<>swap:
   | $owner.notify{"Unit is too scared to perform any action!"}
   | leave
-| when $steps < Act.steps:
-  | $owner.notify{"Not enough action points ([Act.steps] required)"}
+| when $mov < Act.mov:
+  | $owner.notify{"Not enough moves ([Act.mov] required)"}
   | leave
 | when Act.title><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $owner.human and (Act.title><move or Act.title><attack):
@@ -452,33 +452,30 @@ knockback Me Target =
 | DC = $world.cell{@DXYZ}
 | when DC.tile.empty and not DC.block: Target.move{DXYZ}
 
-unit.assault Combat Target =
+unit.assault Atk Target =
 | Unavoid = 0
 | Lifedrain = 0
 | Mods = []
-| case Combat
+| case Atk
   [`.` Ms C]
-    | Mods <= Combat^| @r [_ Ms M]=>[M @(case Ms [_ _ _] Ms^r Else [Ms])]
-    | Combat <= Mods.head
+    | Mods <= Atk^| @r [_ Ms M]=>[M @(case Ms [_ _ _] Ms^r Else [Ms])]
+    | Atk <= Mods.head
     | Mods <= Mods.tail
   Else
-    | when Combat.is_list: bad "harm: unknown assault specifier [Combat]"
-| Damage = if Combat><user then $combat else Combat
+    | when Atk.is_list: bad "harm: unknown assault specifier [Atk]"
+| Damage = if Atk><user then $atk else Atk
 | till Mods.end:
   | Mod = Mods^pop
   | case Mod
-    unavoid
-      | Unavoid <= 1
     lifedrain
       | Lifedrain <= 1
     Else
-      | bad "Unknown combat modifier [Mod]"
+      | bad "Unknown attack modifier [Mod]"
 | when Target.cursed and $blessed: Damage += (Damage*100)/100
 | when $invisible: Damage += (Damage*100)/100
 | $run_genes{attack}
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
-| less Unavoid: Damage -= Target.armor
 | when Target.defending: Damage <= 1
 | Damage <= max 1 Damage
 | when Lifedrain: heal_unit Me 1

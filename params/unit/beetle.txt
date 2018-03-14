@@ -1,13 +1,13 @@
 tier: 1
 cost: 5,3,10
 health: 5
-combat: 1
-armor: 0
-steps: 4
+atk: 1
+def: 0
+mov: 4
 sight: 5
 speed: 48
 inborn: (organic)
 impact: shell,harm{user},sound{spider_attack}
 hit: effect{blood},sound{spider_hit}
 death: sound{spider_death}
-moves: sound{step}
+onMove: sound{step}

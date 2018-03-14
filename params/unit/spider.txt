@@ -1,12 +1,11 @@
 tier: 1
 cost: 5,5,10
 health: 8
-combat: 2
-armor: 0
+atk: 2
+def: 0
 speed: 20
 inborn: (organic climber)
-//attack: sound{spider_attack}
 impact: shell,harm{user},macro{poison},sound{spider_attack}
 hit: effect{blood},sound{spider_hit}
 death: sound{spider_death}
-moves: sound{step}
+onMove: sound{step}

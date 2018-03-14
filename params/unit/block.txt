@@ -1,8 +1,8 @@
 sprite: system_dummy
 health: 0
-combat: 0
+atk: 0
 aux: 1
-armor: 999
+def: 999
 show: 0
 item: 0
 ai: block

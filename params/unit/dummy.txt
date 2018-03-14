@@ -2,8 +2,8 @@
 sprite: special_missing
 tier: 0
 health: 0
-combat: 0
-armor: 0
+atk: 0
+def: 0
 speed: 0
 empty: 1
 show: 0

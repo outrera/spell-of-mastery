@@ -1,4 +1,4 @@
 range: 0
-steps: 0
+mov: 0
 check: any
 

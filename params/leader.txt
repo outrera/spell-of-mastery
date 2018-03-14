@@ -5,13 +5,13 @@ sprite: auto
 active: 1
 height: 2
 tier: 5
+mov: 5
 health: 15 // hit points - number of hits, before this unit is dead
+atk: 2
+def: 0
 range: 4
-combat: 2
-armor: 0
 will: -1
 cooldown: 24
-steps: 5
 sight: 7
 speed: 28
 pickable: 1
@@ -21,8 +21,6 @@ ai: unit
 item: 0
 inborn: (organic)
 impact: missile{bolt},resist,harm{1},impact{bolt_impact},sound{explosion}
-//attack: sound{wizard_attack}
-//impact: sound{attack2}
 moves: sound{step}
 acts: (pentagram act_fireball)
 spells:

@@ -1,14 +1,13 @@
 tier: 1
 cost: 3,3,10
 health: 6
-combat: 0
-steps: 14
+atk: 0
+mov: 14
 sight: 10
-armor: 5
+def: 5
 speed: 20
 inborn: (flyer organic)
-attack: sound{bat_attack}
 impact: shell,harm{user}
-hit: effect{blood},sound{bat_hit}
-death: sound{bat_die}
-moves: sound{bat_move}
+hit: effect{blood},sound{oculus_move}
+death: sound{explosion}
+onMove: sound{oculus_move}

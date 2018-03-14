@@ -1,11 +1,11 @@
 tier: 2
 cost: 3,4,5
 health: 6
-combat: 2
-armor: 0
+atk: 2
+def: 0
 speed: 24
 inborn: (organic)
 impact: shell,harm{user},sound{cut}
 hit: effect{blood},sound{imp_hit}
 death: sound{imp_die}
-moves: sound{step}
+onMove: sound{step}

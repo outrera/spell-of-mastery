@@ -1,14 +1,14 @@
 tier: 4
 cost: 20,20,30
 health: 20
-combat: 8
-armor: 1
+atk: 8
+def: 1
 sight: 10
 speed: 20
 inborn: (organic flyer)
-attack: sound{dragon_attack}
+onAttack: sound{dragon_attack}
 impact: impact{incinerate},shell,harm{user},sound{dragon_flame}
 hit: effect{blood},sound{dragon_hit}
 death: sound{dragon_death}
-moves: sound{dragon_move}
+onMove: sound{dragon_move}
 acts: (act_blowaway)

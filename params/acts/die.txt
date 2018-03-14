@@ -1,5 +1,5 @@
 priority: 50
 range: 1
 speed: 4
-steps: 0
+mov: 0
 check: any

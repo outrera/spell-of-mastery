@@ -1,14 +1,13 @@
 tier: 3
 cost: 10,10,15
 health: 14
-combat: 4
-armor: 0
+atk: 4
+def: 0
 range: 2
 inborn: (cursed)
-//attack: sound{lifedrain}
 impact: shell,harm{lifedrain.user},sound{lifedrain}
 impact_hit: impact{lifedrain}
 hit: effect{blood_undead},sound{ifrit_hit}
 death: sound{wraith_die}
-moves: sound{step}
+onMove: sound{step}
 acts: (vampire_bat_form_on)

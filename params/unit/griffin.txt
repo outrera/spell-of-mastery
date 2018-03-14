@@ -1,11 +1,11 @@
 tier: 3
 cost: 10,10,10
 health: 9
-combat: 4
-armor: 0
+atk: 4
+def: 0
 speed: 18
 inborn: (organic flyer)
 impact: shell,harm{user},sound{cut}
 hit: effect{blood},sound{griffin_hit}
 death: sound{griffin_die}
-moves: sound{griffin_move}
+onMove: sound{griffin_move}

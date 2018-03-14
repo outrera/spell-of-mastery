@@ -1,7 +1,6 @@
 icon: unit_witch
 hit: effect{blood},sound{female_hit}
-death: sound{female_die},sound{mage_die}
-moves: sound{step}
+death: sound{female_die}
 pentagram: special_pentagram_witch
 summons:
       summon_blob, summon_oculus,

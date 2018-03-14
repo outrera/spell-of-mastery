@@ -13,8 +13,8 @@ flyer: on{static}
 swimmer: on{static}
 amphibian: on{static}
 organic: on{static}
-fireaura: on{counter},harm{unavoid.2},impact{fire_ring}
-poison: on{endturn},host,when{has_health.2},harm{unavoid.1}
+fireaura: on{counter},harm{2},impact{fire_ring}
+poison: on{endturn},host,when{has_health.2},harm{1}
 hasted: on{endturn},inc{steps,4}
 //slowed: on{endturn},inc{steps,-1}
 //bloodlust: on{attack},mod{2},self,harm{1}
@@ -22,7 +22,7 @@ invisible: on{act},strip{invisible}
 //shell: on{phys_harm},mod{block},sound{shell},impact{shell},strip{shell}
 regen: on{endturn},when{harmed resting},strip{poison},heal{1},effect{heal}
 regen_tenant: on{tenant_endturn},tenant,when{harmed resting},strip{poison},heal{1},effect{heal}
-burning: on{entry},tenant,harm{unavoid.9},effect1{fire_ring}
+burning: on{entry},tenant,harm{9},effect1{fire_ring}
 enemy_removes: on{entry},tenant,when{enemy},effect{pickup},self,remove
 gateway: on{entry},gateway
 node_aura: on{cycle.12},tenant_mark{effect_aura}

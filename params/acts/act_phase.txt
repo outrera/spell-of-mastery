@@ -5,7 +5,7 @@ hotkey: p
 //cost: 3
 //cool: 10
 range: 2
-steps: 2
+mov: 2
 check: placeable,empty
 before: effect{teleport},sound{summon},self,set{alpha 0},set{delta 10}
 after: impact{teleport},teleport{self},self,set{alpha 255},set{delta -10}

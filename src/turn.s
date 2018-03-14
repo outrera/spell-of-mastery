@@ -13,8 +13,8 @@ unit.new_turn =
 | for Name,Params RunEs: $run_gene{Name Params Me $xyz}
 
 unit.end_turn =
-| Resting = $steps >< $class.steps
-| $steps <= $class.steps
+| Resting = $mov >< $class.mov
+| $mov <= $class.mov
 | when not $empty and $class.hp>0:
   | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}

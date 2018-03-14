@@ -1,6 +1,6 @@
 icon: act_dismiss
 speed: 4
-steps: 0
+mov: 0
 check: unit
 before: animate{idle}
        ,confirm{`Disband Unit?`,`Are you really want to dismiss this unit?`}

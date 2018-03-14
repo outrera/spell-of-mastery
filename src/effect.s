@@ -395,7 +395,7 @@ check_when Me Target C =
   confirmed | $main.dialog_result><yes
   harmed | Target.health<>Target.class.hp
   idle | not Target.goal
-  rested | $steps><$class.steps
+  rested | $mov><$class.mov
   resting | Target.resting
   [`+` not C] | not: check_when Me Target C
   [`.` below Type] | (Target.cell-1).type><Type
@@ -447,7 +447,7 @@ unit.effect Effect Target TargetXYZ =
         | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
         | leave
     else if Name >< insulate then RunActEffects<=0
-    else if Name >< user_attack then when $attack: $effect{$attack T T.xyz}
+    else if Name >< user_attack then when $onAttack: $effect{$onAttack T T.xyz}
     else if Name >< user_impact then
       if $range><1 and $xyz.2-T.xyz.2>1 then
         | $shot_missile{Target [boulder]

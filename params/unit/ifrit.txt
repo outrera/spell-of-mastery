@@ -1,13 +1,12 @@
 tier: 3
 cost: 10,10,15
 health: 12
-combat: 3
-armor: 1
+atk: 3
+def: 1
 speed: 22
 inborn: (organic fireaura flyer)
-//attack: sound{explosion}
-impact: shell,harm{unavoid.user},sound{explosion}
+impact: shell,harm{user},sound{explosion}
 hit: effect{blood},sound{ifrit_hit}
 death: sound{ifrit_death}
-moves: sound{ifrit_move}
+onMove: sound{ifrit_move}
 acts: (act_fireball)
