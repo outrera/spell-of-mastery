@@ -98,18 +98,19 @@ view.world = $main.world
 
 view.infoline =
 | X,Y,Z = $cursor
-| Indoor = if $world.up{$cursor} then 'Indoor; ' else "Outdoor; "
-| Cave = if $world.down{$cursor} then "Cave Roof; " else ""
-| Text = "[Indoor][Cave][X],[Y],[Z]:[$world.at{X Y Z-1}.type]"
+| Indoor = if $world.up{$cursor} then ':indoor' else ":outdoor"
+| Cave = if $world.down{$cursor} then ":roof" else ""
+| Land = "[X],[Y],[Z]:[$world.at{X Y Z-1}.type][Indoor][Cave]"
 | Us = $world.units_get{X,Y,Z}.skip{?empty}
+| Unit = ""
 | less Us.end:
   | U = Us.0
   | Stats = "s:[U.steps]/[U.class.steps] h:[U.health]/[U.class.hp]"
-  | Stats <= "[Stats] a:[U.combat] d:[U.armor] w:[U.will]; "
+  | Stats <= "[Stats] a:[U.combat] d:[U.armor] w:[U.will]"
   | Goal = ""
   | when U.goal: Goal <= " ([U.goal_act.name] at [U.goal.xyz])"
-  | Id = if $world.editor then " ([U.id])" else ""
-  | Text <= "[Text]; [U.title][Id] o:[U.owner.name] [Stats][Goal]"
-| Text
+  | Id = if $world.editor then "[U.id]" else ""
+  | Unit <= "[U.owner.name]'s [U.title][Id] [Stats][Goal]"
+| "[Unit]\n[Land]"
 
 export view

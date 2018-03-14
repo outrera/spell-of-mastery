@@ -4,6 +4,7 @@ TODO:
 - Rename armor to defense and combat to attack, because non-standard names would confuse and annoy gamers.
 - Implement defense stat changes.
 - Implement spellcasting points.
+- Move unit stat icons into info line, so player won't have to select the creature to see its stats.
 - all units with hands should have act_throw_rock ability, which will help fighting ranged units when nothing else is available.
 - int.block should be renamed to unit
 - blowaway should use `world.units_in_range` to determine targets, so obstacles would block the windflow

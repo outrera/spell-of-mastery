@@ -197,7 +197,8 @@ unit.reachable =
 | less $flyer or $climber: for N $cell.neibs: when N.empty:
   | F = N.floor
   | less F.block:
-    | when N-F>1 and $steps>>$jump_cost: push [jump F] Xs
+    | when N-F>1 and $steps>>$jump_cost:
+      | less got Xs.find{?1<>F}: push [jump F] Xs
 | when $range><1 and $steps>>$attack_cost:
   | for E Me^enemies_in_range:
     | when (E.xyz.2-$xyz.2) << 1 or $can_move{}{Me $cell E.cell}:
