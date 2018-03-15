@@ -3,7 +3,7 @@ range: 1
 health: 40
 atk: 5
 def: 0
-impact: harm{user},sound{cut}
+impact: hit{user},sound{cut}
 hit: effect{blood},sound{king_hit}
 death: sound{male_die},sound{mage_die}
 acts: (pentagram)

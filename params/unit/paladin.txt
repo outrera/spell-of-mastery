@@ -5,7 +5,7 @@ atk: 3
 def: 1
 speed: 30
 inborn: (organic bless)
-impact: shell,harm{user},sound{cut}
+impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{knight_hit}
 death: sound{male_die}
 onMove: sound{step}

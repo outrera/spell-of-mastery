@@ -6,7 +6,7 @@ def: 0
 range: 6
 mov: 5
 inborn: (organic)
-impact: shell,harm{user},sound{arrow_hit}
+impact: shell,hit{user},sound{arrow_hit}
 hit: effect{blood},sound{elf_hit}
 death: sound{male_die}
 onMove: sound{step}

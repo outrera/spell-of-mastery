@@ -7,7 +7,7 @@ sight: 10
 speed: 20
 inborn: (organic flyer)
 onAttack: sound{dragon_attack}
-impact: impact{incinerate},shell,harm{user},sound{dragon_flame}
+impact: impact{incinerate},shell,hit{user},sound{dragon_flame}
 hit: effect{blood},sound{dragon_hit}
 death: sound{dragon_death}
 onMove: sound{dragon_move}

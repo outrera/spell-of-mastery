@@ -5,9 +5,9 @@ atk: 4
 def: 0
 range: 2
 inborn: (cursed)
-impact: shell,harm{lifedrain.user},sound{lifedrain}
+impact: shell,hit{user},sound{lifedrain}
 impact_hit: impact{lifedrain}
 hit: effect{blood_undead},sound{ifrit_hit}
 death: sound{wraith_die}
 onMove: sound{step}
-acts: (vampire_bat_form_on)
+acts: (act_lifedrain vampire_bat_form_on)

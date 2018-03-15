@@ -6,7 +6,7 @@ def: 0
 will: 10
 speed: 28
 inborn: (organic)
-impact: shell,harm{user},sound{cut}
+impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{dwarf_hit}
 death: sound{dwarf_die}
 onMove: sound{step}

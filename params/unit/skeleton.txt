@@ -5,7 +5,7 @@ atk: 2
 def: 0
 //speed: 24
 inborn: (cursed)
-impact: shell,harm{user},sound{cut}
+impact: shell,hit{user},sound{cut}
 hit: effect{blood_undead},sound{skeleton_hit}
 death: sound{skeleton_die}
 onMove: sound{step}

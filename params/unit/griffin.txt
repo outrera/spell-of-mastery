@@ -5,7 +5,7 @@ atk: 4
 def: 0
 speed: 18
 inborn: (organic flyer)
-impact: shell,harm{user},sound{cut}
+impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{griffin_hit}
 death: sound{griffin_die}
 onMove: sound{griffin_move}

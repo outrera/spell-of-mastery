@@ -12,7 +12,7 @@ cool: 10
 aux: 1
 summon: 0
 inborn: (cursed flyer)
-impact: harm{user},sound{bat_attack}
+impact: hit{user},sound{bat_attack}
 hit: effect{blood_undead},sound{bat_hit}
 death: sound{bat_die}
 onMove: sound{bat_move}

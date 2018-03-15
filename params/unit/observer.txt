@@ -6,7 +6,7 @@ def: 0
 speed: 28
 inborn: (organic flyer)
 onAttack: sound{observer_attack}
-impact: harm{user}
+impact: hit{user}
 impact_hit: resist,impact{energy_ring},sound{observer_impact}
 hit: effect{blood},sound{observer_hit}
 death: sound{observer_die}

@@ -41,7 +41,7 @@ world.save =
     | Active <= list U.from U.anim U.anim_step U.anim_wait
                      U.kills U.cooldown Genes Host Goal Path
                      U.action.save U.ordered.save U.next_action.save
-                     U.mov
+                     U.mov U.def
   | Facing = U.facing
   | when U.sprite.id <> U.default_sprite.id: Facing <= [U.sprite.id Facing]
   | list U.type U.id U.serial U.owner.id U.xyz U.fxyz Facing
@@ -153,8 +153,9 @@ world.load Saved =
   | U.pick_facing{Facing}
   | when Active:
     | [From Anim AnimStep AnimWait Kills Cool Efx Host Goal Path
-       Action Ordered NextAction Mov @More] = Active
+       Action Ordered NextAction Mov Def @More] = Active
     | U.mov <= Mov
+    | U.def <= Def
     | U.from.init{From}
     | U.animate{Anim}
     | U.anim_step <= AnimStep

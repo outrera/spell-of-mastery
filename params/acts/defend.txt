@@ -3,7 +3,7 @@ icon: spell_shell
 //cost: 4
 cool: 0
 check: owned,unit
-before: add{defending 1},impact{spell}
+before: boost_defense{3},impact{spell}
 after: ()
 range: 0
 hint: boost

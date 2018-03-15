@@ -4,7 +4,7 @@ health: 10
 atk: 4
 def: 2
 inborn: (organic flyer bless)
-impact: shell,harm{user},sound{impact}
+impact: shell,hit{user},sound{impact}
 hit: effect{blood_undead},sound{devil_hit}
 death: sound{dragon_death}
 onMove: sound{dragon_move}

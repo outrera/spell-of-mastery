@@ -5,7 +5,7 @@ atk: 4
 def: 0
 will: 10
 inborn: (organic)
-impact: shell,harm{user},sound{cut}
+impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{orc_hit}
 death: sound{orc_die}
 onMove: sound{step}

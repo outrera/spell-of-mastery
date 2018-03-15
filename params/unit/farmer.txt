@@ -4,7 +4,7 @@ health: 3
 atk: 2
 def: 0
 inborn: (organic)
-impact: shell,harm{user},sound{cut}
+impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{male_hit}
 death: sound{male_die}
 onMove: sound{step}

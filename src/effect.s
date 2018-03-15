@@ -105,10 +105,17 @@ effect effect1 Effect:
 
 effect sound Sound: $sound{Sound}
 
-effect heal Damage: Target.harm{Me -Damage}
+effect heal Amount: Target.harm{Me -Amount}
 
-//harm can be prefixed with magic. unavoid.(ignores defense) and lifedrain.
-effect harm How: $assault{How Target}
+effect harm Damage: Target.harm{Me Damage}
+
+effect hit Damage: $hit{Damage Target}
+
+effect lifedrain Amount:
+| when Amount >< full: Amount <= max{0 $class.hp-$hp}
+| Amount <= min{Target.hp Amount}
+| Target.harm{Me Amount}
+| $harm{Me -Amount}
 
 effect shake_screen Cycles: $world.shake{Cycles}
 effect color_overlay @List: $world.set_color_overlay{List}
@@ -157,6 +164,8 @@ effect set Name Value: unit_getset{Target}.Name <= Value
 effect inc Name Value: unit_getset{Target}.Name += Value
 
 effect world_set Name Value: $world.params.Name <= Value
+
+effect boost_defense Amount: $def <= min{$def+Amount $class.def+Amount}
 
 effect spell_of_mastery:
 | $world.params.winner <= $owner.id
@@ -279,6 +288,14 @@ effect caster Who:
 | less Who >< leader and Leader: leave
 | Leader.animate{attack}
 | Leader.face{TargetXYZ}
+
+knockback Me Target =
+| Dir = Target.xyz-$xyz
+| less Dir.all{?abs<<1}: leave
+| Dir.2 <= 0
+| DXYZ = Target.xyz+Dir
+| DC = $world.cell{@DXYZ}
+| when DC.tile.empty and not DC.block: Target.move{DXYZ}
 
 effect blowaway R BlowSelf:
 | Handled = []
@@ -447,11 +464,13 @@ unit.effect Effect Target TargetXYZ =
         | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
         | leave
     else if Name >< insulate then RunActEffects<=0
+    else if Name >< assault then
+        | when $defend_against{Target}: leave
     else if Name >< user_attack then when $onAttack: $effect{$onAttack T T.xyz}
     else if Name >< user_impact then
       if $range><1 and $xyz.2-T.xyz.2>1 then
         | $shot_missile{Target [boulder]
-                        [shell [harm user] [impact explosion] [sound explosion]]}
+                        [shell [hit user] [impact explosion] [sound explosion]]}
       else
         | $effect{$impact T T.xyz}
     else if Name >< missile then

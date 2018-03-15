@@ -5,7 +5,7 @@ atk: 3
 def: 1
 speed: 22
 inborn: (organic fireaura flyer)
-impact: shell,harm{user},sound{explosion}
+impact: shell,hit{user},sound{explosion}
 hit: effect{blood},sound{ifrit_hit}
 death: sound{ifrit_death}
 onMove: sound{ifrit_move}

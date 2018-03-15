@@ -5,7 +5,7 @@ atk: 2
 def: 0
 speed: 24
 inborn: (organic)
-impact: shell,harm{user},sound{cut}
+impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{imp_hit}
 death: sound{imp_die}
 onMove: sound{step}

@@ -5,7 +5,7 @@ atk: 2
 def: 0
 speed: 20
 inborn: (organic climber)
-impact: shell,harm{user},macro{poison},sound{spider_attack}
+impact: shell,hit{user},macro{poison},sound{spider_attack}
 hit: effect{blood},sound{spider_hit}
 death: sound{spider_death}
 onMove: sound{step}

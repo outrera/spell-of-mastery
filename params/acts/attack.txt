@@ -2,7 +2,8 @@ icon: attack
 hotkey: t
 check: unit
 before: insulate,user_attack
-impact: counter,user_impact
+impact: counter,assault,user_impact
+mov: 1
 range: user
 repeat: 0
 ///hint: harm

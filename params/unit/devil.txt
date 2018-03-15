@@ -4,7 +4,7 @@ health: 14
 atk: 1
 def: 0
 inborn: (organic)
-impact: shell,harm{user},when{kills.1},harm{100},impact{lifedrain},endwhen,sound{devil_attack}
+impact: shell,hit{user},when{kills.1},harm{100},impact{lifedrain},endwhen,sound{devil_attack}
 hit: effect{blood},sound{devil_hit}
 death: sound{devil_hit}
 acts: (teleport)

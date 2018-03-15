@@ -98,7 +98,7 @@ view.world = $main.world
 
 view.infoline =
 | X,Y,Z = $cursor
-| Indoor = if $world.up{$cursor} then ':indoor' else ":outdoor"
+| Indoor = if $world.up{$cursor} then ':indoor' else ':outdoor'
 | Cave = if $world.down{$cursor} then ":roof" else ""
 | Land = "[X],[Y],[Z]:[$world.at{X Y Z-1}.type][Indoor][Cave]"
 | Us = $world.units_get{X,Y,Z}.skip{?empty}
@@ -106,7 +106,7 @@ view.infoline =
 | less Us.end:
   | U = Us.0
   | Stats = "m:[U.mov]/[U.class.mov] h:[U.health]/[U.class.hp]"
-  | Stats <= "[Stats] a:[U.atk] d:[U.def] w:[U.will]"
+  | Stats <= "[Stats] a:[U.atk] d:[U.def]/[U.class.def] s:[U.sight] r:[U.range] w:[U.will]"
   | Goal = ""
   | when U.goal: Goal <= " ([U.goal_act.name] at [U.goal.xyz])"
   | Id = if $world.editor then "[U.id]" else ""

@@ -59,10 +59,12 @@ General:
 - Power versions of spells (damage boosted or all targets) should require additional rare mana/catalyst.
 - units may be set to act out of turn at the expense of being able to act in their own turn
 - Ranged units providing fire support, when standing near defending unit.
+- Harmed creatures getting penalties to their attack, defense regen and steps.
 
 Creatures:
 - Creature that is immune to blessed attacks.
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
+- Creature that can change places with nearby enemy
 - Creature, that gives bonuses to nearby allies.
 - Creature that does damage based on defenders movement rate.
 - Creature that has defense base on its remaining steps: unused movement points reduce damage.

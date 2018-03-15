@@ -136,7 +136,6 @@ update_path_move Me XYZ =
 | less M: leave 0
 | Us = $world.units_get{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
-| when M<>attack and $nearby_enemies_at{XYZ}.size: $engaged <= 1
 | $order.init{M | Target or XYZ}
 
 
@@ -253,9 +252,9 @@ update_action Me =
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave // ensure animation finishes
   | $action.finish
+  | when $action.act.mov>0 and $threatened: $engaged <= 1
   | update_next_action Me
-  | when $action.type><attack:
-    | $cooldown <= $class.cooldown
+  | when $action.type><attack: $cooldown <= $class.cooldown
 | $action.update
 
 unit.clinging =
