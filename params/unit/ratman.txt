@@ -3,7 +3,7 @@ cost: 5,5,10
 health: 8
 atk: 3
 def: 2
-will:5
+will: 5
 inborn: (organic)
 impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{rat_death}

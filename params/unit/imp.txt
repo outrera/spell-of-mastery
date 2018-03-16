@@ -2,7 +2,7 @@ tier: 2
 cost: 3,4,5
 health: 6
 atk: 2
-def: 0
+def: 1
 speed: 24
 inborn: (organic)
 impact: shell,hit{user},sound{cut}

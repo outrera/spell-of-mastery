@@ -1,10 +1,10 @@
 tier: 3
-cost: 10,10,15
-health: 14
+cost: 10,5,20
+health: 8
 atk: 1
-def: 0
+def: 6
 inborn: (organic)
-impact: shell,hit{user},when{kills.1},harm{100},impact{lifedrain},endwhen,sound{devil_attack}
+impact: shell,hit{user},sound{devil_attack}
 hit: effect{blood},sound{devil_hit}
 death: sound{devil_hit}
-acts: (teleport)
+acts: (teleport act_punish)

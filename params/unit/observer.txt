@@ -1,8 +1,10 @@
-tier: 2
+tier: 4
 cost: 15,15,20
-health: 10
-atk: 3
-def: 0
+mov: 5
+health: 15
+atk: 7
+def: 4
+range: 6
 speed: 28
 inborn: (organic flyer)
 onAttack: sound{observer_attack}

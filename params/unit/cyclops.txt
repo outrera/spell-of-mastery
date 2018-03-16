@@ -1,8 +1,8 @@
 tier: 4
-cost: 10,10,20
+cost: 15,15,20
 health: 20
-atk: 5
-def: 0
+atk: 10
+def: 1
 inborn: (organic)
 impact: shell,hit{user},sound{cyclops_club}
 hit: effect{blood},sound{cyclops_hit}

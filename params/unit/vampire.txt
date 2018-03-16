@@ -1,8 +1,8 @@
 tier: 3
-cost: 10,10,15
-health: 14
-atk: 4
-def: 0
+cost: 10,7,15
+health: 12
+atk: 3
+def: 4
 range: 2
 inborn: (cursed)
 impact: shell,hit{user},sound{lifedrain}

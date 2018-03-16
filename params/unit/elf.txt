@@ -1,10 +1,9 @@
-tier: 1
-cost: 10,7,14
+tier: 2
+cost: 5,6,15
 health: 6
 atk: 4
-def: 0
+def: 1
 range: 6
-mov: 5
 inborn: (organic)
 impact: shell,hit{user},sound{arrow_hit}
 hit: effect{blood},sound{elf_hit}

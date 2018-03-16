@@ -187,7 +187,7 @@ unit.reachable =
     | B = Dst.block
     | if not B then R <= 0
       else if $owner.id <> B.owner.id then Type <= 0
-      else if B.mov<1 or B.engaged then Type <= 0
+      else if B.mov<1 /*or B.engaged*/ then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | for E $nearby_enemies_at{Dst.xyz}:

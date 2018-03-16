@@ -2,7 +2,7 @@ tier: 1
 cost: 5,5,10
 health: 7
 atk: 2
-def: 0
+def: 2
 range: 3
 mov: 5
 inborn: (organic)

@@ -1,9 +1,9 @@
 tier: 1
-cost: 5,7,10
-health: 9
-atk: 2
+cost: 5,5,10
 mov: 8
-def: 0
+health: 8
+atk: 2
+def: 1
 speed: 18
 inborn: (organic climber resist)
 onAttack: sound{lizard_attack}

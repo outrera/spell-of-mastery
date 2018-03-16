@@ -1,8 +1,8 @@
 tier: 3
-cost: 10,10,15
+cost: 10,7,20
 health: 15
 atk: 6
-def: 0
+def: 2
 inborn: (organic)
 impact: shell,hit{user},sound{minotaur_attack}
 hit: effect{blood},sound{minotaur_hit}

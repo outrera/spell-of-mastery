@@ -1,8 +1,10 @@
 tier: 2
-cost: 10,7,14
+cost: 5,6,15
+mov: 5
 health: 9
 atk: 3
-def: 1
+def: 6
+will: 10
 speed: 30
 inborn: (organic bless)
 impact: shell,hit{user},sound{cut}

@@ -249,6 +249,13 @@ Regarding possibility of allowing creature standing on top of another, and the a
 - How would AI handle such possibilities?
 - Maybe only specific creatures, with acrobatics gene could do that? But then we already have climbers.
 
+Regarding possibility of swapping places with engaged unit:
+Pros:
+   - More tactical depth, encouraging supporting units.
+   - Easier for AI to handle.
+Cons:
+   - It could potentially lead to infinite loops, where both sides have two creatures and swap them to restore armor.
+
 
 Subvert spell can be implemented differently:
     - Each creature has its own subvert cost, called "will". Some creature are immune to subvert. This will may be equivalent to creature's cost.

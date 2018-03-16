@@ -4,13 +4,13 @@ active: 1
 height: 2
 tier: 1
 cost: 0,0,0 //lore,mana,cool
+mov: 6
 health: 9 // hit points - number of hits, before this unit is dead
 atk: 0
 def: 0
 will: -1
-cooldown: 16
-mov: 6
 sight: 7
+cooldown: 16 // cycles before that unit can act again
 speed: 24 // cycles required to move between game world cells
 ascendSpeed: 4 //pixels/per second of vertical movement
 pickable: 1

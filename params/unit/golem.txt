@@ -1,8 +1,9 @@
 tier: 4
 cost: 15,15,20
-health: 12
-atk: 4
-def: 10
+mov: 3
+health: 30
+atk: 12
+def: 2
 speed: 34
 inborn: ()
 impact: shell,hit{user},sound{golem_attack}

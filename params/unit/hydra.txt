@@ -1,9 +1,9 @@
 tier: 4
 cost: 15,15,20
-health: 20
-atk: 7
-def: 0
 mov: 4
+health: 20
+atk: 10
+def: 4
 cooldown: 4
 speed: 28
 inborn: (organic regen amphibian)

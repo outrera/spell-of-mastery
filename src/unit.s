@@ -57,7 +57,6 @@ type unit.$class{Id World}
   mov //movement points remained this turn
   hp // hit points
   def //defense points remained
-  kills //how many enemies this unit has killed
   flags //various flags (mostly genes)
   genes/[] //active genes
   mod //set by various genes to modify some contextual behavior
@@ -109,6 +108,14 @@ unit.`=resting` State = $flags <= $flags^set_bit{17 State}
 unit.resisting = $flags^get_bit{18}
 unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
 
+//how many other units this unit has killed
+unit.kills = $get_item{kills}
+unit.`=kills` Value = $set_item{kills Value}
+
+//how much that unit harmed other units
+unit.sinned = $get_item{sinned}
+unit.`=sinned` Value = $set_item{sinned Value}
+
 unit.`=backtrack` XYZ =
 | less XYZ:
   | $strip_gene{btrack}
@@ -152,7 +159,6 @@ unit.init Class =
 | $flags <= 0
 | $alpha <= 0
 | $delta <= 0
-| $kills <= 0
 | $cooldown <= 0
 | $from.init{0,0,-1}
 | when $class.active
@@ -235,15 +241,14 @@ unit.strip_gene What =
 | $genes.heapfree
 | $genes <= Es.enheap
 
-unit.add_item Name Amount =
-| less Amount: leave
+unit.set_item Name Amount =
 | for E $genes: when E.name><Name:
-  | E.amount-=Amount
-  | when E.amount >> 0:
-    | $strip_gene{Name}
-    | leave
+  | E.amount <= -Amount
+  | when E.amount >> 0: $strip_gene{Name}
   | leave
 | $add_gene{Name -Amount []}
+
+unit.add_item Name Amount =  $set_item{Name $get_item{Name}+Amount}
 
 unit.get_item Name =
 | for E $genes: when E.name><Name: leave -E.amount
@@ -457,7 +462,7 @@ unit.defend_against Target =
 | Hit = min{Def $mov}
 | $mov -= Hit
 | Def -= Hit
-| when Def>0
+| when Def > 0:
   | Target.def <= Def-1
   | leave 1
 | Target.def <= Target.class.def
@@ -472,17 +477,14 @@ unit.hit Damage Target =
 | Target.harm{Me Damage}
 
 unit.harm Attacker Damage =
-| when $removed or not $alive: leave
-| $resting <= 0
-| when Attacker and $leader><1 and $owner.id<>0:
-  | when not $owner.human and Attacker.owner.id><0:
-    | Attacker.harm{Me 1000}
-    | leave //roaming neutral units wont harm AI leader
+| when $removed or not $alive: leave //should never happen
 | when Damage << 0:
   | heal_unit Me -Damage
   | leave
+| $resting <= 0
 | Damage <= max 1 Damage
 | $hp -= Damage
+| when Attacker: Attacker.sinned += Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
   | Effect = $class.hit

@@ -105,8 +105,8 @@ view.infoline =
 | Unit = ""
 | less Us.end:
   | U = Us.0
-  | Stats = "m:[U.mov]/[U.class.mov] h:[U.health]/[U.class.hp]"
-  | Stats <= "[Stats] a:[U.atk] d:[U.def]/[U.class.def] s:[U.sight] r:[U.range] w:[U.will]"
+  | Stats = "M:[U.mov]/[U.class.mov] H:[U.health]/[U.class.hp]"
+  | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def] S:[U.sight] R:[U.range] W:[U.will]"
   | Goal = ""
   | when U.goal: Goal <= " ([U.goal_act.name] at [U.goal.xyz])"
   | Id = if $world.editor then "[U.id]" else ""

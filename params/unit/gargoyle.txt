@@ -1,8 +1,9 @@
 tier: 3
-cost: 10,10,10
+cost: 10,7,15
+mov: 8
 health: 10
-atk: 4
-def: 2
+atk: 2
+def: 8
 inborn: (organic flyer bless)
 impact: shell,hit{user},sound{impact}
 hit: effect{blood_undead},sound{devil_hit}

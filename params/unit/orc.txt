@@ -1,8 +1,8 @@
 tier: 2
-cost: 10,7,14
-health: 10
-atk: 4
-def: 0
+cost: 5,6,15
+health: 12
+atk: 5
+def: 1
 will: 10
 inborn: (organic)
 impact: shell,hit{user},sound{cut}

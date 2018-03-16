@@ -1,0 +1,10 @@
+icon: spell_heal
+title: `Punish`
+lore: 0
+cost: 0
+cool: 10
+range: 4
+check: non_leader,unit
+impact: shell,sound{devil_attack},punish{1000}
+hint: punish
+tab: spell

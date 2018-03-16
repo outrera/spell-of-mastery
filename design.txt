@@ -4,12 +4,13 @@ General:
 - The basic idea is to design an X-Com inspired game, but in a fantasy setting, with determenistic game mechanics (i.e. game design doesn't use random dice rolls). Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. The enchancement spells play the role of equipment, say instead of physical armor item, we we have magic shield enchantment, and instead of medkits we have guardian angel enchantment. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters or alien bases, there would be dungeons and ruins to explore. Additionally zeppelins, flying ships, flying islands/castles could be introduced for transporting squad on kingdom view.
 - Each creature has 5 major stats: Moves, Health, Attack, Defense, View, Range, and Will. Some magical artifacts and structures can affect these numbers.
 - Moves determines how many movement point or steps this unit gains per turn. One move allows moving one map square. The more complex is the action the more moves it will require per turn.
-- Attack determines how many health points that creature's attack removes from victim.
+- Health determines how much damage that unit could take, before perishing.
+- Attack determines how many health points that creature's attack removes from victim on its usual attack.
 - Defense determines how many moves it would cost for other creature to attack this one. While it doesn't take much strength to kill a rat, yet rat is a very agile creature, so it takes a lot of speed to hit it and really slow moving creature wont be able to catch a rat at all. At the same time, bat being fast, may bite some unarmored creature and run away. Player may pick against which attacker his creature should concenrate its defense, ignoring attacks from other ones. Lost defense points are regenerated at the end of a turn, if creature is not engaged, based on remaining movement points.
 - Sight determines how far this unit sees.
 - Range determines how far this creature can attack. Not that for artillery units range is usually longer than their sight.
 - Will stat determines how many caster points is required to cast a harmful spell onto this creature, for example, if somebody is trying to cast mind control spell onto your creature you will be notified and will have that creature's number of turns to counter the spell. Although enemy can invest additional mana to prevent countering the spell.
-- Usual humanoid speed is 6 moves per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5. Casting spell or attacking requires 4 moves. Haste gives +4 moves, allowing most units to attack twice.
+- Typial humanoid has 6 moves per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5, preventing leader to be able to run away from most creatures. Casting spell or attacking requires 4 moves. Haste gives +4 moves, allowing most units to attack twice.
 - Tier 1 creature costs 5 mana, while ultimate creature, dragon, costs 20.
 - Fall damage equals to FallHeight*3-2
 
@@ -53,7 +54,7 @@ Wraith: cursed, incorporeal, sees through walls, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: has stun-attack ability, disabling enemy for a single turn.
-Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed, or 1, if target haven't done any damage.
+Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed.
 Vampire: cursed, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy hitter
@@ -74,7 +75,7 @@ Leader Abilities:
 - Guardian (law): summons a turret, that can attack nearby enemies.
 
 Status Effects:
-- Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near an non-afraid enemy, like moving into adjanced cell, or ending its turn in a cell near an enemy.
+- Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near an non-afraid enemy, like moving into adjanced cell, or ending its turn in a cell near an enemy. Allied units can still swap places with engaged unit, takin its place.
 - Threatened: this creature has started its turn near enemy, if at the end of its first action it remains threatened, it becomes engaged.
 - Agile: creature can move near an enemy, without becoming engaged. I.e. such creature can hit and run.
 - Cursed: creature is immune to non-magical weapons and poison, but suffers 100% more damage from blessed units.
@@ -92,6 +93,7 @@ Status Effects:
 - Incorporeal: walks through doors and 1-tile walls (implementable through special teleport ability).
 - Seethrough: obstacles don't block this creature's sight
 - Darkvision: this creature doesn't suffer sight penalty at night.
+- Sinner: creature has spilled blood by killing somebody. Such creatures are vulneraly to specific abilities, like devil's punish ability.
 - Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow.
 
 Digging Mechanics:

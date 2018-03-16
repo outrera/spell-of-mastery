@@ -1,8 +1,8 @@
 tier: 1
 cost: 5,5,10
 health: 4
-atk: 1
-def: 0
+atk: 2
+def: 6
 inborn: (organic)
 impact: shell,hit{user},sound{cut}
 hit: effect{blood},sound{halfling_hit}

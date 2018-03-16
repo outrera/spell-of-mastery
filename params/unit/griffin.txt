@@ -1,8 +1,9 @@
 tier: 3
-cost: 10,10,10
-health: 9
+cost: 10,7,15
+mov: 6
+health: 12
 atk: 4
-def: 0
+def: 2
 speed: 18
 inborn: (organic flyer)
 impact: shell,hit{user},sound{cut}

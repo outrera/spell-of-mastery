@@ -1,8 +1,9 @@
 tier: 2
-cost: 10,7,14
-health: 10
+cost: 5,6,15
+mov: 5
+health: 9
 atk: 3
-def: 0
+def: 3
 will: 10
 speed: 28
 inborn: (organic)

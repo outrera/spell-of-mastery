@@ -1,8 +1,9 @@
 tier: 2
-cost: 10,10,15
-health: 9
+cost: 5,8,15
+mov: 5
+health: 8
 atk: 3
-def: 0
+def: 2
 speed: 28
 inborn: (cursed flyer)
 impact: shell,hit{user},sound{cut}

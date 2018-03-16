@@ -1,8 +1,9 @@
 tier: 4
-cost: 20,20,30
+cost: 20,20,25
+mov: 5
 health: 20
 atk: 8
-def: 1
+def: 6
 sight: 10
 speed: 20
 inborn: (organic flyer)

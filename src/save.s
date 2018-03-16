@@ -39,7 +39,7 @@ world.save =
              else [G.id U.goal_act.name]
     | Path = if U.path.end then 0 else [U.path 0]
     | Active <= list U.from U.anim U.anim_step U.anim_wait
-                     U.kills U.cooldown Genes Host Goal Path
+                     unused U.cooldown Genes Host Goal Path
                      U.action.save U.ordered.save U.next_action.save
                      U.mov U.def
   | Facing = U.facing
@@ -152,7 +152,7 @@ world.load Saved =
     | Facing <= Facing.1
   | U.pick_facing{Facing}
   | when Active:
-    | [From Anim AnimStep AnimWait Kills Cool Efx Host Goal Path
+    | [From Anim AnimStep AnimWait Unused Cool Efx Host Goal Path
        Action Ordered NextAction Mov Def @More] = Active
     | U.mov <= Mov
     | U.def <= Def
@@ -160,7 +160,6 @@ world.load Saved =
     | U.animate{Anim}
     | U.anim_step <= AnimStep
     | U.anim_wait <= AnimWait
-    | U.kills <= Kills
     | U.cooldown <= Cool
     | for E U.genes: $free_gene{E}
     | U.genes.heapfree

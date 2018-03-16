@@ -1,8 +1,8 @@
-tier: 1
-cost: 5,5,10
+tier: 2
+cost: 5,7,15
 health: 8
 atk: 2
-def: 0
+def: 6
 speed: 20
 inborn: (organic climber)
 impact: shell,hit{user},macro{poison},sound{spider_attack}

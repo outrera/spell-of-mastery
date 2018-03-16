@@ -111,9 +111,13 @@ effect harm Damage: Target.harm{Me Damage}
 
 effect hit Damage: $hit{Damage Target}
 
+effect punish MaxDamage:
+| Damage = if Target.kills>>1 then Target.hp else Target.sinned
+| Target.harm{Me min{MaxDamage Damage}}
+
 effect lifedrain Amount:
-| when Amount >< full: Amount <= max{0 $class.hp-$hp}
-| Amount <= min{Target.hp Amount}
+| when Amount >< full: Amount <= $class.hp
+| Amount <= min{Amount Target.hp $class.hp-$hp}
 | Target.harm{Me Amount}
 | $harm{Me -Amount}
 
@@ -422,7 +426,6 @@ check_when Me Target C =
   [`.` hasnt Effect] | not Target.has{Effect}
   [`.` got_child Type] | got Target.child{Type}
   [`.` no_child Type] | no Target.child{Type}
-  [`.` kills N] | Target.kills>>N
   Else | 0
 
 unit.effect Effect Target TargetXYZ =
