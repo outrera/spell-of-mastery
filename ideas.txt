@@ -257,6 +257,12 @@ Cons:
    - It could potentially lead to infinite loops, where both sides have two creatures and swap them to restore armor.
 
 
+Regarding attack of opportunity, when enemy enters the range, if defender has enough action points:
+Pros:
+   - Improves tactical depth
+Cons:
+   - Simple implementation would give too much advantage to defending site, using ranged units.
+
 Subvert spell can be implemented differently:
     - Each creature has its own subvert cost, called "will". Some creature are immune to subvert. This will may be equivalent to creature's cost.
     - Limit subversion time (i.e. just N turns). make sure player can't disband it.
