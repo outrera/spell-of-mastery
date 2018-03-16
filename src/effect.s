@@ -142,9 +142,6 @@ effect detonate Args:
   | B = $world.block_at{TargetXYZ+D}
   | when B: B.harm{Me Damage}
 
-effect counter:
-| when $range<<1: Target.run_genes{counter target/Me xyz/Me.xyz}
-
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
@@ -458,17 +455,17 @@ unit.effect Effect Target TargetXYZ =
         | less got T.class.inborn.find{resist}: T.strip_gene{resist}
         | leave
     else if Name >< shell then
+      | less $assault{Target}: leave
       | when T.shelled:
         | $world.effect{T.xyz shell}
         | T.sound{shell}
         | less got T.class.inborn.find{shell}: T.strip_gene{shell}
         | leave
+      | when $range<<1: Target.run_genes{counter target/Me xyz/Me.xyz}
       | when T.cursed: less $blessed or $cursed:
         | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
         | leave
     else if Name >< insulate then RunActEffects<=0
-    else if Name >< assault then
-        | when $defend_against{Target}: leave
     else if Name >< user_attack then when $onAttack: $effect{$onAttack T T.xyz}
     else if Name >< user_impact then
       if $range><1 and $xyz.2-T.xyz.2>1 then

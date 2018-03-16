@@ -155,7 +155,7 @@ unit.path_around_to Range XYZ = //Me is unit
 | Found = $pathfind{Range &check}
 | if Found then Found.path else []
 
-enemies_in_range Me =
+unit.enemies_in_range =
 | O = $owner
 | check B =
   | when O.is_enemy{B.owner} and B.health and not B.invisible:
@@ -202,8 +202,8 @@ unit.reachable =
     | when N-F>1 and $mov>>$jump_cost:
       | less got Xs.find{?1<>F}: push [jump F] Xs
 | when $range><1 and not $afraid and $mov>>1:
-  | for E Me^enemies_in_range:
+  | for E $enemies_in_range:
     | when $can_attack{$cell E.cell}: push [attack E.cell] Xs
 | when $range>1 and not $afraid and $mov>>1:
-  | for E Me^enemies_in_range: push [attack E.cell] Xs
+  | for E $enemies_in_range: push [attack E.cell] Xs
 | Xs

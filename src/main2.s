@@ -1,4 +1,4 @@
-use world gfx sprite_dump unit_flags enheap
+use world order gfx sprite_dump unit_flags enheap
 
 type main{Data}
      world
