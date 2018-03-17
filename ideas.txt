@@ -13,6 +13,7 @@ General:
   Cons:
     - Spawning a crystal would waste precious leader's turn, that could be spent on something cooler.
     - Could be too complex for AI to handle.
+- Elevator tiles.
 - Reagents used to reduce spellcasting cost, in a way that mana cost first subtracted from reagent pools. Alternatively, spells could specify reagents, that they can consume instead of mana. Simpler system would have just one reagent, say shrooms, that could be purchased with mana, and that reagent would be required to cast most powerful spells, or to pay upkeep. Cauldron could be required to make use of reagents, generate them, or it can provide separate boost. Liquid color in cauldron would indicate it's owner.
 - Non flyers should be able to jump from a cliff, sustaining fall damage
 - Allow some flyers/climbers to throw down unit standing near cliff, echangin place with it and inducing fall damage.
@@ -64,6 +65,8 @@ General:
 Creatures:
 - Creature that is immune to blessed attacks.
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
+- Creature whose attack is proportional to its defense
+- Creature whose attack is proportional to its life
 - Creature that can change places with nearby enemy
 - Creature, that gives bonuses to nearby allies.
 - Creature that does damage based on defenders movement rate.

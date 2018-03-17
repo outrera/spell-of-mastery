@@ -5,6 +5,7 @@ health: 20
 atk: 8
 def: 6
 sight: 10
+will: 15
 speed: 20
 inborn: (organic flyer)
 onAttack: sound{dragon_attack}

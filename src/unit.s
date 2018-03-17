@@ -57,6 +57,7 @@ type unit.$class{Id World}
   mov //movement points remained this turn
   hp // hit points
   def //defense points remained
+  will //will points remained
   flags //various flags (mostly genes)
   genes/[] //active genes
   mod //set by various genes to modify some contextual behavior
@@ -166,6 +167,7 @@ unit.init Class =
     | $world.active.push{Me}
   | $active <= 1
   | $mov <= $class.mov
+  | $will <= $class.will
   | $handled <= 0
   | $aistate <= \initial
   | $ordered.type <= 0

@@ -1,7 +1,7 @@
 icon: spell_subvert
 hotkey: m
-//lore: 10
-//cost: 0
+//lore: 5
+//cost: 5
 //cool: 10
 range: 9000
 check: non_leader,will,unit

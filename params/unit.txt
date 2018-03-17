@@ -8,7 +8,7 @@ mov: 6
 health: 9 // hit points - number of hits, before this unit is dead
 atk: 0
 def: 0
-will: -1
+will: 5
 sight: 7
 cooldown: 16 // cycles before that unit can act again
 speed: 24 // cycles required to move between game world cells
