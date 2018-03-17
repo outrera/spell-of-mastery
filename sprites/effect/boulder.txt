@@ -1,7 +1,7 @@
 author: `Jordan Irwin (a.k.a. AntumDeluge)`, `Nikita Sadkov`
 license: `CC-BY 3.0`
 origin: `http://opengameart.org/content/boulder`
-xy: 4,30
+xy: 0,12
 frames: 47*46
 anims: | idle time-3 0
 

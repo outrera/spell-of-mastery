@@ -1,0 +1,6 @@
+author: `nazzyc`, `Nikita Sadkov`
+license: `CC-BY 3.0`
+origin: `https://opengameart.org/content/ice-spells`
+xy: -2,18
+frames: 78*100
+anims: | idle time-4 0
