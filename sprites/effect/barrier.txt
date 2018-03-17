@@ -1,0 +1,6 @@
+author: `Joseph Crown 'jcrown41' (www.crownjoseph.com)`, `Nikita Sadkobv`
+license: `CC-BY-SA 3.0`
+origin: `https://opengameart.org/content/animated-sci-fi-gateway-electric-trap`
+xy: 0,0
+frames: 32*111
+anims: | idle time-2 0 1 2
