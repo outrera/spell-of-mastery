@@ -34,7 +34,7 @@ effect add @Args:
 
 effect strip Name:
 | when got Target.class.inborn.find{Name}: leave
-| Target.strip_gene{Name}
+| Target.strip{Name}
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
@@ -452,14 +452,14 @@ unit.effect Effect Target TargetXYZ =
       | when T.resisting:
         | $world.effect{T.xyz resist}
         | T.sound{resist}
-        | less got T.class.inborn.find{resist}: T.strip_gene{resist}
+        | less got T.class.inborn.find{resist}: T.strip{resist}
         | leave
     else if Name >< shell then
       | less $assault{Target}: leave
       | when T.shelled:
         | $world.effect{T.xyz shell}
         | T.sound{shell}
-        | less got T.class.inborn.find{shell}: T.strip_gene{shell}
+        | less got T.class.inborn.find{shell}: T.strip{shell}
         | leave
       | when $range<<1: Target.run_genes{counter target/Me xyz/Me.xyz}
       | when T.cursed: less $blessed or $cursed:

@@ -13,9 +13,9 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
             //             heal_allies, morph
   tab/Tab //UI tab where this action appears
   room/Room // this act places room scaffolds
+  mov/Mov //movement points require to execute this action
   lore/Lore //amount of lore required to research this action
   cost/Cost //how much to cast it
-  mov/Mov //movement points require to execute this action
   cool/Cool //action cooldown
   needs/Needs //list of dependencies
   priority/Priority
@@ -57,10 +57,15 @@ act.validate Actor XYZ Target Invalid =
   | Invalid{"Needs seen territory."}
   | leave 0
 | when T.unit and not Target or Target.removed: leave 0
+| Cost = $cost
+| when T.will and Target: Cost += Target.will
+| when Cost > Actor.owner.mana:
+  | Invalid{"Needs [Cost] mana."}
+  | leave 0
 | when T.pentagram:
   | P = Actor.owner.pentagram
   | less P:
-    | Invalid{"This action requires pentagram."}
+    | Invalid{"Needs pentagram."}
     | leave 0
   | when Actor.world.block_at{P.xyz}:
     | Invalid{"Pentagram is blocked"}
@@ -90,9 +95,6 @@ act.validate Actor XYZ Target Invalid =
   | leave 0
 | when T.non_leader and Target and Target.leader><1:
   | Invalid{"Needs non-leader."}
-  | leave 0
-| when T.will and Target and Target.will > Actor.owner.mana:
-  | Invalid{"Needs [Target.will] mana."}
   | leave 0
 | when T.c_fullhp and Actor.hp < Actor.class.hp:
   | Invalid{"Needs full health."}

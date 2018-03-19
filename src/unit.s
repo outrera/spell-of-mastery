@@ -89,6 +89,9 @@ unit.`=shelled` State = $flags <= $flags^set_bit{4 State}
 unit.flyer = $flags^get_bit{5}
 unit.`=flyer` State = $flags <= $flags^set_bit{5 State}
 
+unit.charging = $flags^get_bit{6}
+unit.`=charging` State = $flags <= $flags^set_bit{6 State}
+
 unit.climber = $flags^get_bit{9}
 unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
@@ -110,16 +113,16 @@ unit.resisting = $flags^get_bit{18}
 unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
 
 //how many other units this unit has killed
-unit.kills = $get{kills}^~{No 0}
+unit.kills = $get{kills}
 unit.`=kills` Value = $set{kills Value}
 
 //how much that unit harmed other units
-unit.sinned = $get{sinned}^~{No 0}
+unit.sinned = $get{sinned}
 unit.`=sinned` Value = $set{sinned Value}
 
 unit.`=backtrack` XYZ =
 | less XYZ:
-  | $strip_gene{btrack}
+  | $strip{btrack}
   | leave
 | when $has{btrack}: leave
 | $add_gene{btrack 0 XYZ}
@@ -221,11 +224,18 @@ unit.cooldown_of ActName =
 | E = $genes.find{E => E.name><cool and E.params.0><ActName}
 | if got E then [E.params.1 E.params.2] else 0
 
-unit.gene_param Name =
-| E = $genes.find{?name><Name}
-| if got E then E.params.unheap else 0
+unit.set Name Value =
+| for E $genes: when E.name><Name:
+  | E.params.heapfree
+  | E.params <= Value.enheap
+  | leave
+| $add_gene{Name 0 Value}
 
-unit.strip_gene What =
+unit.get Name =
+| for E $genes: when E.name><Name: leave E.params.unheap
+| 0
+
+unit.strip What =
 | Check = if What.is_fn then What else E => E.name><What
 | FreeEs =
 | Es =
@@ -243,20 +253,10 @@ unit.strip_gene What =
 | $genes.heapfree
 | $genes <= Es.enheap
 
-unit.set Name Value =
-| for E $genes: when E.name><Name:
-  | E.params <= Value
-  | leave
-| $add_gene{Name 0 Value}
-
-unit.get Name =
-| for E $genes: when E.name><Name: leave E.params
-| No
-
 unit.set_item Name Amount =
 | for E $genes: when E.name><Name:
   | E.amount <= -Amount
-  | when E.amount >> 0: $strip_gene{Name}
+  | when E.amount >> 0: $strip{Name}
   | leave
 | $add_gene{Name -Amount []}
 

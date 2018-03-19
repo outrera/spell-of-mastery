@@ -67,7 +67,7 @@ dact missile.update
 
 dact missile.finish
 | U = $unit
-| _,UId,USerial,Es = U.gene_param{missile}.0
+| _,UId,USerial,Es = U.get{missile}.0
 | Source = U.world.units.UId
 | less Source.serial >< USerial: Source <= $world.nil
 | Source.effect{Es $target $xyz}
@@ -190,7 +190,10 @@ world.action Unit = action Unit
 
 action.main = $unit.main
 
-action.cost = $act.cost
+action.cost =
+| Cost = $act.cost
+| when Target and $act.check.will: Cost += Target.will
+| Cost
 action.check = $act.check
 action.before = $act.before
 action.impact =

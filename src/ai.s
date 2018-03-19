@@ -159,7 +159,7 @@ unit.run_way Btrack =
     | Best <= R
 | when Best:
   | $order_at{Best.xyz}
-  | when Btrack: less $gene_param{btrack}: $backtrack <= $xyz
+  | when Btrack: less $get{btrack}: $backtrack <= $xyz
 | $handled <= 1
 
 ai_update_unit Me =
@@ -192,7 +192,7 @@ ai_update_unit Me =
       | less $handled: $handled <= 1
       | leave break
 | when $aistate <> roam:
-  | BtXYZ = $gene_param{btrack}
+  | BtXYZ = $get{btrack}
   | when BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
 | when $aistate >< roam and roam Me: leave break
 | $handled <= 1

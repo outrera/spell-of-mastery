@@ -210,9 +210,15 @@ update_next_action Me =
   | update_path Me
   | update_order Me
 | Cost = $next_action.cost
+| when $charging:
+  | $owner.notify{'Already charging an action.'}
+  | $next_action.init{idle $xyz}
 | if     $next_action.type and $next_action.valid
      and (not Cost or $owner.mana>>Cost)
-  then | $owner.mana -= $next_action.cost
+  then | $owner.mana -= Cost
+       | when $will < Cost:
+         | $set{charge [$next_action.type Target.id $will Cost]}
+         | $next_action.init{idle $xyz}
   else
   | if not $next_action.type
       then
@@ -277,8 +283,8 @@ update_fall Me =
 
 unit_landed Me =
 | $velocity.2 <= 0.0
-| FH = $gene_param{fallheight}
-| $strip_gene{fallheight}
+| FH = $get{fallheight}
+| $strip{fallheight}
 | when FH>0:
   | $sound{land}
   | $harm{Me FH*3-2}

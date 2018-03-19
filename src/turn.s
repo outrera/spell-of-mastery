@@ -9,7 +9,7 @@ unit.new_turn =
     | when E.when >< timeout: push [E.name E.params.unheap] RunEs
     | Remove <= 1
     | E.amount <= No
-| when Remove: $strip_gene{?amount><No} //strip genes with zero duration
+| when Remove: $strip{?amount><No} //strip genes with zero duration
 | for Name,Params RunEs: $run_gene{Name Params Me $xyz}
 
 unit.end_turn =
