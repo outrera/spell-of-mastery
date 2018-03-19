@@ -211,13 +211,13 @@ update_next_action Me =
   | update_order Me
 | Cost = $next_action.cost
 | when $charging:
-  | $owner.notify{'Already charging an action.'}
+  | $owner.notify{'Busy charging [$get{charge}.0.title].'}
   | $next_action.init{idle $xyz}
 | if     $next_action.type and $next_action.valid
      and (not Cost or $owner.mana>>Cost)
   then | $owner.mana -= Cost
        | when $will < Cost:
-         | $set{charge [$next_action.type Target.id $will Cost]}
+         | $set{charge [$next_action.act Target.id $will Cost]}
          | $next_action.init{idle $xyz}
   else
   | if not $next_action.type
