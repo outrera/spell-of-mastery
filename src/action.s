@@ -192,7 +192,7 @@ action.main = $unit.main
 
 action.cost =
 | Cost = $act.cost
-| when Target and $act.check.will: Cost += Target.will
+| when $target and $act.check.will: Cost += $target.will
 | Cost
 action.check = $act.check
 action.before = $act.before

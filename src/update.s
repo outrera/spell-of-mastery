@@ -204,40 +204,51 @@ center_on_actor Me =
   | LastMovedUnit = $serial
   | LastMovedTurn = $world.turn
 
-update_next_action Me =
-| when $order.type: update_order Me
-| less $next_action.type: less $path.end:
-  | update_path Me
-  | update_order Me
+handle_next_action_cost Me =
+| Charge = 0
+| when $next_action.type >< idle: leave 1
+| less $next_action.type: leave 0
+| less $next_action.valid: leave 0
+| when $next_action.cost and $charging:
+  | if $get{charge}.0.name <> $next_action.act.name
+    then | $owner.notify{"Busy charging [$get{charge}.0.title]."}
+         | leave 0
+    else | C = $get{charge}
+         | Charge <= C.1
+         | $owner.mana += C.2
 | Cost = $next_action.cost
-| when $charging:
-  | $owner.notify{'Busy charging [$get{charge}.0.title].'}
-  | $next_action.init{idle $xyz}
-| if     $next_action.type and $next_action.valid
-     and (not Cost or $owner.mana>>Cost)
-  then | $owner.mana -= Cost
-       | when $will < Cost:
-         | $set{charge [$next_action.act Target.id $will Cost]}
-         | $next_action.init{idle $xyz}
-  else
-  | if not $next_action.type
-      then
-    else if Cost and not $owner.mana>>Cost
-      then $owner.notify{'Not enough mana.'}
-    else if not $next_action.valid
-      then //$owner.notify{'Cant perform action.'}
-    else
-  | $next_action.init{idle $xyz}
-| when $flyer or $climber:
+| when Cost and $owner.mana<Cost:
+  | $owner.notify{'Not enough mana.'}
+  | leave 0
+| $owner.mana -= Cost
+| when Cost and $will < Cost-Charge:
+  | TId = if $next_action.target then $next_action.target.id else 0
+  | $set{charge [$next_action.act Charge Cost TId]}
+  | leave 0
+| $will -= Cost-Charge
+| 1
+
+
+handle_next_action_height_change Me =
+| when $next_action.type<>idle and ($flyer or $climber):
   | T = $next_action.type
   | NP = $next_action.xyz
-  | when T><move and $xyz.2-NP.2>1:
+  | when T><move and $xyz.2-NP.2>1: //ensure flyer nicely descends
     | $next_action.xyz.init{[NP.0 NP.1 $xyz.2-1]}
     | T = 0
   | when $range><1 and (T><attack or T><move) and NP.2-$xyz.2>1:
     | $face{$next_action.xyz}
     | $action.init{ascend $next_action.xyz}
-    | leave
+    | leave 0
+| 1
+
+update_next_action Me =
+| when $order.type: update_order Me
+| less $next_action.type: less $path.end:
+  | update_path Me
+  | update_order Me
+| less handle_next_action_cost Me: $next_action.init{idle $xyz}
+| less handle_next_action_height_change Me: leave
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0

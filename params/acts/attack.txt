@@ -3,7 +3,6 @@ hotkey: t
 check: unit
 before: insulate,user_attack
 impact: (user_impact)
-mov: 1
 range: user
 repeat: 0
 ///hint: harm
