@@ -143,7 +143,7 @@ roam Me =
 unit.enemies_in_sight =
 | $units_in_range{$sight}.keep{X=>$is_enemy{X} and not X.invisible}
 
-unit.run_way Btrack =
+unit.runaway Btrack =
 | Es = $enemies_in_sight
 | Rs = $reachable{}{?1}.skip{?block}
 | Best = 0
@@ -162,14 +162,20 @@ unit.run_way Btrack =
   | when Btrack: less $get{btrack}: $backtrack <= $xyz
 | $handled <= 1
 
+unit.charging_act = $get{charge}.0
+unit.charging_charge = $get{charge}.1
+unit.charging_cost = $get{charge}.2
+
+
 ai_update_unit Me =
 | less $mov > 0:
   | $handled <= 1
   | leave 0
 | when $afraid:
-  | when $enemies_in_sight.size: $run_way{1}
+  | when $enemies_in_sight.size: $runaway{1}
   | leave 0
-| when cast_spell Me: leave break
+| when not $charging or $charging_charge+$will>>$charging_cost:
+  | when cast_spell Me: leave break
 | when $atk:
   | Cs = $reachable
   | case Cs.keep{?0><attack} [[Type Cell]@_]:
@@ -177,7 +183,6 @@ ai_update_unit Me =
     | when Block and not Block.invisible:
       | $backtrack <= $xyz
       | $order_at{Cell.xyz}
-      | $handled <= 1
       | leave break
   | when $mov:
     | Es = $enemies_in_sight

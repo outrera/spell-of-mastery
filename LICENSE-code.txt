@@ -1,4 +1,4 @@
-Following license covers only the source code under src/. Art has its own licenses (see LICENSE-art file)
+Following license covers only the source code under src/. Art and data files have its own licenses (see LICENSE-art file)
 
 --------
 

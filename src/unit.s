@@ -422,8 +422,6 @@ unit.threatened_at XYZ =
 
 unit.threatened = $threatened_at{$xyz}
 
-retaliate Me Enemy Range =
-
 heal_unit Me Amount =
 | less $class.hp: leave
 | $hp += min Amount $class.hp-$health
@@ -456,6 +454,13 @@ unit.hit Damage Target =
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
 | Target.harm{Me Damage}
 
+unit.interrupt =
+| less $charging: leave
+| C = $get{charge}
+| $owner.notify{"[C.0.title] was interrupted"}
+| $owner.mana += C.2
+| $strip{charge}
+
 unit.harm Attacker Damage =
 | when $removed or not $alive: leave //should never happen
 | when Damage << 0:
@@ -470,8 +475,9 @@ unit.harm Attacker Damage =
   | Effect = $class.hit
   | when Effect: $effect{Effect Me $xyz}
   | when $anim><idle or $anim><move: $animate{hit}
-  | when Attacker and $owner.is_enemy{Attacker.owner}:
-    | retaliate Me Attacker 5
+  | when $charging:
+    | $interrupt
+    | when Attacker: Attacker.owner.notify{"Succeed interrupting target's action"}
   | leave
 | when Attacker:
   | AO = Attacker.owner

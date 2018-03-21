@@ -106,11 +106,13 @@ view.infoline =
 | less Us.end:
   | U = Us.0
   | Stats = "M:[U.mov]/[U.class.mov] H:[U.health]/[U.class.hp]"
-  | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def] S:[U.sight] R:[U.range] W:[U.will]"
-  | Goal = ""
-  | when U.goal: Goal <= " ([U.goal_act.name] at [U.goal.xyz])"
+  | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def] S:[U.sight] R:[U.range]"
+  | Stats <= "[Stats] W:[U.will]/[U.class.will]"
+  | when U.charging:
+    | CAct, Charge, CCost, TId = U.get{charge}
+    | Stats <= "[Stats] ([CAct.title]: [Charge]/[CCost])"
   | Id = if $world.editor then "[U.id]" else ""
-  | Unit <= "[U.owner.name]'s [U.title][Id] [Stats][Goal]"
+  | Unit <= "[U.owner.name]'s [U.title][Id] [Stats]"
 | "[Unit]\n[Land]"
 
 export view

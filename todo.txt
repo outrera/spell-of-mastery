@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Implement willpower-based spellcasting: when player picks spell to cast, that spells mana cost is removed from player's reserves, but if player's leader has not enough willpower to cast the spell, it is being delayed to the next turn. Charged spell could be cast from abilities/spells menu.
+- Interrupt charge icon.
+- Better disband icon.
 - consider moving spells into spell book and usual abilities to the left of the menu buttons.
 - Implement spell countering, using usual dispel spell, where player choices the unit that is being targeted by harmful spell and pays the mana amount required to dispel it. Dispeling a global enchantment should be a separate action, that would present player with menu of all enchantments and their owners
 - Unit's facing affecting damage received: hitting unit from side would inflict 1 additional damage, while hitting it from back would also decrease its defense by 1. Allow changing facing by spending 1 step.

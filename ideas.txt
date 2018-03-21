@@ -63,6 +63,7 @@ General:
 - Harmed creatures getting penalties to their attack, defense regen and steps.
 
 Creatures:
+- Creature that does damage based on range to the target.
 - Creature that is immune to blessed attacks.
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
 - Creature whose attack is proportional to its defense
@@ -162,6 +163,7 @@ Spells:
 - Guardian Angel: killed unit gets resurrected at pentagram.
 - Clone Self: creates clone of self, which will continue leading, if creator dies
 - Passion: caster loses health, but gains mana.
+- Mana Shield: harm to target unti is converted in mana loss.
 - Live Shield: portion of damage to one creature gets redirected to another.
 - Harm Mirror: reflects damage from the next attack back to attacker.
 - Return Harm: any damage target deals gets returned to it.

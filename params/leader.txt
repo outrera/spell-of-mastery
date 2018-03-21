@@ -7,8 +7,8 @@ height: 2
 tier: 5
 mov: 5
 health: 15 // hit points - number of hits, before this unit is dead
-atk: 2
-def: 0
+atk: 3
+def: 3
 range: 4
 will: 2
 cooldown: 24
@@ -19,8 +19,8 @@ passable: 0
 leader: 1
 ai: unit
 item: 0
-inborn: (organic)
-impact: missile{bolt},resist,harm{1},impact{bolt_impact},sound{explosion}
+inborn: (organic bless)
+impact: missile{bolt},shell,hit{user},impact{bolt_impact},sound{explosion}
 moves: sound{step}
 acts: (pentagram act_fireball)
 spells:

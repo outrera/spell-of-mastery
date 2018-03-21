@@ -11,12 +11,21 @@ unit.new_turn =
     | E.amount <= No
 | when Remove: $strip{?amount><No} //strip genes with zero duration
 | for Name,Params RunEs: $run_gene{Name Params Me $xyz}
+| $mov <= $class.mov
+| $will <= $class.will
 
 unit.end_turn =
 | Resting = $def >< $class.def and not $engaged
 | when $threatened: $engaged <= 1 //ended its turn near enemy?
-| less $engaged: $def <= min{$mov $class.def}
-| $mov <= $class.mov
+| less $engaged:
+  | DefInc = max 0: min $mov $class.def-$def
+  | $def += DefInc
+  | $mov -= DefInc
+| when $charging:
+  | CAct, Charge, CCost, TId = $get{charge}
+  | CInc = min $will CCost-Charge
+  | Charge += CInc
+  | $set{charge [CAct Charge CCost TId]}
 | when not $empty and $class.hp>0:
   | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}
