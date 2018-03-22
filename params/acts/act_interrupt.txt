@@ -1,4 +1,4 @@
-icon: spell_dispel
+icon: act_interrupt
 speed: 4
 mov: 0
 check: unit
