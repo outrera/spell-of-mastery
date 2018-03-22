@@ -1,4 +1,4 @@
-icon: spell_heal
+icon: act_lifedrain
 title: `Lifedrain`
 lore: 0
 cost: 0
