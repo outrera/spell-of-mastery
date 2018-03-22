@@ -33,7 +33,7 @@ spells:
       cast_haste
       cast_fear
       cast_shell
-      cast_resist
+      cast_antimagic
       cast_bless
       cast_curse
       cast_invisibility
