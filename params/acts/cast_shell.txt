@@ -2,7 +2,8 @@ icon: spell_shell
 lore: 5
 cost: 1
 cool: 5
+range: 9000
 check: unit
 before: /*owner_units,*/add{shell},impact{shell},sound{shell}
-hint: boost
+hint: shell
 tab: spell

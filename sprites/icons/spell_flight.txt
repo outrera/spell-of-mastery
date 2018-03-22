@@ -1,3 +1,3 @@
-author: `random223 (http://random223.deviantart.com/)`
-license: `CC-BY-SA 3.0`
-origin: `http://opengameart.org/content/colored-ability-icons`
+author: `J. W. Bjerk "eleazzaar" (www.jwbjerk.com/art)`
+license: `CC-BY`
+origin: `http://opengameart.org/content/painterly-spell-icons-part-2`
