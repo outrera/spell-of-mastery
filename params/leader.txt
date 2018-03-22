@@ -7,7 +7,7 @@ height: 2
 tier: 5
 mov: 5
 health: 15 // hit points - number of hits, before this unit is dead
-atk: 3
+atk: 2
 def: 3
 range: 4
 will: 2

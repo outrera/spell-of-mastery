@@ -210,6 +210,8 @@ effect gateway:
 | $world.effect{T.xyz teleport}
 | $sound{summon}
 
+effect interrupt: Target.interrupt
+
 effect remove: Target.free
 
 effect die Whom:

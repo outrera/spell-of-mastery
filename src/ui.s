@@ -405,6 +405,7 @@ ui_update_panel_buttons Me Unit As GAs =
     | Count <= Act.0
     | Act <= Act.1
   | Preqs = Act.needs.all{Ns=>Ns.any{N=>Player.research_remain{Acts.N}<<0}}
+  | when Act.needsGene.any{Ns=>not Ns.any{N=>Unit.has{N}}}: Preqs <= 0
   | Icons = if I<0 then | I <= -(I+1); GroundActIcons 
             else UnitActIcons
   | when Preqs:

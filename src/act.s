@@ -2,7 +2,7 @@ use util
 
 
 type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
-         lore/0 cost/0 mov/1 cool/0 needs/[]
+         lore/0 cost/0 mov/1 cool/0 needs/[] needsGene/[]
          priority/50 range/0 speed/4 repeat/0
          check/unit before/[] impact/Impact after/[]}
   title/Title
@@ -18,6 +18,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   cost/Cost //how much to cast it
   cool/Cool //action cooldown
   needs/Needs //list of dependencies
+  needsGene/NeedsGene //available only when unit has specific status
   priority/Priority
   range/Range //range
   speed/Speed //number of cycles before unit can act again
@@ -33,6 +34,9 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   icon_gfx //icon graphics for fast access
 | $before_table <= $before.table
 | $after_table <= $after.table
+| when $needsGene <> []:
+  | when $needsGene.is_text: $needsGene <= [$needsGene]
+  | $needsGene <= map N $needsGene: if N.is_text then [N] else []
 | when $cool>0: $before <= [[cool $cool] @$before]
 | less $title: $title <= $name.replace{_ ' '}
 | Flags = []

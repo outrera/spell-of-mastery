@@ -92,10 +92,11 @@ main.load_classes =
       | Item.title <= Name.replace{_ ' '}
   | when V.active:
     | As = []
-    | when V.speed: As <= [act_recall @As]
+    | when V.mov>0: As <= [act_recall @As]
     | when V.atk and V.atk><impact: V.atk<=0
     | As <= [@As @V.acts]
-    | when V.leader<>1 and V.ai<>pentagram: As <= [@As dismiss]
+    | As <= [@As act_interrupt]
+    | when V.leader<>1: As <= [@As dismiss]
     | V.acts <= As
 | for K,Act $params.acts.list:
   | less Act.needs.end:

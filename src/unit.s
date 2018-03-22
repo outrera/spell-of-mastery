@@ -457,9 +457,15 @@ unit.hit Damage Target =
 unit.interrupt =
 | less $charging: leave
 | C = $get{charge}
+| Charge = C.1
+| Mana = C.2
 | $owner.notify{"[C.0.title] was interrupted"}
-| $owner.mana += C.2
 | $strip{charge}
+| $owner.mana += Mana
+| when Charge>0:
+  | $sound{fizzle}
+  | E = $world.effect{$xyz energy}
+  | E.fxyz.init{$fxyz}
 
 unit.harm Attacker Damage =
 | when $removed or not $alive: leave //should never happen
