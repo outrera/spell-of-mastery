@@ -365,8 +365,7 @@ effect align How:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 effect yes
-| MenuActName,XYZ,TargetSerial = $get{menu}
-| Target.strip{menu}
+| MenuActName,XYZ,TargetSerial = $get{menuact}
 | T = 0
 | when got TargetSerial:
   | T <= $active.list.find{?serial><TargetSerial}
@@ -380,7 +379,7 @@ effect yes
   | leave
 | $order_at{XYZ act/Act goal/T}
 
-effect no | Target.strip{menu}
+effect no | No
 
 check_when Me Target C =
 | leave: case C

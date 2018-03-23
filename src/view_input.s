@@ -35,6 +35,8 @@ view.handle_picked_act2 Actor Act XYZ Target =
   | when Act.onMenu: Actor.effect{Act.onMenu Target XYZ}
   | Actor.set{menu [Act.name XYZ if Target then Target.serial else No]}
   | leave
+| Actor.set{menuact Actor.get{menu}}
+| Actor.strip{menu}
 | Actor.order_at{XYZ act/Act goal/Target}
 
 view.handle_picked_act Target =
