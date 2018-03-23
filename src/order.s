@@ -1,7 +1,8 @@
 use util
 
 unit.order_at XYZ act/0 goal/0 =
-| Units = $world.cell{@XYZ}.units
+| Cell = $world.cellp{XYZ}
+| Units = Cell.units
 | OAct = Act
 | less Goal: Goal <= $world.block_at{XYZ}
 | Act <= if Act.is_text then $main.params.acts.Act
@@ -12,6 +13,7 @@ unit.order_at XYZ act/0 goal/0 =
            $main.params.acts.act_jump
          else $main.params.acts.move
 | ActName = Act.name
+| when ActName><idle: Goal <= Me
 | less ActName><idle or ActName><move or ActName><swap:
   | invalid Error =
     | $owner.notify{Error}
@@ -35,10 +37,7 @@ unit.order_at XYZ act/0 goal/0 =
   | less Move.size
     | $owner.notify{'Cant cast there'}
     | leave
-| $unit_goal.xyz.init{XYZ}
-| $goal <= if Goal then Goal else $unit_goal
-| $goal_act <= Act
-| $goal_serial <= $goal.serial
+| $set_goal{Act (Goal or XYZ)}
 | $world.actors.set{[Me @$world.actors.get]}
 | $set_path{$path_around_to{1000 $goal.xyz}}
 

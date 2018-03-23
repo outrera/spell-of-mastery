@@ -1,0 +1,4 @@
+sprite: system_dummy
+aux: 1
+health: 999999
+invincible: 1

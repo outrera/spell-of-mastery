@@ -566,6 +566,11 @@ world.effect XYZ What =
 | E.die
 | E
 
+world.new_goal XYZ =
+| G = $players.0.alloc_unit{special_goal}
+| G.move{XYZ}
+| G
+
 world.units_in_range Center R =
 | Units = []
 | for X,Y points_in_diamond{R}
@@ -751,5 +756,12 @@ world.shake Cycles =
 world.set_color_overlay List =
 | $color_overlay <= List
 | $color_overlay_step <= 0
+
+world.sound_at XYZ ForceExplored SoundName =
+| less ForceExplored or $human.explored{XYZ} > 1: leave 0
+| CXYZ = $main.ui.view.center
+| V = 1.0 / | max 1.0 (CXYZ - XYZ).abs*0.5
+| when V>0.01: $main.sound{SoundName volume/V}
+| 1
 
 export world

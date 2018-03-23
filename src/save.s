@@ -23,14 +23,12 @@ world.save =
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
   | Active = 0
-  | when U.active or U.type><unit_build:
+  | when U.active:
     | Genes = if U.genes.end then 0
               else U.genes.map{E=>[E.when E.name E.amount E.params]}
     | Host = if U.host then U.host.id else 0
     | G = U.goal
-    | Goal = if not G then 0
-             else if G.type><goal then [G.xyz U.goal_act.name]
-             else [G.id U.goal_act.name]
+    | Goal = if G then [G.id U.goal_act.name] else 0
     | Path = if U.path.end then 0 else [U.path 0]
     | Active <= list U.from U.anim U.anim_step U.anim_wait
                      unused U.cooldown Genes Host Goal Path
@@ -133,7 +131,7 @@ world.load Saved =
 | for X Saved.units
   | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active]=X
   | U = $players.Owner.alloc_unit{Type}
-  | less Active or U.type><unit_build: U.change_owner{$players.0}
+  | less Active: U.change_owner{$players.0} //kludge
   | U.serial <= Serial
   | case XYZ A,B:
     | XYZ <= A
@@ -165,15 +163,6 @@ world.load Saved =
       | U.path.heapfree
       | U.path <= P
     | U.host <= [Host Goal Action Ordered NextAction]
-    | when Type><unit_build: //kludge!
-      | Target,ActName = Goal
-      | U.goal <= U.unit_goal
-      | U.goal.xyz.init{XYZ}
-      | U.goal_act <= Acts.ActName
-      | U.sprite <= Sprites.special_construction
-      | U.goal_act <= Acts.ActName
-      | U.host <= 0
-      | U.animate{idle}
   | U.flags <= Flags
   | when U.leader: U.owner.leader <= U
   | when U.bank >< pentagram: U.owner.pentagram <= U
@@ -187,8 +176,7 @@ world.load Saved =
     | U.goal_act <= Acts.ActName
     | if Target.is_int
       then U.goal <= IdMap.Target
-      else | U.goal <= U.unit_goal
-           | U.goal.xyz.init{Target}
+      else U.goal <= $new_goal{Target}
     | U.goal_serial <= U.goal.serial
   | U.action.load{IdMap Action}
   | U.ordered.load{IdMap Ordered}

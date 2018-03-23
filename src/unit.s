@@ -1,21 +1,9 @@
 use util macros unit_flags
 
-type cell_goal xyz/[0 0 0] serial
-
 CellSize =
 
 init_unit_module CS =
 | CellSize <= CS
-
-cell_goal.id = -1
-cell_goal.type = \goal
-cell_goal.fxyz = [$xyz.0*CellSize $xyz.1*CellSize $xyz.2*CellSize]
-cell_goal.atk = 0
-cell_goal.leader = 0
-cell_goal.removed = 0
-cell_goal.alive = 1
-cell_goal.empty = 1
-cell_goal.harm Attacker Damage =
 
 type unit.$class{Id World}
   world/World //FIXME: get rid of it, we wont be using several world
@@ -53,7 +41,6 @@ type unit.$class{Id World}
   goal_act //what to do with the goal
   host //what unit hosts this sprite
   host_serial //when host dies, its serial changes
-  unit_goal/cell_goal{}
   mov //movement points remained this turn
   hp // hit points
   def //defense points remained
@@ -177,8 +164,6 @@ unit.init Class =
   | $next_action.type <= 0
   | $action.init{idle 0,0,0}
   | $velocity.init{[0.0 0.0 0.0]}
-  | $action.cycles <= 0
-  | $unit_goal.serial <= $serial
   | $add_genes{$inborn}
   | $update_move_method
 
@@ -357,7 +342,7 @@ unit.free =
   | $owner.leader <= 0
 | when $active: $active <= 2 //request removal from active list
 | less $path.end: $set_path{[]}
-| $goal <= 0
+| $reset_goal
 | $host <= 0
 | $colors <= 0
 | for E $genes: $world.free_gene{E}
@@ -367,7 +352,15 @@ unit.free =
 
 unit.reset_goal =
 | less $path.end: $set_path{[]}
+| when $goal and $goal.type><special_goal and not $goal.removed: $goal.free
 | $goal <= 0
+
+unit.set_goal Act Goal =
+| $goal_act <= Act
+| $reset_goal
+| $goal <= if Goal.is_unit then Goal else $world.new_goal{Goal}
+| $goal_serial <= $goal.serial
+
 
 //a faster solution would be keeping the linked list of all targeters
 unit.reset_followers =
@@ -540,10 +533,6 @@ unit.face XYZ =
 | XY = (XYZ-$xyz).take{2}{?sign}
 | less XY >< [0 0]: $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
 
-unit.sound SoundName =
-| when not $id or (not $removed and $world.human.explored{$xyz}>1):
-  | CXYZ = $main.ui.view.center
-  | V = 1.0 / | max 1.0 (CXYZ - $xyz).abs*0.5
-  | when V>0.01: $main.sound{SoundName volume/V}
+unit.sound SoundName = $world.sound_at{$xyz $id^not SoundName}
 
 export unit init_unit_module
