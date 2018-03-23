@@ -19,14 +19,14 @@ order_at Me XYZ Target =
   | when Below.unit and (Cell-Below.height).block.ai><remove:
     | U = Us.0
     | XYZ = Cell.xyz
-    | U.order_at{XYZ}
+    | U.order_at{XYZ 0}
     | leave
 | for U Us:
   | P = Cell
   | less Target: less Used.end:
     | Found = $world.find{1000 U Cell | Dst => no Used.find{Dst}}
     | when Found: P <= Found
-  | U.order_at{P.xyz}
+  | U.order_at{P.xyz 0}
   | push P Used
 
 view.handle_picked_act2 Actor Act XYZ Target =
@@ -37,7 +37,7 @@ view.handle_picked_act2 Actor Act XYZ Target =
   | leave
 | Actor.set{menuact Actor.get{menu}}
 | Actor.strip{menu}
-| Actor.order_at{XYZ act/Act goal/Target}
+| Actor.order_at{(Target or XYZ) Act}
 
 view.handle_picked_act Target =
 | less $mice_click><pick:

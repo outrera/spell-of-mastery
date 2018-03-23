@@ -1,6 +1,8 @@
 use util
 
-unit.order_at XYZ act/0 goal/0 =
+unit.order_at Goal Act =
+| XYZ = if Goal.is_list then Goal else Goal.xyz
+| when Goal.is_list: Goal <= 0
 | Cell = $world.cellp{XYZ}
 | Units = Cell.units
 | OAct = Act
@@ -37,9 +39,22 @@ unit.order_at XYZ act/0 goal/0 =
   | less Move.size
     | $owner.notify{'Cant cast there'}
     | leave
-| $set_goal{Act (Goal or XYZ)}
+| $reset_goal
+| $goal_act <= Act
+| $goal <= if Goal then Goal else $world.new_goal{XYZ}
+| $goal_serial <= $goal.serial
 | $world.actors.set{[Me @$world.actors.get]}
 | $set_path{$path_around_to{1000 $goal.xyz}}
 
-unit.validated_order_at Act Target =
+unit.reset_goal =
+| less $path.end: $set_path{[]}
+| when $goal and $goal.type><special_goal and not $goal.removed: $goal.free
+| $goal <= 0
+
+unit.set_path Path =
+| P = Path.enheap
+| $path.heapfree
+| $path <= P
+
+unit.order = $ordered
 

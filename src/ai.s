@@ -31,7 +31,7 @@ unit.advance_to GoalXYZ =
     | $handled <= \wait //try to avoid swapping
     | leave 0
   | B.backtrack <= B.xyz
-| $order_at{Cell.xyz}
+| $order_at{Cell.xyz 0}
 | 0
 
 cast_pentagram Me =
@@ -158,7 +158,7 @@ unit.runaway Btrack =
     | BestDist <= Dist
     | Best <= R
 | when Best:
-  | $order_at{Best.xyz}
+  | $order_at{Best.xyz 0}
   | when Btrack: less $get{btrack}: $backtrack <= $xyz
 | $handled <= 1
 
@@ -182,7 +182,7 @@ ai_update_unit Me =
     | Block = Cell.block
     | when Block and not Block.invisible:
       | $backtrack <= $xyz
-      | $order_at{Cell.xyz}
+      | $order_at{Cell.xyz 0}
       | leave break
   | when $mov:
     | Es = $enemies_in_sight
@@ -233,10 +233,10 @@ ai_clean_pentagram Me =
     | Cs = Cs.sort{A B => (A.1.xyz-B.1.xyz).take{2}{?abs}.sum}.flip
     | for Type,Cell Cs:
       | when not Cell.block and got Cell.units.find{?ai><hold}:
-        | B.order_at{Cell.xyz} //move unit out of pentagram
+        | B.order_at{Cell.xyz 0} //move unit out of pentagram
         | leave 1
     | case Cs [[Type Cell]@_]:
-      | B.order_at{Cell.xyz} //move unit out of pentagram
+      | B.order_at{Cell.xyz 0} //move unit out of pentagram
       | leave 1
 | 0
 

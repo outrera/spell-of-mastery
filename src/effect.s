@@ -377,7 +377,7 @@ effect yes
 | when no Act:
   | $owner.notify{"effect yes: missing act [MenuActName]"}
   | leave
-| $order_at{XYZ act/Act goal/T}
+| $order_at{(T or XYZ) Act}
 
 effect no | No
 

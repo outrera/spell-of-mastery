@@ -350,31 +350,12 @@ unit.free =
 | $genes <= []
 | $world.free_unit{Me}
 
-unit.reset_goal =
-| less $path.end: $set_path{[]}
-| when $goal and $goal.type><special_goal and not $goal.removed: $goal.free
-| $goal <= 0
-
-unit.set_goal Act Goal =
-| $goal_act <= Act
-| $reset_goal
-| $goal <= if Goal.is_unit then Goal else $world.new_goal{Goal}
-| $goal_serial <= $goal.serial
-
-
 //a faster solution would be keeping the linked list of all targeters
 unit.reset_followers =
 | for U $world.active: when U.goal and U.goal.id><$id:
   | U.reset_goal
 
 unit.removed = $xyz.2 >< -1
-
-unit.set_path Path =
-| P = Path.enheap
-| $path.heapfree
-| $path <= P
-
-unit.order = $ordered
 
 unit.order_act Act target/0 =
 | less Target: Target <= Me
@@ -423,7 +404,7 @@ unit.counter_attack Attacker =
 | less $owner.id <> $world.player and $mov>0 and $atk: leave
 | when $afraid or no $enemies_in_range.find{?id><Attacker.id}: leave
 | less $can_attack{$cell Attacker.cell}: leave
-| $order_at{Attacker.xyz}
+| $order_at{Attacker.xyz 0}
 
 //action goes through target`s defense
 unit.assault Target =
