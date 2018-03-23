@@ -8,20 +8,14 @@ action.save =
    $priority
    $xyz
    (if $target then $target.id else 0)
-   $toXYZ
-   $fromXYZ
-   $start_cycles
 
 action.load IdMap Saved =
 | less Saved: leave
-| [Type Cycles Priority XYZ Target To From StartC] = Saved
+| Type,Cycles,Priority,XYZ,Target = Saved.take{5}
 | $init{Type |if Target then IdMap.Target else XYZ}
 | $priority <= Priority
 | $cycles <= Cycles
-| $start_cycles <= StartC
 | $xyz.init{XYZ}
-| $toXYZ.init{To}
-| $fromXYZ.init{From}
 
 
 world.save =

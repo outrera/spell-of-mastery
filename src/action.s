@@ -42,31 +42,37 @@ Dirs = list [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0] [-1 -1]
 move_start Me =
 | U = $unit
 | when $xyz><U.xyz:
-  | $toXYZ.init{U.fxyz}
+  | U.set{toXYZ U.fxyz}
   | $cycles <= 0
   | leave
 | X,Y,Z = $xyz - U.xyz
-| $fromXYZ.init{U.fxyz}
+| U.set{fromXYZ U.fxyz}
 | U.move{$xyz}
-| $toXYZ.init{U.fxyz}
-| U.fxyz.init{$fromXYZ}
+| U.set{toXYZ U.fxyz}
+| U.fxyz.init{U.get{fromXYZ}}
 | U.facing <= Dirs.locate{X,Y}
 | when U.anim<>move: U.animate{move}
 | $cycles <= U.speed
 | when X >< -Y: $cycles <= max 1 $cycles*3/2
-| $start_cycles <= $cycles
+| U.set{startCycles $cycles}
 | Effect = U.class.onMove
 | when Effect: U.effect{Effect U U.xyz}
 
 move_update Me =
 | U = $unit
-| V = $toXYZ-$fromXYZ
-| U.fxyz.init{$fromXYZ + V*($start_cycles-$cycles)/$start_cycles}
+| FromXYZ = U.get{fromXYZ}
+| V = U.get{toXYZ} - FromXYZ
+| StartCycles = U.get{startCycles}
+| U.fxyz.init{FromXYZ + V*(StartCycles-$cycles)/StartCycles}
 
 move_finish Me =
 | U = $unit
-| U.fxyz.init{$toXYZ}
+| U.fxyz.init{U.get{toXYZ}}
 | U.on_entry
+| U.strip{startCycles}
+| U.strip{fromXYZ}
+| U.strip{toXYZ}
+
 
 dact move.valid
 | U = $unit
@@ -81,17 +87,19 @@ dact move.finish | move_finish Me
 
 dact missile.start
 | U = $unit
-| $fromXYZ.init{U.fxyz}
+| U.set{fromXYZ U.fxyz}
 | U.move{$xyz}
-| $toXYZ.init{U.fxyz}
-| U.fxyz.init{$fromXYZ}
+| U.set{toXYZ U.fxyz}
+| U.fxyz.init{U.get{fromXYZ}}
 | less $cycles: $cycles <= 1
-| $start_cycles <= $cycles
+| U.set{startCycles $cycles}
 
 dact missile.update
 | U = $unit
-| V = $toXYZ-$fromXYZ
-| U.fxyz.init{$fromXYZ + V*($start_cycles-$cycles)/$start_cycles}
+| FromXYZ = U.get{fromXYZ}
+| V = U.get{toXYZ} - FromXYZ
+| StartCycles = U.get{startCycles}
+| U.fxyz.init{FromXYZ + V*(StartCycles-$cycles)/StartCycles}
 
 dact missile.finish
 | U = $unit
@@ -204,9 +212,6 @@ type action{unit}
    priority
    xyz/[0 0 0] // target x,y,z
    target // when action targets a unit
-   toXYZ/[0 0 0]
-   fromXYZ/[0 0 0]
-   start_cycles
    range
    act_init/&default_init
    act_valid/&default_valid
