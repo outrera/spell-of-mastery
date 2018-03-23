@@ -287,7 +287,7 @@ world.new_game =
 | $actors.set{[]}
 | $seed <= LCG_M.rand
 | for K,V $main.params.world: $params.K <= V
-| for ActName,Act $main.params.acts: Act.enabled <= #FFFFFF
+| for ActName,Act $main.params.acts: Act.players <= #FFFFFF
 | $human <= $players.1
 | $human.human <= 1
 | $cycle <= 0
@@ -335,8 +335,11 @@ world.notify Text =
 
 world.alloc_unit ClassName Owner =
 | Class = $main.classes.ClassName
-| less got Class:
+| when no Class:
   | $notify{"Missing class `[ClassName]`"}
+  | when ClassName><unit_nil:
+    | say 'world.alloc_unit: unit_nil is missing!'
+    | halt //something is really wrong
   | Class <= $main.classes.trigger_missing
 | U = $free_units.pop
 | when Class.leader and Class.leader><1:

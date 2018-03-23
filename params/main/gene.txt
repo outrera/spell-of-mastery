@@ -2,7 +2,7 @@ flags: attacker{0 -1},picked{1 -1},engaged{2 1}
       ,hasted{3 5},shell{4 2},flyer{5 -1},charge{6 9},fireaura{7 0},organic{8 -1}
       ,climber{9 -1},swimmer{10 -1},amphibian{11 -1},invisible{12 -1}
       ,bless{13 6},cursed{14 3},afraid{15 7},mark{16 -1},resting{17 -1}
-      ,resist{18 8}
+      ,resist{18 8},leader{19 -1}
 
 //FIXME: this crap needs complete redesign and proper DSL.
 //       all unit fields should be expressed here.
@@ -13,6 +13,7 @@ flyer: on{static}
 swimmer: on{static}
 amphibian: on{static}
 organic: on{static}
+leader: on{static}
 fireaura: on{counter},harm{2},impact{fire_ring}
 poison: on{endturn},host,when{has_health.2},harm{1}
 hasted: on{endturn},inc{steps,4}

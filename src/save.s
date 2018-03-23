@@ -69,7 +69,7 @@ world.save =
               | map T Ts: if T.parts.is_int then T.parts else T.id
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
-    actions_enabled | map Name,Act $main.params.acts: Name,Act.enabled
+    enabled | map Name,Act $main.params.acts: Name,Act.players
 
 main.save Path = Path.set{$world.save.as_text}
 
@@ -201,9 +201,8 @@ world.load Saved =
   | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
 | for P $players: P.picked <= (P.params.picked){IdMap.?}
-| AEs = Saved.actions_enabled
-| when got AEs: for Name,Enabled AEs:
-  | when got Acts.Name: Acts.Name.enabled <= Enabled
+| for Name,Flags Saved.enabled^~{No []}:
+  | when got Acts.Name: Acts.Name.players <= Flags
 
 main.load Path =
 | File = Path.get

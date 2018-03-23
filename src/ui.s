@@ -393,10 +393,34 @@ ui.update = //called by world.update each game cycle
     | $load{"[MapsFolder][NextWorld].txt"}
     | $world.new_game
 
+ui.update_act_icon I Act Count Unit =
+| Icons = if I<0 then | I <= -(I+1); GroundActIcons 
+          else UnitActIcons
+| Active = 1
+| Icon = Icons.I.widget
+| ResearchRemain = Unit.owner.research_remain{Act}
+| ActName = Act.name
+| Icon.data <= ActName
+| Icon.unit <= Unit
+| Icon.fg <= Act.icon_gfx
+| Icon.grayed <= 0
+| Cool = Unit.cooldown_of{ActName}
+| when Cool and Cool.1:
+  | TurnsDone = Unit.world.turn - Cool.0
+  | TurnsTotal = Cool.1
+  | Icon.grayed <= 100-(TurnsDone*100)/TurnsTotal
+| Number = if ResearchRemain <> 0 then ResearchRemain else No
+| when got Count: Number <= Count
+| Icon.text.init{[0 0 Number]}
+| Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'
+| Icon.frame.init{[3 3 Frame]}
+| Icon.w <= Icon.fg.w
+| Icon.h <= Icon.fg.h
+| Icon.hotkey <= Act.hotkey
+| Icons.I.show <= Active
+
 ui_update_panel_buttons Me Unit As GAs =
-| Acts = $main.params.acts
 | As = As.i.take{min{MaxUnitActIcons As.size}}
-| As = As.keep{Act=>Act.is_list or Act.enabled^get_bit{Unit.owner.id}}
 | GAs = GAs.i.map{I,Act=>[-I-1 Act]}.take{min{MaxGroundActIcons GAs.size}}
 | Player = Unit.owner
 | for I,Act @As,@GAs:
@@ -404,92 +428,68 @@ ui_update_panel_buttons Me Unit As GAs =
   | when Act.is_list:
     | Count <= Act.0
     | Act <= Act.1
-  | Preqs = Act.needs.all{Ns=>Ns.any{N=>Player.research_remain{Acts.N}<<0}}
-  | when Act.needsGene.any{Ns=>not Ns.any{N=>Unit.has{N}}}: Preqs <= 0
-  | Icons = if I<0 then | I <= -(I+1); GroundActIcons 
-            else UnitActIcons
-  | when Preqs:
-    | Active = 1
-    | Icon = Icons.I.widget
-    | ResearchRemain = Player.research_remain{Act}
-    | ActName = Act.name
-    | Icon.data <= ActName
-    | Icon.unit <= Unit
-    | Icon.fg <= Act.icon_gfx
-    | Icon.grayed <= 0
-    | Cool = Unit.cooldown_of{ActName}
-    | when Cool and Cool.1:
-      | TurnsDone = Unit.world.turn - Cool.0
-      | TurnsTotal = Cool.1
-      | Icon.grayed <= 100-(TurnsDone*100)/TurnsTotal
-    | Number = if ResearchRemain <> 0 then ResearchRemain else No
-    | when got Count: Number <= Count
-    | Icon.text.init{[0 0 Number]}
-    | Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'
-    | Icon.frame.init{[3 3 Frame]}
-    | Icon.w <= Icon.fg.w
-    | Icon.h <= Icon.fg.h
-    | Icon.hotkey <= Act.hotkey
-    | Icons.I.show <= Active
+  | when Act.available{Unit}: $update_act_icon{I Act Count Unit}
 
 ui.on_unit_pick Units =
 | for Icon AllActIcons: Icon.show <= 0
 | Unit = 0
 | As = 0
 | GAs = []
+| Unit = if Units.size then Units.0 else $world.nil
 | if PanelTab >< unit then
-     | less Units.size: leave
-     | Unit <= Units.0
-     | As <= Unit.acts.skip{?tab}
+     if Unit.has{menu} then
+       | MenuActName,XYZ,TargetSerial = Unit.get{menu}
+       | As <= $main.params.acts.MenuActName.menu
+     else As <= Unit.acts.skip{?tab}
   else if PanelTab >< summon or PanelTab >< spell then
-     | Unit <= if Units.size then Units.0.owner.leader
-               else $world.human.leader
-     | less Unit: leave
+     | Unit <= $world.human.leader or $world.nil
      | As <= Unit.acts.keep{?tab><PanelTab}
   else if PanelTab >< bag then
-     | when Units.size<>1: leave
-     | Unit <= Units.0
      | Acts = $main.params.acts
      | As <= map K,A Unit.items: [A Acts."drop_[K]"]
      | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
   else leave
 | ui_update_panel_buttons Me Unit As GAs
 
+actClickIcon Me Icon =
+| HKI = HotKeyInvoke
+| HotKeyInvoke <= 0
+| $world.act <= 0
+| $main.sound{ui_click}
+| when ActIcon.is_icon: ActIcon.picked <= 0
+//| Icon.picked <= 1
+| Unit = Icon.unit
+| ActIcon <= Icon
+| ActName = Icon.data
+| Act = $params.acts.ActName
+| Cost = Act.cost
+| ResearchRemain = Unit.owner.research_remain{Act}
+| Cool = Unit.cooldown_of{ActName}
+| O = Unit.owner
+| when Cool:
+  | TurnsLeft = Cool.0 + Cool.1 - Unit.world.turn
+  | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
+  | leave
+| when ResearchRemain
+  | research_act Me Unit Act
+  | leave
+| when got Cost and Cost>0 and Cost>O.mana:
+  | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
+  | leave
+| when O.id <> $player.id: leave
+| when Unit.mov < Act.mov:
+  | O.notify{"[Act.title] requires [Act.mov] moves."}
+  | leave
+| when Act.range >< 0:
+  | $view.handle_picked_act2{Unit Act Unit.xyz Unit}
+  | leave
+| $world.act <= Act
+| $world.act_unit.init{Unit,Unit.serial}
+| when HKI: $view.mice_click <= \leftup //FIXME: kludge
+
 create_act_icons Me =
-| actClick Icon =
-  | HKI = HotKeyInvoke
-  | HotKeyInvoke <= 0
-  | $world.act <= 0
-  | $main.sound{ui_click}
-  | when ActIcon.is_icon: ActIcon.picked <= 0
-  //| Icon.picked <= 1
-  | Unit = Icon.unit
-  | ActIcon <= Icon
-  | ActName = Icon.data
-  | Act = $params.acts.ActName
-  | Cost = Act.cost
-  | ResearchRemain = Unit.owner.research_remain{Act}
-  | Cool = Unit.cooldown_of{ActName}
-  | O = Unit.owner
-  | if Cool then
-      | TurnsLeft = Cool.0 + Cool.1 - Unit.world.turn
-      | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
-    else if ResearchRemain then
-      | research_act Me Unit Act
-    else if got Cost and Cost>0 and Cost>O.mana then
-      | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
-    else when O.id >< $player.id:
-      | if Unit.mov >> Act.mov then
-         | if Act.range >< 0
-           then 
-            | Us = if PanelTab><unit then $main.ui.view.picked else [Unit]
-            | for U Us: U.order_at{self act/Act}
-           else | $world.act <= Act
-                | if PanelTab><unit then $world.act_unit.init{0,0}
-                  else $world.act_unit.init{Unit,Unit.serial}
-                | when HKI: $view.mice_click <= \leftup //FIXME: kludge
-        else O.notify{"[Act.title] requires [Act.mov] moves."}
-| map I MaxUnitActIcons+MaxGroundActIcons: hidden: icon 0 click/&actClick
+| map I MaxUnitActIcons+MaxGroundActIcons:
+  | hidden: icon 0 click/|Icon => actClickIcon Me Icon
 
 ui_input Me Base In =
 | Base.input{In}

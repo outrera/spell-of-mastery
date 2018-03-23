@@ -29,51 +29,46 @@ order_at Me XYZ Target =
   | U.order_at{P.xyz}
   | push P Used
 
-handle_picked_act Me Rect Units Act =
-| Actor = 0
-| [ActUnit ActUnitOldSerial] = $world.act_unit
-| when ActUnit
-  | when ActUnit.serial<>ActUnitOldSerial:
-    | $world.act <= 0
-    | leave
-  | Actor <= ActUnit
-| less Actor: Actor <= $picked.0
-| Target = if Units.end then 0 else Units.0
+view.handle_picked_act2 Actor Act XYZ Target =
+| when Target: $world.blink.init{[4 Target]}
+| when Act.menu:
+  | when Act.onMenu: Actor.effect{Act.onMenu Target XYZ}
+  | Actor.set{menu [Act.name XYZ if Target then Target.serial else No]}
+  | leave
+| Actor.order_at{XYZ act/Act goal/Target}
+
+view.handle_picked_act Target =
 | less $mice_click><pick:
-  | when Act.check.unit:
+  | when $world.act.check.unit:
     | Cur = if Target then \ui_cursor_target else \ui_cursor_target2
     | get_gui{}.cursor <= $main.img{Cur}
   | leave
-| $mice_click <= 0
-| invalid Error =
-  | Actor.owner.notify{Error}
-  | $main.sound{illegal}
-| when Act.validate{Actor $cursor Target &invalid}:
-  | when Target: $world.blink.init{[4 Target]}
-  | Actor.order_at{$cursor act/Act goal/Target}
+| [Actor ActUnitOldSerial] = $world.act_unit
+| when Actor.serial><ActUnitOldSerial: //is actor alive?
+  | $handle_picked_act2{Actor $world.act $cursor Target}
 | $world.act <= 0
+| $mice_click <= 0
 
-handle_picked Me Rect Units = //Me is view
+view.handle_picked Rect Units =
 | $ui.on_unit_pick{$picked}
 | Player = $player
 | Units = Units.keep{U=>Player.seen{U.xyz}}
-| Act = $world.act
-| when Act:
-  | handle_picked_act Me Rect Units Act
+| Target = if Units.end then 0 else Units.0
+| when $world.act:
+  | $handle_picked_act{Target}
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
 | less $mice_click:
-  //| less Units.end: get_gui{}.cursor <= $main.img{ui_cursor_glass}
+  //| when Target: get_gui{}.cursor <= $main.img{ui_cursor_glass}
   | leave
 | when $mice_click >< rightup: leave
 | when $mice_click >< left: leave
 | when $mice_click >< order:
   | $mice_click <= 0
   | XYZ = $cursor
-  | if Units.end then order_at Me $cursor 0
-    else | U = Units.0
-         | $world.blink.init{[4 U]}
-         | order_at Me U.xyz U
+  | if not Target then order_at Me $cursor 0
+    else | $world.blink.init{[4 Target]}
+         | order_at Me Target.xyz Target
   | leave
 | when $mice_click >< pick:
   | $mice_click <= 0
@@ -92,7 +87,7 @@ handle_picked Me Rect Units = //Me is view
 view.handle_pick UnitRects =
 | Units = []
 | when@@it $world.cell{@$cursor}.block: Units <= [it]
-| handle_picked Me 0 Units
+| $handle_picked{0 Units}
 
 view.worldToView P =
 | X,Y = P - $view_origin

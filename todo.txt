@@ -1,7 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Confirmation shouldn't require dialog box: implement it using tow icon yes/no and "are your sure?" text in message area.
+- Unify XYZ and Target in actions, that way missiles could continue flying even their targets get dead.
+- notifications should be moved to the bottom, that way user can easily associate picked action with notification feedback from them. It would probably be a good idea to make them into a separate scrollable widget, so user could see the history.
+- Simplify order_at, so it will always take explicit act and goal, or 0, when these is missing.
+- Parametrize UI: panel tab would be a list defined inside params/main/
+- When there is no pentagram or leader, use nil unit in place of them.
+- Reanme `before` into `onShot` and `after` into `onHit`
 - Better UI, maybe new-age/astrology themed, scrolls are not magical enough.
 - consider moving spells into spell book and usual abilities to the left of the menu buttons.
 - Implement spell countering, using usual dispel spell, where player choices the unit that is being targeted by harmful spell and pays the mana amount required to dispel it. Dispeling a global enchantment should be a separate action, that would present player with menu of all enchantments and their owners
@@ -106,5 +111,6 @@ Optimization Possibilities:
 - mouse picking can be done in reverse on draw list
 
 Symta Language Handicaps:
+- Don't use abort, because it involves windows debugger, that is pretty annoying.
 - No way to quickly introduce an efficient inplace field on a struct, like unit, propagating it to save-file.
 - No proper API for manually allocating types in shared memory.

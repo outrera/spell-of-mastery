@@ -4,7 +4,11 @@ Leader abilities:
 - Dual-cast: allows casting two different spells on two different locations on the same turn.
 
 General:
-- Alternative resource system: limiting mana hoarding, proportional to the number of slow moving silos crystals, player built. Say leader starts with 10 storage, each crystal provides 5 additional mana storage. Crystals are required to cast high-cost spells.
+- Different units could have different will regeneration rates.
+- Consider spells, that inflict damage based on unit's will depletion.
+- Consider units at zero or negative will receiving additional damage.
+- Attacking some units may also require spending will or breaking their will.
+- Alternative resource system: limiting mana hoarding, proportional to the number of silos crystals, player built. Say leader starts with 10 storage, each crystal provides 5 additional mana storage. Crystals are required to cast high-cost spells. Silos could be also allowed to slowly move.
   Pros:
      - nice growth limiting
      - if leader's health is linked to mana, then destroying crystals would weaken that leader

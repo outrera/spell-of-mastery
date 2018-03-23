@@ -1,7 +1,0 @@
-icon: act_dismiss
-speed: 4
-mov: 0
-check: unit
-before: animate{idle},confirm{`Disband Unit?` `Are you sure?`}
-after: when{confirmed},sound{cancel},effect{teleport},remove
-

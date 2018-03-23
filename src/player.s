@@ -189,4 +189,7 @@ player.add_item Name Amount =
   | when Amount < 0: leave 1
 | 1
 
+player.sound Name =
+| when $id >< $world.human.id: $main.sound{Name}
+
 export player

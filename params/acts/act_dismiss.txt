@@ -1,0 +1,10 @@
+icon: act_dismiss
+title: `Dismiss`
+needsGene: (-leader)
+mov: 0
+check: self
+menu: m_yes,m_no
+onMenu: notify{`Dismiss this creature? Are you sure?`}
+animate: No
+before: sound{cancel},effect{teleport},remove
+hint: dismiss

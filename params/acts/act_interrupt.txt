@@ -1,8 +1,10 @@
 icon: act_interrupt
-speed: 4
-mov: 0
-check: unit
+title: `Interrupt`
 needsGene: (charge)
-before: animate{idle},confirm{`Interrupt action?` `Are you sure?`}
-after: when{confirmed},interrupt
+mov: 0
+check: self
+menu: m_yes,m_no
+onMenu: notify{`Interrupt this creature? Are you sure?`}
+animate: No
+before: (interrupt)
 hint: interrupt

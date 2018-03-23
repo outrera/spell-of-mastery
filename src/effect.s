@@ -2,23 +2,6 @@ use util effect_ macros
 
 Effects = t
 
-set_act_enabled Me State Players ActNames =
-| when Players >< all: Players <= 16{(?)}
-| when ActNames >< all: ActNames <= $params.acts{}{?0}
-| when Players.is_int: Players <= [Players]
-| when ActNames.is_text: ActNames <= [ActNames]
-| Acts = $params.acts
-| for ActName ActNames:
-  | Act = Acts.ActName
-  | less got Act: bad "missing act [ActName]"
-  | Es = Act.enabled
-  | for Id Players: Es <= Es^set_bit{Id State}
-  | Act.enabled <= Es
-
-effect enable State Players ActNames:
-| when Players >< owner: Players <= [$owner.id] 
-| when Players >< target_owner: Players <= [Target.owner.id]
-| set_act_enabled $main State Players ActNames
 
 effect on When: No
 
@@ -56,7 +39,10 @@ effect tenant_mark Type:
 | S.delta <= -50
 | S.move{TargetXYZ}
 
-metric A B = (B-A).take{2}.abs
+effect turn State Players ActNames:
+| when Players >< owner: Players <= [$owner.id] 
+| when Players >< target_owner: Players <= [Target.owner.id]
+| $world.turn_act{State Players ActNames}
 
 effect gain @Args:
 | ActNames = []
@@ -70,9 +56,8 @@ effect gain @Args:
 | for ActName ActNames:
   | when ActNames.size><1 and Target.owner.human:
     | Title = ActName.replace{'_' ' '}
-    | $main.show_message{'Knowledge Gained'
-       "The secret knowledge of [Title] has been revealed"}
-  | set_act_enabled $main 1 Player.id ActName
+    | Player.notify{"Gained knowledge of [Title]."}
+  | $world.turn_act{1 Player.id ActName}
   | Player.research_item{ActName}
 
 effect cool Time: $add_gene{cool Time [$action.type $world.turn Time]}
@@ -379,34 +364,23 @@ effect align How:
 | when T.wallShift and not $world.at{X Y+1 Z}.type><T.around:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
-unit.shot_missile Target Args Effect =
-| XYZ = if Target.is_unit then Target.xyz else Target
-| Type = 0
-| Offset = \user
-| Speed = 2
-| case Args
-   [T S O]
-     | Type <= T
-     | if S><height_div then Speed <= 1
-       else Speed <= S
-     | Offset <= O
-   [T] | Type <= T
-| S = $owner.alloc_unit{"effect_[Type]"}
-| case Offset
-  user | S.move{$xyz}
-       | S.face{XYZ}
-  [target @D] | S.move{$xyz}
-              | O = if Target.is_unit then Target.fxyz
-                    else $world.fxyz{XYZ}
-              | S.fxyz.init{O+D}
-  Else | bad "invalid offset specifier [Offset]"
-| S.add_gene{missile 0 [[payload $id $serial Effect]]}
-| Or = S.order
-| Or.init{missile Target}
-| Or.priority <= 1500
-| C = Speed.float*(XYZ-$xyz).abs*1.5
-| Or.cycles <= @int C
+effect yes
+| MenuActName,XYZ,TargetSerial = $get{menu}
+| Target.strip{menu}
+| T = 0
+| when got TargetSerial:
+  | T <= $active.list.find{?serial><TargetSerial}
+  | when no T or not T.alive:
+    | $owner.notify{"Target is lost!"}
+    | leave
+  |
+| Act = $main.params.acts.MenuActName
+| when no Act:
+  | $owner.notify{"effect yes: missing act [MenuActName]"}
+  | leave
+| $order_at{XYZ act/Act goal/T}
 
+effect no | Target.strip{menu}
 
 check_when Me Target C =
 | leave: case C

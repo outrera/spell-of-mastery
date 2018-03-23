@@ -74,7 +74,8 @@ Leader Abilities:
 - Fireball (chaos): throws a cheap fireball.
 - Guardian (law): summons a turret, that can attack nearby enemies.
 
-Status Effects:
+Creature Properties:
+- Leader: this creature is a leader. If it dies and its owner has no other leaders, then its owner loses.
 - Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near an non-afraid enemy, like moving into adjanced cell, or ending its turn in a cell near an enemy. Allied units can still swap places with engaged unit, takin its place.
 - Threatened: this creature has started its turn near enemy, if at the end of its first action it remains threatened, it becomes engaged.
 - Charging: creature is charging its spell or performing other action. While creature is busy charging, its only abilities would be casting the charged spell or canceling the process. If creature gets harmed during a charge, its spellcasting fails and all charged mana is returned back to mana reserves. Charging specific abilities would immobilize the creature, in other cases it may be possible to have a precharged spell or action.

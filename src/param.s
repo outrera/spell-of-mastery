@@ -87,6 +87,11 @@ params_handle_acts Me =
   | A.cool <= Cool
   | Acts."summon_[N]" <= A
 | for Name,Act Acts: Acts.Name <= act Name @Act.list.join
+| for Name,Act Acts: when Act.menu:
+  | Act.menu <= map ActName Act.menu:
+    | SubAct = Acts.ActName
+    | less got SubAct: bad "[Act.name]'s menu references undefined act [ActName]"
+    | SubAct
 
 main.load_params =
 | $params <= load_params "[$data]params/"

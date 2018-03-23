@@ -1,9 +1,10 @@
-use util
+use util macros
 
 
 type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
          lore/0 cost/0 mov/1 cool/0 needs/[] needsGene/[]
-         priority/50 range/0 speed/4 repeat/0
+         priority/50 range/0 speed/4 animate/No repeat/0
+         menu/0 onMenu/0
          check/unit before/[] impact/Impact after/[]}
   title/Title
   icon/Icon
@@ -22,12 +23,15 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   priority/Priority
   range/Range //range
   speed/Speed //number of cycles before unit can act again
+  animate/Animate
   repeat/Repeat //repeat action, while possible (i.e. tree is not chopped)
   check/Check //what it can target (see Allowed below)
+  menu/Menu
+  onMenu/OnMenu
   before/Before
   impact/Impact
   after/After
-  enabled/#FFFFFF //which players have access to this action
+  players/#FFFFFF //flags which players have access to this action
   flags //unit flags this actions sets up
   before_table
   after_table
@@ -35,15 +39,16 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | $before_table <= $before.table
 | $after_table <= $after.table
 | when $needsGene <> []:
-  | when $needsGene.is_text: $needsGene <= [$needsGene]
-  | $needsGene <= map N $needsGene: if N.is_text then [N] else []
+  | when $needsGene.is_text or $needsGene.0><'-': $needsGene <= [$needsGene]
+  | $needsGene <= map N $needsGene:
+    | if N.is_text or N.0><'-' then [N] else []
 | when $cool>0: $before <= [[cool $cool] @$before]
 | less $title: $title <= $name.replace{_ ' '}
 | Flags = []
 | for E [@$before @$after]: case E [add Name]: push Name Flags
 | $flags <= Flags
 | Allowed = [land water clear seen below outdoor owned ally non_leader will
-             any unit empty self pentagram
+             menu any unit empty self pentagram
              placeable c_fullhp]
 | T = Allowed{[? 0]}.table
 | As = $check
@@ -51,7 +56,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | for A As:
   | when no T.A: bad "Act [$name]: illegal check item `[A]`"
   | T.A <= 1
-| when not T.unit and not T.any and not T.empty and not T.self and not T.pentagram: 
+| less T.unit or T.any or T.empty or T.self or T.pentagram or T.menu:
   | bad "Act [$name]: missing check target type."
 | $check <= T
 
@@ -115,6 +120,28 @@ act.validate Actor XYZ Target Invalid =
 | when $name >< room_demolish and not Below.cost:
   | Invalid{"Cant demolish this."}
   | leave 0
+| 1
+
+//turns on/off act(s) for player(s)
+world.turn_act State Players ActNames =
+| when Players >< all: Players <= 16{(?)}
+| when ActNames >< all: ActNames <= $params.acts{}{?0}
+| when Players.is_int: Players <= [Players]
+| when ActNames.is_text: ActNames <= [ActNames]
+| Acts = $main.params.acts
+| for ActName ActNames:
+  | Act = Acts.ActName
+  | less got Act: bad "missing act [ActName]"
+  | for Id Players: Act.players <= Act.players^set_bit{Id State}
+
+act.enabled Player = $players^get_bit{Player.id}<>0
+
+act.available Unit =
+| P = Unit.owner
+| less $enabled{P}: leave 0
+| less $needs.all{Ns=>Ns.any{N=>P.research_remain{Me}<<0}}: leave 0
+| geneCheck N = if N.is_list then not Unit.has{N.1} else Unit.has{N}
+| when $needsGene.any{Ns=>not Ns.any{&geneCheck}}: leave 0
 | 1
 
 export act

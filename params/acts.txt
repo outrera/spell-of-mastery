@@ -8,6 +8,7 @@ speed: 4
 before: ()
 after: ()
 needs: ()
+animate: attack
 check: unit //what it can target
 hint: 0
 tab: 0

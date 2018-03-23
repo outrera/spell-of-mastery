@@ -4,7 +4,7 @@ mov: 8
 health: 10
 atk: 2
 def: 8
-inborn: (organic flyer bless)
+inborn: (flyer bless)
 impact: shell,hit{user},sound{impact}
 hit: effect{blood_undead},sound{devil_hit}
 death: sound{dragon_death}
