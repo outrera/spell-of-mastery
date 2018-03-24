@@ -74,5 +74,34 @@ unit.set_path Path =
 | $path.heapfree
 | $path <= P
 
+unit.shot_missile Target Args Effect =
+| XYZ = if Target.is_unit then Target.xyz else Target
+| Type = 0
+| Offset = \user
+| Speed = 2
+| case Args
+   [T S O]
+     | Type <= T
+     | if S><height_div then Speed <= 1
+       else Speed <= S
+     | Offset <= O
+   [T] | Type <= T
+| S = $owner.alloc_unit{"effect_[Type]"}
+| case Offset
+  user | S.move{$xyz}
+       | S.face{XYZ}
+       | S.animate{idle}
+  [target @D] | S.move{$xyz}
+              | O = if Target.is_unit then Target.fxyz
+                    else $world.fxyz{XYZ}
+              | S.fxyz.init{O+D}
+  Else | bad "invalid offset specifier [Offset]"
+| S.add_gene{missile 0 [[payload $id $serial Effect]]}
+| Or = S.order
+| Or.init{missile Target}
+| Or.priority <= 1500
+| C = Speed.float*(XYZ-$xyz).abs*1.5
+| Or.cycles <= @int C
+
 unit.order = $ordered
 
