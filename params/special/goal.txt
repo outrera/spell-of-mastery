@@ -1,4 +1,5 @@
 sprite: system_dummy
 aux: 1
+active: 0
 health: 999999
 invincible: 1

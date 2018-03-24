@@ -282,7 +282,7 @@ unit.clinging =
 | Cell.climbable or (Cell-1).climbable
 
 GravAcc = 9.807*0.2
-update_fall Me =
+unit.update_fall =
 | when $velocity.2>>0.0:
   | FH = $cell-$floor
   | when $flyer or $clinging: FH <= -FH
@@ -318,7 +318,7 @@ unit.update =
          | $fxyz.init{$host.fxyz}
     else $die
 | when $cell > $floor and $action.type><idle:
-  | update_fall Me
+  | $update_fall
   | leave
 | when $velocity.2<0.0: unit_landed Me
 | when $class.hp and ($cell-1).tile.liquid and not $can_stand_on_water:
