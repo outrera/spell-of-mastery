@@ -47,7 +47,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 | Flags = []
 | for E [@$before @$after]: case E [add Name]: push Name Flags
 | $flags <= Flags
-| Allowed = [land water clear seen below outdoor owned ally non_leader will
+| Allowed = [land water clear seen below outdoor owned ally non_leader organic will
              menu any unit empty self pentagram
              placeable c_fullhp]
 | T = Allowed{[? 0]}.table
@@ -62,6 +62,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 
 act.validate Actor XYZ Target Invalid =
 | T = $check
+| less Invalid: Invalid <= | M =>
 | less Actor.owner.seen{XYZ}:
   | Invalid{"Needs seen territory."}
   | leave 0
@@ -102,8 +103,11 @@ act.validate Actor XYZ Target Invalid =
 | when T.outdoor and not Actor.world.outdoor{XYZ}:
   | Invalid{"Needs outdoor space."}
   | leave 0
-| when T.non_leader and Target and Target.leader><1:
+| when T.non_leader and Target and Target.leader:
   | Invalid{"Needs non-leader."}
+  | leave 0
+| when T.organic and not Target.has{organic}:
+  | Invalid{"Needs organic."}
   | leave 0
 | when T.c_fullhp and Actor.hp < Actor.class.hp:
   | Invalid{"Needs full health."}
@@ -136,12 +140,15 @@ world.turn_act State Players ActNames =
 
 act.enabled Player = $players^get_bit{Player.id}<>0
 
-act.available Unit =
-| P = Unit.owner
-| less $enabled{P}: leave 0
-| less $needs.all{Ns=>Ns.any{N=>P.research_remain{Me}<<0}}: leave 0
+act.researched Player =
+| $needs.all{Ns=>Ns.any{N=>Player.research_remain{Me}<<0}}
+
+act.earned Unit =
 | geneCheck N = if N.is_list then not Unit.has{N.1} else Unit.has{N}
 | when $needsGene.any{Ns=>not Ns.any{&geneCheck}}: leave 0
-| 1
+
+//checks if specific act is availalble for particular unit
+act.available Unit =
+| $enabled{Unit.owner} and $researched{Unit.owner} and $earned{Unit}
 
 export act

@@ -4,4 +4,4 @@ range: 0
 speed: 4
 mov: 1
 check: any
-
+hint: move

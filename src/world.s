@@ -256,12 +256,14 @@ world.clear =
 // force reset of all unit genes and health
 reinit_units Us =
 | InitedUnits = []
+| XYZ = [0 0 0]
+| FXYZ = [0 0 0]
 | for U Us: less U.removed
   | Type = U.type
   | Owner = U.owner
   | Facing = U.facing
-  | XYZ = U.xyz.deep_copy
-  | FXYZ = U.fxyz.deep_copy
+  | XYZ.init{U.xyz}
+  | FXYZ.init{U.fxyz}
   | Items = U.items
   | when U.leader: U.hp <= U.class.hp
   | U.free
@@ -305,7 +307,7 @@ world.new_game =
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}
   | L = P.leader
-  | when L:
+  | less L.removed:
     | L.alpha <= 255
     | L.delta <= -50
     | $effect{L.xyz teleport}
@@ -315,7 +317,7 @@ world.new_game =
       | C.free
       | C = P.alloc_unit{special_pentagram}
       | C.move{XYZ}
-  | when L and got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
+  | when got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
 | $end_turn
@@ -351,7 +353,7 @@ world.alloc_unit ClassName Owner =
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
 | when U.leader:
-  | when Owner.leader: Owner.leader.free
+  | Owner.leader.free
   | Owner.leader <= U
 | U.owner <= Owner
 | U.colors <= Owner.colors

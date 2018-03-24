@@ -15,7 +15,6 @@ ai.clear =
 | $params.aiType <= 'default'
 | $params.aiStep <= 0
 | $params.aiWait <= 0
-| $params.aiSpellWait <= 0  //hack to stop AI from spamming spells
 | $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
 | $params.aiLeaderHarmTurn <= -24*100000
 | $params.aiCastFlight <= 0
@@ -97,7 +96,7 @@ player.clear =
 | $unit_counts.clear{0}
 | $ai.clear
 | $picked <= []
-| $leader <= 0
+| $leader <= $world.nil
 | $pentagram <= 0
 | $researching <= 0
 | $mana <= 0
@@ -155,7 +154,7 @@ update_spell_of_mastery Me P =
 
 player.update =
 | Cycle = $world.cycle
-| when Cycle><0 and $human and $leader:
+| when Cycle><0 and $human and not $leader.removed:
   | $world.view.center_at{$leader.xyz cursor/1}
 | update_spell_of_mastery $world Me
 
@@ -191,5 +190,20 @@ player.add_item Name Amount =
 
 player.sound Name =
 | when $id >< $world.human.id: $main.sound{Name}
+
+player.lost_leader Leader =
+| Leaders = []
+| RemainingUnits = []
+| for U $world.active.list: when U.id <> Leader.id:
+  | when U.leader: push U Leaders
+  | when U.owner.id >< $id: push U RemainingUnits
+| case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
+  | $world.params.winner <= L.owner.id
+  | $world.params.victory_type <= 'Victory by defeating other leaders.'
+| when Leader.owner.human: less Leaders.any{?owner.human}:
+  | $world.params.winner <= 0
+  | $world.params.victory_type <= 'Defeat by losing your leader.'
+| $world.notify{"[$name] was defeated."}
+| less RemainingUnits.any{?leader}: for U RemainingUnits: U.free
 
 export player

@@ -4,4 +4,4 @@ hotkey: b
 speed: 4
 check: any
 before: sound{bat_move},effect{spell},morph{unit_vampire},strip{flyer}
-hint: morph
+hint: batform0

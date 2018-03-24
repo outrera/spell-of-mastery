@@ -46,6 +46,24 @@ unit.order_at Goal Act =
 | $world.actors.set{[Me @$world.actors.get]}
 | $set_path{$path_around_to{1000 $goal.xyz}}
 
+unit.order_act Act Target =
+| $order.init{Act Target}
+| $world.actors.set{[Me @$world.actors.get]}
+
+// order taking over any other order
+unit.forced_order Act Target =
+| O = $order.init{Act Target}
+| O.priority <= 1000
+| O.cycles <= 0
+| O
+
+unit.die =
+| Effect = $class.death
+| when Effect: $effect{Effect Me $xyz}
+| $forced_order{die 0}
+| $order.priority <= 2000
+| $cooldown <= 0
+
 unit.reset_goal =
 | less $path.end: $set_path{[]}
 | when $goal and $goal.type><special_goal and not $goal.removed: $goal.free

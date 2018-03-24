@@ -109,21 +109,6 @@ dact missile.finish
 | Source.effect{Es $target $xyz}
 | U.free
 
-player_lost_leader Me Leader =
-| Leaders = []
-| RemainingUnits = []
-| for U $world.active.list: when U.id <> Leader.id:
-  | when U.leader><1: push U Leaders
-  | when U.owner.id >< $id: push U RemainingUnits
-| case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
-  | $world.params.winner <= L.owner.id
-  | $world.params.victory_type <= 'Victory by defeating other leaders.'
-| when Leader.owner.human: less Leaders.any{?owner.human}:
-  | $world.params.winner <= 0
-  | $world.params.victory_type <= 'Defeat by losing your leader.'
-| $world.notify{"[$name] was defeated."}
-| less RemainingUnits.any{?leader><1}: for U RemainingUnits: U.free
-
 dact die.start
 | U = $unit
 | U.drop_all
@@ -134,9 +119,8 @@ dact die.start
 
 dact die.finish
 | U = $unit
-| when U.leader><1 and U.hp << 0: player_lost_leader U.owner U
+| when U.leader and U.hp << 0: U.owner.lost_leader{U}
 | U.free
-
 
 dact swap.valid
 | T = $target

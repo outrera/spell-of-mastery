@@ -1,7 +1,9 @@
 icon: spell_knowledge
-//lore: misc.tier1_lcost
-cost: misc.tier1_scost
+//lore: 0
+cost: 5
+cool: 1
 check: self
 before: effect{teleport},sound{pentagram}
 after: lore{1}
+hint: knowledge
 tab: spell

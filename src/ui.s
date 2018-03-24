@@ -442,7 +442,7 @@ ui.on_unit_pick Units =
        | As <= $main.params.acts.MenuActName.menu
      else As <= Unit.acts.skip{?tab}
   else if PanelTab >< summon or PanelTab >< spell then
-     | Unit <= $world.human.leader or $world.nil
+     | Unit <= $world.human.leader
      | As <= Unit.acts.keep{?tab><PanelTab}
   else if PanelTab >< bag then
      | Acts = $main.params.acts

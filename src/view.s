@@ -75,8 +75,8 @@ view.clear =
 | $anchor.init{[1 1 1]}
 | $mice_click <= 0
 | $pick_count <= 0
-| Leader = $player.units.find{?leader}
-| when got Leader: $center_at{Leader.xyz}
+| Leader = $player.leader
+| when not Leader.removed: $center_at{Leader.xyz}
 | $zlock <= $world.params.view_zlock
 | when no $zlock: $zlock <= $world.d-2
 

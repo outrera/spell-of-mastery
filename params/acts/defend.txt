@@ -6,4 +6,4 @@ check: owned,unit
 before: boost_defense{3},impact{spell}
 after: ()
 range: 0
-hint: boost
+hint: defend

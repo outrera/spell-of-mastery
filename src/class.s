@@ -17,7 +17,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   pickable/Pickable     //can be picked?
   empty/Empty           //other units can move through this one
   default_sprite/Sprite
-  unit/Unit             //is creature or leader?
+  unit/Unit             //what kind of unit?
   box_xy/Box_xy         //bounding box x,y correction
   aux/Aux               //auxilary unit, like mark
   speed/Speed           //cycles to move between cells

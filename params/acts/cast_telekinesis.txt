@@ -6,4 +6,5 @@ range: 9000
 check: any
 before: sound{pentagram}
 after: spawn{unit_telekinesis}
+hint: telekinesis
 tab: spell

@@ -16,7 +16,6 @@ sight: 7
 speed: 28
 pickable: 1
 passable: 0
-leader: 1
 ai: unit
 item: 0
 inborn: (organic leader bless)

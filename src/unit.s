@@ -120,13 +120,16 @@ unit.child Type =
 | $world.units_get{$xyz}
         .find{(?host and ?type><Type and ?host.serial><$serial)}
 
-unit.is_enemy Target = $owner.is_enemy{Target.owner} and Target.health
+unit.is_enemy Target = $owner.is_enemy{Target.owner} and Target.hp>0
+unit.is_ally Target = not $owner.is_enemy{Target.owner} and Target.hp>0
 
 unit.size =
 | S = $sprite.size
 | if $height then S else [S.0 S.1 0]
 
 unit.alive = $hp > 0
+unit.harmed = $hp < $class.hp
+
 unit.health = $hp
 
 unit.placeable_at Dst =
@@ -340,8 +343,8 @@ unit.animate Anim =
 unit.free =
 | when $picked: $owner.picked <= $owner.picked.skip{?id><$id}
 | when $owner: $owner.lost_unit{Me}
-| when $leader><1:
-  | $owner.leader <= 0
+| when $id >< $owner.leader.id: $owner.leader <= $world.nil
+//| when $id >< $owner.pentagram: $owner.pentagram <= $world.nil
 | when $active: $active <= 2 //request removal from active list
 | less $path.end: $set_path{[]}
 | $reset_goal
@@ -358,25 +361,6 @@ unit.reset_followers =
   | U.reset_goal
 
 unit.removed = $xyz.2 >< -1
-
-unit.order_act Act target/0 =
-| less Target: Target <= Me
-| $order.init{Act Target}
-| $world.actors.set{[Me @$world.actors.get]}
-
-// order taking over any other order
-unit.forced_order Act Target =
-| O = $order.init{Act Target}
-| O.priority <= 1000
-| O.cycles <= 0
-| O
-
-unit.die =
-| Effect = $class.death
-| when Effect: $effect{Effect Me $xyz}
-| $forced_order{die 0}
-| $order.priority <= 2000
-| $cooldown <= 0
 
 in_range Me XYZ =
 | less XYZ.mdist{$xyz}<<$range: leave 0
@@ -429,6 +413,10 @@ unit.hit Damage Target =
 | ImpactHit = $class.impact_hit
 | when ImpactHit: $effect{ImpactHit Target Target.xyz}
 | Target.harm{Me Damage}
+
+unit.charging_act = $get{charge}.0
+unit.charging_charge = $get{charge}.1
+unit.charging_cost = $get{charge}.2
 
 unit.interrupt =
 | less $charging: leave

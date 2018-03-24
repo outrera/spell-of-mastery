@@ -5,15 +5,6 @@ OwnedUnits = 0
 SeenEnemies = 0
 PerCycle = 0
 
-unit.can_do Act =
-| when Act.mov > $mov: leave 0
-| when $owner.research_remain{Act}: leave 0
-| when $owner.mana < Act.cost: leave 0
-| when $cooldown_of{Act.name}: leave 0
-| 1
-
-PerTurn = 0
-
 unit.advance_to GoalXYZ =
 | when $xyz >< GoalXYZ: leave 1
 | Path = $path_to{GoalXYZ}
@@ -34,76 +25,72 @@ unit.advance_to GoalXYZ =
 | $order_at{Cell.xyz 0}
 | 0
 
-cast_pentagram Me =
-| case $acts.keep{?hint >< pentagram} [Act@_]
-  | less $can_do{Act}: leave 0
-  | $order_act{Act}
-  | leave 1
-| leave 0
-
-cast_spell_sub Me Spell Force =
-| less Spell and got Spell: leave 0
-| Act = Spell
-| when Act.is_text:
-  | Act <= $main.params.acts.Spell
-  | when no Act: bad "AI: cant find spell `[Spell]`"
-| Hint = Act.hint
-| when Hint<>boost and Hint<>harm: less Force: leave 0
-| when Act.name><attack: leave 0
+unit.ai_pick_target Act =
 | R = Act.range
 | Targets =
     if R>>9000 then SeenUnits
     else if R><0 then [Me]
     else $world.units_in_range{Me.xyz Act.range}
 | Ts = Targets.skip{?empty}.keep{?alive}
-| if Hint><harm
-  then Ts <= Ts.keep{U=>U.owner.is_enemy{$owner}}
-  else Ts <= Ts.skip{U=>U.owner.is_enemy{$owner}}
-| when Act.check.unit:
-  | when Act.check.non_leader: Ts <= Ts.skip{?leader><1}
-  | when Act.check.outdoor: Ts <= Ts.keep{U => $world.outdoor{U.xyz}}
+| Hint = Act.hint
+| if Hint >< pentagram then
+  else if Hint >< heal then
+    | Ts <= Ts.keep{?is_ally{Me}}.keep{?harmed}
+  else if Hint >< lifedrain then
+    | less $harmed: leave 0
+    | Ts <= Ts.keep{?is_enemy{Me}}
+  else if Hint >< harm then
+    | Ts <= Ts.keep{?is_enemy{Me}}
+  else if Hint >< benefit then
+    | Ts <= Ts.keep{?is_ally{Me}}
+  else leave 0
+| Ts <= Ts.keep{T => Act.validate{Me T.xyz T 0}}
 | for Flag Act.flags //avoid overriding
   | FlagN = getUnitFlagsTable{}.Flag
   | when got FlagN: Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
-| less Ts.size: leave 0
-| Target = Ts.0
+| if Ts.size then Ts.0 else 0
+
+unit.ai_ability_sub Act =
+| when Act.mov > $mov: leave 0
+| when $owner.mana < Act.cost: leave 0
+| when $cooldown_of{Act.name}: leave 0
+| less Act.available{Me}: leave 0
+| when Act.hint >< dismiss: leave 0
+| when Act.hint >< pentagram:
+  | when $owner.pentagram: leave 0
+  | less $cell.is_floor_empty: 
+    | TargetNode = $pathfind{1000 |Dst=>Dst.is_floor_empty}
+    | when TargetNode:
+      | $advance_to{TargetNode.xyz}
+      | leave 1
+    | leave 0
+| Target = $ai_pick_target{Act}
+| less Target: leave 0 //no suitable target for this act
 | Cost = Act.cost
 | Me.owner.mana+=Cost
 | when $can_do{Act}
-  | $order_act{Act target/Target}
+  | $order_act{Act Target}
   | leave 1
-| Me.owner.mana-=Cost //havent casted the spell
+| Me.owner.mana -= Cost //havent casted the spell
 | 0
 
+// for final build do some random-shuffle $acts to make it less predictable
+list_rotate I Xs =
+| N = Xs.size
+| less N: leave Xs
+| N <= I%N
+| [@Xs.drop{N} @Xs.take{N}]
 
-cast_spell Me = //Me is unit
-| Acts = $acts
-| less Acts.size: leave 0
-| PP = $owner.params
-| when $leader:
-  | Pentagram = $owner.pentagram
-  | less Pentagram:
-    | if $cell.is_floor_empty
-      then | when cast_pentagram Me: leave 1
-      else | TargetNode = $pathfind{1000 |Dst=>Dst.is_floor_empty}
-           | when TargetNode:
-             | $advance_to{TargetNode.xyz}
-             | leave 1
-  | PP = $owner.params
-  | Turn = $world.turn
-  | when PP.aiSpellWait>>Turn: leave 0
-  | for Spell PP.ai_spells
-    | when cast_spell_sub{Me Spell 0}:
-      | PP.aiSpellWait <= Turn + 2
-      | leave 1
+unit.ai_ability =
+| for Act list_rotate{$world.turn $acts}: when $ai_ability_sub{Act}: leave 1
 | 0
 
 ai_leader_harmed Me Attacker Victim =
 
 ai.harm Attacker Victim =
-| when Victim.leader><1: ai_leader_harmed Me Attacker Victim
+| when Victim.leader: ai_leader_harmed Me Attacker Victim
 
-roam Me =
+unit.ai_roam =
 | World = $world
 | Owner = $owner
 | OId = Owner.id
@@ -143,7 +130,7 @@ roam Me =
 unit.enemies_in_sight =
 | $units_in_range{$sight}.keep{X=>$is_enemy{X} and not X.invisible}
 
-unit.runaway Btrack =
+unit.ai_runaway Btrack =
 | Es = $enemies_in_sight
 | Rs = $reachable{}{?1}.skip{?block}
 | Best = 0
@@ -162,20 +149,15 @@ unit.runaway Btrack =
   | when Btrack: less $get{btrack}: $backtrack <= $xyz
 | $handled <= 1
 
-unit.charging_act = $get{charge}.0
-unit.charging_charge = $get{charge}.1
-unit.charging_cost = $get{charge}.2
-
-
-ai_update_unit Me =
+unit.ai_update =
 | less $mov > 0:
   | $handled <= 1
   | leave 0
 | when $afraid:
-  | when $enemies_in_sight.size: $runaway{1}
+  | when $enemies_in_sight.size: $ai_runaway{1}
   | leave 0
 | when not $charging or $charging_charge+$will>>$charging_cost:
-  | when cast_spell Me: leave break
+  | when $ai_ability: leave break
 | when $atk:
   | Cs = $reachable
   | case Cs.keep{?0><attack} [[Type Cell]@_]:
@@ -199,19 +181,18 @@ ai_update_unit Me =
 | when $aistate <> roam:
   | BtXYZ = $get{btrack}
   | when BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
-| when $aistate >< roam and roam Me: leave break
+| when $aistate >< roam and $ai_roam: leave break
 | $handled <= 1
 | \next
 
-ai_get_clean_pentagram Me =
+ai.get_clean_pentagram =
 | Pentagram = $player.pentagram
 | when Pentagram and not Pentagram.cell.block: leave Pentagram
 | 0
 
-ai_update_build Me =
+ai.update_build =
 | Leader = $player.leader
-| less Leader: leave 0
-| Pentagram = ai_get_clean_pentagram Me
+| Pentagram = $get_clean_pentagram
 | less Pentagram: leave 0
 | Spawns = Leader.acts.keep{?after_table.spawn^got}
 | less Spawns.size: leave 0
@@ -220,11 +201,11 @@ ai_update_build Me =
 | for Type Missing:
   | S = Spawns.find{?after_table.spawn >< Type}
   | when got S and Leader.can_do{S}:
-    | Leader.order_act{S}
+    | Leader.order_act{S Me}
     | leave 1
 | 0
 
-ai_clean_pentagram Me =
+ai.clean_pentagram =
 | Pentagram = $player.pentagram
 | when Pentagram:
   | B = Pentagram.cell.block
@@ -240,18 +221,18 @@ ai_clean_pentagram Me =
       | leave 1
 | 0
 
-ai_update_units Me =
-| when ai_update_build Me: leave 0
+ai.update_units =
+| when $update_build: leave 0
 | for U OwnedUnits: less U.handled:
-  | R = ai_update_unit U
+  | R = U.ai_update
   | when R >< break: leave 0
 | for U OwnedUnits: when U.handled><wait:
-  | R = ai_update_unit U //handle units with delayed movement
+  | R = U.ai_update //handle units with delayed movement
   | when R >< break: leave 0
-| when ai_clean_pentagram Me: leave 0
+| when $clean_pentagram: leave 0
 | 1 //return true, meaning that we have handled all units
 
-ai_group_roam Me Types =
+ai.group_roam Types =
 | Units = $player.units
 | UTs = Units.keep{?aistate><spawned}.div{?type}
 | As = []
@@ -284,7 +265,7 @@ ai.script =
 | Command = AISteps.AIStep
 | case Command
   [roam @Types]
-    | less ai_group_roam Me Types{"unit_[?]"}: leave 0
+    | less $group_roam{Types{"unit_[?]"}}: leave 0
     | PParams.aiStep++
   [goto NewAIType when @Condition]
     | if case Condition [[`>>` lossage X]]
@@ -305,12 +286,12 @@ ai.script =
     | bad 'invalid AI command: [Command]'
 | leave 1
 
-ai_update_turn Me =
+ai.update_turn =
 | when $player.params.attack_with_guards >< 1:
   | for U OwnedUnits: U.aistate <= \roam
   | $player.params.attack_with_guards <= 0
 | when $player.id: while $script><1: //FIXME: this can hung
-| when ai_update_units Me: $world.end_turn
+| when $update_units: $world.end_turn
 
 ai.update =
 | PerCycle <= t
@@ -320,7 +301,7 @@ ai.update =
 | PID = Player.id
 | OwnedUnits <= SeenUnits.keep{?owner.id><PID}
 | SeenEnemies <= SeenUnits.keep{?owner.is_enemy{Player}}.skip{?invisible}
-| ai_update_turn Me
+| $update_turn
 | SeenUnits <= 0
 | OwnedUnits <= 0
 | SeenEnemies <= 0
