@@ -99,6 +99,8 @@ unit.`=resting` State = $flags <= $flags^set_bit{17 State}
 unit.resisting = $flags^get_bit{18}
 unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
 
+unit.leader = $flags^get_bit{19}
+
 //how many other units this unit has killed
 unit.kills = $get{kills}
 unit.`=kills` Value = $set{kills Value}

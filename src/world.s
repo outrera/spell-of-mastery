@@ -342,9 +342,6 @@ world.alloc_unit ClassName Owner =
     | halt //something is really wrong
   | Class <= $main.classes.trigger_missing
 | U = $free_units.pop
-| when Class.leader and Class.leader><1:
-  | when Owner.leader: Owner.leader.free
-  | Owner.leader <= U
 | when Class.ai >< pentagram
   | Pentagram = Owner.pentagram
   | when Pentagram
@@ -353,6 +350,9 @@ world.alloc_unit ClassName Owner =
   | Owner.pentagram <= U
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
+| when U.leader:
+  | when Owner.leader: Owner.leader.free
+  | Owner.leader <= U
 | U.owner <= Owner
 | U.colors <= Owner.colors
 | U.owner.got_unit{U}

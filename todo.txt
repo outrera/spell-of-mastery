@@ -1,8 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Parametrize UI: panel tab would be a list defined inside params/main/
 - When there is no pentagram or leader, use nil unit in place of them. That will greatly simplify large portion of code
+- Parametrize UI: panel tab would be a list defined inside params/main/global.txt
 - notifications should be moved to the bottom, that way user can easily associate picked action with notification feedback from them. It would probably be a good idea to make them into a separate scrollable widget, so user could see the history.
 - Reanme `before` into `onShot` and `after` into `onHit`
 - Better UI, maybe new-age/astrology themed, scrolls are not magical enough.

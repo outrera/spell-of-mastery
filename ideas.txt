@@ -68,6 +68,7 @@ General:
 
 Creatures:
 - Creature that does damage based on range to the target.
+- Creature that is immune to ranged attacks.
 - Creature that is immune to blessed attacks.
 - Blessed creatures dealing additional damage to undeads. So it would make sense to bless even the creatures with magical attack.
 - Creature whose attack is proportional to its defense
