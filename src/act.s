@@ -63,44 +63,46 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
 act.validate Actor XYZ Target Invalid =
 | T = $check
 | less Invalid: Invalid <= | M =>
-| less Actor.owner.seen{XYZ}:
+| O = Actor.owner
+| less O.seen{XYZ}:
   | Invalid{"Needs seen territory."}
   | leave 0
 | when T.unit and not Target or Target.removed: leave 0
 | Cost = $cost
 | when T.will and Target: Cost += Target.will
-| when Cost > Actor.owner.mana:
+| when Cost > O.mana:
   | Invalid{"Needs [Cost] mana."}
   | leave 0
+| Wr = Actor.world
 | when T.pentagram:
-  | P = Actor.owner.pentagram
-  | less P:
+  | P = O.pentagram
+  | when P.removed:
     | Invalid{"Needs pentagram."}
     | leave 0
-  | when Actor.world.block_at{P.xyz}:
+  | when Wr.block_at{P.xyz}:
     | Invalid{"Pentagram is blocked"}
     | leave 0
 | when T.clear:
   | less Actor.cell.is_floor_empty:
     | Invalid{"Needs clear floor"}
     | leave 0
-| when T.empty and Actor.world.block_at{XYZ}:
+| when T.empty and Wr.block_at{XYZ}:
   | Invalid{"Needs empty floor"}
   | leave 0
-| Below = Actor.world.at{XYZ.0 XYZ.1 XYZ.2-1}
+| Below = Wr.at{XYZ.0 XYZ.1 XYZ.2-1}
 | when T.land and (Below.liquid or Below.type><void):
   | Invalid{"Needs land."}
   | leave 0
 | when T.ally and Actor.is_enemy{Target}:
   | Invalid{"Needs ally."}
   | leave 0
-| when T.owned and Target and Target.owner.id<>Actor.owner.id:
+| when T.owned and Target and Target.owner.id<>O.id:
   | Invalid{"Needs a unit you own."}
   | leave 0 
 | when T.water and Below.type <> water:
   | Invalid{"Needs water."}
   | leave 0
-| when T.outdoor and not Actor.world.outdoor{XYZ}:
+| when T.outdoor and not Wr.outdoor{XYZ}:
   | Invalid{"Needs outdoor space."}
   | leave 0
 | when T.non_leader and Target and Target.leader:
@@ -112,13 +114,13 @@ act.validate Actor XYZ Target Invalid =
 | when T.c_fullhp and Actor.hp < Actor.class.hp:
   | Invalid{"Needs full health."}
   | leave 0
-| when T.seen and not Actor.world.seen_from{Actor.xyz XYZ}:
+| when T.seen and not Wr.seen_from{Actor.xyz XYZ}:
   | Invalid{"Needs to be in line of sight."}
   | leave 0
 | when T.below and XYZ.2>>Actor.xyz.2:
   | Invalid{"Needs lower target"}
   | leave 0
-| when T.placeable and not Actor.placeable_at{Actor.world.cellp{XYZ}}:
+| when T.placeable and not Actor.placeable_at{Wr.cellp{XYZ}}:
   | Invalid{"Needs place where this unit can stand."}
   | leave 0
 | when $name >< room_demolish and not Below.cost:

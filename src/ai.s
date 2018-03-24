@@ -57,7 +57,7 @@ unit.ai_ability_sub Act =
 | less Act.available{Me}: leave 0
 | when Act.hint >< dismiss: leave 0
 | when Act.hint >< pentagram:
-  | when $owner.pentagram: leave 0
+  | less $owner.pentagram.removed: leave 0
   | less $cell.is_floor_empty: 
     | TargetNode = $pathfind{1000 |Dst=>Dst.is_floor_empty}
     | when TargetNode:
@@ -187,7 +187,8 @@ unit.ai_update =
 
 ai.get_clean_pentagram =
 | Pentagram = $player.pentagram
-| when Pentagram and not Pentagram.cell.block: leave Pentagram
+| when Pentagram.removed: leave 0
+| when not Pentagram.cell.block: leave Pentagram
 | 0
 
 ai.update_build =
@@ -207,18 +208,18 @@ ai.update_build =
 
 ai.clean_pentagram =
 | Pentagram = $player.pentagram
-| when Pentagram:
-  | B = Pentagram.cell.block
-  | when B and B.mov and B.owner.id><$player.id:
-    | Cs = B.reachable.keep{?0><move}
-    | Cs = Cs.sort{A B => (A.1.xyz-B.1.xyz).take{2}{?abs}.sum}.flip
-    | for Type,Cell Cs:
-      | when not Cell.block and got Cell.units.find{?ai><hold}:
-        | B.order_at{Cell.xyz 0} //move unit out of pentagram
-        | leave 1
-    | case Cs [[Type Cell]@_]:
-      | B.order_at{Cell.xyz 0} //move unit out of pentagram
-      | leave 1
+| when Pentagram.removed: leave 0
+| B = Pentagram.cell.block
+| less B and B.mov and B.owner.id><$player.id: leave 0
+| Cs = B.reachable.keep{?0><move}
+| Cs = Cs.sort{A B => A.1.xyz.mdist{B.1.xyz}.sum}.flip
+| for Type,Cell Cs:
+  | when not Cell.block and got Cell.units.find{?ai><hold}:
+    | B.order_at{Cell.xyz 0} //move unit out of pentagram
+    | leave 1
+| case Cs [[Type Cell]@_]:
+  | B.order_at{Cell.xyz 0} //move unit out of pentagram
+  | leave 1
 | 0
 
 ai.update_units =

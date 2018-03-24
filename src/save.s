@@ -165,7 +165,7 @@ world.load Saved =
     | U.host <= [Host Goal Action Ordered NextAction]
   | U.flags <= Flags
   | when U.leader: U.owner.leader <= U
-  | when U.bank >< pentagram: U.owner.pentagram <= U
+  | when U.ai >< pentagram: U.owner.pentagram <= U
   | IdMap.Id <= U
 | for U $active: when U.host:
   | [HostId Goal Action Ordered NextAction] = U.host

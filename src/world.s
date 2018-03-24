@@ -312,7 +312,7 @@ world.new_game =
     | L.delta <= -50
     | $effect{L.xyz teleport}
     | C = P.pentagram
-    | when C:
+    | less C.removed:
       | XYZ = C.xyz.copy
       | C.free
       | C = P.alloc_unit{special_pentagram}
@@ -346,7 +346,7 @@ world.alloc_unit ClassName Owner =
 | U = $free_units.pop
 | when Class.ai >< pentagram
   | Pentagram = Owner.pentagram
-  | when Pentagram
+  | less Pentagram.removed:
     | $free_units.push{U}
     | leave Pentagram
   | Owner.pentagram <= U
@@ -451,9 +451,6 @@ world.roof XYZ =
 | X,Y,Z = XYZ
 | while $at{X Y Z}.empty and Z < $d-1: Z++
 | Z
-
-// manhattan distance
-list.mdist P = ($0 - P.0).abs + ($1 - P.1).abs
 
 world.seen_from A B =
 | when A.2 < B.2: swap A B //hack to accomodate for line_calls3d quirks

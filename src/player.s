@@ -97,7 +97,7 @@ player.clear =
 | $ai.clear
 | $picked <= []
 | $leader <= $world.nil
-| $pentagram <= 0
+| $pentagram <= $world.nil
 | $researching <= 0
 | $mana <= 0
 | $lore <= 0
@@ -120,7 +120,7 @@ player.lost_unit U =
 | when CID:
   | $unit_counts.CID--
   | $total_units--
-| when U.ai >< pentagram: $pentagram <= 0
+| when U.ai >< pentagram: $pentagram <= $world.nil
 
 player.research_item What =
 | Act = $main.params.acts.What

@@ -8,6 +8,9 @@ list.has Item = got $find{Item}
 // take up to N elements
 list.upto N = $take{|min $size N}
 
+// manhattan distance
+list.mdist P = ($0 - P.0).abs + ($1 - P.1).abs
+
 points X Y W H = dup I W*H [X+I%W Y+I/W]
 
 list.overlaps [BX BY BW BH] =

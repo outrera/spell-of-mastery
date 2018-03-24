@@ -164,16 +164,11 @@ effect swap Arg:
 | $move{TargetXYZ}
 | Target.move{XYZ}
 
-effect recall Where:
-| XYZ = [0 0 0]
-| if Where><pentagram then
-   | P = $owner.pentagram
-   | less P: leave
-   | XYZ.init{P.xyz}
-  else if Where><self then XYZ.init{$xyz}
-  else leave
+effect recall:
+| P = $owner.pentagram
+| when P.removed: leave
 | Target.remove
-| Target.move{XYZ}
+| Target.move{P.xyz}
 | Target.backtrack <= 0
 | Target.reset_goal
 | Target.reset_followers
@@ -461,7 +456,7 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
     else if Name >< pentagram then
       | P = $owner.pentagram
-      | less P: _goto end
+      | when P.removed: _goto end
       | XYZ.init{P.xyz}
       | Target <= P
       | T <= Target

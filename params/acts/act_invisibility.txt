@@ -6,5 +6,4 @@ cool: 10
 check: owned,unit
 before: add{invisible},impact{spell},sound{invisibility}
 after: ()
-range: 0
 hint: boost
