@@ -23,6 +23,7 @@ CreditsRoll =
 BankList =
 HotKeyInvoke = 0
 ResourceCounters =
+NotificationWidget =
 
 MenuBG =
 IconsPanelBG =
@@ -323,10 +324,11 @@ create_view_ui Me =
 | EditorTabs <= create_editor_tabs Me
 | IPY = $height-IconsPanelBG.h
 | UnitActIconsLay <= hidden: layV s/14
-                     layH{s/4 UnitActIcons.drop{UnitActIcons.size/2}}
-                    ,layH{s/4 UnitActIcons.take{UnitActIcons.size/2}}
+                     layH{s/8 UnitActIcons.drop{UnitActIcons.size/2}}
+                    ,layH{s/8 UnitActIcons.take{UnitActIcons.size/2}}
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
 | ResourceCounters <= resource_counters $view
+| NotificationWidget <= notification_widget $view
 | EndTurnButton = button 'END TURN' skin/hourglass: => $world.end_turn
 | dlg: mtx
   |  0   0| $view
@@ -338,6 +340,7 @@ create_view_ui Me =
   | 142 $height-118| UnitActIconsLay
   | 142 $height-110| MenuTab
   | 164 $height-20 | infoline
+  | 0 $height-170 | NotificationWidget
   | $width-50 80 | GroundActIconsLay
   | $width-80 48 | EndTurnButton
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
@@ -420,15 +423,22 @@ ui.update_act_icon I Act Count Unit =
 | Icons.I.show <= Active
 
 ui_update_panel_buttons Me Unit As GAs =
-| As = As.i.take{min{MaxUnitActIcons As.size}}
-| GAs = GAs.i.map{I,Act=>[-I-1 Act]}.take{min{MaxGroundActIcons GAs.size}}
+| As = As.take{min{MaxUnitActIcons As.size}}
+| GAs = GAs.take{min{MaxGroundActIcons GAs.size}}
 | Player = Unit.owner
-| for I,Act @As,@GAs:
+| I = 0
+| for Act [@As @GAs{[gact ?]}]:
   | Count = No
+  | GAct = 0 //ground act
+  | case Act [gact A]
+    | GAct <= 1
+    | Act <= A
   | when Act.is_list:
     | Count <= Act.0
     | Act <= Act.1
-  | when Act.available{Unit}: $update_act_icon{I Act Count Unit}
+  | when Act.available{Unit}:
+    | $update_act_icon{(if GAct then -I-1 else I) Act Count Unit}
+    | I += 1
 
 ui.on_unit_pick Units =
 | for Icon AllActIcons: Icon.show <= 0
@@ -440,7 +450,7 @@ ui.on_unit_pick Units =
      if Unit.has{menu} then
        | MenuActName,XYZ,TargetSerial = Unit.get{menu}
        | As <= $main.params.acts.MenuActName.menu
-     else As <= Unit.acts.skip{?tab}
+     else As <= if Unit.removed then [] else Unit.acts.skip{?tab}
   else if PanelTab >< summon or PanelTab >< spell then
      | Unit <= $world.human.leader
      | As <= Unit.acts.keep{?tab><PanelTab}

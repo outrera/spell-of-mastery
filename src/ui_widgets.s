@@ -85,9 +85,9 @@ resource_counters.draw G X Y =
 | IX = ($view.w-Indicators.w)/2
 | IY = 0
 | P = $world.human
-| Font = font medium
 | G.blit{IX IY Indicators}
 | Param = P.params
+| Font = font medium
 | Font.draw{G IX+36 IY+2 "[P.mana]"}
 | Font.draw{G IX+148 IY+2 "[P.lore]"}
 | Font.draw{G IX+232 IY+2 "[$world.turn]:[$world.player]"}
@@ -97,11 +97,16 @@ resource_counters.draw G X Y =
 //| Font.draw{G IX+620 IY+2 "[Param.item_houses]"}
 | Debug = $world.params.debug
 | when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
-| C = 34
-| Notes = $world.notes
+
+type notification_widget.widget{view} world w/0 h/0
+| $world <= $view.world
+notification_widget.main = $world.main
+notification_widget.draw G X Y =
+| Font = font medium
+| C = 24
 | Clock = clock
 | for [Expires Chars] $world.notes: when Clock < Expires:
-  | Font.draw{G 150 IY+C "* [Chars.text]"}
+  | Font.draw{G 16 Y-C "* [Chars.text]"}
   | C+=16
 
 type save_dlg.$base{world start cancelCB loadCB}
@@ -175,5 +180,5 @@ player_picker.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
-export message_box world_props credits_roll
+export message_box world_props credits_roll notification_widget
        player_picker save_dlg load_dlg resource_counters
