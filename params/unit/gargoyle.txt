@@ -6,6 +6,6 @@ atk: 2
 def: 8
 inborn: (flyer bless)
 onHit: shell,hit{user},sound{impact}
-onHarm: effect{blood_undead},sound{devil_hit}
+onHarm: visual{blood_undead},sound{devil_hit}
 onDeath: sound{dragon_death}
 onMove: sound{dragon_move}

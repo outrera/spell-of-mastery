@@ -3,11 +3,11 @@ icon: spell_armageddon
 //cost: 10
 //cool: 20
 check: unit
-onInit: impact{pentagram_appearance},sound{pentagram}
+onInit: visual{pentagram_appearance},sound{pentagram}
 onEnd: shake_screen{24},
        color_overlay{(2 #AFFF0000) (2 #7FFF0000)
                      (16 #3FFF0000)
                      (2 #7FFF0000) (2 #AFFF0000)},
-       sound{armageddon},all_alive,resist,harm{9},impact{fire}
+       sound{armageddon},all_alive,resist,harm{9},visual{fire}
 hint: armageddon
 tab: spell

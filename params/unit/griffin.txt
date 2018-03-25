@@ -7,6 +7,6 @@ def: 2
 speed: 18
 inborn: (organic flyer)
 onHit: shell,hit{user},sound{cut}
-onHarm: effect{blood},sound{griffin_hit}
+onHarm: visual{blood},sound{griffin_hit}
 onDeath: sound{griffin_die}
 onMove: sound{griffin_move}

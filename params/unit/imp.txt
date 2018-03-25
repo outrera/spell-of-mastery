@@ -6,6 +6,6 @@ def: 1
 speed: 24
 inborn: (organic)
 onHit: shell,hit{user},sound{cut}
-onHarm: effect{blood},sound{imp_hit}
+onHarm: visual{blood},sound{imp_hit}
 onDeath: sound{imp_die}
 onMove: sound{step}

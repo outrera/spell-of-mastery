@@ -304,7 +304,7 @@ unit_landed Me =
 
 unit.sink =
 | $sound{sink}
-| $world.effect{$xyz sink}
+| $world.visual{$xyz sink}
 | $move{[$world.w+1 $world.h+1 1]} //move it out of sight
 | $harm{Me 6000}
 

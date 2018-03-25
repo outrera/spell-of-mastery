@@ -6,6 +6,6 @@ def: 1
 range: 6
 inborn: (organic)
 onHit: shell,hit{user},sound{arrow_hit}
-onHarm: effect{blood},sound{elf_hit}
+onHarm: visual{blood},sound{elf_hit}
 onDeath: sound{male_die}
 onMove: sound{step}

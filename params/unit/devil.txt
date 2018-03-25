@@ -5,6 +5,6 @@ atk: 1
 def: 6
 inborn: (organic)
 onHit: shell,hit{user},sound{devil_attack}
-onHarm: effect{blood},sound{devil_hit}
+onHarm: visual{blood},sound{devil_hit}
 onDeath: sound{devil_hit}
 acts: (teleport act_punish)

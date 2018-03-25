@@ -1,4 +1,4 @@
 icon: unit_witch
-onHarm: effect{blood},sound{female_hit}
+onHarm: visual{blood},sound{female_hit}
 onDeath: sound{female_die}
 

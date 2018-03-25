@@ -5,7 +5,7 @@ title: `Blow Away`
 cool: 6
 mov: 2
 check: owned,unit
-onInit: animate{still},blowaway{6 0},impact{dustbig},sound{blowaway}
+onInit: animate{still},blowaway{6 0},visual{dustbig},sound{blowaway}
 onEnd: ()
 range: 0
 hint: blowaway

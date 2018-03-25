@@ -6,7 +6,7 @@ def: 2
 will: 5
 inborn: (organic)
 onHit: shell,hit{user},sound{cut}
-onHarm: effect{blood},sound{rat_death}
+onHarm: visual{blood},sound{rat_death}
 onDeath: sound{rat_death}
 onMove: sound{step}
 acts: (act_invisibility)

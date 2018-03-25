@@ -47,7 +47,6 @@ type unit.$class{Id World}
   will //will points remained
   flags //various flags (mostly genes)
   genes/[] //active genes
-  mod //set by various genes to modify some contextual behavior
   can_move //movement function
   aistate //how AI processes this unit
 | $action <= $world.action{Me}
@@ -426,7 +425,7 @@ unit.interrupt =
 | $owner.mana += Mana
 | when Charge>0:
   | $sound{fizzle}
-  | E = $world.effect{$xyz energy}
+  | E = $world.visual{$xyz energy}
   | E.fxyz.init{$fxyz}
 
 unit.harm Attacker Damage =

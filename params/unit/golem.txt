@@ -7,6 +7,6 @@ def: 2
 speed: 34
 inborn: ()
 onHit: shell,hit{user},sound{golem_attack}
-onHarm: sound{golem_hit},effect{blood_undead}
+onHarm: sound{golem_hit},visual{blood_undead}
 onDeath: sound{golem_die}
 onMove: sound{step}

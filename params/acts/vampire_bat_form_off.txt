@@ -3,5 +3,5 @@ title: `Bat Form Swith`
 hotkey: b
 speed: 4
 check: any
-onInit: sound{bat_move},effect{spell},morph{unit_vampire},strip{flyer}
+onInit: visual{spell},sound{bat_move},morph{unit_vampire},strip{flyer}
 hint: batform0

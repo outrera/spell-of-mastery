@@ -19,7 +19,7 @@ passable: 0
 ai: unit
 item: 0
 inborn: (organic leader bless)
-onHit: missile{bolt},shell,hit{user},impact{bolt_impact},sound{explosion}
+onHit: missile{bolt},shell,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
 acts: (pentagram act_fireball)
 spells:

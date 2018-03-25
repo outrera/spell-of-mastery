@@ -13,7 +13,7 @@ aux: 1
 summon: 0
 inborn: (cursed flyer)
 onHit: hit{user},sound{bat_attack}
-onHarm: effect{blood_undead},sound{bat_hit}
+onHarm: visual{blood_undead},sound{bat_hit}
 onDeath: sound{bat_die}
 onMove: sound{bat_move}
 acts: (vampire_bat_form_off)

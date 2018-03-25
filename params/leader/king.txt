@@ -4,6 +4,6 @@ health: 40
 atk: 5
 def: 0
 onHit: hit{user},sound{cut}
-onHarm: effect{blood},sound{king_hit}
-onDeath: sound{male_die},sound{mage_die}
+onHarm: visual{blood},sound{king_hit}
+onDeath: sound{male_die}
 acts: (pentagram)

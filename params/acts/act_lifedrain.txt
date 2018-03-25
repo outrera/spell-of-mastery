@@ -5,6 +5,6 @@ cost: 0
 cool: 16
 range: 4
 check: non_leader,organic,unit
-onInit: lifedrain{full},sound{lifedrain},impact{lifedrain},self,impact{heal}
+onInit: lifedrain{full},visual{lifedrain},sound{lifedrain},self,visual{heal}
 hint: lifedrain
 tab: spell

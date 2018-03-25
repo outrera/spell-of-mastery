@@ -7,7 +7,7 @@ def: 2
 speed: 28
 inborn: (cursed flyer)
 onHit: shell,hit{user},sound{cut}
-onHarm: effect{blood_undead},sound{wraith_hit}
+onHarm: visual{blood_undead},sound{wraith_hit}
 onDeath: sound{wraith_die}
 onMove: sound{wraith_move}
 acts: (act_invisibility act_phase)

@@ -6,6 +6,6 @@ def: 2
 //speed: 24
 inborn: (cursed)
 onHit: shell,hit{user},sound{cut}
-onHarm: effect{blood_undead},sound{skeleton_hit}
+onHarm: visual{blood_undead},sound{skeleton_hit}
 onDeath: sound{skeleton_die}
 onMove: sound{step}

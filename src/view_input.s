@@ -9,7 +9,7 @@ PickCount = 0
 order_at Me XYZ Target =
 | Player = $player
 | Us = $picked.keep{U => U.owner.id >< Player.id}
-| when Us.size: $world.effect{XYZ ack}
+| when Us.size: $world.visual{XYZ ack}
 | Us = Us{U=>[(XYZ-U.xyz).abs U]}.sort{?0<??0}{?1}
 | Used = []
 | less Target and Target.owner.is_enemy{Player}: Target <= 0

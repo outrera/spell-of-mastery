@@ -310,7 +310,7 @@ world.new_game =
   | less L.removed:
     | L.alpha <= 255
     | L.delta <= -50
-    | $effect{L.xyz teleport}
+    | $visual{L.xyz teleport}
     | C = P.pentagram
     | less C.removed:
       | XYZ = C.xyz.copy
@@ -559,7 +559,7 @@ world.remove_unit U =
 | U.cell <= 0
 | U.xyz.init{XYZ}
 
-world.effect XYZ What =
+world.visual XYZ What =
 | E = $players.0.alloc_unit{"effect_[What]"}
 | E.move{XYZ}
 | E.die

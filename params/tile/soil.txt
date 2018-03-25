@@ -7,5 +7,5 @@ box: (64 64 39)
 hp: 100
 water: water,soil_water
 stack: soil0,dirt1,soil2
-hit: effect{spell},sound{mining}
-death: effect{explosion},sound{impact},sound{excavate}
+hit: visual{spell},sound{mining}
+death: visual{explosion},sound{impact},sound{excavate}

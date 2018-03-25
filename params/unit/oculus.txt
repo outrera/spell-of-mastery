@@ -8,6 +8,6 @@ def: 5
 speed: 20
 inborn: (flyer organic)
 onHit: shell,hit{user}
-onHarm: effect{blood},sound{oculus_move}
+onHarm: visual{blood},sound{oculus_move}
 onDeath: sound{explosion}
 onMove: sound{oculus_move}

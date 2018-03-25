@@ -1,4 +1,5 @@
 icon: unit_katzard
-onHarm: effect{blood},sound{male_hit}
+onHit: harm{user},visual{fire_spiral},sound{explosion}
+onHarm: visual{blood},sound{male_hit}
 onDeath: sound{mage_die}
-onHit: harm{user},impact{fire_spiral},sound{explosion}
+

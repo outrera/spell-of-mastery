@@ -4,6 +4,6 @@ cost: 4
 //cool: 10
 range: 9000
 check: outdoor,non_leader,unit
-onInit: impact{lightning},sound{lightning},resist,harm{9}
+onInit: visual{lightning},sound{lightning},resist,harm{9}
 hint: harm
 tab: spell

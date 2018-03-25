@@ -7,7 +7,7 @@ def: 2
 speed: 22
 inborn: (organic fireaura flyer)
 onHit: shell,hit{user},sound{explosion}
-onHarm: effect{blood},sound{ifrit_hit}
+onHarm: visual{blood},sound{ifrit_hit}
 onDeath: sound{ifrit_death}
 onMove: sound{ifrit_move}
 acts: (act_fireball)

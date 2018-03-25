@@ -5,6 +5,6 @@ atk: 10
 def: 1
 inborn: (organic)
 onHit: shell,hit{user},sound{cyclops_club}
-onHarm: effect{blood},sound{cyclops_hit}
+onHarm: visual{blood},sound{cyclops_hit}
 onDeath: sound{cyclops_die}
 onMove: sound{step}

@@ -3,9 +3,9 @@ icon: spell_of_mastery
 //cost: 10
 check: any
 onInit: shake_screen{24},
-       color_overlay{(2 #AFFFFFFF) (2 #7FFFFFFF)
-                     (16 #3FFFFFFF)
-                     (2 #7FFFFFFF) (2 #AFFFFFFF)},
-        impact{teleport},sound{mastery}
+        color_overlay{(2 #AFFFFFFF) (2 #7FFFFFFF)
+                      (16 #3FFFFFFF)
+                      (2 #7FFFFFFF) (2 #AFFFFFFF)},
+        visual{teleport},sound{mastery}
 onEnd: (spell_of_mastery)
 tab: spell

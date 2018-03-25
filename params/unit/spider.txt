@@ -6,6 +6,6 @@ def: 6
 speed: 20
 inborn: (organic climber)
 onHit: shell,hit{user},macro{poison},sound{spider_attack}
-onHarm: effect{blood},sound{spider_hit}
+onHarm: visual{blood},sound{spider_hit}
 onDeath: sound{spider_death}
 onMove: sound{step}

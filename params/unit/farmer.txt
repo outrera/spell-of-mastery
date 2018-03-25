@@ -6,6 +6,6 @@ def: 0
 will: 5
 inborn: (organic)
 onHit: shell,hit{user},sound{cut}
-onHarm: effect{blood},sound{male_hit}
+onHarm: visual{blood},sound{male_hit}
 onDeath: sound{male_die}
 onMove: sound{step}

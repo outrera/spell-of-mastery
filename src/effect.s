@@ -21,9 +21,6 @@ effect strip Name:
 
 effect add_item Name Amount: Target.add_item{Name Amount}
 
-//mod should really be a function
-effect mod Arg: Target.mod <= Arg
-
 effect tenant_mark Type:
 | Block = $world.block_at{TargetXYZ}
 | S = $world.units_get{TargetXYZ}.find{?type><Type}
@@ -74,19 +71,15 @@ effect macro Name:
 | when no M: bad "main/macro.txt doesnt define `[Name]`"
 | $effect{M Target TargetXYZ}
 
-effect impact Impact:
-| E = $world.effect{TargetXYZ Impact}
+effect visual Effect:
+| E = $world.visual{TargetXYZ Effect}
 | when Target: E.fxyz.init{Target.fxyz}
 
-effect effect Effect:
-| E = $world.effect{$xyz Effect}
-| E.fxyz.init{$fxyz}
-
-effect effect1 Effect:
+effect visual1 Effect: //this one guards against multiple instances
 | Type = "effect_[Effect]"
 | E = $world.units_get{TargetXYZ}.find{?type><Type}
 | when got E: leave
-| $world.effect{TargetXYZ Effect}
+| $world.visual{TargetXYZ Effect}
 
 effect sound Sound: $sound{Sound}
 
@@ -178,7 +171,7 @@ effect gateway:
 | less B: leave
 | T = $cell.gate
 | less T: leave
-| $world.effect{B.xyz teleport}
+| $world.visual{B.xyz teleport}
 | A = T.cell.block
 | B.move{T.xyz}
 | B.reset_goal
@@ -187,7 +180,7 @@ effect gateway:
   | BH = B.health
   | B.harm{0 AH}
   | A.harm{0 BH}
-| $world.effect{T.xyz teleport}
+| $world.visual{T.xyz teleport}
 | $sound{summon}
 
 effect interrupt: Target.interrupt
@@ -310,8 +303,8 @@ effect blowaway R BlowSelf:
       | B.move{TP}
       | for T Trail:
         | less got $world.units_get{T}.find{?type><effect_dustend}:
-          | $world.effect{T dustend}
-    | $world.effect{B.xyz dust}
+          | $world.visual{T dustend}
+    | $world.visual{B.xyz dust}
 
 effect jumpdown:
 | $reset_goal
@@ -422,14 +415,14 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< endwhen then
     else if Name >< resist then
       | when T.resisting:
-        | $world.effect{T.xyz resist}
+        | $world.visual{T.xyz resist}
         | T.sound{resist}
         | less got T.class.inborn.find{resist}: T.strip{resist}
         | leave
     else if Name >< shell then
       | less $assault{Target}: leave
       | when T.shelled:
-        | $world.effect{T.xyz shell}
+        | $world.visual{T.xyz shell}
         | T.sound{shell}
         | less got T.class.inborn.find{shell}: T.strip{shell}
         | leave

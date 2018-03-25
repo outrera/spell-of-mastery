@@ -1,6 +1,6 @@
 title: `Pentagram`
 check: clear,land,any
-onInit: impact{pentagram_appearance},sound{pentagram}
+onInit: visual{pentagram_appearance},sound{pentagram}
 onEnd: spawn{special_pentagram}
 icon: special_pentagram
 cost: 5

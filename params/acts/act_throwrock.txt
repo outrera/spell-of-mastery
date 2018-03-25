@@ -6,6 +6,6 @@ cool: 3
 mov: 4
 range: 3
 check: seen,unit
-onInit: missile{boulder},resist,harm{1},impact{explosion},sound{explosion}
+onInit: missile{boulder},resist,harm{1},visual{explosion},sound{explosion}
 onEnd: ()
 hint: boost

@@ -1,12 +1,11 @@
 icon: recall
-title: `Recall to Summoning Circle`
+title: `Recall to Pentagram`
 needsGene: (-leader)
 //lore: 2
 //cost: 1
 cool: 10
 check: pentagram
 hotkey: r
-onInit: effect{teleport},sound{summon},impact{teleport}
-       ,recall,pentagram,impact{teleport}
+onInit: visual{teleport},sound{summon},recall,pentagram,visual{teleport}
 onEnd: ()
 hint: recall

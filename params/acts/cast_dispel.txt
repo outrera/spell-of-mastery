@@ -7,6 +7,6 @@ range: 9000
 check: unit
 onInit: resist,strip{fear},strip{shell},strip{bless},strip{flyer},strip{hasted}
        ,strip{invisible},strip{invisible_on_attack}
-       ,impact{spell},sound{dispel}
+       ,visual{spell},sound{dispel}
 hint: heal_allies
 tab: spell

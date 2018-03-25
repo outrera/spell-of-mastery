@@ -14,18 +14,18 @@ swimmer: on{static}
 amphibian: on{static}
 organic: on{static}
 leader: on{static}
-fireaura: on{counter},harm{2},impact{fire_ring}
+fireaura: on{counter},harm{2},visual{fire_ring}
 poison: on{endturn},host,when{has_health.2},harm{1}
 hasted: on{endturn},inc{steps,4}
 invisible: on{act},strip{invisible}
-//shell: on{phys_harm},mod{block},sound{shell},impact{shell},strip{shell}
-regen: on{endturn},when{harmed resting},strip{poison},heal{1},effect{heal}
-regen_tenant: on{tenant_endturn},tenant,when{harmed resting},strip{poison},heal{1},effect{heal}
-burning: on{entry},tenant,harm{9},effect1{fire_ring}
-enemy_removes: on{entry},tenant,when{enemy},effect{pickup},self,remove
+//shell: on{phys_harm},mod{block},sound{shell},visual{shell},strip{shell}
+regen: on{endturn},when{harmed resting},strip{poison},heal{1},visual{heal}
+regen_tenant: on{tenant_endturn},tenant,when{harmed resting},strip{poison},heal{1},visual{heal}
+burning: on{entry},tenant,harm{9},visual1{fire_ring}
+enemy_removes: on{entry},tenant,when{enemy},visual{pickup},self,remove
 gateway: on{entry},gateway
 node_aura: on{cycle.12},tenant_mark{effect_aura}
-ttl: on{timeout},effect{teleport},sound{summon},remove
+ttl: on{timeout},visual{teleport},sound{summon},remove
 ttl_s: on{timeout},remove //silent ttl
 income1: on{tenant_endturn},tenant,mana{1}
 door_align: on{place},align{door}

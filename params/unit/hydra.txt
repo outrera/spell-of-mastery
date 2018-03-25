@@ -8,6 +8,6 @@ cooldown: 4
 speed: 28
 inborn: (organic regen amphibian)
 onHit: hydra_targets,when{enemy},shell,hit{user},macro{poison},sound{hydra_attack}
-onHarm: effect{blood},sound{hydra_hit}
+onHarm: visual{blood},sound{hydra_hit}
 onDeath: sound{hydra_hit}
 onMove: sound{step}
