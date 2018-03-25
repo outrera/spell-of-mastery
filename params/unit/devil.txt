@@ -4,7 +4,7 @@ health: 8
 atk: 1
 def: 6
 inborn: (organic)
-impact: shell,hit{user},sound{devil_attack}
-hit: effect{blood},sound{devil_hit}
-death: sound{devil_hit}
+onHit: shell,hit{user},sound{devil_attack}
+onHarm: effect{blood},sound{devil_hit}
+onDeath: sound{devil_hit}
 acts: (teleport act_punish)

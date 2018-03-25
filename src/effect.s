@@ -438,13 +438,13 @@ unit.effect Effect Target TargetXYZ =
         | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
         | leave
     else if Name >< insulate then RunActEffects<=0
-    else if Name >< user_attack then when $onAttack: $effect{$onAttack T T.xyz}
-    else if Name >< user_impact then
+    else if Name >< onAttack then when $onAttack: $effect{$onAttack T T.xyz}
+    else if Name >< onHit then
       if $range><1 and $xyz.2-T.xyz.2>1 then
         | $shot_missile{Target [boulder]
                         [shell [hit user] [impact explosion] [sound explosion]]}
       else
-        | $effect{$impact T T.xyz}
+        | $effect{$onHit T T.xyz}
     else if Name >< missile then
       | $shot_missile{(Target or XYZ) Args Es}
       | Es <= []

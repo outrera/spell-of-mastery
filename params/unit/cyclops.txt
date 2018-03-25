@@ -4,7 +4,7 @@ health: 20
 atk: 10
 def: 1
 inborn: (organic)
-impact: shell,hit{user},sound{cyclops_club}
-hit: effect{blood},sound{cyclops_hit}
-death: sound{cyclops_die}
+onHit: shell,hit{user},sound{cyclops_club}
+onHarm: effect{blood},sound{cyclops_hit}
+onDeath: sound{cyclops_die}
 onMove: sound{step}

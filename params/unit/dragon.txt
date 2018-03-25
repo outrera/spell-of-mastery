@@ -9,8 +9,8 @@ will: 15
 speed: 20
 inborn: (organic flyer)
 onAttack: sound{dragon_attack}
-impact: impact{incinerate},shell,hit{user},sound{dragon_flame}
-hit: effect{blood},sound{dragon_hit}
-death: sound{dragon_death}
+onHit: impact{incinerate},shell,hit{user},sound{dragon_flame}
+onHarm: effect{blood},sound{dragon_hit}
+onDeath: sound{dragon_death}
 onMove: sound{dragon_move}
 acts: (act_blowaway)

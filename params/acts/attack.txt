@@ -1,8 +1,8 @@
 icon: attack
 hotkey: t
 check: unit
-onInit: insulate,user_attack
-onHit: (user_impact)
+onInit: insulate,onAttack
+onHit: (onHit)
 range: user
 repeat: 0
 hint: attack

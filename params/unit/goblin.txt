@@ -6,7 +6,7 @@ def: 2
 range: 3
 mov: 5
 inborn: (organic)
-impact: shell,hit{user},sound{cut}
-hit: sound{goblin_hit}
-death: sound{goblin_die}
+onHit: shell,hit{user},sound{cut}
+onHarm: sound{goblin_hit}
+onDeath: sound{goblin_die}
 onMove: sound{step}

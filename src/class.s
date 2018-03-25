@@ -9,8 +9,8 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            acts/[] spells/0 summons/0 rooms/0 icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
-           onAttack/0 impact/0 impact_hit/0
-           hit/0 death/0 onMove/0 platform/0 gate/0 ascendSpeed/4}
+           onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
+           platform/0 gate/0 ascendSpeed/4}
   id                    //for unit counts table
   type/"[Bank]_[Class_name]"
   block/0               //acts as map block
@@ -43,12 +43,11 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   tier/Tier             //unit power-level
   mov/Mov               //movement points this unit gains per turn
   inborn/Inborn         //inborn abilities
-  onAttack/OnAttack     //on attack script
-  impact/Impact         //on impact script
-  impact_hit/Impact_hit //on impact hit script
-  hit/Hit               //on hurt script
-  death/Death           //on death script
-  onMove/OnMove         //on movement script
+  onAttack/OnAttack     //called when unit starts its attack
+  onHit/OnHit           //called when attack hits the enemy
+  onHarm/OnHarm         //called when unit receives damage
+  onDeath/OnDeath       //called when unit dies
+  onMove/OnMove         //called when unit enters a cell
   platform/Platform     //increased tenants position on screen
   gate/Gate             //gateway, teleporting units to other cell
 | when Spells: $acts <= [@$acts @Spells].list

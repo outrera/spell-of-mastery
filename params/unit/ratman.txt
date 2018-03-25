@@ -5,8 +5,8 @@ atk: 3
 def: 2
 will: 5
 inborn: (organic)
-impact: shell,hit{user},sound{cut}
-hit: effect{blood},sound{rat_death}
-death: sound{rat_death}
+onHit: shell,hit{user},sound{cut}
+onHarm: effect{blood},sound{rat_death}
+onDeath: sound{rat_death}
 onMove: sound{step}
 acts: (act_invisibility)

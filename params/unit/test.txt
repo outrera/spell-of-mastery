@@ -5,7 +5,7 @@ atk: 10
 def: 0
 summon: 0
 inborn: (flyer)
-impact: hit{user},sound{explosion}
-hit: effect{blood},sound{devil_hit}
-death: sound{dragon_death}
+onHit: hit{user},sound{explosion}
+onHarm: effect{blood},sound{devil_hit}
+onDeath: sound{dragon_death}
 onMove: sound{dragon_move}

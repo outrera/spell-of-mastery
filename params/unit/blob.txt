@@ -7,8 +7,8 @@ def: 0
 range: 3
 speed: 60
 //inborn: (ttl.10{})
-impact: shell,hit{user},sound{blob_attack}
-hit: effect{blood_undead},sound{blob_hit}
-death: sound{blob_hit}
+onHit: shell,hit{user},sound{blob_attack}
+onHarm: effect{blood_undead},sound{blob_hit}
+onDeath: sound{blob_hit}
 onMove: sound{step}
 acts: (act_blobspawn)

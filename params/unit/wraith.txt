@@ -6,8 +6,8 @@ atk: 3
 def: 2
 speed: 28
 inborn: (cursed flyer)
-impact: shell,hit{user},sound{cut}
-hit: effect{blood_undead},sound{wraith_hit}
-death: sound{wraith_die}
+onHit: shell,hit{user},sound{cut}
+onHarm: effect{blood_undead},sound{wraith_hit}
+onDeath: sound{wraith_die}
 onMove: sound{wraith_move}
 acts: (act_invisibility act_phase)

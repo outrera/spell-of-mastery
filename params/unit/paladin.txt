@@ -7,7 +7,7 @@ def: 6
 will: 10
 speed: 30
 inborn: (organic bless)
-impact: shell,hit{user},sound{cut}
-hit: effect{blood},sound{knight_hit}
-death: sound{male_die}
+onHit: shell,hit{user},sound{cut}
+onHarm: effect{blood},sound{knight_hit}
+onDeath: sound{male_die}
 onMove: sound{step}

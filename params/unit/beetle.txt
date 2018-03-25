@@ -7,7 +7,7 @@ mov: 4
 sight: 5
 speed: 48
 inborn: (organic)
-impact: shell,hit{user},sound{spider_attack}
-hit: effect{blood},sound{spider_hit}
-death: sound{spider_death}
+onHit: shell,hit{user},sound{spider_attack}
+onHarm: effect{blood},sound{spider_hit}
+onDeath: sound{spider_death}
 onMove: sound{step}

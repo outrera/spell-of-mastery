@@ -7,8 +7,8 @@ def: 3
 will: 10
 speed: 28
 inborn: (organic)
-impact: shell,hit{user},sound{cut}
-hit: effect{blood},sound{dwarf_hit}
-death: sound{dwarf_die}
+onHit: shell,hit{user},sound{cut}
+onHarm: effect{blood},sound{dwarf_hit}
+onDeath: sound{dwarf_die}
 onMove: sound{step}
 acts: (defend)

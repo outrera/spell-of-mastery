@@ -7,7 +7,7 @@ def: 1
 speed: 18
 inborn: (organic climber resist)
 onAttack: sound{lizard_attack}
-impact: shell,hit{user}//,sound{cut}
-hit: effect{blood},sound{lizard_hit}
-death: sound{devil_hit}
+onHit: shell,hit{user}//,sound{cut}
+onHarm: effect{blood},sound{lizard_hit}
+onDeath: sound{devil_hit}
 onMove: sound{lizard_move}

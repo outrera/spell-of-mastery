@@ -4,8 +4,8 @@ health: 4
 atk: 2
 def: 6
 inborn: (organic)
-impact: shell,hit{user},sound{cut}
-hit: effect{blood},sound{halfling_hit}
-death: sound{halfling_die}
+onHit: shell,hit{user},sound{cut}
+onHarm: effect{blood},sound{halfling_hit}
+onDeath: sound{halfling_die}
 onMove: sound{step}
 acts: (act_invisibility)

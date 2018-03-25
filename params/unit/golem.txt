@@ -6,7 +6,7 @@ atk: 12
 def: 2
 speed: 34
 inborn: ()
-impact: shell,hit{user},sound{golem_attack}
-hit: sound{golem_hit},effect{blood_undead}
-death: sound{golem_die}
+onHit: shell,hit{user},sound{golem_attack}
+onHarm: sound{golem_hit},effect{blood_undead}
+onDeath: sound{golem_die}
 onMove: sound{step}

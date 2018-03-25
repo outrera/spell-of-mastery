@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Implement firewall properly.
+- rename effect to visual
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse.
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Implement spell countering, using usual dispel spell, where player choices the unit that is being targeted by harmful spell and pays the mana amount required to dispel it. Dispeling a global enchantment should be a separate action, that would present player with menu of all enchantments and their owners

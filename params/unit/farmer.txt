@@ -5,7 +5,7 @@ atk: 2
 def: 0
 will: 5
 inborn: (organic)
-impact: shell,hit{user},sound{cut}
-hit: effect{blood},sound{male_hit}
-death: sound{male_die}
+onHit: shell,hit{user},sound{cut}
+onHarm: effect{blood},sound{male_hit}
+onDeath: sound{male_die}
 onMove: sound{step}

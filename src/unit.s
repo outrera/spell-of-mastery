@@ -410,8 +410,6 @@ unit.hit Damage Target =
 | Damage = if Damage><user then $atk else Damage
 | when Target.cursed and $blessed: Damage += (Damage*100)/100
 | $run_genes{attack}
-| ImpactHit = $class.impact_hit
-| when ImpactHit: $effect{ImpactHit Target Target.xyz}
 | Target.harm{Me Damage}
 
 unit.charging_act = $get{charge}.0
@@ -442,8 +440,8 @@ unit.harm Attacker Damage =
 | when Attacker: Attacker.sinned += Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $hp > 0:
-  | Effect = $class.hit
-  | when Effect: $effect{Effect Me $xyz}
+  | OnHarm = $class.onHarm
+  | when OnHarm: $effect{OnHarm Me $xyz}
   | when $anim><idle or $anim><move: $animate{hit}
   | when $charging:
     | $interrupt

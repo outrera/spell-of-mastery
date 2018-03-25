@@ -8,9 +8,9 @@ range: 6
 speed: 28
 inborn: (organic flyer)
 onAttack: sound{observer_attack}
-impact: hit{user}
-impact_hit: resist,impact{energy_ring},sound{observer_impact}
-hit: effect{blood},sound{observer_hit}
-death: sound{observer_die}
+onHit: hit{user}
+impact_onHarm: resist,impact{energy_ring},sound{observer_impact}
+onHarm: effect{blood},sound{observer_hit}
+onDeath: sound{observer_die}
 onMove: sound{observer_move}
 acts: (pentagram)

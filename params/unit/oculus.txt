@@ -7,7 +7,7 @@ sight: 10
 def: 5
 speed: 20
 inborn: (flyer organic)
-impact: shell,hit{user}
-hit: effect{blood},sound{oculus_move}
-death: sound{explosion}
+onHit: shell,hit{user}
+onHarm: effect{blood},sound{oculus_move}
+onDeath: sound{explosion}
 onMove: sound{oculus_move}

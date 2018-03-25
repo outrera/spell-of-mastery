@@ -5,7 +5,7 @@ atk: 4
 def: 1
 range: 6
 inborn: (organic)
-impact: shell,hit{user},sound{arrow_hit}
-hit: effect{blood},sound{elf_hit}
-death: sound{male_die}
+onHit: shell,hit{user},sound{arrow_hit}
+onHarm: effect{blood},sound{elf_hit}
+onDeath: sound{male_die}
 onMove: sound{step}
