@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- End turn as normal button, because that huge hourglass looks silly and can be clicked by mistake.
 - Rename `before` into `onShot` and `after` into `onHit`
 - Better UI, maybe new-age/astrology themed, scrolls are not magical enough.
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse.

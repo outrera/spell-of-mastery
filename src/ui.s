@@ -33,7 +33,6 @@ BrushPicker =
 PlayerWidget =
 PlayerPickers = 0
 PickedIconOverlay = 0
-PlayIcon =
 
 LastBrush = [0 0]
 
@@ -152,7 +151,7 @@ EditorTabs =
 begin_ingame Me Editor =
 | $main.music{playlist}
 | $world.editor <= Editor
-| EditorTabs.show <= Editor
+| for T EditorTabs: T.show <= Editor
 
 load_game Me NewGame Path =
 | begin_ingame Me 0
@@ -234,13 +233,13 @@ create_bank_list Me =
          | ItemList.pick{0}
 | BankList,ItemList
 
-create_editor_tabs Me =
-| PlayIconClick = Icon =>
-  | $world.new_game
-  | $unpause
-| PlayIcon <= icon data/play $img{icons_tab_play} click/PlayIconClick
-| PlayIcon.picked_fg <= $img{icons_tab_pause}
-| hidden: layH s/0 PlayIcon,spacer{8 0}
+create_play_button Me =
+| Icon = icon data/play $img{icons_tab_play} click/
+  | Icon =>
+    | $world.new_game
+    | $unpause
+| Icon.picked_fg <= $img{icons_tab_pause}
+| hidden{Icon}
 
 handle_brush_tab Me Picked =
 | if PanelTab><brush
@@ -297,7 +296,7 @@ create_icons_panel_tabs Me =
   | Icon.picked_overlay <= PickedIconOverlay
   | Icon
 | for Icon Icons: Icon.group <= Icons
-| layH{s/6 Icons}
+| Icons
 
 create_view_ui Me =
 | PlayerPickers <= map Player $world.players:
@@ -308,8 +307,6 @@ create_view_ui Me =
 | PlayerWidget <= hidden: layH PlayerPickers
 | BankList,ItemList = create_bank_list Me
 | BrushPicker <= hidden: layH: BankList,ItemList
-| IconsPanelTabs = create_icons_panel_tabs Me
-| EditorTabs <= create_editor_tabs Me
 | IPY = $height-IconsPanelBG.h
 | UnitActIconsLay <= hidden: layV s/14
                      layH{s/8 UnitActIcons.drop{UnitActIcons.size/2}}
@@ -317,17 +314,19 @@ create_view_ui Me =
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
 | ResourceCounters <= resource_counters $view
 | NotificationWidget <= notification_widget $view
+| IconsPanelTabs = create_icons_panel_tabs Me
+| PlayButton = create_play_button Me
+| EditorTabs <= [PlayButton]
 | EndTurnButton = icon data/endturn $img{icons_tab_endturn} click/|Icon=>$world.end_turn
+| HeaderIcons = layH s/8 [@IconsPanelTabs spacer{16 0} PlayButton spacer{140 0} EndTurnButton]
 | dlg: mtx
   |  0   0| $view
   |  0   0| ResourceCounters
   |  0   0| BrushPicker
   |  0 IPY| IconsPanelBG
-  | 140 IPY-28| IconsPanelTabs
-  | 640 IPY-28| EditorTabs
-  | 800-48 IPY-28 | EndTurnButton
-  | 142 $height-118| UnitActIconsLay
-  | 142 $height-110| MenuTab
+  | 140 IPY-28| HeaderIcons
+  | 146 $height-118| UnitActIconsLay
+  | 146 $height-110| MenuTab
   | 164 $height-20 | infoline
   | 0 $height-170 | NotificationWidget
   | $width-50 80 | GroundActIconsLay
