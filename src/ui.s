@@ -240,7 +240,7 @@ create_editor_tabs Me =
   | $unpause
 | PlayIcon <= icon data/play $img{icons_tab_play} click/PlayIconClick
 | PlayIcon.picked_fg <= $img{icons_tab_pause}
-| hidden: layH s/0 PlayIcon,spacer{8 0}//,BrushIcon
+| hidden: layH s/0 PlayIcon,spacer{8 0}
 
 handle_brush_tab Me Picked =
 | if PanelTab><brush
@@ -317,7 +317,7 @@ create_view_ui Me =
 | GroundActIconsLay <= hidden: layV s/4 GroundActIcons.flip
 | ResourceCounters <= resource_counters $view
 | NotificationWidget <= notification_widget $view
-| EndTurnButton = button 'END TURN' skin/hourglass: => $world.end_turn
+| EndTurnButton = icon data/endturn $img{icons_tab_endturn} click/|Icon=>$world.end_turn
 | dlg: mtx
   |  0   0| $view
   |  0   0| ResourceCounters
@@ -325,12 +325,12 @@ create_view_ui Me =
   |  0 IPY| IconsPanelBG
   | 140 IPY-28| IconsPanelTabs
   | 640 IPY-28| EditorTabs
+  | 800-48 IPY-28 | EndTurnButton
   | 142 $height-118| UnitActIconsLay
   | 142 $height-110| MenuTab
   | 164 $height-20 | infoline
   | 0 $height-170 | NotificationWidget
   | $width-50 80 | GroundActIconsLay
-  | $width-80 48 | EndTurnButton
   | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0 IPY | PlayerWidget
 
