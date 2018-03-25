@@ -71,9 +71,6 @@ player.notify Text =
 
 player.main = $world.main
 
-player.researching = $params.researching
-player.`=researching` R = $params.researching <= R
-
 player.lore = $params.lore
 player.`=lore` R = $params.lore <= R
 
@@ -98,7 +95,6 @@ player.clear =
 | $picked <= []
 | $leader <= $world.nil
 | $pentagram <= $world.nil
-| $researching <= 0
 | $mana <= 0
 | $lore <= 0
 | $params.lossage <= 0
@@ -174,7 +170,7 @@ alloc_ai_blockers Me =
 free_ai_blockers Me =
 | for U $units: less U.removed: when U.type >< unit_block:
   | U.free
-  
+
 player.make_move =
 | when $human: leave
 //|alloc_ai_blockers $world
@@ -196,8 +192,7 @@ player.add_item Name Amount =
   | when Amount < 0: leave 1
 | 1
 
-player.sound Name =
-| when $id >< $world.human.id: $main.sound{Name}
+player.sound Name = when $id >< $world.human.id: $main.sound{Name}
 
 player.lost_leader Leader =
 | Leaders = []

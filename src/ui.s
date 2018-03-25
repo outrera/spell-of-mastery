@@ -75,18 +75,6 @@ pick_main_menu Me pause/1 =
 | $main.music{"title.ogg"}
 | $pick{main_menu}
 
-research_act Me Unit Act =
-| O = Unit.owner
-| Needs = $player.lore-Act.lore
-| when Needs < 0:
-  | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
-  | leave
-| $main.show_message{'Research?' buttons/[yes,'Yes' no,'No']
-                     'Are you sure want to spend lore on this?'}
-| O.researching <= Act.name
-| Research = $main.params.acts.research
-| Unit.order.init{Research Unit}
-
 create_victory_dlg Me =
 | dlg: mtx
   |   0   0 | $img{ui_victory_bg}
@@ -446,20 +434,32 @@ ui.on_unit_pick Units =
 | As = 0
 | GAs = []
 | Unit = if Units.size then Units.0 else $world.nil
-| if PanelTab >< unit then
-     if Unit.has{menu} then
-       | MenuActName,XYZ,TargetSerial = Unit.get{menu}
-       | As <= $main.params.acts.MenuActName.menu
-     else As <= if Unit.removed then [] else Unit.acts.skip{?tab}
+| Acts = $main.params.acts
+| if Unit.has{menu} then
+     | MenuActName,XYZ,TargetSerial = Unit.get{menu}
+     | As <= if TargetSerial><research
+             then [Acts.m_yes Acts.m_no]
+             else Acts.MenuActName.menu
+  else if PanelTab >< unit then
+     | As <= if Unit.removed then [] else Unit.acts.skip{?tab}
   else if PanelTab >< summon or PanelTab >< spell then
      | Unit <= $world.human.leader
      | As <= Unit.acts.keep{?tab><PanelTab}
   else if PanelTab >< bag then
-     | Acts = $main.params.acts
      | As <= map K,A Unit.items: [A Acts."drop_[K]"]
      | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
   else leave
 | ui_update_panel_buttons Me Unit As GAs
+
+research_act Unit Act =
+| O = Unit.owner
+| Needs = O.lore-Act.lore
+| when Needs < 0:
+  | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
+  | leave
+| O.notify{"Research this?"}
+| Unit.owner.picked <= [Unit]
+| Unit.set{menu [Act.name Unit.xyz research]}
 
 actClickIcon Me Icon =
 | HKI = HotKeyInvoke
@@ -480,8 +480,8 @@ actClickIcon Me Icon =
   | TurnsLeft = Cool.0 + Cool.1 - Unit.world.turn
   | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
   | leave
-| when ResearchRemain
-  | research_act Me Unit Act
+| when ResearchRemain:
+  | research_act Unit Act
   | leave
 | when got Cost and Cost>0 and Cost>O.mana:
   | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
