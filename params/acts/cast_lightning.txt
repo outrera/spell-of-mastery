@@ -1,5 +1,4 @@
 icon: spell_lightning
-hotkey: l
 //lore: 5
 cost: 4
 //cool: 10

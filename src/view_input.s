@@ -329,8 +329,7 @@ world.update_cursor =
 | Marks = $marks.unheap
 | P = $human
 | if $act
-  then | when $act.check.unit:
-         | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
+  then | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
   else | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
        | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks
 | case View.brush
