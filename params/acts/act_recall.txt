@@ -6,7 +6,7 @@ needsGene: (-leader)
 cool: 10
 check: pentagram
 hotkey: r
-before: effect{teleport},sound{summon},impact{teleport}
+onInit: effect{teleport},sound{summon},impact{teleport}
        ,recall,pentagram,impact{teleport}
-after: ()
+onEnd: ()
 hint: recall

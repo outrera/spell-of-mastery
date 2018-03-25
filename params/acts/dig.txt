@@ -4,5 +4,5 @@ icon: spell_excavate
 range: 1
 repeat: 1
 check: any
-before: same_z,idle_void{0} //kludge: idle if goal is void
-impact: same_z,dig{target}
+onInit: same_z,idle_void{0} //kludge: idle if goal is void
+onHit: same_z,dig{target}

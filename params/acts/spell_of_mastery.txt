@@ -2,10 +2,10 @@ icon: spell_of_mastery
 //lore: 200
 //cost: 10
 check: any
-before: shake_screen{24},
+onInit: shake_screen{24},
        color_overlay{(2 #AFFFFFFF) (2 #7FFFFFFF)
                      (16 #3FFFFFFF)
                      (2 #7FFFFFFF) (2 #AFFFFFFF)},
         impact{teleport},sound{mastery}
-after: (spell_of_mastery)
+onEnd: (spell_of_mastery)
 tab: spell

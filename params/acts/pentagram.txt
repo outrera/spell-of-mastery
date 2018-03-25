@@ -1,7 +1,7 @@
 title: `Pentagram`
 check: clear,land,any
-before: impact{pentagram_appearance},sound{pentagram}
-after: spawn{special_pentagram}
+onInit: impact{pentagram_appearance},sound{pentagram}
+onEnd: spawn{special_pentagram}
 icon: special_pentagram
 cost: 5
 //lore: misc.tier1_lcost

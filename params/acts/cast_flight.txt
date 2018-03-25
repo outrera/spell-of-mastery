@@ -4,6 +4,6 @@ cost: 5
 cool: 10
 range: 9000
 check: unit
-before: add{flyer},impact{heal},sound{flight}
+onInit: add{flyer},impact{heal},sound{flight}
 hint: benefit
 tab: spell

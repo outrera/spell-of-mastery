@@ -3,4 +3,4 @@ title: `Yes`
 mov: 0
 check: self
 animate: No
-before: (yes)
+onInit: (yes)

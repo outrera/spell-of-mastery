@@ -4,6 +4,6 @@ icon: spell_firewall
 //cool: 5
 range: 9000
 check: any
-before: impact{fire_ring},sound{summon},spawn{special_firewall}
+onInit: impact{fire_ring},sound{summon},spawn{special_firewall}
 hint: firewall
 tab: spell

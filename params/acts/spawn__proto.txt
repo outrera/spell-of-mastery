@@ -3,7 +3,7 @@ lore: 0
 cost: 0
 speed: -1
 check: pentagram
-before: pentagram,sound{summon},caster{leader}
-after: pentagram,impact{teleport},spawn{auto}
+onInit: pentagram,sound{summon},caster{leader}
+onEnd: pentagram,impact{teleport},spawn{auto}
 hint: spawn
 tab: summon

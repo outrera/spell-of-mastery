@@ -4,6 +4,6 @@ title: `Invisibility`
 //cost: 2
 cool: 10
 check: owned,unit
-before: add{invisible},impact{spell},sound{invisibility}
-after: ()
+onInit: add{invisible},impact{spell},sound{invisibility}
+onEnd: ()
 hint: boost

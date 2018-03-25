@@ -195,12 +195,12 @@ ai.update_build =
 | Leader = $player.leader
 | Pentagram = $get_clean_pentagram
 | less Pentagram: leave 0
-| Spawns = Leader.acts.keep{?after_table.spawn^got}
+| Spawns = Leader.acts.keep{?onEndTable.spawn^got}
 | less Spawns.size: leave 0
 | Missing = PerCycle.missing_attackers
 | less got Missing: leave
 | for Type Missing:
-  | S = Spawns.find{?after_table.spawn >< Type}
+  | S = Spawns.find{?onEndTable.spawn >< Type}
   | when got S and Leader.can_do{S}:
     | Leader.order_act{S Me}
     | leave 1

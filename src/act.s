@@ -5,7 +5,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
          lore/0 cost/0 mov/1 cool/0 needs/[] needsGene/[]
          priority/50 range/0 speed/4 animate/No repeat/0
          menu/0 onMenu/0
-         check/unit before/[] impact/Impact after/[]}
+         check/unit onInit/[] onHit/OnHit onEnd/[]}
   title/Title
   icon/Icon
   hotkey/Hotkey //keyboard shortcut
@@ -28,24 +28,24 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   check/Check //what it can target (see Allowed below)
   menu/Menu
   onMenu/OnMenu
-  before/Before
-  impact/Impact
-  after/After
+  onInit/OnInit
+  onHit/OnHit
+  onEnd/OnEnd
   players/#FFFFFF //flags which players have access to this action
   flags //unit flags this actions sets up
-  before_table
-  after_table
+  onInitTable
+  onEndTable
   icon_gfx //icon graphics for fast access
-| $before_table <= $before.table
-| $after_table <= $after.table
+| $onInitTable <= $onInit.table
+| $onEndTable <= $onEnd.table
 | when $needsGene <> []:
   | when $needsGene.is_text or $needsGene.0><'-': $needsGene <= [$needsGene]
   | $needsGene <= map N $needsGene:
     | if N.is_text or N.0><'-' then [N] else []
-| when $cool>0: $before <= [[cool $cool] @$before]
+| when $cool>0: $onInit <= [[cool $cool] @$onInit]
 | less $title: $title <= $name.replace{_ ' '}
 | Flags = []
-| for E [@$before @$after]: case E [add Name]: push Name Flags
+| for E [@$onInit @$onEnd]: case E [add Name]: push Name Flags
 | $flags <= Flags
 | Allowed = [land water clear seen below outdoor owned ally non_leader organic will
              menu any unit empty self pentagram

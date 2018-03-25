@@ -2,6 +2,6 @@ icon: item_food
 hotkey: x
 speed: 4
 check: any
-before: animate{idle},when{harmed},sound{munch},heal{60},effect{pickup},add_item{food,-1}
+onInit: animate{idle},when{harmed},sound{munch},heal{60},effect{pickup},add_item{food,-1}
 
 

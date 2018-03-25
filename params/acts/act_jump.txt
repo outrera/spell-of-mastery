@@ -6,6 +6,6 @@ cool: 6
 mov: 4
 range: 1
 check: placeable,empty,below,seen
-before: jumpdown{0}
-after: ()
+onInit: jumpdown{0}
+onEnd: ()
 hint: boost

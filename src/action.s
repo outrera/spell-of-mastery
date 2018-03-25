@@ -140,11 +140,11 @@ custom_start Me =
 | U = $unit
 | when got@@it $act.animate: U.animate{it}
 | U.face{$xyz}
-| when $before: U.effect{$before $target $xyz}
+| when $onInit: U.effect{$onInit $target $xyz}
 custom_update Me =
 custom_finish Me =
 | U = $unit
-| when $after: U.effect{$after $target $xyz}
+| when $onEnd: U.effect{$onEnd $target $xyz}
 
 
 default_init Me =
@@ -183,16 +183,16 @@ action.cost =
 | when $target and $act.check.will: Cost += $target.class.will
 | Cost
 action.check = $act.check
-action.before = $act.before
-action.impact =
+action.onInit = $act.onInit
+action.onHit =
 | less $act: leave //in case it is just an animation
-| Impact = $act.impact
-| when got Impact:
+| OnHit = $act.onHit
+| when got OnHit:
   | Target = $target
-  | if Target then $unit.effect{Impact Target Target.xyz}
-    else $unit.effect{Impact 0 $xyz}
+  | if Target then $unit.effect{OnHit Target Target.xyz}
+    else $unit.effect{OnHit 0 $xyz}
 
-action.after = $act.after
+action.onEnd = $act.onEnd
 
 action.as_text = "#action{[$type] [$priority] [$target]}"
 action.init Act Target =

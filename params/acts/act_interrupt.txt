@@ -6,5 +6,5 @@ check: self
 menu: m_yes,m_no
 onMenu: notify{`Interrupt this creature? Are you sure?`}
 animate: No
-before: (interrupt)
+onInit: (interrupt)
 hint: interrupt

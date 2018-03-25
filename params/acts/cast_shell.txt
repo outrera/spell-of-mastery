@@ -4,6 +4,6 @@ cost: 1
 cool: 5
 range: 9000
 check: unit
-before: /*owner_units,*/add{shell},impact{shell},sound{shell}
+onInit: /*owner_units,*/add{shell},impact{shell},sound{shell}
 hint: benefit
 tab: spell

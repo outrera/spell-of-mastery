@@ -4,7 +4,7 @@ lore: misc.tier1_lcost
 cost: 100
 range: 9000
 check: any
-before: sound{pentagram}
-after: spawn{unit_telekinesis}
+onInit: sound{pentagram}
+onEnd: spawn{unit_telekinesis}
 hint: telekinesis
 tab: spell

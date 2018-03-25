@@ -7,6 +7,6 @@ hotkey: p
 range: 2
 mov: 2
 check: placeable,empty
-before: effect{teleport},sound{summon},self,set{alpha 0},set{delta 10}
-after: impact{teleport},teleport{self},self,set{alpha 255},set{delta -10}
+onInit: effect{teleport},sound{summon},self,set{alpha 0},set{delta 10}
+onEnd: impact{teleport},teleport{self},self,set{alpha 255},set{delta -10}
 hint: teleport

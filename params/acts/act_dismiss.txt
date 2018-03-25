@@ -6,5 +6,5 @@ check: self
 menu: m_yes,m_no
 onMenu: notify{`Dismiss this creature? Are you sure?`}
 animate: No
-before: sound{cancel},effect{teleport},remove
+onInit: sound{cancel},effect{teleport},remove
 hint: dismiss
