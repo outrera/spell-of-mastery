@@ -416,7 +416,7 @@ ui.update_act_icon I Act Count Unit =
 | when got Count: Number <= Count
 | Icon.text.init{[0 0 Number]}
 | Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'
-| Icon.frame.init{[3 3 Frame]}
+| Icon.frame.init{[3 3 icon_act]}
 | Icon.w <= Icon.fg.w
 | Icon.h <= Icon.fg.h
 | Icon.hotkey <= Act.hotkey
@@ -436,7 +436,7 @@ ui_update_panel_buttons Me Unit As GAs =
   | when Act.is_list:
     | Count <= Act.0
     | Act <= Act.1
-  | when Act.available{Unit}:
+  | when Unit.can{Act} or Unit.owner.can_research{Act}:
     | $update_act_icon{(if GAct then -I-1 else I) Act Count Unit}
     | I += 1
 

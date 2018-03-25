@@ -1,4 +1,4 @@
-use bits
+use bits macros
 
 type ai{player} world
 | $world <= $player.world
@@ -131,6 +131,14 @@ player.research_remain Act =
 | ResearchSpent = $research.(Act.name)
 | ResearchRemain = Act.lore - ResearchSpent
 | ResearchRemain
+
+player.enabled Act = Act.players^get_bit{$id}<>0
+
+player.researched Act = $research_remain{Act}<<0
+
+player.can_research Act =
+| when $researched{Act}: leave 0
+| Act.needs.all{Ns=>Ns.any{N=>$researched{N}}}
 
 player.units =
 | PID = $id

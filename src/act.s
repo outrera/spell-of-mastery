@@ -140,17 +140,11 @@ world.turn_act State Players ActNames =
   | less got Act: bad "missing act [ActName]"
   | for Id Players: Act.players <= Act.players^set_bit{Id State}
 
-act.enabled Player = $players^get_bit{Player.id}<>0
+unit.earned Act =
+| geneCheck N = if N.is_list then not $has{N.1} else $has{N}
+| Act.needsGene.all{?all{&geneCheck}}
 
-act.researched Player =
-| $needs.all{Ns=>Ns.any{N=>Player.research_remain{Me}<<0}}
-
-act.earned Unit =
-| geneCheck N = if N.is_list then not Unit.has{N.1} else Unit.has{N}
-| when $needsGene.any{Ns=>not Ns.any{&geneCheck}}: leave 0
-
-//checks if specific act is availalble for particular unit
-act.available Unit =
-| $enabled{Unit.owner} and $researched{Unit.owner} and $earned{Unit}
+//is specific act is availalble for particular unit?
+unit.can Act = $owner.enabled{Act} and $owner.researched{Act} and $earned{Act}
 
 export act

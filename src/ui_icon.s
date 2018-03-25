@@ -43,6 +43,8 @@ type icon.widget{fg data/0 click/(Icon=>)}
    group //use for exclusive widgets, like radio buttons or tabs
    //popup/icon_popup{}
 
+ResearchIcon = 0
+
 icon.draw G PX PY =
 | less $fg: leave
 | X = PX
@@ -59,6 +61,12 @@ icon.draw G PX PY =
     then | XX,YY,Overlay = $picked_overlay
          | G.blit{X+XX Y+YY Overlay}
     else G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
+| Unit = $unit
+| ActName = $data
+| when Unit and not Unit.owner.researched{Unit.main.params.acts.ActName}:
+  | less ResearchIcon: ResearchIcon <= skin{'icon_research'}
+  | RI = ResearchIcon
+  | G.blit{X Y+$fg.h-RI.h RI}
 | when $grayed:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
   | Ov = DisabledIconOverlay
@@ -94,14 +102,13 @@ icon.infoline =
 | Info = Act.title
 | Number = $text.2
 | Cool = Unit.cooldown_of{ActName}
-| ResearchRemain = Unit.owner.research_remain{Act}
 | Cost = Act.cost
 | if Cool then
     | Info <= "[Info] ([Cool.0+Cool.1-Unit.world.turn] TURNS TO RECHARGE)"
-  else if ResearchRemain then
+  else if not Unit.owner.researched{Act} then
     | Info <= "research [Info] ([Act.lore] LORE)"
   else when got Cost and Cost:
-    | Info <= "cast [Info] ([Cost] MANA)"
+    | Info <= "[Info] ([Cost] MANA)"
 | Info.upcase
 
 export minimap icon

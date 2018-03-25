@@ -54,7 +54,7 @@ unit.ai_ability_sub Act =
 | when Act.mov > $mov: leave 0
 | when $owner.mana < Act.cost: leave 0
 | when $cooldown_of{Act.name}: leave 0
-| less Act.available{Me}: leave 0
+| less $owner.enabled{Act} and $earned{Act}: leave 0
 | when Act.hint >< dismiss: leave 0
 | when Act.hint >< pentagram:
   | less $owner.pentagram.removed: leave 0
