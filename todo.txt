@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Rename `before` into `onShot` and `after` into `onHit`
+- Implement firewall properly.
 - Better UI, maybe new-age/astrology themed, scrolls are not magical enough.
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse.
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.

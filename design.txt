@@ -29,7 +29,7 @@ Spells:
 - Bless (law): target gains ability to harm undead and break magic doors.
 - Curse (chaos): makes target immune to non-magical weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible. Doing any action beside movement would cancel invisibility.
-- Firewall (chaos): creates a wall of fire at empty space, damaging creatures entering it. One wall burns for 10 turns, while cooldown is 5 turns, allowing wizard to support two walls at any given time.
+- Firewall (chaos): sets ground on fire, damaging creatures entering it. Fire expands for several turn.
 - Flight (law): target gains ability to fly.
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health.
 - Subvert (law): gain control over the target creature by spending mana equivalent to creature's willpower.
@@ -74,6 +74,10 @@ Leader Abilities:
 - Fireball (chaos): throws a cheap fireball.
 - Guardian (law): summons a turret, that can attack nearby enemies.
 
+Creature Abilities:
+- Invisibility: becomes invisible until the next non-movement action.
+- Phase Shift: phases through 1-tile walls.
+
 Creature Properties:
 - Leader: this creature is a leader. If it dies and its owner has no other leaders, then its owner loses.
 - Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near an non-afraid enemy, like moving into adjanced cell, or ending its turn in a cell near an enemy. Allied units can still swap places with engaged unit, takin its place.
@@ -92,8 +96,7 @@ Creature Properties:
 - Afraid: creature can't attack.
 - Regen: creature restores 1 hit point at the end of its turn, if it isn't engaged and has full defense.
 - Organic: non-undead and non-mechanical units can be target by attacks like life stealing.
-- Incorporeal: walks through doors and 1-tile walls (implementable through special teleport ability).
-- Seethrough: obstacles don't block this creature's sight
+- Supravision: obstacles don't block this creature's sight
 - Darkvision: this creature doesn't suffer sight penalty at night.
 - Sinner: creature has spilled blood by killing somebody. Such creatures are vulneraly to specific abilities, like devil's punish ability.
 - Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow.

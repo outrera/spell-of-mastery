@@ -3,7 +3,7 @@ title: `Phase Shift`
 hotkey: p
 //lore: 5
 //cost: 3
-//cool: 10
+//cool: 5
 range: 2
 mov: 2
 check: placeable,empty
