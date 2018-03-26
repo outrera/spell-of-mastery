@@ -1,0 +1,8 @@
+icon: act_face
+title: `Look At`
+hotkey: f
+mov: 0
+range: 1
+check: any
+onInit: animate{idle},face
+hint: face

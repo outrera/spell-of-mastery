@@ -327,6 +327,9 @@ effect victory Player Reason:
 | WP.winner <= Player
 | WP.victory_type <= Reason
 
+effect face:
+| $face{TargetXYZ}
+
 effect align How:
 | less How><door: bad "effect align: cant [How]-align"
 | X,Y,Z = $xyz

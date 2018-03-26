@@ -41,6 +41,7 @@ type unit.$class{Id World}
   goal_act //what to do with the goal
   host //what unit hosts this sprite
   host_serial //when host dies, its serial changes
+  fatigue //fatigued unit will less moves
   mov //movement points remained this turn
   hp // hit points
   def //defense points remained
@@ -126,6 +127,8 @@ unit.size =
 | S = $sprite.size
 | if $height then S else [S.0 S.1 0]
 
+unit.moves = max 0 $mov-$fatigue
+
 unit.alive = $hp > 0
 unit.harmed = $hp < $class.hp
 
@@ -161,6 +164,7 @@ unit.init Class =
     | $world.active.push{Me}
   | $active <= 1
   | $mov <= $class.mov
+  | $fatigue <= 0
   | $will <= $class.will
   | $handled <= 0
   | $aistate <= \initial
@@ -386,7 +390,7 @@ heal_unit Me Amount =
 | $hp += min Amount $class.hp-$health
 
 unit.counter_attack Attacker =
-| less $owner.id <> $world.player and $mov>0 and $atk: leave
+| less $owner.id <> $world.player and $moves>0 and $atk: leave
 | when $afraid or no $enemies_in_range.find{?id><Attacker.id}: leave
 | less $can_attack{$cell Attacker.cell}: leave
 | $order_at{Attacker.xyz 0}
@@ -394,8 +398,8 @@ unit.counter_attack Attacker =
 //action goes through target`s defense
 unit.assault Target =
 | Def = Target.def
-| when $invisible: Def <= min{2 Def}
-| Hit = min{Def $mov}
+| when $invisible: Def <= min{1 Def}
+| Hit = min{Def $moves}
 | $mov -= Hit
 | Def -= Hit
 | when Def > 0:

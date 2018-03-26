@@ -3,7 +3,7 @@ title: `Jump Down`
 //lore: 0
 //cost: 0
 cool: 6
-mov: 4
+mov: 2
 range: 1
 check: placeable,empty,below,seen
 onInit: jumpdown{0}

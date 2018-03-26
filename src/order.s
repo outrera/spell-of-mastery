@@ -24,7 +24,7 @@ unit.order_at Goal Act =
 | when $afraid and Act.name<>move and Act.name<>swap:
   | $owner.notify{"Unit is too scared to perform any action!"}
   | leave
-| when $mov < Act.mov:
+| when $moves < Act.mov:
   | $owner.notify{"Not enough moves ([Act.mov] required)"}
   | leave
 | when Act.name><move: Goal <= 0 //otherwise it will hung in swap-loop
@@ -34,10 +34,10 @@ unit.order_at Goal Act =
   | less Move.size
     | $owner.notify{'Cant move there'}
     | leave
-| when $owner.human and Act.tab><spell and Act.range>1 and Act.range<9000:
+| when $owner.human and Act.name<>attack and Act.range>>1 and Act.range<9000:
   | Move = Units.keep{?type><mark_cast}
   | less Move.size
-    | $owner.notify{'Cant cast there'}
+    | $owner.notify{'Out of range!'}
     | leave
 | $reset_goal
 | $goal_act <= Act

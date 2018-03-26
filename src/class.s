@@ -5,7 +5,7 @@ ClassIdCounter = 1
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            unit/0 box_xy/[0 0] aux/0 speed/0 cooldown/24
            active/0
-           mov/0 health/0 atk/0 def/0 sight/No range/0 will/0 inborn/[]
+           mov/0 stamina/1 health/0 atk/0 def/0 sight/No range/0 will/0 inborn/[]
            acts/[] spells/0 summons/0 rooms/0 icon/0 title/0 item/0
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
@@ -23,6 +23,8 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   speed/Speed           //cycles to move between cells
   ascendSpeed/AscendSpeed //how many pixels/cycle flyer can climb
   active/Active         //update unit each cycle?
+  mov/Mov               //movement points this unit gains per turn
+  stamina/Stamina       //fatigue decrement speed
   hp/Health             //health points
   atk/Atk               //damage this unit deals on attack
   def/Def               //how many moves it takes to hit this unit
@@ -41,7 +43,6 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   movable/Movable       //can move
   counter/Counter       //counter-attack script
   tier/Tier             //unit power-level
-  mov/Mov               //movement points this unit gains per turn
   inborn/Inborn         //inborn abilities
   onAttack/OnAttack     //called when unit starts its attack
   onHit/OnHit           //called when attack hits the enemy

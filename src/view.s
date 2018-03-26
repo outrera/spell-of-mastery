@@ -105,9 +105,9 @@ view.infoline =
 | Unit = ""
 | less Us.end:
   | U = Us.0
-  | Stats = "M:[U.mov]/[U.class.mov] H:[U.health]/[U.class.hp]"
-  | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def] S:[U.sight] R:[U.range]"
-  | Stats <= "[Stats] W:[U.will]/[U.class.will]"
+  | Stats = "M:[U.moves]/[U.class.mov] H:[U.health]/[U.class.hp]"
+  | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def] F:[U.fatigue]-[U.stamina]"
+  | Stats <= "[Stats] S:[U.sight] R:[U.range] W:[U.will]/[U.class.will]"
   | when U.charging:
     | CAct, Charge, CCost, TId = U.get{charge}
     | Stats <= "[Stats] ([CAct.title]: [Charge]/[CCost])"

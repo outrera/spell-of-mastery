@@ -254,7 +254,11 @@ update_next_action Me =
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0
-| $mov -= $action.act.mov
+| AM = $action.act.mov
+| when AM:
+  | $mov -= AM
+  | Fat = $action.act.fatigue
+  | when Fat: $fatigue += Fat+$fatigue/2
 | center_on_actor Me
 | $action.start
 | when $anim><move: $pick_facing{$facing}

@@ -12,13 +12,14 @@ unit.new_turn =
 | when Remove: $strip{?amount><No} //strip genes with zero duration
 | for Name,Params RunEs: $run_gene{Name Params Me $xyz}
 | $mov <= $class.mov
+| $fatigue <= max 0: min $fatigue-$stamina $mov-1
 | $will <= $class.will
 
 unit.end_turn =
 | Resting = $def >< $class.def and not $engaged
 | when $threatened: $engaged <= 1 //ended its turn near enemy?
 | less $engaged:
-  | DefInc = max 0: min $mov $class.def-$def
+  | DefInc = max 0: min $moves $class.def-$def
   | $def += DefInc
   | $mov -= DefInc
 | when $charging:

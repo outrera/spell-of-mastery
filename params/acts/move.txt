@@ -3,5 +3,6 @@ priority: 50
 range: 0
 speed: 4
 mov: 1
+fatigue: 0
 check: any
 hint: move

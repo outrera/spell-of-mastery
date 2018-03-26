@@ -2,7 +2,7 @@ use util macros
 
 
 type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
-         lore/0 cost/0 mov/1 cool/0 needs/[] needsGene/[]
+         lore/0 cost/0 mov/1 fatigue/1 cool/0 needs/[] needsGene/[]
          priority/50 range/0 speed/4 animate/No repeat/0
          menu/0 onMenu/0
          check/unit onInit/[] onHit/OnHit onEnd/[]}
@@ -15,6 +15,7 @@ type act{name title/0 icon/No hotkey/0 hint/0 tab/0 room/0
   tab/Tab //UI tab where this action appears
   room/Room // this act places room scaffolds
   mov/Mov //movement points require to execute this action
+  fatigue/Fatigue
   lore/Lore //amount of lore required to research this action
   cost/Cost //how much to cast it
   cool/Cool //action cooldown
@@ -64,6 +65,9 @@ act.validate Actor XYZ Target Invalid =
 | T = $check
 | less Invalid: Invalid <= | M =>
 | O = Actor.owner
+| when Actor.moves < $mov:
+  | Invalid{"Needs [$mov] movement points."}
+  | leave 0
 | less O.seen{XYZ}:
   | Invalid{"Needs seen territory."}
   | leave 0
@@ -80,14 +84,14 @@ act.validate Actor XYZ Target Invalid =
     | Invalid{"Needs pentagram."}
     | leave 0
   | when Wr.block_at{P.xyz}:
-    | Invalid{"Pentagram is blocked"}
+    | Invalid{"Pentagram is blocked."}
     | leave 0
 | when T.clear:
   | less Actor.cell.is_floor_empty:
-    | Invalid{"Needs clear floor"}
+    | Invalid{"Needs clear floor."}
     | leave 0
 | when T.empty and Wr.block_at{XYZ}:
-  | Invalid{"Needs empty floor"}
+  | Invalid{"Needs empty floor."}
   | leave 0
 | Below = Wr.at{XYZ.0 XYZ.1 XYZ.2-1}
 | when T.land and (Below.liquid or Below.type><void):
@@ -118,7 +122,7 @@ act.validate Actor XYZ Target Invalid =
   | Invalid{"Needs to be in line of sight."}
   | leave 0
 | when T.below and XYZ.2>>Actor.xyz.2:
-  | Invalid{"Needs lower target"}
+  | Invalid{"Needs lower target."}
   | leave 0
 | when T.placeable and not Actor.placeable_at{Wr.cellp{XYZ}}:
   | Invalid{"Needs place where this unit can stand."}

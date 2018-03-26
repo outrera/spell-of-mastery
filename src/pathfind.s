@@ -171,7 +171,7 @@ path_len Cell =
 | C
 
 unit.attack_cost = if $afraid then 9000 else 1
-unit.jump_cost = 4
+unit.jump_cost = 1
 
 can_jump Src Dst = Dst.empty and Dst.floor-Dst>1
 
@@ -180,30 +180,30 @@ unit.can_attack Src Dst = (Dst.z-Src.z) << 1 or $can_move{}{Me Src Dst}
 unit.reachable =
 | Xs = []
 | XYZ = $xyz
-| less $engaged: when $mov>0: $find{$mov
+| less $engaged: when $moves>0: $find{$moves
   | Dst =>
     | R = \block
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
       else if $owner.id <> B.owner.id then Type <= 0
-      else if B.mov<1 /*or B.engaged*/ then Type <= 0
+      else if B.moves<1 /*or B.engaged*/ then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | for E $nearby_enemies_at{Dst.xyz}:
       | when not E.afraid and $can_attack{E.cell $world.cellp{XYZ}}:
         | R <= \block //engage
-      | when $range><1 and not $afraid and $mov >> Dst^path_len+1:
+      | when $range><1 and not $afraid and $moves >> Dst^path_len+1:
         | when $can_attack{Dst E.cell}: push [attack E.cell] Xs
     | R}
 | less $flyer or $climber: for N $cell.neibs: when N.empty:
   | F = N.floor
   | less F.block:
-    | when N-F>1 and $mov>>$jump_cost:
+    | when N-F>1 and $moves>>$jump_cost:
       | less got Xs.find{?1<>F}: push [jump F] Xs
-| when $range><1 and not $afraid and $mov>>1:
+| when $range><1 and not $afraid and $moves>>1:
   | for E $enemies_in_range:
     | when $can_attack{$cell E.cell}: push [attack E.cell] Xs
-| when $range>1 and not $afraid and $mov>>1:
+| when $range>1 and not $afraid and $moves>>1:
   | for E $enemies_in_range: push [attack E.cell] Xs
 | Xs
