@@ -61,9 +61,6 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $world.main
 
-Facings = [[-1 -1] [0 -1] [1 -1] [1 0] [1 1] [0 1] [-1 1] [-1 0]]
-unit.direction = Facings.$facing
-
 unit.picked = $flags^get_bit{1}
 unit.`=picked` State = $flags <= $flags^set_bit{1 State}
 
@@ -395,10 +392,18 @@ unit.counter_attack Attacker =
 | less $can_attack{$cell Attacker.cell}: leave
 | $order_at{Attacker.xyz 0}
 
+unit.attack_bonus Target =
+| Bonus = 0
+| case $sees_facing{Target}
+  side | Bonus += 1
+  back | Bonus += 3
+| Bonus += max -2: min 2 $xyz.2-Target.xyz.2
+| when $invisible: Bonus += 2
+| Bonus
+
 //action goes through target`s defense
 unit.assault Target =
-| Def = Target.def
-| when $invisible: Def <= min{1 Def}
+| Def = max 0 Target.def-$attack_bonus{Target}
 | Hit = min{Def $mov}
 | $mov -= Hit
 | Def -= Hit
@@ -504,6 +509,15 @@ unit.environment_updated =
 unit.face XYZ =
 | XY = (XYZ-$xyz).take{2}{?sign}
 | less XY >< [0 0]: $facing <= Dirs.locate{(XYZ-$xyz).take{2}{?sign}}
+
+unit.direction = Dirs.($facing/2*2)
+
+unit.sees_facing Target =
+| D = (Target.xyz-$xyz).take{2}{?sign}
+| TD = Target.direction
+| if D >< TD then \back
+  else if D >< -TD then \front
+  else \side
 
 unit.sound SoundName = $world.sound_at{$xyz $id^not SoundName}
 

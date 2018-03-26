@@ -6,12 +6,12 @@ General:
 - Moves determines how many movement point or steps this unit gains per turn. One move allows moving one map square. The more complex is the action the more moves it will require per turn.
 - Health determines how much damage that unit could take, before perishing.
 - Attack determines how many health points that creature's attack removes from victim on its usual attack.
-- Defense determines how many moves it would cost for other creature to attack this one. While it doesn't take much strength to kill a rat, yet rat is a very agile creature, so it takes a lot of speed to hit it and really slow moving creature wont be able to catch a rat at all. At the same time, bat being fast, may bite some unarmored creature and run away. Player may pick against which attacker his creature should concentrate its defense for the next turn, ignoring attacks from other ones. Lost defense points are regenerated at the end of a turn, if creature is not engaged, based on remaining movement points. A creature that successfuly defended can counter-attack, if it has some movement points.
+- Defense determines how many moves it would cost for other creature to attack this one. While it doesn't take much strength to kill a rat, yet rat is a very agile creature, so it takes a lot of speed to hit it and really slow moving creature wont be able to catch a rat at all. At the same time, bat being fast, may bite some unarmored creature and run away. Player may pick against which attacker his creature should concentrate its defense for the next turn, ignoring attacks from other ones. Lost defense points are regenerated at the end of a turn, if creature is not engaged, based on remaining movement points. A creature that successfuly defended can counter-attack, if it has some movement points. Creatures defending against attacks coming from below get defence bonus (upto +2), while attacks from above decrease defence. Creature's facing direction also affects its defence: creature hit from side gets -1 penalty to defence, creature hit from back gets -3 penalty to defence.
 - Fatigue decreases movement points and grows exponentially from performing actions. Each turn fatigue is decreased by creature's stamina.
 - Sight determines how far this unit sees.
 - Range determines how far this creature can attack. Not that for artillery units range is usually longer than their sight.
 - Will stat determines how much mana that creature can channel into its spellcasting per turn and ho much additional mana it will cost to cast harmful enchantment onto this creature. For example, if somebody is trying to cast subvert spell onto a creature, he will have to spent subvert's spell cost plus that creature's will power.
-- Typial humanoid has 6 moves per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5, preventing leader to be able to run away from most creatures. Casting spell or attacking requires 4 moves. Haste gives +4 moves, allowing most units to attack twice.
+- Typial humanoid creature has 6 moves per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5, preventing leader to be able to run away from most creatures. Casting spell or attacking requires 4 moves. Haste gives +4 moves, allowing most units to attack twice.
 - Tier 1 creature costs 5 mana, while ultimate creature, dragon, costs 20.
 - Fall damage equals to FallHeight*3-2
 
@@ -76,7 +76,7 @@ Leader Abilities:
 - Guardian (law): summons a turret, that can attack nearby enemies.
 
 Creature Abilities:
-- Look at: changes creature's facing direction, which affects creature's defence. Creature hit from side gets -1 penalty to defence, creature hit from back gets -3 penalty to defence.
+- Look at: changes creature's facing direction.
 - Invisibility: becomes invisible until the next non-movement action.
 - Phase Shift: phases through 1-tile walls.
 
@@ -91,7 +91,7 @@ Creature Properties:
 - Poison: creature can't regenerate and loses health with time, until health drops to 1 or heal is cast.
 - Fire Aura: attacker gets damaged equivalent to their own damage, when melee attacking this creature.
 - Hasted: creature gains additional 2 additional moves per turn.
-- Invisible: invisible creatures cannot be seen or targeted by enemy players, and are not affected by engagement, their attacks ignore defense, using fixed value of 2.
+- Invisible: invisible creatures cannot be seen or targeted by enemy players, and are not affected by engagement, their attacks gain +2 bouns against target's defence.
 - Shell: creature is invincible to the next physical attack.
 - Resisting: creature is invincible to the next harmful magical effect.
 - Flying: creature can move over any terrain and gains addition sight. Flying units are unaffected by fall damage.

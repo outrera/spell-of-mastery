@@ -105,8 +105,14 @@ view.infoline =
 | Unit = ""
 | less Us.end:
   | U = Us.0
+  | Ps = $picked
+  | P = if Ps.size then Ps.0 else 0
+  | Bonus = if P and P.id<>U.id then P.attack_bonus{U} else 0
+  | DI = if Bonus > 0 then "-[Bonus]"
+         else if Bonus < 0 then "[-Bonus]"
+         else ""
   | Stats = "M:[U.moves]:[U.mov]/[U.class.mov] H:[U.health]/[U.class.hp]"
-  | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def] F:[U.fatigue]-[U.stamina]"
+  | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def][DI] F:[U.fatigue]-[U.stamina]"
   | Stats <= "[Stats] S:[U.sight] R:[U.range] W:[U.will]/[U.class.will]"
   | when U.charging:
     | CAct, Charge, CCost, TId = U.get{charge}
