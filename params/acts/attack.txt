@@ -1,5 +1,6 @@
 icon: attack
 hotkey: t
+fatigue: 2
 check: unit
 onInit: insulate,onAttack
 onHit: (onHit)
