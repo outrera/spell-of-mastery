@@ -399,7 +399,7 @@ unit.counter_attack Attacker =
 unit.assault Target =
 | Def = Target.def
 | when $invisible: Def <= min{1 Def}
-| Hit = min{Def $moves}
+| Hit = min{Def $mov}
 | $mov -= Hit
 | Def -= Hit
 | when Def > 0:
