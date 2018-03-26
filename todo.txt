@@ -1,8 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Ground advantage: cretures defending on lower ground have defence penalty. 
-- world.save could be refactored by moving unit related serialization into unit methods
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. The spells must be pre-selected by player, based on difficulty. Additional spells could be gained by spying.
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Move unit stat icons into info line, so player won't have to select the creature to see its stats.

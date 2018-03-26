@@ -18,26 +18,28 @@ action.load IdMap Saved =
 | $xyz.init{XYZ}
 
 
+unit.serialize = //unit serializer for savegames
+| Active = 0
+| when $active:
+  | Genes = if $genes.end then 0
+            else $genes.map{E=>[E.when E.name E.amount E.params]}
+  | Host = if $host then $host.id else 0
+  | Goal = if $goal then [$goal.id $goal_act.name] else 0
+  | Path = if $path.end then 0 else [$path 0]
+  | Active <= list $from $anim $anim_step $anim_wait
+                   $fatigue $cooldown Genes Host Goal Path
+                   $action.save $ordered.save $next_action.save
+                   $mov $def
+| Facing = $facing
+| when $sprite.id <> $default_sprite.id: Facing <= [$sprite.id Facing]
+| list $type $id $serial $owner.id $xyz $fxyz Facing
+       $flags $hp Active
+
 world.save =
 | ActivePlayers = dup 32 0
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
-  | Active = 0
-  | when U.active:
-    | Genes = if U.genes.end then 0
-              else U.genes.map{E=>[E.when E.name E.amount E.params]}
-    | Host = if U.host then U.host.id else 0
-    | G = U.goal
-    | Goal = if G then [G.id U.goal_act.name] else 0
-    | Path = if U.path.end then 0 else [U.path 0]
-    | Active <= list U.from U.anim U.anim_step U.anim_wait
-                     U.fatigue U.cooldown Genes Host Goal Path
-                     U.action.save U.ordered.save U.next_action.save
-                     U.mov U.def
-  | Facing = U.facing
-  | when U.sprite.id <> U.default_sprite.id: Facing <= [U.sprite.id Facing]
-  | list U.type U.id U.serial U.owner.id U.xyz U.fxyz Facing
-         U.flags U.hp Active
+  | U.serialize
 | $params.view_zlock <= $view.zlock
 | $params.turn <= $turn
 | $params.player <= $player
@@ -81,6 +83,47 @@ remap_tids Me LookupTable Xs =
       | when H>0: times I H: Rs.(Z+I) <= Ps.I
   | Rs
 
+world.deserialize_unit IdMap X =
+| [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active] = X
+| U = $players.Owner.alloc_unit{Type}
+| less Active: U.change_owner{$players.0} //kludge
+| U.serial <= Serial
+| case XYZ A,B:
+  | XYZ <= A
+  | U.from.init{B}
+| U.hp <= HP
+| U.move{XYZ}
+| U.fxyz.init{FXYZ}
+| when Facing.is_list:
+  | U.sprite <= $main.sprites.(Facing.0)
+  | Facing <= Facing.1
+| U.pick_facing{Facing}
+| when Active:
+  | [From Anim AnimStep AnimWait Fatigue Cool Genes Host Goal Path
+     Action Ordered NextAction Mov Def @More] = Active
+  | U.mov <= Mov
+  | U.fatigue <= Fatigue^~{unused 0}
+  | U.def <= Def
+  | U.from.init{From}
+  | U.animate{Anim}
+  | U.anim_step <= AnimStep
+  | U.anim_wait <= AnimWait
+  | U.cooldown <= Cool
+  | for E U.genes: $free_gene{E}
+  | U.genes.heapfree
+  | U.genes <= if Genes.is_list and not Genes.end
+               then Genes{E=>$new_gene{@E}}
+               else []
+  | when Path:
+    | P = Path.0.enheap
+    | U.path.heapfree
+    | U.path <= P
+  | U.host <= [Host Goal Action Ordered NextAction]
+| U.flags <= Flags
+| when U.leader: U.owner.leader <= U
+| when U.ai >< pentagram: U.owner.pentagram <= U
+| IdMap.Id <= U
+
 world.load Saved =
 | $clear
 | $w <= Saved.w
@@ -105,7 +148,7 @@ world.load Saved =
 //| StartTime = clock
 //| say "world.load: update_move_map_ took [clock{}-StartTime]"
 | $cycle <= Saved.cycle
-| IdMap = t
+| IdMap = t //used to remap old ids to new ones
 | for X Saved.players
   | [Id Name Human Color Picked Moves Params Research Mana] = X
   | P = $players.Id
@@ -126,48 +169,8 @@ world.load Saved =
       | if Dst.size><Src.size then Src.init{Src}
         else for J WH: Dst.J <= Src.J
 | $human <= $players.(Saved.player)
+| for X Saved.units: $deserialize_unit{IdMap X}
 | Acts = $main.params.acts
-| Sprites = $main.sprites
-| for X Saved.units
-  | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active]=X
-  | U = $players.Owner.alloc_unit{Type}
-  | less Active: U.change_owner{$players.0} //kludge
-  | U.serial <= Serial
-  | case XYZ A,B:
-    | XYZ <= A
-    | U.from.init{B}
-  | U.hp <= HP
-  | U.move{XYZ}
-  | U.fxyz.init{FXYZ}
-  | when Facing.is_list:
-    | U.sprite <= Sprites.(Facing.0)
-    | Facing <= Facing.1
-  | U.pick_facing{Facing}
-  | when Active:
-    | [From Anim AnimStep AnimWait Fatigue Cool Efx Host Goal Path
-       Action Ordered NextAction Mov Def @More] = Active
-    | U.mov <= Mov
-    | U.fatigue <= Fatigue^~{unused 0}
-    | U.def <= Def
-    | U.from.init{From}
-    | U.animate{Anim}
-    | U.anim_step <= AnimStep
-    | U.anim_wait <= AnimWait
-    | U.cooldown <= Cool
-    | for E U.genes: $free_gene{E}
-    | U.genes.heapfree
-    | U.genes <= if Efx.is_list and not Efx.end
-                 then Efx{E=>$new_gene{@E}}
-                 else []
-    | when Path:
-      | P = Path.0.enheap
-      | U.path.heapfree
-      | U.path <= P
-    | U.host <= [Host Goal Action Ordered NextAction]
-  | U.flags <= Flags
-  | when U.leader: U.owner.leader <= U
-  | when U.ai >< pentagram: U.owner.pentagram <= U
-  | IdMap.Id <= U
 | for U $active: when U.host:
   | [HostId Goal Action Ordered NextAction] = U.host
   | U.host <= 0
