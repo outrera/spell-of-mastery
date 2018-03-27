@@ -280,8 +280,7 @@ knockback Me Target =
 
 effect blowaway R BlowSelf:
 | Handled = []
-| for DX,DY points_in_diamond{R}:
-  | B = $world.block_at_safe{TargetXYZ+[DX DY 0]}
+| for B $world.units_in_range{TargetXYZ R}: when B.ai >< unit:
   | when B and not Handled.has{B.id} and (BlowSelf or B.xyz<>TargetXYZ):
     | push B.id Handled
     | N = max 0 R-(DX.abs+DY.abs)

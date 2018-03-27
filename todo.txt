@@ -1,13 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. The spells must be pre-selected by player, based on difficulty. Additional spells could be gained by spying.
+- Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
-- Move unit stat icons into info line, so player won't have to select the creature to see its stats.
-- all units with hands should have act_throw_rock ability, which will help fighting ranged units when nothing else is available.
-- int.block should be renamed to unit
-- blowaway should use `world.units_in_range` to determine targets, so obstacles would block the windflow
-- griffin's unlimited counter attack (watch out for endless cycle, when griffin attacks other griffin)
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Sound on failed attack on undead.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key. Unit deselecting would be done with selecting that unit again.

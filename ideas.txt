@@ -33,6 +33,7 @@ General:
 - AI should cast spell of mastery, when his lossage gets too high
 - When one players starts casting spell of mastery, all other players will get notified, so they get a chance to stop caster by allied assault.
 - reintroduce sokoban boxes pushing, lifting, falling and floating on water; units standing on top of moved objects should move with them
+- Units with hands could have act_throw_rock ability, which will help fighting ranged units when nothing else is available.
 - when unit drops large item, like crate, it pops under that unit, serving as elevation
 - phone/touch version should have transparent buttons
 - non-leader units could be able to hide inside bushes
