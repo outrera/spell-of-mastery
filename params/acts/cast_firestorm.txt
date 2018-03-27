@@ -3,7 +3,7 @@ icon: spell_firestorm
 //cost: 3
 //cool: 5
 range: 9000
-check: any,seen
+check: any
 onInit: visual{fire_ring},sound{firestorm},spawn{special_fire}
 hint: firestorm
 tab: spell
