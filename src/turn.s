@@ -27,7 +27,7 @@ unit.end_turn =
   | CInc = min $will CCost-Charge
   | Charge += CInc
   | $set{charge [CAct Charge CCost TId]}
-| when not $empty and $class.hp>0:
+| when $ai><unit:
   | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}
 | $resting <= Resting

@@ -5,6 +5,9 @@ Leader abilities:
 
 General:
 - Different units could have different will regeneration rates.
+- When fire consumes some burnable item, consider increasing fire's health.
+- Consider using liquid mechanics for fire, having pressure, that would increase it's spreading speed.
+- Consider fire burning air indoors, leading creatures being suffocated.
 - Consider spells, that inflict damage based on unit's will depletion.
 - Consider units at zero or negative will receiving additional damage.
 - Attacking some units may also require spending will or breaking their will.

@@ -1,14 +1,14 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
+- rename `inborn` to `genome`
+- Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Sound on failed attack on undead.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key. Unit deselecting would be done with selecting that unit again.
   That should help porting to touch devices.
 - Proper teleporation spell, requires introducing two point actions, probably can be implement using paired actions.
-- Proper firewall implementation, placing flame between two points.
 - begin implementing campaign
 - Include recall to pentagram into AI's pathfinding.
 - height advantage gives +1 to attack to melee units, and +2 to ranged units

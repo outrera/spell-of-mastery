@@ -438,7 +438,8 @@ unit.interrupt =
   | E.fxyz.init{$fxyz}
 
 unit.harm Attacker Damage =
-| when $removed or not $alive: leave //should never happen
+| when $ai <> unit: leave //likely collateral in explosion
+| when $removed or not $alive: leave //entered building?
 | when Damage << 0:
   | heal_unit Me -Damage
   | leave

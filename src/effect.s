@@ -112,6 +112,26 @@ effect area As: //area{any,3,harm{magic.2}}
 | when Whom><enemy: Ts <= Ts.keep{?is_enemy{Me}}
 | for T Ts: $effect{Es T T.xyz}
 
+effect spread What Wither HP Harm
+| when Wither: $hp -= Wither
+| when $hp < 1:
+  | when $action.type <> die: $die
+  | leave
+| when HP><inherit: HP <= $hp
+| for C $world.cellp{TargetXYZ}.floor.neibs{}{?floor}:
+  | XYZ = C.xyz
+  | when C.empty and (XYZ.2-TargetXYZ.2).abs<<1 and no C.units.find{?type><What}:
+    | S = $owner.alloc_unit{What}
+    | S.hp <= 
+    | less S.alpha:
+      | S.alpha <= 255
+      | S.delta <= -50
+    | S.hp <= HP
+    | S.move{XYZ}
+    | when Harm:
+      | B = C.block
+      | when B: B.harm{Me Harm}
+
 effect detonate Args:
 | B = $world.block_at{TargetXYZ}
 | Damage = Target.class.hp
@@ -120,9 +140,9 @@ effect detonate Args:
   | B = $world.block_at{TargetXYZ+D}
   | when B: B.harm{Me Damage}
 
-effect explosion Range:
-| for U $world.units_in_range{TargetXYZ Range}
-  | Damage = max 1 Range-TargetXYZ.mdist{U.xyz}
+effect explosion Size:
+| for U $world.units_in_range{TargetXYZ Size}:
+  | Damage = max 1 Size-TargetXYZ.mdist{U.xyz}
   | U.harm{Me Damage}
 
 effect notify Text: Target.owner.notify{Text}
@@ -282,6 +302,7 @@ effect blowaway R BlowSelf:
 | Handled = []
 | for B $world.units_in_range{TargetXYZ R}: when B.ai >< unit:
   | when B and not Handled.has{B.id} and (BlowSelf or B.xyz<>TargetXYZ):
+    | DX,DY,DZ = B.xyz-TargetXYZ
     | push B.id Handled
     | N = max 0 R-(DX.abs+DY.abs)
     | BP = B.xyz

@@ -17,7 +17,8 @@ Scripting:
 // set player 2's mana to 100000
 ((repeat always) set{2,mana,100000})
 
-
+// limits unit's lifespan to 10 turns
+inborn: (ttl.10{})
 
 
 Graphics Editing Hints:

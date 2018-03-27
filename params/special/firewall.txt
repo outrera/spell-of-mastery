@@ -1,6 +1,0 @@
-sprite: effect_fire
-sight: 1
-//ai: avoid
-height: 4
-box_xy: (1 1)
-inborn: (burning ttl.10{})

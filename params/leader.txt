@@ -36,7 +36,7 @@ spells:
       cast_bless
       cast_curse
       cast_invisibility
-      cast_firewall
+      cast_firestorm
       cast_flight
       cast_detonate
       cast_armageddon

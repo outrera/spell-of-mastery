@@ -30,7 +30,7 @@ Spells:
 - Bless (law): target gains ability to harm undead and break magic doors.
 - Curse (chaos): makes target immune to non-magical weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible. Doing any action beside movement would cancel invisibility.
-- Firewall (chaos): sets ground on fire, damaging creatures entering it. Fire expands for several turn.
+- Firestorm (chaos): sets ground on fire, damaging creatures inside it. Fire expands for several turn.
 - Flight (law): target gains ability to fly.
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health.
 - Subvert (law): gain control over the target creature by spending mana equivalent to creature's willpower.

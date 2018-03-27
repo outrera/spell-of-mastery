@@ -21,7 +21,9 @@ invisible: on{act},strip{invisible}
 //shell: on{phys_harm},mod{block},sound{shell},visual{shell},strip{shell}
 regen: on{endturn},when{harmed resting},strip{poison},heal{1},visual{heal}
 regen_tenant: on{tenant_endturn},tenant,when{harmed resting},strip{poison},heal{1},visual{heal}
-burning: on{entry},tenant,harm{9},visual1{fire_ring}
+burns_visitors: on{entry},tenant,harm{1},visual1{fire_ring}
+burns_tenants: on{tenant_endturn},tenant,harm{1},visual1{fire_ring}
+firestorm: on{endturn},spread{special_fire 1 inherit 1}
 enemy_removes: on{entry},tenant,when{enemy},visual{pickup},self,remove
 gateway: on{entry},gateway
 node_aura: on{cycle.12},tenant_mark{effect_aura}

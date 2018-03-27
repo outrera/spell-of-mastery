@@ -1,0 +1,9 @@
+icon: spell_firestorm
+//lore: 5
+//cost: 3
+//cool: 5
+range: 9000
+check: any,seen
+onInit: visual{fire_ring},sound{firestorm},spawn{special_fire}
+hint: firestorm
+tab: spell
