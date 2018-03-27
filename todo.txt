@@ -1,6 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- finish goblin explosion, making area of effect attack.
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. The spells must be pre-selected by player, based on difficulty. Additional spells could be gained by spying.
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Move unit stat icons into info line, so player won't have to select the creature to see its stats.
@@ -74,7 +75,6 @@ Graphics:
 - icon for dwarf's defend action
 - icon for ghost's phase
 - icon for devil's teleport
-- goblin should be throwing bomb or molotov cocktrail instead of spear, as throwing spear looks too silly for such a weak creature, while bomb would contribute to that anarchist mischevous style. It would also differentiate goblin from elf by allowing his attack to have splash damage and setting ground on fire.
 - dragon animation jumps horizontally during attack
 - eye movement animation.
 - finish house tileset, including floor and roof; dirt/plain should not align to house wall

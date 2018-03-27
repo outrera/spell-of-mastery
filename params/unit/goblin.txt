@@ -4,9 +4,9 @@ health: 7
 atk: 2
 def: 2
 range: 3
-mov: 5
+mov: 6
 inborn: (organic)
-onHit: shell,hit{user},sound{cut}
+onHit: missile{bomb},hit{user},visual{explosion},sound{explosion}
 onHarm: sound{goblin_hit}
 onDeath: sound{goblin_die}
 onMove: sound{step}

@@ -8,7 +8,11 @@ normalize_curly E =
 load_params2 File =
 | less File.exists: bad "cant open [File]"
 | Xs = File.get.utf8.parse{src File}^|$_ [[]] => []
-| map Key,Value Xs{?1.0,?2.0}
+| map KV Xs
+  | when KV.size <> 3 or not KV.1.is_list or not KV.2.is_list:
+    | bad "entry `[KV]` in [File]"
+  | Key = KV.1.0
+  | Value = KV.2.0
   | case Value
     [`,` A B]
       | Value <= Value^| @r [`,` A B] => [@A^r B]

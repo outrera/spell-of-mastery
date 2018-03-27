@@ -43,7 +43,7 @@ Oculus: flyer, scout, clears invisibility from enemy units in sight.
 Blob: slow, when in full health, can divide into two blobs of half the health.
 Imp: digs terrain, builds bridges, plants trees, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
-Goblin: weakest shooter.
+Goblin: throws bombs with are attack.
 Elf: shooter.
 Dwarf: has defend ability, which reduces all incoming damage to 1
 Orc: has enough health to withstand a single lightning bolt.
