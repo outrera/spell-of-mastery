@@ -1,5 +1,6 @@
-author: `Nikita Sadkov`
+author: `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
 copyright: `Nikita Sadkov`
-xy: 8,16
-frames: 64*64
-anims: | idle time-2 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
+origin: `Spell of Mastery`
+xy: -10,86
+frames: folder
+anims: | idle (idle0 3) (idle1 3) (idle2 3) (idle3 3) (idle4 3)

@@ -1,0 +1,3 @@
+author: `Jan Schupke 'Vehicle' (http://www.vehiclemusic.eu jan.schupke@gmail.com)`
+license: `Public Domain (CC0)`
+origin: `http://opengameart.org/content/fantasy-sound-effects-tinysized-sfx`

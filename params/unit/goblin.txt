@@ -1,12 +1,13 @@
 tier: 1
 cost: 5,5,10
-health: 7
-atk: 2
-def: 2
+health: 8
+atk: 1
+def: 1
 range: 3
 mov: 6
 inborn: (organic)
-onHit: missile{bomb},hit{user},visual{explosion},sound{explosion}
+onHit: sound{throw},missile{rock},hit{user},sound{impact}
 onHarm: sound{goblin_hit}
 onDeath: sound{goblin_die}
 onMove: sound{step}
+acts: (act_bomb)

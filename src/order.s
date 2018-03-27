@@ -60,6 +60,7 @@ unit.forced_order Act Target =
 unit.die =
 | OnDeath = $class.onDeath
 | when OnDeath: $effect{OnDeath Me $xyz}
+| $animate{death}
 | $forced_order{die 0}
 | $order.priority <= 2000
 | $cooldown <= 0

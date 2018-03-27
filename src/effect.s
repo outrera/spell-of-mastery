@@ -120,6 +120,11 @@ effect detonate Args:
   | B = $world.block_at{TargetXYZ+D}
   | when B: B.harm{Me Damage}
 
+effect explosion Range:
+| for U $world.units_in_range{TargetXYZ Range}
+  | Damage = max 1 Range-TargetXYZ.mdist{U.xyz}
+  | U.harm{Me Damage}
+
 effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
