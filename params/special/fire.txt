@@ -4,4 +4,4 @@ sight: 1
 health: 10
 height: 2
 box_xy: (1 1)
-inborn: (burns_visitors burns_tenants firestorm)
+inborn: (burns_visitors burns_tenants firestorm ttl_die.3{})

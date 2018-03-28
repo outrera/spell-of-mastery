@@ -112,21 +112,18 @@ effect area As: //area{any,3,harm{magic.2}}
 | when Whom><enemy: Ts <= Ts.keep{?is_enemy{Me}}
 | for T Ts: $effect{Es T T.xyz}
 
-effect spread What Wither HP Harm
-| when Wither: $hp -= Wither
-| when $hp < 1:
+effect spread What Harm
+| when $hp < 2:
   | when $action.type <> die: $die
   | leave
-| when HP><inherit: HP <= $hp
 | for C $world.cellp{TargetXYZ}.floor.neibs{}{?floor}:
   | XYZ = C.xyz
   | when C.empty and (XYZ.2-TargetXYZ.2).abs<<1 and no C.units.find{?type><What}:
     | S = $owner.alloc_unit{What}
-    | S.hp <= 
     | less S.alpha:
       | S.alpha <= 255
       | S.delta <= -50
-    | S.hp <= HP
+    | S.hp <= $hp-1
     | S.move{XYZ}
     | when Harm:
       | B = C.block
@@ -212,9 +209,17 @@ effect interrupt: Target.interrupt
 
 effect remove: Target.free
 
-effect die Whom:
-| T = if Whom >< self then Me else Target
-| when T.action.type <> die: T.die
+effect die: when Target.action.type <> die: Target.die
+
+effect fade_die:
+| when Target.action.type >< die: leave
+| Target.add_gene{fade_die 0 []}
+
+effect fade_die_upd:
+| $delta <= 25
+| when $alpha<255: leave
+| when $action.type >< die: leave
+| $die
 
 effect clear Where:
 | X,Y,Z = case Where

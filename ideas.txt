@@ -308,3 +308,13 @@ Liquid dynamics:
     1 cell = 1 mana.
   - Flooding could be global, expanding all water cells
 - Populous 3 had cool spell, called bridge, that connected two terrain points. Although such spell would involve generation of new matter.
+
+
+The genome metaphor:
+- main/gene.txt needs some redesign and proper DSL.
+- Think of its entries as of DNA genes or ECS components.
+- Single gene should be allowed to have several `on` clauses.
+- Whole unit should be expressible with genes, while each gene would have
+  its cost. Some combinations may incur additional costs.
+  That would help balancing the game bottom-up.
+- Some AI stuff, like spellcasting can be moved here too.

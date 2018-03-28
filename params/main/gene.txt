@@ -4,10 +4,6 @@ flags: attacker{0 -1},picked{1 -1},engaged{2 1}
       ,bless{13 6},cursed{14 3},afraid{15 7},mark{16 -1},resting{17 -1}
       ,resist{18 8},leader{19 -1}
 
-//FIXME: this crap needs complete redesign and proper DSL.
-//       all unit fields should be expressed here.
-//       Think of these entries as of DNA genes or ECS components.
-//       Some AI stuff, like spellcasting can be moved here too.
 haste: on{static}
 flyer: on{static}
 swimmer: on{static}
@@ -23,13 +19,15 @@ regen: on{endturn},when{harmed resting},strip{poison},heal{1},visual{heal}
 regen_tenant: on{tenant_endturn},tenant,when{harmed resting},strip{poison},heal{1},visual{heal}
 burns_visitors: on{entry},tenant,harm{1},visual1{fire_ring}
 burns_tenants: on{tenant_endturn},tenant,harm{1},visual1{fire_ring}
-firestorm: on{endturn},spread{special_fire 1 inherit 1}
+firestorm: on{endturn},spread{special_fire 1}
 enemy_removes: on{entry},tenant,when{enemy},visual{pickup},self,remove
 gateway: on{entry},gateway
 node_aura: on{cycle.12},tenant_mark{effect_aura}
 ttl: on{timeout},visual{teleport},sound{summon},remove
 ttl_s: on{timeout},remove //silent ttl
+ttl_die: on{timeout},fade_die
+fade_die: on{cycle.12},fade_die_upd
 income1: on{tenant_endturn},tenant,mana{1}
 door_align: on{place},align{door}
 
-//when{harmed,has_mana.50}
+//when{harmed has_mana.50}
