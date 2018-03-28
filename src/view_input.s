@@ -68,9 +68,10 @@ view.handle_picked Rect Units =
 | when $mice_click >< order:
   | $mice_click <= 0
   | XYZ = $cursor
-  | if not Target then order_at Me $cursor 0
-    else | $world.blink.init{[4 Target]}
-         | order_at Me Target.xyz Target
+  | less $paused:
+    | if not Target then order_at Me $cursor 0
+      else | $world.blink.init{[4 Target]}
+           | order_at Me Target.xyz Target
   | leave
 | when $mice_click >< pick:
   | $mice_click <= 0

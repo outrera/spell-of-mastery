@@ -468,13 +468,14 @@ actClickIcon Me Icon =
 | when ActIcon.is_icon: ActIcon.picked <= 0
 //| Icon.picked <= 1
 | Unit = Icon.unit
+| O = Unit.owner
+| when $paused or O.id <> $player.id: leave
 | ActIcon <= Icon
 | ActName = Icon.data
 | Act = $params.acts.ActName
 | Cost = Act.cost
 | ResearchRemain = Unit.owner.research_remain{Act}
 | Cool = Unit.cooldown_of{ActName}
-| O = Unit.owner
 | when Cool:
   | TurnsLeft = Cool.0 + Cool.1 - Unit.world.turn
   | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
@@ -485,7 +486,6 @@ actClickIcon Me Icon =
 | when got Cost and Cost>0 and Cost>O.mana:
   | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
   | leave
-| when O.id <> $player.id: leave
 | when Unit.mov < Act.mov:
   | O.notify{"[Act.title] requires [Act.mov] moves."}
   | leave
