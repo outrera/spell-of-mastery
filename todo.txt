@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Refactor ui.s
+- Add slider to editor tab
 - Implement spell picking menu.
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
