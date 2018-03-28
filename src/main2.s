@@ -1,4 +1,4 @@
-use world order gfx sprite_dump unit_flags enheap
+use world gfx sprite_dump unit_flags enheap ui widgets gui
 
 type main{Data}
      world
@@ -58,5 +58,12 @@ type main{Data}
 //| sprite_dump Me "work/sd" staticFrame/160 sheet/0 unit_katzard
 | init_unit_flags Me
 | world Me
+
+
+main.run =
+| set_main Me
+| $ui <= ui Me
+| $ui.init
+| gui $ui cursor/$img{ui_cursor_point}
 
 export main

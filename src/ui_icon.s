@@ -58,8 +58,7 @@ icon.draw G PX PY =
 | G.blit{X Y | if $picked and $picked_fg then $picked_fg else $fg}
 | when $picked:
   | if $picked_overlay
-    then | XX,YY,Overlay = $picked_overlay
-         | G.blit{X+XX Y+YY Overlay}
+    then G.blit{X Y $picked_overlay^skin}
     else G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
 | Unit = $unit
 | ActName = $data

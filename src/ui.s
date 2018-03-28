@@ -1,19 +1,10 @@
 use gui widgets view ui_icon ui_widgets macros
 
-CopyrightLine = 'SymtaEngine v0.3; Copyright (c) 2016 Nikita Sadkov'
-MapsFolder = 'work/worlds/'
-SavesFolder = 'work/saves/'
+CopyrightLine = 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'
 
-PanelW = 200 //FIXME: hardcoded stuff is bad
-
-AllActIcons = []
-MaxUnitActIcons = 24
 UnitActIcons = []
-MaxGroundActIcons = 10
 GroundActIcons = []
 ActIcon = 0
-
-MenuButtonsX = 0
 
 InputBlocker =
 WorldProperties = No
@@ -32,14 +23,28 @@ PanelTab = \spell
 BrushPicker =
 PlayerWidget =
 PlayerPickers = 0
-PickedIconOverlay = 0
 
 LastBrush = [0 0]
 
-type ui.$tabs{main} tabs width height world message_box view paused
+type ui.$tabs{main}
+  tabs
+  width
+  height
+  world
+  message_box
+  view
+  paused
+  mapsFolder/"work/worlds/"
+  savesFolder/"work/saves/"
+  actIcons/[]
+  maxUnitActIcons/24
+  maxGroundActIcons/10
+  menuButtonsX/0
 | $world <= $main.world
 | $width <= $params.ui.width
 | $height <= $params.ui.height
+| $menuButtonsX <= $width/2 - 162
+
 
 ui.render =
 | InputBlocker.show <= $paused or $world.actors.get.size
@@ -56,7 +61,6 @@ ui.load File =
 | $view.clear
 ui.save File = $main.save{File}
 ui.params = $main.params
-ui.act_icons = AllActIcons
 ui.pause =
 | $paused <= 1
 | InputBlocker.show <= 1
@@ -95,13 +99,13 @@ create_defeat_dlg Me =
         | button 'EXIT TO MENU' skin/scroll: => pick_main_menu Me pause/0
 
 create_new_game_dlg Me =
-| X = MenuButtonsX
+| X = $menuButtonsX
 | dlg: mtx
   |   0   0 | MenuBG
   |  16 $height-16 | txt small CopyrightLine
   | X 220 | button 'CAMPAIGN' skin/scroll: =>
-            | load_game Me 1 "[MapsFolder]default.txt"
-            //| load_game Me 1 "[MapsFolder]level0.txt"
+            | load_game Me 1 "[$mapsFolder]default.txt"
+            //| load_game Me 1 "[$mapsFolder]level0.txt"
   | X 290 | button 'SCENARIO' skin/scroll: => $pick{scenario_menu}
   | X 360 | button 'MULTIPLAYER' skin/scroll: => 
   | X 500 | button 'BACK' skin/scroll: => $pick{main_menu}
@@ -109,9 +113,9 @@ create_new_game_dlg Me =
 
 create_scenario_menu Me =
 | loadScenarioBack = $pick{new_game_menu}
-| LoadScenarioDlg = load_dlg $world MapsFolder &loadScenarioBack: X =>
+| LoadScenarioDlg = load_dlg $world $mapsFolder &loadScenarioBack: X =>
   | load_game Me 1 X
-| LoadScenarioDlg.folder <= MapsFolder
+| LoadScenarioDlg.folder <= $mapsFolder
 | dlg: mtx
   |   0   0 | MenuBG
   |  220 200 | LoadScenarioDlg
@@ -119,17 +123,17 @@ create_scenario_menu Me =
 
 create_load_menu_dlg Me =
 | loadScenarioBack = $pick{new_game_menu}
-| LoadScenarioDlg = load_dlg $world SavesFolder &loadScenarioBack: X =>
+| LoadScenarioDlg = load_dlg $world $savesFolder &loadScenarioBack: X =>
   | load_game Me 0 X
   | $world.paused <= 0
-| LoadScenarioDlg.folder <= SavesFolder
+| LoadScenarioDlg.folder <= $savesFolder
 | dlg: mtx
   |   0   0 | MenuBG
   |  220 200 | LoadScenarioDlg
   |  16 $height-16 | txt small CopyrightLine
 
 create_main_menu_dlg Me =
-| X = MenuButtonsX
+| X = $menuButtonsX
 | dlg: mtx
   |   0   0 | MenuBG
   |  16 $height-16 | txt small CopyrightLine
@@ -163,7 +167,7 @@ load_game Me NewGame Path =
 parse_int_normalized Default Text =
 | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
 
-create_world_props Me = 
+ui.create_world_props = 
 | hidden: world_props $world: P =>
   | W = parse_int_normalized{$world.w P.width.value}.clip{4 240}
   | H = parse_int_normalized{$world.h P.height.value}.clip{4 240}
@@ -173,27 +177,27 @@ create_world_props Me =
   | $unpause
   | WorldProperties.show <= 0
 
-create_save_world_dlg Me =
+ui.create_save_world_dlg =
 | Dlg = No
 | hideDlg = 
   | Dlg.show <= 0
   | $unpause
 | DlgW =
-| DlgW <= save_dlg $world MapsFolder &hideDlg: X =>
+| DlgW <= save_dlg $world $mapsFolder &hideDlg: X =>
   | Path = "[DlgW.folder][DlgW.filename.value].txt"
   | $save{Path}
   //| $main.show_message{'Saved' 'Your map is saved!'}
   | hideDlg
-| DlgW.folder <= MapsFolder
+| DlgW.folder <= $mapsFolder
 | Dlg <= hidden: DlgW
 | Dlg
 
-create_load_world_dlg Me =
+ui.create_load_world_dlg =
 | Dlg = No
 | hideDlg = 
   | Dlg.show <= 0
   | $unpause
-| DlgW = load_dlg $world MapsFolder &hideDlg: X =>
+| DlgW = load_dlg $world $mapsFolder &hideDlg: X =>
   | $load{X}
   | World = $world
   | World.human <= World.players.1
@@ -202,7 +206,7 @@ create_load_world_dlg Me =
     | World.paused <= 1
     | World.explore{1}
   | hideDlg
-| DlgW.folder <= MapsFolder
+| DlgW.folder <= $mapsFolder
 | Dlg <= hidden: DlgW
 | Dlg
 
@@ -213,6 +217,8 @@ create_credits_dlg Me =
   |  $width-80 $height-20
      | button 'Exit' skin/small_medium: => pick_main_menu Me pause/0
 
+
+PanelW = 200 //FIXME: hardcoded stuff is bad
 create_bank_list Me =
 | TileBanks = $main.params.world.tile_banks
 | BankName =
@@ -264,12 +270,12 @@ create_menu_tab Me =
 | SaveIcon = icon data/pick $img{icons_menu_save} click: Icon =>
   | $pause
   | SaveWorldDlg.show <= 1
-  | SaveWorldDlg.folder <= if $world.editor then MapsFolder else SavesFolder
+  | SaveWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
   | SaveWorldDlg.filename.value <= $world.filename
 | LoadIcon = icon data/pick $img{icons_menu_load} click: Icon =>
   | $pause
   | LoadWorldDlg.show <= 1 
-  | LoadWorldDlg.folder <= if $world.editor then MapsFolder else SavesFolder
+  | LoadWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
 | ExitIcon = icon data/pick $img{icons_menu_exit} click: Icon =>
   | $main.show_message{'Exit to Main Menu?'
                        'Are you sure want to exit?'
@@ -293,7 +299,7 @@ create_icons_panel_tabs Me =
 | Icons = map Name [unit spell summon bag brush menu]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
   | when Name><menu: Icon.picked<=1
-  | Icon.picked_overlay <= PickedIconOverlay
+  | Icon.picked_overlay <= \icon_hl
   | Icon
 | for Icon Icons: Icon.group <= Icons
 | Icons
@@ -380,7 +386,7 @@ ui.update = //called by world.update each game cycle
       else | $main.music{"defeat.ogg"}
            | $pick{defeat}
   | when got NextWorld:
-    | $load{"[MapsFolder][NextWorld].txt"}
+    | $load{"[$mapsFolder][NextWorld].txt"}
     | $world.new_game
 
 ui.update_act_icon I Act Count Unit =
@@ -410,8 +416,8 @@ ui.update_act_icon I Act Count Unit =
 | Icons.I.show <= Active
 
 ui_update_panel_buttons Me Unit As GAs =
-| As = As.take{min{MaxUnitActIcons As.size}}
-| GAs = GAs.take{min{MaxGroundActIcons GAs.size}}
+| As = As.take{min{$maxUnitActIcons As.size}}
+| GAs = GAs.take{min{$maxGroundActIcons GAs.size}}
 | Player = Unit.owner
 | I = 0
 | for Act [@As @GAs{[gact ?]}]:
@@ -428,7 +434,7 @@ ui_update_panel_buttons Me Unit As GAs =
     | I += 1
 
 ui.on_unit_pick Units =
-| for Icon AllActIcons: Icon.show <= 0
+| for Icon $actIcons: Icon.show <= 0
 | Unit = 0
 | As = 0
 | GAs = []
@@ -496,46 +502,37 @@ actClickIcon Me Icon =
 | $world.act_unit.init{Unit,Unit.serial}
 | when HKI: $view.mice_click <= \leftup //FIXME: kludge
 
-create_act_icons Me =
-| map I MaxUnitActIcons+MaxGroundActIcons:
+ui.create_act_icons =
+| map I $maxUnitActIcons+$maxGroundActIcons:
   | hidden: icon 0 click/|Icon => actClickIcon Me Icon
 
-ui_input Me Base In =
+ui.process_input Base In =
 | Base.input{In}
 | when InputBlocker.show: leave 
 | case In [key Key 1]
-  | for Icon AllActIcons: when Icon.show: when Icon.hotkey><Key:
+  | for Icon $actIcons: when Icon.show: when Icon.hotkey><Key:
     | HotKeyInvoke <= 1
     | Icon.on_click{}{Icon}
 
 ui.init =
-| MapsFolder <= "[$data][MapsFolder]"
-| SavesFolder <= "[$data][SavesFolder]"
+| $mapsFolder <= "[$data][$mapsFolder]"
+| $savesFolder <= "[$data][$savesFolder]"
 | $view <= view $main Me $width $height-128
 | $create{8 8}
-| MenuButtonsX <= $width/2 - 162
-| X = MenuButtonsX
-| PickedIconOverlay <= [0 0 $img{"ui_icon_hl"}]
 | MenuBG <= $img{ui_menu_bg}
 | IconsPanelBG <= $img{ui_panel}
 | $message_box <= message_box Me
 | InputBlocker <= hidden: spacer $width $height
-| WorldProperties <= create_world_props Me
-| SaveWorldDlg <= create_save_world_dlg Me
-| LoadWorldDlg <= create_load_world_dlg Me
-| AllActIcons <= create_act_icons Me
-| UnitActIcons <= AllActIcons.take{MaxUnitActIcons}
-| GroundActIcons <= AllActIcons.drop{MaxUnitActIcons}
+| WorldProperties <= $create_world_props
+| SaveWorldDlg <= $create_save_world_dlg
+| LoadWorldDlg <= $create_load_world_dlg
+| $actIcons <= $create_act_icons
+| UnitActIcons <= $actIcons.take{$maxUnitActIcons}
+| GroundActIcons <= $actIcons.drop{$maxUnitActIcons}
 | Tabs = create_dialog_tabs Me
-| $tabs <= input_split Tabs: Base In => ui_input Me Base In
+| $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | BankList.pick{0}
 | $view.set_brush{0,0}
 | begin_ingame Me 1
 
-main.run =
-| set_main Me
-| $ui <= ui Me
-| $ui.init
-| gui $ui cursor/$img{ui_cursor_point}
-
-
+export ui
