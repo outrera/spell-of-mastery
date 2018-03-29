@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Refactor ui.s
-- Better "Exit to Main Menu?" confirmation, similar to disband confirmation.
+- Better "Exit to Main Menu?" confirmation, similar to disband confirmation, to do that through yes/no I need to either introduce menu specific hidden `confirm` tab in panelTabs, or introduce menu-units and instant actions, that go over update.s, that would also require introducing effects, going from game world into UI, which maybe no the best, because now game world could affect UI. The next thing would be game world affecting users harddrive. Although it could be Russian rulette mode of player: if player loses, the game wipes out his Documents folder.
 - Add slider to editor tab
 - Implement spell picking menu.
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
