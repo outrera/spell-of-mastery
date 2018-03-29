@@ -12,6 +12,9 @@ type ui.$tabs{main}
   mapsFolder/"work/worlds/"
   savesFolder/"work/saves/"
   panelTabs
+  panelTabsMore/(t) //sparse element related to picked tab
+  panelTabsSelect/(t)
+  panelTabsDeselect/(t)
   curPanelTab/spell
   actIcons/[]
   maxUnitActIcons/24
@@ -19,7 +22,6 @@ type ui.$tabs{main}
   curActIcon/0
   unitActIcons/[]
   groundActIcons/[]
-  unitActIconsLay
   groundActIconsLay
   menuButtonsX/0
   menuBG
@@ -29,8 +31,6 @@ type ui.$tabs{main}
   saveWorldDlg
   loadWorldDlg
   bankList
-  playButton
-  menuTab
   hotKeyInvoke/0
   playerWidget
   playerPickers/0
@@ -232,18 +232,7 @@ ui.create_bank_list =
          | ItemList.pick{0}
 | BankList,ItemList
 
-ui.handle_brush_tab Picked =
-| if $curPanelTab><brush
-  then when Picked<>brush:
-       | $brushPicker.show <= 0
-       | $playerWidget.show <= 0
-       | $view.set_brush{0,0}
-  else when Picked><brush:
-       | $brushPicker.show <= 1
-       | $playerWidget.show <= 1
-       | $view.set_brush{$lastBrush}
-
-ui.create_menu_tab =
+ui.create_panel_tab_menu =
 | WorldIcon = icon $img{icons_menu_world} click: Icon =>
   | $pause
   | $worldProperties.show <= 1
@@ -262,7 +251,7 @@ ui.create_menu_tab =
                        'Are you sure want to exit?'
        buttons/[yes,'Yes' no,'No']
        click/|$0 yes => $pick_main_menu}
-| hidden: layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
+| layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
 
 ui.create_play_button =
 | Icon = icon data/play $img{icons_tab_play} click/
@@ -272,17 +261,64 @@ ui.create_play_button =
 | Icon.picked_fg <= $img{icons_tab_pause}
 | hidden Icon
 
-ui.create_panel_header_icons =
-| $menuTab <= $create_menu_tab
-| $menuTab.show <= 1
-| Click = Icon =>
-  | $main.sound{ui_click}
-  | when $curPanelTab><brush or Icon.data><brush: $handle_brush_tab{Icon.data}
-  | $curPanelTab <= Icon.data
-  | ShowActIcons = no [brush menu].find{$curPanelTab}
-  | $unitActIconsLay.show <= ShowActIcons
-  | $groundActIconsLay.show <= ShowActIcons
-  | $menuTab.show <= $curPanelTab><menu
+
+ui.create_panel_tab_bag =
+| $panelTabsMore.bag <= [$groundActIconsLay]
+| $unitActIconsLay
+
+ui.create_panel_tab_brush =
+| $playerPickers <= map Player $world.players:
+  | player_picker Player.name 0 Player.colors.1: Item =>
+    | Name = Item.name
+    | when got@@it $world.players.find{?name >< Name}: $world.human <= it
+| $playerPickers.1.picked <= 1
+| $playerWidget <= hidden: layH $playerPickers
+| BankList,ItemList = $create_bank_list
+| $bankList <= BankList
+| $brushPicker <= hidden: layH: BankList,ItemList
+| $panelTabsMore.brush <= [$brushPicker $playerWidget]
+| $panelTabsSelect.brush <= From To => $view.set_brush{$lastBrush}
+| $panelTabsDeselect.brush <= From To => $view.set_brush{0,0}
+| spacer{1 1}
+
+ui.create_panel_tabs =
+| $actIcons <= $create_act_icons
+| $unitActIcons <= $actIcons.take{$maxUnitActIcons}
+| ActIconsLay = layV s/14
+                     layH{s/8 $unitActIcons.drop{$unitActIcons.size/2}}
+                    ,layH{s/8 $unitActIcons.take{$unitActIcons.size/2}}
+| $groundActIcons <= $actIcons.drop{$maxUnitActIcons}
+| $groundActIconsLay <= hidden: layV s/4 $groundActIcons.flip
+| $panelTabs <= tabs menu: t
+          unit    | ActIconsLay
+          spell   | ActIconsLay
+          summon  | ActIconsLay
+          bag     | ActIconsLay
+          menu    | $create_panel_tab_menu
+          brush   | $create_panel_tab_brush
+| $panelTabs
+
+ui.handle_brush_tab Picked =
+| if $curPanelTab><brush
+  then when Picked<>brush:
+       | $view.set_brush{0,0}
+  else when Picked><brush:
+       | $view.set_brush{$lastBrush}
+
+ui.panel_tab_picked TabName = 
+| $main.sound{ui_click}
+| when got@@it $panelTabsDeselect.$curPanelTab: (it){$curPanelTab TabName}
+| when got@@it $panelTabsSelect.$curPanelTab: (it){$curPanelTab TabName}
+| Ms = $panelTabsMore.$curPanelTab
+| when got Ms: for M Ms: M.show <= 0
+| when $curPanelTab><brush or TabName><brush: $handle_brush_tab{TabName}
+| $curPanelTab <= TabName
+| Ms = $panelTabsMore.$curPanelTab
+| when got Ms: for M Ms: M.show <= 1
+| $panelTabs.pick{TabName}
+
+ui.create_panel_tabs_header =
+| Click = Icon => $panel_tab_picked{Icon.data}
 | TabIconsBare = []
 | TabsIcons = map Name [unit spell summon bag menu brush]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
@@ -300,36 +336,20 @@ ui.create_panel_header_icons =
 | layH s/8 [@TabsIcons spacer{16 0} PlayButton spacer{140 0} EndTurnButton]
 
 ui.create_ingame_ui =
-| $playerPickers <= map Player $world.players:
-  | player_picker Player.name 0 Player.colors.1: Item =>
-    | Name = Item.name
-    | when got@@it $world.players.find{?name >< Name}: $world.human <= it
-| $playerPickers.1.picked <= 1
-| $playerWidget <= hidden: layH $playerPickers
-| BankList,ItemList = $create_bank_list
-| $bankList <= BankList
-| $brushPicker <= hidden: layH: BankList,ItemList
+| $create_panel_tabs //should preceede create_panel_tabs_header
 | IPY = $height-$iconsPanelBG.h
-| $actIcons <= $create_act_icons
-| $unitActIcons <= $actIcons.take{$maxUnitActIcons}
-| $groundActIcons <= $actIcons.drop{$maxUnitActIcons}
-| $unitActIconsLay <= hidden: layV s/14
-                     layH{s/8 $unitActIcons.drop{$unitActIcons.size/2}}
-                    ,layH{s/8 $unitActIcons.take{$unitActIcons.size/2}}
-| $groundActIconsLay <= hidden: layV s/4 $groundActIcons.flip
 | dlg: mtx
-  |  0   0| $view
-  |  0   0| resource_counters $view
-  |  0   0| $brushPicker
-  |  0 IPY| $iconsPanelBG
-  | 140 IPY-28| $create_panel_header_icons
-  | 146 $height-118| $unitActIconsLay
-  | 146 $height-110| $menuTab
-  | 164 $height-20 | infoline
-  | 0 $height-170 | notification_widget $view
-  | $width-50 80 | $groundActIconsLay
-  | 0 $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
-  | 0 IPY | $playerWidget
+  |  0   0          | $view
+  |  0   0          | resource_counters $view
+  |  0   0          | $brushPicker
+  |  0 IPY          | $iconsPanelBG
+  | 140 IPY-28      | $create_panel_tabs_header
+  | 146 $height-114 | $panelTabs
+  | 164 $height-20  | infoline
+  | 0 $height-170   | notification_widget $view
+  | $width-50 80    | $groundActIconsLay
+  | 0 $height-128   | minimap $main | X Y => $view.center_at{[X Y 0]}
+  | 0 IPY           | $playerWidget
 
 ui.create_ingame_dlg =
 | $saveWorldDlg <= $create_save_world_dlg
