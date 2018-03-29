@@ -11,7 +11,8 @@ type ui.$tabs{main}
   paused
   mapsFolder/"work/worlds/"
   savesFolder/"work/saves/"
-  panelTab/spell
+  panelTabs
+  curPanelTab/spell
   actIcons/[]
   maxUnitActIcons/24
   maxGroundActIcons/10
@@ -31,11 +32,12 @@ type ui.$tabs{main}
   playButton
   menuTab
   hotKeyInvoke/0
-  brushPicker
   playerWidget
   playerPickers/0
   copyrightText
+  brushPicker
   lastBrush/[0 0]
+  editorWidgets/[]
 | $world <= $main.world
 | $width <= $params.ui.width
 | $height <= $params.ui.height
@@ -148,7 +150,7 @@ ui.create_main_menu_dlg =
 ui.begin_ingame Editor =
 | $main.music{playlist}
 | $world.editor <= Editor
-| $playButton.show <= Editor
+| for W $editorWidgets: W.show <= Editor
 
 ui.load_game NewGame Path =
 | $begin_ingame{0}
@@ -230,16 +232,8 @@ ui.create_bank_list =
          | ItemList.pick{0}
 | BankList,ItemList
 
-ui.create_play_button =
-| Icon = icon data/play $img{icons_tab_play} click/
-  | Icon =>
-    | $world.new_game
-    | $unpause
-| Icon.picked_fg <= $img{icons_tab_pause}
-| hidden{Icon}
-
 ui.handle_brush_tab Picked =
-| if $panelTab><brush
+| if $curPanelTab><brush
   then when Picked<>brush:
        | $brushPicker.show <= 0
        | $playerWidget.show <= 0
@@ -270,24 +264,40 @@ ui.create_menu_tab =
        click/|$0 yes => $pick_main_menu}
 | hidden: layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
 
-ui.create_icons_panel_tabs =
+ui.create_play_button =
+| Icon = icon data/play $img{icons_tab_play} click/
+  | Icon =>
+    | $world.new_game
+    | $unpause
+| Icon.picked_fg <= $img{icons_tab_pause}
+| hidden Icon
+
+ui.create_panel_header_icons =
 | $menuTab <= $create_menu_tab
 | $menuTab.show <= 1
 | Click = Icon =>
   | $main.sound{ui_click}
-  | when $panelTab><brush or Icon.data><brush: $handle_brush_tab Icon.data
-  | $panelTab <= Icon.data
-  | ShowActIcons = no [brush menu].find{$panelTab}
+  | when $curPanelTab><brush or Icon.data><brush: $handle_brush_tab{Icon.data}
+  | $curPanelTab <= Icon.data
+  | ShowActIcons = no [brush menu].find{$curPanelTab}
   | $unitActIconsLay.show <= ShowActIcons
   | $groundActIconsLay.show <= ShowActIcons
-  | $menuTab.show <= $panelTab><menu
-| Icons = map Name [unit spell summon bag brush menu]:
+  | $menuTab.show <= $curPanelTab><menu
+| TabIconsBare = []
+| TabsIcons = map Name [unit spell summon bag menu brush]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
   | when Name><menu: Icon.picked<=1
   | Icon.picked_overlay <= \icon_hl
+  | push Icon TabIconsBare
+  | when Name><brush:
+    | Icon <= hidden Icon
+    | push Icon $editorWidgets
   | Icon
-| for Icon Icons: Icon.group <= Icons
-| Icons
+| for Icon TabIconsBare: Icon.group <= TabIconsBare
+| PlayButton = $create_play_button
+| push PlayButton $editorWidgets
+| EndTurnButton = icon data/endturn $img{icons_tab_endturn} click/|Icon=>$world.end_turn
+| layH s/8 [@TabsIcons spacer{16 0} PlayButton spacer{140 0} EndTurnButton]
 
 ui.create_ingame_ui =
 | $playerPickers <= map Player $world.players:
@@ -300,20 +310,19 @@ ui.create_ingame_ui =
 | $bankList <= BankList
 | $brushPicker <= hidden: layH: BankList,ItemList
 | IPY = $height-$iconsPanelBG.h
+| $actIcons <= $create_act_icons
+| $unitActIcons <= $actIcons.take{$maxUnitActIcons}
+| $groundActIcons <= $actIcons.drop{$maxUnitActIcons}
 | $unitActIconsLay <= hidden: layV s/14
                      layH{s/8 $unitActIcons.drop{$unitActIcons.size/2}}
                     ,layH{s/8 $unitActIcons.take{$unitActIcons.size/2}}
 | $groundActIconsLay <= hidden: layV s/4 $groundActIcons.flip
-| IconsPanelTabs = $create_icons_panel_tabs
-| $playButton <= $create_play_button
-| EndTurnButton = icon data/endturn $img{icons_tab_endturn} click/|Icon=>$world.end_turn
-| HeaderIcons = layH s/8 [@IconsPanelTabs spacer{16 0} $playButton spacer{140 0} EndTurnButton]
 | dlg: mtx
   |  0   0| $view
   |  0   0| resource_counters $view
   |  0   0| $brushPicker
   |  0 IPY| $iconsPanelBG
-  | 140 IPY-28| HeaderIcons
+  | 140 IPY-28| $create_panel_header_icons
   | 146 $height-118| $unitActIconsLay
   | 146 $height-110| $menuTab
   | 164 $height-20 | infoline
@@ -421,12 +430,12 @@ ui.on_unit_pick Units =
      | As <= if TargetSerial><research
              then [Acts.m_yes Acts.m_no]
              else Acts.MenuActName.menu
-  else if $panelTab >< unit then
+  else if $curPanelTab >< unit then
      | As <= if Unit.removed then [] else Unit.acts.skip{?tab}
-  else if $panelTab >< summon or $panelTab >< spell then
+  else if $curPanelTab >< summon or $curPanelTab >< spell then
      | Unit <= $world.human.leader
-     | As <= Unit.acts.keep{?tab><$panelTab}
-  else if $panelTab >< bag then
+     | As <= Unit.acts.keep{?tab><$curPanelTab}
+  else if $curPanelTab >< bag then
      | As <= map K,A Unit.items: [A Acts."drop_[K]"]
      | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
   else leave
@@ -499,9 +508,6 @@ ui.init =
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $worldProperties <= $create_world_props
-| $actIcons <= $create_act_icons
-| $unitActIcons <= $actIcons.take{$maxUnitActIcons}
-| $groundActIcons <= $actIcons.drop{$maxUnitActIcons}
 | Tabs = $create_dialog_tabs
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}
