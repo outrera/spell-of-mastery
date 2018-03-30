@@ -298,20 +298,12 @@ ui.create_panel_tabs =
           brush   | $create_panel_tab_brush
 | $panelTabs
 
-ui.handle_brush_tab Picked =
-| if $curPanelTab><brush
-  then when Picked<>brush:
-       | $view.set_brush{0,0}
-  else when Picked><brush:
-       | $view.set_brush{$lastBrush}
-
 ui.panel_tab_picked TabName = 
 | $main.sound{ui_click}
 | when got@@it $panelTabsDeselect.$curPanelTab: (it){$curPanelTab TabName}
 | when got@@it $panelTabsSelect.$curPanelTab: (it){$curPanelTab TabName}
 | Ms = $panelTabsMore.$curPanelTab
 | when got Ms: for M Ms: M.show <= 0
-| when $curPanelTab><brush or TabName><brush: $handle_brush_tab{TabName}
 | $curPanelTab <= TabName
 | Ms = $panelTabsMore.$curPanelTab
 | when got Ms: for M Ms: M.show <= 1
