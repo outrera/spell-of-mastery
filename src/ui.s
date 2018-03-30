@@ -11,11 +11,12 @@ type ui.$tabs{main}
   paused
   mapsFolder/"work/worlds/"
   savesFolder/"work/saves/"
+  confirmFn //callaback for yes/no confirmation
   panelTabs
   panelTabsMore/(t) //sparse element related to picked tab
   panelTabsSelect/(t)
   panelTabsDeselect/(t)
-  curPanelTab/spell
+  curPanelTab/menu
   actIcons/[]
   maxUnitActIcons/24
   maxGroundActIcons/10
@@ -237,21 +238,34 @@ ui.create_panel_tab_menu =
   | $pause
   | $worldProperties.show <= 1
   | $worldProperties.update
-| SaveIcon = icon data/pick $img{icons_menu_save} click: Icon =>
+| SaveIcon = icon $img{icons_menu_save} click: Icon =>
   | $pause
   | $saveWorldDlg.show <= 1
   | $saveWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
   | $saveWorldDlg.filename.value <= $world.filename
-| LoadIcon = icon data/pick $img{icons_menu_load} click: Icon =>
+| LoadIcon = icon $img{icons_menu_load} click: Icon =>
   | $pause
   | $loadWorldDlg.show <= 1 
   | $loadWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
-| ExitIcon = icon data/pick $img{icons_menu_exit} click: Icon =>
-  | $main.show_message{'Exit to Main Menu?'
-                       'Are you sure want to exit?'
-       buttons/[yes,'Yes' no,'No']
-       click/|$0 yes => $pick_main_menu}
+| ExitIcon = icon $img{icons_menu_exit} click: Icon =>
+  | $confirm{"Sure want to exit?" |$0 yes => $pick_main_menu}
 | layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
+
+ui.confirm Msg Fn =
+| $world.notify{Msg}
+| $confirmFn <= Fn
+| $panelTabs.pick{confirm}
+
+ui.confirm_done State =
+| $panelTabs.pick{$curPanelTab}
+| Fn = $confirmFn
+| $confirmFn <= 0
+| Fn{State}
+
+ui.create_panel_tab_confirm =
+| YesIcon = icon $img{icons_menu_yes} click: Icon => $confirm_done{yes}
+| NoIcon = icon $img{icons_menu_no} click: Icon => $confirm_done{no}
+| layH s/4 YesIcon,NoIcon
 
 ui.create_play_button =
 | Icon = icon data/play $img{icons_tab_play} click/
@@ -296,6 +310,7 @@ ui.create_panel_tabs =
           bag     | ActIconsLay
           menu    | $create_panel_tab_menu
           brush   | $create_panel_tab_brush
+          confirm | $create_panel_tab_confirm
 | $panelTabs
 
 ui.panel_tab_picked TabName = 
@@ -314,7 +329,7 @@ ui.create_panel_tabs_header =
 | TabIconsBare = []
 | TabsIcons = map Name [unit spell summon bag menu brush]:
   | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
-  | when Name><menu: Icon.picked<=1
+  | when Name><$curPanelTab: Icon.picked<=1
   | Icon.picked_overlay <= \icon_hl
   | push Icon TabIconsBare
   | when Name><brush:
