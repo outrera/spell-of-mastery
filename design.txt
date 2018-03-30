@@ -16,6 +16,7 @@ Kingdom View:
     on them, and then killing them. After battle player's creatures are returned to soul cage.
     Before summoning, player must first research creatures. To do research, player must
     have a soul gem with it.
+- Wizard guild can have several bases, which are managed using the same battle view, but with limited actions. Player starts with a single base, location for which he picks at the start of the game.
 
 Battle View:
 - Each creature major stats: Moves, Health, Attack, Defense, Fatigue, View, Range, and Will. Some magical artifacts and structures can affect these numbers.
