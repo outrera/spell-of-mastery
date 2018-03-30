@@ -245,7 +245,7 @@ ui.create_panel_tab_menu =
   | $saveWorldDlg.filename.value <= $world.filename
 | LoadIcon = icon $img{icons_menu_load} click: Icon =>
   | $pause
-  | $loadWorldDlg.show <= 1 
+  | $loadWorldDlg.show <= 1
   | $loadWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
 | ExitIcon = icon $img{icons_menu_exit} click: Icon =>
   | $confirm{"Sure want to exit?" |$0 yes => $pick_main_menu}
