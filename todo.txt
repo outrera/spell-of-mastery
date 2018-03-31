@@ -4,7 +4,8 @@ TODO:
 - Add slider to editor tab
 - Implement ingredient and spell systems, then a menu to manage them at the start of the battle.
 - Kingdom view.
-- Random map generation, based matching tiles.
+- Random map generation, based on matching tiles.
+- Optimize sprite drawing routine: instead of that fragiles, complicated and N^2 slow C++ code, break every sprite into cubes on loading. That will order of magnitude speed up drawing of large number of tiles.
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
