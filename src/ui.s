@@ -1,4 +1,4 @@
-use gui widgets view ui_icon ui_widgets macros
+use gui widgets view planet ui_icon ui_widgets macros
 
 type ui.$tabs{main}
   tabs
@@ -72,10 +72,15 @@ ui.create W H =
 | $world.create{W H}
 | $view.clear
 
-ui.pick_main_menu pause/1 =
+ui.pick_title_menu pause/1 =
 | when Pause: $pause
 | $main.music{"title.ogg"}
 | $pick{main_menu}
+
+ui.pick_planet pause/1 =
+| when Pause: $pause
+| $main.music{"title.ogg"}
+| $pick{planet}
 
 ui.create_victory_dlg =
 | dlg: mtx
@@ -85,7 +90,7 @@ ui.create_victory_dlg =
               | Type = $world.params.victory_type.replace{_ ' '}
               | "[Player.name] has won!\n[Type]"
   | $width-360 $height-100
-        | button 'EXIT TO MENU' skin/scroll: => $pick_main_menu{pause/0}
+        | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
 
 ui.create_defeat_dlg = 
 | dlg: mtx
@@ -95,7 +100,7 @@ ui.create_defeat_dlg =
               | Type = $world.params.victory_type.replace{_ ' '}
               | "[Player.name] has been defeated!\n"
   | $width-360 $height-100
-        | button 'EXIT TO MENU' skin/scroll: => $pick_main_menu{pause/0}
+        | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
 
 ui.create_new_game_dlg =
 | X = $menuButtonsX
@@ -210,7 +215,7 @@ ui.create_credits_dlg =
   |  0   0 | $img{ui_stars}
   |  0   0 | $creditsRoll
   |  $width-80 $height-20
-     | button 'Exit' skin/small_medium: => $pick_main_menu{pause/0}
+     | button 'Exit' skin/small_medium: => $pick_title_menu{pause/0}
 
 ui.create_bank_list =
 | TileBanks = $main.params.world.tile_banks
@@ -248,8 +253,12 @@ ui.create_panel_tab_menu =
   | $loadWorldDlg.show <= 1
   | $loadWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
 | ExitIcon = icon $img{icons_menu_exit} click: Icon =>
-  | $confirm{"Sure want to exit?" |$0 yes => $pick_main_menu}
-| layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon
+  | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
+| LeaveIcon = icon $img{icons_menu_leave} click: Icon =>
+  | $pick_planet
+  //| $confirm{"Leave this territory?" |$0 yes => $pick_planet}
+| layV s/4 [(layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon)
+            (LeaveIcon)]
 
 ui.confirm Msg Fn =
 | $world.notify{Msg}
@@ -373,6 +382,9 @@ ui.create_ingame_dlg =
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
 
+ui.create_planet_dlg =
+| planet $main Me $width $height
+
 ui.create_dialog_tabs =
 | $copyrightText <= txt small 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'
 | IsDebug = $main.params.ui.debug><1
@@ -386,6 +398,7 @@ ui.create_dialog_tabs =
           victory($create_victory_dlg)
           defeat($create_defeat_dlg)
           credits($create_credits_dlg)
+          planet($create_planet_dlg)
 
 ui.update = //called by world.update each game cycle
 | WinnerId = $world.params.winner
