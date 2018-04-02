@@ -217,13 +217,13 @@ ui.create_bank_list =
 | BankName =
 | BankNames = [@TileBanks unit leader @$main.bank_names.skip{unit}.skip{leader}]
 | PanelW = 200 //FIXME: hardcoded stuff is bad
-| ItemList = litems w/(PanelW-80) lines/40 [] f: N =>
+| ItemList = litems PanelW-80 $height-$panelBG.h []: N =>
   | Brush = if got TileBanks.find{BankName}
             then [tile N]
             else [obj BankName,N]
   | $view.set_brush{Brush}
   | $lastBrush.init{Brush}
-| BankList = litems w/80 lines/40 BankNames f: N =>
+| BankList = litems 80 $height-$panelBG.h BankNames: N =>
   | BankName <= N
   | if got TileBanks.find{BankName}
     then | ItemList.data <= $main.tile_names{BankName}
@@ -289,7 +289,8 @@ ui.create_panel_tab_brush =
 | $playerWidget <= hidden: layH $playerPickers
 | BankList,ItemList = $create_bank_list
 | $bankList <= BankList
-| ItemSlider = slider v $height-$panelBG.h-38 | N => say N
+| ItemSlider = slider v $height-$panelBG.h-38: N =>
+  | ItemList.offset <= @int N*ItemList.data.size.float
 | $brushPicker <= hidden: layH: BankList,ItemList,ItemSlider
 | $panelTabsMore.brush <= [$brushPicker $playerWidget]
 | $panelTabsSelect.brush <= From To => $view.set_brush{$lastBrush}

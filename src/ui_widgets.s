@@ -113,7 +113,7 @@ type save_dlg.$base{world start cancelCB loadCB}
 | MarginH = 50
 | $title <= txt medium 'Save'
 | $filename <= txt_input{''}
-| $widget <= folder_widget $start: File =>
+| $widget <= folder_widget 320 160 $start: File =>
   | $picked <= File
   | FN = File.url.1
   | when FN<>'': $filename.value <= FN
@@ -137,7 +137,7 @@ type load_dlg.$base{world start cancelCB loadCB}
 | MarginW = 65
 | MarginH = 50
 | $title <= txt medium 'Load'
-| $widget <= folder_widget $start: File =>
+| $widget <= folder_widget 320 160 $start: File =>
   | $picked <= File
   | LoadButton.state <= if File.exists and File.urls.size >< 0
     then 'normal'

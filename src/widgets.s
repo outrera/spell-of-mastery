@@ -199,9 +199,14 @@ droplist.pick Name =
   | $picked <= I
   | leave
 
-type litems.$box{Xs w/160 lines/5 f/(V=>)}
-    f/F ih/No lines/Lines xs/Xs box picked o/No
-| $box <= layV: dup $lines: litem '' w/W
+type litems.$box{W H Xs F}
+    f/F ih/No lines xs/Xs box picked o/No ls
+| Pad = "litem-disabled"^skin
+| LH = Pad.h
+| $lines <= max 1 H/LH
+| $ls <= dup $lines: litem '' w/W
+| LHH = $lines*LH
+| $box <= layV: if LHH><H then $ls else [@$ls Pad.cut{0 0 W LH}]
 | $offset <= 0
 litems.offset = $o
 litems.`=offset` NO =
@@ -209,7 +214,7 @@ litems.`=offset` NO =
 | $o <= max 0: @clip 0 $xs.size-1 NO
 | times K $lines
   | I = $o + K
-  | Item = $box.items.K
+  | Item = $ls.K
   | if I < $xs.size
     then | Item.text <= $xs.I
          | Item.state <= if I >< $picked then \picked else \normal
@@ -352,10 +357,9 @@ folder_nomalized Path =
 | Parent = if Path >< '/' or Path.last >< ':' then [] else ['../']
 | [@Parent @Folders @Files]
 
-type folder_litems.$litems{Root w/300 lines/10 f/(V=>)} root/Root f/F litems
+type folder_litems.$litems{W H Root F} root/Root f/F litems
 | when not $root.size or $root.last <> '/': $root <= "[$root]/"
-| $litems <= litems lines/Lines w/W f/(N => F "[$root][N]")
-                    $root^folder_nomalized
+| $litems <= litems W H $root^folder_nomalized | N => $f "[$root][N]"
 folder_litems.cd NewRoot =
 | $root <= NewRoot
 | $litems.data <= $root^folder_nomalized
@@ -367,10 +371,10 @@ folder_litems.input In = case In
   Else | $litems.input{In}
 folder_litems.itemAt Point XY WH = [Me XY WH]
 
-type folder_widget.$lay{Root F} lay base
-| FL = folder_litems Root f/F
+type folder_widget.$lay{W H Root F} lay base
+| FL = folder_litems W H Root F
 | $base <= FL
-| S = slider v 160 | N => FL.offset <= @int N*FL.data.size.float
+| S = slider v H | N => FL.offset <= @int N*FL.data.size.float
 | $lay <= layH FL,S
 folder_widget.folder = $base.root
 folder_widget.`=folder` NewFolder = $base.cd{NewFolder}
