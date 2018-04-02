@@ -199,7 +199,8 @@ droplist.pick Name =
   | $picked <= I
   | leave
 
-type litems.$box{Xs w/160 lines/5 f/(V=>)} f/F ih/No lines/Lines xs/Xs box picked o/No
+type litems.$box{Xs w/160 lines/5 f/(V=>)}
+    f/F ih/No lines/Lines xs/Xs box picked o/No
 | $box <= layV: dup $lines: litem '' w/W
 | $offset <= 0
 litems.offset = $o
@@ -234,17 +235,24 @@ litems.pick NP =
 litems.input In = case In
   [mice left 1 P] | have $ih: $box.items.0.render.h
                   | $pick{P.1/$ih+$o}
-litems.itemAt Point XY WH = [Me XY WH] //override lay's method
+litems.itemAt Point XY WH = [Me XY WH] //override lay`s method
 
-type slider_.widget{D f/(N=>) size/124 value/0.0 state/normal delta/No}
-     dir/D f/F size/Size pos/0.0 state/State skin/No w/1 h/1 delta/Delta
-| have $delta (10.0/$size.float)
-| $value <= Value
-slider_.value = $pos/$size.float
+type slider_.widget{Dir Size F}
+     dir/Dir
+     size/Size
+     f/F
+     pos/0.0
+     state/normal
+     skin/No
+     w/1 h/1
+     delta/0.01
+| $value <= 0.0
+slider_.value = $pos
 slider_.`=value` V =
-| OV = $value
-| $pos <= (V*$size.float).clip{0.0 $size.float}
-| when $value <> OV: $f $value
+| NP = V.clip{0.0 1.0}
+| when $pos <> NP:
+  | $pos <= NP
+  | $f $pos
 slider_.render =
 | S = skin "slider-[$dir]-normal"
 | $w <= S.w
@@ -261,18 +269,16 @@ slider_.draw G PX PY =
   | while I < $size
     | G.blit{PX PY+I BG.rect{0 0 BG.w (min BG.h $size-I)}}
     | I += BG.h
-  | G.blit{PX+1 PY+$pos.int*($size-K.h)/$size+1 K}
+  | G.blit{PX+1 PY+($pos*($size-K.h).float).int K}
 | when $dir >< h
   | while I < $size
     | G.blit{PX+I PY BG.rect{0 0 (min BG.w $size-I) BG.h}}
     | I += BG.w
-  | G.blit{PX+$pos.int*($size-K.w)/$size+1 PY+1 K}
+  | G.blit{PX+($pos*($size-K.w).float).int PY+1 K}
 slider_.input In = case In
-  [mice_move _ P] | when $state >< pressed
+  [mice_move _ P] | when $state >< pressed:
                     | NP = @clip 0 $size: if $dir >< v then P.1 else P.0
-                    | when NP <> $pos.int
-                      | $pos <= NP.float
-                      | $f $value
+                    | $value <= NP.float/$size.float
   [mice left 1 P] | when $state >< normal
                     | $state <= \pressed
                     | $input{mice_move,P,P}
@@ -294,11 +300,19 @@ arrow.input In = case In
                     | $state <= \normal
 arrow.as_text = "#arrow{[$direction] state([$state])}"
 
-slider D @Rest =
-| S = slider_ D @Rest
+slider D Sz F =
+| S = No
+| Dec = => S.dec
+| Inc = => S.inc
 | if D >< v
-  then layV [(arrow up (=>S.dec)) S (arrow down (=>S.inc))]
-  else layH [(arrow left (=>S.dec)) S (arrow right (=>S.inc))]
+  then | A = arrow up Dec
+       | B = arrow down Inc
+       | S <= slider_ D max{0 Sz-A.render.h*2} F
+       | layV A,S,B
+  else | A = arrow left Dec
+       | B = arrow right Inc
+       | S <= slider_ D max{Sz-A.render.w*2} F
+       | layH A,S,B
 
 type txt_input.widget{Text w/140 state/normal}
   text_/Text w/W h state/State font fw fh init
@@ -356,7 +370,7 @@ folder_litems.itemAt Point XY WH = [Me XY WH]
 type folder_widget.$lay{Root F} lay base
 | FL = folder_litems Root f/F
 | $base <= FL
-| S = slider size/124 v f/(N => FL.offset <= @int N*FL.data.size.float)
+| S = slider v 160 | N => FL.offset <= @int N*FL.data.size.float
 | $lay <= layH FL,S
 folder_widget.folder = $base.root
 folder_widget.`=folder` NewFolder = $base.cd{NewFolder}

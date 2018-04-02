@@ -16,6 +16,7 @@ type ui.$tabs{main}
   panelTabsMore/(t) //sparse element related to picked tab
   panelTabsSelect/(t)
   panelTabsDeselect/(t)
+  panelBG
   curPanelTab/menu
   actIcons/[]
   maxUnitActIcons/24
@@ -26,7 +27,6 @@ type ui.$tabs{main}
   groundActIconsLay
   menuButtonsX/0
   menuBG
-  iconsPanelBG
   inputBlocker
   worldProperties
   saveWorldDlg
@@ -289,7 +289,8 @@ ui.create_panel_tab_brush =
 | $playerWidget <= hidden: layH $playerPickers
 | BankList,ItemList = $create_bank_list
 | $bankList <= BankList
-| $brushPicker <= hidden: layH: BankList,ItemList
+| ItemSlider = slider v $height-$panelBG.h-38 | N => say N
+| $brushPicker <= hidden: layH: BankList,ItemList,ItemSlider
 | $panelTabsMore.brush <= [$brushPicker $playerWidget]
 | $panelTabsSelect.brush <= From To => $view.set_brush{$lastBrush}
 | $panelTabsDeselect.brush <= From To => $view.set_brush{0,0}
@@ -344,19 +345,19 @@ ui.create_panel_tabs_header =
 
 ui.create_ingame_ui =
 | $create_panel_tabs //should preceede create_panel_tabs_header
-| IPY = $height-$iconsPanelBG.h
+| PY = $height-$panelBG.h
 | dlg: mtx
   |  0   0          | $view
   |  0   0          | resource_counters $view
   |  0   0          | $brushPicker
-  |  0 IPY          | $iconsPanelBG
-  | 140 IPY-28      | $create_panel_tabs_header
+  |  0  PY          | $panelBG
+  | 140 PY-28       | $create_panel_tabs_header
   | 146 $height-114 | $panelTabs
   | 164 $height-20  | infoline
-  | 0 $height-170   | notification_widget $view
+  | 0   $height-170 | notification_widget $view
   | $width-50 80    | $groundActIconsLay
-  | 0 $height-128   | minimap $main | X Y => $view.center_at{[X Y 0]}
-  | 0 IPY           | $playerWidget
+  | 0   $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
+  | 0   PY          | $playerWidget
 
 ui.create_ingame_dlg =
 | $saveWorldDlg <= $create_save_world_dlg
@@ -528,10 +529,10 @@ ui.process_input Base In =
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
 | $savesFolder <= "[$data][$savesFolder]"
-| $view <= view $main Me $width $height-128
-| $create{8 8}
 | $menuBG <= $img{ui_menu_bg}
-| $iconsPanelBG <= $img{ui_panel}
+| $panelBG <= $img{ui_panel}
+| $view <= view $main Me $width $height-($panelBG.h-10)
+| $create{8 8}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $worldProperties <= $create_world_props
