@@ -11,6 +11,7 @@ type ui.$tabs{main}
   paused
   mapsFolder/"work/worlds/"
   savesFolder/"work/saves/"
+  planet
   confirmFn //callaback for yes/no confirmation
   panelTabs
   panelTabsMore/(t) //sparse element related to picked tab
@@ -383,7 +384,15 @@ ui.create_ingame_dlg =
 | input_split Ingame: Base In => Base.input{In}
 
 ui.create_planet_dlg =
-| planet $main Me $width $height
+| $planet <= planet $main Me $width $height
+| BY = $height-64
+| ET = icon $img{icons_tab_endturn} click: Icon=> $planet.pass_time
+| EX = icon $img{icons_menu_exit} click: Icon => $pick_title_menu
+| Buttons = layH s/4 [ET spacer{44 0} EX]
+| dlg w/$width h/$height: mtx
+  |   0          0 | $planet
+  | 0 $height-20 | infoline
+  |  32         BY | Buttons
 
 ui.create_dialog_tabs =
 | $copyrightText <= txt small 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'

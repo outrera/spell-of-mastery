@@ -48,6 +48,11 @@ points_in_diamond R =
 | for I RR: push [I-R 0] Ps
 | Ps
 
+point_in_rect [RX RY RW RH] [X Y] = RX<<X and X<RX+RW and RY<<Y and Y<RY+RH
+rects_intersect [AX AY AW AH] [BX BY BW BH] =
+| AX<BX+BW and AY<BY+BH and BX<AX+AW and BY<AY+AH
+
 export points Dirs Dirs4 Dirs43 dirN add_border_to_matrix
        points_in_square points_in_circle
        points_in_matrix points_in_diamond
+       point_in_rect rects_intersect

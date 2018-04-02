@@ -1,9 +1,5 @@
 use macros util gui
 
-point_in_rect [RX RY RW RH] [X Y] = RX<<X and X<RX+RW and RY<<Y and Y<RY+RH
-rects_intersect [AX AY AW AH] [BX BY BW BH] =
-| AX<BX+BW and AY<BY+BH and BX<AX+AW and BY<AY+AH
-
 PickCount = 0
 
 order_at Me XYZ Target =
