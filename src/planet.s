@@ -1,10 +1,17 @@
-use gui util widgets
+use gui util widgets stack
 
-type place{Planet Id Type XY}
-  planet/Planet id/Id type/Type xy/XY data
+type planet_site{Id Planet}
+  planet/Planet //planet this sites belongs to
+  id/Id // numeric id, which can be reused
+  serial //serial guaranteed to be unique for the duration of the game
+  type //city, lair, base, monsters
+  turn //turn this place came to live
+  name
+  xy/[-1 -1]
+  data
 
-place.rect =
-| C = $planet.placeC
+planet_site.rect =
+| C = $planet.siteC
 | [$xy.0-C $xy.1-C C*2 C*2]
 
 type planet.widget{Main UI W H}
@@ -14,13 +21,21 @@ type planet.widget{Main UI W H}
   h/H
   mice_xy/[0 0]
   seed
+  serial
   bg
-  fg_place
+  fg_site
   fow
   turn
-  places/[]
-  events/[]
-  placeC/8
+  sites
+  all_sites
+  free_sites
+  siteC/8
+  param
+| $param <= $main.params.planet
+| MaxSites = $param.max_sites
+| $all_sites <= MaxSites{(planet_site ? Me)}
+| $sites <= stack MaxSites
+| $free_sites <= stack $all_sites
 | $clear
 
 LCG_M = 2147483647
@@ -34,32 +49,41 @@ planet.rand Size =
 
 planet.img Name = $main.img{Name}
 
-
 planet.clear =
-| $places <= []
+| for S $sites: $free_sites.push{S}
+| $sites.clear
 | $turn <= 0
+| $serial <= 0
 | $seed <= LCG_M.rand
 | $generate
 
-planet.generate_place Id Ps =
+planet.free_site S =
+| S.xy.init{-1,-1}
+
+planet.generate_site Type =
 | X = 0
 | Y = 0
 | R = [0 0 0 0]
-| C2 = $placeC*2
+| C2 = $siteC*2
 | _label again
 | X = $rand{$w}
 | Y = $rand{$h}
 | R.init{[X Y C2 C2]}
 | when Y>510 or X>$w-C2: _goto again
-| for P Ps: when rects_intersect{R P.rect}: _goto again
-| X += $placeC
-| Y += $placeC
-| place Me Id 0 [X Y]
+| for P $sites: when rects_intersect{R P.rect}: _goto again
+| X += $siteC
+| Y += $siteC
+| S = $free_sites.pop
+| S.type <= Type
+| S.serial <= $serial++
+| S.turn <= $turn
+| S.xy.init{X,Y}
+| $sites.push{S}
+| S
 
 planet.generate =
-| NPlaces = 200
-| for I NPlaces:
-  | push $generate_place{I $places} $places
+| for I $param.ncities: $generate_site{city}
+| for I $param.nlairs: $generate_site{lair}
 
 planet.pass_time =
 | $turn += 1
@@ -68,18 +92,21 @@ planet.render = Me
 
 planet.draw FB X Y =
 | less $bg: $bg <= $img{planet_bg}
-| less $fg_place: $fg_place <= $img{planet_place}
+| less $fg_site: $fg_site <= $img{planet_site}
 | FB.blit{0 0 $bg}
-| C = $placeC
-| for P $places: FB.blit{P.xy.0-C P.xy.1-C $fg_place}
+| C = $siteC
+| for S $sites: when S.xy.0>0: FB.blit{S.xy.0-C S.xy.1-C $fg_site}
 
+planet.site_at XY =
+| C = $siteC
+| for S $sites: when point_in_rect{[S.xy.0-C S.xy.1-C C*2 C*2] XY}:
+  | leave S
+| 0
 
 planet.infoline =
-| M = $mice_xy
-| C = $placeC
-| for P $places: when point_in_rect{[P.xy.0-C P.xy.1-C C*2 C*2] M}:
-  | leave "place([P.id]): [P.type]"
-| "[M]"
+| S = $site_at{$mice_xy}
+| less S: leave "[$mice_xy]"
+| "site([S.serial]): [S.type]"
 
 planet.input In =
 | case In

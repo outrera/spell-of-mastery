@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- layV/layH should always require s/
+- Rename `world` to `site`.
+- Rename `planet` to `world`
 - Implement ingredient and spell systems, then a menu to manage them at the start of the battle.
 - Finish kingdom view. It would be turnbased too. Each turn several events spawn, like invading monster squad. Player will have a choice to either intercept it or ignore. If player ignores monster squad, it will invade some town, player will then again will have choice to defend the city, or ignore, losing score.
 - Random map generation, based on matching tiles.
@@ -104,6 +105,7 @@ Optimization Possibilities:
 
 Symta Language Handicaps:
 - Allow to specify name of the output executable file and entry point file, other than main. That way we can produce several executable files in the same dir from the same source code base. I.e. we could have sprite sheet dumper utility without touching the main game exe.
+- The foremost handicap is the absence of proper enheap API and allocation syntax.
 - `got@@it` leads to potential errors, because when `it` gets removed upstream, downstream references would be treated as literal symbols. It also introduces confusion.
 - Don't use abort, because it involves windows debugger, that is pretty annoying.
 - No way to quickly introduce an efficient inplace field on a struct, like unit, propagating it to save-file.
