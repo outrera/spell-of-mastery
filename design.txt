@@ -1,7 +1,16 @@
 THIS FILE STATES DESIGN DECISIONS THAT WERE MADE
 
+
+General:
+- The basic idea is to design an X-Com inspired game, but in a fantasy setting. Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. The enchantment spells play the role of equipment, say instead of physical armor item, we we have magic shield enchantment, and instead of medkits we have creatures specializing with healing. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters or alien bases, there would be dungeons and ruins to explore. Additionally zeppelins, flying ships, flying islands/castles could be introduced for transporting squad on kingdom view. Instead of corporations there are different competing wizard orders and castles with lords/kings.
+- Other sources of inspiration are Spellcraft: Aspects of Valor, Lords of Chaos, and Magic & Mayhem.
+- Completely determenistic game mechanics (i.e. game design doesn't use random dice rolls). Random rolls are allowed only for world and site generation, and for AI players decision making.
+
+
+Background Story:
+The Great King [KingName] the [First, Second, Third] of [Dynasty Name] has hired your guild to protect his kingdom from increasing monster attacks and investigate their cause. The King has promised to pay hefty amount of money for each attack on his cities you help preventing and even more money have you succeed putting an end to these attacks. The king has also provided you with a list of sites, which you can use to establish your bases of operation.
+
 Kingdom View:
-- The basic idea is to design an X-Com inspired game, but in a fantasy setting, with determenistic game mechanics (i.e. game design doesn't use random dice rolls). Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. The enchantment spells play the role of equipment, say instead of physical armor item, we we have magic shield enchantment, and instead of medkits we have creatures specializing with healing. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters or alien bases, there would be dungeons and ruins to explore. Additionally zeppelins, flying ships, flying islands/castles could be introduced for transporting squad on kingdom view. Instead of corporations there are different competing wizard orders and castles with lords/kings.
 - The player is in charge of wizard guild, which is hired by king to protect the kingdom from ongoing invasion.
 - Each wizard is controlling a flying ship, which he uses to intercept inviding monsters or investigate lairs.
 - Flying ship has following facilities (all limited in size):
@@ -17,7 +26,9 @@ Kingdom View:
     Before summoning, player must first research creatures. To do research, player must
     have a soul gem with it.
 - Wizard guild can have several bases (wizard towers), which are managed using the same battle view, but with limited actions. Player starts with a single base, location for which he picks at the start of the game.
-- Bases have detection facilities, exposing roaming monster squads near them. If such squad gets detected, player has choice to intercept it or let it further, in that case such squad can attack a city, build a lair or wander away.
+- Bases have detection facilities, such as scrying devices, exposing roaming monster squads near them. If such squad gets detected, player has choice to intercept it or let it further, in that case such squad can attack a city, build a lair or wander away.
+- If monsters capure city it turns into ruins. Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The less cities there are the more are the chances, so it is always wise to leave some guards. The percentage of total reward gold gained is based on the percent of cities alive. Restoring city requires capturing it back and spending some gold.
+- The goal to defeat several enemy wizards, who are behind the monster invasion, by assaulting their sites of living(which should be uncovered first). Player could also attempt to capture king's castle, which will give him income each turn from the cities not turned into ruins.
 
 Battle View:
 - Each creature major stats: Moves, Health, Attack, Defense, Fatigue, View, Range, and Will. Some magical artifacts and structures can affect these numbers.

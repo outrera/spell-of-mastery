@@ -4,7 +4,7 @@ type planet_site{Id Planet}
   planet/Planet //planet this sites belongs to
   id/Id // numeric id, which can be reused
   serial //serial guaranteed to be unique for the duration of the game
-  type //city, lair, base, monsters
+  type //city, ruin, lair, base, enemy
   turn //turn this place came to live
   name
   xy/[-1 -1]
@@ -20,15 +20,18 @@ type planet.widget{Main UI W H}
   w/W
   h/H
   mice_xy/[0 0]
+  click_xy/[0 0]
   seed
   serial
   bg
   fg_site
+  fg_picked
   fow
   turn
   sites
   all_sites
   free_sites
+  picked //picked site
   siteC/8
   param
 | $param <= $main.params.planet
@@ -52,8 +55,9 @@ planet.img Name = $main.img{Name}
 planet.clear =
 | for S $sites: $free_sites.push{S}
 | $sites.clear
+| $picked <= 0
 | $turn <= 0
-| $serial <= 0
+| $serial <= 1
 | $seed <= LCG_M.rand
 | $generate
 
@@ -83,7 +87,6 @@ planet.generate_site Type =
 
 planet.generate =
 | for I $param.ncities: $generate_site{city}
-| for I $param.nlairs: $generate_site{lair}
 
 planet.pass_time =
 | $turn += 1
@@ -93,9 +96,15 @@ planet.render = Me
 planet.draw FB X Y =
 | less $bg: $bg <= $img{planet_bg}
 | less $fg_site: $fg_site <= $img{planet_site}
+| less $fg_picked: $fg_picked <= $img{planet_picked}
 | FB.blit{0 0 $bg}
+| Clock = clock
+| PickBlink = (Clock-Clock.int.float)<0.25
 | C = $siteC
-| for S $sites: when S.xy.0>0: FB.blit{S.xy.0-C S.xy.1-C $fg_site}
+| PickedId = if $picked then $picked.id else -1
+| for S $sites: when S.xy.0>0:
+  | G = if S.id <> PickedId or PickBlink then $fg_site else $fg_picked
+  | FB.blit{S.xy.0-C S.xy.1-C G}
 
 planet.site_at XY =
 | C = $siteC
@@ -114,6 +123,9 @@ planet.input In =
     | $mice_xy.init{XY}
   [mice left State XY]
     | $mice_xy.init{XY}
+    | when State: leave
+    | S = $site_at{$mice_xy}
+    | when S: $picked <= S
   [mice right State XY]
     | $mice_xy.init{XY}
 
