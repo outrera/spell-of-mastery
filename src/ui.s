@@ -240,22 +240,22 @@ ui.create_bank_list =
 | BankList,ItemList
 
 ui.create_panel_tab_menu =
-| WorldIcon = icon $img{icons_menu_world} click: Icon =>
+| WorldIcon = icon menu_world: Icon =>
   | $pause
   | $worldProperties.show <= 1
   | $worldProperties.update
-| SaveIcon = icon $img{icons_menu_save} click: Icon =>
+| SaveIcon = icon menu_save: Icon =>
   | $pause
   | $saveWorldDlg.show <= 1
   | $saveWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
   | $saveWorldDlg.filename.value <= $world.filename
-| LoadIcon = icon $img{icons_menu_load} click: Icon =>
+| LoadIcon = icon menu_load: Icon =>
   | $pause
   | $loadWorldDlg.show <= 1
   | $loadWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
-| ExitIcon = icon $img{icons_menu_exit} click: Icon =>
+| ExitIcon = icon menu_exit: Icon =>
   | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
-| LeaveIcon = icon $img{icons_menu_leave} click: Icon =>
+| LeaveIcon = icon menu_leave: Icon =>
   | $pick_planet
   //| $confirm{"Leave this territory?" |$0 yes => $pick_planet}
 | layV s/4 [(layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon)
@@ -273,15 +273,14 @@ ui.confirm_done State =
 | Fn{State}
 
 ui.create_panel_tab_confirm =
-| YesIcon = icon $img{icons_menu_yes} click: Icon => $confirm_done{yes}
-| NoIcon = icon $img{icons_menu_no} click: Icon => $confirm_done{no}
+| YesIcon = icon menu_yes: Icon => $confirm_done{yes}
+| NoIcon = icon menu_no: Icon => $confirm_done{no}
 | layH s/4 YesIcon,NoIcon
 
 ui.create_play_button =
-| Icon = icon data/play $img{icons_tab_play} click/
-  | Icon =>
-    | $world.new_game
-    | $unpause
+| Icon = icon tab_play: Icon =>
+  | $world.new_game
+  | $unpause
 | Icon.picked_fg <= $img{icons_tab_pause}
 | hidden Icon
 
@@ -326,7 +325,6 @@ ui.create_panel_tabs =
 | $panelTabs
 
 ui.panel_tab_picked TabName = 
-| $main.sound{ui_click}
 | when got@@it $panelTabsDeselect.$curPanelTab: (it){$curPanelTab TabName}
 | when got@@it $panelTabsSelect.$curPanelTab: (it){$curPanelTab TabName}
 | Ms = $panelTabsMore.$curPanelTab
@@ -340,7 +338,8 @@ ui.create_panel_tabs_header =
 | Click = Icon => $panel_tab_picked{Icon.data}
 | TabIconsBare = []
 | TabsIcons = map Name [unit spell summon bag menu brush]:
-  | Icon = icon data/Name $img{"icons_tab_[Name]"} click/Click
+  | Icon = icon "tab_[Name]" Click
+  | Icon.data <= Name
   | when Name><$curPanelTab: Icon.picked<=1
   | Icon.picked_overlay <= \icon_hl
   | push Icon TabIconsBare
@@ -351,7 +350,7 @@ ui.create_panel_tabs_header =
 | for Icon TabIconsBare: Icon.group <= TabIconsBare
 | PlayButton = $create_play_button
 | push PlayButton $editorWidgets
-| EndTurnButton = icon data/endturn $img{icons_tab_endturn} click/|Icon=>$world.end_turn
+| EndTurnButton = icon tab_endturn: Icon => $world.end_turn
 | layH s/8 [@TabsIcons spacer{16 0} PlayButton spacer{140 0} EndTurnButton]
 
 ui.create_ingame_ui =
@@ -386,8 +385,8 @@ ui.create_ingame_dlg =
 ui.create_planet_dlg =
 | $planet <= planet $main Me $width $height
 | BY = $height-64
-| ET = icon $img{icons_tab_endturn} click: Icon=> $planet.pass_time
-| EX = icon $img{icons_menu_exit} click: Icon => $pick_title_menu
+| ET = icon tab_endturn: Icon => $planet.pass_time
+| EX = icon menu_exit: Icon => $pick_title_menu
 | Buttons = layH s/4 [ET spacer{44 0} EX]
 | dlg w/$width h/$height: mtx
   |   0          0 | $planet
@@ -506,7 +505,6 @@ ui.actClickIcon Icon =
 | HKI = $hotKeyInvoke
 | $hotKeyInvoke <= 0
 | $world.act <= 0
-| $main.sound{ui_click}
 | when $curActIcon: $curActIcon.picked <= 0
 | $curActIcon <= Icon
 | Unit = Icon.unit
@@ -539,7 +537,7 @@ ui.actClickIcon Icon =
 
 ui.create_act_icons =
 | map I $maxUnitActIcons+$maxGroundActIcons:
-  | hidden: icon 0 click/|Icon => $actClickIcon{Icon}
+  | hidden: icon 0: Icon => $actClickIcon{Icon}
 
 ui.process_input Base In =
 | Base.input{In}

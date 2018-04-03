@@ -1,4 +1,4 @@
-use world gfx sprite_dump unit_flags enheap ui widgets gui
+use world gfx sprite_dump unit_flags enheap ui widgets gui main_data
 
 type main{Data}
      world

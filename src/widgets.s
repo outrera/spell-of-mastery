@@ -1,19 +1,13 @@
-use gui
+use gui main_data
 
-Main = No
 Fonts = t
-Tints = No
 
-set_main NewMain =
-| Main <= NewMain
-| Tints <= Main.params.tints
-
-skin F = Main.img{"ui_[F]"}
+skin F = get_main{}.img{"ui_[F]"}
 
 type font{@new_font Gs W H} glyphs/Gs widths/W height/H
 font.as_text = "#font{}"
 font N = have Fonts.N:
-| S = Main.spr{"font_[N]"}
+| S = get_main{}.spr{"font_[N]"}
 | [W H EX] = S.frames.0^|F => [F.w F.h F.xy.0]
 | Glyphs = S.frames.list{}{F<[X Y W H].margins=>| F.xy <= 0,0
                                                 | F.cut{X 0 W F.h}}
@@ -89,7 +83,7 @@ bar.draw G X Y =
 
 type button.widget{Text Fn state/normal skin/medium_large}
   text/Text value on_click/Fn state_/State sprite over w h
-| $sprite <= Main.spr{"ui_button_[Skin]"} 
+| $sprite <= get_main{}.spr{"ui_button_[Skin]"} 
 | $w <= $sprite.frames.'normal'.0.w
 | $h <= $sprite.frames.'normal'.0.h
 button.state = $state_
@@ -174,7 +168,7 @@ droplist.draw G PX PY =
     | Y += R.h
 | less $drop
   | G.blit{PX PY $rs.$picked}
-  | A = Main.spr{"ui_arrow"}.frames.down_normal.0
+  | A = get_main{}.spr{"ui_arrow"}.frames.down_normal.0
   | G.blit{PX+$w-A.w PY A}
 | $rs <= 0
 | No
@@ -291,7 +285,7 @@ slider_.input In = case In
 
 type arrow.widget{D Fn state/normal skin/arrow}
   direction/D on_click/Fn state/State sprite
-| $sprite <= Main.spr{"ui_[Skin]"}
+| $sprite <= get_main{}.spr{"ui_[Skin]"}
 arrow.render = $sprite.frames."[$direction]_[$state]".0
 arrow.input In = case In
   [mice left 1 P] | when $state >< normal
@@ -347,7 +341,7 @@ txt_input.input In = case In
   [key K<1.size 1] | $value <= "[$value][K]"
 
 type img.widget{Path} path/Path
-img.render = Main.img{"image_[$path]"}
+img.render = get_main{}.img{"image_[$path]"}
 
 
 folder_nomalized Path = 
@@ -384,5 +378,5 @@ infoline.render =
 | $info_text.value <= (get_gui).mice_widget.infoline
 | $info_text.render
 
-export set_main skin font txt button litem droplist slider folder_widget 
+export skin font txt button litem droplist slider folder_widget 
        litems txt_input img infoline

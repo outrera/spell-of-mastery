@@ -1,4 +1,4 @@
-use widgets gfx
+use widgets gfx main_data
 
 
 /*
@@ -24,7 +24,8 @@ minimap.input In = case In
 
 DisabledIconOverlay = 0
 
-type icon.widget{fg data/0 click/(Icon=>)}
+type icon.widget{FG OnClick}
+   fg/FG
    w/50
    h/42
    pressed
@@ -36,10 +37,11 @@ type icon.widget{fg data/0 click/(Icon=>)}
    grayed //percent of grayed area of the icon
    text/[0 0 No]
    frame/[2 2 icon_frame]
-   data/Data
+   data/0
    unit/0
    hotkey
-   on_click/Click
+   on_click/OnClick
+   sound/ui_click
    group //use for exclusive widgets, like radio buttons or tabs
    //popup/icon_popup{}
 
@@ -47,6 +49,7 @@ ResearchIcon = 0
 
 icon.draw G PX PY =
 | less $fg: leave
+| when $fg.is_text: $fg <= get_main{}.img{"icons_[$fg]"}
 | X = PX
 | Y = PY
 | when $pressed:
@@ -89,6 +92,7 @@ icon.input In =
          | when $group:
            | for Icon $group: Icon.picked <= 0
            | $picked <= 1
+         | when $sound: get_main{}.sound{$sound}
          | $on_click{}{Me}
        | $pressed <= 0
 
