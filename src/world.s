@@ -8,7 +8,9 @@ type world_site{Id World}
   gfx //representation on world map
   turn //turn this site came to life
   name
+  attacker/0
   xy/[-1 -1]
+  state
   data
 
 world_site.rect =
@@ -38,7 +40,7 @@ type world.widget{Main UI W H}
   incomeFactor
 | $param <= $main.params.world
 | $bg <= $img{world_bg}
-| $fg <= @table: map N [site picked base city lair party]
+| $fg <= @table: map N [site picked base city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
 | MaxSites = $param.max_sites
 | $all_sites <= MaxSites{(world_site ? Me)}
@@ -69,16 +71,13 @@ world.clear =
 | $generate
 
 world.free_site S =
+| when $picked and $picked.id><S.id: $picked <= 0
 | Type = S.type
 | $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}-1
 | S.xy.init{-1,-1}
 | $free_sites.push{S}
 
-world.generate_site Type =
-| Lim = 
-| less $data."cnt_[Type]"^~{No 0}<$param."lim_[Type]"^~{No 1000}:
-  | leave 0
-| less $free_sites.used: leave 0 //FIXME: should we halt the game?
+world.generate_xy =
 | X = 0
 | Y = 0
 | R = [0 0 0 0]
@@ -91,12 +90,22 @@ world.generate_site Type =
 | for P $sites: when rects_intersect{R P.rect}: _goto again
 | X += $siteC
 | Y += $siteC
+| X,Y
+
+world.generate_site Type xy/0 =
+| Lim = 
+| less $data."cnt_[Type]"^~{No 0}<$param."lim_[Type]"^~{No 1000}:
+  | leave 0
+| less $free_sites.used: leave 0 //FIXME: should we halt the game?
+| X,Y = if Xy then Xy else $generate_xy
 | S = $free_sites.pop
 | S.type <= Type
 | S.serial <= $serial++
 | S.turn <= $turn
 | S.xy.init{X,Y}
 | S.gfx <= $fg.Type
+| S.attacker <= 0
+| S.state <= 0
 | when no S.gfx: S.gfx <= $fg.site
 | $sites.push{S}
 | $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}+1
@@ -106,6 +115,12 @@ world.generate =
 | for I $param.start_cities: $generate_site{city}
 
 world.end_turn =
+| for S $sites:
+  | when S.type >< city and S.attacker:
+    | $free_site{S.attacker}
+    | X,Y = S.xy
+    | $free_site{S}
+    | R = $generate_site{ruin xy/[X Y]}
 | Ss = $sites.list
 | $sites.clear
 | Lairs = []
@@ -122,14 +137,20 @@ world.end_turn =
   | $sites.push{S}
 | $turn += 1
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
+| for P Parties: less P.state:
+  | C = Cities.find{?attacker^not}
+  | when got C:
+    | C.attacker <= P
+    | P.state <= \raid
 | LSLC = $param.lair_spawn_lair_chance
 | LSMC = $param.lair_spawn_monster_chance
+| LH = $param.lair_handicap
 | for L Lairs:
-  | T = $turn - L.turn
-  | when T<$rand{5} and $rand{100}<LSMC: $generate_site{party}
-  | when T<$rand{10} and $rand{100}<LSLC: $generate_site{lair}
+  | A = $turn - L.turn
+  | when $rand{5}<A and $rand{100}<LSMC: $generate_site{party}
+  | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
 | when $rand{100}<LSMC: $generate_site{party}
-| when $rand{100}<LSLC: $generate_site{lair}
+| when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
 | $ui.notify{"Turn [$turn]"}
 
 world.render = Me
@@ -140,10 +161,10 @@ world.draw FB X Y =
 | PickBlink = (Clock-Clock.int.float)<0.25
 | C = $siteC
 | PickedId = if $picked then $picked.id else -1
-| for S $sites: when S.xy.0>0:
+| for S $sites: when S.xy.0>0 and S.state <> raid:
   | G = if S.id <> PickedId or
            (PickBlink and not point_in_rect{S.rect $mice_xy})
-        then S.gfx
+        then if S.attacker then $fg.attack else S.gfx
         else $fg.picked
   | FB.blit{S.xy.0-C S.xy.1-C G}
 
