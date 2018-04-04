@@ -103,7 +103,10 @@ world.draw FB X Y =
 | C = $siteC
 | PickedId = if $picked then $picked.id else -1
 | for S $sites: when S.xy.0>0:
-  | G = if S.id <> PickedId or PickBlink then $fg_site else $fg_picked
+  | G = if S.id <> PickedId or
+           (PickBlink and not point_in_rect{S.rect $mice_xy})
+        then $fg_site
+        else $fg_picked
   | FB.blit{S.xy.0-C S.xy.1-C G}
 
 world.site_at XY =
@@ -125,6 +128,7 @@ world.input In =
     | $mice_xy.init{XY}
     | when State: leave
     | S = $site_at{$mice_xy}
+    | $picked <= 0
     | when S: $picked <= S
   [mice right State XY]
     | $mice_xy.init{XY}
