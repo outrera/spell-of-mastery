@@ -28,29 +28,29 @@ unit.end_turn =
   | Charge += CInc
   | $set{charge [CAct Charge CCost TId]}
 | when $ai><unit:
-  | for V $world.units_get{$xyz}: V.run_genes{tenant_endturn}
+  | for V $site.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}
 | $resting <= Resting
 | $handled <= 0
 | $engaged <= 0
 
-world.new_turn =
+site.new_turn =
 
 EndTurnLoop = 0
 player.new_turn =
 | less $total_units:
   | if EndTurnLoop++ > 16
     then | say "caught in end turn loop"
-    else | $world.end_turn //no units, skip his turn
+    else | $site.end_turn //no units, skip his turn
          | leave
 | EndTurnLoop <= 0
-| say "[$name] ([$color]) begins turn [$world.turn]"
+| say "[$name] ([$color]) begins turn [$site.turn]"
 | for U $units: U.new_turn
 
 player.end_turn =
 | for U $units: U.end_turn
 
-world.end_turn =
+site.end_turn =
 | $players.$player.end_turn
 | $player++
 | when $player >< $players.size:

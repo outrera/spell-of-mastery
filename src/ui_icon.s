@@ -11,10 +11,10 @@ icon_popup.render =
 type minimap.widget{Main CenterAt}
      main/Main w/128 h/128 pressed center/CenterAt
 minimap.draw G PX PY =
-| MM = $main.world.minimap
+| MM = $main.site.minimap
 | G.blit{PX PY MM}
 
-minimap.center_at P = ($center){P.0*$main.world.w/$w P.1*$main.world.h/$h}
+minimap.center_at P = ($center){P.0*$main.site.w/$w P.1*$main.site.h/$h}
 
 minimap.input In = case In
   [mice_move _ XY] | when $pressed: $center_at{XY}
@@ -107,7 +107,7 @@ icon.infoline =
 | Cool = Unit.cooldown_of{ActName}
 | Cost = Act.cost
 | if Cool then
-    | Info <= "[Info] ([Cool.0+Cool.1-Unit.world.turn] TURNS TO RECHARGE)"
+    | Info <= "[Info] ([Cool.0+Cool.1-Unit.site.turn] TURNS TO RECHARGE)"
   else if not Unit.owner.researched{Act} then
     | Info <= "research [Info] ([Act.lore] LORE)"
   else when got Cost and Cost:

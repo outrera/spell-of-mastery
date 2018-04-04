@@ -1,7 +1,7 @@
 use bits macros
 
-type ai{player} world
-| $world <= $player.world
+type ai{player} site
+| $site <= $player.site
 | $params.view <= [0 0 0]
 | $params.cursor <= [0 0 1]
 
@@ -23,7 +23,7 @@ ai.clear =
 
 PlayerColors = [red blue teal purple orange black white yellow]
 
-type player{id world}
+type player{id site}
    name
    ai
    human //1 for human controlled players
@@ -45,7 +45,7 @@ type player{id world}
 | $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | $params <= t
-| MaxSize = $world.maxSize
+| MaxSize = $site.maxSize
 | $sight <= dup MaxSize: MaxSize.bytes
 | $ai <= ai Me
 | Cs = $main.img{ui_colors}
@@ -67,9 +67,9 @@ player.is_enemy P = $id <> P.id
 
 player.notify Text =
 | less $human: leave
-| $world.notify{Text}
+| $site.notify{Text}
 
-player.main = $world.main
+player.main = $site.main
 
 player.lore = $params.lore
 player.`=lore` R = $params.lore <= R
@@ -93,8 +93,8 @@ player.clear =
 | $unit_counts.clear{0}
 | $ai.clear
 | $picked <= []
-| $leader <= $world.nil
-| $pentagram <= $world.nil
+| $leader <= $site.nil
+| $pentagram <= $site.nil
 | $mana <= 0
 | $lore <= 0
 | $params.lossage <= 0
@@ -116,7 +116,7 @@ player.lost_unit U =
 | when CID:
   | $unit_counts.CID--
   | $total_units--
-| when U.ai >< pentagram: $pentagram <= $world.nil
+| when U.ai >< pentagram: $pentagram <= $site.nil
 
 player.research_item What =
 | Act = $main.params.acts.What
@@ -138,7 +138,7 @@ player.can_research Act =
 
 player.units =
 | PID = $id
-| $world.active.list.keep{(?owner.id >< PID and not ?removed)}
+| $site.active.list.keep{(?owner.id >< PID and not ?removed)}
 
 player.seen XYZ = $sight.(XYZ.1).(XYZ.0)>1
 
@@ -157,10 +157,10 @@ update_spell_of_mastery Me P =
   | P.params.spell_of_mastery <= SOM
 
 player.update =
-| Cycle = $world.cycle
+| Cycle = $site.cycle
 | when Cycle><0 and $human and not $leader.removed:
-  | $world.view.center_at{$leader.xyz cursor/1}
-| update_spell_of_mastery $world Me
+  | $site.view.center_at{$leader.xyz cursor/1}
+| update_spell_of_mastery $site Me
 
 alloc_ai_blockers Me =
 | for U $units: less U.removed: when U.ai >< avoid:
@@ -173,9 +173,9 @@ free_ai_blockers Me =
 
 player.make_move =
 | when $human: leave
-//|alloc_ai_blockers $world
+//|alloc_ai_blockers $site
 | $ai.update
-//|free_ai_blockers $world
+//|free_ai_blockers $site
 
 player.add_item Name Amount =
 | when Amount > 0: bad "player.remove_item implement positive amount"
@@ -192,21 +192,21 @@ player.add_item Name Amount =
   | when Amount < 0: leave 1
 | 1
 
-player.sound Name = when $id >< $world.human.id: $main.sound{Name}
+player.sound Name = when $id >< $site.human.id: $main.sound{Name}
 
 player.lost_leader Leader =
 | Leaders = []
 | RemainingUnits = []
-| for U $world.active.list: when U.id <> Leader.id:
+| for U $site.active.list: when U.id <> Leader.id:
   | when U.leader: push U Leaders
   | when U.owner.id >< $id: push U RemainingUnits
 | case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
-  | $world.params.winner <= L.owner.id
-  | $world.params.victory_type <= 'Victory by defeating other leaders.'
+  | $site.params.winner <= L.owner.id
+  | $site.params.victory_type <= 'Victory by defeating other leaders.'
 | when Leader.owner.human: less Leaders.any{?owner.human}:
-  | $world.params.winner <= 0
-  | $world.params.victory_type <= 'Defeat by losing your leader.'
-| $world.notify{"[$name] was defeated."}
+  | $site.params.winner <= 0
+  | $site.params.victory_type <= 'Defeat by losing your leader.'
+| $site.notify{"[$name] was defeated."}
 | less RemainingUnits.any{?leader}: for U RemainingUnits: U.free
 
 export player

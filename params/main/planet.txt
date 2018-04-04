@@ -1,3 +1,0 @@
-max_sites: 1000
-ncities: 30
-max_lairs: 100

@@ -20,7 +20,7 @@ flyer_can_move Me Src Dst =
 | SZ = Src.z
 | DZ = Dst.z
 | if SZ<DZ
-  then | when DZ > $world.d-3: leave 0
+  then | when DZ > $site.d-3: leave 0
        | times I DZ-SZ: less (Src+I).tile.empty: leave 0
   else times I SZ-DZ: less (Dst+I).tile.empty: leave 0
 | 1
@@ -32,7 +32,7 @@ climber_can_move Me Src Dst =
 | DZ = Dst.z
 | if SZ<DZ
   then | when DZ-SZ > 3: leave 0
-       | when DZ > $world.d-3: leave 0
+       | when DZ > $site.d-3: leave 0
        | times I DZ-SZ: less (Src+I).tile.empty: leave 0
   else | when SZ-DZ > 3: leave 0
        | times I SZ-DZ: less (Dst+I).tile.empty: leave 0
@@ -67,7 +67,7 @@ unit.list_moves Src Cost =
 
 PFQueue = queue 256*256
 
-world.pathfind MaxCost U StartCell Check =
+site.pathfind MaxCost U StartCell Check =
 | less U.speed: leave 0
 | X,Y,Z = StartCell.xyz
 | StartCost = $new_cost
@@ -102,7 +102,7 @@ world.pathfind MaxCost U StartCell Check =
 //| say EndTime-StartTime
 | R
 
-world.closest_reach MaxCost U StartCell TargetXYZ =
+site.closest_reach MaxCost U StartCell TargetXYZ =
 | less U.speed: leave 0
 | X,Y,Z = StartCell.xyz
 | TX,TY,TZ = TargetXYZ
@@ -128,26 +128,26 @@ world.closest_reach MaxCost U StartCell TargetXYZ =
 | $pathfind{MaxCost U StartCell &check}
 | Best
 
-world.find MaxCost U StartCell Check =
+site.find MaxCost U StartCell Check =
 | Found = $pathfind{MaxCost U StartCell Check}
 | if Found then Found else 0
 
-unit.find MaxCost Check = $world.find{MaxCost Me $cell Check}
+unit.find MaxCost Check = $site.find{MaxCost Me $cell Check}
 
-unit.pathfind MaxCost Check = $world.pathfind{MaxCost Me $cell Check}
+unit.pathfind MaxCost Check = $site.pathfind{MaxCost Me $cell Check}
 
 unit.path_to XYZ =
-| Target = $world.cell{@XYZ}
-| Found = $world.pathfind{1000 Me $cell ?><Target}
+| Target = $site.cell{@XYZ}
+| Found = $site.pathfind{1000 Me $cell ?><Target}
 | if Found then Found.path else []
 
 // returns path to closest reachable point near XYZ
 unit.path_near XYZ =
-| Found = $world.closest_reach{1000 Me $cell XYZ}
+| Found = $site.closest_reach{1000 Me $cell XYZ}
 | if Found then Found.path else []
 
 unit.path_around_to Range XYZ = //Me is unit
-| Target = $world.cell{@XYZ}
+| Target = $site.cell{@XYZ}
 | check Dst =
   | if Dst><Target then 1
     else if Dst.block then \block
@@ -191,7 +191,7 @@ unit.reachable =
       else Type <= \swap
     | when Type: push [Type Dst] Xs
     | for E $nearby_enemies_at{Dst.xyz}:
-      | when not E.afraid and $can_attack{E.cell $world.cellp{XYZ}}:
+      | when not E.afraid and $can_attack{E.cell $site.cellp{XYZ}}:
         | R <= \block //engage
       | when $range><1 and not $afraid and $moves >> Dst^path_len+1:
         | when $can_attack{Dst E.cell}: push [attack E.cell] Xs

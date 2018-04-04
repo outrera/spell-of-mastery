@@ -5,14 +5,14 @@ CellSize =
 init_unit_module CS =
 | CellSize <= CS
 
-type unit.$class{Id World}
-  world/World //FIXME: get rid of it, we wont be using several world
+type unit.$class{Id Site}
+  site/Site //FIXME: get rid of it, we wont be using several site
   id/Id //id could be reused, when this unit is freed
   serial //seral cant be reused, when this unit is freed
   class //data shared between all units of that class
   owner // player controlling this unit
   fxyz/[0 0 0] // fine X,Y,Z
-  xyz/[0 0 -1] // world cell X,Y,Z
+  xyz/[0 0 -1] // site cell X,Y,Z
   zhack // used to make unit appear standing on platform
   cell/0 //cell this unit resides in
   floor/0 // ground cell under this unit
@@ -50,16 +50,16 @@ type unit.$class{Id World}
   genes/[] //active genes
   can_move //movement function
   aistate //how AI processes this unit
-| $action <= $world.action{Me}
-| $next_action <= $world.action{Me}
-| $ordered <= $world.action{Me}
+| $action <= $site.action{Me}
+| $next_action <= $site.action{Me}
+| $ordered <= $site.action{Me}
 
 unit.enheap = Me
 unit.unheap = Me
 
 unit.as_text = "#unit{[$type] [$id]}"
 
-unit.main = $world.main
+unit.main = $site.main
 
 unit.picked = $flags^get_bit{1}
 unit.`=picked` State = $flags <= $flags^set_bit{1 State}
@@ -114,7 +114,7 @@ unit.`=backtrack` XYZ =
 | $add_gene{btrack 0 XYZ}
 
 unit.child Type =
-| $world.units_get{$xyz}
+| $site.units_get{$xyz}
         .find{(?host and ?type><Type and ?host.serial><$serial)}
 
 unit.is_enemy Target = $owner.is_enemy{Target.owner} and Target.hp>0
@@ -141,13 +141,13 @@ unit.placeable_at Dst =
 //FIXME: when serials get exhausted, compress serial space
 unit.init Class =
 | $class <= Class
-| $sprite <= if $show or $world.editor
+| $sprite <= if $show or $site.editor
              then $default_sprite
-             else $world.nil.sprite
+             else $site.nil.sprite
 | $facing <= 3
 | $mirror <= 0
-| $serial <= $world.serial
-| $world.serial++
+| $serial <= $site.serial
+| $site.serial++
 | $animate{idle}
 | $hp <= $class.hp
 | $def <= $class.def
@@ -158,7 +158,7 @@ unit.init Class =
 | $from.init{0,0,-1}
 | when $class.active
   | less $active
-    | $world.active.push{Me}
+    | $site.active.push{Me}
   | $active <= 1
   | $mov <= $class.mov
   | $fatigue <= 0
@@ -176,9 +176,9 @@ unit.morph Class =
 | $owner.lost_unit{Me}
 | $hp <= Class.hp + $hp - $class.hp
 | $class <= Class
-| $sprite <= if $show or $world.editor
+| $sprite <= if $show or $site.editor
              then $default_sprite
-             else $world.nil.sprite
+             else $site.nil.sprite
 | $animate{idle}
 | $owner.got_unit{Me}
 
@@ -189,7 +189,7 @@ unit.add_gene Name Duration Params =
 | when no Effect: Effect <= [[on static]]
 | On = Effect.0
 | when On.0 <> `on`:
-  | $world.notify{"unit.add_gene: missing `on{When}` for effect [Name]"}
+  | $site.notify{"unit.add_gene: missing `on{When}` for effect [Name]"}
   | leave
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag:
@@ -198,7 +198,7 @@ unit.add_gene Name Duration Params =
   | $flags <= $flags^set_bit{Flag 1}
   | $update_move_method
 | When = On.1
-| $genes <= $genes.cons{$world.new_gene{When Name Duration Params}}
+| $genes <= $genes.cons{$site.new_gene{When Name Duration Params}}
 
 unit.add_genes Genes =
 | for E Genes: case E
@@ -239,7 +239,7 @@ unit.strip What =
     | when Name><invisible: $alpha <= 0
     | $flags <= $flags^set_bit{Flag 0}
     | $update_move_method
-  | $world.free_gene{E}
+  | $site.free_gene{E}
 | $genes.heapfree
 | $genes <= Es.enheap
 
@@ -343,41 +343,41 @@ unit.animate Anim =
 unit.free =
 | when $picked: $owner.picked <= $owner.picked.skip{?id><$id}
 | when $owner: $owner.lost_unit{Me}
-| when $id >< $owner.leader.id: $owner.leader <= $world.nil
-//| when $id >< $owner.pentagram: $owner.pentagram <= $world.nil
+| when $id >< $owner.leader.id: $owner.leader <= $site.nil
+//| when $id >< $owner.pentagram: $owner.pentagram <= $site.nil
 | when $active: $active <= 2 //request removal from active list
 | less $path.end: $set_path{[]}
 | $reset_goal
 | $host <= 0
 | $colors <= 0
-| for E $genes: $world.free_gene{E}
+| for E $genes: $site.free_gene{E}
 | $genes.heapfree
 | $genes <= []
-| $world.free_unit{Me}
+| $site.free_unit{Me}
 
 //a faster solution would be keeping the linked list of all targeters
 unit.reset_followers =
-| for U $world.active: when U.goal and U.goal.id><$id:
+| for U $site.active: when U.goal and U.goal.id><$id:
   | U.reset_goal
 
 unit.removed = $xyz.2 >< -1
 
 in_range Me XYZ =
 | less XYZ.mdist{$xyz}<<$range: leave 0
-| $world.seen_from{$xyz $goal.xyz}
+| $site.seen_from{$xyz $goal.xyz}
 
-unit.units_in_range Range = $world.units_in_range{Me.xyz Range}
+unit.units_in_range Range = $site.units_in_range{Me.xyz Range}
 
 unit.nearby_enemies_at XYZ =
 | Es = []
 | for D Dirs43:
-  | Us = $world.cellp{XYZ+D}.floor.units
+  | Us = $site.cellp{XYZ+D}.floor.units
   | Us.skip{?empty}.keep{?is_enemy{Me}}.keep{?alive}{E=>push E Es} //.keep{E=>(E.xyz.2-XYZ.2)<<1}
 | Es
 
 unit.threatened_at XYZ =
 | for E $nearby_enemies_at{XYZ}:
-  | when not E.afraid and $can_attack{E.cell $world.cellp{XYZ}}: leave 1
+  | when not E.afraid and $can_attack{E.cell $site.cellp{XYZ}}: leave 1
 | 0
 
 unit.threatened = $threatened_at{$xyz}
@@ -387,7 +387,7 @@ heal_unit Me Amount =
 | $hp += min Amount $class.hp-$health
 
 unit.counter_attack Attacker =
-| less $owner.id <> $world.player and $moves>0 and $atk: leave
+| less $owner.id <> $site.player and $moves>0 and $atk: leave
 | when $afraid or no $enemies_in_range.find{?id><Attacker.id}: leave
 | less $can_attack{$cell Attacker.cell}: leave
 | $order_at{Attacker.xyz 0}
@@ -434,7 +434,7 @@ unit.interrupt =
 | $owner.mana += Mana
 | when Charge>0:
   | $sound{fizzle}
-  | E = $world.visual{$xyz energy}
+  | E = $site.visual{$xyz energy}
   | E.fxyz.init{$fxyz}
 
 unit.harm Attacker Damage =
@@ -472,22 +472,22 @@ unit_pickup_items Me =
 | for U $cell.units: when U.item.is_list: U.effect{U.item Me $xyz}
 
 unit.fine_move FXYZ =
-| C = $world.c
+| C = $site.c
 | XYZ = [FXYZ.0/C FXYZ.1/C FXYZ.2/C]
 | $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
-| C = $world.c
+| C = $site.c
 | $fxyz.init{FXYZ}
 | $zhack <= 0
 | when $ai >< unit:
-  | Platform = $world.units_get{$xyz}.find{?platform}
+  | Platform = $site.units_get{$xyz}.find{?platform}
   | when got Platform: $zhack <= -Platform.platform
 | RUs = []
 | when $platform:
-  | RUs <= $world.units_get{$xyz}{[? ?fxyz]}
+  | RUs <= $site.units_get{$xyz}{[? ?fxyz]}
   | RUs{?0.remove}
-| $world.place_unit{Me}
+| $site.place_unit{Me}
 | RUs{U,F=>U.fine_move{F}}
 | $floor <= $cell.floor
 | $environment_updated
@@ -495,14 +495,14 @@ unit.fine_move FXYZ =
 | Me
 
 unit.move XYZ =
-| C = $world.c
+| C = $site.c
 | $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
 | when $class.active: $run_genes{move}
 | Me
 
 unit.remove =
 | when $removed: leave
-| $world.remove_unit{Me}
+| $site.remove_unit{Me}
 | $xyz.2 <= -1
 
 unit.environment_updated =
@@ -520,6 +520,6 @@ unit.sees_facing Target =
   else if D >< -TD then \front
   else \side
 
-unit.sound SoundName = $world.sound_at{$xyz $id^not SoundName}
+unit.sound SoundName = $site.sound_at{$xyz $id^not SoundName}
 
 export unit init_unit_module

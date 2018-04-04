@@ -3,10 +3,10 @@ use util
 unit.order_at Goal Act =
 | XYZ = if Goal.is_list then Goal else Goal.xyz
 | when Goal.is_list: Goal <= 0
-| Cell = $world.cellp{XYZ}
+| Cell = $site.cellp{XYZ}
 | Units = Cell.units
 | OAct = Act
-| less Goal: Goal <= $world.block_at{XYZ}
+| less Goal: Goal <= $site.block_at{XYZ}
 | Act <= if Act.is_text then $main.params.acts.Act
          else if Act then Act
          else if Goal and $owner.is_enemy{Goal.owner} then
@@ -41,14 +41,14 @@ unit.order_at Goal Act =
     | leave
 | $reset_goal
 | $goal_act <= Act
-| $goal <= if Goal then Goal else $world.new_goal{XYZ}
+| $goal <= if Goal then Goal else $site.new_goal{XYZ}
 | $goal_serial <= $goal.serial
-| $world.actors.set{[Me @$world.actors.get]}
+| $site.actors.set{[Me @$site.actors.get]}
 | $set_path{$path_around_to{1000 $goal.xyz}}
 
 unit.order_act Act Target =
 | $order.init{Act Target}
-| $world.actors.set{[Me @$world.actors.get]}
+| $site.actors.set{[Me @$site.actors.get]}
 
 // order taking over any other order
 unit.forced_order Act Target =
@@ -94,7 +94,7 @@ unit.shot_missile Target Args Effect =
        | S.animate{idle}
   [target @D] | S.move{$xyz}
               | O = if Target.is_unit then Target.fxyz
-                    else $world.fxyz{XYZ}
+                    else $site.fxyz{XYZ}
               | S.fxyz.init{O+D}
   Else | bad "invalid offset specifier [Offset]"
 | S.add_gene{missile 0 [[payload $id $serial Effect]]}

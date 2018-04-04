@@ -22,8 +22,8 @@ effect strip Name:
 effect add_item Name Amount: Target.add_item{Name Amount}
 
 effect tenant_mark Type:
-| Block = $world.block_at{TargetXYZ}
-| S = $world.units_get{TargetXYZ}.find{?type><Type}
+| Block = $site.block_at{TargetXYZ}
+| S = $site.units_get{TargetXYZ}.find{?type><Type}
 | less Block:
   | when got S:
     | S.delta <= 50
@@ -39,7 +39,7 @@ effect tenant_mark Type:
 effect turn State Players ActNames:
 | when Players >< owner: Players <= [$owner.id] 
 | when Players >< target_owner: Players <= [Target.owner.id]
-| $world.turn_act{State Players ActNames}
+| $site.turn_act{State Players ActNames}
 
 effect gain @Args:
 | ActNames = []
@@ -48,18 +48,18 @@ effect gain @Args:
    [ANs] | ActNames <= ANs
          | Player = Target.owner
    [PId ANs] | ActNames <= ANs
-             | Player <= $world.players.PId
+             | Player <= $site.players.PId
 | when ActNames >< all: ActNames <= $main.params.acts{}{?0}
 | for ActName ActNames:
   | when ActNames.size><1 and Target.owner.human:
     | Title = ActName.replace{'_' ' '}
     | Player.notify{"Gained knowledge of [Title]."}
-  | $world.turn_act{1 Player.id ActName}
+  | $site.turn_act{1 Player.id ActName}
   | Player.research_item{ActName}
 
-effect cool Time: $add_gene{cool Time [$action.type $world.turn Time]}
+effect cool Time: $add_gene{cool Time [$action.type $site.turn Time]}
 
-effect explore Player State: $world.explore{State}
+effect explore Player State: $site.explore{State}
 
 effect confirm Title Text:
 | $main.show_message{Title buttons/[yes,'Yes' no,'No'] Text}
@@ -72,14 +72,14 @@ effect macro Name:
 | $effect{M Target TargetXYZ}
 
 effect visual Effect:
-| E = $world.visual{TargetXYZ Effect}
+| E = $site.visual{TargetXYZ Effect}
 | when Target: E.fxyz.init{Target.fxyz}
 
 effect visual1 Effect: //this one guards against multiple instances
 | Type = "effect_[Effect]"
-| E = $world.units_get{TargetXYZ}.find{?type><Type}
+| E = $site.units_get{TargetXYZ}.find{?type><Type}
 | when got E: leave
-| $world.visual{TargetXYZ Effect}
+| $site.visual{TargetXYZ Effect}
 
 effect sound Sound: $sound{Sound}
 
@@ -99,12 +99,12 @@ effect lifedrain Amount:
 | Target.harm{Me Amount}
 | $harm{Me -Amount}
 
-effect shake_screen Cycles: $world.shake{Cycles}
-effect color_overlay @List: $world.set_color_overlay{List}
+effect shake_screen Cycles: $site.shake{Cycles}
+effect color_overlay @List: $site.set_color_overlay{List}
 
 effect area As: //area{any,3,harm{magic.2}}
 | [Whom Range @Es] = As
-| Ts = $world.units_in_range{TargetXYZ Range}.skip{?empty}
+| Ts = $site.units_in_range{TargetXYZ Range}.skip{?empty}
 | case Whom [exclude_self W]:
   | Whom <= W
   | Ts <= Ts.skip{?id><$id}
@@ -116,7 +116,7 @@ effect spread What Harm
 | when $hp < 2:
   | when $action.type <> die: $die
   | leave
-| for C $world.cellp{TargetXYZ}.floor.neibs{}{?floor}:
+| for C $site.cellp{TargetXYZ}.floor.neibs{}{?floor}:
   | XYZ = C.xyz
   | when C.empty and (XYZ.2-TargetXYZ.2).abs<<1 and no C.units.find{?type><What}:
     | S = $owner.alloc_unit{What}
@@ -130,15 +130,15 @@ effect spread What Harm
       | when B: B.harm{Me Harm}
 
 effect detonate Args:
-| B = $world.block_at{TargetXYZ}
+| B = $site.block_at{TargetXYZ}
 | Damage = Target.class.hp
 | Target.harm{Me Damage}
 | for D Dirs43
-  | B = $world.block_at{TargetXYZ+D}
+  | B = $site.block_at{TargetXYZ+D}
   | when B: B.harm{Me Damage}
 
 effect explosion Size:
-| for U $world.units_in_range{TargetXYZ Size}:
+| for U $site.units_in_range{TargetXYZ Size}:
   | Damage = max 1 Size-TargetXYZ.mdist{U.xyz}
   | U.harm{Me Damage}
 
@@ -164,13 +164,13 @@ effect set Name Value: unit_getset{Target}.Name <= Value
 
 effect inc Name Value: unit_getset{Target}.Name += Value
 
-effect world_set Name Value: $world.params.Name <= Value
+effect site_set Name Value: $site.params.Name <= Value
 
 effect boost_defense Amount: $def <= min{$def+Amount $class.def+Amount}
 
 effect spell_of_mastery:
-| $world.params.winner <= $owner.id
-| $world.params.victory_type <= 'Victory by casting the Spell of Mastery'
+| $site.params.winner <= $owner.id
+| $site.params.victory_type <= 'Victory by casting the Spell of Mastery'
 
 
 effect swap Arg:
@@ -193,7 +193,7 @@ effect gateway:
 | less B: leave
 | T = $cell.gate
 | less T: leave
-| $world.visual{B.xyz teleport}
+| $site.visual{B.xyz teleport}
 | A = T.cell.block
 | B.move{T.xyz}
 | B.reset_goal
@@ -202,7 +202,7 @@ effect gateway:
   | BH = B.health
   | B.harm{0 AH}
   | A.harm{0 BH}
-| $world.visual{T.xyz teleport}
+| $site.visual{T.xyz teleport}
 | $sound{summon}
 
 effect interrupt: Target.interrupt
@@ -226,14 +226,14 @@ effect clear Where:
   target | TargetXYZ
   X,Y,Z | X,Y,Z
   Else | bad "effect clear: invalid target ([Where])"
-| $world.clear_tile{X Y Z}
+| $site.clear_tile{X Y Z}
 
 effect set_tile [X Y Z] Type:
 | Tile = $main.tiles.Type
 | when no Tile:
   | say "set_tile: missing tile `[Type]`"
   | leave
-| $world.set{X Y Z Tile}
+| $site.set{X Y Z Tile}
 
 effect spawn What:
 | when What><auto: What <= "unit[$action.act.name.drop{6}]"
@@ -300,12 +300,12 @@ knockback Me Target =
 | less Dir.all{?abs<<1}: leave
 | Dir.2 <= 0
 | DXYZ = Target.xyz+Dir
-| DC = $world.cell{@DXYZ}
+| DC = $site.cell{@DXYZ}
 | when DC.tile.empty and not DC.block: Target.move{DXYZ}
 
 effect blowaway R BlowSelf:
 | Handled = []
-| for B $world.units_in_range{TargetXYZ R}: when B.ai >< unit:
+| for B $site.units_in_range{TargetXYZ R}: when B.ai >< unit:
   | when B and not Handled.has{B.id} and (BlowSelf or B.xyz<>TargetXYZ):
     | DX,DY,DZ = B.xyz-TargetXYZ
     | push B.id Handled
@@ -319,8 +319,8 @@ effect blowaway R BlowSelf:
     | Trail = []
     | times I N:
       | T = BP + D*(I+1)
-      | less $world.valid{@T}: done
-      | F = $world.cellp{T}.floor
+      | less $site.valid{@T}: done
+      | F = $site.cellp{T}.floor
       | less F.vacant: done
       | Prev = TP
       | TP <= T
@@ -332,9 +332,9 @@ effect blowaway R BlowSelf:
       | B.reset_goal
       | B.move{TP}
       | for T Trail:
-        | less got $world.units_get{T}.find{?type><effect_dustend}:
-          | $world.visual{T dustend}
-    | $world.visual{B.xyz dust}
+        | less got $site.units_get{T}.find{?type><effect_dustend}:
+          | $site.visual{T dustend}
+    | $site.visual{B.xyz dust}
 
 effect jumpdown:
 | $reset_goal
@@ -352,7 +352,7 @@ effect lore Amount:
 | Target.owner.lore += Amount
 
 effect victory Player Reason:
-| WP = $world.params
+| WP = $site.params
 | when Player >< owner: Player <= $owner.id
 | WP.winner <= Player
 | WP.victory_type <= Reason
@@ -363,15 +363,15 @@ effect face:
 effect align How:
 | less How><door: bad "effect align: cant [How]-align"
 | X,Y,Z = $xyz
-| less $world.at{X Y-1 Z}.empty or $world.at{X Y+1 Z}.empty:
+| less $site.at{X Y-1 Z}.empty or $site.at{X Y+1 Z}.empty:
   | $face{$xyz+[1 0 0]}
-  | T = $world.at{X Y-1 Z}
-  | when T.wallShift and not $world.at{X+1 Y Z}.type><T.around:
+  | T = $site.at{X Y-1 Z}
+  | when T.wallShift and not $site.at{X+1 Y Z}.type><T.around:
     | $fxyz.init{$fxyz+[T.wallShift 0 0]}
   | leave
 | $face{$xyz+[0 1 0]}
-| T = $world.at{X-1 Y Z}
-| when T.wallShift and not $world.at{X Y+1 Z}.type><T.around:
+| T = $site.at{X-1 Y Z}
+| when T.wallShift and not $site.at{X Y+1 Z}.type><T.around:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 unit.yes_research ActName =
@@ -431,7 +431,7 @@ unit.effect Effect Target TargetXYZ =
 | Es = Effect.list
 | RunActEffects = 1
 | when Es.size >< 0 or (T.is_unit and T.id><$id):
-  | RunActEffects <= 0 // action doesnt affect outside world
+  | RunActEffects <= 0 // action doesnt affect outside site
 | till Es.end
   | E = pop Es
   | less E.is_list: E <= [E []]
@@ -448,14 +448,14 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< endwhen then
     else if Name >< resist then
       | when T.resisting:
-        | $world.visual{T.xyz resist}
+        | $site.visual{T.xyz resist}
         | T.sound{resist}
         | less got T.class.inborn.find{resist}: T.strip{resist}
         | leave
     else if Name >< shell then
       | less $assault{Target}: leave
       | when T.shelled:
-        | $world.visual{T.xyz shell}
+        | $site.visual{T.xyz shell}
         | T.sound{shell}
         | less got T.class.inborn.find{shell}: T.strip{shell}
         | leave
@@ -478,7 +478,7 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me
     else if Name >< tenant then
-      | Block = $world.block_at{XYZ}
+      | Block = $site.block_at{XYZ}
       | less Block: _goto end
       | T <= Block
     else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
@@ -489,25 +489,25 @@ unit.effect Effect Target TargetXYZ =
       | Target <= P
       | T <= Target
     else if Name >< all_alive then
-      | for U $world.active: when U.alive:
+      | for U $site.active: when U.alive:
         | when U.ai><unit: $effect{Es U U.xyz}
       | _goto end
     else if Name >< hydra_targets then
       | D = (TargetXYZ-$xyz){?sign}
       | DD = D.1,D.0,D.2
       | for XYZ [$xyz+DD $xyz-DD]
-        | B = $world.block_at{XYZ}
+        | B = $site.block_at{XYZ}
         | when B: $effect{Es B B.xyz}
       | $effect{Es T XYZ}
       | _goto end
     else if Name >< owner_units then
       | OID = $owner.id
-      | for U $world.active: when U.owner.id><OID:
+      | for U $site.active: when U.owner.id><OID:
         | when U.ai><unit: $effect{Es U U.xyz}
       | _goto end
     else if Name >< enemy_units then
       | OID = $owner.id
-      | for U $world.active: when $is_enemy{U}:
+      | for U $site.active: when $is_enemy{U}:
         | when U.ai><unit: $effect{Es U U.xyz}
       | _goto end
     else bad "no effect handler for [Name]{[Args]} of [Me]"

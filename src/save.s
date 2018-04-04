@@ -35,7 +35,7 @@ unit.serialize = //unit serializer for savegames
 | list $type $id $serial $owner.id $xyz $fxyz Facing
        $flags $hp Active
 
-world.save =
+site.save =
 | ActivePlayers = dup 32 0
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
@@ -65,7 +65,7 @@ world.save =
                | [Id $players.Id.sight{}{X=>rle_encode X}]
     enabled | map Name,Act $main.params.acts: Name,Act.players
 
-main.save Path = Path.set{$world.save.as_text}
+main.save Path = Path.set{$site.save.as_text}
 
 remap_tids Me LookupTable Xs =
 | TidMap = $tid_map
@@ -83,7 +83,7 @@ remap_tids Me LookupTable Xs =
       | when H>0: times I H: Rs.(Z+I) <= Ps.I
   | Rs
 
-world.deserialize_unit IdMap X =
+site.deserialize_unit IdMap X =
 | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active] = X
 | U = $players.Owner.alloc_unit{Type}
 | less Active: U.change_owner{$players.0} //kludge
@@ -124,7 +124,7 @@ world.deserialize_unit IdMap X =
 | when U.ai >< pentagram: U.owner.pentagram <= U
 | IdMap.Id <= U
 
-world.load Saved =
+site.load Saved =
 | $clear
 | $w <= Saved.w
 | $h <= Saved.h
@@ -146,7 +146,7 @@ world.load Saved =
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
 //| StartTime = clock
-//| say "world.load: update_move_map_ took [clock{}-StartTime]"
+//| say "site.load: update_move_map_ took [clock{}-StartTime]"
 | $cycle <= Saved.cycle
 | IdMap = t //used to remap old ids to new ones
 | for X Saved.players
@@ -195,4 +195,4 @@ main.load Path =
 | less got File: bad "cant load [Path]"
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table
 | Saved.filename <= Path.url.1
-| $world.load{Saved}
+| $site.load{Saved}

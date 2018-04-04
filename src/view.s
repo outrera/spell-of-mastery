@@ -24,7 +24,7 @@ type view.widget{M UI W H}
   fpsGoal/24 // goal frames per second
   fpsD/30.0
   param
-  view_size/32  // render 32x32 world chunk
+  view_size/32  // render 32x32 site chunk
   center/[0 0 0]
   zfix/1
   zlock/0
@@ -38,9 +38,9 @@ type view.widget{M UI W H}
 | $fpsGoal <= $main.params.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
 | $param <= $main.params.ui
-| Wr = $world
+| Wr = $site
 | Wr.view <= Me
-| WParam = $main.params.world
+| WParam = $main.params.site
 | TS = WParam.tile_size
 | $xunit <= TS.0
 | $yunit <= TS.1
@@ -56,10 +56,10 @@ view.key_set Name Value =
 | K = $keymap.Name
 | $keys.K <= Value
 
-view.paused = $world.paused
-view.`=paused` V = $world.paused <= V
+view.paused = $site.paused
+view.`=paused` V = $site.paused <= V
 
-view.player = $world.human //view deals with human player
+view.player = $site.human //view deals with human player
 
 view.picked = $player.picked
 view.`=picked` Us = $player.picked <= Us
@@ -77,14 +77,14 @@ view.clear =
 | $pick_count <= 0
 | Leader = $player.leader
 | when not Leader.removed: $center_at{Leader.xyz}
-| $zlock <= $world.params.view_zlock
-| when no $zlock: $zlock <= $world.d-2
+| $zlock <= $site.params.view_zlock
+| when no $zlock: $zlock <= $site.d-2
 
 view.center_at XYZ cursor/0 =
 | X,Y,Z = XYZ
-| X = X.clip{1 $world.w}
-| Y = Y.clip{1 $world.h}
-| Z = Z.clip{1 $world.d}
+| X = X.clip{1 $site.w}
+| Y = Y.clip{1 $site.h}
+| Z = Z.clip{1 $site.d}
 | $center.init{X,Y,Z}
 | when Cursor: $zlock <= Z
 | when Cursor: $cursor.init{X,Y,Z}
@@ -94,14 +94,14 @@ view.center_at XYZ cursor/0 =
 
 view.set_brush NewBrush = $brush.init{NewBrush}
 
-view.world = $main.world
+view.site = $main.site
 
 view.infoline =
 | X,Y,Z = $cursor
-| Indoor = if $world.up{$cursor} then ':indoor' else ':outdoor'
-| Cave = if $world.down{$cursor} then ":roof" else ""
-| Land = "[X],[Y],[Z]:[$world.at{X Y Z-1}.type][Indoor][Cave]"
-| Us = $world.units_get{X,Y,Z}.skip{?empty}
+| Indoor = if $site.up{$cursor} then ':indoor' else ':outdoor'
+| Cave = if $site.down{$cursor} then ":roof" else ""
+| Land = "[X],[Y],[Z]:[$site.at{X Y Z-1}.type][Indoor][Cave]"
+| Us = $site.units_get{X,Y,Z}.skip{?empty}
 | Unit = ""
 | less Us.end:
   | U = Us.0
@@ -117,7 +117,7 @@ view.infoline =
   | when U.charging:
     | CAct, Charge, CCost, TId = U.get{charge}
     | Stats <= "[Stats] ([CAct.title]: [Charge]/[CCost])"
-  | Id = if $world.editor then "[U.id]" else ""
+  | Id = if $site.editor then "[U.id]" else ""
   | Unit <= "[U.owner.name]'s [U.title][Id] [Stats]"
 | "[Unit]\n[Land]"
 

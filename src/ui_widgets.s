@@ -10,7 +10,7 @@ type message_box.$base{ui} base title text buttons width margin/[0 0] click
 | button_click Result = 
   | DialogResult <= Result
   | $ui.unpause
-  | $ui.world.paused <= 0
+  | $ui.site.paused <= 0
   | $show <= 0
   | when $click: $click{}{DialogResult}
 | Buttons =
@@ -39,19 +39,19 @@ message_box.display Buttons Title Text Click =
   | B.value <= Value
 | $show <= 1
 | $ui.pause
-| $ui.world.paused <= 1
+| $ui.site.paused <= 1
 
 main.show_message Title Text buttons/[ok,'Ok'] click/0 =
 | $ui.message_box.display{Buttons Title Text Click}
 
 main.dialog_result = DialogResult
 
-type world_props.$base{world callback} name description width height base
+type site_props.$base{site callback} name description width height base
 | $name <= txt_input{''}
 | $description <= txt_input{w/240 ''}
 | $width <= txt_input{''}
 | $height <= txt_input{''}
-| PropFields = ['World Name:',$name 
+| PropFields = ['Site Name:',$name 
                 'Description:',$description
                 'Width:',$width
                 'Height:',$height
@@ -59,14 +59,14 @@ type world_props.$base{world callback} name description width height base
 | MarginW = 65
 | MarginH = 50
 | $base <= dlg: mtx
-  | -MarginW  -MarginH | $world.main.img{ui_scroll}
+  | -MarginW  -MarginH | $site.main.img{ui_scroll}
   | 130  10 | txt medium 'Properties'
   |  15  40 | layV s/8 PropFields{(txt small ?0)}
   | 100  36 | layV PropFields{?1}
   |  15 305 | button 'Done' skin/medium_small: => ($callback){Me}
 
-world_props.update =
-| W = $world
+site_props.update =
+| W = $site
 | $name.value <= W.name
 | $description.value <= W.description
 | $width.value <= "[W.w]"
@@ -74,38 +74,38 @@ world_props.update =
 
 
 Indicators = 0
-type resource_counters.widget{view} world w/0 h/0
-| $world <= $view.world
+type resource_counters.widget{view} site w/0 h/0
+| $site <= $view.site
 
-resource_counters.main = $world.main
+resource_counters.main = $site.main
 
 resource_counters.draw G X Y =
 | less Indicators: Indicators <= $main.img{ui_indicators}
 | Cursor = 
 | IX = ($view.w-Indicators.w)/2
 | IY = 0
-| P = $world.human
+| P = $site.human
 | G.blit{IX IY Indicators}
 | Param = P.params
 | Font = font medium
 | Font.draw{G IX+36 IY+2 "[P.mana]"}
 | Font.draw{G IX+148 IY+2 "[P.lore]"}
-| Font.draw{G IX+232 IY+2 "[$world.turn]:[$world.player]"}
-| Debug = $world.params.debug
+| Font.draw{G IX+232 IY+2 "[$site.turn]:[$site.player]"}
+| Debug = $site.params.debug
 | when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
 
-type notification_widget.widget{view} world w/0 h/0
-| $world <= $view.world
-notification_widget.main = $world.main
+type notification_widget.widget{view} site w/0 h/0
+| $site <= $view.site
+notification_widget.main = $site.main
 notification_widget.draw G X Y =
 | Font = font medium
 | C = 24
 | Clock = clock
-| for [Expires Chars] $world.notes: when Clock < Expires:
+| for [Expires Chars] $site.notes: when Clock < Expires:
   | Font.draw{G 16 Y-C "* [Chars.text]"}
   | C+=16
 
-type save_dlg.$base{world start cancelCB loadCB}
+type save_dlg.$base{site start cancelCB loadCB}
   base picked title filename button widget
 | $button <= button 'Save' skin/medium_small: => ($loadCB){$picked}
 | $button.state <= 'normal'
@@ -118,7 +118,7 @@ type save_dlg.$base{world start cancelCB loadCB}
   | FN = File.url.1
   | when FN<>'': $filename.value <= FN
 | $base <= dlg: mtx
-  | -MarginW   -MarginH | $world.main.img{ui_scroll}
+  | -MarginW   -MarginH | $site.main.img{ui_scroll}
   | 130  10 | $title
   |  15  40 | $filename
   |  15  60 | $widget
@@ -130,7 +130,7 @@ save_dlg.render =
 | $button.state <= if $filename.value<>'' then \normal else \disabled
 | $base.render
 
-type load_dlg.$base{world start cancelCB loadCB}
+type load_dlg.$base{site start cancelCB loadCB}
   filename base picked title widget
 | LoadButton = button 'Load' skin/medium_small: => ($loadCB){$picked}
 | LoadButton.state <= 'disabled'
@@ -143,7 +143,7 @@ type load_dlg.$base{world start cancelCB loadCB}
     then 'normal'
     else 'disabled'
 | $base <= dlg: mtx
-  | -MarginW   -MarginH | $world.main.img{ui_scroll}
+  | -MarginW   -MarginH | $site.main.img{ui_scroll}
   | 130  10 | $title
   |  15  40 | $widget
   |  15 305 | LoadButton
@@ -176,5 +176,5 @@ player_picker.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
-export message_box world_props credits_roll notification_widget
+export message_box site_props credits_roll notification_widget
        player_picker save_dlg load_dlg resource_counters

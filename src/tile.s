@@ -61,21 +61,21 @@ transparentize Base Alpha =
 
 DummyGfx = gfx 1 1
 
-m_same_side World X Y Z Tile = World.getSidesSame{X Y Z Tile.role}
-m_same_corner World X Y Z Tile = World.getCornersSame{X Y Z Tile.role}
-m_any_side World X Y Z Tile = World.getSides{X Y Z}
-m_any_corner World X Y Z Tile = World.getCorners{X Y Z}
+m_same_side Site X Y Z Tile = Site.getSidesSame{X Y Z Tile.role}
+m_same_corner Site X Y Z Tile = Site.getCornersSame{X Y Z Tile.role}
+m_any_side Site X Y Z Tile = Site.getSides{X Y Z}
+m_any_corner Site X Y Z Tile = Site.getCorners{X Y Z}
 
-m_any_cornerside World X Y Z Tile =
-| R = World.getCorners{X Y Z}
+m_any_cornerside Site X Y Z Tile =
+| R = Site.getCorners{X Y Z}
 //| when [X Y]><[3 6]: say [Z R]
 | if R><[0 1 0 0] then
-    if World.filled{X Y+1 Z} then R <= [1 1 0 1]
-    else if World.at{X Y Z+1}.type><Tile.type then R <= [1 1 0 0]
+    if Site.filled{X Y+1 Z} then R <= [1 1 0 1]
+    else if Site.at{X Y Z+1}.type><Tile.type then R <= [1 1 0 0]
     else
   else if R><[0 0 0 1] then 
-    if World.filled{X+1 Y Z} then R <= [1 1 0 1]
-    else if World.at{X Y Z+1}.type><Tile.type then R <= [1 0 0 1]
+    if Site.filled{X+1 Y Z} then R <= [1 1 0 1]
+    else if Site.at{X Y Z+1}.type><Tile.type then R <= [1 0 0 1]
     else
   else
 | R
@@ -177,15 +177,15 @@ tile.render X Y Z Below Above Variation =
 | when $invisible
   | BelowSlope <= #@1111
   | leave 0
-| World = $main.world
-| less Z: ColumnHeight <= World.height{X Y}
+| Site = $main.site
+| less Z: ColumnHeight <= Site.height{X Y}
 | Limpid = 0
 | TH = $height
 | when Above.opaque:
-  | A = World.at{X+1 Y Z}
-  | B = World.at{X Y+1 Z}
-  | C = World.at{X+1 Y+1 Z}
-  | D = World.at{X+1 Y-1 Z}
+  | A = Site.at{X+1 Y Z}
+  | B = Site.at{X Y+1 Z}
+  | C = Site.at{X+1 Y+1 Z}
+  | D = Site.at{X+1 Y-1 Z}
   | when A.opaque and B.opaque and C.opaque and (D.opaque or D.type><border_)
          and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH:
     | Limpid <= 1
@@ -199,13 +199,13 @@ tile.render X Y Z Below Above Variation =
   | T <= $indoor
 | when T.water:
   | Neib,Water = T.water
-  | when got World.neibs{X Y Z-TH+1}.find{?type><Neib}:
+  | when got Site.neibs{X Y Z-TH+1}.find{?type><Neib}:
     | T <= Water
 | when $back:
   | Z = Z-$height+1
-  | A = World.at{X+1 Y Z}
-  | B = World.at{X Y+1 Z}
-  | C = World.at{X+1 Y+1 Z}
+  | A = Site.at{X+1 Y Z}
+  | B = Site.at{X Y+1 Z}
+  | C = Site.at{X+1 Y+1 Z}
   | Ar = $around
   | when A.type><Ar or B.type><Ar or C.type><Ar:
     | T <= $back
@@ -223,10 +223,10 @@ tile.render X Y Z Below Above Variation =
 | G = if Lineup
       then | NeibSlope <= #@1111
            | Gs.NeibSlope
-      else | Elev = $tiler{}{World X Y Z Me}
+      else | Elev = $tiler{}{Site X Y Z Me}
            | FB = TT.fallback
            | when FB.0><Elev and FB.1><AH:
-             | Elev <= (FB.3){World X Y Z Me}
+             | Elev <= (FB.3){Site X Y Z Me}
              //| when [X Y]><[2 3]: say [Z Elev]
              | Gs <= FB.2.gfxes
            | NeibSlope <= Elev.digits{2}
@@ -251,8 +251,8 @@ get_match_fn Desc = case Desc
   Else | 0
 
 main.load_tiles =
-| BankNames = case $params.world.tile_banks [@Xs](Xs) X[X]
-| $params.world.tile_banks <= BankNames 
+| BankNames = case $params.site.tile_banks [@Xs](Xs) X[X]
+| $params.site.tile_banks <= BankNames 
 | Tiles = t
 | $aux_tiles <= t
 | Frames = No

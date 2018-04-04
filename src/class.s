@@ -64,7 +64,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
 class.form = $default_sprite.form
 
 main.load_classes =
-| BankNames = case $params.world.class_banks [@Xs](Xs) X[X]
+| BankNames = case $params.site.class_banks [@Xs](Xs) X[X]
 | $classes <= @table: @join: map BankName BankNames
   | map Name,Params $params.BankName
     | R = class BankName Name Me @Params.list.join

@@ -1,8 +1,8 @@
-// game world update routines
+// game site update routines
 use util
 
 main.update =
-| $world.update
+| $site.update
 
 EventActions = []
 
@@ -23,7 +23,7 @@ check_event_condition Me When =
     | got Units.find{?type><UnitType}
   [researched Player ActName]
     | Act = $main.params.acts.ActName
-    | less got ActName: "World events references unknown act [ActName]"
+    | less got ActName: "Site events references unknown act [ActName]"
     | ResearchSpent = $players.Player.research.(Act.name)
     | ResearchRemain = Act.lore - ResearchSpent
     | ResearchRemain << 0
@@ -32,7 +32,7 @@ check_event_condition Me When =
   [`or` A B] | check_event_condition Me A or check_event_condition Me B
   Else | bad "unexpected event condition [When]"
 
-world.process_events =
+site.process_events =
 | DisabledEvents = have $params.disabled_events []
 | for [Id [When @Actions]] $events: when no DisabledEvents.find{Id}:
   | Repeat = 0
@@ -77,7 +77,7 @@ update_units Me =
   | when U.active: push U NextActive
 | for U NextActive: $active.push{U}
 
-world.update =
+site.update =
 | $main.music{playlist_advance}
 | when $blink.0>0 and not $cycle%12:
   | $blink.0--
@@ -118,12 +118,12 @@ unit_check_move Me Dst =
 | SX,SY,SZ = Src
 | X,Y,Z = Dst
 | when (X-SX).abs>1 or (Y-SY).abs>1: leave 0
-| Tile = $world.at{X Y Z}
+| Tile = $site.at{X Y Z}
 | less Tile.empty: leave 0
-| Below = $world.at{X Y $world.floor{X,Y,Z}-1}
+| Below = $site.at{X Y $site.floor{X,Y,Z}-1}
 | when Below.type><water:
   | less $flyer or $amphibian or $swimmer: leave 0
-| B = $world.block_at{Dst}
+| B = $site.block_at{Dst}
 | less B: leave move
 | if $is_enemy{B}
   then //when B.alive and $atk: leave attack
@@ -134,7 +134,7 @@ unit_check_move Me Dst =
 update_path_move Me XYZ =
 | M = unit_check_move Me XYZ
 | less M: leave 0
-| Us = $world.units_get{XYZ}.skip{?empty}
+| Us = $site.units_get{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
 | $order.init{M | Target or XYZ}
 
@@ -194,15 +194,15 @@ update_fade Me =
 LastMovedUnit = -1
 LastMovedTurn = -1
 
-unit.seen_by_human = $world.human.seen{$xyz}
+unit.seen_by_human = $site.human.seen{$xyz}
 unit.observe = $main.ui.view.center_at{$xyz+[-3 -3 0] cursor/1}
 
 center_on_actor Me =
 | less $owner.human: when $action.type<>idle and $health and $seen_by_human:
-  | when LastMovedUnit <> $serial or LastMovedTurn <> $world.turn:
+  | when LastMovedUnit <> $serial or LastMovedTurn <> $site.turn:
     | $observe
   | LastMovedUnit = $serial
-  | LastMovedTurn = $world.turn
+  | LastMovedTurn = $site.turn
 
 handle_next_action_cost Me =
 | Charge = 0
@@ -282,7 +282,7 @@ update_action Me =
 
 unit.clinging =
 | less $climber: leave 0
-| Cell = $world.cellp{$xyz}
+| Cell = $site.cellp{$xyz}
 | Cell.climbable or (Cell-1).climbable
 
 GravAcc = 9.807*0.2
@@ -295,7 +295,7 @@ unit.update_fall =
 | $velocity.2 -= GravAcc
 | FZ = $floor.z
 | FDst = $fxyz+$velocity{}{?int}
-| if FDst.2 > (FZ*$world.c+31) then $fine_move{FDst}
+| if FDst.2 > (FZ*$site.c+31) then $fine_move{FDst}
   else $move{[$xyz.0 $xyz.1 FZ]}
 
 unit_landed Me =
@@ -308,8 +308,8 @@ unit_landed Me =
 
 unit.sink =
 | $sound{sink}
-| $world.visual{$xyz sink}
-| $move{[$world.w+1 $world.h+1 1]} //move it out of sight
+| $site.visual{$xyz sink}
+| $move{[$site.w+1 $site.h+1 1]} //move it out of sight
 | $harm{Me 6000}
 
 unit.update =

@@ -1,7 +1,7 @@
-use world gfx sprite_dump unit_flags enheap ui widgets gui main_data
+use site gfx sprite_dump unit_flags enheap ui widgets gui main_data
 
 type main{Data}
-     world
+     site
      data/Data
      cache/(t)
      params
@@ -57,7 +57,7 @@ type main{Data}
               ]
 //| sprite_dump Me "work/sd" staticFrame/160 sheet/0 unit_katzard
 | init_unit_flags Me
-| world Me
+| site Me
 
 
 main.run =

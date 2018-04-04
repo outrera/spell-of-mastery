@@ -1,6 +1,6 @@
 use gfx util param
 
-worldToSprite X Y =
+siteToSprite X Y =
 | RX = (X*64 - Y*64)/2
 | RY = (X*32 + Y*32)/2
 | [RX RY]
@@ -51,7 +51,7 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
 | FormH = Form.size
 | FormW = Form.0.size
 | when FormH+FormW>2:
-  | $xy <= $xy + worldToSprite{FormW-1 FormH-1}
+  | $xy <= $xy + siteToSprite{FormW-1 FormH-1}
 | for Y,Hs Form.i: for X,H Hs.i: when H: push [X -Y 0] XYs
 | $form <= XYs.list
 | $anims <= @table: map [Name@Frames] Anims.tail

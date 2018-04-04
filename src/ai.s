@@ -30,7 +30,7 @@ unit.ai_pick_target Act =
 | Targets =
     if R>>9000 then SeenUnits
     else if R><0 then [Me]
-    else $world.units_in_range{Me.xyz Act.range}
+    else $site.units_in_range{Me.xyz Act.range}
 | Ts = Targets.skip{?empty}.keep{?alive}
 | Hint = Act.hint
 | if Hint >< pentagram then
@@ -82,7 +82,7 @@ list_rotate I Xs =
 | [@Xs.drop{N} @Xs.take{N}]
 
 unit.ai_ability =
-| for Act list_rotate{$world.turn $acts}: when $ai_ability_sub{Act}: leave 1
+| for Act list_rotate{$site.turn $acts}: when $ai_ability_sub{Act}: leave 1
 | 0
 
 ai_leader_harmed Me Attacker Victim =
@@ -91,10 +91,10 @@ ai.harm Attacker Victim =
 | when Victim.leader: ai_leader_harmed Me Attacker Victim
 
 unit.ai_roam =
-| World = $world
+| Site = $site
 | Owner = $owner
 | OId = Owner.id
-| Us = World.units_get{$xyz}
+| Us = Site.units_get{$xyz}
 | when got Us.find{?ai><hold} and no Us.find{?ai><unhold}: leave 0
 | Check = Dst =>
   | MoveIn = 0
@@ -138,7 +138,7 @@ unit.ai_runaway Btrack =
 | for R Rs:
   | Dist = 9000
   | for E Es:
-    | Found = $world.closest_reach{$sight Me R E.xyz}
+    | Found = $site.closest_reach{$sight Me R E.xyz}
     | Path = if Found then Found.path else []
     | when Path.size<Dist: Dist <= Path.size
   | when BestDist<Dist:
@@ -255,9 +255,9 @@ ai.script =
 | AIType = PParams.aiType
 | AIStep = PParams.aiStep
 | AISteps = Params.main.ai.AIType
-| when PParams.aiWait > $world.turn: leave 0
+| when PParams.aiWait > $site.turn: leave 0
 | less got AISteps
-  | $world.notify{"AI: missing type `[AIType]`"}
+  | $site.notify{"AI: missing type `[AIType]`"}
   | leave 0
 | AISteps = AISteps.tail
 | less AIStep<AISteps.size:
@@ -278,7 +278,7 @@ ai.script =
     | PParams.aiType <= NewAIType
     | PParams.aiStep <= 0
   [wait Turns]
-    | PParams.aiWait <= $world.turn+Turns
+    | PParams.aiWait <= $site.turn+Turns
     | PParams.aiStep++
   [set Var Value]
     | PParams.Var <= Value
@@ -292,12 +292,12 @@ ai.update_turn =
   | for U OwnedUnits: U.aistate <= \roam
   | $player.params.attack_with_guards <= 0
 | when $player.id: while $script><1: //FIXME: this can hung
-| when $update_units: $world.end_turn
+| when $update_units: $site.end_turn
 
 ai.update =
 | PerCycle <= t
 | Player = $player
-| SeenUnits <= $world.active.list.keep{U=>Player.seen{U.xyz}}
+| SeenUnits <= $site.active.list.keep{U=>Player.seen{U.xyz}}
                      .keep{(?unit and not ?removed)}
 | PID = Player.id
 | OwnedUnits <= SeenUnits.keep{?owner.id><PID}

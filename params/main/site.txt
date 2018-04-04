@@ -1,0 +1,18 @@
+max_notes: 4 //number of simultaneous notifications on screen
+note_size: 256
+note_life: 5.0 // in seconds
+max_size: 128 // max world size (should be a power of 2)
+depth: 32 // max world depth in tiles
+max_players: 8
+max_units: 4096 // maximum number of objects in world
+//FIXME: following should really correspond to cell dimensions, not tile dimensions
+cell_size: 32 // cell edge's size
+tile_size: 64,32,32 //width,height,depthm; typical isometric tile cube is 64x32x32
+tile_banks: tile,room//,deco
+class_banks: unit,leader,item,special,trigger
+explored: 1 //all maps are explored from the beginning
+start_mana: 10
+start_lore: 10
+bounding_boxes: 0
+excavate_ttl: 1440 //24*60=1440
+build_ttl: 1440 //24*60=1440

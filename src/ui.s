@@ -1,17 +1,17 @@
-use gui widgets view planet ui_icon ui_widgets macros
+use gui widgets view world ui_icon ui_widgets macros
 
 type ui.$tabs{main}
   tabs
   width
   height
-  world
+  site
   message_box
   creditsRoll
   view
   paused
-  mapsFolder/"work/worlds/"
+  mapsFolder/"work/sites/"
   savesFolder/"work/saves/"
-  planet
+  world
   confirmFn //callaback for yes/no confirmation
   panelTabs
   panelTabsMore/(t) //sparse element related to picked tab
@@ -29,9 +29,9 @@ type ui.$tabs{main}
   menuButtonsX/0
   menuBG
   inputBlocker
-  worldProperties
-  saveWorldDlg
-  loadWorldDlg
+  siteProperties
+  saveSiteDlg
+  loadSiteDlg
   bankList
   hotKeyInvoke/0
   playerWidget
@@ -40,21 +40,21 @@ type ui.$tabs{main}
   brushPicker
   lastBrush/[0 0]
   editorWidgets/[]
-| $world <= $main.world
+| $site <= $main.site
 | $width <= $params.ui.width
 | $height <= $params.ui.height
 | $menuButtonsX <= $width/2 - 162
 
 
 ui.render =
-| $inputBlocker.show <= $paused or $world.actors.get.size
-                     or not ($world.players.($world.player).human
-                             or $world.editor)
-| HumanName = $world.human.name
+| $inputBlocker.show <= $paused or $site.actors.get.size
+                     or not ($site.players.($site.player).human
+                             or $site.editor)
+| HumanName = $site.human.name
 | for PP $playerPickers: PP.picked <= PP.name >< HumanName
 | $tabs.render
 
-ui.player = $world.human
+ui.player = $site.human
 ui.data = $main.data
 ui.load File =
 | $main.load{File}
@@ -70,7 +70,7 @@ ui.unpause =
 
 ui.img File = $main.img{File}
 ui.create W H =
-| $world.create{W H}
+| $site.create{W H}
 | $view.clear
 
 ui.pick_title_menu pause/1 =
@@ -78,17 +78,17 @@ ui.pick_title_menu pause/1 =
 | $main.music{"title.ogg"}
 | $pick{main_menu}
 
-ui.pick_planet pause/1 =
+ui.pick_world pause/1 =
 | when Pause: $pause
 | $main.music{"title.ogg"}
-| $pick{planet}
+| $pick{world}
 
 ui.create_victory_dlg =
 | dlg: mtx
   |   0   0 | $img{ui_victory_bg}
   | 100 100 | txt medium: =>
-              | Player = $world.players.($world.params.winner)
-              | Type = $world.params.victory_type.replace{_ ' '}
+              | Player = $site.players.($site.params.winner)
+              | Type = $site.params.victory_type.replace{_ ' '}
               | "[Player.name] has won!\n[Type]"
   | $width-360 $height-100
         | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
@@ -97,8 +97,8 @@ ui.create_defeat_dlg =
 | dlg: mtx
   |   0   0 | $img{ui_defeat_bg}
   | 140 100 | txt medium: =>
-              | Player = $world.human
-              | Type = $world.params.victory_type.replace{_ ' '}
+              | Player = $site.human
+              | Type = $site.params.victory_type.replace{_ ' '}
               | "[Player.name] has been defeated!\n"
   | $width-360 $height-100
         | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
@@ -118,7 +118,7 @@ ui.create_new_game_dlg =
 
 ui.create_scenario_menu =
 | loadScenarioBack = $pick{new_game_menu}
-| LoadScenarioDlg = load_dlg $world $mapsFolder &loadScenarioBack: X =>
+| LoadScenarioDlg = load_dlg $site $mapsFolder &loadScenarioBack: X =>
   | $load_game{1 X}
 | dlg: mtx
   |   0   0 | $menuBG
@@ -127,9 +127,9 @@ ui.create_scenario_menu =
 
 ui.create_load_menu_dlg =
 | loadScenarioBack = $pick{new_game_menu}
-| LoadScenarioDlg = load_dlg $world $savesFolder &loadScenarioBack: X =>
+| LoadScenarioDlg = load_dlg $site $savesFolder &loadScenarioBack: X =>
   | $load_game{0 X}
-  | $world.paused <= 0
+  | $site.paused <= 0
 | dlg: mtx
   |   0   0 | $menuBG
   |  220 200 | LoadScenarioDlg
@@ -156,36 +156,36 @@ ui.create_main_menu_dlg =
 
 ui.begin_ingame Editor =
 | $main.music{playlist}
-| $world.editor <= Editor
+| $site.editor <= Editor
 | for W $editorWidgets: W.show <= Editor
 
 ui.load_game NewGame Path =
 | $begin_ingame{0}
 | $load{Path}
-| when NewGame: $world.new_game
+| when NewGame: $site.new_game
 | $unpause
 | $pick{ingame}
 
 parse_int_normalized Default Text =
 | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
 
-ui.create_world_props = 
-| hidden: world_props $world: P =>
-  | W = parse_int_normalized{$world.w P.width.value}.clip{4 240}
-  | H = parse_int_normalized{$world.h P.height.value}.clip{4 240}
-  | when W <> $world.w or H <> $world.h: $create{W H}
-  | $world.name <= P.name.value
-  | $world.description <= P.description.value
+ui.create_site_props = 
+| hidden: site_props $site: P =>
+  | W = parse_int_normalized{$site.w P.width.value}.clip{4 240}
+  | H = parse_int_normalized{$site.h P.height.value}.clip{4 240}
+  | when W <> $site.w or H <> $site.h: $create{W H}
+  | $site.name <= P.name.value
+  | $site.description <= P.description.value
   | $unpause
-  | $worldProperties.show <= 0
+  | $siteProperties.show <= 0
 
-ui.create_save_world_dlg =
+ui.create_save_site_dlg =
 | Dlg = No
 | hideDlg = 
   | Dlg.show <= 0
   | $unpause
 | DlgW =
-| DlgW <= save_dlg $world $mapsFolder &hideDlg: X =>
+| DlgW <= save_dlg $site $mapsFolder &hideDlg: X =>
   | Path = "[DlgW.folder][DlgW.filename.value].txt"
   | $save{Path}
   //| $main.show_message{'Saved' 'Your map is saved!'}
@@ -193,19 +193,19 @@ ui.create_save_world_dlg =
 | Dlg <= hidden: DlgW
 | Dlg
 
-ui.create_load_world_dlg =
+ui.create_load_site_dlg =
 | Dlg = No
 | hideDlg = 
   | Dlg.show <= 0
   | $unpause
-| DlgW = load_dlg $world $mapsFolder &hideDlg: X =>
+| DlgW = load_dlg $site $mapsFolder &hideDlg: X =>
   | $load{X}
-  | World = $world
-  | World.human <= World.players.1
-  | World.human.human <= 1
-  | when World.editor:
-    | World.paused <= 1
-    | World.explore{1}
+  | Site = $site
+  | Site.human <= Site.players.1
+  | Site.human.human <= 1
+  | when Site.editor:
+    | Site.paused <= 1
+    | Site.explore{1}
   | hideDlg
 | Dlg <= hidden: DlgW
 | Dlg
@@ -219,7 +219,7 @@ ui.create_credits_dlg =
      | button 'Exit' skin/small_medium: => $pick_title_menu{pause/0}
 
 ui.create_bank_list =
-| TileBanks = $main.params.world.tile_banks
+| TileBanks = $main.params.site.tile_banks
 | BankName =
 | BankNames = [@TileBanks unit leader @$main.bank_names.skip{unit}.skip{leader}]
 | PanelW = 200 //FIXME: hardcoded stuff is bad
@@ -240,29 +240,29 @@ ui.create_bank_list =
 | BankList,ItemList
 
 ui.create_panel_tab_menu =
-| WorldIcon = icon menu_world: Icon =>
+| SiteIcon = icon menu_site: Icon =>
   | $pause
-  | $worldProperties.show <= 1
-  | $worldProperties.update
+  | $siteProperties.show <= 1
+  | $siteProperties.update
 | SaveIcon = icon menu_save: Icon =>
   | $pause
-  | $saveWorldDlg.show <= 1
-  | $saveWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
-  | $saveWorldDlg.filename.value <= $world.filename
+  | $saveSiteDlg.show <= 1
+  | $saveSiteDlg.folder <= if $site.editor then $mapsFolder else $savesFolder
+  | $saveSiteDlg.filename.value <= $site.filename
 | LoadIcon = icon menu_load: Icon =>
   | $pause
-  | $loadWorldDlg.show <= 1
-  | $loadWorldDlg.folder <= if $world.editor then $mapsFolder else $savesFolder
+  | $loadSiteDlg.show <= 1
+  | $loadSiteDlg.folder <= if $site.editor then $mapsFolder else $savesFolder
 | ExitIcon = icon menu_exit: Icon =>
   | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
 | LeaveIcon = icon menu_leave: Icon =>
-  | $pick_planet
-  //| $confirm{"Leave this territory?" |$0 yes => $pick_planet}
-| layV s/4 [(layH s/4 SaveIcon,LoadIcon,WorldIcon,spacer{8 0},ExitIcon)
+  | $pick_world
+  //| $confirm{"Leave this site?" |$0 yes => $pick_world}
+| layV s/4 [(layH s/4 SaveIcon,LoadIcon,SiteIcon,spacer{8 0},ExitIcon)
             (LeaveIcon)]
 
 ui.confirm Msg Fn =
-| $world.notify{Msg}
+| $site.notify{Msg}
 | $confirmFn <= Fn
 | $panelTabs.pick{confirm}
 
@@ -279,7 +279,7 @@ ui.create_panel_tab_confirm =
 
 ui.create_play_button =
 | Icon = icon tab_play: Icon =>
-  | $world.new_game
+  | $site.new_game
   | $unpause
 | Icon.picked_fg <= $img{icons_tab_pause}
 | hidden Icon
@@ -290,10 +290,10 @@ ui.create_panel_tab_bag =
 | $unitActIconsLay
 
 ui.create_panel_tab_brush =
-| $playerPickers <= map Player $world.players:
+| $playerPickers <= map Player $site.players:
   | player_picker Player.name 0 Player.colors.1: Item =>
     | Name = Item.name
-    | when got@@it $world.players.find{?name >< Name}: $world.human <= it
+    | when got@@it $site.players.find{?name >< Name}: $site.human <= it
 | $playerPickers.1.picked <= 1
 | $playerWidget <= hidden: layH $playerPickers
 | BankList,ItemList = $create_bank_list
@@ -350,7 +350,7 @@ ui.create_panel_tabs_header =
 | for Icon TabIconsBare: Icon.group <= TabIconsBare
 | PlayButton = $create_play_button
 | push PlayButton $editorWidgets
-| EndTurnButton = icon tab_endturn: Icon => $world.end_turn
+| EndTurnButton = icon tab_endturn: Icon => $site.end_turn
 | layH s/8 [@TabsIcons spacer{16 0} PlayButton spacer{140 0} EndTurnButton]
 
 ui.create_ingame_ui =
@@ -370,26 +370,26 @@ ui.create_ingame_ui =
   | 0   PY          | $playerWidget
 
 ui.create_ingame_dlg =
-| $saveWorldDlg <= $create_save_world_dlg
-| $loadWorldDlg <= $create_load_world_dlg
+| $saveSiteDlg <= $create_save_site_dlg
+| $loadSiteDlg <= $create_load_site_dlg
 | Ingame = dlg w/$width h/$height: mtx
   |  0   0| spacer $width $height
   |  0   0| $create_ingame_ui
   |  0   0| $inputBlocker
-  |170 100| $worldProperties
-  |170 100| $loadWorldDlg
-  |170 100| $saveWorldDlg
+  |170 100| $siteProperties
+  |170 100| $loadSiteDlg
+  |170 100| $saveSiteDlg
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
 
-ui.create_planet_dlg =
-| $planet <= planet $main Me $width $height
+ui.create_world_dlg =
+| $world <= world $main Me $width $height
 | BY = $height-64
-| ET = icon tab_endturn: Icon => $planet.pass_time
+| ET = icon tab_endturn: Icon => $world.pass_time
 | EX = icon menu_exit: Icon => $pick_title_menu
 | Buttons = layH s/4 [ET spacer{44 0} EX]
 | dlg w/$width h/$height: mtx
-  |   0          0 | $planet
+  |   0          0 | $world
   | 0 $height-20 | infoline
   |  32         BY | Buttons
 
@@ -406,23 +406,23 @@ ui.create_dialog_tabs =
           victory($create_victory_dlg)
           defeat($create_defeat_dlg)
           credits($create_credits_dlg)
-          planet($create_planet_dlg)
+          world($create_world_dlg)
 
-ui.update = //called by world.update each game cycle
-| WinnerId = $world.params.winner
+ui.update = //called by site.update each game cycle
+| WinnerId = $site.params.winner
 | when got WinnerId:
-  | Winner = $world.players.WinnerId
-  | NextWorld = when Winner.human: $world.params.next_world
-  | less got NextWorld:
+  | Winner = $site.players.WinnerId
+  | NextSite = when Winner.human: $site.params.next_site
+  | less got NextSite:
     | $pause
     | if Winner.human
       then | $main.music{"victory.ogg"}
            | $pick{victory}
       else | $main.music{"defeat.ogg"}
            | $pick{defeat}
-  | when got NextWorld:
-    | $load{"[$mapsFolder][NextWorld].txt"}
-    | $world.new_game
+  | when got NextSite:
+    | $load{"[$mapsFolder][NextSite].txt"}
+    | $site.new_game
 
 ui.update_act_icon I Act Count Unit =
 | Icons = if I<0 then | I <= -(I+1); $groundActIcons 
@@ -437,7 +437,7 @@ ui.update_act_icon I Act Count Unit =
 | Icon.grayed <= 0
 | Cool = Unit.cooldown_of{ActName}
 | when Cool and Cool.1:
-  | TurnsDone = Unit.world.turn - Cool.0
+  | TurnsDone = Unit.site.turn - Cool.0
   | TurnsTotal = Cool.1
   | Icon.grayed <= 100-(TurnsDone*100)/TurnsTotal
 | Number = if ResearchRemain <> 0 then ResearchRemain else No
@@ -473,7 +473,7 @@ ui.on_unit_pick Units =
 | Unit = 0
 | As = 0
 | GAs = []
-| Unit = if Units.size then Units.0 else $world.nil
+| Unit = if Units.size then Units.0 else $site.nil
 | Acts = $main.params.acts
 | if Unit.has{menu} then
      | MenuActName,XYZ,TargetSerial = Unit.get{menu}
@@ -483,7 +483,7 @@ ui.on_unit_pick Units =
   else if $curPanelTab >< unit then
      | As <= if Unit.removed then [] else Unit.acts.skip{?tab}
   else if $curPanelTab >< summon or $curPanelTab >< spell then
-     | Unit <= $world.human.leader
+     | Unit <= $site.human.leader
      | As <= Unit.acts.keep{?tab><$curPanelTab}
   else if $curPanelTab >< bag then
      | As <= map K,A Unit.items: [A Acts."drop_[K]"]
@@ -504,7 +504,7 @@ unit.research_act Act =
 ui.actClickIcon Icon =
 | HKI = $hotKeyInvoke
 | $hotKeyInvoke <= 0
-| $world.act <= 0
+| $site.act <= 0
 | when $curActIcon: $curActIcon.picked <= 0
 | $curActIcon <= Icon
 | Unit = Icon.unit
@@ -516,7 +516,7 @@ ui.actClickIcon Icon =
 | ResearchRemain = Unit.owner.research_remain{Act}
 | Cool = Unit.cooldown_of{ActName}
 | when Cool:
-  | TurnsLeft = Cool.0 + Cool.1 - Unit.world.turn
+  | TurnsLeft = Cool.0 + Cool.1 - Unit.site.turn
   | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
   | leave
 | when ResearchRemain:
@@ -531,8 +531,8 @@ ui.actClickIcon Icon =
 | when Act.range >< 0:
   | $view.handle_picked_act2{Unit Act Unit.xyz Unit}
   | leave
-| $world.act <= Act
-| $world.act_unit.init{Unit,Unit.serial}
+| $site.act <= Act
+| $site.act_unit.init{Unit,Unit.serial}
 | when HKI: $view.mice_click <= \leftup //FIXME: kludge
 
 ui.create_act_icons =
@@ -556,7 +556,7 @@ ui.init =
 | $create{8 8}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
-| $worldProperties <= $create_world_props
+| $siteProperties <= $create_site_props
 | Tabs = $create_dialog_tabs
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}

@@ -46,7 +46,7 @@ move_finish Me =
 
 dact move.valid
 | U = $unit
-| U.world.no_block_at{$xyz} and U.can_move{}{U U.cell $xyz.cell}
+| U.site.no_block_at{$xyz} and U.can_move{}{U U.cell $xyz.cell}
 
 dact move.start
 | move_start Me
@@ -74,8 +74,8 @@ dact missile.update
 dact missile.finish
 | U = $unit
 | _,UId,USerial,Es = U.get{missile}.0
-| Source = U.world.units.UId
-| less Source.serial >< USerial: Source <= $world.nil
+| Source = U.site.units.UId
+| less Source.serial >< USerial: Source <= $site.nil
 | Source.effect{Es $target $xyz}
 | U.free
 
@@ -116,7 +116,7 @@ dact ascend.start | when $unit.anim<>move: $unit.animate{move}
 
 ascend_update Me GoalZ =
 | FDst = $fxyz+[0 0 $ascendSpeed]
-| when FDst.2 < (GoalZ*$world.c)
+| when FDst.2 < (GoalZ*$site.c)
   | $fine_move{FDst}
   | leave 1
 | $move{[$xyz.0 $xyz.1 GoalZ]}
@@ -173,7 +173,7 @@ type action{unit}
    act_update/&default_update
    act_finish/&default_finish
 
-world.action Unit = action Unit
+site.action Unit = action Unit
 
 action.main = $unit.main
 

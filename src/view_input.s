@@ -5,11 +5,11 @@ PickCount = 0
 order_at Me XYZ Target =
 | Player = $player
 | Us = $picked.keep{U => U.owner.id >< Player.id}
-| when Us.size: $world.visual{XYZ ack}
+| when Us.size: $site.visual{XYZ ack}
 | Us = Us{U=>[(XYZ-U.xyz).abs U]}.sort{?0<??0}{?1}
 | Used = []
 | less Target and Target.owner.is_enemy{Player}: Target <= 0
-| Cell = $world.cell{@XYZ}
+| Cell = $site.cell{@XYZ}
 | when Us.size><1: less Target:
   | Below = (Cell-1).tile
   | when Below.unit and (Cell-Below.height).block.ai><remove:
@@ -20,13 +20,13 @@ order_at Me XYZ Target =
 | for U Us:
   | P = Cell
   | less Target: less Used.end:
-    | Found = $world.find{1000 U Cell | Dst => no Used.find{Dst}}
+    | Found = $site.find{1000 U Cell | Dst => no Used.find{Dst}}
     | when Found: P <= Found
   | U.order_at{P.xyz 0}
   | push P Used
 
 view.handle_picked_act2 Actor Act XYZ Target =
-| when Target: $world.blink.init{[4 Target]}
+| when Target: $site.blink.init{[4 Target]}
 | when Act.menu:
   | when Act.onMenu: Actor.effect{Act.onMenu Target XYZ}
   | Actor.set{menu [Act.name XYZ if Target then Target.serial else No]}
@@ -37,14 +37,14 @@ view.handle_picked_act2 Actor Act XYZ Target =
 
 view.handle_picked_act Target =
 | less $mice_click><pick:
-  | when $world.act.check.unit:
+  | when $site.act.check.unit:
     | Cur = if Target then \ui_cursor_target else \ui_cursor_target2
     | get_gui{}.cursor <= $main.img{Cur}
   | leave
-| [Actor ActUnitOldSerial] = $world.act_unit
+| [Actor ActUnitOldSerial] = $site.act_unit
 | when Actor.serial><ActUnitOldSerial: //is actor alive?
-  | $handle_picked_act2{Actor $world.act $cursor Target}
-| $world.act <= 0
+  | $handle_picked_act2{Actor $site.act $cursor Target}
+| $site.act <= 0
 | $mice_click <= 0
 
 view.handle_picked Rect Units =
@@ -52,7 +52,7 @@ view.handle_picked Rect Units =
 | Player = $player
 | Units = Units.keep{U=>Player.seen{U.xyz}}
 | Target = if Units.end then 0 else Units.0
-| when $world.act:
+| when $site.act:
   | $handle_picked_act{Target}
   | leave
 | get_gui{}.cursor <= $main.img{ui_cursor_point}
@@ -66,7 +66,7 @@ view.handle_picked Rect Units =
   | XYZ = $cursor
   | less $paused:
     | if not Target then order_at Me $cursor 0
-      else | $world.blink.init{[4 Target]}
+      else | $site.blink.init{[4 Target]}
            | order_at Me Target.xyz Target
   | leave
 | when $mice_click >< pick:
@@ -85,22 +85,22 @@ view.handle_picked Rect Units =
 
 view.handle_pick UnitRects =
 | Units = []
-| when@@it $world.cell{@$cursor}.block: Units <= [it]
+| when@@it $site.cell{@$cursor}.block: Units <= [it]
 | $handle_picked{0 Units}
 
-view.worldToView P =
+view.siteToView P =
 | X,Y = P - $view_origin
 | RX = (X*$xunit - Y*$xunit)/2
 | RY = (X*$yunit + Y*$yunit)/2
 | [RX RY] + $blit_origin
 
-view.viewToWorld P =
+view.viewToSite P =
 | X,Y = P - $blit_origin - [$yunit -$yunit+$zunit]
 | WH = $xunit*$yunit
 | RX = (Y*$xunit + X*$yunit)/WH
 | RY = (Y*$xunit - X*$yunit)/WH
 | [RX RY] = [RX RY] + $view_origin
-| [RX.clip{1 $world.w} RY.clip{1 $world.h}]
+| [RX.clip{1 $site.w} RY.clip{1 $site.h}]
 
 view.mice_rect =
 | AX,AY = $mice_xy_anchor
@@ -114,7 +114,7 @@ view.mice_rect =
 | less MW>4 or MH>4: leave 0
 | [X Y MW MH]
 
-view.units_get XYZ = $world.units_get{XYZ}.skip{?mark}
+view.units_get XYZ = $site.units_get{XYZ}.skip{?mark}
 
 LMB_Count = 0
 AnchorHack = -1
@@ -122,7 +122,7 @@ AnchorHack = -1
 place_object Me Bank Type =
 | X,Y,Z = $cursor
 | less Z << $anchor.2: leave
-| Cell = $world.cell{X Y Z}
+| Cell = $site.cell{X Y Z}
 | Mirror = $key{edit_place_mirrored}
 | PlaceRandom = $key{edit_place_random}
 | ClassName = if PlaceRandom
@@ -132,19 +132,19 @@ place_object Me Bank Type =
 | when Class.item><1:
   | Cell.add_item{ClassName 1}
   | leave
-| when Z+Class.height>>$world.d: leave
+| when Z+Class.height>>$site.d: leave
 | Place = 1
 | for XX,YY,ZZ Class.form: when Place:
   | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
-  | Us = $world.units_get{XYZ}.skip{?bank><mark}
-  | Place <= if not $world.valid{@XYZ} then 0
+  | Us = $site.units_get{XYZ}.skip{?bank><mark}
+  | Place <= if not $site.valid{@XYZ} then 0
              else if not Class.empty then Us.all{?empty}
              else if PlaceRandom then Us.end
              else not Us.any{?class^address >< Class^address}
   | when Place:
     | X,Y,Z = XYZ
     | H = if Class.passable then Class.height else 2
-    | Place <= H.list.all{I=>$world.get{X,Y,Z+I}.empty}
+    | Place <= H.list.all{I=>$site.get{X,Y,Z+I}.empty}
     | less Place: $main.sound{illegal}
 | when Place
   | U = $player.alloc_unit{ClassName}
@@ -157,7 +157,7 @@ place_object Me Bank Type =
   | U.run_genes{place}
   | U.animate{idle}
 
-world_place_tile_walls Me X Y Z Tile =
+site_place_tile_walls Me X Y Z Tile =
 | Wall = $main.tiles.(Tile.wall)
 | for DX,DY Dirs:
   | XX = X+DX
@@ -166,20 +166,20 @@ world_place_tile_walls Me X Y Z Tile =
   | when DTile.dig or DTile.empty:
     | when $at{XX YY Z-1}.type <> Wall.around:
       | $clear_tile{XX YY Z}
-      | world_place_tile Me XX YY Z Wall
+      | site_place_tile Me XX YY Z Wall
 
-world_place_tile Me X Y Z Tile =
+site_place_tile Me X Y Z Tile =
 | when X<1 or Y<1 or X>$w or Y>$h: leave
 | $set{X Y Z Tile}
 | for U $units_get{X,Y,Z}: U.move{X,Y,Z+Tile.height}
-| world_place_tile_deco Me X Y Z Tile
+| site_place_tile_deco Me X Y Z Tile
 
-world_place_tile_deco Me X Y Z Tile =
+site_place_tile_deco Me X Y Z Tile =
 | when Tile.roof.is_list:
   | H,RoofTile = Tile.roof
   | for DX,DY [0,0 @Dirs]:
-    | world_place_tile Me X+DX Y+DY Z+H RoofTile
-| when Tile.wall: world_place_tile_walls Me X Y Z Tile
+    | site_place_tile Me X+DX Y+DY Z+H RoofTile
+| when Tile.wall: site_place_tile_walls Me X Y Z Tile
 
 place_tile Me Type =
 | $cursor.2 <= $floor{$cursor}
@@ -195,43 +195,43 @@ place_tile Me Type =
     | AnchorHack <= LMB_Count
   | Z = 0
   | while Z<$anchor.2:
-    | when $world.at{X Y Z}.type >< void:
-      | $world.set{X Y Z EmptyTile}
+    | when $site.at{X Y Z}.type >< void:
+      | $site.set{X Y Z EmptyTile}
     | Z++
-  | till $world.at{X Y Z}.empty: Z++
+  | till $site.at{X Y Z}.empty: Z++
   | $cursor.2 <= Z
 | less IsBridge
   | if Tile.embed then
       | when Tile.wall
-        | Below = $world.at{X Y $cursor.2-1}
+        | Below = $site.at{X Y $cursor.2-1}
         | while $cursor.2 > 1 and (Below.around or Below.roof
                                    or Below.type><void):
-          | H = $world.at{X Y $cursor.2-1}.height
+          | H = $site.at{X Y $cursor.2-1}.height
           | $cursor.2 -= H
           | $anchor.2 <= $cursor.2
-          | $world.clear_tile{@$cursor}
-          | Below <= $world.at{X Y $cursor.2-1}
+          | $site.clear_tile{@$cursor}
+          | Below <= $site.at{X Y $cursor.2-1}
       | when $cursor.2<<$anchor.2:
-        | Below = $world.at{X Y $cursor.2-1}
+        | Below = $site.at{X Y $cursor.2-1}
         | less Below.empty
-          | $world.set{X Y $cursor.2-1 Tile owner/$world.human}
-          | world_place_tile_deco $world X Y $cursor.2 Tile
+          | $site.set{X Y $cursor.2-1 Tile owner/$site.human}
+          | site_place_tile_deco $site X Y $cursor.2 Tile
           | leave
     else
-      | when $world.at{X Y $cursor.2-1}.embed: 
+      | when $site.at{X Y $cursor.2-1}.embed: 
         | Z = $cursor.2-1
         | when AnchorHack<>LMB_Count:
           | $anchor.2 <= Z
           | AnchorHack <= LMB_Count
-        | while Z>>0 and $world.at{X Y Z}.embed:
-          | $world.set{X Y Z-- Tile owner/$world.human}
+        | while Z>>0 and $site.at{X Y Z}.embed:
+          | $site.set{X Y Z-- Tile owner/$site.human}
         | leave
   | AnchorHack <= LMB_Count
 | while 1
   | Z <= $cursor.2
-  | less Z << $anchor.2 and $world.at{X Y Z}.empty: leave
-  | when Z+Tile.height>>$world.d: leave
-  | world_place_tile $world X Y Z Tile
+  | less Z << $anchor.2 and $site.at{X Y Z}.empty: leave
+  | when Z+Tile.height>>$site.d: leave
+  | site_place_tile $site X Y Z Tile
   | when Tile.empty:
     | when Tile.id><0: leave
     | when IsEmpty: leave
@@ -241,10 +241,10 @@ place_tile Me Type =
 remove_object_or_tile Me =
 | X,Y,Z = $cursor
 | Brush = $brush
-| T = $world.at{X Y Z-1}
+| T = $site.at{X Y Z-1}
 | Us = $units_get{X,Y,Z}
 | when T.unit and not Us.size:
-  | while $world.at{X Y Z}.type >< T.type: Z++
+  | while $site.at{X Y Z}.type >< T.type: Z++
   | ZZ = Z - T.height
   | BelowUs = $units_get{X,Y,ZZ}
   | when BelowUs.size:
@@ -255,18 +255,18 @@ remove_object_or_tile Me =
   [obj Type]
     | for U Us: U.free
   [tile Type]
-    | less $world.at{X Y Z}.empty: when Z>1
-      | $world.clear_tile{X Y Z-1}
+    | less $site.at{X Y Z}.empty: when Z>1
+      | $site.clear_tile{X Y Z-1}
       | $cursor.2 <= Z-1
     | while 1
       | Z <= $cursor.2
       | less Z >> $anchor.2 and Z > 1: leave
       | less Z > 1: leave
-      | Tile = $world.at{X Y Z-1}
+      | Tile = $site.at{X Y Z-1}
       | less Tile.height: leave
-      | $world.clear_tile{X Y Z-1}
+      | $site.clear_tile{X Y Z-1}
       | $cursor.2 <= $floor{$cursor}
-      | for U $world.units_get{X,Y,Z}: U.move{$cursor}
+      | for U $site.units_get{X,Y,Z}: U.move{$cursor}
 
 view.update_brush =
 | when $mice_click><leftup or $mice_click><rightup:
@@ -282,13 +282,13 @@ view.update_play =
   leftup | $mice_click <= \pick
   right | when $picked.size:
           | $mice_click <= \order
-        | when $world.act:
-          | $world.act <= 0
+        | when $site.act:
+          | $site.act <= 0
           | $mice_click <= 0
   rightup
     | $mice_click <= 0
 
-world.update_picked =
+site.update_picked =
 | for M $marks: M.free
 | $marks.heapfree
 | $marks <= []
@@ -320,7 +320,7 @@ world.update_picked =
   | push Mark Marks
 | $marks <= Marks.enheap
 
-world.update_cursor =
+site.update_cursor =
 | View = $view
 | CXYZ = View.cursor
 | Marks = $marks.unheap
@@ -365,16 +365,16 @@ view.update =
 | case $key{down} 1: $center_at{$center+[1 1 0]}
 | case $key{left} 1: $center_at{$center-[1 -1 0]}
 | case $key{right} 1: $center_at{$center+[1 -1 0]}
-//| $cursor.0 <= $cursor.0.clip{1 $world.w}
-//| $cursor.1 <= $cursor.1.clip{1 $world.h}
+//| $cursor.0 <= $cursor.0.clip{1 $site.w}
+//| $cursor.1 <= $cursor.1.clip{1 $site.h}
 | case $key{floor_down} 1:
-  | NewZ = $world.down{$cursor}
+  | NewZ = $site.down{$cursor}
   | when NewZ:
     | $cursor.2 <= NewZ
   | $zlock <= $cursor.2
   | $key_set{floor_down 0}
 | case $key{floor_up} 1:
-  | NewZ = $world.up{$cursor}
+  | NewZ = $site.up{$cursor}
   | when NewZ:
     | $cursor.2 <= NewZ
   | $zlock <= $cursor.2
@@ -386,14 +386,14 @@ view.update =
     | $key_set{edit_down 0}
   | case $key{edit_up} 1:
     | $zfix <= 0
-    | when $cursor.2<$world.d-2: $cursor.2++
+    | when $cursor.2<$site.d-2: $cursor.2++
     | $key_set{edit_up 0}
   | case $key{edit_zfix} 1:
     | $zfix <= 1
     | $key_set{edit_zfix 0}
 | X,Y,Z = $cursor
-| $world.update_picked
-| $world.update_cursor
+| $site.update_picked
+| $site.update_cursor
 | when $brush.0: $update_brush
 | $update_play
 | less $paused: $main.update
@@ -401,7 +401,7 @@ view.update =
 
 view.floor XYZ =
 | less $zfix: leave XYZ.2
-| if $key{edit_over_empty} then $world.floor_void{XYZ} else $world.floor{XYZ}
+| if $key{edit_over_empty} then $site.floor_void{XYZ} else $site.floor{XYZ}
 
 view.input In =
 //| when $paused: leave
@@ -409,23 +409,23 @@ view.input In =
   [mice_move _ XY]
     | $mice_xy.init{XY}
     | less $mice_click: $mice_xy_anchor.init{XY}
-    | CX,CY = $viewToWorld{$mice_xy}
-    | when $brush.0 or $world.human.sight.CY.CX:
+    | CX,CY = $viewToSite{$mice_xy}
+    | when $brush.0 or $site.human.sight.CY.CX:
       | less ($mice_click><left or $mice_click><pick) and not $brush.0:
         | $cursor.init{[CX CY $cursor.2]}
         | $cursor.2 <= $floor{$cursor}
         | NewZ = $cursor.2
         | while NewZ and NewZ>>$zlock:
           | $cursor.2 <= NewZ
-          | NewZ <= $world.down{$cursor}
+          | NewZ <= $site.down{$cursor}
         | NewZ = $cursor.2
         | while NewZ and NewZ<<$zlock:
           | $cursor.2 <= NewZ
-          | NewZ <= $world.up{$cursor}
+          | NewZ <= $site.up{$cursor}
         | Ds = [[1 0] [0 1] [-1 0] [0 -1]]
         | X,Y,NewZ = $cursor
         | while NewZ>$zlock+1:
-          | less Ds.all{[XD YD] => $world.at{X+XD Y+YD NewZ}.empty}:
+          | less Ds.all{[XD YD] => $site.at{X+XD Y+YD NewZ}.empty}:
             | $cursor.2 <= NewZ
           | NewZ--
   [mice left State XY]
@@ -433,13 +433,13 @@ view.input In =
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
     | if State then $anchor.init{$cursor}
-      else when $world.at{@$cursor}.empty: $cursor.2 <= $floor{$cursor}
+      else when $site.at{@$cursor}.empty: $cursor.2 <= $floor{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
     | $zfix <= 1
     | $mice_click <= if State then \right else \rightup
     | if State then $anchor.init{$cursor}
-      else when $world.at{@$cursor}.empty:
+      else when $site.at{@$cursor}.empty:
            | $cursor.2 <= $floor{$cursor}
            | $anchor.init{$cursor}
     | when State: $mice_xy_anchor.init{XY}

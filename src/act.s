@@ -77,7 +77,7 @@ act.validate Actor XYZ Target Invalid =
 | when Cost > O.mana:
   | Invalid{"Needs [Cost] mana."}
   | leave 0
-| Wr = Actor.world
+| Wr = Actor.site
 | when T.pentagram:
   | P = O.pentagram
   | when P.removed:
@@ -133,7 +133,7 @@ act.validate Actor XYZ Target Invalid =
 | 1
 
 //turns on/off act(s) for player(s)
-world.turn_act State Players ActNames =
+site.turn_act State Players ActNames =
 | when Players >< all: Players <= 16{(?)}
 | when ActNames >< all: ActNames <= $params.acts{}{?0}
 | when Players.is_int: Players <= [Players]

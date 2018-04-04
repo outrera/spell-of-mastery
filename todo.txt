@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Rename `world` to `site`.
-- Rename `planet` to `world`
+- move max_notes into ui.s and implement notes for kingdom view.
 - Implement ingredient and spell systems, then a menu to manage them at the start of the battle.
 - Finish kingdom view. It would be turnbased too. Each turn several events spawn, like invading monster squad. Player will have a choice to either intercept it or ignore. If player ignores monster squad, it will invade some town, player will then again will have choice to defend the city, or ignore, losing score.
 - Random map generation, based on matching tiles.

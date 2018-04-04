@@ -102,7 +102,7 @@ unit.draw FB B =
   | G.flop
 | S = $sprite
 | when S.shadow:
-  | S = $world.shadow
+  | S = $site.shadow
   | ZZ = $cell-$floor
   | I = min (ZZ/16).abs S.size-1
   | SGfx = S.I
@@ -324,7 +324,7 @@ draw_overlay FB Wr =
 ShakeXY = [[10 10] [0 10] [0 -10] [0 0] [-10 -10] [10 0] [-10 0]]
 
 view.render_iso =
-| Wr = $world
+| Wr = $site
 | BlitItems <= []
 | PickedRects <= stack 256
 | UnitRects <= stack 1024
@@ -376,7 +376,7 @@ view.render_iso =
     | O = B.object
     | O.draw{FB B}*/
 | less BlitItems.end
-  | DrawBoundingBox = $main.params.world.bounding_boxes><1
+  | DrawBoundingBox = $main.params.site.bounding_boxes><1
   | BL = BlitItems.list
   | isort_begin
   | for I,B BL.i: isort_add I 0 B.x B.y B.z B.x2 B.y2 B.z2
@@ -404,14 +404,14 @@ view.render_iso =
 | UnitRects <= 0
 
 view.render_frame =
-| IsNight = $world.params.night><1
+| IsNight = $site.params.night><1
 | BrightFactor <= if IsNight then 10 else 0
 //| $fb.clear{#929292/*#00A0C0*/}
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
 | InfoText = []
 | when $param.show_frame: push "frame=[$frame]" InfoText
-| when $param.show_cycle: push "cycle=[$world.cycle]" InfoText
+| when $param.show_cycle: push "cycle=[$site.cycle]" InfoText
 | when $param.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.render.draw{$fb 200 ($h-50)}

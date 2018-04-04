@@ -25,7 +25,7 @@ Rooms <= map R Rooms
          | less Ls.all{?size >< W}: bad 'room [R]'
          | room W H Ls
 
-world.generate W H =
+site.generate W H =
 | $clear
 | $w <= W
 | $h <= H
