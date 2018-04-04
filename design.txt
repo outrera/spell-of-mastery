@@ -27,9 +27,10 @@ Kingdom View:
     have a soul gem with it.
 - Wizard guild can have several bases (wizard towers), which are managed using the same battle view, but with limited actions. Player starts with a single base, location for which he picks at the start of the game.
 - Bases have detection facilities, such as scrying devices, exposing roaming monster squads near them. If such squad gets detected, player has choice to intercept it or let it further, in that case such squad can attack a city, build a lair or wander away.
-- If monsters capure city it turns into ruins. Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The less cities there are the more are the chances, so it is always wise to leave some guards. The percentage of total reward gold gained is based on the percent of cities alive. Restoring city requires capturing it back and spending some gold.
+- If monsters capure city it turns into ruins. Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The less cities there are the more are the chances, so it is always wise to leave some guards. The percentage of total reward gold gained is based on the percent of cities alive. Ruins are restored back to a living city after some time.
 - The goal to defeat several enemy wizards, who are behind the monster invasion, by assaulting their sites of living(which should be uncovered first). Player could also attempt to capture king's castle, which will give him income each turn from the cities not turned into ruins.
-
+- Each monster lair generates a monster squad each N turns, based on its age.
+- Base can only access location immediately in its vicinity. Transfering resouces between bases takes 1 turn.
 Battle View:
 - Each creature major stats: Moves, Health, Attack, Defense, Fatigue, View, Range, and Will. Some magical artifacts and structures can affect these numbers.
 - Moves determines how many movement point or steps this unit gains per turn. One move allows moving one map square. The more complex is the action the more moves it will require per turn.

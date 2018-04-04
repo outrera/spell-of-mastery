@@ -4,8 +4,9 @@ type world_site{Id World}
   world/World //world this sites belongs to
   id/Id // numeric id, which can be reused
   serial //serial guaranteed to be unique for the duration of the game
-  type //city, ruin, lair, base, enemy
-  turn //turn this place came to live
+  type //city, ruin, lair, base, party
+  gfx //representation on world map
+  turn //turn this site came to life
   name
   xy/[-1 -1]
   data
@@ -21,11 +22,12 @@ type world.widget{Main UI W H}
   h/H
   mice_xy/[0 0]
   click_xy/[0 0]
+  param
+  data/(t)
   seed
   serial
   bg
-  fg_site
-  fg_picked
+  fg
   fow
   turn
   sites
@@ -33,8 +35,11 @@ type world.widget{Main UI W H}
   free_sites
   picked //picked site
   siteC/8
-  param
+  incomeFactor
 | $param <= $main.params.world
+| $bg <= $img{world_bg}
+| $fg <= @table: map N [site picked base city lair party]
+  | [N $img{"world_fg_[N]"}]
 | MaxSites = $param.max_sites
 | $all_sites <= MaxSites{(world_site ? Me)}
 | $sites <= stack MaxSites
@@ -54,17 +59,26 @@ world.img Name = $main.img{Name}
 
 world.clear =
 | for S $sites: $free_sites.push{S}
+| for K,V $data.list: $data.K <= No
 | $sites.clear
 | $picked <= 0
 | $turn <= 0
 | $serial <= 1
+| $incomeFactor <= 100
 | $seed <= LCG_M.rand
 | $generate
 
 world.free_site S =
+| Type = S.type
+| $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}-1
 | S.xy.init{-1,-1}
+| $free_sites.push{S}
 
 world.generate_site Type =
+| Lim = 
+| less $data."cnt_[Type]"^~{No 0}<$param."lim_[Type]"^~{No 1000}:
+  | leave 0
+| less $free_sites.used: leave 0 //FIXME: should we halt the game?
 | X = 0
 | Y = 0
 | R = [0 0 0 0]
@@ -82,22 +96,45 @@ world.generate_site Type =
 | S.serial <= $serial++
 | S.turn <= $turn
 | S.xy.init{X,Y}
+| S.gfx <= $fg.Type
+| when no S.gfx: S.gfx <= $fg.site
 | $sites.push{S}
+| $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}+1
 | S
 
 world.generate =
-| for I $param.ncities: $generate_site{city}
+| for I $param.start_cities: $generate_site{city}
 
 world.end_turn =
+| Ss = $sites.list
+| $sites.clear
+| Lairs = []
+| Cities = []
+| Bases = []
+| Ruins = []
+| Parties = []
+| for S Ss: when S.xy.0>0
+  | when S.type><base: push S Bases
+  | when S.type><lair: push S Lairs
+  | when S.type><city: push S Cities
+  | when S.type><ruin: push S Ruins
+  | when S.type><party: push S Parties
+  | $sites.push{S}
 | $turn += 1
+| $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
+| LSLC = $param.lair_spawn_lair_chance
+| LSMC = $param.lair_spawn_monster_chance
+| for L Lairs:
+  | T = $turn - L.turn
+  | when T<$rand{5} and $rand{100}<LSMC: $generate_site{party}
+  | when T<$rand{10} and $rand{100}<LSLC: $generate_site{lair}
+| when $rand{100}<LSMC: $generate_site{party}
+| when $rand{100}<LSLC: $generate_site{lair}
 | $ui.notify{"Turn [$turn]"}
 
 world.render = Me
 
 world.draw FB X Y =
-| less $bg: $bg <= $img{world_bg}
-| less $fg_site: $fg_site <= $img{world_site}
-| less $fg_picked: $fg_picked <= $img{world_picked}
 | FB.blit{0 0 $bg}
 | Clock = clock
 | PickBlink = (Clock-Clock.int.float)<0.25
@@ -106,8 +143,8 @@ world.draw FB X Y =
 | for S $sites: when S.xy.0>0:
   | G = if S.id <> PickedId or
            (PickBlink and not point_in_rect{S.rect $mice_xy})
-        then $fg_site
-        else $fg_picked
+        then S.gfx
+        else $fg.picked
   | FB.blit{S.xy.0-C S.xy.1-C G}
 
 world.site_at XY =
