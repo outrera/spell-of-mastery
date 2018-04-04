@@ -94,14 +94,12 @@ resource_counters.draw G X Y =
 | Debug = $site.params.debug
 | when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
 
-type notification_widget.widget{view} site w/0 h/0
-| $site <= $view.site
-notification_widget.main = $site.main
+type notification_widget.widget{ui} site w/0 h/0
 notification_widget.draw G X Y =
 | Font = font medium
 | C = 24
 | Clock = clock
-| for [Expires Chars] $site.notes: when Clock < Expires:
+| for [Expires Chars] $ui.notes: when Clock < Expires:
   | Font.draw{G 16 Y-C "* [Chars.text]"}
   | C+=16
 

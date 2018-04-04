@@ -40,11 +40,28 @@ type ui.$tabs{main}
   brushPicker
   lastBrush/[0 0]
   editorWidgets/[]
+  notes
+  noteLife/1.0
 | $site <= $main.site
-| $width <= $params.ui.width
-| $height <= $params.ui.height
+| Prm = $params.ui
+| $width <= Prm.width
+| $height <= Prm.height
+| $noteLife <= Prm.note_life
+| NoteSize = Prm.note_size
+| $notes <= dup Prm.max_notes: [0.0 (dup NoteSize ``)]
 | $menuButtonsX <= $width/2 - 162
 
+ui.notify Text =
+| Clock = clock
+| Used = $notes.keep{?0 > Clock}
+| Free = $notes.skip{?0 > Clock}
+| less Free.size: push Used^pop Free
+| N = Free.0
+| N.0 <= Clock + $noteLife
+| Chars = N.1
+| Chars.clear{``}
+| for I min{Chars.size Text.size}: Chars.I <= Text.I
+| $notes.init{[@Used @Free]}
 
 ui.render =
 | $inputBlocker.show <= $paused or $site.actors.get.size
@@ -262,7 +279,7 @@ ui.create_panel_tab_menu =
             (LeaveIcon)]
 
 ui.confirm Msg Fn =
-| $site.notify{Msg}
+| $notify{Msg}
 | $confirmFn <= Fn
 | $panelTabs.pick{confirm}
 
@@ -364,7 +381,7 @@ ui.create_ingame_ui =
   | 140 PY-28       | $create_panel_tabs_header
   | 146 $height-114 | $panelTabs
   | 164 $height-20  | infoline
-  | 0   $height-170 | notification_widget $view
+  | 0   $height-170 | notification_widget Me
   | $width-50 80    | $groundActIconsLay
   | 0   $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0   PY          | $playerWidget
@@ -385,13 +402,14 @@ ui.create_ingame_dlg =
 ui.create_world_dlg =
 | $world <= world $main Me $width $height
 | BY = $height-64
-| ET = icon tab_endturn: Icon => $world.pass_time
+| ET = icon tab_endturn: Icon => $world.end_turn
 | EX = icon menu_exit: Icon => $pick_title_menu
 | Buttons = layH s/4 [ET spacer{44 0} EX]
 | dlg w/$width h/$height: mtx
-  |   0          0 | $world
-  | 0 $height-20 | infoline
-  |  32         BY | Buttons
+  |   0           0| $world
+  |   0 $height-20 | infoline
+  |   0 $height-170| notification_widget Me
+  |  32          BY| Buttons
 
 ui.create_dialog_tabs =
 | $copyrightText <= txt small 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'

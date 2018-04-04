@@ -1,7 +1,7 @@
 use gui util widgets stack
 
-type world_site{Id Planet}
-  world/Planet //world this sites belongs to
+type world_site{Id World}
+  world/World //world this sites belongs to
   id/Id // numeric id, which can be reused
   serial //serial guaranteed to be unique for the duration of the game
   type //city, ruin, lair, base, enemy
@@ -88,8 +88,9 @@ world.generate_site Type =
 world.generate =
 | for I $param.ncities: $generate_site{city}
 
-world.pass_time =
+world.end_turn =
 | $turn += 1
+| $ui.notify{"Turn [$turn]"}
 
 world.render = Me
 

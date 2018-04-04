@@ -1,6 +1,3 @@
-max_notes: 4 //number of simultaneous notifications on screen
-note_size: 256
-note_life: 5.0 // in seconds
 max_size: 128 // max world size (should be a power of 2)
 depth: 32 // max world depth in tiles
 max_players: 8

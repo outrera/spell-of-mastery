@@ -1,9 +1,5 @@
 use enheap gfx stack heap util line_points unit player
 
-MaxUnits = No
-MaxActiveUnits = 4096
-NoteLife = 1.0
-
 type efx when name amount params
 
 CellsTile =
@@ -36,7 +32,7 @@ int.`=cost` V = CellsCost.Me <= V
 int.prev = CellsPrev.Me
 int.`=prev` V = CellsPrev.Me <= V
 //for empty cell, floor returns corresponding ground cell bellow them
-//for non-empty cell, floor retursn ground cell above them
+//for non-empty cell, floor returns ground cell above them
 int.floor = CellsFloor.Me
 int.`=floor` V = CellsFloor.Me <= V
 int.gate = CellsGate.Me
@@ -121,7 +117,6 @@ type site{main}
    view //viewport, attached rendering this site
    act
    act_unit/[0 0]
-   notes
    editor/0 //site is in editor mode
    paused/0
    sound_cycles/(t) //used to avoid playing similar sounds at once
@@ -160,11 +155,6 @@ site.init =
 | $maxSize <= WParam.max_size+12 //FIXME: get rid of this 12 margin
 | SiteSize <= $maxSize
 | CellsLineSize <= SiteSize*SiteDepth
-| MaxUnits <= WParam.max_units
-| NoteSize = WParam.note_size
-| NoteLife <= WParam.note_life
-| $notes <= dup WParam.max_notes
-  | [0.0 (dup NoteSize ``)]
 | $players <= map Id WParam.max_players: player Id Me
 | $c <= WParam.cell_size
 | init_unit_module $c
@@ -180,10 +170,12 @@ site.init =
 | CellsFloor <= dup NCells 0
 | CellsGate <= dup NCells 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
+| MaxUnits = WParam.max_units
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $genes <= (MaxUnits*2){N=>(efx)}
 | $free_genes <= stack $genes
+| MaxActiveUnits = 4096
 | $active <= stack MaxActiveUnits
 | $shadow <= $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
@@ -323,17 +315,7 @@ site.new_game =
 | $end_turn
 | $paused <= 0
 
-site.notify Text =
-| Clock = clock
-| Used = $notes.keep{?0 > Clock}
-| Free = $notes.skip{?0 > Clock}
-| less Free.size: push Used^pop Free
-| N = Free.0
-| N.0 <= Clock + NoteLife
-| Chars = N.1
-| Chars.clear{``}
-| for I min{Chars.size Text.size}: Chars.I <= Text.I
-| $notes.init{[@Used @Free]}
+site.notify Text = $main.ui.notify{Text}
 
 site.alloc_unit ClassName Owner =
 | Class = $main.classes.ClassName
