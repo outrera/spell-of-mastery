@@ -41,11 +41,15 @@ type world.widget{Main UI W H}
   siteLimX
   siteLimY/510
   incomeFactor
+  tmap/(t) //terrain map
+  sterra/(t) //allowed terrain for sites
 | $param <= $main.params.world
 | $bg <= $img{world_bg}
 | $siteLimX <= $bg.w
 | $fg <= @table: map N [site picked base city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
+| for V,@Ks $param.tmap: for K Ks: $tmap.K <= V
+| for K,@Vs $param.sterra: $sterra.K <= Vs
 | MaxSites = $param.max_sites
 | $all_sites <= MaxSites{(world_site ? Me)}
 | $sites <= stack MaxSites
@@ -84,11 +88,23 @@ world.free_site S =
 | S.xy.init{-100,-100}
 | $free_sites.push{S}
 
+world.terra_at XY =
+| T = $tmap.|$bg.get{XY.0.clip{0 $bg.w} XY.1.clip{0 $bg.h}}
+| when no T: T <= \void
+| T
+
+world.site_at XY =
+| C = $siteC
+| for S $sites: when point_in_rect{S.rect XY}:
+  | leave S
+| 0
+
 world.can_place Type XY =
 | X,Y = XY
 | less Y<$siteLimY: leave 0
 | less X<$siteLimX: leave 0
 | when X>$w-$siteC: leave 0
+| less got $sterra.Type.find{$terra_at{XY}}: leave 0
 | C2 = $siteC*2
 | R = [X-$siteC Y-$siteC C2 C2]
 | for S $sites: when rects_intersect{R S.rect}: leave 0
@@ -185,23 +201,18 @@ world.draw FB X Y =
         else $fg.picked
   | FB.blit{S.xy.0-C S.xy.1-C G}
 
-world.site_at XY =
-| C = $siteC
-| for S $sites: when point_in_rect{S.rect XY}:
-  | leave S
-| 0
-
 world.base_placement =
 | less $data."cnt_base"^~{No 0}<$param."lim_base"^~{No 1000}:
   | $notify{"We are too stretched to build any more bases."}
   | leave
 | $mode <= \newBase
 
-world.infoline =
-| S = $site_at{$mice_xy}
-| less S: leave "[$mice_xy]"
-| "site([S.serial]): [S.type]"
 
+world.infoline =
+| R = "[$mice_xy]:[$terra_at{$mice_xy}]"
+| S = $site_at{$mice_xy}
+| when S: R <= "[R]:[S.type]([S.serial])" 
+| R
 
 world.mode_pick M =
 | when M><newBase:

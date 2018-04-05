@@ -7,3 +7,16 @@ start_cities: 30
 lair_handicap: 10
 lair_spawn_monster_chance: 75
 lair_spawn_lair_chance: 20
+tmap: (grass #306f2a #318133 #4c863b #69904b)
+     ,(mountain #393116 #6c5a4d #807a74 #9a938d #d3c6bb)
+     ,(forest #001300 #14460f #296823)
+     ,(desert #736440 #958049 #ad9540 #bca246)
+     ,(snow #5e4624 #c7c7c7 #d7d7d7)
+     ,(shore #a58d57)
+     ,(river #175a8e)
+     ,(sea #144f7d)
+sterra: (city grass desert snow)
+       ,(ruin grass desert snow)
+       ,(lair forest mountain grass desert snow)
+       ,(party shore forest mountain grass desert snow)
+       ,(base forest mountain grass desert snow)
