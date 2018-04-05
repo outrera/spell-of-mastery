@@ -9,7 +9,7 @@ type world_site{Id World}
   turn //turn this site came to life
   name
   attacker/0
-  xy/[-1 -1]
+  xy/[-100 -100]
   state
   data
 
@@ -26,6 +26,7 @@ type world.widget{Main UI W H}
   click_xy/[0 0]
   param
   data/(t)
+  mode
   seed
   serial
   bg
@@ -37,9 +38,12 @@ type world.widget{Main UI W H}
   free_sites
   picked //picked site
   siteC/8
+  siteLimX
+  siteLimY/510
   incomeFactor
 | $param <= $main.params.world
 | $bg <= $img{world_bg}
+| $siteLimX <= $bg.w
 | $fg <= @table: map N [site picked base city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
 | MaxSites = $param.max_sites
@@ -59,12 +63,15 @@ world.rand Size =
 
 world.img Name = $main.img{Name}
 
+world.notify Msg = $ui.notify{Msg}
+
 world.clear =
 | for S $sites: $free_sites.push{S}
 | for K,V $data.list: $data.K <= No
 | $sites.clear
 | $picked <= 0
 | $turn <= 0
+| $mode <= 0
 | $serial <= 1
 | $incomeFactor <= 100
 | $seed <= LCG_M.rand
@@ -74,22 +81,26 @@ world.free_site S =
 | when $picked and $picked.id><S.id: $picked <= 0
 | Type = S.type
 | $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}-1
-| S.xy.init{-1,-1}
+| S.xy.init{-100,-100}
 | $free_sites.push{S}
 
-world.generate_xy =
+world.can_place Type XY =
+| X,Y = XY
+| less Y<$siteLimY: leave 0
+| less X<$siteLimX: leave 0
+| when X>$w-$siteC: leave 0
+| C2 = $siteC*2
+| R = [X-$siteC Y-$siteC C2 C2]
+| for S $sites: when rects_intersect{R S.rect}: leave 0
+| 1
+
+world.generate_xy Type =
 | X = 0
 | Y = 0
-| R = [0 0 0 0]
-| C2 = $siteC*2
 | _label again
-| X = $rand{$w}
-| Y = $rand{$h}
-| R.init{[X Y C2 C2]}
-| when Y>510 or X>$w-C2: _goto again
-| for P $sites: when rects_intersect{R P.rect}: _goto again
-| X += $siteC
-| Y += $siteC
+| X <= $rand{$w-$siteC}+$siteC
+| Y <= $rand{$h-$siteC}+$siteC
+| less $can_place{Type X,Y}: _goto again
 | X,Y
 
 world.generate_site Type xy/0 =
@@ -97,7 +108,7 @@ world.generate_site Type xy/0 =
 | less $data."cnt_[Type]"^~{No 0}<$param."lim_[Type]"^~{No 1000}:
   | leave 0
 | less $free_sites.used: leave 0 //FIXME: should we halt the game?
-| X,Y = if Xy then Xy else $generate_xy
+| X,Y = if Xy then Xy else $generate_xy{Type}
 | S = $free_sites.pop
 | S.type <= Type
 | S.serial <= $serial++
@@ -151,9 +162,15 @@ world.end_turn =
   | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
 | when $rand{100}<LSMC: $generate_site{party}
 | when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
-| $ui.notify{"Turn [$turn]"}
+| $notify{"Turn [$turn]"}
 
-world.render = Me
+world.render =
+| less $mode: get_gui{}.cursor <= $img{ui_cursor_point}
+| when $mode><newBase:
+  | Can = $can_place{base $mice_xy}
+  | Cur = if Can then \ui_cursor_target else \ui_cursor_target2
+  | get_gui{}.cursor <= $img{Cur}
+| Me
 
 world.draw FB X Y =
 | FB.blit{0 0 $bg}
@@ -170,14 +187,31 @@ world.draw FB X Y =
 
 world.site_at XY =
 | C = $siteC
-| for S $sites: when point_in_rect{[S.xy.0-C S.xy.1-C C*2 C*2] XY}:
+| for S $sites: when point_in_rect{S.rect XY}:
   | leave S
 | 0
+
+world.base_placement =
+| less $data."cnt_base"^~{No 0}<$param."lim_base"^~{No 1000}:
+  | $notify{"We are too stretched to build any more bases."}
+  | leave
+| $mode <= \newBase
 
 world.infoline =
 | S = $site_at{$mice_xy}
 | less S: leave "[$mice_xy]"
 | "site([S.serial]): [S.type]"
+
+
+world.mode_pick M =
+| when M><newBase:
+  | less $can_place{base $mice_xy}:
+    | $notify{"Can't place new base here."}
+    | leave newBase
+  | $generate_site{base xy/$mice_xy}
+  | leave 0
+| leave 0
+
 
 world.input In =
 | case In
@@ -186,10 +220,15 @@ world.input In =
   [mice left State XY]
     | $mice_xy.init{XY}
     | when State: leave
+    | when $mode:
+      | $mode <= $mode_pick{$mode}
+      | leave
     | S = $site_at{$mice_xy}
     | $picked <= 0
     | when S: $picked <= S
+    | $ui.site_picked{S}
   [mice right State XY]
+    | $mode <= 0
     | $mice_xy.init{XY}
 
 export world

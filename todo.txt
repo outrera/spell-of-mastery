@@ -1,9 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- Base attacking enemies. Also, make sure only reachable enemies will appear during the selection phase.
+- present new sites in sequence, so player wont be overwhelmed by ton of new info. Also play some attention gaining sounds, like base placement and raiding party appearance.
 - Implement ingredient and spell systems, then a menu to manage them at the start of the battle.
 - Finish kingdom view. It would be turnbased too. Each turn several events spawn, like invading monster squad. Player will have a choice to either intercept it or ignore. If player ignores monster squad, it will invade some town, player will then again will have choice to defend the city, or ignore, losing score.
 - Random map generation, based on matching tiles.
+- Better door interactions, with creatures automatically locking and unlocking them.
 - Finish minimap implementation, it should show only the current level and reduce saturation for levels below
 - Optimize sprite drawing routine: instead of that fragiles, complicated and N^2 slow C++ code, break every sprite into cubes on loading. That will order of magnitude speed up drawing of large number of tiles.
 - Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
@@ -102,6 +105,7 @@ Optimization Possibilities:
 - mouse picking can be done in reverse on draw list
 
 Symta Language Handicaps:
+- do-while loop, to avoid needless `_label again`
 - Allow to specify name of the output executable file and entry point file, other than main. That way we can produce several executable files in the same dir from the same source code base. I.e. we could have sprite sheet dumper utility without touching the main game exe.
 - The foremost handicap is the absence of proper enheap API and allocation syntax.
 - `got@@it` leads to potential errors, because when `it` gets removed upstream, downstream references would be treated as literal symbols. It also introduces confusion.

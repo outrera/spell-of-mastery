@@ -12,6 +12,7 @@ type ui.$tabs{main}
   mapsFolder/"work/sites/"
   savesFolder/"work/saves/"
   world
+  worldSiteTabs
   confirmFn //callaback for yes/no confirmation
   panelTabs
   panelTabsMore/(t) //sparse element related to picked tab
@@ -399,17 +400,24 @@ ui.create_ingame_dlg =
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
 
+ui.site_picked S =
+
 ui.create_world_dlg =
 | $world <= world $main Me $width $height
 | BY = $height-64
+| BX = $width-220
+| BP = icon world_flag: Icon => $world.base_placement
 | ET = icon tab_endturn: Icon => $world.end_turn
 | EX = icon menu_exit: Icon => $pick_title_menu
-| Buttons = layH s/4 [ET spacer{44 0} EX]
+| WorldButtons = layH s/4 [BP spacer{22 0} ET spacer{22 0} EX]
+| $worldSiteTabs <= tabs none: t
+    none | spacer 0 0
 | dlg w/$width h/$height: mtx
   |   0           0| $world
   |   0 $height-20 | infoline
   |   0 $height-170| notification_widget Me
-  |  32          BY| Buttons
+  |  4         BY  | $worldSiteTabs 
+  |  BX        BY  | WorldButtons
 
 ui.create_dialog_tabs =
 | $copyrightText <= txt small 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'
