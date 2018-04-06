@@ -400,7 +400,20 @@ ui.create_ingame_dlg =
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
 
+
+ui.create_world_base_tab =
+| icon world_airship: Icon => $world.airship_targeting
+
+ui.create_worldSiteTabs =
+| $worldSiteTabs <= tabs none: t
+    none | spacer 0 0
+    base | $create_world_base_tab
+| $worldSiteTabs
+
 ui.site_picked S =
+| Type = S.type
+| if got $worldSiteTabs.table.Type then $worldSiteTabs.pick{Type}
+  else $worldSiteTabs.pick{none}
 
 ui.create_world_dlg =
 | $world <= world $main Me $width $height
@@ -410,13 +423,11 @@ ui.create_world_dlg =
 | ET = icon tab_endturn: Icon => $world.end_turn
 | EX = icon menu_exit: Icon => $pick_title_menu
 | WorldButtons = layH s/4 [BP spacer{22 0} ET spacer{22 0} EX]
-| $worldSiteTabs <= tabs none: t
-    none | spacer 0 0
 | dlg w/$width h/$height: mtx
   |   0           0| $world
   |   0 $height-20 | infoline
   |   0 $height-170| notification_widget Me
-  |  4         BY  | $worldSiteTabs 
+  |  4         BY  | $create_worldSiteTabs 
   |  BX        BY  | WorldButtons
 
 ui.create_dialog_tabs =

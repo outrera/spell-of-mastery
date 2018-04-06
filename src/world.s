@@ -105,6 +105,8 @@ world.can_place Type XY =
 | less X<$siteLimX: leave 0
 | when X>$w-$siteC: leave 0
 | less got $sterra.Type.find{$terra_at{XY}}: leave 0
+| when Type><city: for S $sites: when S.type><city:
+  | when (S.xy-XY).all{?abs<32}: leave 0
 | C2 = $siteC*2
 | R = [X-$siteC Y-$siteC C2 C2]
 | for S $sites: when rects_intersect{R S.rect}: leave 0
@@ -140,8 +142,13 @@ world.generate_site Type xy/0 =
 
 world.generate =
 | for I $param.start_cities: $generate_site{city}
+| $generate_site{base}
+| $generate_site{party}
 
 world.end_turn =
+| when $turn><0 and $data."cnt_base"^~{No 0}<1:
+  | $notify{"Place a base first! Click that flag icon."}
+  | leave
 | for S $sites:
   | when S.type >< city and S.attacker:
     | $free_site{S.attacker}
@@ -181,11 +188,15 @@ world.end_turn =
 | $notify{"Turn [$turn]"}
 
 world.render =
-| less $mode: get_gui{}.cursor <= $img{ui_cursor_point}
+| Cur = \ui_cursor_point
 | when $mode><newBase:
   | Can = $can_place{base $mice_xy}
-  | Cur = if Can then \ui_cursor_target else \ui_cursor_target2
-  | get_gui{}.cursor <= $img{Cur}
+  | Cur <= if Can then \ui_cursor_target else \ui_cursor_target2
+
+| when $mode><airship:
+  | S = $site_at{$mice_xy}
+  | Cur <= if S then \ui_cursor_target else \ui_cursor_target2
+| get_gui{}.cursor <= $img{Cur}
 | Me
 
 world.draw FB X Y =
@@ -205,14 +216,14 @@ world.base_placement =
 | less $data."cnt_base"^~{No 0}<$param."lim_base"^~{No 1000}:
   | $notify{"We are too stretched to build any more bases."}
   | leave
-| $mode <= \newBase
+| $set_mode{newBase}
+
+world.airship_targeting = $set_mode{airship}
 
 
-world.infoline =
-| R = "[$mice_xy]:[$terra_at{$mice_xy}]"
-| S = $site_at{$mice_xy}
-| when S: R <= "[R]:[S.type]([S.serial])" 
-| R
+world.set_mode M =
+| when $mode >< M: leave
+| $mode <= M
 
 world.mode_pick M =
 | when M><newBase:
@@ -221,8 +232,22 @@ world.mode_pick M =
     | leave newBase
   | $generate_site{base xy/$mice_xy}
   | leave 0
+| when M><airship:
+  | S = $site_at{$mice_xy}
+  | less S: leave airship
+  | when S.type><party:
+    | $free_site{S}
+    | $notify{"You have defeated the raiding party!"}
+    | leave 0
+  | when S.type><city and S.attacker:
+    | $free_site{S.attacker}
+    | $notify{"You have defended the city!"}
+    | leave 0
+  | $notify{"Nothing to investigate there."}
+  | leave airship
 | leave 0
 
+world.cancel_mode = $set_mode{0}
 
 world.input In =
 | case In
@@ -232,14 +257,20 @@ world.input In =
     | $mice_xy.init{XY}
     | when State: leave
     | when $mode:
-      | $mode <= $mode_pick{$mode}
+      | $set_mode{$mode_pick{$mode}}
       | leave
     | S = $site_at{$mice_xy}
     | $picked <= 0
     | when S: $picked <= S
     | $ui.site_picked{S}
   [mice right State XY]
-    | $mode <= 0
+    | $set_mode{0}
     | $mice_xy.init{XY}
+
+world.infoline =
+| R = "[$mice_xy]:[$terra_at{$mice_xy}]"
+| S = $site_at{$mice_xy}
+| when S: R <= "[R]:[S.type]([S.serial])" 
+| R
 
 export world

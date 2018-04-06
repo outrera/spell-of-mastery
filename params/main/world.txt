@@ -1,5 +1,5 @@
 max_sites: 1000
-lim_lair: 100
+lim_lair: 50
 lim_party: 100
 lim_base: 10
 lim_city: 30
