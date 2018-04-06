@@ -3,6 +3,7 @@ lim_lair: 50
 lim_party: 100
 lim_base: 10
 lim_city: 30
+base_reach: 10
 start_cities: 30
 lair_handicap: 10
 lair_spawn_monster_chance: 75
