@@ -438,9 +438,7 @@ view.draw FB X Y =
 | FinishTime = GUI.ticks
 | when $wakeupTime<<FinishTime:
   | SleepTime = $calc_fps{StartTime FinishTime}
-  | when SleepTime > 0.0:
-    | $wakeupTime <= FinishTime + SleepTime
-    //| get_gui{}.sleep{SleepTime}
+  //| when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
 | $fb <= 0 //no framebuffer outside of view.draw
 
 view.render = Me

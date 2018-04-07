@@ -349,7 +349,7 @@ ui.create_panel_tabs =
 
 ui.panel_tab_picked TabName = 
 | when got@@it $panelTabsDeselect.$curPanelTab: (it){$curPanelTab TabName}
-| when got@@it $panelTabsSelect.$curPanelTab: (it){$curPanelTab TabName}
+| when got@@it $panelTabsSelect.TabName: (it){$curPanelTab TabName}
 | Ms = $panelTabsMore.$curPanelTab
 | when got Ms: for M Ms: M.show <= 0
 | $curPanelTab <= TabName

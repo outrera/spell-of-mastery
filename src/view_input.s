@@ -357,6 +357,9 @@ site.update_cursor =
 | $marks <= Marks.enheap
 
 view.update =
+| GUI = get_gui
+| StartTime = GUI.ticks
+| when $wakeupTime>StartTime: leave 1
 | case $key{pause} 1:
   | $paused <= not $paused
   | $key_set{pause 0}
@@ -396,9 +399,10 @@ view.update =
 | $site.update_cursor
 | when $brush.0: $update_brush
 | $update_play
-| less $paused:
-  | when $wakeupTime<<get_gui{}.ticks:
-    | $main.update
+| less $paused: $main.update
+| FinishTime = GUI.ticks
+| Wait = 1.0/$fpsGoal.float - (FinishTime-StartTime)
+| when Wait > 0.0: $wakeupTime <= FinishTime+Wait
 | 1
 
 view.floor XYZ =
