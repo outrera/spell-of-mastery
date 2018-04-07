@@ -24,7 +24,7 @@ type world.widget{Main UI W H}
   h/H
   mice_xy/[0 0]
   click_xy/[0 0]
-  param
+  cfg
   data/(t)
   mode
   seed
@@ -43,14 +43,14 @@ type world.widget{Main UI W H}
   incomeFactor
   tmap/(t) //terrain map
   sterra/(t) //allowed terrain for sites
-| $param <= $main.cfg.world
+| $cfg <= $main.cfg.world
 | $bg <= $img{world_bg}
 | $siteLimX <= $bg.w
 | $fg <= @table: map N [site picked base city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
-| for V,@Ks $param.tmap: for K Ks: $tmap.K <= V
-| for K,@Vs $param.sterra: $sterra.K <= Vs
-| MaxSites = $param.max_sites
+| for V,@Ks $cfg.tmap: for K Ks: $tmap.K <= V
+| for K,@Vs $cfg.sterra: $sterra.K <= Vs
+| MaxSites = $cfg.max_sites
 | $all_sites <= MaxSites{(world_site ? Me)}
 | $sites <= stack MaxSites
 | $free_sites <= stack $all_sites
@@ -123,7 +123,7 @@ world.generate_xy Type =
 
 world.generate_site Type xy/0 =
 | Lim = 
-| less $data."cnt_[Type]"^~{No 0}<$param."lim_[Type]"^~{No 1000}:
+| less $data."cnt_[Type]"^~{No 0}<$cfg."lim_[Type]"^~{No 1000}:
   | leave 0
 | less $free_sites.used: leave 0 //FIXME: should we halt the game?
 | X,Y = if Xy then Xy else $generate_xy{Type}
@@ -141,7 +141,7 @@ world.generate_site Type xy/0 =
 | S
 
 world.generate =
-| for I $param.start_cities: $generate_site{city}
+| for I $cfg.start_cities: $generate_site{city}
 | $generate_site{base}
 | $generate_site{party}
 
@@ -176,9 +176,9 @@ world.end_turn =
   | when got C:
     | C.attacker <= P
     | P.state <= \raid
-| LSLC = $param.lair_spawn_lair_chance
-| LSMC = $param.lair_spawn_monster_chance
-| LH = $param.lair_handicap
+| LSLC = $cfg.lair_spawn_lair_chance
+| LSMC = $cfg.lair_spawn_monster_chance
+| LH = $cfg.lair_handicap
 | for L Lairs:
   | A = $turn - L.turn
   | when $rand{5}<A and $rand{100}<LSMC: $generate_site{party}
@@ -213,7 +213,7 @@ world.draw FB X Y =
   | FB.blit{S.xy.0-C S.xy.1-C G}
 
 world.base_placement =
-| less $data."cnt_base"^~{No 0}<$param."lim_base"^~{No 1000}:
+| less $data."cnt_base"^~{No 0}<$cfg."lim_base"^~{No 1000}:
   | $notify{"We are too stretched to build any more bases."}
   | leave
 | $set_mode{newBase}
@@ -230,8 +230,8 @@ world.site_by_serial Serial =
 | 0
 
 world.leave_site =
-| less $ui.site.params.victory><1: leave
-| S = $site_by_serial{$ui.site.params.serial}
+| less $ui.site.data.victory><1: leave
+| S = $site_by_serial{$ui.site.data.serial}
 | when S.type><party:
   | $free_site{S}
   | $notify{"You have defeated the raiding party!"}

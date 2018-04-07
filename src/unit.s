@@ -184,7 +184,7 @@ unit.morph Class =
 
 unit.find_dna Name = $main.cfg.gene.Name
 
-unit.add_gene Name Duration Params =
+unit.add_gene Name Duration Data =
 | Effect = $find_dna{Name}
 | when no Effect: Effect <= [[on static]]
 | On = Effect.0
@@ -198,7 +198,7 @@ unit.add_gene Name Duration Params =
   | $flags <= $flags^set_bit{Flag 1}
   | $update_move_method
 | When = On.1
-| $genes <= $genes.cons{$site.new_gene{When Name Duration Params}}
+| $genes <= $genes.cons{$site.new_gene{When Name Duration Data}}
 
 unit.add_genes Genes =
 | for E Genes: case E
@@ -211,18 +211,18 @@ unit.add_genes Genes =
 unit.has Name = got $genes.find{?name><Name}
 
 unit.cooldown_of ActName =
-| E = $genes.find{E => E.name><cool and E.params.0><ActName}
-| if got E then [E.params.1 E.params.2] else 0
+| E = $genes.find{E => E.name><cool and E.data.0><ActName}
+| if got E then [E.data.1 E.data.2] else 0
 
 unit.set Name Value =
 | for E $genes: when E.name><Name:
-  | E.params.heapfree
-  | E.params <= Value.enheap
+  | E.data.heapfree
+  | E.data <= Value.enheap
   | leave
 | $add_gene{Name 0 Value}
 
 unit.get Name =
-| for E $genes: when E.name><Name: leave E.params.unheap
+| for E $genes: when E.name><Name: leave E.data.unheap
 | 0
 
 unit.strip What =
@@ -288,7 +288,7 @@ unit.run_genes Selector target/0 xyz/0 =
   | push DNA Es //cuz invoking it right here may clobber $genes
 | for Effect Es: $effect{Effect Target Xyz}
 
-unit.run_gene Name Params Target TargetXYZ =
+unit.run_gene Name Data Target TargetXYZ =
 | $effect{$find_dna{Name} Target TargetXYZ}
 
 unit.change_owner NewOwner =
@@ -459,7 +459,7 @@ unit.harm Attacker Damage =
 | when Attacker:
   | AO = Attacker.owner
   | when $owner.id <> AO.id: AO.lore += $tier
-  | $owner.params.lossage += $tier
+  | $owner.data.lossage += $tier
   | Attacker.kills++
 | $die
 | $action.cycles <= 1

@@ -250,47 +250,47 @@ ai.group_roam Types =
 
 ai.script =
 | Player = $player
-| PParams = Player.params
+| PData = Player.data
 | Cfg = $main.cfg
-| AIType = PParams.aiType
-| AIStep = PParams.aiStep
+| AIType = PData.aiType
+| AIStep = PData.aiStep
 | AISteps = Cfg.main.ai.AIType
-| when PParams.aiWait > $site.turn: leave 0
+| when PData.aiWait > $site.turn: leave 0
 | less got AISteps
   | $site.notify{"AI: missing type `[AIType]`"}
   | leave 0
 | AISteps = AISteps.tail
 | less AIStep<AISteps.size:
   | AIStep <= 0
-  | PParams.aiStep <= 0
+  | PData.aiStep <= 0
 | Command = AISteps.AIStep
 | case Command
   [roam @Types]
     | less $group_roam{Types{"unit_[?]"}}: leave 0
-    | PParams.aiStep++
+    | PData.aiStep++
   [goto NewAIType when @Condition]
     | if case Condition [[`>>` lossage X]]
-              PParams.lossage+PParams.difficulty*2>>X
-      then | PParams.aiType <= NewAIType
-           | PParams.aiStep <= 0
-      else | PParams.aiStep++
+              PData.lossage+PData.difficulty*2>>X
+      then | PData.aiType <= NewAIType
+           | PData.aiStep <= 0
+      else | PData.aiStep++
   [goto NewAIType]
-    | PParams.aiType <= NewAIType
-    | PParams.aiStep <= 0
+    | PData.aiType <= NewAIType
+    | PData.aiStep <= 0
   [wait Turns]
-    | PParams.aiWait <= $site.turn+Turns
-    | PParams.aiStep++
+    | PData.aiWait <= $site.turn+Turns
+    | PData.aiStep++
   [set Var Value]
-    | PParams.Var <= Value
-    | PParams.aiStep++
+    | PData.Var <= Value
+    | PData.aiStep++
   Else
     | bad 'invalid AI command: [Command]'
 | leave 1
 
 ai.update_turn =
-| when $player.params.attack_with_guards >< 1:
+| when $player.data.attack_with_guards >< 1:
   | for U OwnedUnits: U.aistate <= \roam
-  | $player.params.attack_with_guards <= 0
+  | $player.data.attack_with_guards <= 0
 | when $player.id: while $script><1: //FIXME: this can hung
 | when $update_units: $site.end_turn
 

@@ -404,15 +404,15 @@ view.render_iso =
 | UnitRects <= 0
 
 view.render_frame =
-| IsNight = $site.params.night><1
+| IsNight = $site.data.night><1
 | BrightFactor <= if IsNight then 10 else 0
 //| $fb.clear{#929292/*#00A0C0*/}
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
 | InfoText = []
-| when $param.show_frame: push "frame=[$frame]" InfoText
-| when $param.show_cycle: push "cycle=[$site.cycle]" InfoText
-| when $param.show_fps: push "fps=[$fps]" InfoText
+| when $cfg.show_frame: push "frame=[$frame]" InfoText
+| when $cfg.show_cycle: push "cycle=[$site.cycle]" InfoText
+| when $cfg.show_fps: push "fps=[$fps]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.render.draw{$fb 200 ($h-50)}
 | $infoText.value <= ''
@@ -427,7 +427,7 @@ view.calc_fps StartTime FinishTime =
   | $fpsT <= T
 | $frame++
 | SleepTime = 1.0/$fpsD - (FinishTime-StartTime)
-| when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
+| SleepTime
 
 view.draw FB X Y =
 | $fb <= FB
@@ -436,7 +436,11 @@ view.draw FB X Y =
 | $update
 | $render_frame
 | FinishTime = GUI.ticks
-| $calc_fps{StartTime FinishTime}
+| when $wakeupTime<<FinishTime:
+  | SleepTime = $calc_fps{StartTime FinishTime}
+  | when SleepTime > 0.0:
+    | $wakeupTime <= FinishTime + SleepTime
+    //| get_gui{}.sleep{SleepTime}
 | $fb <= 0 //no framebuffer outside of view.draw
 
 view.render = Me

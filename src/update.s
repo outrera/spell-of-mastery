@@ -12,8 +12,8 @@ check_event_condition Me When =
     | V = case Var
         [`.` Player Var]
           | P = $players.Player
-          | if Var >< mana then P.mana else P.params.Var
-        Else | $params.Var
+          | if Var >< mana then P.mana else P.data.Var
+        Else | $data.Var
     | if got V then if N><eq then V >< Value else V >> Value
       else 0
   [always] | 1
@@ -33,7 +33,7 @@ check_event_condition Me When =
   Else | bad "unexpected event condition [When]"
 
 site.process_events =
-| DisabledEvents = have $params.disabled_events []
+| DisabledEvents = have $data.disabled_events []
 | for [Id [When @Actions]] $events: when no DisabledEvents.find{Id}:
   | Repeat = 0
   | case When [repeat @RealWhen]
@@ -41,7 +41,7 @@ site.process_events =
     | Repeat <= 1
   | True = check_event_condition Me When
   | less True: Repeat <= 1
-  | less Repeat: push Id $params.disabled_events
+  | less Repeat: push Id $data.disabled_events
   | when True: push Actions EventActions
 | EventActions <= EventActions.flip.join
 

@@ -86,12 +86,11 @@ resource_counters.draw G X Y =
 | IY = 0
 | P = $site.human
 | G.blit{IX IY Indicators}
-| Param = P.params
 | Font = font medium
 | Font.draw{G IX+36 IY+2 "[P.mana]"}
 | Font.draw{G IX+148 IY+2 "[P.lore]"}
 | Font.draw{G IX+232 IY+2 "[$site.turn]:[$site.player]"}
-| Debug = $site.params.debug
+| Debug = $site.data.debug
 | when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
 
 type notification_widget.widget{ui} site w/0 h/0

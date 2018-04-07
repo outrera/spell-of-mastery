@@ -135,7 +135,7 @@ act.validate Actor XYZ Target Invalid =
 //turns on/off act(s) for player(s)
 site.turn_act State Players ActNames =
 | when Players >< all: Players <= 16{(?)}
-| when ActNames >< all: ActNames <= $params.acts{}{?0}
+| when ActNames >< all: ActNames <= $data.acts{}{?0}
 | when Players.is_int: Players <= [Players]
 | when ActNames.is_text: ActNames <= [ActNames]
 | Acts = $main.acts

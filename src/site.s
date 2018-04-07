@@ -1,6 +1,6 @@
 use enheap gfx stack heap util line_points unit player
 
-type efx when name amount params
+type efx when name amount data
 
 CellsTile =
 CellsUnits = //units residing in the cell
@@ -112,7 +112,8 @@ type site{main}
    nil // null unit with id >< 0
    vars/t{} // variables
    marks/[]
-   params/(t)
+   cfg
+   data/(t)
    events
    view //viewport, attached rendering this site
    act
@@ -149,14 +150,14 @@ site.init =
 | $main.site <= Me
 | Site <= Me
 | $minimap <= gfx 128 128
-| SParam = $main.cfg.site
-| $d <= SParam.depth
+| $cfg <= $main.cfg.site
+| $d <= $cfg.depth
 | SiteDepth <= $d
-| $maxSize <= SParam.max_size+12 //FIXME: get rid of this 12 margin
+| $maxSize <= $cfg.max_size+12 //FIXME: get rid of this 12 margin
 | SiteSize <= $maxSize
 | CellsLineSize <= SiteSize*SiteDepth
-| $players <= map Id SParam.max_players: player Id Me
-| $c <= SParam.cell_size
+| $players <= map Id $cfg.max_players: player Id Me
+| $c <= $cfg.cell_size
 | init_unit_module $c
 | $void <= $main.tiles.void
 | NCells = $maxSize*$maxSize*$d
@@ -170,7 +171,7 @@ site.init =
 | CellsFloor <= dup NCells 0
 | CellsGate <= dup NCells 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
-| MaxUnits = SParam.max_units
+| MaxUnits = $cfg.max_units
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
 | $genes <= (MaxUnits*2){N=>(efx)}
@@ -235,7 +236,7 @@ site.clear =
 | $human.human <= 1
 | $marks.heapfree
 | $marks <= []
-| for K,V $params: $params.K <= No
+| for K,V $data: $data.K <= No
 | for U $active.list: U.active <= 0
 | $active.clear
 | for [K V] $sound_cycles: $sound_cycles.K <= 0
@@ -280,14 +281,15 @@ handle_attack_triggers Us =
 site.new_game =
 | $actors.set{[]}
 | $seed <= LCG_M.rand
-| for K,V $main.cfg.site: $params.K <= V
+| SCfg = $main.cfg.site
+| for K,V SCfg: $data.K <= V
 | for ActName,Act $main.acts: Act.players <= #FFFFFF
 | $human <= $players.1
 | $human.human <= 1
 | $cycle <= 0
 | $turn <= 0
 | $player <= 0
-| if $params.explored then $explore{1} else $explore{0}
+| if SCfg.explored then $explore{1} else $explore{0}
 | ActNames = $main.acts{}{?0}
 | StartMana = $main.cfg.site.start_mana
 | StartLore = $main.cfg.site.start_lore
@@ -309,7 +311,7 @@ site.new_game =
       | C.free
       | C = P.alloc_unit{special_pentagram}
       | C.move{XYZ}
-  | when got PAI.(L.type): P.params.aiType <= L.type //got specialized AI
+  | when got PAI.(L.type): P.data.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
 | $end_turn
@@ -717,17 +719,17 @@ site.pop XY =
 | $pop_{XY}
 | $upd_neibs{XY.0 XY.1}
 
-site.new_gene When Name Amount Params =
+site.new_gene When Name Amount Data =
 | E = $free_genes.pop
 | E.when <= When
 | E.name <= Name.enheap
 | E.amount <= Amount
-| E.params <= Params.enheap
+| E.data <= Data.enheap
 | E
 
 site.free_gene E =
 | E.name.heapfree
-| E.params.heapfree
+| E.data.heapfree
 | $free_genes.push{E}
 
 site.shake Cycles =

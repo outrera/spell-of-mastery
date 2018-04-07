@@ -22,7 +22,7 @@ unit.serialize = //unit serializer for savegames
 | Active = 0
 | when $active:
   | Genes = if $genes.end then 0
-            else $genes.map{E=>[E.when E.name E.amount E.params]}
+            else $genes.map{E=>[E.when E.name E.amount E.data]}
   | Host = if $host then $host.id else 0
   | Goal = if $goal then [$goal.id $goal_act.name] else 0
   | Path = if $path.end then 0 else [$path 0]
@@ -40,20 +40,20 @@ site.save =
 | Units = map U $units.skip{(?removed or ?mark)}
   | ActivePlayers.(U.owner.id) <= 1
   | U.serialize
-| $params.view_zlock <= $view.zlock
-| $params.turn <= $turn
-| $params.player <= $player
-| $params.paused <= $paused
+| $data.view_zlock <= $view.zlock
+| $data.turn <= $turn
+| $data.player <= $player
+| $data.paused <= $paused
 | list version(0.2) w($w) h($h) serial($serial) cycle($cycle) seed($seed)
     filename | $filename
     name | $name
     description | $description
-    params | map [K V] $params [K V]
+    data | map [K V] $data [K V]
     events | $events{}{?1}
     tids | $tid_map{}{?type}
     players | map P $players
               | [P.id P.name P.human 0 P.picked{}{?id} 0
-                 P.params.list P.research.list.keep{?1} P.mana]
+                 P.data.list P.research.list.keep{?1} P.mana]
     player | $human.id
     units | Units
     tilemap | map X $w: map Y $h:
@@ -135,10 +135,10 @@ site.load Saved =
 | $serial <= 0
 | Seed = 
 | when got@@it Saved.seed: $seed <= it
-| when got@@it Saved.params: for [K V] it: $params.K <= V
-| $turn <= $params.turn
-| $player <= $params.player
-| $paused <= $params.paused
+| when got@@it Saved.data: for [K V] it: $data.K <= V
+| $turn <= $data.turn
+| $player <= $data.player
+| $paused <= $data.paused
 | TypeTids = $main.tid_map{}{?type,?id}.table
 | LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
 | Tilemap = remap_tids Me LookupTable Saved.tilemap
@@ -150,14 +150,14 @@ site.load Saved =
 | $cycle <= Saved.cycle
 | IdMap = t //used to remap old ids to new ones
 | for X Saved.players
-  | [Id Name Human Color Picked Moves Params Research Mana] = X
+  | [Id Name Human Color Picked Moves Data Research Mana] = X
   | P = $players.Id
   | P.name <= Name
   | P.human <= Human
   | P.mana <= Mana
-  | for K,V Params: P.params.K <= V
+  | for K,V Data: P.data.K <= V
   | for N,R Research: P.research.N <= R
-  | P.params.picked <= if Picked then Picked else []
+  | P.data.picked <= if Picked then Picked else []
 | Explored = Saved.explored
 | when got Explored:
   | for PID,Sight Explored
@@ -186,7 +186,7 @@ site.load Saved =
   | U.ordered.load{IdMap Ordered}
   | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
-| for P $players: P.picked <= (P.params.picked){IdMap.?}
+| for P $players: P.picked <= (P.data.picked){IdMap.?}
 | for Name,Flags Saved.enabled^~{No []}:
   | when got Acts.Name: Acts.Name.players <= Flags
 

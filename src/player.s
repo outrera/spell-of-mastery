@@ -2,24 +2,24 @@ use bits macros
 
 type ai{player} site
 | $site <= $player.site
-| $params.view <= [0 0 0]
-| $params.cursor <= [0 0 1]
+| $data.view <= [0 0 0]
+| $data.cursor <= [0 0 1]
 
 ai.main = $player.main
-ai.params = $player.params
+ai.data = $player.data
 
 ai.picked = $player.picked
 ai.`=picked` V = $player.picked <= V
 
 ai.clear =
-| $params.aiType <= 'default'
-| $params.aiStep <= 0
-| $params.aiWait <= 0
-| $params.difficulty <= 5 // 0=easy, 5=normal, 10=hard
-| $params.aiLeaderHarmTurn <= -24*100000
-| $params.aiCastFlight <= 0
-| $params.aiCastFlightTurn <= -24*100000
-| $params.ai_spells <= []
+| $data.aiType <= 'default'
+| $data.aiStep <= 0
+| $data.aiWait <= 0
+| $data.difficulty <= 5 // 0=easy, 5=normal, 10=hard
+| $data.aiLeaderHarmTurn <= -24*100000
+| $data.aiCastFlight <= 0
+| $data.aiCastFlightTurn <= -24*100000
+| $data.ai_spells <= []
 
 PlayerColors = [red blue teal purple orange black white yellow]
 
@@ -30,7 +30,7 @@ type player{id site}
    mana
    leader
    pentagram
-   params
+   data/(t)
    research/(t) //research and latency
    picked_ //picked units
    sight // fog of war
@@ -44,7 +44,6 @@ type player{id site}
    houses
 | $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
-| $params <= t
 | MaxSize = $site.maxSize
 | $sight <= dup MaxSize: MaxSize.bytes
 | $ai <= ai Me
@@ -71,8 +70,8 @@ player.notify Text =
 
 player.main = $site.main
 
-player.lore = $params.lore
-player.`=lore` R = $params.lore <= R
+player.lore = $data.lore
+player.`=lore` R = $data.lore <= R
 
 player.explore State =
 | when State
@@ -97,8 +96,8 @@ player.clear =
 | $pentagram <= $site.nil
 | $mana <= 0
 | $lore <= 0
-| $params.lossage <= 0
-| $params.mana <= 0
+| $data.lossage <= 0
+| $data.mana <= 0
 | for Type,Act $main.acts: $research.Type <= 0
 
 player.init StartMana StartLore =
@@ -144,17 +143,17 @@ player.seen XYZ = $sight.(XYZ.1).(XYZ.0)>1
 
 update_spell_of_mastery Me P =
 | when P.human: for Q $players:
-  | S = Q.params.spell_of_mastery
+  | S = Q.data.spell_of_mastery
   | when got S and not S%(24*5):
     | P.notify{"[Q.name] will finish Spell of Mastery in [S/24] seconds"}
-| SOM = P.params.spell_of_mastery
+| SOM = P.data.spell_of_mastery
 | when got SOM:
   | SOM--
   | less SOM > 0:
-    | $params.winner <= P.id
-    | $params.victory_type <= 'Victory by casting the Spell of Mastery'
+    | $data.winner <= P.id
+    | $data.victory_type <= 'Victory by casting the Spell of Mastery'
     | leave
-  | P.params.spell_of_mastery <= SOM
+  | P.data.spell_of_mastery <= SOM
 
 player.update =
 | Cycle = $site.cycle
@@ -201,11 +200,11 @@ player.lost_leader Leader =
   | when U.leader: push U Leaders
   | when U.owner.id >< $id: push U RemainingUnits
 | case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
-  | $site.params.winner <= L.owner.id
-  | $site.params.victory_type <= 'Victory by defeating other leaders.'
+  | $site.data.winner <= L.owner.id
+  | $site.data.victory_type <= 'Victory by defeating other leaders.'
 | when Leader.owner.human: less Leaders.any{?owner.human}:
-  | $site.params.winner <= 0
-  | $site.params.victory_type <= 'Defeat by losing your leader.'
+  | $site.data.winner <= 0
+  | $site.data.victory_type <= 'Defeat by losing your leader.'
 | $site.notify{"[$name] was defeated."}
 | less RemainingUnits.any{?leader}: for U RemainingUnits: U.free
 

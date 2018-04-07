@@ -6,11 +6,11 @@ unit.new_turn =
 | for E $genes: when E.amount>0:
   | E.amount--
   | less E.amount > 0:
-    | when E.when >< timeout: push [E.name E.params.unheap] RunEs
+    | when E.when >< timeout: push [E.name E.data.unheap] RunEs
     | Remove <= 1
     | E.amount <= No
 | when Remove: $strip{?amount><No} //strip genes with zero duration
-| for Name,Params RunEs: $run_gene{Name Params Me $xyz}
+| for Name,Data RunEs: $run_gene{Name Data Me $xyz}
 | $mov <= $class.mov
 | $fatigue <= max 0: min $fatigue-$stamina $mov-1
 | $will <= $class.will

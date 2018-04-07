@@ -21,9 +21,10 @@ type view.widget{M UI W H}
   infoText/txt{small info}
   fps/1
   fpsT/0.0
+  wakeupTime/0.0
   fpsGoal/24 // goal frames per second
   fpsD/30.0
-  param
+  cfg
   view_size/32  // render 32x32 site chunk
   center/[0 0 0]
   zfix/1
@@ -37,15 +38,15 @@ type view.widget{M UI W H}
 | $keymap <= $main.cfg.keymap
 | $fpsGoal <= $main.cfg.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
-| $param <= $main.cfg.ui
+| $cfg <= $main.cfg.ui
 | Wr = $site
 | Wr.view <= Me
-| WParam = $main.cfg.site
-| TS = WParam.tile_size
+| SCfg = $main.cfg.site
+| TS = SCfg.tile_size
 | $xunit <= TS.0
 | $yunit <= TS.1
 | $zunit <= TS.2
-| $d <= WParam.cell_size
+| $d <= SCfg.cell_size
 | $fpsT <= clock
 
 view.key Name =
@@ -65,6 +66,7 @@ view.picked = $player.picked
 view.`=picked` Us = $player.picked <= Us
 
 view.clear =
+| $wakeupTime <= 0.0
 | $zlock <= 0
 | $zfix <= 1
 | $center_at{[0 0 0]}
@@ -77,7 +79,7 @@ view.clear =
 | $pick_count <= 0
 | Leader = $player.leader
 | when not Leader.removed: $center_at{Leader.xyz}
-| $zlock <= $site.params.view_zlock
+| $zlock <= $site.cfg.view_zlock
 | when no $zlock: $zlock <= $site.d-2
 
 view.center_at XYZ cursor/0 =

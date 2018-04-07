@@ -102,8 +102,8 @@ ui.create_victory_dlg =
 | dlg: mtx
   |   0   0 | $img{ui_victory_bg}
   | 100 100 | txt medium: =>
-              | Player = $site.players.($site.params.winner)
-              | Type = $site.params.victory_type.replace{_ ' '}
+              | Player = $site.players.($site.data.winner)
+              | Type = $site.data.victory_type.replace{_ ' '}
               | "[Player.name] has won!\n[Type]"
   | $width-360 $height-100
         | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
@@ -113,7 +113,7 @@ ui.create_defeat_dlg =
   |   0   0 | $img{ui_defeat_bg}
   | 140 100 | txt medium: =>
               | Player = $site.human
-              | Type = $site.params.victory_type.replace{_ ' '}
+              | Type = $site.data.victory_type.replace{_ ' '}
               | "[Player.name] has been defeated!\n"
   | $width-360 $height-100
         | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
@@ -187,7 +187,7 @@ ui.create W H =
 
 ui.enter_site Site =
 | $load_game{1 "[$mapsFolder]test.txt"}
-| $site.params.serial <= Site.serial
+| $site.data.serial <= Site.serial
 
 parse_int_normalized Default Text =
 | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
@@ -451,10 +451,10 @@ ui.create_dialog_tabs =
           world($create_world_dlg)
 
 ui.update = //called by site.update each game cycle
-| WinnerId = $site.params.winner
+| WinnerId = $site.data.winner
 | when got WinnerId:
   | Winner = $site.players.WinnerId
-  | NextSite = when Winner.human: $site.params.next_site
+  | NextSite = when Winner.human: $site.data.next_site
   | less got NextSite:
     | $pause
     | if Winner.human

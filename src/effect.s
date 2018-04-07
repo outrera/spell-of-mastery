@@ -164,13 +164,13 @@ effect set Name Value: unit_getset{Target}.Name <= Value
 
 effect inc Name Value: unit_getset{Target}.Name += Value
 
-effect site_set Name Value: $site.params.Name <= Value
+effect site_set Name Value: $site.data.Name <= Value
 
 effect boost_defense Amount: $def <= min{$def+Amount $class.def+Amount}
 
 effect spell_of_mastery:
-| $site.params.winner <= $owner.id
-| $site.params.victory_type <= 'Victory by casting the Spell of Mastery'
+| $site.data.winner <= $owner.id
+| $site.data.victory_type <= 'Victory by casting the Spell of Mastery'
 
 
 effect swap Arg:
@@ -352,7 +352,7 @@ effect lore Amount:
 | Target.owner.lore += Amount
 
 effect victory Player Reason:
-| WP = $site.params
+| WP = $site.data
 | when Player >< owner: Player <= $owner.id
 | WP.winner <= Player
 | WP.victory_type <= Reason

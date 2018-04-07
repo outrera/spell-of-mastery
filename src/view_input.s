@@ -396,7 +396,9 @@ view.update =
 | $site.update_cursor
 | when $brush.0: $update_brush
 | $update_play
-| less $paused: $main.update
+| less $paused:
+  | when $wakeupTime<<get_gui{}.ticks:
+    | $main.update
 | 1
 
 view.floor XYZ =

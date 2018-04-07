@@ -5,8 +5,8 @@ PlayListIndex = 0
 
 main.load_sounds =
 | Folders = "[$data]sound/".urls.keep{(?1><'' and ?2><'')}{?0}
-| Params = $cfg_load_folder{"[$data]/sound/"}
-| $credits.sound <= $extract_cfg_authors{Params}
+| Cfgs = $cfg_load_folder{"[$data]/sound/"}
+| $credits.sound <= $extract_cfg_authors{Cfgs}
 | $sounds <= @table: @join: map Folder Folders:
   | map Name Folder.urls.keep{is.[@_ txt]}{?1}
     | SoundFile = "[Folder][Name].wav"
