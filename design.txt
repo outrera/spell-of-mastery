@@ -8,29 +8,39 @@ General:
 
 
 Background Story:
-The Great King [KingName] the [First, Second, Third] of [Dynasty Name] has hired your guild to protect his kingdom from increasing monster attacks and investigate their cause. The King has promised to pay hefty amount of money for each attack on his cities you help preventing and even more money have you succeed putting an end to these attacks. The king has also provided you with a list of sites, which you can use to establish your bases of operation.
+The Great King [KingName] the [First, Second, Third] of [Dynasty Name] has hired your wizard guild to protect his kingdom from increasing monster attacks and investigate their cause. The King has promised to pay hefty amount of money for each attack on his cities you help preventing and even more money have you succeed putting an end to these attacks. The king also allows you to establish a few bases of operation. Good luck on your quest!
 
 Kingdom View:
 - The player is in charge of wizard guild, which is hired by king to protect the kingdom from ongoing invasion.
-- Each wizard is controlling a flying ship, which he uses to intercept inviding monsters or investigate lairs.
+- Wizard guild can have several bases (wizard towers). Player starts with a single base, location for which he/she picks at the start of the game. After that additional bases can be build by spending money.
+- Bases have detection facilities, such as scrying devices, exposing roaming monster squads near them. If such squad gets detected, player has choice to intercept it or let it roam further, in that case such squad can attack a city, build a lair or wander away.
+- To intercept roaming monster squads and investigate map sites, player uses airship. Each such flying vessel is commanded by a mage.
+- Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The less cities there are the more are the chances, so it is always wise to leave some guards. The percentage of total reward gold gained is based on the percent of cities alive. Ruins are restored back to a living city after some time.
+- If monsters capture a city or player's base, they plunder it, turning it into special ruins lair. Which could be liberated given sufficient efforts.
+- Each monster lair has a chance to generate a monster squad, based on its age.
+- The goal of the game is to defeat several enemy wizards, who are behind the monster invasion, by assaulting their sites of living(which should be uncovered first). Player could also attempt to capture king's castle, which will give him income each turn from the cities not turned into ruins.
+- Base can only access location immediately in its vicinity. Transfering resouces between bases takes 1 turn.
 - Flying ship has following facilities (all limited in size):
   - Library, determining the kind of spells a wizard can cast. Spells must be first researched.
     To research a spell, player must have all required reagents to cast it.
   - Storage, holding reagents for the spells, wizard can spend.
     Reagents are traded for money or found on map. Some creature attacks require reagents too.
     Some summonings may require reagents.
+  - Mana Crystal, which determines the amount of mana wizard can carry into the site exploration or accumulated from site's magic nodes.
   - Soul Cage, holding soul gems for each creature, that wizard can summon.
   - If wizard wants to summon two goblins, soul cage should hold two soul gems with goblins.
-    Soul gems are traded for money or created from alive creatures, by casting Envslave
-    on them, and then killing them. After battle player's creatures are returned to soul cage.
+    Soul gems are traded for money or created from alive creatures, by casting Enslave
+    on them, and then killing them. After wizard leaves site, summoned creatures are returned to soul cage.
     Before summoning, player must first research creatures. To do research, player must
     have a soul gem with it.
-- Wizard guild can have several bases (wizard towers), which are managed using the same battle view, but with limited actions. Player starts with a single base, location for which he picks at the start of the game.
-- Bases have detection facilities, such as scrying devices, exposing roaming monster squads near them. If such squad gets detected, player has choice to intercept it or let it further, in that case such squad can attack a city, build a lair or wander away.
-- If monsters capure city it turns into ruins. Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The less cities there are the more are the chances, so it is always wise to leave some guards. The percentage of total reward gold gained is based on the percent of cities alive. Ruins are restored back to a living city after some time.
-- The goal to defeat several enemy wizards, who are behind the monster invasion, by assaulting their sites of living(which should be uncovered first). Player could also attempt to capture king's castle, which will give him income each turn from the cities not turned into ruins.
-- Each monster lair generates a monster squad each N turns, based on its age.
-- Base can only access location immediately in its vicinity. Transfering resouces between bases takes 1 turn.
+- Reagents:
+  - Blood (red): required by most summoning spells
+  - Herb (green): benefical and nature enchancments
+  - Fungus (blue): poison and other harmful spells
+  - Sulfur (yellow): required for fire spells and goblin's bombs
+  - Mercury (black): 
+
+
 Battle View:
 - Each creature major stats: Moves, Health, Attack, Defense, Fatigue, View, Range, and Will. Some magical artifacts and structures can affect these numbers.
 - Moves determines how many movement point or steps this unit gains per turn. One move allows moving one map square. The more complex is the action the more moves it will require per turn.

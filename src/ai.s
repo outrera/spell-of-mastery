@@ -68,7 +68,7 @@ unit.ai_ability_sub Act =
 | less Target: leave 0 //no suitable target for this act
 | Cost = Act.cost
 | Me.owner.mana+=Cost
-| when $can_do{Act}
+| when $can{Act}
   | $order_act{Act Target}
   | leave 1
 | Me.owner.mana -= Cost //havent casted the spell
@@ -201,7 +201,7 @@ ai.update_build =
 | less got Missing: leave
 | for Type Missing:
   | S = Spawns.find{?onEndTable.spawn >< Type}
-  | when got S and Leader.can_do{S}:
+  | when got S and Leader.can{S}:
     | Leader.order_act{S Me}
     | leave 1
 | 0

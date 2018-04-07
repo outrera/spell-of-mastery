@@ -225,6 +225,20 @@ world.set_mode M =
 | when $mode >< M: leave
 | $mode <= M
 
+world.site_by_serial Serial =
+| for S $sites: when S.serial><Serial: leave S
+| 0
+
+world.leave_site =
+| less $ui.site.params.victory><1: leave
+| S = $site_by_serial{$ui.site.params.serial}
+| when S.type><party:
+  | $free_site{S}
+  | $notify{"You have defeated the raiding party!"}
+| when S.type><city and S.attacker:
+  | $free_site{S.attacker}
+  | $notify{"You have defended the city!"}
+
 world.mode_pick M =
 | when M><newBase:
   | less $can_place{base $mice_xy}:
@@ -236,12 +250,9 @@ world.mode_pick M =
   | S = $site_at{$mice_xy}
   | less S: leave airship
   | when S.type><party:
-    | $free_site{S}
-    | $notify{"You have defeated the raiding party!"}
+    | $ui.enter_site{S}
     | leave 0
   | when S.type><city and S.attacker:
-    | $free_site{S.attacker}
-    | $notify{"You have defended the city!"}
     | leave 0
   | $notify{"Nothing to investigate there."}
   | leave airship

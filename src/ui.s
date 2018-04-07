@@ -87,9 +87,6 @@ ui.unpause =
 | $inputBlocker.show <= 0
 
 ui.img File = $main.img{File}
-ui.create W H =
-| $site.create{W H}
-| $view.clear
 
 ui.pick_title_menu pause/1 =
 | when Pause: $pause
@@ -184,10 +181,18 @@ ui.load_game NewGame Path =
 | $unpause
 | $pick{ingame}
 
+ui.create W H =
+| $site.create{W H}
+| $view.clear
+
+ui.enter_site Site =
+| $load_game{1 "[$mapsFolder]test.txt"}
+| $site.params.serial <= Site.serial
+
 parse_int_normalized Default Text =
 | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
 
-ui.create_site_props = 
+ui.create_site_props_dlg = 
 | hidden: site_props $site: P =>
   | W = parse_int_normalized{$site.w P.width.value}.clip{4 240}
   | H = parse_int_normalized{$site.h P.height.value}.clip{4 240}
@@ -590,10 +595,10 @@ ui.init =
 | $menuBG <= $img{ui_menu_bg}
 | $panelBG <= $img{ui_panel}
 | $view <= view $main Me $width $height-($panelBG.h-10)
-| $create{8 8}
+| $create{10 10}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
-| $siteProperties <= $create_site_props
+| $siteProperties <= $create_site_props_dlg
 | Tabs = $create_dialog_tabs
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}
