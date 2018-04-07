@@ -1,5 +1,0 @@
-- Cursed creatures are immune to normal physical attacks, but suffer additional damage from blessed creatures.
-- Creature attacking out of invisibility deals additional damage.
-- Lightning affects only outdoor targets, so taking cover would prevent enemy from harrasing you.
-- Poisoned creature loses health down to 1, unless heal is cast. Undead creatures are immune to poison.
-- Hydra can cross water.
