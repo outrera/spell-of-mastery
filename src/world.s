@@ -43,7 +43,7 @@ type world.widget{Main UI W H}
   incomeFactor
   tmap/(t) //terrain map
   sterra/(t) //allowed terrain for sites
-| $param <= $main.params.world
+| $param <= $main.cfg.world
 | $bg <= $img{world_bg}
 | $siteLimX <= $bg.w
 | $fg <= @table: map N [site picked base city lair party ruin attack]

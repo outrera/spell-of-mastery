@@ -182,7 +182,7 @@ unit.morph Class =
 | $animate{idle}
 | $owner.got_unit{Me}
 
-unit.find_dna Name = $main.params.gene.Name
+unit.find_dna Name = $main.cfg.gene.Name
 
 unit.add_gene Name Duration Params =
 | Effect = $find_dna{Name}
@@ -270,12 +270,12 @@ unit.drop_all =
 | for K,V $items: $drop_item{K V}
 
 unit.acts =
-| Param = $main.params
-| ItemDefs = Param.iacts
+| Cfg = $main.cfg
+| ItemDefs = Cfg.iacts
 | ItemActs = []
 | for Name,Count $items:
   | Item = ItemDefs.Name
-  | when got Item: for ActName Item: push Param.acts.ActName ItemActs
+  | when got Item: for ActName Item: push Cfg.acts.ActName ItemActs
 | [@$class.acts @ItemActs]
 
 unit.run_genes Selector target/0 xyz/0 =

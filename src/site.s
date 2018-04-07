@@ -149,7 +149,7 @@ site.init =
 | $main.site <= Me
 | Site <= Me
 | $minimap <= gfx 128 128
-| SParam = $main.params.site
+| SParam = $main.cfg.site
 | $d <= SParam.depth
 | SiteDepth <= $d
 | $maxSize <= SParam.max_size+12 //FIXME: get rid of this 12 margin
@@ -182,8 +182,8 @@ site.init =
 | MaxSize = $maxSize
 | $variation <= MaxSize{_=>MaxSize{_=>SS.rand}}
 | $nil <= $players.0.alloc_unit{unit_nil}
-| $main.params.unit_getters_ <= getters_ $nil
-| $main.params.unit_setters_ <= setters_ $nil
+| $main.cfg.unit_getters_ <= getters_ $nil
+| $main.cfg.unit_setters_ <= setters_ $nil
 
 site.new_cost =
 | $cost--
@@ -280,19 +280,19 @@ handle_attack_triggers Us =
 site.new_game =
 | $actors.set{[]}
 | $seed <= LCG_M.rand
-| for K,V $main.params.site: $params.K <= V
-| for ActName,Act $main.params.acts: Act.players <= #FFFFFF
+| for K,V $main.cfg.site: $params.K <= V
+| for ActName,Act $main.cfg.acts: Act.players <= #FFFFFF
 | $human <= $players.1
 | $human.human <= 1
 | $cycle <= 0
 | $turn <= 0
 | $player <= 0
 | if $params.explored then $explore{1} else $explore{0}
-| ActNames = $main.params.acts{}{?0}
-| StartMana = $main.params.site.start_mana
-| StartLore = $main.params.site.start_lore
+| ActNames = $main.cfg.acts{}{?0}
+| StartMana = $main.cfg.site.start_mana
+| StartLore = $main.cfg.site.start_lore
 | InitedUnits = reinit_units $active
-| PAI = $main.params.ai
+| PAI = $main.cfg.ai
 | for P $players:
   | P.init{StartMana StartLore}
   | Us = P.units

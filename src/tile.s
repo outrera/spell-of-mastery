@@ -251,12 +251,12 @@ get_match_fn Desc = case Desc
   Else | 0
 
 main.load_tiles =
-| BankNames = case $params.site.tile_banks [@Xs](Xs) X[X]
-| $params.site.tile_banks <= BankNames 
+| BankNames = case $cfg.site.tile_banks [@Xs](Xs) X[X]
+| $cfg.site.tile_banks <= BankNames 
 | Tiles = t
 | $aux_tiles <= t
 | Frames = No
-| T = $params.tile
+| T = $cfg.tile
 | HT = T.height_
 | for I 15: // object height blockers
   | T."h[I+1]_" <=
@@ -265,7 +265,7 @@ main.load_tiles =
     | R
 | Es = [1111 1000 1100 1001 0100 0001 0110 0011
         0010 0111 1011 1101 1110 1010 0101 0000]
-| for Bank BankNames: for Type,Tile $params.Bank
+| for Bank BankNames: for Type,Tile $cfg.Bank
   | Tile.bank <= Bank
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux

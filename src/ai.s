@@ -251,10 +251,10 @@ ai.group_roam Types =
 ai.script =
 | Player = $player
 | PParams = Player.params
-| Params = $main.params
+| Cfg = $main.cfg
 | AIType = PParams.aiType
 | AIStep = PParams.aiStep
-| AISteps = Params.main.ai.AIType
+| AISteps = Cfg.main.ai.AIType
 | when PParams.aiWait > $site.turn: leave 0
 | less got AISteps
   | $site.notify{"AI: missing type `[AIType]`"}
@@ -270,7 +270,7 @@ ai.script =
     | PParams.aiStep++
   [goto NewAIType when @Condition]
     | if case Condition [[`>>` lossage X]]
-              Player.params.lossage+PParams.difficulty*2>>X
+              PParams.lossage+PParams.difficulty*2>>X
       then | PParams.aiType <= NewAIType
            | PParams.aiStep <= 0
       else | PParams.aiStep++

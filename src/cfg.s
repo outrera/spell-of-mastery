@@ -60,28 +60,28 @@ main.extract_cfg_authors Cfg =
 | Authors
 
 main.cfg_handle_vars =
-| Main = $params.main
-| for BName,Bank $params: for PName,Cfgs Bank: for Key,Value Cfgs:
+| Main = $cfg.main
+| for BName,Bank $cfg: for PName,Cfgs Bank: for Key,Value Cfgs:
   | case Value [`.` SPName SKey]
     | less got Main.SPName and got Main.SPName.SKey:
       | bad "[BName]/[PName].txt/[Key]: missing main/[SPName].txt/[SKey]"
-    | $params.BName.PName.Key <= Main.SPName.SKey
+    | $cfg.BName.PName.Key <= Main.SPName.SKey
 
 main.cfg_handle_prototypes =
-| for BName,Bank $params: for PName,Cfgs Bank: when got Cfgs.proto:
+| for BName,Bank $cfg: for PName,Cfgs Bank: when got Cfgs.proto:
   | SBName = BName
   | SPName = Cfgs.proto
   | case SPName B,P:
     | SBName <= B
     | SPName <= P
-  | Proto = $params.SBName.SPName.deep_copy
+  | Proto = $cfg.SBName.SPName.deep_copy
   | for K,V Cfgs: less K><proto: Proto.K <= V
   | Bank.PName <= Proto
 
 main.cfg_handle_acts =
-| Acts = $params.acts
+| Acts = $cfg.acts
 | SP = Acts.spawn__proto
-| for N,U $params.unit: less U.aux: when U.summon:
+| for N,U $cfg.unit: less U.aux: when U.summon:
   | when U.summon<>auto: N <= U.summon
   | A = SP.deep_copy
   | A.icon <= "unit_[N]"
@@ -99,7 +99,7 @@ main.cfg_handle_acts =
     | SubAct
 
 main.load_configuration =
-| $params <= $cfg_load_folder{"[$data]cfg/"}
+| $cfg <= $cfg_load_folder{"[$data]cfg/"}
 | $cfg_handle_vars
 | $cfg_handle_prototypes
 | $cfg_handle_acts

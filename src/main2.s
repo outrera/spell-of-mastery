@@ -4,7 +4,7 @@ type main{Data}
      site
      data/Data
      cache/(t)
-     params
+     cfg
      sprites
      classes // object classes
      classes_banks
@@ -22,9 +22,9 @@ type main{Data}
 | say 'init heap'
 | enheap_init 64000
 | $credits <= t
-| say 'loading params'
+| say 'loading configuration'
 | $load_configuration
-| for K,V $params.main: $params.K <= V
+| for K,V $cfg.main: $cfg.K <= V //for fast access
 | say 'loading sprites'
 | $load_sprites
 | say 'loading sounds'
@@ -34,7 +34,7 @@ type main{Data}
 | say 'loading classes'
 | $load_classes
 | say 'post init'
-| for K,V $params.acts: less V.icon_gfx:
+| for K,V $cfg.acts: less V.icon_gfx:
   | IName = V.icon
   | IName = if IName.is_text then "icons_[IName]" else IName.1
   | V.icon_gfx <= $img{IName}
@@ -56,7 +56,7 @@ type main{Data}
                "  Matthew Ostil\n"
               ]
 //| sprite_dump Me "work/sd" staticFrame/160 sheet/0 unit_katzard
-| init_unit_flags Me
+| $init_unit_flags
 | site Me
 
 

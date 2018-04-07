@@ -49,7 +49,7 @@ effect gain @Args:
          | Player = Target.owner
    [PId ANs] | ActNames <= ANs
              | Player <= $site.players.PId
-| when ActNames >< all: ActNames <= $main.params.acts{}{?0}
+| when ActNames >< all: ActNames <= $main.cfg.acts{}{?0}
 | for ActName ActNames:
   | when ActNames.size><1 and Target.owner.human:
     | Title = ActName.replace{'_' ' '}
@@ -67,7 +67,7 @@ effect confirm Title Text:
 effect animate Anim: $animate{Anim}
 
 effect macro Name:
-| M = $main.params.macro.Name
+| M = $main.cfg.macro.Name
 | when no M: bad "main/macro.txt doesnt define `[Name]`"
 | $effect{M Target TargetXYZ}
 
@@ -151,12 +151,12 @@ effect mana Amount: Target.owner.mana+=Amount
 type unit_getset{unit}
 
 unit_getset.`.` K =
-| Getter = $unit.main.params.unit_getters_.K
+| Getter = $unit.main.cfg.unit_getters_.K
 | when no Getter: bad "unit_getset: unknown unit field [K]"
 | Getter $unit
 
 unit_getset.`=` K V =
-| Setter = $unit.main.params.unit_setters_.K
+| Setter = $unit.main.cfg.unit_setters_.K
 | when no Setter: bad "unit_getset: unknown unit field [K]"
 | Setter $unit V
 
@@ -375,7 +375,7 @@ effect align How:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 unit.yes_research ActName =
-| Act = $main.params.acts.ActName
+| Act = $main.cfg.acts.ActName
 | Needs = $owner.lore-Act.lore
 | when Needs < 0:
   | $owner.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
@@ -396,7 +396,7 @@ effect yes
   | when no T or not T.alive:
     | $owner.notify{"Target is lost!"}
     | leave
-| Act = $main.params.acts.MenuActName
+| Act = $main.cfg.acts.MenuActName
 | when no Act:
   | $owner.notify{"effect yes: missing act [MenuActName]"}
   | leave

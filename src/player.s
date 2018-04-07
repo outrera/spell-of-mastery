@@ -99,7 +99,7 @@ player.clear =
 | $lore <= 0
 | $params.lossage <= 0
 | $params.mana <= 0
-| for Type,Act $main.params.acts: $research.Type <= 0
+| for Type,Act $main.cfg.acts: $research.Type <= 0
 
 player.init StartMana StartLore =
 | $lore <= StartLore
@@ -119,7 +119,7 @@ player.lost_unit U =
 | when U.ai >< pentagram: $pentagram <= $site.nil
 
 player.research_item What =
-| Act = $main.params.acts.What
+| Act = $main.cfg.acts.What
 | $research.What <= Act.lore
 | $notify{"Acquired [Act.title]"}
 

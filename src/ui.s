@@ -44,7 +44,7 @@ type ui.$tabs{main}
   notes
   noteLife/1.0
 | $site <= $main.site
-| Prm = $params.ui
+| Prm = $cfg.ui
 | $width <= Prm.width
 | $height <= Prm.height
 | $noteLife <= Prm.note_life
@@ -78,7 +78,7 @@ ui.load File =
 | $main.load{File}
 | $view.clear
 ui.save File = $main.save{File}
-ui.params = $main.params
+ui.cfg = $main.cfg
 ui.pause =
 | $paused <= 1
 | $inputBlocker.show <= 1
@@ -242,7 +242,7 @@ ui.create_credits_dlg =
      | button 'Exit' skin/small_medium: => $pick_title_menu{pause/0}
 
 ui.create_bank_list =
-| TileBanks = $main.params.site.tile_banks
+| TileBanks = $cfg.site.tile_banks
 | BankName =
 | BankNames = [@TileBanks unit leader @$main.bank_names.skip{unit}.skip{leader}]
 | PanelW = 200 //FIXME: hardcoded stuff is bad
@@ -437,7 +437,7 @@ ui.create_world_dlg =
 
 ui.create_dialog_tabs =
 | $copyrightText <= txt small 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'
-| IsDebug = $main.params.ui.debug><1
+| IsDebug = $cfg.ui.debug><1
 | InitTab = if IsDebug then \ingame else \main_menu
 | tabs InitTab: t
           main_menu($create_main_menu_dlg)
@@ -516,7 +516,7 @@ ui.on_unit_pick Units =
 | As = 0
 | GAs = []
 | Unit = if Units.size then Units.0 else $site.nil
-| Acts = $main.params.acts
+| Acts = $main.cfg.acts
 | if Unit.has{menu} then
      | MenuActName,XYZ,TargetSerial = Unit.get{menu}
      | As <= if TargetSerial><research
@@ -553,7 +553,7 @@ ui.actClickIcon Icon =
 | O = Unit.owner
 | when $paused or O.id <> $player.id: leave
 | ActName = Icon.data
-| Act = $params.acts.ActName
+| Act = $main.cfg.acts.ActName
 | Cost = Act.cost
 | ResearchRemain = Unit.owner.research_remain{Act}
 | Cool = Unit.cooldown_of{ActName}

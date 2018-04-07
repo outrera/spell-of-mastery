@@ -376,7 +376,7 @@ view.render_iso =
     | O = B.object
     | O.draw{FB B}*/
 | less BlitItems.end
-  | DrawBoundingBox = $main.params.site.bounding_boxes><1
+  | DrawBoundingBox = $main.cfg.site.bounding_boxes><1
   | BL = BlitItems.list
   | isort_begin
   | for I,B BL.i: isort_add I 0 B.x B.y B.z B.x2 B.y2 B.z2

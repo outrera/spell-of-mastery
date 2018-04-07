@@ -34,13 +34,13 @@ type view.widget{M UI W H}
   zunit
   d //cell edge size
   keymap
-| $keymap <= $main.params.keymap
-| $fpsGoal <= $main.params.ui.fps
+| $keymap <= $main.cfg.keymap
+| $fpsGoal <= $main.cfg.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
-| $param <= $main.params.ui
+| $param <= $main.cfg.ui
 | Wr = $site
 | Wr.view <= Me
-| WParam = $main.params.site
+| WParam = $main.cfg.site
 | TS = WParam.tile_size
 | $xunit <= TS.0
 | $yunit <= TS.1

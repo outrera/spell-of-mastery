@@ -2,13 +2,15 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Rename site.params to site.data, then rename params/ to cfg/, dont forget about renaming $main.params too!
+- move main.cfg.acts to jost main.acts
+- debug should be in ui, not site.params.debug
 - Implement reagents and spell systems, then a menu to manage them at the start of the battle.
 - Random map generation, based on matching tiles.
 - Make sure only reachable enemies will appear during the airship target selection phase.
 - present new sites in sequence, so player wont be overwhelmed by ton of new info. Also play some attention gaining sounds, like base placement and raiding party appearance.
 - Better door interactions, with creatures automatically locking and unlocking them.
 - Move researach to world map. Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
-- Optimize sprite drawing routine: instead of that fragiles, complicated and N^2 slow C++ code, break every sprite into cubes on loading. That will order of magnitude speed up drawing of large number of tiles.
+- Get rid of isort_.s - optimize sprite drawing routine: instead of that fragile, complicated and N^2 slow C++ code, break every sprite into cubes on loading. That will order of magnitude speed up drawing of large number of tiles.
 - Finish minimap implementation, it should show only the current level and reduce saturation for levels below
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.

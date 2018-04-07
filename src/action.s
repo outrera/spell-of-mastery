@@ -202,7 +202,7 @@ action.init Act Target =
 | $xyz.init{XYZ}
 | $target <= if Target.is_list then 0 else Target
 | A = Acts.$type
-| $act <= if Act.is_text then $main.params.acts.$type else Act
+| $act <= if Act.is_text then $main.cfg.acts.$type else Act
 | less got $act: bad "unknown action type [$type]"
 | $range <= $act.range
 | $cycles <= $act.speed

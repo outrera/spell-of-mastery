@@ -63,7 +63,7 @@ site.save =
               | map T Ts: if T.parts.is_int then T.parts else T.id
     explored | map Id,Active ActivePlayers.i.keep{?.1}
                | [Id $players.Id.sight{}{X=>rle_encode X}]
-    enabled | map Name,Act $main.params.acts: Name,Act.players
+    enabled | map Name,Act $main.cfg.acts: Name,Act.players
 
 main.save Path = Path.set{$site.save.as_text}
 
@@ -170,7 +170,7 @@ site.load Saved =
         else for J WH: Dst.J <= Src.J
 | $human <= $players.(Saved.player)
 | for X Saved.units: $deserialize_unit{IdMap X}
-| Acts = $main.params.acts
+| Acts = $main.cfg.acts
 | for U $active: when U.host:
   | [HostId Goal Action Ordered NextAction] = U.host
   | U.host <= 0

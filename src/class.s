@@ -64,10 +64,10 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
 class.form = $default_sprite.form
 
 main.load_classes =
-| BankNames = case $params.site.class_banks [@Xs](Xs) X[X]
+| BankNames = case $cfg.site.class_banks [@Xs](Xs) X[X]
 | $classes <= @table: @join: map BankName BankNames
-  | map Name,Params $params.BankName
-    | R = class BankName Name Me @Params.list.join
+  | map Name,Cfgs $cfg.BankName
+    | R = class BankName Name Me @Cfgs.list.join
     | DS = R.default_sprite
     | when DS><auto: DS <= "unit_[Name]"
     | S = $sprites.DS
@@ -78,7 +78,7 @@ main.load_classes =
   | C = class S.bank S.name Me @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
-| Acts = $params.acts
+| Acts = $cfg.acts
 | ItemDrop = Acts.item_drop
 | ItemTake = Acts.item_take
 | for K,V $classes:
@@ -93,9 +93,9 @@ main.load_classes =
     | As = []
     | when V.atk and V.atk><impact: V.atk<=0
     | As <= [@As @V.acts]
-    | As <= [@As @$params.global.acts]
+    | As <= [@As @$cfg.global.acts]
     | V.acts <= As
-| for K,Act $params.acts.list:
+| for K,Act $cfg.acts.list:
   | less Act.needs.end:
     | Act.needs <= map N Act.needs:
       | if N.is_list then N else [N]
