@@ -281,14 +281,14 @@ site.new_game =
 | $actors.set{[]}
 | $seed <= LCG_M.rand
 | for K,V $main.cfg.site: $params.K <= V
-| for ActName,Act $main.cfg.acts: Act.players <= #FFFFFF
+| for ActName,Act $main.acts: Act.players <= #FFFFFF
 | $human <= $players.1
 | $human.human <= 1
 | $cycle <= 0
 | $turn <= 0
 | $player <= 0
 | if $params.explored then $explore{1} else $explore{0}
-| ActNames = $main.cfg.acts{}{?0}
+| ActNames = $main.acts{}{?0}
 | StartMana = $main.cfg.site.start_mana
 | StartLore = $main.cfg.site.start_lore
 | InitedUnits = reinit_units $active

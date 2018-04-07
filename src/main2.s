@@ -5,12 +5,12 @@ type main{Data}
      data/Data
      cache/(t)
      cfg
+     acts
      sprites
      classes // object classes
      classes_banks
      bank_names
      tiles 
-     acts //obsolete?
      editor_types
      last_tid
      tid_map
@@ -34,7 +34,7 @@ type main{Data}
 | say 'loading classes'
 | $load_classes
 | say 'post init'
-| for K,V $cfg.acts: less V.icon_gfx:
+| for K,V $acts: less V.icon_gfx:
   | IName = V.icon
   | IName = if IName.is_text then "icons_[IName]" else IName.1
   | V.icon_gfx <= $img{IName}

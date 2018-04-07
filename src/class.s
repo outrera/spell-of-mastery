@@ -78,7 +78,7 @@ main.load_classes =
   | C = class S.bank S.name Me @S.class
   | C.default_sprite <= S
   | $classes."[S.bank]_[S.name]" <= C
-| Acts = $cfg.acts
+| Acts = $acts
 | ItemDrop = Acts.item_drop
 | ItemTake = Acts.item_take
 | for K,V $classes:
@@ -95,7 +95,7 @@ main.load_classes =
     | As <= [@As @V.acts]
     | As <= [@As @$cfg.global.acts]
     | V.acts <= As
-| for K,Act $cfg.acts.list:
+| for K,Act Acts:
   | less Act.needs.end:
     | Act.needs <= map N Act.needs:
       | if N.is_list then N else [N]

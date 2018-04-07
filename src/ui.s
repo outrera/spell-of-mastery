@@ -516,7 +516,7 @@ ui.on_unit_pick Units =
 | As = 0
 | GAs = []
 | Unit = if Units.size then Units.0 else $site.nil
-| Acts = $main.cfg.acts
+| Acts = $main.acts
 | if Unit.has{menu} then
      | MenuActName,XYZ,TargetSerial = Unit.get{menu}
      | As <= if TargetSerial><research
@@ -553,7 +553,7 @@ ui.actClickIcon Icon =
 | O = Unit.owner
 | when $paused or O.id <> $player.id: leave
 | ActName = Icon.data
-| Act = $main.cfg.acts.ActName
+| Act = $main.acts.ActName
 | Cost = Act.cost
 | ResearchRemain = Unit.owner.research_remain{Act}
 | Cool = Unit.cooldown_of{ActName}

@@ -7,13 +7,13 @@ unit.order_at Goal Act =
 | Units = Cell.units
 | OAct = Act
 | less Goal: Goal <= $site.block_at{XYZ}
-| Act <= if Act.is_text then $main.cfg.acts.Act
+| Act <= if Act.is_text then $main.acts.Act
          else if Act then Act
          else if Goal and $owner.is_enemy{Goal.owner} then
-           $main.cfg.acts.attack
+           $main.acts.attack
          else if $owner.human and and got Units.find{?type><mark_jump} then
-           $main.cfg.acts.act_jump
-         else $main.cfg.acts.move
+           $main.acts.act_jump
+         else $main.acts.move
 | ActName = Act.name
 | when ActName><idle: Goal <= Me
 | less ActName><idle or ActName><move or ActName><swap:

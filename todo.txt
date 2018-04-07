@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Rename site.params to site.data, then rename params/ to cfg/, dont forget about renaming $main.params too!
-- move main.cfg.acts to jost main.acts
+- Rename site.params to site.data, player.params to player.data, etc...
 - debug should be in ui, not site.params.debug
 - Implement reagents and spell systems, then a menu to manage them at the start of the battle.
 - Random map generation, based on matching tiles.

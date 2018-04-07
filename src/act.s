@@ -138,7 +138,7 @@ site.turn_act State Players ActNames =
 | when ActNames >< all: ActNames <= $params.acts{}{?0}
 | when Players.is_int: Players <= [Players]
 | when ActNames.is_text: ActNames <= [ActNames]
-| Acts = $main.cfg.acts
+| Acts = $main.acts
 | for ActName ActNames:
   | Act = Acts.ActName
   | less got Act: bad "missing act [ActName]"

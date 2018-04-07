@@ -80,6 +80,7 @@ main.cfg_handle_prototypes =
 
 main.cfg_handle_acts =
 | Acts = $cfg.acts
+| $acts <= Acts
 | SP = Acts.spawn__proto
 | for N,U $cfg.unit: less U.aux: when U.summon:
   | when U.summon<>auto: N <= U.summon

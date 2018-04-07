@@ -65,7 +65,7 @@ icon.draw G PX PY =
     else G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
 | Unit = $unit
 | ActName = $data
-| when Unit and not Unit.owner.researched{Unit.main.cfg.acts.ActName}:
+| when Unit and not Unit.owner.researched{Unit.main.acts.ActName}:
   | less ResearchIcon: ResearchIcon <= skin{'icon_research'}
   | RI = ResearchIcon
   | G.blit{X Y+$fg.h-RI.h RI}
@@ -100,7 +100,7 @@ icon.infoline =
 | ActName = $data
 | Unit = $unit
 | less Unit: leave ''
-| Act = Unit.main.cfg.acts.ActName
+| Act = Unit.main.acts.ActName
 | when no Act: leave ''
 | Info = Act.title
 | Number = $text.2

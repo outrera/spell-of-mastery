@@ -49,7 +49,7 @@ effect gain @Args:
          | Player = Target.owner
    [PId ANs] | ActNames <= ANs
              | Player <= $site.players.PId
-| when ActNames >< all: ActNames <= $main.cfg.acts{}{?0}
+| when ActNames >< all: ActNames <= $main.acts{}{?0}
 | for ActName ActNames:
   | when ActNames.size><1 and Target.owner.human:
     | Title = ActName.replace{'_' ' '}
@@ -375,7 +375,7 @@ effect align How:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 unit.yes_research ActName =
-| Act = $main.cfg.acts.ActName
+| Act = $main.acts.ActName
 | Needs = $owner.lore-Act.lore
 | when Needs < 0:
   | $owner.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
@@ -396,7 +396,7 @@ effect yes
   | when no T or not T.alive:
     | $owner.notify{"Target is lost!"}
     | leave
-| Act = $main.cfg.acts.MenuActName
+| Act = $main.acts.MenuActName
 | when no Act:
   | $owner.notify{"effect yes: missing act [MenuActName]"}
   | leave

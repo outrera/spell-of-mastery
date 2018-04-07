@@ -22,7 +22,7 @@ check_event_condition Me When =
     | Units = $players.Player.units
     | got Units.find{?type><UnitType}
   [researched Player ActName]
-    | Act = $main.cfg.acts.ActName
+    | Act = $main.acts.ActName
     | less got ActName: "Site events references unknown act [ActName]"
     | ResearchSpent = $players.Player.research.(Act.name)
     | ResearchRemain = Act.lore - ResearchSpent
