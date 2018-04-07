@@ -1,0 +1,4 @@
+sprite: special_trigger3
+item: world_set{trigger3 1}
+show: 0
+

@@ -1,0 +1,11 @@
+sprite: unit_test
+tier: 2
+health: 5
+atk: 10
+def: 0
+summon: 0
+inborn: (flyer)
+onHit: hit{user},sound{explosion}
+onHarm: visual{blood},sound{devil_hit}
+onDeath: sound{dragon_death}
+onMove: sound{dragon_move}

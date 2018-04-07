@@ -1,0 +1,3 @@
+sprite: tiles_room_bridge
+embed: soil
+1111: 0

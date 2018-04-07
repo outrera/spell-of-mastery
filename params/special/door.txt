@@ -1,6 +1,0 @@
-proto: door_proto
-aux: 0
-sprite: special_door
-title: `Door (closed)`
-empty: 0
-acts: (door_open)

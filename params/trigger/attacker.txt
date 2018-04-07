@@ -1,4 +1,0 @@
-sprite: special_attacker
-show: 0
-ai: attack
-note: `unit sharing cell with this object becomes aggressive`

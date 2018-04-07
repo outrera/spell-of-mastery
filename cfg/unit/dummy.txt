@@ -1,0 +1,13 @@
+// used for hacks like temporary cleared tiles
+sprite: special_missing
+tier: 0
+health: 0
+atk: 0
+def: 0
+speed: 0
+empty: 1
+show: 0
+aux: 1
+item: 0
+invincible: 1
+pickable: 0

@@ -1,0 +1,3 @@
+sprite: icons_unit_hydra
+item: gain{summon_hydra}
+ai: hold

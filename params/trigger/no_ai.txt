@@ -1,5 +1,0 @@
-sprite: special_no_ai
-item: remove
-show: 0
-ai: avoid
-note: `points places that ai should avoid`

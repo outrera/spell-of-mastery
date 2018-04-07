@@ -1,0 +1,14 @@
+tier: 2
+cost: 5,6,15
+mov: 5
+health: 9
+atk: 3
+def: 3
+will: 10
+speed: 28
+inborn: (organic)
+onHit: shell,hit{user},sound{cut}
+onHarm: visual{blood},sound{dwarf_hit}
+onDeath: sound{dwarf_die}
+onMove: sound{step}
+acts: (defend)

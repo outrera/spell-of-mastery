@@ -1,4 +1,0 @@
-sprite: tiles_base_
-invisible: 0
-aux: 1
-1111: 0

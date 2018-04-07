@@ -23,7 +23,7 @@ type main{Data}
 | enheap_init 64000
 | $credits <= t
 | say 'loading params'
-| $load_params
+| $load_configuration
 | for K,V $params.main: $params.K <= V
 | say 'loading sprites'
 | $load_sprites

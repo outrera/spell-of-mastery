@@ -1,4 +1,4 @@
-use gfx util param
+use gfx util cfg
 
 siteToSprite X Y =
 | RX = (X*64 - Y*64)/2
@@ -126,19 +126,19 @@ init_frames_from_folder S Folder =
 
 init_sprites Me =
 | Sprites = $sprites
-| for SpriteName,Params Sprites
-  | S = sprite Me Params.bank Params.name @Params.list.join
+| for SpriteName,Cfgs Sprites
+  | S = sprite Me Cfgs.bank Cfgs.name @Cfgs.list.join
   | S.id <= SpriteName
   | $sprites.SpriteName <= S
 
 join_banks Bs =
 | @table: @join: map BankName,Bank Bs:
-                 map PName,Params Bank: "[BankName]_[PName]",Params
+                 map PName,Cfgs Bank: "[BankName]_[PName]",Cfgs
 
 main.load_sprites =
-| Params = load_params "[$data]/sprites/"
-| $credits.graphics <= extract_params_authors Params
-| $sprites <= join_banks Params
+| Cfgs = $cfg_load_folder{"[$data]/sprites/"}
+| $credits.graphics <= $extract_cfg_authors{Cfgs}
+| $sprites <= join_banks Cfgs
 | init_sprites Me
 | $effect <= $spr{ui_unit_effects}
 

@@ -1,4 +1,0 @@
-sprite: special_trigger9
-item: world_set{trigger9 1}
-show: 0
-

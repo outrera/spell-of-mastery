@@ -1,0 +1,3 @@
+sprite: tiles_room_treasury
+embed: soil
+1111: 0

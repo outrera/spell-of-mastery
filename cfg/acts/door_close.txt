@@ -1,0 +1,7 @@
+icon: act_switch
+hotkey: f
+speed: 4
+check: any
+onInit: sound{door_switch},morph{special_door}
+
+

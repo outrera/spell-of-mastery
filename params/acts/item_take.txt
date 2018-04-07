@@ -1,7 +1,0 @@
-//item prototype
-icon: "icons_nil"
-range: 0
-check: any
-onInit: animate{idle},sound{item_take},take{_ all}
-onEnd: ()
-tab: bag

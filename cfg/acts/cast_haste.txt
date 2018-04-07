@@ -1,0 +1,10 @@
+icon: spell_haste
+//hotkey: z
+lore: 5
+cost: 5
+cool: 10
+range: 9000
+check: non_leader,unit
+onInit: when{hasnt.haste},add{hasted},strip{slowed},inc{steps,4},visual{haste},sound{hasted}
+hint: boost
+tab: spell

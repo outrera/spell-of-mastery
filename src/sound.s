@@ -1,12 +1,12 @@
-use gui param
+use gui cfg
 
 PlayList = []
 PlayListIndex = 0
 
 main.load_sounds =
 | Folders = "[$data]sound/".urls.keep{(?1><'' and ?2><'')}{?0}
-| Params = load_params "[$data]/sound/"
-| $credits.sound <= extract_params_authors Params
+| Params = $cfg_load_folder{"[$data]/sound/"}
+| $credits.sound <= $extract_cfg_authors{Params}
 | $sounds <= @table: @join: map Folder Folders:
   | map Name Folder.urls.keep{is.[@_ txt]}{?1}
     | SoundFile = "[Folder][Name].wav"

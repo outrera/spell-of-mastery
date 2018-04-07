@@ -1,9 +1,0 @@
-icon: spell_lightning
-//lore: 5
-cost: 4
-//cool: 10
-range: 9000
-check: outdoor,non_leader,unit
-onInit: visual{lightning},sound{lightning},resist,harm{9}
-hint: harm
-tab: spell

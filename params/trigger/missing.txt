@@ -1,3 +1,0 @@
-sprite: special_missing
-show: 0
-note: `placeholder for missing objects`

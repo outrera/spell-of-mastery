@@ -1,9 +1,0 @@
-icon: spell_knowledge
-//lore: 0
-cost: 5
-cool: 1
-check: self
-onInit: visual{teleport},sound{pentagram}
-onEnd: lore{1}
-hint: knowledge
-tab: spell

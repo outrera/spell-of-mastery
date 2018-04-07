@@ -1,0 +1,10 @@
+tier: 3
+cost: 10,5,20
+health: 8
+atk: 1
+def: 6
+inborn: (organic)
+onHit: shell,hit{user},sound{devil_attack}
+onHarm: visual{blood},sound{devil_hit}
+onDeath: sound{devil_hit}
+acts: (teleport act_punish)

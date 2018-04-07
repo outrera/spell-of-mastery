@@ -1,0 +1,9 @@
+sprite: system_dummy
+health: 0
+atk: 0
+aux: 1
+def: 999
+show: 0
+item: 0
+ai: block
+pickable: 0

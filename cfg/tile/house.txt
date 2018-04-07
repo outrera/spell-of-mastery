@@ -1,0 +1,7 @@
+sprite: tiles_room_bridge
+dig: 1
+embed: 1
+wall: house_wall
+roof: 2,house_roof
+height: 1
+1111: 0

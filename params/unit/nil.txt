@@ -1,3 +1,0 @@
-sprite: system_dummy
-aux: 1
-health: 0

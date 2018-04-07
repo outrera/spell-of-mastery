@@ -1,0 +1,11 @@
+sprite: system_dummy
+empty: 1
+aux: 1
+invincible: 1
+health: 0
+atk: 0
+def: 0
+show: 0
+speed: 0
+pickable: 0
+inborn: (ttl_s.1)

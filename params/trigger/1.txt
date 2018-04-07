@@ -1,4 +1,0 @@
-sprite: special_trigger1
-item: world_set{trigger1 1}
-show: 0
-

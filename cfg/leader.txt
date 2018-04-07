@@ -1,0 +1,73 @@
+//NOTE: ensure all leaders have 32 frames of attack animation
+//      otherwise some leader could put more damage than the other
+unit: 1
+sprite: auto
+active: 1
+height: 2
+tier: 5
+mov: 5
+health: 15 // hit points - number of hits, before this unit is dead
+atk: 2
+def: 3
+range: 4
+will: 2
+cooldown: 24
+sight: 7
+speed: 28
+pickable: 1
+passable: 0
+ai: unit
+item: 0
+inborn: (organic leader)
+onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
+onMove: sound{step}
+acts: (pentagram act_fireball)
+spells:
+      (
+      cast_knowledge
+      cast_telekinesis
+      cast_dispel
+      cast_heal
+      cast_lightning
+      cast_haste
+      cast_fear
+      cast_shell
+      cast_antimagic
+      cast_bless
+      cast_curse
+      cast_invisibility
+      cast_firestorm
+      cast_flight
+      cast_detonate
+      cast_armageddon
+      cast_subvert
+      spell_of_mastery
+      )
+
+summons:
+      summon_oculus,
+      summon_observer,
+      summon_blob,
+      summon_imp,
+      summon_ratman,
+      summon_goblin,
+      summon_orc,
+      summon_elf,
+      summon_dwarf,
+      summon_spider,
+      summon_lizard,
+      summon_paladin,
+      summon_skeleton,
+      summon_ifrit,
+      summon_griffin,
+      summon_minotaur,
+      summon_wraith,
+      summon_devil,
+      summon_vampire,
+      summon_cyclops,
+      summon_hydra,
+      summon_golem,
+      summon_gargoyle,
+      summon_dragon
+
+rooms: ()

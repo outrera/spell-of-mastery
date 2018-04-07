@@ -1,4 +1,0 @@
-icon: unit_mime
-onHarm: visual{blood}
-onDeath: sound{mage_die}
-

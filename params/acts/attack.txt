@@ -1,9 +1,0 @@
-icon: attack
-hotkey: t
-fatigue: 2
-check: unit
-onInit: insulate,onAttack
-onHit: (onHit)
-range: user
-repeat: 0
-hint: attack

@@ -1,4 +1,0 @@
-icon: unit_mage
-onHarm: visual{blood},sound{male_hit}
-onDeath: sound{mage_die}
-

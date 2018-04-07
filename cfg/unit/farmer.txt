@@ -1,0 +1,11 @@
+tier: 1
+cost: 5,3,10
+health: 3
+atk: 2
+def: 0
+will: 5
+inborn: (organic)
+onHit: shell,hit{user},sound{cut}
+onHarm: visual{blood},sound{male_hit}
+onDeath: sound{male_die}
+onMove: sound{step}

@@ -1,0 +1,3 @@
+icon: unit_heretic
+onHarm: visual{blood},sound{male_hit}
+onDeath: sound{mage_die}

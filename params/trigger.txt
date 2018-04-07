@@ -1,4 +1,0 @@
-empty: 1
-editor: 1
-passable: 0
-draw_order: 10

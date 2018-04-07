@@ -1,0 +1,6 @@
+sprite: special_node
+ai: hold
+height: 4
+box_xy: (-1 -1)
+platform: 8
+inborn: (income1 node_aura regen_tenant)

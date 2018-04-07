@@ -1,0 +1,9 @@
+icon: spell_flight
+lore: 10
+cost: 5
+cool: 10
+range: 9000
+check: unit
+onInit: add{flyer},visual{heal},sound{flight}
+hint: benefit
+tab: spell

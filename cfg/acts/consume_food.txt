@@ -1,0 +1,6 @@
+icon: item_food
+hotkey: x
+speed: 4
+check: any
+onInit: animate{idle},when{harmed},heal{3},add_item{food,-1},visual{pickup},sound{munch}
+

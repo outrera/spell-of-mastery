@@ -1,0 +1,10 @@
+icon: spell_heal
+hotkey: h
+lore: 5
+cost: 2
+cool: 10
+range: 9000
+check: unit
+onInit: heal{9},strip{poison},strip{fear},visual{heal},sound{heal}
+hint: heal
+tab: spell

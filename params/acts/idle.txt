@@ -1,4 +1,0 @@
-range: 0
-mov: 0
-check: any
-

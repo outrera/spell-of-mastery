@@ -1,7 +1,0 @@
-icon: unit_bat
-title: `Bat Form Swith`
-hotkey: b
-speed: 4
-check: any
-onInit: visual{spell},sound{bat_move},morph{unit_vampire_bat_form},add{flyer}
-hint: batform1

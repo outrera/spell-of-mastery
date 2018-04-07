@@ -1,0 +1,13 @@
+tier: 2
+cost: 5,8,15
+mov: 5
+health: 8
+atk: 3
+def: 2
+speed: 28
+inborn: (cursed flyer)
+onHit: shell,hit{user},sound{cut}
+onHarm: visual{blood_undead},sound{wraith_hit}
+onDeath: sound{wraith_die}
+onMove: sound{wraith_move}
+acts: (act_invisibility act_phase)

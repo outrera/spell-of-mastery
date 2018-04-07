@@ -1,0 +1,14 @@
+icon: nil
+lore: 0
+cost: 0
+mov: 1
+priority: 50
+range: 0 //0=target self
+speed: 4
+before: ()
+after: ()
+needs: ()
+animate: attack
+check: unit //what it can target
+hint: 0
+tab: 0

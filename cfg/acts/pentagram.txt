@@ -1,0 +1,9 @@
+title: `Pentagram`
+check: clear,land,any
+onInit: visual{pentagram_appearance},sound{pentagram}
+onEnd: spawn{special_pentagram}
+icon: special_pentagram
+cost: 5
+//lore: misc.tier1_lcost
+cool: 10
+hint: pentagram
