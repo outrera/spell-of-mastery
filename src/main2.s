@@ -1,4 +1,4 @@
-use site gfx sprite_dump unit_flags enheap ui widgets gui main_data
+use site gfx sprite unit_flags enheap ui widgets gui main_data
 
 type main{Data}
      site
@@ -55,7 +55,7 @@ type main{Data}
                "\n\n\nTHANKS TO:\n"
                "  Matthew Ostil\n"
               ]
-//| sprite_dump Me "work/sd" staticFrame/160 sheet/0 unit_katzard
+//| $sprites.unit_katzard.save{frames "work/sd/katzard"}; halt
 | $init_unit_flags
 | site Me
 

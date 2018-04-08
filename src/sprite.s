@@ -152,4 +152,66 @@ main.spr Name =
 | less got S: bad "missing sprite `[Name]`"
 | S
 
+//Following code is used to create sprite sheets and
+//save optimized frames
+//How = sheet/frames/framesXY
+sprite.save How Dst =
+| Rs = []
+| WW = 1
+| HH = 1
+| for F $frames:
+  | AnimName = F.0
+  | G0 = F.1.3
+  | G1 = F.1.6
+  | for Dir,G [3,G0 6,G1]: when G:
+    | X,Y,W,H = G.margins
+    | R = G.cut{X Y W H}
+    | GX,GY = G.xy
+    | XX = GX-G.w/2 + X + W/2
+    | YY = GY-G.h   + Y + H
+    | WW <= max WW (R.w + XX*2)
+    | HH <= max HH (R.h+32-YY)
+    | push [R AnimName Dir XX YY] Rs
+| when How><frames:
+  | Dst.mkpath
+  | FB = gfx WW HH 
+  | for [R AnimName Dir XX YY] Rs:
+    | FB.clear{#FF000000}
+    | FB.blit{FB.w/2-R.w/2+XX FB.h-32-R.h+YY R}
+    | FB.save{"[Dst]/[Dir]-[AnimName].png"}
+  | FB.free
+| when How><frames_xy:
+  | Dst.mkpath 
+  | for [R AnimName Dir XX YY] Rs:
+    | R.save{"[Dst]/[Dir]-[AnimName]+[XX]+[YY].png"}
+| when How><sheet:
+  | Order = [idle move attack death hit]
+  | Order = Order.keep{O =>
+      got Rs.find{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}}
+  | MaxCol = 1
+  | for O Order: for D 3,6:
+    | Xs = Rs.keep{?2><D}
+    | Xs = Xs.keep{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}
+    | MaxCol <= max MaxCol Xs.size
+  | W = Order.size*2*WW
+  | H = MaxCol*HH
+  | G = gfx W H
+  | G.clear{#FF000000} // transparent
+  | Col = 0
+  | Ls = []
+  | for O Order: for D 3,6:
+    | Xs = Rs.keep{?2><D}
+    | Xs = Xs.keep{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}
+    | Xs = Xs.sort{?1<??1}
+    | for Row,[R AnimName Dir XX YY] Xs.i:
+      | X = Col*WW
+      | Y = Row*HH
+      | G.blit{X Y R}
+      | push ["[Dir]-[AnimName]+[XX]+[YY]" [X Y R.w R.h]] Ls
+    | Col++
+  | "[Dst].txt".set{Ls.flip.as_text}
+  | G.save{"[Dst].png"}
+  | G.free
+
+
 export sprite
