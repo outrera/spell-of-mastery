@@ -31,20 +31,20 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   bank/Bank
   name/Name
   frames/0
-  frame_format/Frames
+  frame_format/Frames //how sprite frames are stored
   xy/Xy
   anims
-  faces/Faces
-  class/Class
+  faces/Faces //numer of facing directions this sprite has
+  class/Class //should we autocreate class for this sprite?
   margins/Margins
   pick_height/Pick_height
   font/Font
   icon/Icon
-  shadow/Shadow
-  form
-  rect/Rect
+  shadow/Shadow //shadow sprite or 0 if sprite doesnt cast shadow
+  form //X,Y this sprite occupies
+  rect/Rect //selection rect
   size/Size
-  recolors/Recolors
+  recolors/Recolors //indices of recolorable colors
   colors/0
 | XYs = []
 | Form = Form.tail
@@ -100,7 +100,6 @@ init_frames S G =
   | Rs = map R Rs: CM.locate{R}
   | Default = Rs.find{?<>No}
   | when got Default: S.colors <= map R Rs: if R<>No then R else No
-  //| say [S.name CM.size S.colors]
 | Fs = case S.frame_format
   [`*` W H]
      | Xs = map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}

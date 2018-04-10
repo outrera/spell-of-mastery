@@ -291,9 +291,6 @@ render_unexplored Me Wr X Y BX BY =
 | B.sy <= BY-$zunit-Unexplored.h
 | push B BlitItems
 
-// still needs true 3d pipeline interpolate xyz across texture
-view_to_z X Y Z = (X+Y+Z)*-256 + Z
-
 colorize G Layer Color =
 | Alpha = Color >>> 24
 | Color <= Color &&& #FFFFFF
@@ -322,6 +319,9 @@ draw_overlay FB Wr =
 | colorize FB Wr.main.img{"ui_colorizer"} CO.K.1
 
 ShakeXY = [[10 10] [0 10] [0 -10] [0 0] [-10 -10] [10 0] [-10 0]]
+
+// still needs true 3d pipeline interpolate xyz across texture
+view_to_z X Y Z = (X+Y+Z)*-256 + Z
 
 view.render_iso =
 | Wr = $site
@@ -369,13 +369,14 @@ view.render_iso =
 | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
 | when $mice_click<>left or $brush.0:
   | render_cursor Me Wr BX BY $cursor
-/*| less BlitItems.end
-  | Xs = BlitItems{B=>[(view_to_z B.x B.y B.z+B.z2) B]}
+| less BlitItems.end
+  //| Xs = BlitItems{B=>[(B.z+B.z2)*256+(B.x+B.y)/2 B]}
+  | Xs = BlitItems{B=>[(B.z+B.z2)*-256-(B.x+B.y)/2 B]}
   | Xs <= Xs.sort{A B => A.0>B.0} //could be replaced with z-buffer
   | for X,B Xs
     | O = B.object
-    | O.draw{FB B}*/
-| less BlitItems.end
+    | O.draw{FB B}
+/*| less BlitItems.end
   | DrawBoundingBox = $main.cfg.site.bounding_boxes><1
   | BL = BlitItems.list
   | isort_begin
@@ -396,7 +397,7 @@ view.render_iso =
       | draw_bounding_box_back Color FB B
       | O.draw{FB B}
       | draw_bounding_box_front Color FB B
-  | isort_free_result
+  | isort_free_result*/
 | draw_picked_rects FB PickedRects.list.flip
 | draw_overlay FB Wr
 | less $brush.0: $handle_pick{UnitRects.list.flip}

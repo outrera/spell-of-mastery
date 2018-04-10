@@ -107,6 +107,7 @@ Optimization Possibilities:
 
 Symta Language Handicaps:
 - do-while loop, to avoid needless `_label again`
+- A some file, like common.s, that would be included by default into every other file. Such file would incldue common constants, like TILE_WIDTH.
 - Allow to specify name of the output executable file and entry point file, other than main. That way we can produce several executable files in the same dir from the same source code base. I.e. we could have sprite sheet dumper utility without touching the main game exe.
 - The foremost handicap is the absence of proper enheap API and allocation syntax.
 - `got@@it` leads to potential errors, because when `it` gets removed upstream, downstream references would be treated as literal symbols. It also introduces confusion.

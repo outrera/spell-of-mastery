@@ -5,7 +5,7 @@ CellSize = 32 //FIXME: hardcoded
 type tile{As Main Type Role Id stack/0 gfxes/0
           height/1 filler/1 invisible/0 match/[same corner] shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
-          parts/0 box/[64 64 h] wallShift/0 indoor/0 liquid/0 opaque/No
+          parts/0 box/[64 64 64] wallShift/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
           hit/0 death/0 embed/0}
      id/Id
@@ -31,8 +31,9 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      lineup/Lineup
      dig/Dig
      parts/Parts
-     box/Box
-     wallShift/WallShift //FIXME: tile.box should be used for everything
+     box/Box //bounding box, used for draw list sorting
+     wallShift/WallShift //used for calcucalating door`s fine x,y
+                         //FIXME: tile.box should be used for everything
      tiler/0
      indoor/Indoor
      liquid/Liquid
@@ -47,7 +48,6 @@ type tile{As Main Type Role Id stack/0 gfxes/0
 | $empty <= not $id
 | when Cost and Cost.size: $cost <= Cost.group{2}{K,V=>"item_[K]",V}
 | when no $opaque: $opaque <= not $invisible
-| when $box.2><h: $box.2 <= $height*CellSize
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1
