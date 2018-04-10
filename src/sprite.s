@@ -102,7 +102,10 @@ init_frames S G =
   | when got Default: S.colors <= map R Rs: if R<>No then R else No
   //| say [S.name CM.size S.colors]
 | Fs = case S.frame_format
-  [`*` W H] | map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
+  [`*` W H]
+     | Xs = map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
+     | G.free
+     | Xs
   [list Ls]
      | Xs = map [N Rect] Ls:
        | [N G.cut{@Rect}]

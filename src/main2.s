@@ -24,7 +24,7 @@ type main{Data}
 | $credits <= t
 | say 'loading configuration'
 | $load_configuration
-| for K,V $cfg.main: $cfg.K <= V //for fast access
+| for K,V $cfg.main: $cfg.K <= V //easies access
 | say 'loading sprites'
 | $load_sprites
 | say 'loading sounds'
