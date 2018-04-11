@@ -26,7 +26,9 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
             frames/0 faces/0 anims/[`|` [idle [0 24]]] recolors/0
             class/0 margins/0 pick_height/0
             font/Font icon/0 shadow/0 form/[`|` [4]]
-            rect/[40 76 -4] size/[37 37 70]}
+            rect/[40 76 -4]
+            size/[37 37 70]
+            }
   id/0
   bank/Bank
   name/Name

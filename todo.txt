@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Get rid of isort_.s - optimize sprite drawing routine: instead of that fragile, complicated and N^2 slow C++ code, break every sprite into cubes on loading. That will order of magnitude speed up drawing of large number of tiles. First sort by Z, then by (X+Y)/2, units Z should be set to the top of its head.
+- Get rid of isort_.s - optimize sprite drawing routine: limit dependence sorting only to local tiles, if there is a unit standing in front of that tile, then draw it before the tile
 - Think about using quadtrees for sprite partitioning. That would also optimize drawing of sprites containing a lot of empty space and possibly animations, that have static content.
 - Autogeneration of incinerate and gibbed animations. For incinerate sprite first turns into ashes bottom up and then ash falls down.
 - Random map generation, based on matching tiles.
