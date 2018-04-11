@@ -50,6 +50,7 @@ type unit.$class{Id Site}
   genes/[] //active genes
   can_move //movement function
   aistate //how AI processes this unit
+  blitem //draw list structure associated with this unit.
 | $action <= $site.action{Me}
 | $next_action <= $site.action{Me}
 | $ordered <= $site.action{Me}

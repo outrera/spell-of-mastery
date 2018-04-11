@@ -10,6 +10,7 @@ CellsCost =  //movement cost to reach this cell
 CellsPrev =
 CellsFloor =
 CellsGate =
+CellsBlitem =
 SiteSize = 1 //max site size
 SiteDepth = 1
 CellsLineSize = 1
@@ -24,6 +25,8 @@ int.units = CellsUnits.Me
 int.`=units` V = CellsUnits.Me <= V
 int.gfx = CellsGfxes.Me
 int.`=gfx` V = CellsGfxes.Me <= V
+int.blitem = CellsBlitem.Me
+int.`=blitem` V = CellsBlitem.Me <= V
 int.block = CellsBlock.Me //unit blocking the tile
 int.`=block` V = CellsBlock.Me <= V
 int.vacant = $empty and not $block
@@ -160,16 +163,17 @@ site.init =
 | $c <= $cfg.cell_size
 | init_unit_module $c
 | $void <= $main.tiles.void
-| NCells = $maxSize*$maxSize*$d
+| $ncells = $maxSize*$maxSize*$d
 | Void = $void
-| CellsTile <= dup NCells Void
-| CellsUnits <= dup NCells []
-| CellsGfxes <= dup NCells 0
-| CellsBlock <= dup NCells 0
-| CellsCost <= dup NCells #FFFFFFFFFFFF
-| CellsPrev <= dup NCells 0
-| CellsFloor <= dup NCells 0
-| CellsGate <= dup NCells 0
+| CellsTile <= dup $ncells Void
+| CellsUnits <= dup $ncells []
+| CellsGfxes <= dup $ncells 0
+| CellsBlock <= dup $ncells 0
+| CellsCost <= dup $ncells #FFFFFFFFFFFF
+| CellsPrev <= dup $ncells 0
+| CellsFloor <= dup $ncells 0
+| CellsGate <= dup $ncells 0
+| CellsBlitem <= dup $ncells 0
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | MaxUnits = $cfg.max_units
 | $units <= MaxUnits{(unit ? Me)}
