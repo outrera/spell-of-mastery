@@ -27,7 +27,6 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
             class/0 margins/0 pick_height/0
             font/Font icon/0 shadow/0 form/[`|` [4]]
             rect/[40 76 -4]
-            size/[37 37 70]
             }
   id/0
   bank/Bank
@@ -45,7 +44,6 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   shadow/Shadow //shadow sprite or 0 if sprite doesnt cast shadow
   form //X,Y this sprite occupies
   rect/Rect //selection rect
-  size/Size
   recolors/Recolors //indices of recolorable colors
   colors/0
 | XYs = []
@@ -189,21 +187,21 @@ sprite.save How Dst =
   | for [R AnimName Dir XX YY] Rs:
     | R.save{"[Dst]/[Dir]-[AnimName]+[XX]+[YY].png"}
 | when How><sheet:
-  | Order = [idle move attack death hit]
-  | Order = Order.keep{O =>
+  | Anim = [idle move attack death hit]
+  | Anim = Anim.keep{O =>
       got Rs.find{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}}
   | MaxCol = 1
-  | for O Order: for D 3,6:
+  | for O Anim: for D 3,6:
     | Xs = Rs.keep{?2><D}
     | Xs = Xs.keep{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}
     | MaxCol <= max MaxCol Xs.size
-  | W = Order.size*2*WW
+  | W = Anim.size*2*WW
   | H = MaxCol*HH
   | G = gfx W H
   | G.clear{#FF000000} // transparent
   | Col = 0
   | Ls = []
-  | for O Order: for D 3,6:
+  | for O Anim: for D 3,6:
     | Xs = Rs.keep{?2><D}
     | Xs = Xs.keep{[_ AN @_]=>AN.size>>O.size and AN.take{O.size}><O}
     | Xs = Xs.sort{?1<??1}
