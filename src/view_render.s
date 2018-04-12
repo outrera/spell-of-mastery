@@ -1,4 +1,4 @@
-use gfx gui util widgets macros isort_ unit_flags stack
+use gfx gui util widgets macros unit_flags stack
 
 ScreenXY = [0 0]
 BrightFactor = 0
@@ -411,9 +411,9 @@ view.render_iso =
       | E = Explored.Y.X
       | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY
-| BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
-| BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
 | when $mice_click<>left or $brush.0:
+  | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
+  | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
   | render_cursor Me Wr BX BY $cursor
 | less BlitItems.end
   | $find_blit_deps
@@ -422,28 +422,6 @@ view.render_iso =
   | for X,B Xs: when B.deps.end:
     | O = B.object
     | O.draw{FB B}
-/*| less BlitItems.end
-  | DrawBoundingBox = $main.cfg.site.bounding_boxes><1
-  | BL = BlitItems.list
-  | isort_begin
-  | for I,B BL.i: isort_add I 0 B.x B.y B.z B.x2 B.y2 B.z2
-  | ResultSize = isort_end
-  | Result = isort_result
-  | less DrawBoundingBox: for I ResultSize:
-      | N = _ffi_get int Result I
-      | B = BL.N
-      | O = B.object
-      | O.draw{FB B}
-  | when DrawBoundingBox: for I ResultSize:
-      | N = _ffi_get int Result I
-      | B = BL.N
-      | O = B.object
-      | ZD = B.z2-B.z
-      | Color = if O.is_unit then #0000FF else #00FF00
-      | draw_bounding_box_back Color FB B
-      | O.draw{FB B}
-      | draw_bounding_box_front Color FB B
-  | isort_free_result*/
 | draw_picked_rects FB PickedRects.list.flip
 | draw_overlay FB Wr
 | less $brush.0: $handle_pick{UnitRects.list.flip}
