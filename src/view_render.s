@@ -10,7 +10,6 @@ XUnit =
 YUnit =
 ZUnit =
 CS =
-CS2 =
 Folded = 0
 Marked = 0
 Unexplored = 0
@@ -34,27 +33,29 @@ to_iso X Y Z = [X-Y (X+Y)/2-Z]
 */
 
 draw_bounding_box_front Color FB B =
-| ZD = B.z2-B.z
+| X2,Y2 = B.x-32, B.y-32
+| ZD = 32
 | P = ScreenXY
-| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
-| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
+| P2 = to_iso{X2 B.y B.z} - [0 ZD] + P
+| P3 = to_iso{B.x Y2 B.z} - [0 ZD] + P
 | P4 = to_iso{B.x B.y B.z} - [0 ZD] + P
-| P5 = to_iso{B.x2 B.y B.z} + P
-| P6 = to_iso{B.x B.y2 B.z} + P
+| P5 = to_iso{X2 B.y B.z} + P
+| P6 = to_iso{B.x Y2 B.z} + P
 | P7 = to_iso{B.x B.y B.z} + P
 | for A,B [P2,P4 P4,P3 P3,P6 P6,P7 P7,P5 P5,P2 P4,P7]
   | FB.line{Color A B}
 
 
 draw_bounding_box_back Color FB B =
-| ZD = B.z2-B.z
+| X2,Y2 = B.x-32, B.y-32
+| ZD = 32
 | P = ScreenXY
-| P1 = to_iso{B.x2 B.y2 B.z} - [0 ZD] + P
-| P2 = to_iso{B.x2 B.y B.z} - [0 ZD] + P
-| P3 = to_iso{B.x B.y2 B.z} - [0 ZD] + P
-| P5 = to_iso{B.x2 B.y B.z} + P
-| P6 = to_iso{B.x B.y2 B.z} + P
-| P8 = to_iso{B.x2 B.y2 B.z} + P
+| P1 = to_iso{X2 Y2 B.z} - [0 ZD] + P
+| P2 = to_iso{X2 B.y B.z} - [0 ZD] + P
+| P3 = to_iso{B.x Y2 B.z} - [0 ZD] + P
+| P5 = to_iso{X2 B.y B.z} + P
+| P6 = to_iso{B.x Y2 B.z} + P
+| P8 = to_iso{X2 Y2 B.z} + P
 | for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
   | FB.line{Color A B}
 
@@ -72,18 +73,18 @@ draw_text FB X Y Msg =
 | Font.draw{FB X Y Msg}
 | FB.zbuffer <= ZB
 
-type blit_item{object x y z x2 y2 z2}
+type blit_item{object x y z}
   id
   data
   sx sy // screen x,y
   flags
   brighten
-  lx ly
+  lx ly //light x,y
   deps/[] //what items must be drawn before this one
   cover/[] //what itms must be drwan after this one
 
-make_blit_item X Y Z XD YD ZD Object =
-| blit_item Object X Y Z X-XD/2 Y-YD/2 Z+ZD
+make_blit_item X Y Z Object =
+| blit_item Object X Y Z
 
 blit_item_from_unit Me =
 | X,Y,Z = $fxyz
@@ -92,9 +93,7 @@ blit_item_from_unit Me =
 | DDY = 2*DY-DDX
 | X += DDX
 | Y += DDY
-| XD,YD,ZD = $size
-| when $mirror: swap XD YD
-| BI = make_blit_item X Y Z+7 XD YD ZD Me //Z+7 is a hack to avoid cursor cluttering
+| BI = make_blit_item X Y Z+7 Me //Z+7 is a hack to avoid cursor cluttering
 | $blitem <= BI
 | BI
 
@@ -214,12 +213,12 @@ render_cursor Me Wr BX BY CursorXYZ =
   | TH = T.height
   | ZZ = Z*ZUnit
   | GH = if G then G.h else YUnit
-  | B = make_blit_item X*CS-2 Y*CS-2 Z*CS CS2 CS2 TH*CS
+  | B = make_blit_item X*CS-2 Y*CS-2 Z*CS
                        special_blit{box_back}
   | B.sx <= BX
   | B.sy <= BY-GH-ZZ
   | push B BlitItems
-  | B = make_blit_item X*CS Y*CS Z*CS+2 CS2 CS2 TH*CS
+  | B = make_blit_item X*CS Y*CS Z*CS+2
                        special_blit{box_front}
   | B.sx <= BX
   | B.sy <= BY-GH-ZZ
@@ -283,8 +282,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | G <= Folded
       else G <= 0
     | when G and Z>SkipZ:
-      | Box = T.box
-      | B = make_blit_item X*CS Y*CS Z*CS Box.0 Box.1 Box.2 T
+      | B = make_blit_item X*CS Y*CS Z*CS T
       | B.data <= G,Cell
       | B.sx <= BX
       | B.sy <= BY-G.h-ZZ
@@ -299,7 +297,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
   | Z <= UnitZ
 
 render_unexplored Me Wr X Y BX BY =
-| B = make_blit_item X*CS Y*CS 0 CS2 CS2 CS gfx_item{}
+| B = make_blit_item X*CS Y*CS 0 gfx_item{}
 | B.data <= Unexplored
 | B.sx <= BX
 | B.sy <= BY-$zunit-Unexplored.h
@@ -385,7 +383,6 @@ view.render_iso =
 | XUnit2 <= XUnit/2
 | YUnit2 <= YUnit/2
 | CS <= $d
-| CS2 <= CS*2
 | TX,TY = $blit_origin + [0 YUnit] + [0 Z]*ZUnit
 | VX,VY = $view_origin
 | when Wr.cycle < Wr.shake_end:

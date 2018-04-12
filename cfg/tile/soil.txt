@@ -3,7 +3,6 @@ match: any,cornerside
 lineup: 0
 dig: 1
 indoor: dirt
-box: (64 64 64)
 hp: 100
 water: water,soil_water
 stack: soil0,dirt1,soil2
