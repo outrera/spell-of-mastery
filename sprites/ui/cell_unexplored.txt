@@ -1,3 +1,3 @@
-author: `Tracy`
-license: `CC-BY`
-origin: `http://opengameart.org/content/cloud-npc`
+author: `Michael Bryant-Mode 'Michaelmode'`
+license: `Public Domain (CC0)`
+origin: `https://pixabay.com/en/airplane-clouds-lightning-aircraft-1876266/`
