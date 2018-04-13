@@ -141,6 +141,10 @@ unit.draw FB B =
   | G.rect{0 CY G.w CutH}
   | YY += CY
 | FB.blit{XX YY G}
+| for TB B.cover:
+  | TB.deps <= TB.deps.skip{$id}
+  | when TB.deps.end: TB.object.draw{FB TB}
+| $blitem <= 0
 | less $pickable: leave
 | RW,RH,RY = $sprite.rect
 | RX = X+XUnit2 - RW/2
@@ -148,7 +152,6 @@ unit.draw FB B =
 | UnitRects.push{[RX RY RW RH],Me}
 | less $picked: leave
 | PickedRects.push{[RX RY RW RH],Me}
-| $blitem <= 0
 
 
 PickCorner = 0
@@ -347,32 +350,46 @@ unit.add_dep Cell =
 | push Cell $blitem.deps
 | push Me CB.cover
 
-view.find_blit_deps =
-| for U BlitUnits:
-  | X,Y,ZZ = U.xyz
-  | C = U.cell+1
-  | Z = ZZ+1
-  | EndZ = min $d Z+3
-  | while C.invisible and Z<EndZ:
-    | U.add_dep{$site.cell{X-1 Y Z}}
-    | U.add_dep{$site.cell{X Y-1 Z}}
-    | U.add_dep{$site.cell{X-1 Y-1 Z}}
-    | C++
-    | Z++
-  | C = $site.cell{X Y+1 ZZ}+1
-  | EndZ <= Z
-  | Z <= ZZ+1
-  | while C.invisible and Z<EndZ:
-    | U.add_dep{$site.cell{X-1 Y+1 Z}}
-    | C++
-    | Z++
-  | C = $site.cell{X+1 Y ZZ}+1
-  | EndZ <= Z
-  | Z <= ZZ+1
-  | while C.invisible and Z<EndZ:
-    | U.add_dep{$site.cell{X+1 Y-1 Z}}
-    | C++
-    | Z++
+unit.find_blit_deps =
+| X,Y,ZZ = $xyz
+| C = $cell+1
+| Z = ZZ+1
+| EndZ = min $site.d Z+3
+| while C.invisible and Z<EndZ:
+  | $add_dep{$site.cell{X-1 Y Z}}
+  | $add_dep{$site.cell{X Y-1 Z}}
+  | $add_dep{$site.cell{X-1 Y-1 Z}}
+  | C++
+  | Z++
+| C = $site.cell{X Y+1 ZZ}+1
+| EndZ <= Z
+| Z <= ZZ+1
+| while C.invisible and Z<EndZ:
+  | $add_dep{$site.cell{X-1 Y+1 Z}}
+  | C++
+  | Z++
+| C = $site.cell{X+1 Y ZZ}+1
+| EndZ <= Z
+| Z <= ZZ+1
+| while C.invisible and Z<EndZ:
+  | $add_dep{$site.cell{X+1 Y-1 Z}}
+  | C++
+  | Z++
+| when $blitem.deps.end: leave
+| Cell = $site.cell{X+1 Y+1 ZZ}
+/*| less Cell.invisible:
+  | CB = Cell.blitem
+  | when CB:
+    | push $id CB.deps
+    | push CB $blitem.cover*/
+| for U Cell.units:
+  | CB = U.blitem
+  | when CB:
+    | push $id CB.deps
+    | push CB $blitem.cover
+
+
+view.find_blit_deps = for U BlitUnits: U.find_blit_deps
 
 view.render_iso =
 | Wr = $site

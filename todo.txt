@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Setup base map height to allow for underground tunnels.
+- Proper deep water tiling.
 - Random map generation, based on matching tiles.
 - fix tall sprites popping through the ceiling and walls by cutting their bliting
 - Think about using quadtrees for sprite partitioning. That would also optimize drawing of sprites containing a lot of empty space and possibly animations, that have static content.

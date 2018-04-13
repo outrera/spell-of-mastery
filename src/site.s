@@ -198,14 +198,15 @@ site.new_cost =
   | $cost <= #FFFFFF
 | $cost*#1000000
 
-site.create W H =
+site.create W H D Filler =
 | $w <= W
 | $h <= H
 | $w++
 | $h++
 | $clear
-| Filler = [$main.tiles.soil]
-| for Y $h: for X $w: $set_pilar{X Y Filler}
+| FillerTile = $main.tiles.Filler
+| FillerColumn = dup D FillerTile
+| for Y $h: for X $w: $set_pilar{X Y FillerColumn}
 | $w--
 | $h--
 | $create_borders
