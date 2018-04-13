@@ -20,6 +20,7 @@ Site =
 int.tile = CellsTile.Me
 int.`=tile` V = CellsTile.Me <= V
 int.empty = $tile.empty
+int.invisible = $tile.invisible
 int.type = $tile.type
 int.units = CellsUnits.Me
 int.`=units` V = CellsUnits.Me <= V

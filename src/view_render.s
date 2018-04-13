@@ -77,6 +77,7 @@ type blit_item{object x y z}
   id
   data
   sx sy // screen x,y
+  cut // cut this sprite height, to avoid obsucring units behind
   flags
   brighten
   lx ly //light x,y
@@ -134,6 +135,11 @@ unit.draw FB B =
 | G.brighten{B.brighten}
 //| G.light{B.lx B.ly}
 | G.alpha{$alpha}
+| when B.cut:
+  | CutH = 48
+  | CY = max G.h-48 0
+  | G.rect{0 CY G.w CutH}
+  | YY += CY
 | FB.blit{XX YY G}
 | less $pickable: leave
 | RW,RH,RY = $sprite.rect
@@ -261,6 +267,8 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | B.lx <= LX
         | B.ly <= LY
         | B.brighten <= Br
+        | B.cut <= U.foldable
+                   and not (TZ+2 < RoofZ and (AboveCursor or TZ+2 << ZCut))
         | push B BlitItems
         | push U BlitUnits
     else
@@ -333,7 +341,7 @@ draw_overlay FB Wr =
 ShakeXY = [[10 10] [0 10] [0 -10] [0 0] [-10 -10] [10 0] [-10 0]]
 
 unit.add_dep Cell =
-| when Cell.empty: leave
+| when Cell.invisible: leave
 | CB = Cell.blitem
 | when not CB: leave
 | push Cell $blitem.deps
@@ -345,7 +353,7 @@ view.find_blit_deps =
   | C = U.cell+1
   | Z = ZZ+1
   | EndZ = min $d Z+3
-  | while C.empty and Z<EndZ:
+  | while C.invisible and Z<EndZ:
     | U.add_dep{$site.cell{X-1 Y Z}}
     | U.add_dep{$site.cell{X Y-1 Z}}
     | U.add_dep{$site.cell{X-1 Y-1 Z}}
@@ -354,14 +362,14 @@ view.find_blit_deps =
   | C = $site.cell{X Y+1 ZZ}+1
   | EndZ <= Z
   | Z <= ZZ+1
-  | while C.empty and Z<EndZ:
+  | while C.invisible and Z<EndZ:
     | U.add_dep{$site.cell{X-1 Y+1 Z}}
     | C++
     | Z++
   | C = $site.cell{X+1 Y ZZ}+1
   | EndZ <= Z
   | Z <= ZZ+1
-  | while C.empty and Z<EndZ:
+  | while C.invisible and Z<EndZ:
     | U.add_dep{$site.cell{X+1 Y-1 Z}}
     | C++
     | Z++

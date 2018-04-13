@@ -1,10 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Break trees into tiles, so they could cut to uncover items behind them.
+- Setup base map height to allow for underground tunnels.
+- Random map generation, based on matching tiles.
+- fix tall sprites popping through the ceiling and walls by cutting their bliting
 - Think about using quadtrees for sprite partitioning. That would also optimize drawing of sprites containing a lot of empty space and possibly animations, that have static content.
 - Autogeneration of incinerate and gibbed animations. For incinerate sprite first turns into ashes bottom up and then ash falls down.
-- Random map generation, based on matching tiles.
 - Implement reagents and spell systems, then a menu to manage them at the start of the battle.
 - Make sure only reachable enemies will appear during the airship target selection phase.
 - present new sites in sequence, so player wont be overwhelmed by ton of new info. Also play some attention gaining sounds, like base placement and raiding party appearance.

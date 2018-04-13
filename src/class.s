@@ -10,7 +10,8 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
            ai/0 show/1 height/0
            passable/1 movable/0 counter/0 tier/0
            onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
-           platform/0 gate/0 ascendSpeed/4}
+           platform/0 gate/0 ascendSpeed/4
+           foldable/0}
   id                    //for unit counts table
   type/"[Bank]_[Class_name]"
   block/0               //acts as map block
@@ -51,6 +52,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   onMove/OnMove         //called when unit enters a cell
   platform/Platform     //increased tenants position on screen
   gate/Gate             //gateway, teleporting units to other cell
+  foldable/Foldable     //fold unit`s sprite when cursor is behind
 | when Spells: $acts <= [@$acts @Spells].list
 | when Summons: $acts <= [@$acts @Summons].list
 | when Rooms: $acts <= [@$acts @Rooms].list

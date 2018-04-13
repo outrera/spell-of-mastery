@@ -3,6 +3,8 @@ class: empty,0
       ,height,2
       ,ai,remove
       ,health,100
+      ,foldable,1
       ,hit,((effect spell) (sound (tree_hit1 tree_hit2)))
       ,death,((effect spell) (sound (tree_hit1 tree_hit2)) (sound tree_death)
-             (spawn_item (item_wood 10)))
+             //(spawn_item (item_wood 10))
+             )
