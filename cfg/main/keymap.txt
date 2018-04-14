@@ -5,7 +5,7 @@ down: s
 right: d
 floor_up: `e`
 floor_down: `q`
-pause: ` `
+pause: ` ` //remntant from the realtime prototype
 
 /*up: up
 left: left
@@ -13,14 +13,16 @@ down: down
 right: right*/
 
 edit_over_empty: v
-edit_bridge: b //hold this key while drawing to create a bridge
+edit_bridge: r //hold while drawing to create a bridge
 edit_zfix: p
 
-// following keys control placement height of objecy/tile
+// following keys control placement height of object/tile
 edit_up: `'`
 edit_down: `;`
+
 // following keys control how objects should be placed
 edit_place_mirrored: m
 edit_place_reversed: n
-edit_place_random: r
+edit_place_random: v //pick random tile from current bank
+edit_place_embed: b //tile replaces the tile under cursor
 edit_random_facing: z

@@ -1,9 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Proper deep water tiling.
 - Random map generation, based on matching tiles.
-- fix tall sprites popping through the ceiling and walls by cutting their bliting
+- fix tall sprites popping through the ceiling and walls by cutting their bliting from top or bottom
 - Think about using quadtrees for sprite partitioning. That would also optimize drawing of sprites containing a lot of empty space and possibly animations, that have static content.
 - Autogeneration of incinerate and gibbed animations. For incinerate sprite first turns into ashes bottom up and then ash falls down.
 - Implement reagents and spell systems, then a menu to manage them at the start of the battle.
@@ -14,6 +13,8 @@ TODO:
 - Finish minimap implementation, it should show only the current level and reduce saturation for levels below
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
+- Unit's height actually influencing its pathfinding.
+- Proper flyers, that can get above other units (if there is space) and do hit and run tactics.
 - Sound on failed attack on undead.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key. Unit deselecting would be done with selecting that unit again.
   That should help porting to touch devices.

@@ -187,6 +187,7 @@ place_tile Me Type =
 | Tile = $main.tiles.Type
 | IsBridge = $key{edit_bridge}
 | IsEmpty = $key{edit_over_empty} or Tile.empty
+| IsEmbed = $key{edit_place_embed}
 | when IsBridge
   | EmptyTile = $main.tiles.void
   | when LMB_Count<>AnchorHack:
@@ -201,7 +202,8 @@ place_tile Me Type =
   | till $site.at{X Y Z}.empty: Z++
   | $cursor.2 <= Z
 | less IsBridge
-  | if Tile.embed then
+  | when Tile.embed: IsEmbed <= not IsEmbed
+  | if IsEmbed then
       | when Tile.wall
         | Below = $site.at{X Y $cursor.2-1}
         | while $cursor.2 > 1 and (Below.around or Below.roof
@@ -218,12 +220,12 @@ place_tile Me Type =
           | site_place_tile_deco $site X Y $cursor.2 Tile
           | leave
     else
-      | when $site.at{X Y $cursor.2-1}.embed: 
+      | when $site.at{X Y $cursor.2-1}.embed and not Tile.embed: 
         | Z = $cursor.2-1
         | when AnchorHack<>LMB_Count:
           | $anchor.2 <= Z
           | AnchorHack <= LMB_Count
-        | while Z>>0 and $site.at{X Y Z}.embed:
+        | while Z>>0 and $site.at{X Y Z}.embed and not Tile.embed:
           | $site.set{X Y Z-- Tile owner/$site.human}
         | leave
   | AnchorHack <= LMB_Count

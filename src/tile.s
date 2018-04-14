@@ -7,7 +7,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
-          hit/0 death/0 embed/0}
+          hit/0 death/0 embed/0 flatGfx/0}
      id/Id
      main/Main
      bank/Bank
@@ -15,6 +15,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      role/Role
      stack/Stack //column base, middle, top segments
      gfxes/Gfxes
+     flatGfx/FlatGfx
      height/Height
      empty/0
      filler/Filler //true if tile fills space, matching with other tiles
@@ -27,8 +28,8 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      around/Around
      back/Back
      unit/Unit //used for units that act as platforms
-     heavy/Heavy
-     lineup/Lineup
+     heavy/Heavy //shapes the tile below into a cube
+     lineup/Lineup //shaped by tile above into a cube
      dig/Dig
      parts/Parts
      wallShift/WallShift //used for calcucalating door`s fine x,y
@@ -51,11 +52,6 @@ type tile{As Main Type Role Id stack/0 gfxes/0
     then | $parts <= @flip: map I $height-1
            | tile As Main Type Role Id @[parts -(I+1) @As]
     else $parts <= []
-
-transparentize Base Alpha =
-| Empty = 255
-| as R Base.copy
-  | for [X Y] points{0 0 64 64}: when X&&&1 >< Y&&&1: R.set{X Y Empty}
 
 DummyGfx = gfx 1 1
 
@@ -218,19 +214,22 @@ tile.render X Y Z Below Above Variation =
 | Lineup = 0
 | when AH and $lineup and ($lineup<>other or AR<>$role):
   | Lineup <= not Above.stack or AR <> $role
-| G = if Lineup
-      then | NeibSlope <= #@1111
-           | Gs.NeibSlope
-      else | Elev = $tiler{}{Site X Y Z Me}
-           | FB = TT.fallback
-           | when FB.0><Elev and FB.1><AH:
-             | Elev <= (FB.3){Site X Y Z Me}
-             //| when [X Y]><[2 3]: say [Z Elev]
-             | Gs <= FB.2.gfxes
-           | NeibSlope <= Elev.digits{2}
-           | R = Gs.NeibSlope
-           | less got R: R <= Gs.#@1111
-           | R
+| G = if AH and $flatGfx then
+         | NeibSlope <= #@1111
+         | $flatGfx
+      else if Lineup then
+         | NeibSlope <= #@1111
+         | Gs.NeibSlope
+      else
+         | Elev = $tiler{}{Site X Y Z Me}
+         | FB = TT.fallback
+         | when FB.0><Elev and FB.1><AH:
+           | Elev <= (FB.3){Site X Y Z Me}
+           | Gs <= FB.2.gfxes
+         | NeibSlope <= Elev.digits{2}
+         | R = Gs.NeibSlope
+         | less got R: R <= Gs.#@1111
+         | R
 | BelowSlope <= NeibSlope
 | when Limpid: leave 0
 | less $anim_wait: G <= G.(Variation%G.size)
@@ -280,9 +279,14 @@ main.load_tiles =
            | less I < NFrames:
              | bad "Tile `[Type]` wants missing frame [I] in `[SpriteName]`"
            | Frames.I
-    | It = Tile.alpha
-    | when got It: Gs <= Gs{(transparentize ? It)}
     | when Gs.size: Tile.gfxes.E <= Gs
+  | when got Tile.flatGfx:
+    | N = "tiles_[Tile.flatGfx]"
+    | Sprite = $sprites.N
+    | less got Sprite:
+      | bad "Tile [Type] references missing sprite [N]"
+    | G = Sprite.frames.0
+    | Tile.flatGfx <= dup 16 G
 | $tiles <= t size/1024
 | for K,V Tiles
   | Id = if K >< void then 0
