@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Random map generation, based on matching tiles.
+- sort function appears to be a bottleneck in rendering code, use C/C++ implementation
 - fix tall sprites popping through the ceiling and walls by cutting their bliting from top or bottom
 - Think about using quadtrees for sprite partitioning. That would also optimize drawing of sprites containing a lot of empty space and possibly animations, that have static content.
 - Autogeneration of incinerate and gibbed animations. For incinerate sprite first turns into ashes bottom up and then ash falls down.

@@ -19,6 +19,14 @@ site.place_part X Y P =
 | TM = P.tmap
 | for YY P.h: for XX P.w:
   | $set_pilar{1+X+XX 1+Y+YY TM.XX.YY}
+| for UD P.units
+  | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active] = UD
+  | U = $players.Owner.alloc_unit{Type}
+  | U.move{XYZ+[X Y 0]}
+  | when Facing.is_list:
+    | U.sprite <= $main.sprites.(Facing.0)
+    | Facing <= Facing.1
+  | U.pick_facing{Facing}
 
 site.generate W H =
 | $clear

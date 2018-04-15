@@ -401,7 +401,8 @@ view.update =
 | $site.update_cursor
 | when $brush.0: $update_brush
 | $update_play
-| less $paused: $main.update
+| less $paused:
+  | times I $main.cfg.ui.game_speed: $main.update
 | FinishTime = GUI.ticks
 | Wait = 1.0/$fpsGoal.float - (FinishTime-StartTime)
 | when Wait > 0.0: $wakeupTime <= FinishTime+Wait
