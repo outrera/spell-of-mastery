@@ -106,7 +106,6 @@ type site{main}
    actors/heapval{[]} // currently acting unit
    players
    human // human controlled player
-   tid_map/Main.tid_map
    void
    shadow
    cycle // counts calls to site.update
@@ -656,7 +655,7 @@ site.updPilarGfxes X Y =
 | Var = $variation.Y.X
 | Z = 0
 | H = $height{X Y}
-| Below = $tid_map.0
+| Below = $main.tid_map.0
 | T = Cell.tile
 | while Z < H:
   | TH = T.height

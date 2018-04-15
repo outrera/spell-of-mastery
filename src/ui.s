@@ -589,13 +589,18 @@ ui.process_input Base In =
     | $hotKeyInvoke <= 1
     | Icon.on_click{}{Icon}
 
+ui.generate W H =
+| $site.generate{W H}
+| $view.clear
+
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
 | $savesFolder <= "[$data][$savesFolder]"
 | $menuBG <= $img{ui_menu_bg}
 | $panelBG <= $img{ui_panel}
 | $view <= view $main Me $width $height-($panelBG.h-10)
-| $create{10 10}
+//| $create{10 10}
+| $generate{6 6}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg

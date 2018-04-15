@@ -1,35 +1,37 @@
 use util
 
-Rooms = list
-  '+ . . . +
-   . _ _ _ .
-   . _ _ _ .
-   . _ _ _ .
-   + . _ . +'
+Parts = [pond grass rocks]
 
-type room{w h lines}
+type site_part{name w h tmap} units/[]
 
-room.draw W SX SY SZ = 
-| Wall = W.main.tiles.wall
-| Bricks = W.main.tiles.bricks
-| Void = W.main.tiles.void
-| for X,Y points{0 0 $w $h}:
-  | C = $lines.Y.X
-  | Tile = case C '+'(Bricks) '.'(Wall) Else(Void)
-  | when Tile.id: W.dirty_set{SX+X SY+Y SZ Tile}
+site.load_part Name =
+| Path = "[$main.data]/work/sites/[Name].txt"
+| File = Path.get
+| less got File: bad "cant load [Path]"
+| Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table
+| P = site_part Name Saved.w Saved.h $load_tile_map{Saved}
+| P.units <= Saved.units
+| P
 
-Rooms <= map R Rooms
-         | Ls = R.skip{' '}.lines
-         | W = Ls.0.size
-         | H = Ls.size
-         | less Ls.all{?size >< W}: bad 'room [R]'
-         | room W H Ls
+site.place_part X Y P =
+| X *= 10
+| Y *= 10
+| TM = P.tmap
+| for YY P.h: for XX P.w:
+  | $set_pilar{1+X+XX 1+Y+YY TM.XX.YY}
 
 site.generate W H =
 | $clear
-| $w <= W
-| $h <= H
-| for P points{0 0 $w $h}: $push_{P $filler}
-| Rooms.0.draw{Me 1 1 1}
-| Rooms.0.draw{Me 1 1 5}
+| $w <= W*10
+| $h <= H*10
+| $filename <= "default"
+| $name <= "Default"
+| $description <= ""
+| $serial <= 0
+| Parts <= map P Parts: P,$load_part{P}
+| for Y H: for X W: 
+  | P = Parts.0.1
+  //| P = Parts.rand.1
+  | $place_part{X Y P}
+| $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}

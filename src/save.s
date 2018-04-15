@@ -44,13 +44,17 @@ site.save =
 | $data.turn <= $turn
 | $data.player <= $player
 | $data.paused <= $paused
+| Explored = No
+| less $editor:
+  | map Id,Active ActivePlayers.i.keep{?.1}
+    | [Id $players.Id.sight{}{X=>rle_encode X}]
 | list version(0.2) w($w) h($h) serial($serial) cycle($cycle) seed($seed)
     filename | $filename
     name | $name
     description | $description
     data | map [K V] $data [K V]
     events | $events{}{?1}
-    tids | $tid_map{}{?type}
+    tids | $main.tid_map{}{?type}
     players | map P $players
               | [P.id P.name P.human 0 P.picked{}{?id} 0
                  P.data.list P.research.list.keep{?1} P.mana]
@@ -61,27 +65,9 @@ site.save =
               | YY = Y+1
               | Ts = $pilar{XX YY}
               | map T Ts: if T.parts.is_int then T.parts else T.id
-    explored | map Id,Active ActivePlayers.i.keep{?.1}
-               | [Id $players.Id.sight{}{X=>rle_encode X}]
+    explored | Explored
     enabled | map Name,Act $main.acts: Name,Act.players
 
-main.save Path = Path.set{$site.save.as_text}
-
-remap_tids Me LookupTable Xs =
-| TidMap = $tid_map
-| LookupTable = LookupTable{TidMap.?}
-| map Ys Xs: map Zs Ys:
-  | Rs = dup Zs.size
-  | times Z Zs.size:
-    | Id = Zs.Z
-    | when Id >> 0:
-      | T = LookupTable.Id
-      | Rs.Z <= T
-      | H = T.height-1
-      | Ps = T.parts
-      | Z = Z-H
-      | when H>0: times I H: Rs.(Z+I) <= Ps.I
-  | Rs
 
 site.deserialize_unit IdMap X =
 | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active] = X
@@ -124,6 +110,27 @@ site.deserialize_unit IdMap X =
 | when U.ai >< pentagram: U.owner.pentagram <= U
 | IdMap.Id <= U
 
+remap_tids TidMap LookupTable Xs =
+| LookupTable = LookupTable{TidMap.?}
+| map Ys Xs: map Zs Ys:
+  | Rs = dup Zs.size
+  | times Z Zs.size:
+    | Id = Zs.Z
+    | when Id >> 0:
+      | T = LookupTable.Id
+      | Rs.Z <= T
+      | H = T.height-1
+      | Ps = T.parts
+      | Z = Z-H
+      | when H>0: times I H: Rs.(Z+I) <= Ps.I
+  | Rs
+
+site.load_tile_map Saved =
+| TidMap = $main.tid_map
+| TypeTids = TidMap{?type,?id}.table
+| LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
+| remap_tids TidMap LookupTable Saved.tilemap
+
 site.load Saved =
 | $clear
 | $w <= Saved.w
@@ -139,9 +146,7 @@ site.load Saved =
 | $turn <= $data.turn
 | $player <= $data.player
 | $paused <= $data.paused
-| TypeTids = $main.tid_map{}{?type,?id}.table
-| LookupTable = Saved.tids{}{TypeTids.?}.replace{No 0}
-| Tilemap = remap_tids Me LookupTable Saved.tilemap
+| Tilemap = $load_tile_map{Saved}
 | for X $w: for Y $h: $set_pilar{X+1 Y+1 Tilemap.X.Y}
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
@@ -189,6 +194,8 @@ site.load Saved =
 | for P $players: P.picked <= (P.data.picked){IdMap.?}
 | for Name,Flags Saved.enabled^~{No []}:
   | when got Acts.Name: Acts.Name.players <= Flags
+
+main.save Path = Path.set{$site.save.as_text}
 
 main.load Path =
 | File = Path.get
