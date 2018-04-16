@@ -416,11 +416,13 @@ view.render_iso =
   | Unexplored <= Wr.main.img{ui_cell_unexplored}
 | times YY VS
   | Y = YY + VY
+  | XXX = TX - YY*XUnit2
+  | YYY = TY + YY*YUnit2
   | when 0<Y and Y<<WH: times XX VS:
     | X = XX + VX
     | when 0<X and X<<WW: // FIXME: move this out of the loop
-      | BX = TX + XX*XUnit2 - YY*XUnit2
-      | BY = TY + XX*YUnit2 + YY*YUnit2
+      | BX = XXX + XX*XUnit2
+      | BY = YYY + XX*YUnit2
       | E = Explored.Y.X
       | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
         else render_unexplored Me Wr X Y BX BY
@@ -429,12 +431,11 @@ view.render_iso =
   | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
   | render_cursor Me Wr BX BY $cursor
 | less BlitItems.end
+  | BlitItems <= BlitItems.list
   | $find_blit_deps
-  | Xs = BlitItems{B=>[(B.x+B.y+B.z)*1000 - B.z B]}
-  | Xs <= Xs.sort{A B => A.0<B.0}
-  | for X,B Xs: when B.deps.end:
-    | O = B.object
-    | O.draw{FB B}
+  | for B BlitItems: B.id <= (B.x+B.y+B.z)*1000 - B.z
+  | Bs = BlitItems.qsort_{A B => A.id<B.id}
+  | for B Bs: when B.deps.end: B.object.draw{FB B}
 | draw_picked_rects FB PickedRects.list.flip
 | draw_overlay FB Wr
 | less $brush.0: $handle_pick{UnitRects.list.flip}
@@ -461,14 +462,15 @@ view.render_frame =
 
 // calculates current framerate and adjusts sleeping accordingly
 view.calc_fps StartTime FinishTime =
+| DT = FinishTime-StartTime
+| $fpsT += DT
 | when $frame%24 >< 0
-  | T = StartTime
-  | $fps <= @int 24.0/(T - $fpsT)
+  | $fps <= @int 24.0/$fpsT
+  | $fpsT <= 0.0
   | when $fps < $fpsGoal and $fpsD < $fpsGoal.float*2.0: $fpsD += 1.0
   | when $fps > $fpsGoal and $fpsD > $fpsGoal.float/2.0: $fpsD -= 1.0
-  | $fpsT <= T
 | $frame++
-| SleepTime = 1.0/$fpsD - (FinishTime-StartTime)
+| SleepTime = 1.0/$fpsD - DT
 | SleepTime
 
 view.draw FB X Y =
@@ -480,9 +482,7 @@ view.draw FB X Y =
 | $update
 | $render_frame
 | FinishTime = GUI.ticks
-| when $wakeupTime<<FinishTime:
-  | SleepTime = $calc_fps{StartTime FinishTime}
-  //| when SleepTime > 0.0: get_gui{}.sleep{SleepTime}
+| $calc_fps{StartTime FinishTime}
 | $fb <= 0 //no framebuffer outside of view.draw
 
 view.render = Me

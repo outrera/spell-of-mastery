@@ -11,5 +11,3 @@ explored: 1 //all maps are explored from the beginning
 start_mana: 10
 start_lore: 10
 bounding_boxes: 0
-excavate_ttl: 1440 //24*60=1440
-build_ttl: 1440 //24*60=1440

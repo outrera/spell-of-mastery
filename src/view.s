@@ -69,12 +69,13 @@ view.clear =
 | $wakeupTime <= 0.0
 | $zlock <= 0
 | $zfix <= 1
-| $center_at{[0 0 0]}
 | $blit_origin.init{[$w/2 $h/2-170]-[32 $view_size/4*$zunit]}
 | $mice_xy.init{[0 0]}
 | $mice_xy_anchor.init{[0 0]}
-| $cursor.init{[1 1 1]}
-| $anchor.init{[1 1 1]}
+| CurZ = $site.floor{1,1,1}
+| $cursor.init{[1 1 CurZ]}
+| $anchor.init{[1 1 CurZ]}
+| $center_at{$cursor}
 | $mice_click <= 0
 | $pick_count <= 0
 | Leader = $player.leader
