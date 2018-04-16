@@ -80,7 +80,6 @@ type blit_item{object x y z}
   cut // cut this sprite height, to avoid obsucring units behind
   flags
   brighten
-  lx ly //light x,y
   deps/[] //what items must be drawn before this one
   cover/[] //what itms must be drwan after this one
 
@@ -119,7 +118,6 @@ unit.draw FB B =
   | I = min (ZZ/16).abs S.size-1
   | SGfx = S.I
   | SGfx.brighten{B.brighten}
-//  | SGfx.light{B.lx B.ly}
   | FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
 | Colors = $colors
 | when Colors:
@@ -133,7 +131,6 @@ unit.draw FB B =
   | YY -= 16
   | Y -= 16
 | G.brighten{B.brighten}
-//| G.light{B.lx B.ly}
 | G.alpha{$alpha}
 | when B.cut:
   | CutH = 48
@@ -191,7 +188,6 @@ tile.draw FB BlitItem =
 | Cell.blitem <= 0
 | when B.flags&&&#40: G.dither{1}
 | G.brighten{B.brighten}
-//| G.light{B.lx B.ly}
 | FB.blit{B.sx B.sy G}
 | for U B.cover:
   | UB = U.blitem
@@ -246,11 +242,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | Fog = Explored><1
 | Br = @int -([CurX CurY]-[X Y]).abs
 | Br *= BrightFactor
-| LXY = (to_iso{X*8 Y*8 0}-to_iso{CurX*8 CurY*8 0}){?float}
-| LXY = LXY{?int} ///(LXY*256.0/LXY.abs){?int}
-| LX,LY = LXY
-| LX = LX.clip{-127 127}
-| LY = LY.clip{-127 127}
 | SkipZ = -1//if $brush.0 then -1 else 0
 | Us = Wr.column_units_get{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
@@ -267,8 +258,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | BX,BY = ScreenXY + to_iso{FX FY FZ}
         | B.sx <= BX - XUnit2
         | B.sy <= BY
-        | B.lx <= LX
-        | B.ly <= LY
         | B.brighten <= Br
         | B.cut <= U.foldable
                    and not (TZ+2 < RoofZ and (AboveCursor or TZ+2 << ZCut))
@@ -277,33 +266,33 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
     else
 | Cell = Wr.cell{X Y 0}
 | EndZ = min RoofZ Wr.height{X Y}
+| FBW = $fb.w
+| FBH = $fb.h
 | while Z < EndZ:
   | G = Cell.gfx
   | T = Cell.tile
   | TH = T.height
-  | ZZ = Z*ZUnit
-  | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
   | UnitZ <= Z + TH
-  | TZ = UnitZ - 1
-  | less T.invisible
-    | G = G
-    | if AboveCursor or TZ << ZCut then
-      else if not DrawnFold then
-        | DrawnFold <= 1
-        | G <= Folded
-      else G <= 0
-    | when G and Z>SkipZ:
-      | B = make_blit_item X*CS Y*CS Z*CS T
-      | B.data <= G,Cell
-      | B.sx <= BX
-      | B.sy <= BY-G.h-ZZ
-      | B.lx <= LX
-      | B.ly <= LY
-      | B.brighten <= Br
-      //| B.brighten <= LM.at{X Y Z}
-      | when Fog: B.flags <= #40 //dither
-      | push B BlitItems
-      | Cell.blitem <= B
+  | when G:
+    | ZZ = Z*ZUnit
+    | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
+    | TZ = UnitZ - 1
+    | SY = BY-ZZ
+    | less SY < 0 or BX < -64 or BX>FBW or SY>FBH or T.invisible:
+      | if AboveCursor or TZ << ZCut then
+        else if not DrawnFold then
+          | DrawnFold <= 1
+          | G <= Folded
+        else G <= 0
+      | when G and Z>SkipZ:
+          | B = make_blit_item X*CS Y*CS Z*CS T
+          | B.data <= G,Cell
+          | B.sx <= BX
+          | B.sy <= SY-G.h
+          | B.brighten <= Br
+          | when Fog: B.flags <= #40 //dither
+          | push B BlitItems
+          | Cell.blitem <= B
   | Cell += TH
   | Z <= UnitZ
 
