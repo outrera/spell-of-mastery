@@ -13,7 +13,8 @@ CS =
 Folded = 0
 Marked = 0
 Unexplored = 0
-
+NDrawnUnits = 0
+NDrawnTiles = 0
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
@@ -101,6 +102,7 @@ UnitRects = 0
 PickedRects = 0
 
 unit.draw FB B =
+| NDrawnUnits++
 | X = B.sx
 | Y = B.sy
 | G = $frame
@@ -182,7 +184,7 @@ draw_picked_rects FB PickedRects =
       | XX += 16
 
 tile.draw FB BlitItem =
-//| leave
+| NDrawnTiles++
 | B = BlitItem
 | G,Cell = B.data
 | Cell.blitem <= 0
@@ -447,9 +449,12 @@ view.render_frame =
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
 | InfoText = []
-| when $cfg.show_frame: push "frame=[$frame]" InfoText
-| when $cfg.show_cycle: push "cycle=[$site.cycle]" InfoText
-| when $cfg.show_fps: push "fps=[$fps]" InfoText
+| when $cfg.show_frame: push "Frame=[$frame]" InfoText
+| when $cfg.show_cycle: push "Cycle=[$site.cycle]" InfoText
+| when $cfg.show_fps: push "FPS=[$fps]" InfoText
+| when $cfg.show_load:
+  | push "DrawnTiles=[NDrawnTiles]" InfoText
+  | push "DrawnUnits=[NDrawnUnits]" InfoText
 | $infoText.value <= InfoText.infix{'; '}.text
 | $infoText.render.draw{$fb 200 ($h-50)}
 | $infoText.value <= ''
@@ -468,6 +473,8 @@ view.calc_fps StartTime FinishTime =
 
 view.draw FB X Y =
 | $fb <= FB
+| NDrawnTiles <= 0
+| NDrawnUnits <= 0
 | GUI = get_gui
 | StartTime = GUI.ticks
 | $update

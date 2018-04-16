@@ -4,7 +4,8 @@ fps: 24
 show_fps: 0
 show_cycle: 0
 show_frame: 0
-game_speed: 4 // game cycles (updates) per frame
+show_load: 1
+game_speed: 2 // game cycles (updates) per frame
 scroll_speed: 1
 debug: 1
 max_notes: 4 //number of simultaneous notifications on screen
