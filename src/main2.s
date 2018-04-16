@@ -55,7 +55,7 @@ type main{Data}
                "\n\n\nTHANKS TO:\n"
                "  Matthew Ostil\n"
               ]
-//| $sprites.unit_katzard.save{frames "work/sd/katzard"}; halt
+//| $sprites.unit_cyclops.save{frames "work/sd/cyclops"}; halt
 | $init_unit_flags
 | site Me
 
