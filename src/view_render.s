@@ -368,11 +368,11 @@ unit.find_blit_deps =
   | Z++
 | when $blitem.deps.end: leave
 | Cell = $site.cell{X+1 Y+1 ZZ}
-/*| less Cell.invisible:
+| less Cell.invisible:
   | CB = Cell.blitem
   | when CB:
     | push $id CB.deps
-    | push CB $blitem.cover*/
+    | push CB $blitem.cover
 | for U Cell.units:
   | CB = U.blitem
   | when CB:
