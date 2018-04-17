@@ -233,21 +233,23 @@ render_cursor Me Wr BX BY CursorXYZ =
   | Z <= UnitZ
 
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
+| FBW = $fb.w
+| when BY < 0 or BX < -64 or BX>FBW: leave
+| FBH = $fb.h
+| EndZ = min RoofZ Wr.height{X Y}
+| when BY-((EndZ-1)*ZUnit) > FBH: leave
 | DrawnFold = 0
 | CurX,CurY,CurZ = CursorXYZ
 | CurH = (CurX+CurY)/2
 | XY2 = (X+Y)/2
 | AboveCursor = CurH >> XY2
 | ZCut = max CurZ 0
-| Z = 0
-| UnitZ = 0
 | Fog = Explored><1
 | Br = @int -([CurX CurY]-[X Y]).abs
 | Br *= BrightFactor
 | SkipZ = -1//if $brush.0 then -1 else 0
 | Us = Wr.column_units_get{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
-//| draw_text FB BX+XUnit2 BY-ZUnit*Z-20 "[Explored]"
 | for U Us:
   | if U.frame.w > 1 then
     | XYZ = U.xyz
@@ -267,20 +269,19 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | push U BlitUnits
     else
 | Cell = Wr.cell{X Y 0}
-| EndZ = min RoofZ Wr.height{X Y}
-| FBW = $fb.w
-| FBH = $fb.h
-| while Z < EndZ:
+| NextZ = 0
+| while NextZ < EndZ:
+  | Z = NextZ
   | G = Cell.gfx
   | T = Cell.tile
   | TH = T.height
-  | UnitZ <= Z + TH
+  | NextZ <= Z + TH
   | when G:
-    | ZZ = Z*ZUnit
+    | SZ = Z*ZUnit
     | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
-    | TZ = UnitZ - 1
-    | SY = BY-ZZ
-    | less SY < 0 or BX < -64 or BX>FBW or SY>FBH or T.invisible:
+    | TZ = NextZ - 1
+    | SY = BY-SZ
+    | less SY>FBH:
       | if AboveCursor or TZ << ZCut then
         else if not DrawnFold then
           | DrawnFold <= 1
@@ -296,7 +297,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
           | push B BlitItems
           | Cell.blitem <= B
   | Cell += TH
-  | Z <= UnitZ
 
 render_unexplored Me Wr X Y BX BY =
 | B = make_blit_item X*CS Y*CS 0 gfx_item{}
