@@ -5,10 +5,12 @@ order_at Me XYZ =
 | U = $picked
 | when not U.id or U.owner.id <> Player.id: leave
 | $site.visual{XYZ ack}
+| $site.last_picked <= 0
 | U.order_at{XYZ 0}
 
 view.handle_picked_act2 Actor Act XYZ Target =
 | when Target: $site.blink.init{[4 Target]}
+| $site.last_picked <= 0
 | when Act.menu:
   | when Act.onMenu: Actor.effect{Act.onMenu Target XYZ}
   | Actor.set{menu [Act.name XYZ if Target then Target.serial else No]}
@@ -58,6 +60,7 @@ view.handle_pick =
   | $mice_click <= 0
   | when Unit.id: $main.sound{ui_click}
   | $picked <= Unit
+  | $site.last_picked <= 0
   | leave
 
 view.siteToView P =
@@ -288,9 +291,9 @@ site.set_mark XYZ Bless Type =
 | $marks.push{M}
 | M
 
-site.update_picked RecentlyClicked =
+site.update_picked =
 | U = $human.picked
-| ClearBlessed = RecentlyClicked or $last_picked<>U.serial
+| ClearBlessed = not U.id or not U.idle or $last_picked<>U.serial
 | $clear_marks{ClearBlessed}
 | less ClearBlessed: leave
 | less U.id: leave
@@ -386,8 +389,7 @@ view.update =
     | $key_set{edit_zfix 0}
 | X,Y,Z = $cursor
 | less $brush.0: $handle_pick
-| $site.update_picked{$recently_clicked}
-| $recently_clicked <= 0
+| $site.update_picked
 | $site.update_cursor
 | when $brush.0: $update_brush
 | $update_play
@@ -428,7 +430,6 @@ view.input In =
             | $cursor.2 <= NewZ
           | NewZ--
   [mice left State XY]
-    | $recently_clicked <= 1
     | LMB_Count++
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
@@ -436,7 +437,6 @@ view.input In =
       else when $site.at{@$cursor}.empty: $cursor.2 <= $floor{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
-    | $recently_clicked <= 1
     | $zfix <= 1
     | $mice_click <= if State then \right else \rightup
     | if State then $anchor.init{$cursor}
@@ -445,7 +445,6 @@ view.input In =
            | $anchor.init{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [key Name S]
-    | $recently_clicked <= 1
     | $keys.Name <= S
 | when $brush.0: $mice_xy_anchor.init{$mice_xy}
 

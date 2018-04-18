@@ -51,6 +51,7 @@ player.end_turn =
 | for U $units: U.end_turn
 
 site.end_turn =
+| $last_picked <= 0
 | $players.$player.end_turn
 | $player++
 | when $player >< $players.size:
