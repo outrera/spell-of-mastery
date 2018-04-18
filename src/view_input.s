@@ -1,29 +1,11 @@
 use macros util gui
 
-PickCount = 0
-
-order_at Me XYZ Target =
+order_at Me XYZ =
 | Player = $player
-| Us = $picked.keep{U => U.owner.id >< Player.id}
-| when Us.size: $site.visual{XYZ ack}
-| Us = Us{U=>[(XYZ-U.xyz).abs U]}.sort{?0<??0}{?1}
-| Used = []
-| less Target and Target.owner.is_enemy{Player}: Target <= 0
-| Cell = $site.cell{@XYZ}
-| when Us.size><1: less Target:
-  | Below = (Cell-1).tile
-  | when Below.unit and (Cell-Below.height).block.ai><remove:
-    | U = Us.0
-    | XYZ = Cell.xyz
-    | U.order_at{XYZ 0}
-    | leave
-| for U Us:
-  | P = Cell
-  | less Target: less Used.end:
-    | Found = $site.find{1000 U Cell | Dst => no Used.find{Dst}}
-    | when Found: P <= Found
-  | U.order_at{P.xyz 0}
-  | push P Used
+| U = $picked
+| when not U.id or U.owner.id <> Player.id: leave
+| $site.visual{XYZ ack}
+| U.order_at{XYZ 0}
 
 view.handle_picked_act2 Actor Act XYZ Target =
 | when Target: $site.blink.init{[4 Target]}
@@ -47,11 +29,14 @@ view.handle_picked_act Target =
 | $site.act <= 0
 | $mice_click <= 0
 
-view.handle_picked Rect Units =
-| $ui.on_unit_pick{$picked}
+
+view.handle_pick =
+| Unit = $site.nil
+| when@@it $site.cell{@$cursor}.block: Unit <= it
 | Player = $player
-| Units = Units.keep{U=>Player.seen{U.xyz}}
-| Target = if Units.end then 0 else Units.0
+| less Player.seen{Unit.xyz}: Unit <= $site.nil
+| $ui.on_unit_pick{$picked}
+| Target = if Unit.id then Unit else 0
 | when $site.act:
   | $handle_picked_act{Target}
   | leave
@@ -65,28 +50,15 @@ view.handle_picked Rect Units =
   | $mice_click <= 0
   | XYZ = $cursor
   | less $paused:
-    | if not Target then order_at Me $cursor 0
+    | if not Target then order_at Me $cursor
       else | $site.blink.init{[4 Target]}
-           | order_at Me Target.xyz Target
+           | order_at Me Target.xyz
   | leave
 | when $mice_click >< pick:
   | $mice_click <= 0
-  | Picked = []
-  | NewPicked = Units
-  | when Rect:
-    | $picked <= [@NewPicked @Picked]
-    | leave
-  | when NewPicked.size>1:
-    | NewPicked <= [NewPicked.(PickCount%NewPicked.size)]
-    | PickCount++
-  | less NewPicked.end: $main.sound{ui_click}
-  | $picked <= [@NewPicked @Picked]
+  | when Unit.id: $main.sound{ui_click}
+  | $picked <= Unit
   | leave
-
-view.handle_pick UnitRects =
-| Units = []
-| when@@it $site.cell{@$cursor}.block: Units <= [it]
-| $handle_picked{0 Units}
 
 view.siteToView P =
 | X,Y = P - $view_origin
@@ -282,7 +254,7 @@ view.update_brush =
 view.update_play =
 | less $brush.0: case $mice_click
   leftup | $mice_click <= \pick
-  right | when $picked.size:
+  right | when $picked.id:
           | $mice_click <= \order
         | when $site.act:
           | $site.act <= 0
@@ -290,13 +262,17 @@ view.update_play =
   rightup
     | $mice_click <= 0
 
-site.clear_marks =
+site.clear_marks ClearBlessed =
+| ReAdd = []
 | for M $marks.list:
-  | M.remove
-  | $free_marks.push{M}
+  | if ClearBlessed or not M.blessed then
+      | M.remove
+      | $free_marks.push{M}
+    else push M ReAdd
 | $marks.clear
+| for M ReAdd: $marks.push{M}
 
-site.set_mark XYZ Type =
+site.set_mark XYZ Bless Type =
 | M = 0
 | if $free_marks.used then
     | M <= $free_marks.pop
@@ -308,17 +284,22 @@ site.set_mark XYZ Type =
     | M <= $human.alloc_unit{Type}
     | M.mark <= 1
 | M.move{XYZ}
+| M.blessed <= Bless
 | $marks.push{M}
 | M
 
-site.update_picked =
-| $clear_marks
-| less $human.picked.size: leave
-| U = $human.picked.0
-| less U.idle: leave
-| Marks = []
+site.update_picked RecentlyClicked =
+| U = $human.picked
+| ClearBlessed = RecentlyClicked or $last_picked<>U.serial
+| $clear_marks{ClearBlessed}
+| less ClearBlessed: leave
+| less U.id: leave
+| less U.idle:
+  | $last_picked <= 0
+  | leave
+| $last_picked <= U.serial
 | less $act:
-  | for What,Cell U.reachable: $set_mark{Cell.xyz "mark_[What]"}
+  | for What,Cell U.reachable: $set_mark{Cell.xyz 1 "mark_[What]"}
   | leave
 | when $act.range >> 9000: leave
 | UX,UY,UZ = U.xyz
@@ -329,7 +310,7 @@ site.update_picked =
     | Cell = $cell{XX YY 1}
     | while Cell.z < $d-1:
       | if Cell.empty then
-          | $set_mark{Cell.xyz mark_cast}
+          | $set_mark{Cell.xyz 1 mark_cast}
           | while Cell.z < $d-1 and Cell.empty: Cell++
         else
           | while Cell.z < $d-1 and not Cell.empty: Cell++
@@ -340,9 +321,9 @@ site.update_cursor =
 | CXYZ = View.cursor
 | P = $human
 | if $act
-  then | $set_mark{CXYZ mark_cursor_target}
-  else | $set_mark{CXYZ mark_cursor0}
-       | $set_mark{CXYZ mark_cursor1}
+  then | $set_mark{CXYZ 0 mark_cursor_target}
+  else | $set_mark{CXYZ 0 mark_cursor0}
+       | $set_mark{CXYZ 0 mark_cursor1}
 | case View.brush
   [obj Bank,Type]
     | Mirror = View.key{edit_place_mirrored}
@@ -359,7 +340,7 @@ site.update_cursor =
       | Class = $main.classes.ClassName
       | Facing = if Mirror then 5 else 3
       | when Reverse: Facing <= if Mirror then 1 else 6
-      | M = $set_mark{XYZ mark_cube}
+      | M = $set_mark{XYZ 0 mark_cube}
       | M.sprite <= Class.default_sprite
       | M.animate{idle}
       | M.pick_facing{Facing}
@@ -404,7 +385,9 @@ view.update =
     | $zfix <= 1
     | $key_set{edit_zfix 0}
 | X,Y,Z = $cursor
-| $site.update_picked
+| less $brush.0: $handle_pick
+| $site.update_picked{$recently_clicked}
+| $recently_clicked <= 0
 | $site.update_cursor
 | when $brush.0: $update_brush
 | $update_play
@@ -445,6 +428,7 @@ view.input In =
             | $cursor.2 <= NewZ
           | NewZ--
   [mice left State XY]
+    | $recently_clicked <= 1
     | LMB_Count++
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
@@ -452,6 +436,7 @@ view.input In =
       else when $site.at{@$cursor}.empty: $cursor.2 <= $floor{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
+    | $recently_clicked <= 1
     | $zfix <= 1
     | $mice_click <= if State then \right else \rightup
     | if State then $anchor.init{$cursor}
@@ -460,6 +445,7 @@ view.input In =
            | $anchor.init{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [key Name S]
+    | $recently_clicked <= 1
     | $keys.Name <= S
 | when $brush.0: $mice_xy_anchor.init{$mice_xy}
 

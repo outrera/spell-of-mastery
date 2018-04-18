@@ -32,7 +32,8 @@ type player{id site}
    pentagram
    data/(t)
    research/(t) //research and latency
-   picked_ //picked units
+   picked_unit
+   picked_serial
    sight // fog of war
    total_units
    unit_counts // counts uwned units for each unit type
@@ -53,14 +54,14 @@ type player{id site}
 
 player.color = PlayerColors.$id
 
-player.picked = $picked_.unheap{}.keep{?0><?1.serial}{?1}.skip{?removed}
+player.picked =
+| U = $picked_unit
+| when U.removed or U.serial<>$picked_serial: leave $site.nil
+| U
 
-player.`=picked` Us =
-| for U $picked_: U.1.picked <= 0
-| for U Us: U.picked <= 1
-| Us = Us{[?serial ?]}.enheap
-| $picked_.heapfree
-| $picked_ <= Us
+player.`=picked` U =
+| $picked_unit <= U
+| $picked_serial <= U.serial
 
 player.is_enemy P = $id <> P.id
 
@@ -91,7 +92,8 @@ player.clear =
 | $total_units <= 0
 | $unit_counts.clear{0}
 | $ai.clear
-| $picked <= []
+| $picked_unit <= $site.nil
+| $picked_serial <= 0
 | $leader <= $site.nil
 | $pentagram <= $site.nil
 | $mana <= 0

@@ -30,6 +30,7 @@ type view.widget{M UI W H}
   zfix/1
   zlock/0
   zbuffer/0
+  recently_clicked/1
   xunit
   yunit
   zunit
@@ -72,6 +73,7 @@ view.clear =
 | $blit_origin.init{[$w/2 $h/2-170]-[32 $view_size/4*$zunit]}
 | $mice_xy.init{[0 0]}
 | $mice_xy_anchor.init{[0 0]}
+| $recently_clicked <= 1
 | CurZ = $site.floor{1,1,1}
 | $cursor.init{[1 1 CurZ]}
 | $anchor.init{[1 1 CurZ]}
@@ -104,13 +106,11 @@ view.infoline =
 | Indoor = if $site.up{$cursor} then ':indoor' else ':outdoor'
 | Cave = if $site.down{$cursor} then ":roof" else ""
 | Land = "[X],[Y],[Z]:[$site.at{X Y Z-1}.type][Indoor][Cave]"
-| Us = $site.units_get{X,Y,Z}.skip{?empty}
+| U = $site.block_at{X,Y,Z}
 | Unit = ""
-| less Us.end:
-  | U = Us.0
-  | Ps = $picked
-  | P = if Ps.size then Ps.0 else 0
-  | Bonus = if P and P.id<>U.id then P.attack_bonus{U} else 0
+| when U:
+  | P = $picked
+  | Bonus = if P.id and P.id<>U.id then P.attack_bonus{U} else 0
   | DI = if Bonus > 0 then "-[Bonus]"
          else if Bonus < 0 then "[-Bonus]"
          else ""

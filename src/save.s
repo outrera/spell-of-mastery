@@ -56,7 +56,7 @@ site.save =
     events | $events{}{?1}
     tids | $main.tid_map{}{?type}
     players | map P $players
-              | [P.id P.name P.human 0 P.picked{}{?id} 0
+              | [P.id P.name P.human 0 P.picked.id 0
                  P.data.list P.research.list.keep{?1} P.mana]
     player | $human.id
     units | Units
@@ -162,7 +162,7 @@ site.load Saved =
   | P.mana <= Mana
   | for K,V Data: P.data.K <= V
   | for N,R Research: P.research.N <= R
-  | P.data.picked <= if Picked then Picked else []
+  | P.data.picked <= Picked
 | Explored = Saved.explored
 | when got Explored:
   | for PID,Sight Explored
@@ -191,7 +191,8 @@ site.load Saved =
   | U.ordered.load{IdMap Ordered}
   | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
-| for P $players: P.picked <= (P.data.picked){IdMap.?}
+| for P $players:
+  | when got@@it P.data.picked: P.picked <= IdMap.(it)
 | for Name,Flags Saved.enabled^~{No []}:
   | when got Acts.Name: Acts.Name.players <= Flags
 

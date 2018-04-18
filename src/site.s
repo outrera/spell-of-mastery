@@ -116,6 +116,7 @@ type site{main}
    vars/t{} // variables
    marks
    free_marks
+   last_picked
    cfg
    data/(t)
    events
@@ -244,6 +245,7 @@ site.clear =
 | $human.human <= 1
 | $marks.clear
 | $free_marks.clear
+| $last_picked <= 0
 | for K,V $data: $data.K <= No
 | for U $active.list: U.active <= 0
 | $active.clear

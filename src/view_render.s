@@ -98,7 +98,6 @@ blit_item_from_unit Me =
 | $blitem <= BI
 | BI
 
-UnitRects = 0
 PickedRects = 0
 
 unit.draw FB B =
@@ -148,9 +147,7 @@ unit.draw FB B =
 | RW,RH,RY = $sprite.rect
 | RX = X+XUnit2 - RW/2
 | RY = Y+RY-RH
-| UnitRects.push{[RX RY RW RH],Me}
-| less $picked: leave
-| PickedRects.push{[RX RY RW RH],Me}
+| when $picked: PickedRects.push{[RX RY RW RH],Me}
 
 
 PickCorner = 0
@@ -385,7 +382,6 @@ view.render_iso =
 | BlitItems <= []
 | BlitUnits <= []
 | PickedRects <= stack 256
-| UnitRects <= stack 1024
 | Explored = Wr.human.sight
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
@@ -439,10 +435,8 @@ view.render_iso =
   | for B Bs: when B.deps.end: B.object.draw{FB B}
 | draw_picked_rects FB PickedRects.list.flip
 | draw_overlay FB Wr
-| less $brush.0: $handle_pick{UnitRects.list.flip}
 | BlitItems <= 0
 | BlitUnits <= 0
-| UnitRects <= 0
 
 view.render_frame =
 | IsNight = $site.data.night><1

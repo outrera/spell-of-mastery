@@ -82,6 +82,7 @@ unit.swimmer = $flags^get_bit{10}
 unit.amphibian = $flags^get_bit{11}
 unit.invisible = $flags^get_bit{12}
 unit.blessed = $flags^get_bit{13}
+unit.`=blessed` State = $flags <= $flags^set_bit{13 State}
 unit.cursed = $flags^get_bit{14}
 unit.afraid = $flags^get_bit{15}
 
@@ -347,7 +348,6 @@ unit.animate Anim =
 | $anim_wait <= $anim_seq.$anim_step.1
 
 unit.free =
-| when $picked: $owner.picked <= $owner.picked.skip{?id><$id}
 | when $owner: $owner.lost_unit{Me}
 | when $id >< $owner.leader.id: $owner.leader <= $site.nil
 //| when $id >< $owner.pentagram: $owner.pentagram <= $site.nil

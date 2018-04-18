@@ -510,12 +510,10 @@ ui.update_panel_buttons Unit As GAs =
     | $update_act_icon{(if GAct then -I-1 else I) Act Count Unit}
     | I += 1
 
-ui.on_unit_pick Units =
+ui.on_unit_pick Unit =
 | for Icon $actIcons: Icon.show <= 0
-| Unit = 0
 | As = 0
 | GAs = []
-| Unit = if Units.size then Units.0 else $site.nil
 | Acts = $main.acts
 | if Unit.has{menu} then
      | MenuActName,XYZ,TargetSerial = Unit.get{menu}
@@ -540,7 +538,7 @@ unit.research_act Act =
   | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
   | leave
 | O.notify{"Research this?"}
-| $owner.picked <= [Me]
+| $owner.picked <= Me
 | $set{menu [Act.name $xyz research]}
 
 ui.actClickIcon Icon =
