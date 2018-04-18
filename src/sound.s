@@ -9,10 +9,7 @@ main.load_sounds =
 | $credits.sound <= $extract_cfg_authors{Cfgs}
 | $sounds <= @table: @join: map Folder Folders:
   | map Name Folder.urls.keep{is.[@_ txt]}{?1}
-    | SoundFile = "[Folder][Name].wav"
-    | less SoundFile.exists: SoundFile <= "[Folder][Name].ogg"
-    | less SoundFile.exists: bad "missing [SoundFile]"
-    | [Name SoundFile^sound_load]
+    | [Name "[Folder][Name]"]
 | for [Path Name Ext] "[$data]/music".urls:
   | when Ext<>txt: case Name "ingame[X]":
     | push "[Name].[Ext]" PlayList
@@ -25,6 +22,12 @@ main.sound Name volume/1.0 =
 | when SCycles.Name><Cycle and not $site.paused: leave
 | SCycles.Name <= Cycle
 | S = $sounds.Name
+| when S.is_text:
+  | SoundFile = "[S].wav"
+  | less SoundFile.exists: SoundFile <= "[S].ogg"
+  | less SoundFile.exists: bad "missing [SoundFile]"
+  | S <= sound_load SoundFile
+  | $sounds.Name <= S
 | when no S: bad "missing sound `[Name]`"
 | sound_play S volume/Volume
 

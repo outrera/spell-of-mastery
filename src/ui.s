@@ -182,7 +182,7 @@ ui.load_game NewGame Path =
 | $pick{ingame}
 
 ui.create W H =
-| $site.create{W H 6 soil}
+| $site.create{W H 4 soil}
 | $view.clear
 
 ui.enter_site Site =
