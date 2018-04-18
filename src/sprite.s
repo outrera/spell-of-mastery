@@ -1,4 +1,4 @@
-use gfx util cfg
+use gfx util
 
 siteToSprite X Y =
 | RX = (X*64 - Y*64)/2

@@ -1,4 +1,4 @@
-use gui cfg
+use gui
 
 PlayList = []
 PlayListIndex = 0
