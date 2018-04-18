@@ -192,7 +192,9 @@ site.load Saved =
   | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
 | for P $players:
-  | when got@@it P.data.picked: P.picked <= IdMap.(it)
+  | when got@@it P.data.picked:
+    | U = IdMap.(it)
+    | when got U: P.picked <= U
 | for Name,Flags Saved.enabled^~{No []}:
   | when got Acts.Name: Acts.Name.players <= Flags
 
