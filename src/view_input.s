@@ -290,47 +290,59 @@ view.update_play =
   rightup
     | $mice_click <= 0
 
+site.clear_marks =
+| for M $marks.list:
+  | M.remove
+  | $free_marks.push{M}
+| $marks.clear
+
+site.set_mark XYZ Type =
+| M = 0
+| if $free_marks.used then
+    | M <= $free_marks.pop
+    | when Type <> M.type:
+      | M.alpha <= 0
+      | M.morph{Type}
+      | M.mark <= 1
+  else
+    | M <= $human.alloc_unit{Type}
+    | M.mark <= 1
+| M.move{XYZ}
+| $marks.push{M}
+| M
+
 site.update_picked =
-| for M $marks: M.free
-| $marks.heapfree
-| $marks <= []
+| $clear_marks
 | less $human.picked.size: leave
 | U = $human.picked.0
 | less U.idle: leave
 | Marks = []
-| when $act:
-  | when $act.range >< 9000: leave
-  | UX,UY,UZ = U.xyz
-  | for X,Y points_in_diamond{$act.range}
-    | XX = UX+X
-    | YY = UY+Y
-    | when XX >> 1 and YY >> 1:
-      | Cell = $cell{XX YY 1}
-      | while Cell.z < $d-1:
-        | if Cell.empty then
-            | Mark = $human.alloc_unit{"mark_cast"}
-            | Mark.move{Cell.xyz}
-            | push Mark Marks
-            | while Cell.z < $d-1 and Cell.empty: Cell++
-          else
-            | while Cell.z < $d-1 and not Cell.empty: Cell++
-  | $marks <= Marks.enheap
+| less $act:
+  | for What,Cell U.reachable: $set_mark{Cell.xyz "mark_[What]"}
   | leave
-| for What,Cell U.reachable:
-  | Mark = $human.alloc_unit{"mark_[What]"}
-  | Mark.move{Cell.xyz}
-  | push Mark Marks
-| $marks <= Marks.enheap
+| when $act.range >> 9000: leave
+| UX,UY,UZ = U.xyz
+| for X,Y points_in_diamond{$act.range}
+  | XX = UX+X
+  | YY = UY+Y
+  | when XX >> 1 and YY >> 1:
+    | Cell = $cell{XX YY 1}
+    | while Cell.z < $d-1:
+      | if Cell.empty then
+          | $set_mark{Cell.xyz mark_cast}
+          | while Cell.z < $d-1 and Cell.empty: Cell++
+        else
+          | while Cell.z < $d-1 and not Cell.empty: Cell++
+
 
 site.update_cursor =
 | View = $view
 | CXYZ = View.cursor
-| Marks = $marks.unheap
 | P = $human
 | if $act
-  then | push P.alloc_unit{mark_cursor_target}.move{CXYZ} Marks
-  else | push P.alloc_unit{mark_cursor0}.move{CXYZ} Marks
-       | push P.alloc_unit{mark_cursor1}.move{CXYZ} Marks
+  then | $set_mark{CXYZ mark_cursor_target}
+  else | $set_mark{CXYZ mark_cursor0}
+       | $set_mark{CXYZ mark_cursor1}
 | case View.brush
   [obj Bank,Type]
     | Mirror = View.key{edit_place_mirrored}
@@ -347,16 +359,11 @@ site.update_cursor =
       | Class = $main.classes.ClassName
       | Facing = if Mirror then 5 else 3
       | when Reverse: Facing <= if Mirror then 1 else 6
-      | M = P.alloc_unit{mark_cube}
+      | M = $set_mark{XYZ mark_cube}
       | M.sprite <= Class.default_sprite
       | M.animate{idle}
       | M.pick_facing{Facing}
-      | M.move{XYZ}
       | M.alpha <= 110
-      | push M Marks
-| for M Marks: M.mark <= 1
-| $marks.heapfree
-| $marks <= Marks.enheap
 
 view.update =
 | GUI = get_gui

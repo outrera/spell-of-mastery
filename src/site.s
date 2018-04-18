@@ -114,7 +114,8 @@ type site{main}
    serial
    nil // null unit with id >< 0
    vars/t{} // variables
-   marks/[]
+   marks
+   free_marks
    cfg
    data/(t)
    events
@@ -182,6 +183,8 @@ site.init =
 | $free_genes <= stack $genes
 | MaxActiveUnits = 4096
 | $active <= stack MaxActiveUnits
+| $marks <= stack 1024
+| $free_marks <= stack 1024
 | $shadow <= $main.sprites.system_shadow.frames
 | SS = $maxSize*$maxSize
 | MaxSize = $maxSize
@@ -239,8 +242,8 @@ site.clear =
 | for P $players: P.clear
 | $human <= $players.1
 | $human.human <= 1
-| $marks.heapfree
-| $marks <= []
+| $marks.clear
+| $free_marks.clear
 | for K,V $data: $data.K <= No
 | for U $active.list: U.active <= 0
 | $active.clear

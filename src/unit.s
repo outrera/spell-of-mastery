@@ -174,6 +174,7 @@ unit.init Class =
   | $update_move_method
 
 unit.morph Class =
+| when Class.is_text: Class <= $main.classes.Class
 | $owner.lost_unit{Me}
 | $hp <= Class.hp + $hp - $class.hp
 | $class <= Class
@@ -182,6 +183,10 @@ unit.morph Class =
              else $site.nil.sprite
 | $animate{idle}
 | $owner.got_unit{Me}
+| when $hp<0:
+  | D = -$hp + 1
+  | $hp <= 1
+  | $harm{Me D}
 
 unit.find_dna Name = $main.cfg.gene.Name
 
@@ -478,7 +483,6 @@ unit.fine_move FXYZ =
 | $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
-| C = $site.c
 | $fxyz.init{FXYZ}
 | $zhack <= 0
 | when $ai >< unit:
@@ -489,7 +493,7 @@ unit.fine_move FXYZ =
   | RUs <= $site.units_get{$xyz}{[? ?fxyz]}
   | RUs{?0.remove}
 | $site.place_unit{Me}
-| RUs{U,F=>U.fine_move{F}}
+| for U,F RUs: U.fine_move{F}
 | $floor <= $cell.floor
 | $environment_updated
 | when $ai >< unit: unit_pickup_items Me
