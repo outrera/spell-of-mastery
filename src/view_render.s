@@ -233,8 +233,6 @@ render_cursor Me Wr BX BY CursorXYZ =
   | Z <= UnitZ
 
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
-| FBW = $fb.w
-| when BY < 0 or BX < -64 or BX>FBW: leave
 | FBH = $fb.h
 | EndZ = min RoofZ Wr.height{X Y}
 | when BY-((EndZ-1)*ZUnit) > FBH: leave
@@ -414,6 +412,7 @@ view.render_iso =
   | Folded <= Wr.main.img{ui_cell_folded}
   | Marked <= Wr.main.img{ui_cell_marked}
   | Unexplored <= Wr.main.img{ui_cell_unexplored}
+| FBW = FB.w
 | times YY VS
   | Y = YY + VY
   | XXX = TX - YY*XUnit2
@@ -422,10 +421,12 @@ view.render_iso =
     | X = XX + VX
     | when 0<X and X<<WW: // FIXME: move this out of the loop
       | BX = XXX + XX*XUnit2
-      | BY = YYY + XX*YUnit2
-      | E = Explored.Y.X
-      | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
-        else render_unexplored Me Wr X Y BX BY
+      | less BX < -64 or BX>FBW:
+        | BY = YYY + XX*YUnit2
+        | less BY < 0:
+          | E = Explored.Y.X
+          | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
+            else render_unexplored Me Wr X Y BX BY
 | when $mice_click<>left or $brush.0:
   | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
   | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2

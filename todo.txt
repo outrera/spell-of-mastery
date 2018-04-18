@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Use height 4 initial terrain. That way we would still have space for undeworld, but free a little resources.
 - Sprite loading can be greatly speed up by loading only the required frames.
 - Random map generation, based on matching tiles.
 - fix tall sprites popping through the ceiling and walls by cutting their bliting from top or bottom
