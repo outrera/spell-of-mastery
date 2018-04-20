@@ -375,7 +375,7 @@ unit.find_blit_deps =
     | push CB $blitem.cover
 
 
-view.find_blit_deps = for U BlitUnits: U.find_blit_deps
+view.find_blit_deps = for U BlitUnits: less U.mark: U.find_blit_deps
 
 view.render_iso =
 | Wr = $site

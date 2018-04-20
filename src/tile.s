@@ -268,7 +268,7 @@ main.load_tiles =
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
   | SpriteName = Tile.sprite
   | Sprite = $sprites.SpriteName
-  | less got Sprite: bad "Tile [Type] references missing sprite [SpriteName]"
+  | less got Sprite: bad "Tile [Bank]_[Type] references missing sprite [SpriteName]"
   | Frames = Sprite.frames
   | NFrames = Frames.size
   | Tile.gfxes <= dup 16 No

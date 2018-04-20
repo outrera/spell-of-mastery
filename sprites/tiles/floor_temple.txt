@@ -1,0 +1,4 @@
+author: `RLTiles Contributors`
+license: `Public Domain`
+origin: `http://rltiles.sf.net`
+frames: 64*64

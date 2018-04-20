@@ -5,7 +5,7 @@ max_units: 4096 // maximum number of objects in world
 //FIXME: following should really correspond to cell dimensions, not tile dimensions
 cell_size: 32 // cell edge's size
 tile_size: 64,32,32 //width,height,depth; typical isometric tile cube is 64x32x32
-tile_banks: tile,room//,deco
+tile_banks: tile,city//,deco
 class_banks: unit,leader,item,special,trigger
 explored: 1 //all maps are explored from the beginning
 start_mana: 10

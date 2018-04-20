@@ -1,8 +1,7 @@
-sprite: tiles_room_library
-cost: wood,1
-embed: soil
+sprite: tiles_floor_temple
+embed: 2
 match: same,corner
-1111: 8
+1111: 9
 0000: 8
 1000: 0
 1100: 1

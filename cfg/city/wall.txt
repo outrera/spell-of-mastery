@@ -1,2 +1,2 @@
-role: castle_wall
+role: wall
 stack: wall0,wall1,wall2

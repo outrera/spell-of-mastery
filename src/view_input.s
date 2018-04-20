@@ -195,12 +195,12 @@ place_tile Me Type =
           | site_place_tile_deco $site X Y $cursor.2 Tile
           | leave
     else
-      | when $site.at{X Y $cursor.2-1}.embed and not Tile.embed: 
+      | when $site.at{X Y $cursor.2-1}.embed><1 and not Tile.embed: 
         | Z = $cursor.2-1
         | when AnchorHack<>LMB_Count:
           | $anchor.2 <= Z
           | AnchorHack <= LMB_Count
-        | while Z>>0 and $site.at{X Y Z}.embed and not Tile.embed:
+        | while Z>>0 and $site.at{X Y Z}.embed><1 and not Tile.embed:
           | $site.set{X Y Z-- Tile owner/$site.human}
         | leave
   | AnchorHack <= LMB_Count

@@ -1,8 +1,10 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Sprite loading can be greatly speed up by loading only the required frames.
-- Random map generation, based on matching tiles.
+- Implement roads and rives for map generator, as a list of tiles, do this by shuffling the list, then shuffling it again, if its end is achieved. Make sure there is at least one bridge tile. Some parts, like river, should be composed of subparts, which should be shuffled, so that say bridge would always be at different location. There should be at least 36 basic parts for map to look non repeatable.
+- Randomizable subarts in 10x10 chunks
+- In addition to `role`, tile should have `material` property, that way effects like fire could burn through wood.
+- Consider faster movement rates, so player could traverse map faster.
 - fix tall sprites popping through the ceiling and walls by cutting their bliting from top or bottom
 - Think about using quadtrees for sprite partitioning. That would also optimize drawing of sprites containing a lot of empty space and possibly animations, that have static content.
 - Autogeneration of incinerate and gibbed animations. For incinerate sprite first turns into ashes bottom up and then ash falls down.

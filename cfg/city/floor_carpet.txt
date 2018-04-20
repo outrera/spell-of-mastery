@@ -1,7 +1,7 @@
-sprite: tiles_room_temple
-embed: soil
+sprite: tiles_floor_carpet
+embed: 2
 match: same,corner
-1111: 9
+1111: 8
 0000: 8
 1000: 0
 1100: 1
