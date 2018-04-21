@@ -11,6 +11,7 @@ Parts = [pond grass rocks castle forest
 
 Spans = @table
         [riverh,[h [riverhb] riverh1]
+        //[riverh,[v [rivervb] riverv1]
          ]
 
 Crosses = []
@@ -32,7 +33,29 @@ site.load_part Name =
 | P.units <= Saved.units
 | Name,P
 
-site.place_part OX OY P =
+site.find_place_for_part PW PH =
+| Ps = []
+| W = $w/PCells
+| H = $h/PCells
+| for Y H: for X W
+  | for YY PH: for XX PW:
+    | when YY+Y>>W or XX+X>>H or Slots.(Y+YY).(X+XX): _goto next
+  | push X,Y Ps
+  | _label next
+| when Ps.end: leave -1,-1
+| Ps.rand
+
+site.get_part PartName =
+| P = Parts.PartName
+| when no P: bad "missing part [PartName]"
+| P
+
+site.place_part XY P =
+| when P.is_text: P <= $get_part{P}
+| less XY:
+  | XY <= $find_place_for_part{P.pw P.ph}
+  | when XY.0 < 0: leave 0
+| OX,OY = XY
 | X = OX*10
 | Y = OY*10
 | TM = P.tmap
@@ -49,18 +72,8 @@ site.place_part OX OY P =
 | PW = P.pw
 | PH = P.ph
 | for YY PH: for XX PW: Slots.(OY+YY).(OX+XX) <= 1
+| 1
 
-site.find_place_for_part PW PH =
-| Ps = []
-| W = $w/PCells
-| H = $h/PCells
-| for Y H: for X W
-  | for YY PH: for XX PW:
-    | when YY+Y>>W or XX+X>>H or Slots.(Y+YY).(X+XX): _goto next
-  | push X,Y Ps
-  | _label next
-| when Ps.end: leave -1,-1
-| Ps.rand
 
 site.load_parts = 
 | Parts <= @table: map P Parts: $load_part{P}
@@ -69,13 +82,14 @@ site.load_parts =
 SiteWish = \
   | filler: pond grass rocks
   | parts: castle forest //forest1 forest2 ruins
-  | spans: riverh //riverv shore
+  | spans: riverh //riverv //shore
        //parentheses mean that only one of these could be placed,
 
 //there can also be placement constraints, like shore should always be placed near edge of the map
 //think about how rivew would translate into the shore.
 //when two spans intersect, consider using special `cross` part, defined for each span
 //also, dont check against Slots for span stage
+
 
 site.generate W H =
 | $clear
@@ -96,8 +110,8 @@ site.generate W H =
   | Span = Spans.SpanName
   | when no Span: bad "missing span [SpanName]"
   | [Dir MustHave @PartSet] = Span
-  | when Dir >< h: less FreeSpansY.end:
-    | say hello
+  //| when Dir >< v: swap FreeSpansX FreeSpansY
+  | less FreeSpansY.end:
     | Y = pop FreeSpansY
     | push Y UsedSpansY
     | ReqXYs = []
@@ -107,28 +121,14 @@ site.generate W H =
     | Ps = []
     | for X W: less got ReqXYs.find{X,Y}:
       | when Ps.end: Ps <= PartSet.shuffle
-      | PartName = pop Ps
-      | P = Parts.PartName
-      | when no P: bad "missing part [PartName]"
-      | $place_part{X Y P}
-    | for X,Y ReqXYs
-      | PartName = pop MustHave
-      | P = Parts.PartName
-      | when no P: bad "missing part [PartName]"
-      | $place_part{X Y P}
+      | $place_part{X,Y Ps^pop}
+    | for X,Y ReqXYs: $place_part{X,Y MustHave^pop}
     | for PartName MustHave: say "no place for [PartName] in [SpanName]"
-| for PartName SW.parts:
-  | P = Parts.PartName
-  | when no P: bad "missing part [PartName]"
-  | X,Y = $find_place_for_part{P.pw P.ph}
-  | less X<0: $place_part{X Y P}
+| for PartName SW.parts: $place_part{0 PartName}
 | Ps = []
 | for Y H: for X W:
   | less Slots.Y.X:
     | when Ps.end: Ps <= SW.filler.shuffle
-    | PartName = pop Ps
-    | P = Parts.PartName
-    | when no P: bad "missing part [PartName]"
-    | $place_part{X Y P}
+    | $place_part{X,Y Ps^pop}
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
