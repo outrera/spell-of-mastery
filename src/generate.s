@@ -5,7 +5,15 @@ PCells = 10
 Slots = 
 
 Parts = [pond grass rocks castle forest
-         /*river_ns,[0 riverns1 riverns2 riverns3 riverns4 riverns5 riverns6]*/]
+         riverh1 riverhb
+         
+        ]
+
+Spans = @table
+        [riverh,[h [riverhb] riverh1]
+         ]
+
+Crosses = []
 
 type site_part{name w h tmap} units/[]
 
@@ -17,9 +25,12 @@ site.load_part Name =
 | File = Path.get
 | less got File: bad "cant load [Path]"
 | Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table
-| P = site_part Name Saved.w Saved.h $load_tile_map{Saved}
+| SW = Saved.w
+| SH = Saved.h
+| when SW%10 or SH%10: bad "[SW]x[SH] is not multiple of 10x10 for [Path]"
+| P = site_part Name SW SH $load_tile_map{Saved}
 | P.units <= Saved.units
-| P
+| Name,P
 
 site.place_part OX OY P =
 | X = OX*10
@@ -39,9 +50,7 @@ site.place_part OX OY P =
 | PH = P.ph
 | for YY PH: for XX PW: Slots.(OY+YY).(OX+XX) <= 1
 
-site.find_place_for_part P =
-| PW = P.pw
-| PH = P.ph
+site.find_place_for_part PW PH =
 | Ps = []
 | W = $w/PCells
 | H = $h/PCells
@@ -54,20 +63,19 @@ site.find_place_for_part P =
 | Ps.rand
 
 site.load_parts = 
-| Parts <= @table: map P Parts: P,$load_part{P}
+| Parts <= @table: map P Parts: $load_part{P}
 
 
 SiteWish = \
-  | small: pond grass rocks
-  | medium: castle forest //forest1 forest2 ruins
-  | huge: //(river_ns river_we) shore
-       //parentheses mean that only one of these should be placed,
-       //frequency could be added for each, as a number,
-       //generator will just duplicate that item, before shuffling
+  | filler: pond grass rocks
+  | parts: castle forest //forest1 forest2 ruins
+  | spans: riverh //riverv shore
+       //parentheses mean that only one of these could be placed,
 
-//first we place huge, then large then small
-//there can also be constraints, like shore should always be placed near edge of the map
-
+//there can also be placement constraints, like shore should always be placed near edge of the map
+//think about how rivew would translate into the shore.
+//when two spans intersect, consider using special `cross` part, defined for each span
+//also, dont check against Slots for span stage
 
 site.generate W H =
 | $clear
@@ -80,15 +88,47 @@ site.generate W H =
 | $serial <= 0
 | $load_parts
 | SW = SiteWish.tail{}{[?1.0 ?2]}.table
-| for PartName SW.medium:
+| UsedSpansX = []
+| UsedSpansY = []
+| FreeSpansX = @shuffle: dup I W I
+| FreeSpansY = @shuffle: dup I H I
+| for SpanName SW.spans:
+  | Span = Spans.SpanName
+  | when no Span: bad "missing span [SpanName]"
+  | [Dir MustHave @PartSet] = Span
+  | when Dir >< h: less FreeSpansY.end:
+    | say hello
+    | Y = pop FreeSpansY
+    | push Y UsedSpansY
+    | ReqXYs = []
+    | for PartName MustHave: less FreeSpansX.end:
+      | X = pop FreeSpansX
+      | push X,Y ReqXYs
+    | Ps = []
+    | for X W: less got ReqXYs.find{X,Y}:
+      | when Ps.end: Ps <= PartSet.shuffle
+      | PartName = pop Ps
+      | P = Parts.PartName
+      | when no P: bad "missing part [PartName]"
+      | $place_part{X Y P}
+    | for X,Y ReqXYs
+      | PartName = pop MustHave
+      | P = Parts.PartName
+      | when no P: bad "missing part [PartName]"
+      | $place_part{X Y P}
+    | for PartName MustHave: say "no place for [PartName] in [SpanName]"
+| for PartName SW.parts:
   | P = Parts.PartName
-  | X,Y = $find_place_for_part{P}
+  | when no P: bad "missing part [PartName]"
+  | X,Y = $find_place_for_part{P.pw P.ph}
   | less X<0: $place_part{X Y P}
 | Ps = []
 | for Y H: for X W:
   | less Slots.Y.X:
-    | when Ps.end: Ps <= SW.small.shuffle
-    | P = Parts.(pop Ps)
+    | when Ps.end: Ps <= SW.filler.shuffle
+    | PartName = pop Ps
+    | P = Parts.PartName
+    | when no P: bad "missing part [PartName]"
     | $place_part{X Y P}
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
