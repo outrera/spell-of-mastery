@@ -3,13 +3,8 @@ use util
 
 PCells = 10
 Slots = 
-
-Parts = [pond grass rocks castle forest
-         riverh1 riverhb
-         riverv1 rivervb
-         riverc1
-        ]
-
+Parts = t
+BluePrints = t
 Spans = @table
         [riverh,[h [riverhb] riverh1]
          riverv,[v [rivervb] riverv1]
@@ -22,17 +17,21 @@ type site_part{name w h tmap} units/[]
 site_part.pw = $w/PCells
 site_part.ph = $h/PCells
 
-site.load_part Name =
-| Path = "[$main.data]/parts/[Name].txt"
+main.load_symta_file Path =
+| Path <= "[$data]/[Path].txt"
 | File = Path.get
 | less got File: bad "cant load [Path]"
-| Saved = Path.get.utf8.parse{src Path}.0.0.group{2}.table
+| Path.get.utf8.parse{src Path}
+
+site.load_part Name =
+| File = $main.load_symta_file{"parts/[Name]"}
+| Saved = File.0.0.group{2}.table
 | SW = Saved.w
 | SH = Saved.h
-| when SW%10 or SH%10: bad "[SW]x[SH] is not multiple of 10x10 for [Path]"
+| when SW%10 or SH%10: bad "[SW]x[SH] is not multiple of 10x10 for part [Name]"
 | P = site_part Name SW SH $load_tile_map{Saved}
 | P.units <= Saved.units
-| Name,P
+| P
 
 site.find_place_for_part PW PH =
 | Ps = []
@@ -48,8 +47,18 @@ site.find_place_for_part PW PH =
 
 site.get_part PartName =
 | P = Parts.PartName
-| when no P: bad "missing part [PartName]"
+| when got P: leave P
+| P <= $load_part{PartName}
+| Parts.PartName <= P
 | P
+
+site.get_blueprint BPName =
+| BP = BluePrints.BPName
+| when got BP: leave BP
+| File = $main.load_symta_file{"bp/[BPName]"}
+| BP <= File{[?1.0 ?2]}.table
+| BluePrints.BPName <= BP
+| BP
 
 site.place_part XY P =
 | when P.is_text: P <= $get_part{P}
@@ -75,22 +84,13 @@ site.place_part XY P =
 | for YY PH: for XX PW: Slots.(OY+YY).(OX+XX) <= 1
 | 1
 
-
-site.load_parts = 
-| Parts <= @table: map P Parts: $load_part{P}
-
-
-SiteWish = \
-  | filler: pond grass rocks
-  | parts: castle forest //forest1 forest2 ruins
-  | spans: (riverh riverv) //shore
-       //parentheses mean that only one of these could be placed,
-
 //FIXME: implement placement constraints, like shore should always be placed near edge of the map
 // also add `cross` for shore mixed with river
 
 
 site.generate W H =
+| BlueprintName = \castle
+| B = $get_blueprint{BlueprintName}
 | $clear
 | $w <= W*PCells
 | $h <= H*PCells
@@ -99,13 +99,11 @@ site.generate W H =
 | $name <= "Default"
 | $description <= ""
 | $serial <= 0
-| $load_parts
-| SW = SiteWish.tail{}{[?1.0 ?2]}.table
 | UsedSpansX = []
 | UsedSpansY = []
 | FreeSpansX = @shuffle: dup I W I
 | FreeSpansY = @shuffle: dup I H I
-| for SpanName SW.spans:
+| for SpanName B.spans:
   | less SpanName.is_text: SpanName <= SpanName.rand
   | Span = Spans.SpanName
   | when no Span: bad "missing span [SpanName]"
@@ -139,11 +137,11 @@ site.generate W H =
     | swap FreeSpansX FreeSpansY
     | swap UsedSpansX UsedSpansY
     | swap W H
-| for PartName SW.parts: $place_part{0 PartName}
+| for PartName B.parts: $place_part{0 PartName}
 | Ps = []
 | for Y H: for X W:
   | less Slots.Y.X:
-    | when Ps.end: Ps <= SW.filler.shuffle
+    | when Ps.end: Ps <= B.filler.shuffle
     | $place_part{X,Y Ps^pop}
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}

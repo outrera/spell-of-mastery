@@ -1,0 +1,4 @@
+filler: pond grass rocks
+parts: castle forest //forest1 forest2 ruins
+spans: (riverh riverv)
+//parentheses mean that only one of these could be placed,
