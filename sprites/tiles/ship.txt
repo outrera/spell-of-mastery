@@ -1,0 +1,2 @@
+author: `Artem Belov`
+frames: 64*64

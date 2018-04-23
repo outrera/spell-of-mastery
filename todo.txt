@@ -1,8 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Implement roads and rives for map generator, as a list of tiles, do this by shuffling the list, then shuffling it again, if its end is achieved. Make sure there is at least one bridge tile. Some parts, like river, should be composed of subparts, which should be shuffled, so that say bridge would always be at different location. There should be at least 36 basic parts for map to look non repeatable.
-- Randomizable subarts in 10x10 chunks
+- There should be at least 36 basic parts for map to look non repeatable.
+- Randomizable subarts inside 10x10 chunks
 - In addition to `role`, tile should have `material` property, that way effects like fire could burn through wood.
 - proper minimap colors.
 - Consider faster movement rates, so player could traverse map faster.
