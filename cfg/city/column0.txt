@@ -1,3 +1,3 @@
 sprite: tiles_column
 aux: 1
-1111: 0
+lay: 0

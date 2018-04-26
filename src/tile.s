@@ -214,13 +214,13 @@ tile.render X Y Z Below Above Variation =
 | G = if AH and $flatGfx then
          | NeibSlope <= #@1111
          | $flatGfx
-      else if $lay then
+      else if $match><same_lay then
          | XX = 1
          | YY = 1
          | while Site.cell{X-XX Y Z}.type><$type: XX++
          | while Site.cell{X Y-YY Z}.type><$type: YY++
          | NeibSlope <= #@1111
-         | G,F = $lay.loop{YY-1}.loop{XX-1}
+         | G,F = Gs.loop{YY-1}.loop{XX-1}
          | when F&&&1: Opaque <= 0
          | G
       else if Lineup then
@@ -283,29 +283,58 @@ main.load_tiles =
     | R
 | Es = [1111 1000 1100 1001 0100 0001 0110 0011
         0010 0111 1011 1101 1110 1010 0101 0000]
+| DefaultLay =
+  [[ 7  6  4]
+   [ 5 16  2]
+   [ 3  1  0]
+   [ 8  9   ]
+   [11 10   ]
+   [12 13 18]]
+| LayMap =
+  [[#@0010 #@0011 #@0001]
+   [#@0110 #@1111 #@1001]
+   [#@0100 #@1100 #@1000]
+   [#@0111 #@1011]
+   [#@1110 #@1101]
+   [#@1010 #@0101 #@0000]]
 | for Bank BankNames: for Type,Tile $cfg.Bank
   | Tile.bank <= Bank
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
   | Frames = $get_tile_frames{"[Bank]_[Type]" Tile.sprite}
   | NFrames = Frames.size
-  | Tile.gfxes <= dup 16 No
-  | for CornersElevation Es: when got@@it Tile.CornersElevation:
-    | E = CornersElevation.digits.digits{2}
-    | Is = if it.is_list then it else [it]
-    | Gs = map I Is
-           | less I < NFrames:
-             | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
-           | Frames.I
-    | when Gs.size: Tile.gfxes.E <= Gs
+  | getFrame I = 
+    | less I < NFrames:
+      | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
+    | Frames.I
+  | Lay = Tile.lay
+  | when got Lay:
+    | Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
+             else if Lay><default then DefaultLay
+             else Lay.tail.list
+  | less got Lay:
+    | Tile.gfxes <= dup 16 No
+    | for CornersElevation Es: when got@@it Tile.CornersElevation:
+      | Is = it
+      | E = CornersElevation.digits.digits{2}
+      | if Is.is_list then
+           | when Is.size: Tile.gfxes.E <= Is{?^getFrame}
+        else Tile.gfxes.E <= Is^getFrame
+  | when got Lay and Tile.match<>same_lay:
+    | Tile.gfxes <= dup 16 No
+    | for Y LayMap.size:
+      | Es = LayMap.Y
+      | for X Es.size:
+        | E = Es.X
+        | Is = Lay.Y.X
+        | if Is.is_list then
+             | when Is.size: Tile.gfxes.E <= Is{?^getFrame}
+          else Tile.gfxes.E <= Is^getFrame
+  | when Tile.match><same_lay:
+    | Tile.gfxes <= map Is Lay: map _,I,F Is: getFrame{I},F
   | when got Tile.flatGfx:
     | G = $get_tile_frames{"[Bank]_[Type]" "tiles_[Tile.flatGfx]"}.0
     | Tile.flatGfx <= dup 16 G
-  | when got Tile.lay:
-    | Tile.lay <= map Is Tile.lay.tail: map _,I,F Is:
-      | less I < NFrames:
-        | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
-      | Frames.I,F
 | $tiles <= t size/1024
 | for K,V Tiles
   | Id = if K >< void then 0

@@ -4,4 +4,4 @@ embed: 1
 wall: house_wall
 roof: 2,house_roof
 height: 1
-1111: 0
+lay: 0
