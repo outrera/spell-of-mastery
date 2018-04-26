@@ -1,6 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- to place ship, rect tiling is needed, so that tiles from sprite sheets go to their associated x,y
+- think about using tile.lay for defining autotiles
+- site.updPilarGfxes could be delayed, until it actually needed to speedup map load. Also rename it to site.renderPilar
+- make sure units made of separate frames are properly recolored.
+- think about better sprite organization. I.e. it should have both named anims and separate frames, which are then subdivided into facings. Make sure widgets, like buttons, function properly, because they still use angles.
+- save seed for site.variation
 - There should be at least 36 basic parts for map to look non repeatable.
 - Randomizable subarts inside 10x10 chunks
 - In addition to `role`, tile should have `material` property, that way effects like fire could burn through wood.
@@ -114,6 +120,7 @@ Optimization Possibilities:
 Symta Language Handicaps:
 - do-while loop, to avoid needless `_label again`
 - A some file, like common.s, that would be included by default into every other file. Such file would incldue common constants, like TILE_WIDTH.
+- Stuff like `Tile.lay <= Tile.lay.tail` really needs some solution.
 - Allow to specify name of the output executable file and entry point file, other than main. That way we can produce several executable files in the same dir from the same source code base. I.e. we could have sprite sheet dumper utility without touching the main game exe.
 - The foremost handicap is the absence of proper enheap API and allocation syntax.
 - `got@@it` leads to potential errors, because when `it` gets removed upstream, downstream references would be treated as literal symbols. It also introduces confusion.

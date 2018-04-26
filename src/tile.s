@@ -7,7 +7,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
-          hit/0 death/0 embed/0 flatGfx/0}
+          hit/0 death/0 embed/0 flatGfx/0 lay/0}
      id/Id
      main/Main
      bank/Bank
@@ -16,6 +16,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      stack/Stack //column base, middle, top segments
      gfxes/Gfxes
      flatGfx/FlatGfx
+     lay/Lay
      height/Height
      empty/0
      filler/Filler //true if tile fills space, matching with other tiles
@@ -166,6 +167,11 @@ m_any_stairs Me X Y Z Tile =
 
 BelowSlope = 0
 ColumnHeight = 0
+BelowG = 0
+
+list.loop I =
+| S = $size
+| if I<0 then Me.(S - I%S) else Me.(I%S)
 
 tile.render X Y Z Below Above Variation =
 | when $invisible
@@ -173,16 +179,7 @@ tile.render X Y Z Below Above Variation =
   | leave 0
 | Site = $main.site
 | less Z: ColumnHeight <= Site.height{X Y}
-| Limpid = 0
 | TH = $height
-| when Above.opaque:
-  | A = Site.at{X+1 Y Z}
-  | B = Site.at{X Y+1 Z}
-  | C = Site.at{X+1 Y+1 Z}
-  | D = Site.at{X+1 Y-1 Z}
-  | when A.opaque and B.opaque and C.opaque and (D.opaque or D.type><border_)
-         and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH:
-    | Limpid <= 1
 | BE = Below.empty
 | BR = Below.role
 | AH = Above.heavy
@@ -214,9 +211,19 @@ tile.render X Y Z Below Above Variation =
 | Lineup = 0
 | when AH and $lineup and ($lineup<>other or AR<>$role):
   | Lineup <= not Above.stack or AR <> $role
+| Opaque = $opaque
 | G = if AH and $flatGfx then
          | NeibSlope <= #@1111
          | $flatGfx
+      else if $lay then
+         | XX = 1
+         | YY = 1
+         | while Site.cell{X-XX Y Z}.type><$type: XX++
+         | while Site.cell{X Y-YY Z}.type><$type: YY++
+         | NeibSlope <= #@1111
+         | G,F = $lay.loop{YY-1}.loop{XX-1}
+         | when F&&&1: Opaque <= 0
+         | G
       else if Lineup then
          | NeibSlope <= #@1111
          | Gs.NeibSlope
@@ -231,8 +238,17 @@ tile.render X Y Z Below Above Variation =
          | less got R: R <= Gs.#@1111
          | R
 | BelowSlope <= NeibSlope
-| when Limpid: leave 0
-| less $anim_wait: G <= G.(Variation%G.size)
+| when G.is_list: less $anim_wait: G <= G.(Variation%G.size)
+| when Opaque and Z > 0:
+  | ZZ = Z-1
+  | A = Site.at{X+1 Y ZZ}
+  | B = Site.at{X Y+1 ZZ}
+  | C = Site.at{X+1 Y+1 ZZ}
+  | D = Site.at{X+1 Y-1 ZZ}
+  | TH = Site.at{X Y ZZ}.height
+  | when A.opaque and B.opaque and C.opaque and (D.opaque or D.type><border_)
+         and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH:
+    | Site.cell{X Y ZZ}.gfx <= 0
 | leave G
 
 main.tile_names Bank =
@@ -246,6 +262,11 @@ get_match_fn Desc = case Desc
   [any cornerside] | &m_any_cornerside
   [any stairs] | &m_any_stairs
   Else | 0
+
+main.get_tile_frames TileName SpriteName =
+| Sprite = $sprites.SpriteName
+| less got Sprite: bad "Tile [TileName] references missing sprite [SpriteName]"
+| Sprite.frames
 
 main.load_tiles =
 | BankNames = case $cfg.site.tile_banks [@Xs](Xs) X[X]
@@ -266,10 +287,7 @@ main.load_tiles =
   | Tile.bank <= Bank
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
-  | SpriteName = Tile.sprite
-  | Sprite = $sprites.SpriteName
-  | less got Sprite: bad "Tile [Bank]_[Type] references missing sprite [SpriteName]"
-  | Frames = Sprite.frames
+  | Frames = $get_tile_frames{"[Bank]_[Type]" Tile.sprite}
   | NFrames = Frames.size
   | Tile.gfxes <= dup 16 No
   | for CornersElevation Es: when got@@it Tile.CornersElevation:
@@ -277,16 +295,17 @@ main.load_tiles =
     | Is = if it.is_list then it else [it]
     | Gs = map I Is
            | less I < NFrames:
-             | bad "Tile `[Type]` wants missing frame [I] in `[SpriteName]`"
+             | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
            | Frames.I
     | when Gs.size: Tile.gfxes.E <= Gs
   | when got Tile.flatGfx:
-    | N = "tiles_[Tile.flatGfx]"
-    | Sprite = $sprites.N
-    | less got Sprite:
-      | bad "Tile [Type] references missing sprite [N]"
-    | G = Sprite.frames.0
+    | G = $get_tile_frames{"[Bank]_[Type]" "tiles_[Tile.flatGfx]"}.0
     | Tile.flatGfx <= dup 16 G
+  | when got Tile.lay:
+    | Tile.lay <= map Is Tile.lay.tail: map _,I,F Is:
+      | less I < NFrames:
+        | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
+      | Frames.I,F
 | $tiles <= t size/1024
 | for K,V Tiles
   | Id = if K >< void then 0
@@ -295,7 +314,7 @@ main.load_tiles =
   | As = V.list.join
   | Tile = tile As Me K V.role^~{K} Id @As
   | Tile.tiler <= get_match_fn Tile.match
-  | less Tile.tiler: bad "tile [K] has invalid `match` = [Tile.match]"
+  | less Tile.tiler: bad "tile [K] has invalid `match` ([Tile.match])"
   | $tiles.K <= Tile
 | for K,T $tiles
   | when T.stack: T.stack <= T.stack{}{$tiles.?}

@@ -5,7 +5,7 @@ siteToSprite X Y =
 | RY = (X*32 + Y*32)/2
 | [RX RY]
 
-type frames{sprite path} data/(t) ready/0
+type frames{sprite path} data/0 ready/0
 frames.`.` Index =
 | less $ready: $init
 | $data.Index
@@ -67,7 +67,9 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   | $anims.attack <= if Attack.size>1
                      then [@Attack.lead [impact 0] Attack.last]
                      else [Attack.head [impact 0]]
-| Path = if $frame_format >< folder then "[Filepath]/" else "[Filepath].png"
+| Path = if $frame_format >< folder or $frame_format><folder_plain
+         then "[Filepath]/"
+         else "[Filepath].png"
 | $frames <= frames Me Path
 
 sprite.anim_speed AnimName =
@@ -75,12 +77,12 @@ sprite.anim_speed AnimName =
 | if got Anim then Anim{?1}.sum else 0
 
 init_frames_from_list S List =
-| Fs = S.frames.data
-| Anims = t
+| Plain = S.frame_format >< folder_plain
+| Fs = if Plain then dup List.size 0 else t
 | for FName,G List
   | Name = FName
   | Angle = 0
-  | case Name "[A]-[N]"
+  | less Plain: case Name "[A]-[N]"
     | Angle <= A.int
     | Name <= N
   | X = 0
@@ -90,8 +92,11 @@ init_frames_from_list S List =
     | Y <= YY.int
     | Name <= N
   | G.xy <= S.xy + [X Y]
-  | have Fs.Name [0 0 0 0 0 0 0 0]
-  | Fs.Name.Angle <= G
+  | if Plain then
+         | Fs.(Name.int) <= G
+    else | have Fs.Name [0 0 0 0 0 0 0 0]
+         | Fs.Name.Angle <= G
+| S.frames.data <= Fs
 
 init_frames S G =
 | Rs = S.recolors
@@ -119,7 +124,9 @@ init_frames S G =
   Else | [G]
 | for F Fs: F.xy += S.xy
 | Frames = S.frames
-| Frames.data <= if S.faces then map F Fs [0 0 0 F 0 0 0 F] else Fs
+| Frames.data <= if S.faces
+                 then map F Fs [0 0 0 F 0 0 0 F] //supply dummy dirs
+                 else Fs
 
 init_frames_from_folder S Folder =
 | Xs = map FName Folder.urls.keep{is.[@_ png]}{?1}
