@@ -1,14 +1,12 @@
 sprite: system_dummy
 match: any_corner
-empty: 0
 filler: 1 //true if it forces other tiles to align with respect to it
-embed: 0 //embed this tile as room floor
-invisible: 0
+embed: 0 //brush replaces the tile below, during painting
+invisible: 0 //not shown to player
 shadow: 1
-height: 1 // height in world units (8 pixels/unit by default)
-heavy: 1 //true if tile compresses the shape of tile below of it into cube
-lineup: 1 // affected by by above heavy tiles
+height: 1 // height in world cubes
+heavy: 1 //shapes the tile below into a cube
+lineup: 1 //shaped by tile above into a cube
 dig: 0 //true if can be cleared physically or magically during gameplay
 opaque: No //transparent see-through tile, No=decide based on `invisible`
-hp: 0 //how long it takes to excavate this tile
-cost: time,10 //what it takes to build this
+hp: 0 //how hard is it to break this tile

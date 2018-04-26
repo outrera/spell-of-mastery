@@ -234,7 +234,6 @@ tile.render X Y Z Below Above Variation =
            | Gs <= FB.2.gfxes
          | NeibSlope <= Elev.digits{2}
          | R = Gs.NeibSlope
-         | less got R: R <= Gs.#@1111
          | R
 | BelowSlope <= NeibSlope
 | when G.is_list: less $anim_wait: G <= G.(Variation%G.size)
@@ -308,19 +307,11 @@ main.load_tiles =
       | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
     | Frames.I
   | Lay = Tile.lay
-  | when got Lay:
-    | Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
-             else if Lay><default then DefaultLay
-             else Lay.tail.list
-  | less got Lay:
-    | Tile.gfxes <= dup 16 No
-    | for CornersElevation Es: when got@@it Tile.CornersElevation:
-      | Is = it
-      | E = CornersElevation.digits.digits{2}
-      | if Is.is_list then
-           | when Is.size: Tile.gfxes.E <= Is{?^getFrame}
-        else Tile.gfxes.E <= Is^getFrame
-  | when got Lay and Tile.match<>same_lay:
+  | less got Lay: Lay <= 0
+  | Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
+           else if Lay><default then DefaultLay
+           else Lay.tail.list
+  | when Tile.match<>same_lay:
     | Tile.gfxes <= dup 16 No
     | for Y LayMap.size:
       | Es = LayMap.Y
