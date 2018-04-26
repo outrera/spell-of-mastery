@@ -3,7 +3,7 @@ use gfx util
 CellSize = 32 //FIXME: hardcoded
 
 type tile{As Main Type Role Id stack/0 gfxes/0
-          height/1 filler/1 invisible/0 match/[same corner] shadow/0
+          height/1 filler/1 invisible/0 match/same_corner shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
@@ -54,8 +54,6 @@ type tile{As Main Type Role Id stack/0 gfxes/0
            | tile As Main Type Role Id @[parts -(I+1) @As]
     else $parts <= []
 
-DummyGfx = gfx 1 1
-
 m_same_side Site X Y Z Tile = Site.getSidesSame{X Y Z Tile.role}
 m_same_corner Site X Y Z Tile = Site.getCornersSame{X Y Z Tile.role}
 m_any_side Site X Y Z Tile = Site.getSides{X Y Z}
@@ -63,7 +61,6 @@ m_any_corner Site X Y Z Tile = Site.getCorners{X Y Z}
 
 m_any_cornerside Site X Y Z Tile =
 | R = Site.getCorners{X Y Z}
-//| when [X Y]><[3 6]: say [Z R]
 | if R><[0 1 0 0] then
     if Site.filled{X Y+1 Z} then R <= [1 1 0 1]
     else if Site.at{X Y Z+1}.type><Tile.type then R <= [1 1 0 0]
@@ -165,6 +162,8 @@ m_any_stairs Me X Y Z Tile =
   else
 | E
 
+m_same_lay Me X Y Z Tile =
+
 BelowSlope = 0
 ColumnHeight = 0
 BelowG = 0
@@ -255,13 +254,14 @@ main.tile_names Bank =
 | $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort
 
 get_match_fn Desc = case Desc
-  [any corner] | &m_any_corner
-  [any side] | &m_any_side
-  [same corner] | &m_same_corner
-  [same side] | &m_same_side
-  [any cornerside] | &m_any_cornerside
-  [any stairs] | &m_any_stairs
-  Else | 0
+  any_corner     | &m_any_corner
+  any_side       | &m_any_side
+  same_corner    | &m_same_corner
+  same_side      | &m_same_side
+  any_cornerside | &m_any_cornerside
+  any_stairs     | &m_any_stairs
+  same_lay       | &m_same_lay
+  Else           | 0
 
 main.get_tile_frames TileName SpriteName =
 | Sprite = $sprites.SpriteName

@@ -1,8 +1,8 @@
 sprite: tiles_house_roof
-match: any,stairs
+match: any_stairs
 opaque: 0
 roof: self
-fallback: ((1 1 1 1) 0 house_roof_fallback (any corner))
+fallback: ((1 1 1 1) 0 house_roof_fallback any_corner)
 0000: 2
 1001: 0
 1000: 1

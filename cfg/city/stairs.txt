@@ -1,5 +1,5 @@
 sprite: tiles_castle
-match: any,stairs
+match: any_stairs
 opaque: 0
 role: stairs
 0000: 2

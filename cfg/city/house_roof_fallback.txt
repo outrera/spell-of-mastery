@@ -1,5 +1,5 @@
 sprite: tiles_house_roof
-match: any,corner
+match: any_corner
 aux: 1
 0000: 16
 1000: 0

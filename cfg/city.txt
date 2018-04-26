@@ -1,5 +1,5 @@
 sprite: system_dummy
-match: any,corner
+match: any_corner
 empty: 0
 filler: 1 //true if it forces other tiles to align with respect to it
 embed: 0 //embed this tile as room floor

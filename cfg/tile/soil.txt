@@ -1,5 +1,5 @@
 role: dirt
-match: any,cornerside
+match: any_cornerside
 lineup: 0
 dig: 1
 indoor: dirt

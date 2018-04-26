@@ -1,4 +1,5 @@
 sprite: tiles_ship
+match: same_lay
 //aux: 1
 lay: |  8,0  9,0
      | 10,0  6,0

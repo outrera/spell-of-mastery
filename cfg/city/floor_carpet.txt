@@ -1,6 +1,6 @@
 sprite: tiles_floor_carpet
 embed: 2
-match: same,corner
+match: same_corner
 1111: 8
 0000: 8
 1000: 0

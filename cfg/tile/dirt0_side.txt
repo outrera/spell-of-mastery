@@ -5,7 +5,7 @@ opaque: 1
 dig: 0
 filler: 0
 lineup: 0
-match: same,side
+match: same_side
 role: dirt
 1111: 10
 0000: 0

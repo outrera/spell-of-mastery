@@ -5,7 +5,7 @@ opaque: 1
 filler: 0
 height: 2
 lineup: 0
-match: same,side
+match: same_side
 role: house_wall
 1111: 5
 0000: 5

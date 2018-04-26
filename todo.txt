@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- to place ship, rect tiling is needed, so that tiles from sprite sheets go to their associated x,y
 - think about using tile.lay for defining autotiles
 - site.updPilarGfxes could be delayed, until it actually needed to speedup map load. Also rename it to site.renderPilar
 - make sure units made of separate frames are properly recolored.
