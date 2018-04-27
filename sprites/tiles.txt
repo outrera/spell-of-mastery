@@ -1,1 +1,2 @@
+anims: 0
 frames: 64*64

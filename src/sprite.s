@@ -22,10 +22,11 @@ frames.init =
 | when@@it $sprite.shadow: $sprite.shadow <= $sprite.main.img{it}
 | $ready <= 1
 
+
 type sprite{main Bank Name filepath/0 xy/[0 0]
-            frames/0 faces/0 anims/[`|` [idle [0 24]]] recolors/0
-            class/0 margins/0 pick_height/0
-            font/Font icon/0 shadow/0 form/[`|` [4]]
+            frames/0 faces/0 anims/default recolors/0
+            class/0 margins/0
+            font/Font icon/0 shadow/0 form/0
             rect/[40 76 -4]
             }
   id/0
@@ -38,7 +39,6 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   faces/Faces //numer of facing directions this sprite has
   class/Class //should we autocreate class for this sprite?
   margins/Margins
-  pick_height/Pick_height
   font/Font
   icon/Icon
   shadow/Shadow //shadow sprite or 0 if sprite doesnt cast shadow
@@ -46,14 +46,27 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   rect/Rect //selection rect
   recolors/Recolors //indices of recolorable colors
   colors/0
-| XYs = []
+| when Form: $init_form{Form}
+| when Anims: $init_anims{Anims}
+| Path = if $frame_format >< folder or $frame_format><folder_plain
+         then "[Filepath]/"
+         else "[Filepath].png"
+| $frames <= frames Me Path
+
+sprite.init_form Form =
 | Form = Form.tail
 | FormH = Form.size
 | FormW = Form.0.size
+| XYs = []
 | when FormH+FormW>2:
   | $xy <= $xy + siteToSprite{FormW-1 FormH-1}
 | for Y,Hs Form.i: for X,H Hs.i: when H: push [X -Y 0] XYs
 | $form <= XYs.list
+
+DefaultAnim = [`|` [idle [0 24]]]
+
+sprite.init_anims Anims =
+| when Anims><default: Anims <= DefaultAnim
 | $anims <= @table: map [Name@Frames] Anims.tail
   | case Frames [[`-` time N]@Fs]: Frames <= Fs{[? N]}
   | [Name Frames]
@@ -67,10 +80,7 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   | $anims.attack <= if Attack.size>1
                      then [@Attack.lead [impact 0] Attack.last]
                      else [Attack.head [impact 0]]
-| Path = if $frame_format >< folder or $frame_format><folder_plain
-         then "[Filepath]/"
-         else "[Filepath].png"
-| $frames <= frames Me Path
+
 
 sprite.anim_speed AnimName =
 | Anim = $anims.AnimName

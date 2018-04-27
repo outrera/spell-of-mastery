@@ -512,10 +512,15 @@ site.place_unit U =
 | XYZ = U.xyz
 | Mirror = U.facing >< 5
 | Blocker = U.passable and U.block
-| for DX,DY,DZ U.form:
-  | XX,YY,ZZ = XYZ + if Mirror then [-DY DX DZ] else [DX -DY DZ]
-  | $place_unitS{U XX YY ZZ}
-  | when Blocker: $set{XX YY ZZ U.block}
+| if U.form then
+    | for DX,DY,DZ U.form:
+      | XX,YY,ZZ = XYZ + if Mirror then [-DY DX DZ] else [DX -DY DZ]
+      | $place_unitS{U XX YY ZZ}
+      | when Blocker: $set{XX YY ZZ U.block}
+  else
+    | XX,YY,ZZ = XYZ
+    | $place_unitS{U XX YY ZZ}
+    | when Blocker: $set{XX YY ZZ U.block}
 | U.cell <= $cell{XYZ.0 XYZ.1 XYZ.2}
 | when U.gate:
   | Target = 0
@@ -545,10 +550,15 @@ site.remove_unit U =
 | XYZ = U.xyz.copy
 | Mirror = U.facing >< 5
 | Blocker = U.passable and U.block
-| for XX,YY,ZZ U.form:
-  | XX,YY,ZZ = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
-  | $remove_unitS{U XX YY ZZ}
-  | when Blocker: $clear_tile{XX YY ZZ}
+| if U.form then
+    | for XX,YY,ZZ U.form:
+      | XX,YY,ZZ = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
+      | $remove_unitS{U XX YY ZZ}
+      | when Blocker: $clear_tile{XX YY ZZ}
+  else
+    | XX,YY,ZZ = XYZ
+    | $remove_unitS{U XX YY ZZ}
+    | when Blocker: $clear_tile{XX YY ZZ}
 | when U.gate: for A $active: when A.gate><U.gate: U.cell.gate <= 0
 | U.cell <= 0
 | U.xyz.init{XYZ}
