@@ -195,10 +195,10 @@ tile.render X Y Z Below Above Variation =
   | when got Site.neibs{X Y Z-TH+1}.find{?type><Neib}:
     | T <= Water
 | when $back:
-  | Z = Z-$height+1
-  | A = Site.at{X+1 Y Z}
-  | B = Site.at{X Y+1 Z}
-  | C = Site.at{X+1 Y+1 Z}
+  | ZZ = Z-$height
+  | A = Site.at{X+1 Y ZZ}
+  | B = Site.at{X Y+1 ZZ}
+  | C = Site.at{X+1 Y+1 ZZ}
   | Ar = $around
   | when A.type><Ar or B.type><Ar or C.type><Ar:
     | T <= $back

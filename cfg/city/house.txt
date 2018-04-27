@@ -1,4 +1,5 @@
 sprite: tiles_floor_wood
+role: house
 dig: 1
 embed: 1
 wall: house_wall

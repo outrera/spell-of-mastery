@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- fix house placement
 - fix grassy cliffs, so that grass would come near the edge.
 - site.updPilarGfxes could be delayed, until it actually needed to speedup map load. Also rename it to site.renderPilar
 - make sure units made of separate frames are properly recolored.
