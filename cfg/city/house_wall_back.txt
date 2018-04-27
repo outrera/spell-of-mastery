@@ -1,4 +1,5 @@
 sprite: tiles_house
+around: house
 aux: 1
 heavy: 1
 opaque: 1
