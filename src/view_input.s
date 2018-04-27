@@ -99,22 +99,19 @@ place_object Me Bank Type =
 | less Z << $anchor.2: leave
 | Cell = $site.cell{X Y Z}
 | Mirror = $key{edit_place_mirrored}
-| PlaceRandom = $key{edit_place_random}
-| ClassName = if PlaceRandom
-              then "[Bank]_[$main.classes_banks.Bank.rand]"
-              else "[Bank]_[Type]"
+| ClassName = "[Bank]_[Type]"
 | Class = $main.classes.ClassName
 | when Class.item><1:
   | Cell.add_item{ClassName 1}
   | leave
 | when Z+Class.height>>$site.d: leave
 | Place = 1
-| for XX,YY,ZZ Class.form: when Place:
+| Form = if Class.form then Class.form else [[0 0 0]]
+| for XX,YY,ZZ Form: when Place:
   | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
   | Us = $site.units_get{XYZ}.skip{?bank><mark}
   | Place <= if not $site.valid{@XYZ} then 0
              else if not Class.empty then Us.all{?empty}
-             else if PlaceRandom then Us.end
              else not Us.any{?class^address >< Class^address}
   | when Place:
     | X,Y,Z = XYZ

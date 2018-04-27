@@ -23,6 +23,5 @@ edit_down: `;`
 // following keys control how objects should be placed
 edit_place_mirrored: m
 edit_place_reversed: n
-edit_place_random: v //pick random tile from current bank
 edit_place_embed: b //tile replaces the tile under cursor
 edit_random_facing: z
