@@ -76,10 +76,22 @@ sprite.anim_speed AnimName =
 | Anim = $anims.AnimName
 | if got Anim then Anim{?1}.sum else 0
 
+init_recolors S G =
+| Rs = S.recolors
+| CM = G.cmap
+| when Rs and CM:
+  | Rs = map R Rs: CM.locate{R}
+  | Default = Rs.find{?<>No}
+  | when got Default: S.colors <= map R Rs: if R<>No then R else No
+
 init_frames_from_list S List =
+| RecolorsReady = 0
 | Plain = S.frame_format >< folder_plain
 | Fs = if Plain then dup List.size 0 else t
 | for FName,G List
+  | less RecolorsReady:
+    | init_recolors S G
+    | RecolorsReady <= 1
   | Name = FName
   | Angle = 0
   | less Plain: case Name "[A]-[N]"
@@ -99,12 +111,7 @@ init_frames_from_list S List =
 | S.frames.data <= Fs
 
 init_frames S G =
-| Rs = S.recolors
-| CM = G.cmap
-| when Rs and CM:
-  | Rs = map R Rs: CM.locate{R}
-  | Default = Rs.find{?<>No}
-  | when got Default: S.colors <= map R Rs: if R<>No then R else No
+| init_recolors S G
 | Fs = case S.frame_format
   [`*` W H]
      | Xs = map I (G.w*G.h)/(W*H): G.cut{I%(G.w/W)*W I/(G.w/W)*H W H}
@@ -183,9 +190,14 @@ sprite.save How Dst =
     | push [R AnimName Dir XX YY] Rs
 | when How><frames:
   | Dst.mkpath
-  | FB = gfx WW HH 
+  | FB = gfx WW HH
   | for [R AnimName Dir XX YY] Rs:
-    | FB.clear{#FF000000}
+    | CMap = R.cmap
+    | if CMap then
+        | FB.clear{0}
+        | FB.cmap <= CMap
+      else
+        | FB.clear{#FF000000}
     | FB.blit{FB.w/2-R.w/2+XX FB.h-32-R.h+YY R}
     | FB.save{"[Dst]/[Dir]-[AnimName].png"}
   | FB.free
