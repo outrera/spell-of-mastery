@@ -1,3 +1,4 @@
 sprite: tiles_plain2
 aux: 1
+colors: #311e17,#31651d
 lay: default

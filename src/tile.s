@@ -8,7 +8,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
           parts/0 wallShift/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
           hit/0 death/0 embed/0 flatGfx/0 lay/0
-          struct/0 structTiles/0}
+          struct/0 structTiles/0 colors/[#808080 #A0A0A0]}
      id/Id
      main/Main
      bank/Bank
@@ -48,6 +48,7 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      death/Death //on death effect
      struct/Struct
      structTiles/StructTiles
+     colors/Colors
 | $empty <= not $id
 | when Cost and Cost.size: $cost <= Cost.group{2}{K,V=>"item_[K]",V}
 | when no $opaque: $opaque <= not $invisible
@@ -169,6 +170,7 @@ m_same_lay Me X Y Z Tile =
 
 BelowSlope = 0
 ColumnHeight = 0
+BelowTile = 0
 BelowG = 0
 
 list.loop I =
@@ -239,6 +241,7 @@ tile.render X Y Z Below Above Variation =
          | R = Gs.NeibSlope
          | R
 | BelowSlope <= NeibSlope
+| BelowTile <= TT
 | when G.is_list: less $anim_wait: G <= G.(Variation%G.size)
 | when Opaque and Z > 0:
   | ZZ = Z-1
@@ -251,6 +254,12 @@ tile.render X Y Z Below Above Variation =
          and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH:
     | Site.cell{X Y ZZ}.gfx <= 0
 | leave G
+
+tile.sloped_color =
+| T = BelowTile
+| less T: leave 0
+| BelowTile <= 0
+| if BelowSlope><#@1111 then T.colors.1 else T.colors.0
 
 main.tile_names Bank =
 | $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort

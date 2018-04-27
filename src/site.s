@@ -215,7 +215,7 @@ site.create W H D Filler =
 | $create_borders
 | $w++
 | $h++
-| for Y $h: when Y: for X $w: when X: $updPilarGfxes{X Y}
+| for Y $h: when Y: for X $w: when X: $upd_pilar{X Y}
 | $w--
 | $h--
 | $paused <= 1
@@ -606,17 +606,7 @@ site.getSidesSame X Y Z Role = `[]`
   $role{X Y-1 Z}><Role $role{X+1 Y Z}><Role
   $role{X Y+1 Z}><Role $role{X-1 Y Z}><Role
 
-site.color_at X Y =
-| Z = $height{X Y}-1
-| when Z<0: Z <= 0
-| Cell = $cell{X Y 0}
-| while Z > 0 and not (Cell+Z).gfx: Z--
-| G = (Cell+Z).gfx
-| less G: leave 0
-| G.get{G.w/2 (min G.h/2 16)} &&& #FFFFFF
-
-site.update_minimap X Y =
-| Color = $color_at{X Y}
+site.update_minimap X Y Color=
 | WW = $w
 | WH = $h
 | MW = $minimap.w
@@ -652,16 +642,17 @@ upd_floor Me Bottom =
   | Cell--
   | LastEmpty <= Empty
 
-site.updPilarGfxes X Y =
+site.upd_pilar X Y =
 | when X < 0 or Y < 0: leave 0
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
 | $heighmap.X.Y <= (Cell+$d-2).floor.z
+| for U $column_units_get{X Y}: U.environment_updated
 | Var = $variation.Y.X
-| Z = 0
 | H = $height{X Y}
 | Below = $main.tid_map.0
 | T = Cell.tile
+| Z = 0
 | while Z < H:
   | TH = T.height
   | Next = Cell+TH
@@ -674,12 +665,11 @@ site.updPilarGfxes X Y =
   | T <= Above
   | Cell <= Next
   | Z += TH
-| for U $column_units_get{X Y}: U.environment_updated
-| $update_minimap{X Y}
+| $update_minimap{X Y T.sloped_color}
 
 site.upd_neibs X Y =
-| for DX,DY Dirs: $updPilarGfxes{X+DX Y+DY}
-| $updPilarGfxes{X Y}
+| for DX,DY Dirs: $upd_pilar{X+DX Y+DY}
+| $upd_pilar{X Y}
 
 site.height X Y = $heighmap.X.Y
 

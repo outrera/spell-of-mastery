@@ -144,5 +144,5 @@ site.generate W H =
     | when Ps.end: Ps <= B.filler.shuffle
     | $place_part{X,Y Ps^pop}
 | $create_borders
-| for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
+| for X,Y points{1 1 $w+1 $h+1}: $upd_pilar{X Y}
 | Slots <= 0

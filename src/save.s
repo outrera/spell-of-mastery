@@ -149,7 +149,7 @@ site.load Saved =
 | Tilemap = $load_tile_map{Saved}
 | for X $w: for Y $h: $set_pilar{X+1 Y+1 Tilemap.X.Y}
 | $create_borders
-| for X,Y points{1 1 $w+1 $h+1}: $updPilarGfxes{X Y}
+| for X,Y points{1 1 $w+1 $h+1}: $upd_pilar{X Y}
 //| StartTime = clock
 //| say "site.load: update_move_map_ took [clock{}-StartTime]"
 | $cycle <= Saved.cycle
