@@ -82,7 +82,7 @@ type blit_item{object x y z}
   flags
   brighten
   deps/[] //what items must be drawn before this one
-  cover/[] //what itms must be drwan after this one
+  cover/[] //what items must be drwan after this one
 
 make_blit_item X Y Z Object =
 | blit_item Object X Y Z
@@ -338,6 +338,12 @@ unit.add_dep Cell =
 
 unit.find_blit_deps =
 | X,Y,ZZ = $xyz
+| when $form:
+  | Mirror = $facing >< 5
+  | for DX,DY,DZ $form:
+    | XX,YY,ZZ = $xyz + if Mirror then [-DY DX DZ] else [DX -DY DZ]
+    | $add_dep{$site.cell{XX YY ZZ-1}}
+  | leave
 | C = $cell+1
 | Z = ZZ+1
 | EndZ = min $site.d Z+3

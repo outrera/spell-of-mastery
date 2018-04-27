@@ -510,9 +510,9 @@ site.place_unitS U X Y Z =
 
 site.place_unit U =
 | XYZ = U.xyz
-| Mirror = U.facing >< 5
 | Blocker = U.passable and U.block
 | if U.form then
+    | Mirror = U.facing >< 5
     | for DX,DY,DZ U.form:
       | XX,YY,ZZ = XYZ + if Mirror then [-DY DX DZ] else [DX -DY DZ]
       | $place_unitS{U XX YY ZZ}
@@ -548,9 +548,9 @@ site.remove_unitS U X Y Z =
 site.remove_unit U =
 | when U.removed: leave
 | XYZ = U.xyz.copy
-| Mirror = U.facing >< 5
 | Blocker = U.passable and U.block
 | if U.form then
+    | Mirror = U.facing >< 5
     | for XX,YY,ZZ U.form:
       | XX,YY,ZZ = XYZ + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
       | $remove_unitS{U XX YY ZZ}
