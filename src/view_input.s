@@ -156,10 +156,28 @@ site_place_tile_deco Me X Y Z Tile =
     | site_place_tile Me X+DX Y+DY Z+H RoofTile
 | when Tile.wall: site_place_tile_walls Me X Y Z Tile
 
-place_tile Me Type =
+site.place_struct XYZ Tile =
+| XX,YY,ZZ = XYZ
+| Tiles = (Tile.structTiles){N=>$main.tiles.N}
+| IIIs = Tile.struct.tail
+| for Y IIIs.size:
+  | IIs = IIIs.Y
+  | for X IIs.size:
+    | Is = IIs.X
+    | Is = if Is.is_int then [Is] else Is.tail
+    | for Z Is.size
+      | I = Is.Z
+      | when I:
+        | site_place_tile Me XX+X YY+Y ZZ+Z Tiles.(I-1)
+
+view.place_tile Type =
 | $cursor.2 <= $floor{$cursor}
-| X,Y,Z = $cursor
 | Tile = $main.tiles.Type
+| when Tile.struct:
+  | $site.place_struct{$cursor Tile}
+  | $mice_click <= 0
+  | leave
+| X,Y,Z = $cursor
 | IsBridge = $key{edit_bridge}
 | IsEmpty = $key{edit_over_empty} or Tile.empty
 | IsEmbed = $key{edit_place_embed}
@@ -251,7 +269,7 @@ view.update_brush =
   | leave
 | when $mice_click><left: case $brush
   [obj Bank,Type] | place_object Me Bank Type
-  [tile Type] | place_tile Me Type
+  [tile Type] | $place_tile{Type}
 | when $mice_click><right: remove_object_or_tile Me
 
 view.update_play =
