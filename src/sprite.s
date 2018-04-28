@@ -37,7 +37,6 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
 type frame_thunk{path xy}
 
 load_frame S Path XY =
-| say "loading [Path]"
 | G = gfx Path
 | G.xy <= S.xy + XY
 | less S.colors: init_recolors S G

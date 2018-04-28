@@ -2,12 +2,12 @@ use gfx util
 
 CellSize = 32 //FIXME: hardcoded
 
-type tile{As Main Type Role Id stack/0 gfxes/0
+type tile{As Main Type Role Id stack/0
           height/1 filler/1 invisible/0 match/same_corner shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
-          hit/0 death/0 embed/0 flatGfx/0 lay/0
+          hit/0 death/0 embed/0 sprite/0 flatGfx/0 lay/No
           struct/0 structTiles/0 colors/[#808080 #A0A0A0]}
      id/Id
      main/Main
@@ -15,7 +15,8 @@ type tile{As Main Type Role Id stack/0 gfxes/0
      type/Type
      role/Role
      stack/Stack //column base, middle, top segments
-     gfxes/Gfxes
+     sprite/Sprite
+     gfxes_data
      flatGfx/FlatGfx
      lay/Lay
      height/Height
@@ -216,9 +217,9 @@ tile.render X Y Z Below Above Variation =
 | when AH and $lineup and ($lineup<>other or AR<>$role):
   | Lineup <= not Above.stack or AR <> $role
 | Opaque = $opaque
-| G = if AH and $flatGfx then
+| G = if AH and TT.flatGfx then
          | NeibSlope <= #@1111
-         | $flatGfx
+         | TT.flatGfx
       else if $match><same_lay then
          | XX = 1
          | YY = 1
@@ -274,15 +275,66 @@ get_match_fn Desc = case Desc
   same_lay       | &m_same_lay
   Else           | 0
 
-main.get_tile_sprite TileName SpriteName =
-| Sprite = $sprites.SpriteName
+tile.get_tile_sprite TileName SpriteName =
+| Sprite = $main.sprites.SpriteName
 | less got Sprite: bad "Tile [TileName] references missing sprite [SpriteName]"
 | Sprite
+
+
+Es = [1111 1000 1100 1001 0100 0001 0110 0011
+        0010 0111 1011 1101 1110 1010 0101 0000]
+DefaultLay =
+  [[ 7  6  4]
+   [ 5 16  2]
+   [ 3  1  0]
+   [ 8  9   ]
+   [11 10   ]
+   [12 13 18]]
+LayMap =
+  [[#@0010 #@0011 #@0001]
+   [#@0110 #@1111 #@1001]
+   [#@0100 #@1100 #@1000]
+   [#@0111 #@1011]
+   [#@1110 #@1101]
+   [#@1010 #@0101 #@0000]]
+
+tile.gfxes =
+| Gs = $gfxes_data
+| when Gs: leave Gs
+| $init_gfxes
+| $gfxes_data
+
+tile.init_gfxes =
+| Sprite = $get_tile_sprite{"[$bank]_[$type]" $sprite}
+| NFrames = Sprite.nframes
+| getFrame I = 
+  | less I < NFrames:
+    | bad "Tile `[$type]` wants missing frame [I] in `[$sprite]`"
+  | Sprite.I
+| Lay = $lay
+| less got Lay: Lay <= 0
+| Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
+         else if Lay><default then DefaultLay
+         else Lay.tail.list
+| when $match<>same_lay:
+  | $gfxes_data <= dup 16 No
+  | for Y LayMap.size:
+    | Es = LayMap.Y
+    | for X Es.size:
+      | E = Es.X
+      | Is = Lay.Y.X
+      | if Is.is_list then
+           | when Is.size: $gfxes_data.E <= Is{?^getFrame}
+        else $gfxes_data.E <= Is^getFrame
+| when $match><same_lay:
+  | $gfxes_data <= map Is Lay: map _,I,F Is: getFrame{I},F
+| when $flatGfx:
+  | G = $get_tile_sprite{"[$bank]_[$type]" "tiles_[$flatGfx]"}.0
+  | $flatGfx <= dup 16 G
 
 main.load_tiles =
 | BankNames = case $cfg.site.tile_banks [@Xs](Xs) X[X]
 | $cfg.site.tile_banks <= BankNames 
-| Tiles = t
 | $aux_tiles <= t
 | T = $cfg.tile
 | HT = T.height_
@@ -291,52 +343,11 @@ main.load_tiles =
     | R = HT.deep_copy
     | R.height <= I+1
     | R
-| Es = [1111 1000 1100 1001 0100 0001 0110 0011
-        0010 0111 1011 1101 1110 1010 0101 0000]
-| DefaultLay =
-  [[ 7  6  4]
-   [ 5 16  2]
-   [ 3  1  0]
-   [ 8  9   ]
-   [11 10   ]
-   [12 13 18]]
-| LayMap =
-  [[#@0010 #@0011 #@0001]
-   [#@0110 #@1111 #@1001]
-   [#@0100 #@1100 #@1000]
-   [#@0111 #@1011]
-   [#@1110 #@1101]
-   [#@1010 #@0101 #@0000]]
+| Tiles = t
 | for Bank BankNames: for Type,Tile $cfg.Bank
   | Tile.bank <= Bank
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
-  | Sprite = $get_tile_sprite{"[Bank]_[Type]" Tile.sprite}
-  | NFrames = Sprite.nframes
-  | getFrame I = 
-    | less I < NFrames:
-      | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
-    | Sprite.I
-  | Lay = Tile.lay
-  | less got Lay: Lay <= 0
-  | Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
-           else if Lay><default then DefaultLay
-           else Lay.tail.list
-  | when Tile.match<>same_lay:
-    | Tile.gfxes <= dup 16 No
-    | for Y LayMap.size:
-      | Es = LayMap.Y
-      | for X Es.size:
-        | E = Es.X
-        | Is = Lay.Y.X
-        | if Is.is_list then
-             | when Is.size: Tile.gfxes.E <= Is{?^getFrame}
-          else Tile.gfxes.E <= Is^getFrame
-  | when Tile.match><same_lay:
-    | Tile.gfxes <= map Is Lay: map _,I,F Is: getFrame{I},F
-  | when got Tile.flatGfx:
-    | G = $get_tile_sprite{"[Bank]_[Type]" "tiles_[Tile.flatGfx]"}.0
-    | Tile.flatGfx <= dup 16 G
 | $tiles <= t size/1024
 | for K,V Tiles
   | Id = if K >< void then 0
@@ -351,10 +362,10 @@ main.load_tiles =
   | when T.stack: T.stack <= T.stack{}{$tiles.?}
   | when T.indoor:
     | T.indoor <= $tiles.(T.indoor)
-    | less got T.indoor: say "bad [K] references unknown indoor tile"
+    | less got T.indoor: bad "tile [K] references unknown indoor tile"
   | when T.water:
     | T.water <= [T.water.0 $tiles.(T.water.1)]
-    | less got T.water: say "bad [K] references unknown water tile"
+    | less got T.water: bad "tile [K] references unknown water tile"
   | when T.back: T.back <= $tiles.(T.back)
   | when T.fallback.0:
     | T.fallback.2 <= $tiles.(T.fallback.2)
