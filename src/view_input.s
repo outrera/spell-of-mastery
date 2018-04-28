@@ -308,6 +308,8 @@ site.set_mark XYZ Bless Type =
 
 site.update_picked =
 | U = $human.picked
+| when U.id: U.picked <= 1
+| when not U.id or $last_picked<>U.serial or not U.alive: U.picked <= 0
 | ClearBlessed = not U.id or not U.idle or $last_picked<>U.serial
 | $clear_marks{ClearBlessed}
 | less ClearBlessed: leave

@@ -187,7 +187,9 @@ tile.draw FB BlitItem =
 //| when B.flags&&&#40: G.dither{1}
 //| G.brighten{B.brighten}
 | FB.blit{B.sx B.sy G}
-| for U B.cover:
+| Us = B.cover
+| when Us.end: leave
+| for U Us:
   | UB = U.blitem
   | UB.deps <= UB.deps.skip{Cell}
   | when UB.deps.end: U.draw{FB UB}
