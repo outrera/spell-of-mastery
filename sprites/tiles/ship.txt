@@ -1,2 +1,2 @@
 author: `Artem Belov`
-frames: folder_plain
+frames: folder

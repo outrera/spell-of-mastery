@@ -8,9 +8,10 @@ type font{@new_font Gs W H} glyphs/Gs widths/W height/H
 font.as_text = "#font{}"
 font N = have Fonts.N:
 | S = get_main{}.spr{"font_[N]"}
-| [W H EX] = S.frames.0^|F => [F.w F.h F.xy.0]
-| Glyphs = S.frames.list{}{F<[X Y W H].margins=>| F.xy <= 0,0
-                                                | F.cut{X 0 W F.h}}
+| [W H EX] = S.0^|F => [F.w F.h F.xy.0]
+| FrameList = map I S.nframes: S.I
+| Glyphs = FrameList{F<[X Y W H].margins=>| F.xy <= 0,0
+                                          | F.cut{X 0 W F.h}}
 | Ws = Glyphs{[X Y W H].margins=>X+W-EX}
 | Ws.0 <= W/2
 | new_font Glyphs Ws H
@@ -84,8 +85,8 @@ bar.draw G X Y =
 type button.widget{Text Fn state/normal skin/medium_large}
   text/Text value on_click/Fn state_/State sprite over w h
 | $sprite <= get_main{}.spr{"ui_button_[Skin]"} 
-| $w <= $sprite.frames.'normal'.0.w
-| $h <= $sprite.frames.'normal'.0.h
+| $w <= $sprite.'normal'.w
+| $h <= $sprite.'normal'.h
 button.state = $state_
 button.`=state` V =
 | when V><normal and $state><pressed: leave
@@ -97,7 +98,7 @@ button.draw G PX PY =
 | State = $state_
 | when State >< normal and $over: State <= \over
 | Sprite = $sprite
-| BG = Sprite.frames.(case State over normal Else State).0
+| BG = Sprite.|case State over normal Else State
 | G.blit{PX PY BG}
 | SF = Sprite.font
 | when SF <> `none`
@@ -168,7 +169,7 @@ droplist.draw G PX PY =
     | Y += R.h
 | less $drop
   | G.blit{PX PY $rs.$picked}
-  | A = get_main{}.spr{"ui_arrow"}.frames.down_normal.0
+  | A = get_main{}.spr{"ui_arrow"}.'down_normal'
   | G.blit{PX+$w-A.w PY A}
 | $rs <= 0
 | No
@@ -286,7 +287,7 @@ slider_.input In = case In
 type arrow.widget{D Fn state/normal skin/arrow}
   direction/D on_click/Fn state/State sprite
 | $sprite <= get_main{}.spr{"ui_[Skin]"}
-arrow.render = $sprite.frames."[$direction]_[$state]".0
+arrow.render = $sprite."[$direction]_[$state]"
 arrow.input In = case In
   [mice left 1 P] | when $state >< normal
                     | $state <= \pressed

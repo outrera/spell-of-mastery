@@ -116,7 +116,7 @@ unit.draw FB B =
 | when S.shadow:
   | S = $site.shadow
   | ZZ = $cell-$floor
-  | I = min (ZZ/16).abs S.size-1
+  | I = min (ZZ/16).abs S.nframes-1
   | SGfx = S.I
   | SGfx.brighten{B.brighten}
   | FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
@@ -174,7 +174,7 @@ draw_picked_rects FB PickedRects =
   | when Icons.size
     | XX = RX + RW/2 - Icons.size*8
     | YY = RY - 16
-    | Fs = $main.effect.frames
+    | Fs = $main.unit_effects_sprite
     | for I Icons
       | F = Fs.I
       | FB.blit{XX YY F}

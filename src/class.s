@@ -88,7 +88,7 @@ main.load_classes =
     | for Pref,Item [`drop_`,ItemDrop `take_`,ItemTake]{?deep_copy}
       | Name = "[Pref][K]"
       | Item.name <= Name
-      | Item.icon_gfx <= V.default_sprite.frames.0
+      | Item.icon_gfx <= V.default_sprite.0
       | Acts.Name <= Item
       | Item.title <= Name.replace{_ ' '}
   | when V.active:

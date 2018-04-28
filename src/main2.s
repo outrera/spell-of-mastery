@@ -18,7 +18,7 @@ type main{Data}
      sounds
      ui
      credits
-     effect
+     unit_effects_sprite
 | say 'init heap'
 | enheap_init 64000
 | $credits <= t

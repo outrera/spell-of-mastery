@@ -274,17 +274,16 @@ get_match_fn Desc = case Desc
   same_lay       | &m_same_lay
   Else           | 0
 
-main.get_tile_frames TileName SpriteName =
+main.get_tile_sprite TileName SpriteName =
 | Sprite = $sprites.SpriteName
 | less got Sprite: bad "Tile [TileName] references missing sprite [SpriteName]"
-| Sprite.frames
+| Sprite
 
 main.load_tiles =
 | BankNames = case $cfg.site.tile_banks [@Xs](Xs) X[X]
 | $cfg.site.tile_banks <= BankNames 
 | Tiles = t
 | $aux_tiles <= t
-| Frames = No
 | T = $cfg.tile
 | HT = T.height_
 | for I 15: // object height blockers
@@ -312,12 +311,12 @@ main.load_tiles =
   | Tile.bank <= Bank
   | Tiles.Type <= Tile
   | when got Tile.aux: $aux_tiles.Type <= Tile.aux
-  | Frames = $get_tile_frames{"[Bank]_[Type]" Tile.sprite}
-  | NFrames = Frames.size
+  | Sprite = $get_tile_sprite{"[Bank]_[Type]" Tile.sprite}
+  | NFrames = Sprite.nframes
   | getFrame I = 
     | less I < NFrames:
       | bad "Tile `[Type]` wants missing frame [I] in `[Tile.sprite]`"
-    | Frames.I
+    | Sprite.I
   | Lay = Tile.lay
   | less got Lay: Lay <= 0
   | Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
@@ -336,7 +335,7 @@ main.load_tiles =
   | when Tile.match><same_lay:
     | Tile.gfxes <= map Is Lay: map _,I,F Is: getFrame{I},F
   | when got Tile.flatGfx:
-    | G = $get_tile_frames{"[Bank]_[Type]" "tiles_[Tile.flatGfx]"}.0
+    | G = $get_tile_sprite{"[Bank]_[Type]" "tiles_[Tile.flatGfx]"}.0
     | Tile.flatGfx <= dup 16 G
 | $tiles <= t size/1024
 | for K,V Tiles

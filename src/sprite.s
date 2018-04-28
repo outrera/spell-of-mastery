@@ -5,23 +5,6 @@ siteToSprite X Y =
 | RY = (X*32 + Y*32)/2
 | [RX RY]
 
-type frames{sprite path} data/0 ready/0
-frames.`.` Index =
-| less $ready: $init
-| $data.Index
-frames.size =
-| less $ready: $init
-| $data.size
-frames.list =
-| less $ready: $init
-| $data.list
-frames.init =
-| if $path.last >< '/'
-  then init_frames_from_folder $sprite $path
-  else init_frames $sprite gfx{$path}
-| when@@it $sprite.shadow: $sprite.shadow <= $sprite.main.img{it}
-| $ready <= 1
-
 
 type sprite{main Bank Name filepath/0 xy/[0 0]
             frames/0 faces/0 anims/default recolors/0
@@ -32,7 +15,7 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   id/0
   bank/Bank
   name/Name
-  frames/0
+  frames
   frame_format/Frames //how sprite frames are stored
   xy/Xy
   anims
@@ -46,12 +29,72 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   rect/Rect //selection rect
   recolors/Recolors //indices of recolorable colors
   colors/0
+  path
 | when Form: $init_form{Form}
 | when Anims: $init_anims{Anims}
-| Path = if $frame_format >< folder or $frame_format><folder_plain
-         then "[Filepath]/"
-         else "[Filepath].png"
-| $frames <= frames Me Path
+| $path <= Filepath
+
+type frame_thunk{path xy}
+
+load_frame S Path XY =
+| say "loading [Path]"
+| G = gfx Path
+| G.xy <= S.xy + XY
+| less S.colors: init_recolors S G
+| G
+
+sprite.`.` Index =
+| less $frames: $init
+| R = $frames.Index
+| when R.is_gfx: leave R
+| when R.is_frame_thunk:
+  | R <= load_frame Me R.path R.xy
+  | $frames.Index <= R
+| R
+
+sprite.nframes =
+| less $frames: $init
+| $frames.size
+
+missing_frame Me Index Angle =
+| Index = $anim_seq.$anim_step.0
+| S = $sprite
+| bad "sprite [$bank]_[$name] is missing frame `[Index]` at angle [Angle]"
+
+//FIXME: move these into sprite loading code
+AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]
+
+sprite.get_frame_at_angle Index Angle Mirror =
+| less $frames: $init
+| OAngle = Angle
+| R = $frames.Index
+| less R.is_list:
+  | when no R: missing_frame Me Index OAngle
+  | when Angle <> 3: Mirror <= 1
+  | when R.is_frame_thunk:
+    | R <= load_frame Me R.path R.xy
+    | $frames.Index <= R
+  | leave R,Mirror
+| Mirror <= 0
+| As = R
+| till As.Angle
+  | Mirror <= AngleReplacements.Angle.1
+  | Angle <= AngleReplacements.Angle.0
+| R <= As.Angle
+| when no R: missing_frame Me Index OAngle
+| when R.is_frame_thunk:
+  | R <= load_frame Me R.path R.xy
+  | As.Angle <= R
+| R,Mirror
+
+
+sprite.init =
+| $path <= if $frame_format >< folder then "[$path]/" else "[$path].png"
+| if $path.last >< '/'
+  then init_frames_from_folder Me $path
+  else init_frames Me gfx{$path}
+| when@@it $shadow: $shadow <= $main.img{it}
+
 
 sprite.init_form Form =
 | Form = Form.tail
@@ -95,30 +138,32 @@ init_recolors S G =
   | when got Default: S.colors <= map R Rs: if R<>No then R else No
 
 init_frames_from_list S List =
-| RecolorsReady = 0
-| Plain = S.frame_format >< folder_plain
-| Fs = if Plain then dup List.size 0 else t
+| Fs = 0
+| Angle = 0
 | for FName,G List
-  | less RecolorsReady:
-    | init_recolors S G
-    | RecolorsReady <= 1
   | Name = FName
-  | Angle = 0
-  | less Plain: case Name "[A]-[N]"
+  | when S.faces: case Name "[A]-[N]"
     | Angle <= A.int
     | Name <= N
+  | less Fs:
+    | Fs <= if S.faces or not Name.0.is_digit then t else dup List.size 0
   | X = 0
   | Y = 0
   | case Name "[N]+[XX]+[YY]"
     | X <= XX.int
     | Y <= YY.int
     | Name <= N
-  | G.xy <= S.xy + [X Y]
-  | if Plain then
-         | Fs.(Name.int) <= G
-    else | have Fs.Name [0 0 0 0 0 0 0 0]
-         | Fs.Name.Angle <= G
-| S.frames.data <= Fs
+  | if G.is_text then
+      | G <= frame_thunk{G [X Y]}
+    else
+      | G.xy <= S.xy + [X Y]
+      | less S.colors: init_recolors S G
+  | if S.faces then
+      | have Fs.Name [0 0 0 0 0 0 0 0]
+      | Fs.Name.Angle <= G
+    else if Fs.is_list then Fs.(Name.int) <= G
+    else Fs.Name <= G
+| S.frames <= Fs
 
 init_frames S G =
 | init_recolors S G
@@ -140,14 +185,13 @@ init_frames S G =
         | Xs
   Else | [G]
 | for F Fs: F.xy += S.xy
-| Frames = S.frames
-| Frames.data <= if S.faces
-                 then map F Fs [0 0 0 F 0 0 0 F] //supply dummy dirs
-                 else Fs
+| S.frames <= if S.faces
+              then map F Fs [0 0 0 F 0 0 0 F] //supply dummy dirs
+              else Fs
 
 init_frames_from_folder S Folder =
 | Xs = map FName Folder.urls.keep{is.[@_ png]}{?1}
-  | [FName gfx."[Folder][FName].png"]
+  | [FName "[Folder][FName].png"]
 | init_frames_from_list S Xs
 
 init_sprites Me =
@@ -166,12 +210,12 @@ main.load_sprites =
 | $credits.graphics <= $extract_cfg_authors{Cfgs}
 | $sprites <= join_banks Cfgs
 | init_sprites Me
-| $effect <= $spr{ui_unit_effects}
+| $unit_effects_sprite <= $spr{ui_unit_effects}
 
 main.img Name =
 | S = $sprites."[Name]"
 | less got S: bad "missing image `[Name]`"
-| S.frames.0
+| S.0
 
 main.spr Name =
 | S = $sprites."[Name]"

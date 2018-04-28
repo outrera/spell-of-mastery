@@ -311,31 +311,13 @@ unit.change_owner NewOwner =
 unit.idle = not $ordered.type and
            [$action $next_action].all{?type^~{0 idle} >< idle}
 
-//FIXME: move these into sprite loading code
-AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]
-
-missing_frame Me =
-| Index = $anim_seq.$anim_step.0
-| S = $sprite
-| bad "sprite [S.bank]_[S.name] is missing frame `[Index]` of `[$anim]` at angle [$facing]"
-
 unit.pick_facing F =
 | $facing <= F
 | AS = $anim_seq
 | FrameIndex = AS.($anim_step%AS.size).0
-| Frame = $sprite.frames.FrameIndex
-| less Frame.is_list
-  | $frame <= Frame
-  | when no $frame: missing_frame Me
-  | when $facing <> 3: $mirror <= 1
-  | leave
-| $mirror <= 0
-| Angle = $facing
-| till Frame.Angle
-  | $mirror <= AngleReplacements.Angle.1
-  | Angle <= AngleReplacements.Angle.0
-| $frame <= Frame.Angle
-| when no $frame: missing_frame Me
+| Frame,Mirror = $sprite.get_frame_at_angle{FrameIndex $facing $mirror}
+| $frame <= Frame
+| $mirror <= Mirror
 
 unit.animate Anim =
 | $anim <= Anim

@@ -1,7 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- think about better sprite organization. I.e. it should have both named anims and separate frames, which are then subdivided into facings. Make sure widgets, like buttons, function properly, because they still use angles.
+- Currently we are loading tiles for ship, even if it isn't used. Fix that
+- no need to load sprites for unseen units and tiles.
+- is unit.size/sprite.size really required?
 - save seed for site.variation
 - There should be at least 36 basic parts for map to look non repeatable.
 - Randomizable subarts inside 10x10 chunks

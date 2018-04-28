@@ -186,7 +186,7 @@ site.init =
 | $active <= stack MaxActiveUnits
 | $marks <= stack 1024
 | $free_marks <= stack 1024
-| $shadow <= $main.sprites.system_shadow.frames
+| $shadow <= $main.sprites.system_shadow
 | SS = $maxSize*$maxSize
 | MaxSize = $maxSize
 | $variation <= MaxSize{_=>MaxSize{_=>SS.rand}}
@@ -213,11 +213,7 @@ site.create W H D Filler =
 | $w--
 | $h--
 | $create_borders
-| $w++
-| $h++
-| for Y $h: when Y: for X $w: when X: $upd_pilar{X Y}
-| $w--
-| $h--
+| for Y $h+1: when Y: for X $w+1: when X: $upd_pilar{X Y}
 | $paused <= 1
 
 // add movement blocking walls
