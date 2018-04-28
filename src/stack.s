@@ -1,3 +1,5 @@
+use fxn
+
 type stack{Init} xs used
 | if Init.is_int then $xs <= dup{Init}
   else | $xs <= dup{Init.size}
@@ -7,9 +9,9 @@ stack.init Xs =
 | $clear
 | for X Xs: $push{X}
 
-stack.push X = $xs.($used++) <= X
+stack.push X = $xs.(fxn $used++) <= X
 
-stack.pop =
+stack.pop = fxn:
 | $used--
 | $xs.$used
 
@@ -29,9 +31,11 @@ stack.remove Item =
   | less X >< Item: push X Xs
 | till Xs.end: $push{Xs^pop}
 
-stack.`.` Index = $xs.($used - Index)
+stack.`.` Index =
+| less _tag Index: bad "stack.`.`: Index isnt integer"
+| fxn $xs.($used - Index)
 
-stack.list = dup I $used: $xs.I
+stack.list = dup I $used: fxn $xs.I
 
 stack.map F = $list.map{F}
 

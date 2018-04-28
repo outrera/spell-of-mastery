@@ -1,4 +1,4 @@
-use enheap gfx stack heap util line_points unit player
+use enheap gfx stack heap util line_points unit player fxn
 
 type efx when name amount data
 
@@ -41,13 +41,13 @@ int.floor = CellsFloor.Me
 int.`=floor` V = CellsFloor.Me <= V
 int.gate = CellsGate.Me
 int.`=gate` V = CellsGate.Me <= V
-int.xyz = [Me/SiteDepth%SiteSize Me/CellsLineSize Me%SiteDepth]
-int.z = Me%SiteDepth
-int.north = Me-CellsLineSize
-int.south = Me+CellsLineSize
-int.west = Me-SiteDepth
-int.east = Me+SiteDepth
-int.neibs = [Me-CellsLineSize Me+CellsLineSize Me-SiteDepth Me+SiteDepth]
+int.xyz = fxn [Me/SiteDepth%SiteSize Me/CellsLineSize Me%SiteDepth]
+int.z = fxn Me%SiteDepth
+int.north = fxn Me-CellsLineSize
+int.south = fxn Me+CellsLineSize
+int.west = fxn Me-SiteDepth
+int.east = fxn Me+SiteDepth
+int.neibs = fxn [Me-CellsLineSize Me+CellsLineSize Me-SiteDepth Me+SiteDepth]
 int.climbable = $neibs.any{?empty^not}
 int.path =
 | Cell = Me
@@ -363,9 +363,11 @@ site.`=picked` Us = $player.picked <= Us
 
 
 site.valid X Y Z =
-| X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < $d
-site.cell X Y Z = (Y*$maxSize+X)*$d+Z
-site.cellp P = (P.1*$maxSize+P.0)*$d+P.2
+| fxn: X >> 0 and Y >> 0 and Z >> 0 and X << $w and Y << $h and Z < $d
+site.cell X Y Z = fxn (Y*$maxSize+X)*$d+Z
+site.cellp P =
+| P <= P.list
+| fxn (P.1*$maxSize+P.0)*$d+P.2
 site.at X Y Z = $cell{X Y Z}.tile
 site.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
 site.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V

@@ -1,4 +1,4 @@
-use gfx gui util widgets macros unit_flags stack
+use gfx gui util widgets macros unit_flags stack fxn
 
 ScreenXY = [0 0]
 BrightFactor = 0
@@ -75,7 +75,7 @@ draw_text FB X Y Msg =
 | FB.zbuffer <= ZB
 
 type blit_item{Object X Y Z}
-  id/((X+Y+Z)*1000 - Z)
+  id/fxn{(X+Y+Z)*1000 - Z}
   object/Object
   data
   sx sy // screen x,y
@@ -86,7 +86,7 @@ type blit_item{Object X Y Z}
   cover/[] //what items must be drwan after this one
 | push Me BlitItems
 
-blit_item_from_unit Me =
+blit_item_from_unit Me = fxn:
 | X,Y,Z = $fxyz
 | DX,DY = $box_xy
 | DDX = (DX+2*DY)/2
@@ -105,34 +105,34 @@ unit.draw FB B =
 | Y = B.sy
 | G = $frame
 | GW = G.w
-| XX = X+XUnit2-GW/2
-| YY = Y-YUnit2-G.h
-| YY += $zhack
+| XX = fxn X+XUnit2-GW/2
+| YY = fxn Y-YUnit2-G.h
+| fxn: YY += $zhack
 | when $mirror:
   | XX -= GW%2
   | G.flop
 | S = $sprite
 | when S.shadow:
   | S = $site.shadow
-  | ZZ = $cell-$floor
-  | I = min (ZZ/16).abs S.nframes-1
+  | ZZ = fxn: $cell-$floor
+  | I = fxn: min (ZZ/16).abs S.nframes-1
   | SGfx = S.I
   //| SGfx.brighten{B.brighten}
-  | FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
+  | fxn: FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
 | Colors = $colors
 | when Colors:
   | Rs = S.colors
   | when Rs:
-    | CM = G.cmap{raw/1}
-    | for I 5:
-      | R = Rs.I
+    | CM = G.raw_cmap
+    | times I 5:
+      | R = fxn Rs.I
       | when got R: _ffi_set uint32_t CM R Colors.I
-| when $flyer
+| fxn: when $flyer
   | YY -= 16
   | Y -= 16
 //| G.brighten{B.brighten}
 | G.alpha{$alpha}
-| when B.cut:
+| fxn: when B.cut:
   | CutH = 48
   | CY = max G.h-48 0
   | G.rect{0 CY G.w CutH}
@@ -144,9 +144,10 @@ unit.draw FB B =
 | $blitem <= 0
 | less $pickable: leave
 | RW,RH,RY = $sprite.rect
-| RX = X+XUnit2 - RW/2
-| RY = Y+RY-RH
-| when $picked: PickedRects.push{[RX RY RW RH],Me}
+| when $picked:
+  | RX = X+XUnit2 - RW/2
+  | RY = Y+RY-RH
+  | PickedRects.push{[RX RY RW RH],Me}
 
 
 PickCorner = 0
@@ -233,12 +234,12 @@ render_cursor Me Wr BX BY CursorXYZ =
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | FBH = $fb.h
 | EndZ = min RoofZ Wr.height{X Y}
-| when BY-((EndZ-1)*ZUnit) > FBH: leave
+| when fxn BY-((EndZ-1)*ZUnit) > FBH: leave
 | DrawnFold = 0
 | CurX,CurY,CurZ = CursorXYZ
-| CurH = (CurX+CurY)/2
-| XY2 = (X+Y)/2
-| AboveCursor = CurH >> XY2
+| CurH = fxn (CurX+CurY)/2
+| XY2 = fxn (X+Y)/2
+| AboveCursor = fxn CurH >> XY2
 | ZCut = max CurZ 0
 | Fog = Explored><1
 | Br = @int -([CurX CurY]-[X Y]).abs
@@ -246,7 +247,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
 | SkipZ = -1//if $brush.0 then -1 else 0
 | Us = Wr.column_units_get{X Y}
 | when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
-| for U Us:
+| fxn: for U Us:
   | if U.frame.w > 1 then
     | XYZ = U.xyz
     | UX,UY,Z = XYZ
@@ -255,7 +256,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
       | when not U.invisible or U.owner.id><$player.id or $brush.0:
         | B = blit_item_from_unit U
         | FX,FY,FZ = U.fxyz
-        | BX,BY = ScreenXY + to_iso{FX FY FZ}
+        | BX,BY = esc ScreenXY + to_iso{FX FY FZ}
         | B.sx <= BX - XUnit2
         | B.sy <= BY
         | B.brighten <= Br
@@ -265,7 +266,7 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
     else
 | Cell = Wr.cell{X Y 0}
 | NextZ = 0
-| while NextZ < EndZ:
+| fxn: while NextZ < EndZ:
   | Z = NextZ
   | G = Cell.gfx
   | T = Cell.tile
@@ -342,41 +343,42 @@ unit.find_blit_deps =
     | XX,YY,ZZ = $xyz + if Mirror then [-DY DX DZ] else [DX -DY DZ]
     | $add_dep{$site.cell{XX YY ZZ-1}}
   | leave
-| C = $cell+1
-| Z = ZZ+1
-| EndZ = min $site.d Z+3
-| while C.invisible and Z<EndZ:
-  | $add_dep{$site.cell{X-1 Y Z}}
-  | $add_dep{$site.cell{X Y-1 Z}}
-  | $add_dep{$site.cell{X-1 Y-1 Z}}
-  | C++
-  | Z++
-| C = $site.cell{X Y+1 ZZ}+1
-| EndZ <= Z
-| Z <= ZZ+1
-| while C.invisible and Z<EndZ:
-  | $add_dep{$site.cell{X-1 Y+1 Z}}
-  | C++
-  | Z++
-| C = $site.cell{X+1 Y ZZ}+1
-| EndZ <= Z
-| Z <= ZZ+1
-| while C.invisible and Z<EndZ:
-  | $add_dep{$site.cell{X+1 Y-1 Z}}
-  | C++
-  | Z++
-| when $blitem.deps.end: leave
-| Cell = $site.cell{X+1 Y+1 ZZ}
-| less Cell.invisible:
-  | CB = Cell.blitem
-  | when CB:
-    | push $id CB.deps
-    | push CB $blitem.cover
-| for U Cell.units:
-  | CB = U.blitem
-  | when CB:
-    | push $id CB.deps
-    | push CB $blitem.cover
+| fxn:
+  | C = $cell+1
+  | Z = ZZ+1
+  | EndZ = min $site.d Z+3
+  | while C.invisible and Z<EndZ:
+    | $add_dep{$site.cell{X-1 Y Z}}
+    | $add_dep{$site.cell{X Y-1 Z}}
+    | $add_dep{$site.cell{X-1 Y-1 Z}}
+    | C++
+    | Z++
+  | C = $site.cell{X Y+1 ZZ}+1
+  | EndZ <= Z
+  | Z <= ZZ+1
+  | while C.invisible and Z<EndZ:
+    | $add_dep{$site.cell{X-1 Y+1 Z}}
+    | C++
+    | Z++
+  | C = $site.cell{X+1 Y ZZ}+1
+  | EndZ <= Z
+  | Z <= ZZ+1
+  | while C.invisible and Z<EndZ:
+    | $add_dep{$site.cell{X+1 Y-1 Z}}
+    | C++
+    | Z++
+  | when $blitem.deps.end: leave
+  | Cell = $site.cell{X+1 Y+1 ZZ}
+  | less Cell.invisible:
+    | CB = Cell.blitem
+    | when CB:
+      | push $id CB.deps
+      | push CB $blitem.cover
+  | for U Cell.units:
+    | CB = U.blitem
+    | when CB:
+      | push $id CB.deps
+      | push CB $blitem.cover
 
 
 view.find_blit_deps = for U BlitUnits: less U.mark: U.find_blit_deps
@@ -413,7 +415,7 @@ view.render_iso =
   | Marked <= Wr.main.img{ui_cell_marked}
   | Unexplored <= Wr.main.img{ui_cell_unexplored}
 | FBW = FB.w
-| times YY VS
+| fxn: times YY VS
   | Y = YY + VY
   | XXX = TX - YY*XUnit2
   | YYY = TY + YY*YUnit2
@@ -424,7 +426,7 @@ view.render_iso =
       | less BX < -64 or BX>FBW:
         | BY = YYY + XX*YUnit2
         | less BY < 0:
-          | E = Explored.Y.X
+          | E = esc Explored.Y.X
           | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
             else render_unexplored Me Wr X Y BX BY
 | when $mice_click<>left or $brush.0:
@@ -434,7 +436,7 @@ view.render_iso =
 | less BlitItems.end
   | BlitItems <= BlitItems.list
   | $find_blit_deps
-  | Bs = BlitItems.qsort_{A B => A.id<B.id}
+  | Bs = BlitItems.qsort_{A B => fxn A.id<B.id}
   | for B Bs: when B.deps.end: B.object.draw{FB B}
 | draw_picked_rects FB PickedRects.list.flip
 | draw_overlay FB Wr
