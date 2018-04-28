@@ -60,11 +60,11 @@ draw_bounding_box_back Color FB B =
 | for A,B [P2,P1 P1,P3 P3,P6 P6,P8 P8,P5 P5,P2 P1,P8]
   | FB.line{Color A B}
 
-type special_blit{what}
+type special_blit{what x y z}
 
 special_blit.draw FB BlitItem =
-| if $what >< box_front then draw_bounding_box_front #00FF00 FB BlitItem
-  else if $what >< box_back then draw_bounding_box_back #FF0000 FB BlitItem
+| if $what >< box_front then draw_bounding_box_front #00FF00 FB Me
+  else if $what >< box_back then draw_bounding_box_back #FF0000 FB Me
   else
 
 draw_text FB X Y Msg =
@@ -74,8 +74,9 @@ draw_text FB X Y Msg =
 | Font.draw{FB X Y Msg}
 | FB.zbuffer <= ZB
 
-type blit_item{object x y z}
-  id
+type blit_item{Object X Y Z}
+  id/((X+Y+Z)*1000 - Z)
+  object/Object
   data
   sx sy // screen x,y
   cut // cut this sprite height, to avoid obsucring units behind
@@ -83,9 +84,7 @@ type blit_item{object x y z}
   brighten
   deps/[] //what items must be drawn before this one
   cover/[] //what items must be drwan after this one
-
-make_blit_item X Y Z Object =
-| blit_item Object X Y Z
+| push Me BlitItems
 
 blit_item_from_unit Me =
 | X,Y,Z = $fxyz
@@ -94,14 +93,14 @@ blit_item_from_unit Me =
 | DDY = 2*DY-DDX
 | X += DDX
 | Y += DDY
-| BI = make_blit_item X Y Z+7 Me //Z+7 is a hack to avoid cursor cluttering
+| BI = blit_item Me X Y Z+7  //Z+7 is a hack to avoid cursor cluttering
 | $blitem <= BI
 | BI
 
 PickedRects = 0
 
 unit.draw FB B =
-| NDrawnUnits++
+//| NDrawnUnits++
 | X = B.sx
 | Y = B.sy
 | G = $frame
@@ -118,7 +117,7 @@ unit.draw FB B =
   | ZZ = $cell-$floor
   | I = min (ZZ/16).abs S.nframes-1
   | SGfx = S.I
-  | SGfx.brighten{B.brighten}
+  //| SGfx.brighten{B.brighten}
   | FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
 | Colors = $colors
 | when Colors:
@@ -131,7 +130,7 @@ unit.draw FB B =
 | when $flyer
   | YY -= 16
   | Y -= 16
-| G.brighten{B.brighten}
+//| G.brighten{B.brighten}
 | G.alpha{$alpha}
 | when B.cut:
   | CutH = 48
@@ -181,12 +180,12 @@ draw_picked_rects FB PickedRects =
       | XX += 16
 
 tile.draw FB BlitItem =
-| NDrawnTiles++
+//| NDrawnTiles++
 | B = BlitItem
 | G,Cell = B.data
 | Cell.blitem <= 0
-| when B.flags&&&#40: G.dither{1}
-| G.brighten{B.brighten}
+//| when B.flags&&&#40: G.dither{1}
+//| G.brighten{B.brighten}
 | FB.blit{B.sx B.sy G}
 | for U B.cover:
   | UB = U.blitem
@@ -198,7 +197,7 @@ type gfx_item
 gfx_item.draw FB BlitItem =
 | B = BlitItem
 | G = B.data
-| when B.flags&&&#40: G.dither{1}
+//| when B.flags&&&#40: G.dither{1}
 | FB.blit{B.sx B.sy G}
 
 render_cursor Me Wr BX BY CursorXYZ =
@@ -217,16 +216,16 @@ render_cursor Me Wr BX BY CursorXYZ =
   | TH = T.height
   | ZZ = Z*ZUnit
   | GH = if G then G.h else YUnit
-  | B = make_blit_item X*CS-2 Y*CS-2 Z*CS
-                       special_blit{box_back}
+  | SB = special_blit box_back X*CS-2 Y*CS-2 Z*CS
+  | B = blit_item SB X*CS-2 Y*CS-2 Z*CS
+                       
   | B.sx <= BX
   | B.sy <= BY-GH-ZZ
-  | push B BlitItems
-  | B = make_blit_item X*CS Y*CS Z*CS+2
-                       special_blit{box_front}
+  | SB = special_blit box_front X*CS Y*CS Z*CS+2
+  | B = blit_item SB X*CS Y*CS Z*CS+2
+                       
   | B.sx <= BX
   | B.sy <= BY-GH-ZZ
-  | push B BlitItems
   | Z <= UnitZ
 
 render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
@@ -260,7 +259,6 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
         | B.brighten <= Br
         | B.cut <= U.foldable
                    and not (TZ+2 < RoofZ and (AboveCursor or TZ+2 << ZCut))
-        | push B BlitItems
         | push U BlitUnits
     else
 | Cell = Wr.cell{X Y 0}
@@ -283,22 +281,20 @@ render_pilar Me Wr X Y BX BY CursorXYZ RoofZ Explored =
           | G <= Folded
         else G <= 0
       | when G and Z>SkipZ:
-          | B = make_blit_item X*CS Y*CS Z*CS T
+          | B = blit_item T X*CS Y*CS Z*CS 
           | B.data <= G,Cell
           | B.sx <= BX
           | B.sy <= SY-G.h
-          | B.brighten <= Br
-          | when Fog: B.flags <= #40 //dither
-          | push B BlitItems
+          //| B.brighten <= Br
+          //| when Fog: B.flags <= #40 //dither
           | Cell.blitem <= B
   | Cell += TH
 
 render_unexplored Me Wr X Y BX BY =
-| B = make_blit_item X*CS Y*CS 0 gfx_item{}
+| B = blit_item gfx_item{} X*CS Y*CS 0
 | B.data <= Unexplored
 | B.sx <= BX
 | B.sy <= BY-$zunit-Unexplored.h
-| push B BlitItems
 
 colorize G Layer Color =
 | Alpha = Color >>> 24
@@ -436,7 +432,6 @@ view.render_iso =
 | less BlitItems.end
   | BlitItems <= BlitItems.list
   | $find_blit_deps
-  | for B BlitItems: B.id <= (B.x+B.y+B.z)*1000 - B.z
   | Bs = BlitItems.qsort_{A B => A.id<B.id}
   | for B Bs: when B.deps.end: B.object.draw{FB B}
 | draw_picked_rects FB PickedRects.list.flip
