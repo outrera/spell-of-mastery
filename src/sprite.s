@@ -1,10 +1,4 @@
-use gfx util
-
-siteToSprite X Y =
-| RX = (X*64 - Y*64)/2
-| RY = (X*32 + Y*32)/2
-| [RX RY]
-
+use gfx util fxn
 
 type sprite{main Bank Name filepath/0 xy/[0 0]
             frames/0 faces/0 anims/default recolors/0
@@ -56,8 +50,6 @@ sprite.nframes =
 | $frames.size
 
 missing_frame Me Index Angle =
-| Index = $anim_seq.$anim_step.0
-| S = $sprite
 | bad "sprite [$bank]_[$name] is missing frame `[Index]` at angle [Angle]"
 
 //FIXME: move these into sprite loading code
@@ -69,17 +61,17 @@ sprite.get_frame_at_angle Index Angle Mirror =
 | R = $frames.Index
 | less R.is_list:
   | when no R: missing_frame Me Index OAngle
-  | when Angle <> 3: Mirror <= 1
+  | when fxn Angle <> 3: Mirror <= 1
   | when R.is_frame_thunk:
     | R <= load_frame Me R.path R.xy
     | $frames.Index <= R
   | leave R,Mirror
 | Mirror <= 0
 | As = R
-| till As.Angle
+| fxn: till As.Angle
   | Mirror <= AngleReplacements.Angle.1
   | Angle <= AngleReplacements.Angle.0
-| R <= As.Angle
+| R <= fxn As.Angle
 | when no R: missing_frame Me Index OAngle
 | when R.is_frame_thunk:
   | R <= load_frame Me R.path R.xy
@@ -94,6 +86,10 @@ sprite.init =
   else init_frames Me gfx{$path}
 | when@@it $shadow: $shadow <= $main.img{it}
 
+siteToSprite X Y =
+| RX = (X*64 - Y*64)/2
+| RY = (X*32 + Y*32)/2
+| [RX RY]
 
 sprite.init_form Form =
 | Form = Form.tail
@@ -122,6 +118,7 @@ sprite.init_anims Anims =
   | $anims.attack <= if Attack.size>1
                      then [@Attack.lead [impact 0] Attack.last]
                      else [Attack.head [impact 0]]
+| $anims <= @table: map K,Fs $anims: K,(map F Fs: F) //optimize
 
 
 sprite.anim_speed AnimName =

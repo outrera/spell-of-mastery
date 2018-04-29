@@ -128,8 +128,8 @@ unit.size =
 
 unit.moves = max 0 $mov-$fatigue
 
-unit.alive = $hp > 0
-unit.harmed = $hp < $class.hp
+unit.alive = fxn $hp > 0
+unit.harmed = fxn $hp < $class.hp
 
 unit.health = $hp
 

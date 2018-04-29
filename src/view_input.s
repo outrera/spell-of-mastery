@@ -59,6 +59,7 @@ view.handle_pick =
 | when $mice_click >< pick:
   | $mice_click <= 0
   | when Unit.id: $main.sound{ui_click}
+  | when $picked.id: $picked.picked <= 0
   | $picked <= Unit
   | $site.last_picked <= 0
   | leave
