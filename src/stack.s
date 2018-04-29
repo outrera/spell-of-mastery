@@ -9,7 +9,7 @@ stack.init Xs =
 | $clear
 | for X Xs: $push{X}
 
-stack.push X = $xs.(fxn $used++) <= X
+stack.push X = fxn: $xs.($used++) <= X
 
 stack.pop = fxn:
 | $used--
@@ -20,7 +20,7 @@ stack.alloc @Xs =
 | Item.init{@Xs}
 | Item
 
-stack.size = $xs.size
+stack.size = $xs^_size
 
 stack.clear = $used <= 0
 

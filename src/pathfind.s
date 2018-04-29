@@ -1,36 +1,36 @@
-use queue util
+use queue util fxn
 
 land_can_move Me Src Dst =
 | H = Dst.z-Src.z
-| when H > 1 or H < -1: leave 0
-| Dst.tile.empty and not (Dst-1).tile.liquid
+| fxn: when H > 1 or H < -1: leave 0
+| Dst.tile.empty and not (fxn Dst-1).tile.liquid
 
 amphibian_can_move Me Src Dst =
 | H = Dst.z-Src.z
-| when H > 1 or H < -1: leave 0
+| fxn: when H > 1 or H < -1: leave 0
 | Dst.tile.empty
 
 swimmer_can_move Me Src Dst =
 | H = Dst.z-Src.z
-| when H > 1 or H < -1: leave 0
-| Dst.tile.empty and (Dst-1).tile.type><water
+| fxn: when H > 1 or H < -1: leave 0
+| Dst.tile.empty and (fxn Dst-1).tile.type><water
 
 flyer_can_move Me Src Dst =
 | less Dst.tile.empty: leave 0
 | SZ = Src.z
 | DZ = Dst.z
-| if SZ<DZ
-  then | when DZ > $site.d-3: leave 0
+| fxn: if SZ<DZ
+  then | fxn: when DZ > $site.d-3: leave 0
        | times I DZ-SZ: less (Src+I).tile.empty: leave 0
   else times I SZ-DZ: less (Dst+I).tile.empty: leave 0
 | 1
 
 climber_can_move Me Src Dst =
 | less Dst.tile.empty: leave 0
-| when (Dst-1).tile.liquid: leave 0
+| when (fxn Dst-1).tile.liquid: leave 0
 | SZ = Src.z
 | DZ = Dst.z
-| if SZ<DZ
+| fxn: if SZ<DZ
   then | when DZ-SZ > 3: leave 0
        | when DZ > $site.d-3: leave 0
        | times I DZ-SZ: less (Src+I).tile.empty: leave 0
@@ -56,7 +56,7 @@ unit.list_moves Src Cost =
   | when Cost < Dst.cost and CanMove{Me Src Dst}:
     | B = Dst.block
     | if B then
-        | if $owner.id <> B.owner.id
+        | if fxn $owner.id <> B.owner.id
           then if B.alive and $atk
                then push Dst Ms //attack
                else
@@ -81,10 +81,10 @@ site.pathfind MaxCost U StartCell Check =
 | till PFQueue.end
   | Src = PFQueue.pop
   | Cost = Src.cost
-  | NextCost = Cost+1
+  | NextCost = fxn Cost+1
   | Ms = U.list_moves{Src NextCost}
   | when Src.gate:
-    | when Src.prev and Src.prev.mdist{Src}><1:
+    | when Src.prev and fxn Src.prev.mdist{Src}><1:
       | Ms <= [Src.gate.cell]
   | for Dst Ms:
     | Dst.prev <= Src
@@ -95,7 +95,7 @@ site.pathfind MaxCost U StartCell Check =
              | R <= Dst
              | _goto end
     | Dst.cost <= NextCost
-    | when NextCost<MaxCost: PFQueue.push{Dst}
+    | when fxn NextCost<MaxCost: PFQueue.push{Dst}
     | _label skip
 | _label end
 //| EndTime = clock
@@ -112,12 +112,12 @@ site.closest_reach MaxCost U StartCell TargetXYZ =
 | check Dst =
   | R = 0
   | DX,DY,DZ = Dst.xyz
-  | NewL = [TX-DX TY-DY].abs
-  | when BestL>>NewL and (BestL>NewL or TZ><DZ):
+  | NewL = [TX-DX TY-DY]^fxn.abs
+  | when BestL>>NewL and (BestL>NewL or fxn TZ><DZ):
     | BestL <= NewL
     | Best <= Dst
     | when BestL < 1.4:
-      | when Best><TCell: | R <= 1; _goto end
+      | when fxn Best><TCell: | R <= 1; _goto end
       | less TCell.tile.empty: | R <= 1; _goto end
       | B = TCell.block
       | when B:
@@ -173,9 +173,9 @@ path_len Cell =
 unit.attack_cost = if $afraid then 9000 else 1
 unit.jump_cost = 1
 
-can_jump Src Dst = Dst.empty and Dst.floor-Dst>1
+can_jump Src Dst = Dst.empty and fxn Dst.floor-Dst>1
 
-unit.can_attack Src Dst = (Dst.z-Src.z) << 1 or $can_move{}{Me Src Dst}
+unit.can_attack Src Dst = fxn (Dst.z-Src.z) << 1 or $can_move{}{Me Src Dst}
 
 unit.reachable =
 | Xs = []
@@ -199,11 +199,11 @@ unit.reachable =
 | less $flyer or $climber: for N $cell.neibs: when N.empty:
   | F = N.floor
   | less F.block:
-    | when N-F>1 and $moves>>$jump_cost:
+    | when fxn N-F>1 and fxn $moves>>$jump_cost:
       | less got Xs.find{?1<>F}: push [jump F] Xs
-| when $range><1 and not $afraid and $moves>>1:
+| when fxn $range><1 and not $afraid and fxn $moves>>1:
   | for E $enemies_in_range:
     | when $can_attack{$cell E.cell}: push [attack E.cell] Xs
-| when $range>1 and not $afraid and $moves>>1:
+| when fxn $range>1 and not $afraid and fxn $moves>>1:
   | for E $enemies_in_range: push [attack E.cell] Xs
 | Xs

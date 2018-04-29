@@ -375,13 +375,13 @@ site.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V
 site.pilar X Y =
 | H = $height{X Y}
 | Cell = $cell{X Y 0}
-| map Z H: (Cell+Z).tile
+| fxn: map Z H: (Cell+Z).tile
 
 site.set_pilar X Y Ts =
 | Cell = $cell{X Y 0}
-| for T Ts: CellsTile.(Cell++) <= T
+| fxn: for T Ts: CellsTile.(Cell++) <= T
 | Void = $void
-| times I $d-Ts.size: CellsTile.(Cell++) <= Void
+| fxn: times I $d-Ts.size: CellsTile.(Cell++) <= Void
 
 site.clear_tile_ X Y Z =
 | Filler = $void
@@ -492,7 +492,7 @@ unit.explore V =
 | Explored = $owner.sight
 | UX = XYZ.0
 | UY = XYZ.1
-| for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when X>>0 and Y>>0:
+| for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when fxn (X>>0 and Y>>0):
   | E = Explored.Y
   | less E.X: E.X <= 1
   | E.X += V
@@ -532,11 +532,11 @@ site.remove_unitS U X Y Z = fxn:
 | U.explore{-1}
 | Cell = $cell{X Y 0}
 | K = Cell.units
-| Cell.units <= K.unheap.skip{?id><U.id}.enheap
+| Cell.units <= K.unheap.skip{X=>fxn X.id><U.id}.enheap
 | K.heapfree
 | Cell += Z
 | K = Cell.units
-| Us = K.unheap.skip{?id><U.id}
+| Us = K.unheap.skip{X=>fxn X.id><U.id}
 | Cell.units <= Us.enheap
 | K.heapfree
 | less U.empty:
@@ -650,7 +650,7 @@ upd_floor Me Bottom = fxn:
   | LastEmpty <= Empty
 
 site.upd_pilar X Y =
-| when X < 0 or Y < 0: leave 0
+| fxn: when X < 0 or Y < 0: leave 0
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
 | $heighmap.X.Y <= fxn (Cell+$d-2).floor.z

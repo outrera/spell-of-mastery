@@ -1,4 +1,4 @@
-use gfx util
+use util
 
 ClassIdCounter = 1
 
