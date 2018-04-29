@@ -1,5 +1,5 @@
 // game site update routines
-use util
+use util fxn
 
 main.update =
 | $site.update
@@ -313,7 +313,7 @@ unit.sink =
 | $harm{Me 6000}
 
 unit.update =
-| when $removed or $active<>1:
+| when $removed or (fxn $active<>1):
   | $active <= 0
   | leave
 | when $host:
@@ -325,7 +325,7 @@ unit.update =
   | $update_fall
   | leave
 | when $velocity.2<0.0: unit_landed Me
-| when $class.hp and ($cell-1).tile.liquid and not $can_stand_on_water:
+| when $class.hp and (fxn $cell-1).tile.liquid and not $can_stand_on_water:
   | $sink
   | leave
 | update_anim Me

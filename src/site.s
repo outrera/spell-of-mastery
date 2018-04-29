@@ -444,7 +444,7 @@ site.roof XYZ =
 | while $at{X Y Z}.empty and Z < $d-1: Z++
 | Z
 
-site.seen_from A B =
+site.seen_from A B = fxn:
 | when A.2 < B.2: swap A B //hack to accomodate for line_calls3d quirks
 | AX,AY,AZ = A
 | BX,BY,BZ = B
@@ -502,7 +502,7 @@ site.explore State = for P $players: P.explore{State}
 site.place_unitS U X Y Z =
 | Cell = $cell{X Y 0}
 | Cell.units <= Cell.units.cons{U}
-| Cell += Z
+| fxn: Cell += Z
 | Cell.units <= Cell.units.cons{U}
 | less U.empty: Cell.block <= U
 
@@ -519,7 +519,7 @@ site.place_unit U =
     | XX,YY,ZZ = XYZ
     | $place_unitS{U XX YY ZZ}
     | when Blocker: $set{XX YY ZZ U.block}
-| U.cell <= $cell{XYZ.0 XYZ.1 XYZ.2}
+| U.cell <= fxn $cell{XYZ.0 XYZ.1 XYZ.2}
 | when U.gate:
   | Target = 0
   | for A $active: when A.gate><U.gate and A.id<>U.id: Target <= A
@@ -528,7 +528,7 @@ site.place_unit U =
     | Target.cell.gate <= U
 | U.explore{1}
 
-site.remove_unitS U X Y Z =
+site.remove_unitS U X Y Z = fxn:
 | U.explore{-1}
 | Cell = $cell{X Y 0}
 | K = Cell.units
@@ -582,39 +582,39 @@ site.units_in_range Center R =
     | for U $column_units_get{X Y}: when $seen_from{Center U.xyz}: push U Units
 | Units
 
-site.neibs X Y Z =
+site.neibs X Y Z = fxn:
   [$at{X Y-1 Z} $at{X+1 Y Z} $at{X Y+1 Z} $at{X-1 Y Z}
    $at{X+1 Y-1 Z} $at{X+1 Y+1 Z} $at{X-1 Y+1 Z} $at{X-1 Y-1 Z}]
 
-site.filled X Y Z =
+site.filled X Y Z = fxn:
 | when X < 0 or Y < 0: leave 1
 | $at{X Y Z}.filler
 
-site.getCorners X Y Z = `[]`
+site.getCorners X Y Z = fxn: `[]`
   [$filled{X-1 Y-1 Z} $filled{X Y-1 Z} $filled{X-1 Y Z}].all{1}
   [$filled{X+1 Y-1 Z} $filled{X Y-1 Z} $filled{X+1 Y Z}].all{1}
   [$filled{X+1 Y+1 Z} $filled{X Y+1 Z} $filled{X+1 Y Z}].all{1}
   [$filled{X-1 Y+1 Z} $filled{X Y+1 Z} $filled{X-1 Y Z}].all{1}
 
-site.getSides X Y Z = `[]`
+site.getSides X Y Z = fxn: `[]`
   $filled{X Y-1 Z} $filled{X+1 Y Z}
   $filled{X Y+1 Z} $filled{X-1 Y Z}
 
-site.role X Y Z =
+site.role X Y Z = fxn:
 | when X < 0 or Y < 0: leave 0
 | $at{X Y Z}.role
 
-site.getCornersSame X Y Z Role = `[]`
+site.getCornersSame X Y Z Role = fxn: `[]`
   [$role{X-1 Y-1 Z} $role{X Y-1 Z} $role{X-1 Y Z}].all{Role}
   [$role{X+1 Y-1 Z} $role{X Y-1 Z} $role{X+1 Y Z}].all{Role}
   [$role{X+1 Y+1 Z} $role{X Y+1 Z} $role{X+1 Y Z}].all{Role}
   [$role{X-1 Y+1 Z} $role{X Y+1 Z} $role{X-1 Y Z}].all{Role}
 
-site.getSidesSame X Y Z Role = `[]`
+site.getSidesSame X Y Z Role = fxn: `[]`
   $role{X Y-1 Z}><Role $role{X+1 Y Z}><Role
   $role{X Y+1 Z}><Role $role{X-1 Y Z}><Role
 
-site.update_minimap X Y Color=
+site.update_minimap X Y Color = fxn:
 | WW = $w
 | WH = $h
 | MW = $minimap.w
@@ -625,10 +625,9 @@ site.update_minimap X Y Color=
 | PH = (MH+WH-1)/WH
 | SX = (X-1)*PW
 | SY = (Y-1)*PH
-| for YY PH: for XX PW:
-  | $minimap.set{SX+XX SY+YY Color}
+| times YY PH: times XX PW: $minimap.set{SX+XX SY+YY Color}
 
-upd_floor Me Bottom =
+upd_floor Me Bottom = fxn:
 | Cell = Bottom
 | Floor = Cell
 | LastEmpty = 0
@@ -654,14 +653,14 @@ site.upd_pilar X Y =
 | when X < 0 or Y < 0: leave 0
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
-| $heighmap.X.Y <= (Cell+$d-2).floor.z
+| $heighmap.X.Y <= fxn (Cell+$d-2).floor.z
 | for U $column_units_get{X Y}: U.environment_updated
 | Var = $variation.Y.X
 | H = $height{X Y}
 | Below = $main.tid_map.0
 | T = Cell.tile
 | Z = 0
-| while Z < H:
+| fxn: while Z < H:
   | TH = T.height
   | Next = Cell+TH
   | Above = Next.tile

@@ -2,7 +2,9 @@
 
 tofxn E =
 | less E.is_list: leave E
-| case E [esc @Xs]: leave Xs
+| case E
+  [`<=` A @Xs] | leave [`<=` A Xs^tofxn]
+  [esc @Xs] | leave Xs
 | E <= E{?^tofxn}
 | case E
   [`+` A B]  | [_add A B]
@@ -26,7 +28,6 @@ tofxn E =
   [`*=` A B]  | [`<=` A [_mul A B]]
   [`/=` A B]  | [`<=` A [_div A B]]
   [`%=` A B]  | [`<=` A [_rem A B]]
-
   Else | E
 
 

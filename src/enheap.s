@@ -48,7 +48,11 @@ list.enheap =
 | Ys
 
 _.unheap = Me
-sexp.unheap = map X Me: X.unheap
+sexp.unheap =
+| dup $size:
+  | R = $head.unheap
+  | Me <= $tail
+  | R
 
 sexp.uncons =
 | T = Me.tail

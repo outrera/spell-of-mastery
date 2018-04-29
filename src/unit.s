@@ -1,4 +1,4 @@
-use util macros unit_flags
+use util macros unit_flags fxn
 
 CellSize =
 
@@ -348,10 +348,10 @@ unit.reset_followers =
 | for U $site.active: when U.goal and U.goal.id><$id:
   | U.reset_goal
 
-unit.removed = $xyz.2 >< -1
+unit.removed = fxn $xyz.2 >< -1
 
 in_range Me XYZ =
-| less XYZ.mdist{$xyz}<<$range: leave 0
+| less fxn XYZ.mdist{$xyz}<<$range: leave 0
 | $site.seen_from{$xyz $goal.xyz}
 
 unit.units_in_range Range = $site.units_in_range{Me.xyz Range}
@@ -461,7 +461,7 @@ unit_pickup_items Me =
 
 unit.fine_move FXYZ =
 | C = $site.c
-| XYZ = [FXYZ.0/C FXYZ.1/C FXYZ.2/C]
+| XYZ = fxn [FXYZ.0/C FXYZ.1/C FXYZ.2/C]
 | $from.init{$xyz}
 | $remove
 | $xyz.init{XYZ}
@@ -483,7 +483,7 @@ unit.fine_move FXYZ =
 
 unit.move XYZ =
 | C = $site.c
-| $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
+| fxn $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
 | when $class.active: $run_genes{move}
 | Me
 
