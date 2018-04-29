@@ -461,6 +461,7 @@ unit_pickup_items Me =
 
 unit.fine_move FXYZ =
 | C = $site.c
+| FXYZ = FXYZ.list //required for fxn
 | XYZ = fxn [FXYZ.0/C FXYZ.1/C FXYZ.2/C]
 | $from.init{$xyz}
 | $remove
@@ -483,6 +484,7 @@ unit.fine_move FXYZ =
 
 unit.move XYZ =
 | C = $site.c
+| XYZ = XYZ.list //required for fxn
 | fxn $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
 | when $class.active: $run_genes{move}
 | Me

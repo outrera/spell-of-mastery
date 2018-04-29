@@ -85,7 +85,7 @@ site.update =
   | less $blink.0:
     | $blink.1.picked <= 0
     | $blink.1<=0
-    | for U $human.picked: U.picked <= 1
+    | when $human.picked.id: $human.picked.picked <= 1
 | when EventActions.end: $process_events
 | when update_events Me: leave
 | update_units Me
@@ -321,7 +321,7 @@ unit.update =
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
     else $die
-| when $cell > $floor and $action.type><idle:
+| when fxn $cell > $floor and $action.type><idle:
   | $update_fall
   | leave
 | when $velocity.2<0.0: unit_landed Me

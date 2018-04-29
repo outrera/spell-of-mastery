@@ -426,7 +426,7 @@ view.render_iso =
       | less BX < -64 or BX>FBW:
         | BY = YYY + XX*YUnit2
         | less BY < 0:
-          | E = esc Explored.Y.X
+          | E = esc Explored.Y.X //explored is bytes array, so we escape it
           | if E then render_pilar Me Wr X Y BX BY $cursor RoofZ E
             else render_unexplored Me Wr X Y BX BY
 | when $mice_click<>left or $brush.0:

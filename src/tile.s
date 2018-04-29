@@ -1,4 +1,4 @@
-use gfx util
+use gfx util fxn
 
 CellSize = 32 //FIXME: hardcoded
 
@@ -208,10 +208,10 @@ tile.render X Y Z Below Above Variation =
 | TT = T
 | St = TT.stack
 | when St:
-  | TT <= if BE then St.2
-          else if BR <> $role or BelowSlope><#@1111 then St.0
-          else if AR <> $role then St.2
-          else St.1
+  | TT <= if BE then fxn St.2
+          else if BR <> $role or fxn BelowSlope><#@1111 then fxn St.0
+          else if AR <> $role then fxn St.2
+          else fxn St.1
 | Gs = TT.gfxes
 | Lineup = 0
 | when AH and $lineup and ($lineup<>other or AR<>$role):
@@ -232,19 +232,19 @@ tile.render X Y Z Below Above Variation =
       else if Lineup then
          | NeibSlope <= #@1111
          | Gs.NeibSlope
-      else
+      else fxn:
          | Elev = $tiler{}{Site X Y Z Me}
          | FB = TT.fallback
          | when FB.0><Elev and FB.1><AH:
            | Elev <= (FB.3){Site X Y Z Me}
            | Gs <= FB.2.gfxes
          | NeibSlope <= Elev.digits{2}
-         | R = Gs.NeibSlope
+         | R = fxn Gs.NeibSlope
          | R
 | BelowSlope <= NeibSlope
 | BelowTile <= TT
 | when G.is_list: less $anim_wait: G <= G.(Variation%G.size)
-| when Opaque and Z > 0:
+| fxn: when Opaque and Z > 0:
   | ZZ = Z-1
   | A = Site.at{X+1 Y ZZ}
   | B = Site.at{X Y+1 ZZ}
