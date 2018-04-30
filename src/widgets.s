@@ -1,4 +1,4 @@
-use gui main_data
+use gui main_data fxn
 
 Fonts = t
 
@@ -12,10 +12,15 @@ font N = have Fonts.N:
 | FrameList = map I S.nframes: S.I
 | Glyphs = FrameList{F<[X Y W H].margins=>| F.xy <= 0,0
                                           | F.cut{X 0 W F.h}}
-| Ws = Glyphs{[X Y W H].margins=>X+W-EX}
+| Ws = Glyphs{[X Y W H].margins=>X+W-EX}.list
 | Ws.0 <= W/2
-| new_font Glyphs Ws H
-font.width Line = | Ws = $widths; Line{C.code => Ws.(C-' '.code)+1}.sum
+| new_font Glyphs.list Ws H
+font.width Line =
+| Ws = $widths
+| CodePoint = ' '.code
+| R = Line.size
+| for C Line: fxn: R += Ws.(C.code-CodePoint)
+| R
 font.draw G X Y Text =
 | Ls = Text.lines
 | Ws = $widths
@@ -23,7 +28,7 @@ font.draw G X Y Text =
 | H = $height
 | CodePoint = ' '.code
 | CY = Y
-| for L Ls
+| fxn: for L Ls
   | CX = X
   | for C L
     | I = C.code-CodePoint
