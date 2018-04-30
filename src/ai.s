@@ -47,7 +47,7 @@ unit.ai_pick_target Act =
 | Ts <= Ts.keep{T => Act.validate{Me T.xyz T 0}}
 | for Flag Act.flags //avoid overriding
   | FlagN = getUnitFlagsTable{}.Flag
-  | when got FlagN: Ts <= Ts.skip{T => T.flags^get_bit{FlagN}}
+  | when got FlagN: Ts <= Ts.skip{T => T.flags.bit{FlagN}}
 | if Ts.size then Ts.0 else 0
 
 unit.ai_ability_sub Act =

@@ -142,7 +142,7 @@ site.turn_act State Players ActNames =
 | for ActName ActNames:
   | Act = Acts.ActName
   | less got Act: bad "missing act [ActName]"
-  | for Id Players: Act.players <= Act.players^set_bit{Id State}
+  | for Id Players: Act.players <= Act.players.bitSet{Id State}
 
 unit.earned Act =
 | geneCheck N = if N.is_list then not $has{N.1} else $has{N}

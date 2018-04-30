@@ -129,7 +129,7 @@ player.research_remain Act =
 | ResearchRemain = Act.lore - ResearchSpent
 | ResearchRemain
 
-player.enabled Act = Act.players^get_bit{$id}<>0
+player.enabled Act = Act.players.bit{$id}
 
 player.researched Act = $research_remain{Act}<<0
 

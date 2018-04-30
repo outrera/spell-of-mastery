@@ -62,43 +62,43 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $site.main
 
-unit.picked = $flags^get_bit{1}
-unit.`=picked` State = $flags <= $flags^set_bit{1 State}
+unit.picked = $flags.bit{1}
+unit.`=picked` State = $flags <= $flags.bitSet{1 State}
 
-unit.engaged = $flags^get_bit{2}
-unit.`=engaged` State = $flags <= $flags^set_bit{2 State}
+unit.engaged = $flags.bit{2}
+unit.`=engaged` State = $flags <= $flags.bitSet{2 State}
 
-unit.shelled = $flags^get_bit{4}
-unit.`=shelled` State = $flags <= $flags^set_bit{4 State}
+unit.shelled = $flags.bit{4}
+unit.`=shelled` State = $flags <= $flags.bitSet{4 State}
 
-unit.flyer = $flags^get_bit{5}
-unit.`=flyer` State = $flags <= $flags^set_bit{5 State}
+unit.flyer = $flags.bit{5}
+unit.`=flyer` State = $flags <= $flags.bitSet{5 State}
 
-unit.charging = $flags^get_bit{6}
-unit.`=charging` State = $flags <= $flags^set_bit{6 State}
+unit.charging = $flags.bit{6}
+unit.`=charging` State = $flags <= $flags.bitSet{6 State}
 
-unit.climber = $flags^get_bit{9}
-unit.swimmer = $flags^get_bit{10}
-unit.amphibian = $flags^get_bit{11}
-unit.invisible = $flags^get_bit{12}
-unit.blessed = $flags^get_bit{13}
-unit.`=blessed` State = $flags <= $flags^set_bit{13 State}
-unit.cursed = $flags^get_bit{14}
-unit.afraid = $flags^get_bit{15}
+unit.climber = $flags.bit{9}
+unit.swimmer = $flags.bit{10}
+unit.amphibian = $flags.bit{11}
+unit.invisible = $flags.bit{12}
+unit.blessed = $flags.bit{13}
+unit.`=blessed` State = $flags <= $flags.bitSet{13 State}
+unit.cursed = $flags.bit{14}
+unit.afraid = $flags.bit{15}
 
 unit.can_stand_on_water = $flyer or $swimmer or $amphibian
 
 // this unit is a temporary mark (i.e. cursor); dont save it
-unit.mark = $flags^get_bit{16}
-unit.`=mark` State = $flags <= $flags^set_bit{16 State}
+unit.mark = $flags.bit{16}
+unit.`=mark` State = $flags <= $flags.bitSet{16 State}
 
-unit.resting = $flags^get_bit{17}
-unit.`=resting` State = $flags <= $flags^set_bit{17 State}
+unit.resting = $flags.bit{17}
+unit.`=resting` State = $flags <= $flags.bitSet{17 State}
 
-unit.resisting = $flags^get_bit{18}
-unit.`=resisting` State = $flags <= $flags^set_bit{18 State}
+unit.resisting = $flags.bit{18}
+unit.`=resisting` State = $flags <= $flags.bitSet{18 State}
 
-unit.leader = $flags^get_bit{19}
+unit.leader = $flags.bit{19}
 
 //how many other units this unit has killed
 unit.kills = $get{kills}
@@ -200,9 +200,9 @@ unit.add_gene Name Duration Data =
   | leave
 | Flag = getUnitFlagsTable{}.Name
 | when got Flag:
-  | when $flags^get_bit{Flag}: leave //already got this gene
+  | when $flags.bit{Flag}: leave //already got this gene
   | when Name><invisible: $alpha <= 127
-  | $flags <= $flags^set_bit{Flag 1}
+  | $flags <= $flags.bitSet{Flag 1}
   | $update_move_method
 | When = On.1
 | $genes <= $genes.cons{$site.new_gene{When Name Duration Data}}
@@ -244,7 +244,7 @@ unit.strip What =
   | Flag = getUnitFlagsTable{}.Name
   | when got Flag:
     | when Name><invisible: $alpha <= 0
-    | $flags <= $flags^set_bit{Flag 0}
+    | $flags <= $flags.bitSet{Flag 0}
     | $update_move_method
   | $site.free_gene{E}
 | $genes.heapfree

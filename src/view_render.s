@@ -170,7 +170,7 @@ draw_picked_rects FB PickedRects =
   //| draw_bar FB #000000 #00FF00 RX RY+RH RW 4 $health $class.hp
   | Icons = []
   | for [_ Flag Icon] getUnitFlags{}: when Icon>>0:
-    | when $flags^get_bit{Flag}: push Icon Icons
+    | when $flags.bit{Flag}: push Icon Icons
   | when Icons.size
     | XX = RX + RW/2 - Icons.size*8
     | YY = RY - 16

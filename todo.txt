@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- get_bit/set_bit should be methods available only for ints. Also, instead of get_bit we could use just `bit`. And `fxn` should optimize these methods
+- gfx blitting can be greatly sped up by creating rle/offset_jump tables on fly, during type determination
 - no need to load sprites for unseen units and tiles.
 - is unit.size/sprite.size really required?
 - save seed for site.variation
