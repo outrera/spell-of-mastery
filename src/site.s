@@ -17,19 +17,19 @@ CellsLineSize = 1
 Site =
 
 //FIXME: such structs could be defined with a macro
-int.tile = CellsTile.Me
-int.`=tile` V = CellsTile.Me <= V
+int.tile = fxn CellsTile.Me
+int.`=tile` V = fxn: CellsTile.Me <= V
 int.empty = $tile.empty
 int.invisible = $tile.invisible
 int.type = $tile.type
-int.units = CellsUnits.Me
-int.`=units` V = CellsUnits.Me <= V
-int.gfx = CellsGfxes.Me
-int.`=gfx` V = CellsGfxes.Me <= V
-int.blitem = CellsBlitem.Me
-int.`=blitem` V = CellsBlitem.Me <= V
-int.block = CellsBlock.Me //unit blocking the tile
-int.`=block` V = CellsBlock.Me <= V
+int.units = fxn CellsUnits.Me
+int.`=units` V = fxn: CellsUnits.Me <= V
+int.gfx = fxn CellsGfxes.Me
+int.`=gfx` V = fxn: CellsGfxes.Me <= V
+int.blitem = fxn CellsBlitem.Me
+int.`=blitem` V = fxn: CellsBlitem.Me <= V
+int.block = fxn CellsBlock.Me //unit blocking the tile
+int.`=block` V = fxn: CellsBlock.Me <= V
 int.vacant = $empty and not $block
 int.cost = CellsCost.Me
 int.`=cost` V = CellsCost.Me <= V
@@ -37,8 +37,8 @@ int.prev = CellsPrev.Me
 int.`=prev` V = CellsPrev.Me <= V
 //for empty cell, floor returns corresponding ground cell bellow them
 //for non-empty cell, floor returns ground cell above them
-int.floor = CellsFloor.Me
-int.`=floor` V = CellsFloor.Me <= V
+int.floor = fxn CellsFloor.Me
+int.`=floor` V = fxn: CellsFloor.Me <= V
 int.gate = CellsGate.Me
 int.`=gate` V = CellsGate.Me <= V
 int.xyz = fxn [Me/SiteDepth%SiteSize Me/CellsLineSize Me%SiteDepth]
@@ -209,11 +209,11 @@ site.create W H D Filler =
 | $clear
 | FillerTile = $main.tiles.Filler
 | FillerColumn = dup D FillerTile
-| for Y $h: for X $w: $set_pilar{X Y FillerColumn}
+| times Y $h: times X $w: $set_pilar{X Y FillerColumn}
 | $w--
 | $h--
 | $create_borders
-| for Y $h+1: when Y: for X $w+1: when X: $upd_pilar{X Y}
+| times Y $h+1: when Y: times X $w+1: when X: $upd_pilar{X Y}
 | $paused <= 1
 
 // add movement blocking walls

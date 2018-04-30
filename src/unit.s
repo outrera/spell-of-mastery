@@ -316,7 +316,7 @@ unit.pick_facing F =
 | AS = $anim_seq
 | FrameIndex = AS.($anim_step%AS.size).0
 | Frame,Mirror = $sprite.get_frame_at_angle{FrameIndex $facing $mirror}
-| $frame <= Frame
+| $frame <= if Frame.w > 1 then Frame else 0
 | $mirror <= Mirror
 
 unit.animate Anim =
