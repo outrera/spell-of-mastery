@@ -576,6 +576,7 @@ ui.actClickIcon Icon =
   | leave
 | $site.act <= Act
 | $site.act_unit.init{Unit,Unit.serial}
+| $site.last_picked <= 0
 | when HKI: $view.mice_click <= \leftup //FIXME: kludge
 
 ui.create_act_icons =

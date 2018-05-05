@@ -2,8 +2,9 @@ icon: unit_devil
 lore: 0
 cost: 0
 speed: -1
-check: pentagram
-onInit: pentagram,sound{summon},caster{leader}
-onEnd: pentagram,visual{teleport},spawn{auto}
+range: 1
+check: clear,land,any
+onInit: visual{pentagram_appearance},sound{summon}
+onEnd: visual{teleport},spawn{auto}
 hint: spawn
 tab: summon

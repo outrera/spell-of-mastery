@@ -456,6 +456,7 @@ view.input In =
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
     | $zfix <= 1
+    | $site.last_picked <= 0
     | $mice_click <= if State then \right else \rightup
     | if State then $anchor.init{$cursor}
       else when $site.at{@$cursor}.empty:
