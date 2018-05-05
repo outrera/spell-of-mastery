@@ -186,8 +186,11 @@ ui.create W H =
 | $view.clear
 
 ui.enter_site Site =
-| $load_game{1 "[$mapsFolder]test.txt"}
+| $generate{6 6 forest}
 | $site.data.serial <= Site.serial
+| $site.new_game
+| $unpause
+| $pick{ingame}
 
 parse_int_normalized Default Text =
 | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
@@ -587,8 +590,8 @@ ui.process_input Base In =
     | $hotKeyInvoke <= 1
     | Icon.on_click{}{Icon}
 
-ui.generate W H =
-| $site.generate{W H}
+ui.generate W H Blueprint =
+| $site.generate{W H Blueprint}
 | $view.clear
 
 ui.init =
@@ -597,8 +600,8 @@ ui.init =
 | $menuBG <= $img{ui_menu_bg}
 | $panelBG <= $img{ui_panel}
 | $view <= view $main Me $width $height-($panelBG.h-10)
-//| $create{10 10}
-| $generate{6 6}
+| $create{10 10}
+//| $generate{6 6 forest}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg

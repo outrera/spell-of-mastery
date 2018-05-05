@@ -22,7 +22,7 @@ TODO:
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
 - Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Unit's height actually influencing its pathfinding.
-- Proper flyers, that can get above other units (if there is space) and do hit and run tactics.
+- Proper flyers, that can get above other units (if there is space) and do hit and run tactics. Think about what happens if flyinh unit creates pentagram. Should it land first?
 - Sound on failed attack on undead.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key. Unit deselecting would be done with selecting that unit again.
   That should help porting to touch devices.
@@ -117,6 +117,7 @@ Optimization Possibilities:
 
 Symta Language Handicaps:
 - do-while loop, to avoid needless `_label again`
+- objects allocated on heap with autopointer cells.
 - A some file, like common.s, that would be included by default into every other file. Such file would incldue common constants, like TILE_WIDTH.
 - Stuff like `Tile.lay <= Tile.lay.tail` really needs some solution.
 - Allow to specify name of the output executable file and entry point file, other than main. That way we can produce several executable files in the same dir from the same source code base. I.e. we could have sprite sheet dumper utility without touching the main game exe.

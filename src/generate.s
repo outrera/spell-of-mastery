@@ -73,8 +73,10 @@ site.place_part XY P =
   | $set_pilar{1+X+XX 1+Y+YY TM.XX.YY}
 | for UD P.units
   | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active] = UD
+  | DXYZ = XYZ+[X Y 0]
+  | $upd_pilar{DXYZ.0 DXYZ.1}
   | U = $players.Owner.alloc_unit{Type}
-  | U.move{XYZ+[X Y 0]}
+  | U.move{DXYZ}
   | when Facing.is_list:
     | U.sprite <= $main.sprites.(Facing.0)
     | Facing <= Facing.1
@@ -88,8 +90,7 @@ site.place_part XY P =
 // also add `cross` for shore mixed with river
 
 
-site.generate W H =
-| BlueprintName = \castle
+site.generate W H BlueprintName =
 | B = $get_blueprint{BlueprintName}
 | $clear
 | $w <= W*PCells

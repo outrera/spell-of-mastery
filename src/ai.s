@@ -212,7 +212,7 @@ ai.clean_pentagram =
 | B = Pentagram.cell.block
 | less B and B.mov and B.owner.id><$player.id: leave 0
 | Cs = B.reachable.keep{?0><move}
-| Cs = Cs.sort{A B => A.1.xyz.mdist{B.1.xyz}.sum}.flip
+| Cs = Cs.sort{A B => A.1.xyz.mdist{B.1.xyz}}.flip
 | for Type,Cell Cs:
   | when not Cell.block and got Cell.units.find{?ai><hold}:
     | B.order_at{Cell.xyz 0} //move unit out of pentagram
