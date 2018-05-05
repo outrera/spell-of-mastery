@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Implement creature and spell selection
+- Implement player avatar selection.
+- Implement initial creature and spell selection. Use checkboxes and a count of initial spells. First player selects spells, then creatures.
 - Implement creature and spell pools, based on current turn's seed.
 - gfx blitting can be greatly sped up by creating rle/offset_jump tables on fly, during type determination
 - no need to load sprites for unseen units and tiles.
