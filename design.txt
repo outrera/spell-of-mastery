@@ -14,26 +14,16 @@ Kingdom View:
 - The player is in charge of wizard guild, which is hired by king to protect the kingdom from ongoing invasion.
 - Wizard guild can have several bases (wizard towers). Player starts with a single base, location for which he/she picks at the start of the game. After that additional bases can be build by spending money.
 - Bases have detection facilities, such as scrying devices, exposing roaming monster squads near them. If such squad gets detected, player has choice to intercept it or let it roam further, in that case such squad can attack a city, build a lair or wander away.
-- To intercept roaming monster squads and investigate map sites, player uses airship. Each such flying vessel is commanded by a mage.
-- Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The less cities there are the more are the chances, so it is always wise to leave some guards. The percentage of total reward gold gained is based on the percent of cities alive. Ruins are restored back to a living city after some time.
+- To intercept roaming monster squads and investigate map sites, player uses airship. Each such flying vessel is commanded by a single mage, and can carry a limited number of creatures and spells into battle. Each turn there is a random selection of creatures that can be summoned for the next mission. Player can hire from this pool of creatures. The summoning pool is randomized each world turn. Such system is simple enough, would favour using less creatures and cheaper ones, make game experience sufficiently random, yet provide some interesting choices for the player. Similarly there is a pool of spells, available for the given turn.
+- At the start of the game, player picks initial spells and creatures. To uncover new creatures and spells player must investigate dungeons, holding secret knowledge or monster settlements.
+- Player may strategically skip a turn in hope of getting a better selection. Creature's and spell's tier determines the chance of their appearance. I.e. dragon (tier=5) unit would appear once per 5 turns on average and will cost a lot of money, making it very unreliable summon to pick at start of the game.
+- Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The more successful the player in using said base to intercept attacks the higher are the chances of retaliation. The percentage of total reward gold gained is based on the percent of cities alive. Ruins are restored back to a living city after some time.
 - If monsters capture a city or player's base, they plunder it, turning it into special ruins lair. Which could be liberated given sufficient efforts.
 - Each monster lair has a chance to generate a monster squad, based on its age.
 - The goal of the game is to defeat several enemy wizards, who are behind the monster invasion, by assaulting their sites of living(which should be uncovered first). Player could also attempt to capture king's castle, which will give him income each turn from the cities not turned into ruins.
 - Base can only access location immediately in its vicinity. Transfering resouces between bases takes 1 turn.
-- Flying ship has following facilities (all limited in size):
-  - Library, determining the kind of spells a wizard can cast. Spells must be first researched.
-    To research a spell, player must have all required reagents to cast it.
-  - Storage, holding reagents for the spells, wizard can spend.
-    Reagents are traded for money or found on map. Some creature attacks require reagents too.
-    Some summonings may require reagents.
-  - Mana Crystal, which determines the amount of mana wizard can carry into the site exploration or accumulated from site's magic nodes.
-  - Soul Cage, holding soul gems for each creature, that wizard can summon.
-  - If wizard wants to summon two goblins, soul cage should hold two soul gems with goblins.
-    Soul gems are traded for money or created from alive creatures, by casting Enslave
-    on them, and then killing them. After wizard leaves site, summoned creatures are returned to soul cage.
-    Before summoning, player must first research creatures. To do research, player must
-    have a soul gem with it.
-- Reagents, which server the role of ammuntion. Following reagents are available:
+- Airship has type, which determines the number of monsters and spells player can carry into battle. The number of creatures is limited by ships size, while the number of spells is determined the size of mana crystal installed on ship. Also, a storage for reagents is also possible.
+- Reagents, which serve the role of ammuntion. Following reagents are available:
   - Blood (red): required by most summoning spells
   - Herb (green): benefical and nature enchancments
   - Fungus (blue): poison and other harmful spells
