@@ -1,3 +1,4 @@
+faces: 8
 class: empty,1
       ,box_xy,(2 2)
       ,speed,24

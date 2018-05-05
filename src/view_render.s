@@ -140,7 +140,10 @@ unit.draw FB B =
 | FB.blit{XX YY G}
 | fxn: for TB B.B_COVER:
   | TB.B_DEPS <= TB.B_DEPS.skip{$id}
-  | when TB.B_DEPS.end: TB.B_OBJECT.draw{FB TB}
+  | when TB.B_DEPS.end:
+    | O = TB.B_OBJECT
+    | if _tag O then O.draw{FB TB}
+      else draw_tile O FB TB
 | $blitem <= 0
 | less $pickable: leave
 | RW,RH,RY = $sprite.rect

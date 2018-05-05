@@ -2,7 +2,7 @@ THIS FILE STATES DESIGN DECISIONS THAT WERE MADE
 
 
 General:
-- The basic idea is to design an X-Com inspired game, but in a fantasy setting. Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. The enchantment spells play the role of equipment, say instead of physical armor item, we we have magic shield enchantment, and instead of medkits we have creatures specializing with healing. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters or alien bases, there would be dungeons and ruins to explore. Additionally zeppelins, flying ships, flying islands/castles could be introduced for transporting squad on kingdom view. Instead of corporations there are different competing wizard orders and castles with lords/kings.
+- The basic idea is to design an X-Com inspired game, but in a fantasy setting. Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. The enchantment spells play the role of equipment, say instead of physical armor item, there are magic shield enchantment, and instead of medkits some creatures specialize in healing. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters or alien bases, there would be dungeons and ruins to explore. Additionally zeppelins, flying ships, flying islands/castles could be introduced for transporting squad on kingdom view. Instead of corporations there are different competing wizard orders and castles with lords/kings.
 - Other sources of inspiration are Spellcraft: Aspects of Valor, Lords of Chaos, and Magic & Mayhem.
 - Completely determenistic game mechanics (i.e. game design doesn't use random dice rolls). Random rolls are allowed only for world and site generation, and for AI players decision making.
 
@@ -33,13 +33,13 @@ Kingdom View:
     on them, and then killing them. After wizard leaves site, summoned creatures are returned to soul cage.
     Before summoning, player must first research creatures. To do research, player must
     have a soul gem with it.
-- Reagents:
+- Reagents, which server the role of ammuntion. Following reagents are available:
   - Blood (red): required by most summoning spells
   - Herb (green): benefical and nature enchancments
   - Fungus (blue): poison and other harmful spells
   - Sulfur (yellow): required for fire spells and goblin's bombs
   - Mercury (black): 
-
+- Research: at the start of the game and with each turn player gains a number of lore points, which he then spends to research spells and units. Researching new units requires first capturing their souls. Converting gold to research should be possile too, by paying for guest schoolar's R&D. To research a spell, player picks his base, then clicks reasearch button.
 
 Battle View:
 - Each creature major stats: Moves, Health, Attack, Defense, Fatigue, View, Range, and Will. Some magical artifacts and structures can affect these numbers.
