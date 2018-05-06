@@ -44,30 +44,5 @@ spells:
       spell_of_mastery
       )
 
-summons:
-      summon_oculus,
-      summon_observer,
-      summon_blob,
-      summon_imp,
-      summon_ratman,
-      summon_goblin,
-      summon_orc,
-      summon_elf,
-      summon_dwarf,
-      summon_spider,
-      summon_lizard,
-      summon_paladin,
-      summon_skeleton,
-      summon_ifrit,
-      summon_griffin,
-      summon_minotaur,
-      summon_wraith,
-      summon_devil,
-      summon_vampire,
-      summon_cyclops,
-      summon_hydra,
-      summon_golem,
-      summon_gargoyle,
-      summon_dragon
 
 rooms: ()

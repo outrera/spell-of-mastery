@@ -43,6 +43,7 @@ type icon.widget{FG OnClick}
    on_click/OnClick
    sound/ui_click
    group //use for exclusive widgets, like radio buttons or tabs
+   infoline_handler
    //popup/icon_popup{}
 
 ResearchIcon = 0
@@ -97,21 +98,7 @@ icon.input In =
        | $pressed <= 0
 
 icon.infoline =
-| ActName = $data
-| Unit = $unit
-| less Unit: leave ''
-| Act = Unit.main.acts.ActName
-| when no Act: leave ''
-| Info = Act.title
-| Number = $text.2
-| Cool = Unit.cooldown_of{ActName}
-| Cost = Act.cost
-| if Cool then
-    | Info <= "[Info] ([Cool.0+Cool.1-Unit.site.turn] TURNS TO RECHARGE)"
-  else if not Unit.owner.researched{Act} then
-    | Info <= "research [Info] ([Act.lore] LORE)"
-  else when got Cost and Cost:
-    | Info <= "[Info] ([Cost] MANA)"
-| Info.upcase
+| if $infoline_handler then ($infoline_handler){Me} else ""
+
 
 export minimap icon
