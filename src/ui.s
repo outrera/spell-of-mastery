@@ -211,6 +211,7 @@ ui.enter_site Site =
 | Acts = $main.acts
 | for Name,Act Acts:
   | $site.human.enable{Act Act.researched}
+| $begin_ingame{0}
 | $unpause
 | $pick{ingame}
 
@@ -418,8 +419,6 @@ ui.create_panel_tabs =
 | $groundActIconsLay <= hidden: layV s/4 $groundActIcons.flip
 | $panelTabs <= tabs menu: t
           unit    | ActIconsLay
-          spell   | ActIconsLay
-          summon  | ActIconsLay
           bag     | ActIconsLay
           menu    | $create_panel_tab_menu
           brush   | $create_panel_tab_brush
@@ -439,7 +438,7 @@ ui.panel_tab_picked TabName =
 ui.create_panel_tabs_header =
 | Click = Icon => $panel_tab_picked{Icon.data}
 | TabIconsBare = []
-| TabsIcons = map Name [unit spell summon bag menu brush]:
+| TabsIcons = map Name [unit bag menu brush]:
   | Icon = icon "tab_[Name]" Click
   | Icon.data <= Name
   | when Name><$curPanelTab: Icon.picked<=1
@@ -600,10 +599,8 @@ ui.on_unit_pick Unit =
              then [Acts.m_yes Acts.m_no]
              else Acts.MenuActName.menu
   else if $curPanelTab >< unit then
-     | As <= if Unit.removed then [] else Unit.acts.skip{?tab}
-  else if $curPanelTab >< summon or $curPanelTab >< spell then
-     | Unit <= $site.human.leader
-     | As <= Unit.acts.keep{?tab><$curPanelTab}
+     | As <= if Unit.removed then []
+             else [@Unit.acts.skip{?tab} @Unit.acts.keep{?tab}]
   else if $curPanelTab >< bag then
      | As <= map K,A Unit.items: [A Acts."drop_[K]"]
      | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
@@ -707,6 +704,6 @@ ui.init =
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}
 | $view.set_brush{0,0}
-| $begin_ingame{1}
+//| $begin_ingame{1}
 
 export ui
