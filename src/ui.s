@@ -190,7 +190,6 @@ ui.create_new_game_setup_dlg =
        | for Icon Icons: when Icon.picked:
          | Act = Icon.data.0
          | Act.researched <= 1
-         | say Act.title
        | $world.clear
        | $pick_world
 
@@ -205,6 +204,15 @@ ui.pick_new_game =
   | when DP.has{Act.name}: $setup_act_picked{Icon}
 | $pick{new_game_setup}
 
+ui.enter_site Site =
+| $generate{6 6 forest}
+| $site.data.serial <= Site.serial
+| $site.new_game
+| Acts = $main.acts
+| for Name,Act Acts:
+  | $site.human.enable{Act Act.researched}
+| $unpause
+| $pick{ingame}
 
 ui.create_scenario_menu =
 | loadScenarioBack = $pick{new_game_menu}
@@ -230,8 +238,8 @@ ui.create_main_menu_dlg =
 | dlg: mtx
   |   0   0 | $menuBG
   |  16 $height-16 | $copyrightText
-  //| X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
   | X 220 | button 'NEW GAME' skin/scroll: => $pick_new_game
+                                              //$pick{new_game_menu}
   | X 290 | button 'LOAD GAME' skin/scroll: => $pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $create{8 8}
@@ -260,13 +268,6 @@ ui.load_game NewGame Path =
 ui.create W H =
 | $site.create{W H 4 soil}
 | $view.clear
-
-ui.enter_site Site =
-| $generate{6 6 forest}
-| $site.data.serial <= Site.serial
-| $site.new_game
-| $unpause
-| $pick{ingame}
 
 parse_int_normalized Default Text =
 | if Text.size>0 and Text.all{?is_digit} then Text.int else Default

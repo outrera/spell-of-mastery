@@ -2,7 +2,8 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Implement creature and spell pools, based on current turn's seed.
-- Implement player avatar selection.
+- Redesign cursed unit to have high defense againse non-echanted weapon, instead of plain invulnerability.
+- Implement player avatar and color selection.
 - gfx blitting can be greatly sped up by creating rle/offset_jump tables on fly, during type determination
 - no need to load sprites for unseen units and tiles.
 - is unit.size/sprite.size really required?

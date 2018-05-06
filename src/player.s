@@ -130,10 +130,12 @@ player.research_remain Act =
 | ResearchRemain
 
 player.enabled Act = Act.players.bit{$id}
+player.enable Act State = Act.players <= Act.players.bitSet{$id State}
 
 player.researched Act = $research_remain{Act}<<0
 
 player.can_research Act =
+| less $enabled{Act}: leave 0
 | when $researched{Act}: leave 0
 | Act.needs.all{Ns=>Ns.any{N=>$researched{N}}}
 
