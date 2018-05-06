@@ -130,6 +130,25 @@ ui.create_new_game_dlg =
   | X 360 | button 'MULTIPLAYER' skin/scroll: => 
   | X 500 | button 'BACK' skin/scroll: => $pick{main_menu}
 
+ui.create_new_game_setup_dlg =
+| BY = $height-48
+| BX = $width-220
+| BP = icon world_flag: Icon => say 1
+| ET = icon tab_endturn: Icon => say 2
+| EX = icon menu_exit: Icon => say 3
+| SpellButtons = layH s/4 [BP spacer{22 0} ET spacer{22 0} EX]
+| dlg w/$width h/$height: mtx
+  |   0          0 | $img{ui_bookshelf}
+  |   20        20 | txt medium 'Pick Spells'
+  |   0 $height-20 | infoline
+  |   0 $height-170| notification_widget Me
+  |  52        52  | SpellButtons
+  |  32        BY
+     | button 'Back' skin/medium_small: => $pick{main_menu}
+  |  $width-128   BY
+     | button 'Proceed' skin/medium_small: => say "Proceed"
+
+
 
 ui.create_scenario_menu =
 | loadScenarioBack = $pick{new_game_menu}
@@ -155,7 +174,8 @@ ui.create_main_menu_dlg =
 | dlg: mtx
   |   0   0 | $menuBG
   |  16 $height-16 | $copyrightText
-  | X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
+  //| X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
+  | X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_setup}
   | X 290 | button 'LOAD GAME' skin/scroll: => $pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $create{8 8}
@@ -438,13 +458,13 @@ ui.create_world_dlg =
   |  4         BY  | $create_worldSiteTabs 
   |  BX        BY  | WorldButtons
 
-ui.create_dialog_tabs =
+ui.create_dialog_tabs InitTab =
 | $copyrightText <= txt small 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'
 | IsDebug = $cfg.ui.debug><1
-| InitTab = if IsDebug then \ingame else \main_menu
 | tabs InitTab: t
           main_menu($create_main_menu_dlg)
-          new_game_menu($create_new_game_dlg)
+          new_game_setup($create_new_game_setup_dlg)
+          //new_game_menu($create_new_game_dlg)
           scenario_menu($create_scenario_menu)
           load_menu($create_load_menu_dlg)
           ingame($create_ingame_dlg)
@@ -606,7 +626,8 @@ ui.init =
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg
-| Tabs = $create_dialog_tabs
+| Tabs = $create_dialog_tabs{main_menu}
+//| Tabs = $create_dialog_tabs{ingame}
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}
 | $view.set_brush{0,0}

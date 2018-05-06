@@ -1,4 +1,4 @@
-author: `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
+author: `Aleksandr Zabylov 'Shurga' <d_shurga@mail.ru>`
 copyright: `Nikita Sadkov`
 origin: `Spell of Mastery`
 xy: -10,86

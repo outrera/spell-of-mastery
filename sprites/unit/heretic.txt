@@ -1,4 +1,4 @@
-author: `Nikita Sadkov`, `Sergey Abramov (InQvisions Company)`, `Aleksandr Zabylov (Shurga) d_shurga@mail.ru`
+author: `Nikita Sadkov`, `Sergey Abramov (InQvisions Company)`, `Aleksandr Zabylov 'Shurga' <d_shurga@mail.ru>`
 copyright: `Nikita Sadkov`
 //xy: 0,32
 //frames: folder

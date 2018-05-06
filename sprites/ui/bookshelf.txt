@@ -1,0 +1,3 @@
+author: `Pete Linforth 'TheDigitalArtist'`, `Nikita Sadkov`
+license: `CC-BY-SA 3.0`
+origin: `https://pixabay.com/en/seamless-texture-background-books-1657447/`

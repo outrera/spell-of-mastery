@@ -1,4 +1,4 @@
-author: `TLK Games`, Nikita Sadkov
+author: `TLK Games`, `Nikita Sadkov`
 license: `GPL3`
 origin: `https://code.google.com/p/hopyone/`
 xy: 0,-16

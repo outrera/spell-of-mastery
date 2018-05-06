@@ -1,4 +1,4 @@
-author: `Joseph Crown 'jcrown41' (www.crownjoseph.com)`, `Nikita Sadkobv`
+author: `Joseph Crown 'jcrown41' (www.crownjoseph.com)`, `Nikita Sadkov`
 license: `CC-BY-SA 3.0`
 origin: `https://opengameart.org/content/animated-sci-fi-gateway-electric-trap`
 xy: 0,0
