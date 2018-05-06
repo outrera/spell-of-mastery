@@ -143,7 +143,7 @@ ui.setup_act_picked Icon =
 | CountName,LimName = if Act.tab >< summon
     then summons_count,start_summons
     else spells_count,start_spells
-| Count = $cfg.world.CountName^~{0}
+| Count = $cfg.world.CountName
 | less Picked:
   | Lim = $cfg.world.LimName
   | less Count < Lim:
@@ -153,9 +153,6 @@ ui.setup_act_picked Icon =
 | when Picked:
   | $cfg.world.CountName <= Count-1
 | Icon.picked <= not Picked
-
-| say Act.tab
-| say [Act.title Icon.picked]
 
 ui.create_new_game_setup_dlg =
 | Acts = $main.acts
@@ -190,8 +187,23 @@ ui.create_new_game_setup_dlg =
      | button 'Back' skin/medium_small: => $pick{main_menu}
   |  $width-128   $height-48
      | button 'Proceed' skin/medium_small: =>
-       | for Icon Icons: when Icon.picked: say Icon.data.0.title
+       | for Icon Icons: when Icon.picked:
+         | Act = Icon.data.0
+         | Act.researched <= 1
+         | say Act.title
+       | $world.clear
+       | $pick_world
 
+ui.pick_new_game =
+| $cfg.world.summons_count <= 0
+| $cfg.world.spells_count <= 0
+| DP = $cfg.world.default_picks
+| for Icon $setupIcons
+  | Act = Icon.data.0
+  | Icon.picked <= 0
+  | Act.researched <= 0
+  | when DP.has{Act.name}: $setup_act_picked{Icon}
+| $pick{new_game_setup}
 
 
 ui.create_scenario_menu =
@@ -219,7 +231,7 @@ ui.create_main_menu_dlg =
   |   0   0 | $menuBG
   |  16 $height-16 | $copyrightText
   //| X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_menu}
-  | X 220 | button 'NEW GAME' skin/scroll: => $pick{new_game_setup}
+  | X 220 | button 'NEW GAME' skin/scroll: => $pick_new_game
   | X 290 | button 'LOAD GAME' skin/scroll: => $pick{load_menu}
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $create{8 8}
@@ -346,8 +358,7 @@ ui.create_panel_tab_menu =
 | ExitIcon = icon menu_exit: Icon =>
   | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
 | LeaveIcon = icon menu_leave: Icon =>
-  | $pick_world
-  //| $confirm{"Leave this site?" |$0 yes => $pick_world}
+  | $confirm{"Leave this site?" |$0 yes => $pick_world}
 | layV s/4 [(layH s/4 SaveIcon,LoadIcon,SiteIcon,spacer{8 0},ExitIcon)
             (LeaveIcon)]
 

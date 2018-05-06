@@ -3,6 +3,8 @@ hotkey: m
 //lore: 5
 //cost: 5
 //cool: 10
+tier: 4
+amount: 1
 range: 9000
 check: non_leader,will,unit
 onInit: visual{hypnotize},sound{subvert},resist,charm{owner}

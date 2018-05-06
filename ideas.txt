@@ -8,7 +8,7 @@ Leader abilities:
 - Dual-cast: allows casting two different spells on two different locations on the same turn.
 
 General:
-- Different units could have different will regeneration rates.
+- Unit behind cover (1-height cell) should gain defense advantage.
 - When fire consumes some burnable item, consider increasing fire's health.
 - Consider using liquid mechanics for fire, having pressure, that would increase it's spreading speed.
 - Consider fire burning air indoors, leading creatures being suffocated.
