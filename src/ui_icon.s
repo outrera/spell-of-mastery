@@ -34,6 +34,7 @@ type icon.widget{FG OnClick}
    picked_fg
    picked_overlay
    disabled
+   hidden
    grayed //percent of grayed area of the icon
    text/[0 0 No]
    frame/[2 2 icon_frame]
@@ -50,6 +51,7 @@ ResearchIcon = 0
 
 icon.draw G PX PY =
 | less $fg: leave
+| when $hidden: leave
 | when $fg.is_text: $fg <= get_main{}.img{"icons_[$fg]"}
 | X = PX
 | Y = PY
@@ -83,7 +85,7 @@ icon.draw G PX PY =
   | Font.draw{G X+$fg.w-8 Y+$fg.h-8 "[$hotkey]"}
 
 icon.input In =
-| when $disabled: leave
+| when $disabled or $hidden: leave
 | case In
   [mice over S P] | $over <= S
   [mice left 1 P] | less $pressed: $pressed <= 1
@@ -98,6 +100,7 @@ icon.input In =
        | $pressed <= 0
 
 icon.infoline =
+| when $hidden: leave ""
 | if $infoline_handler then ($infoline_handler){Me} else ""
 
 

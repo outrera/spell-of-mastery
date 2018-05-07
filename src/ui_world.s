@@ -50,6 +50,11 @@ enter_site_pick_infoline Icon =
 | Title = Act.title
 | "Pick [Title]"
 
+enter_site_unpick_infoline Icon =
+| Act = Icon.data
+| Title = Act.title
+| "Unpick [Title]"
+
 ui.enter_site_picked Icon =
 | Act = Icon.data
 | Avail = Icon.text.2
@@ -58,29 +63,59 @@ ui.enter_site_picked Icon =
   | leave
 | Act.picked += 1
 | Icon.text.2 <= Avail-1
+| less Icon.text.2: Icon.hidden <= 1
+| for Icon $enterSiteIcons2:
+  | A = Icon.data
+  | when A.name >< Act.name
+    | Icon.text.2 <= Act.picked
+    | Icon.hidden <= 0
 
-ui.create_enter_site_dlg =
+ui.enter_site_unpicked Icon =
+| Act = Icon.data
+| Avail = Icon.text.2
+| less Avail>0:
+  | $notify{"can't decrease it any more"}
+  | leave
+| Act.picked -= 1
+| Icon.text.2 <= Avail-1
+| less Icon.text.2: Icon.hidden <= 1
+| for Icon $enterSiteIcons1:
+  | A = Icon.data
+  | when A.name >< Act.name
+    | Icon.text.2 += 1
+    | Icon.hidden <= 0
+
+ui.create_enter_site_icons InfoFn PickedFn =
 | Acts = $main.acts
 | Spells = $cfg.leader.mage.spells
 | Summons = $cfg.world.setup_summons
 | create_pick_icon ActName =
   | Act = Acts.ActName
-  | Icon = icon 0: Icon => $enter_site_picked{Icon}
+  | Icon = icon 0 PickedFn
   | Icon.data <= Act
   | Icon.fg <= Act.icon_gfx
-  | Icon.picked_overlay <= \icon_hl
-  | Icon.infoline_handler <= &enter_site_pick_infoline
+  | Icon.infoline_handler <= InfoFn
   | Icon
 | SpellIcons = map ActName Spells: create_pick_icon ActName
 | SummonIcons = map ActName Summons: create_pick_icon ActName
 | Icons = [@SpellIcons @SummonIcons]
-| $enterSiteIcons1 <= Icons
 | IconsPerLine = 12
 | SpellsLay = map Group SpellIcons.group{IconsPerLine}
               | layH s/8 Group
 | SummonsLay = map Group SummonIcons.group{IconsPerLine}
                | layH s/8 Group
 | IconsLay = layV s/14 [@SpellsLay @SummonsLay]
+| Icons,IconsLay
+
+ui.create_enter_site_dlg =
+| Icons,IconsLay =
+     $create_enter_site_icons{&enter_site_pick_infoline
+                              (Icon => $enter_site_picked{Icon})}
+| Icons2,IconsLay2 =
+     $create_enter_site_icons{&enter_site_unpick_infoline
+                              (Icon => $enter_site_unpicked{Icon})}
+| $enterSiteIcons1 <= Icons
+| $enterSiteIcons2 <= Icons2
 | dlg w/$width h/$height: mtx
   |   0          0 | $img{ui_bookshelf}
   |   300        20| txt medium 'Available Spells'
@@ -88,7 +123,7 @@ ui.create_enter_site_dlg =
   |   0         40 | notification_widget Me
   |  52        52  | IconsLay
   |   300     290  | txt medium 'Picked Spells'
-  |  52       320  | IconsLay
+  |  52       320  | IconsLay2
   |  32        $height-48
      | button 'Back' skin/medium_small: => $pick{world}
   |  $width-128   $height-48
@@ -104,5 +139,9 @@ ui.enter_site Site =
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | Icon.text.2 <= Act.maxPicks
-  | Act.picked <= 0
+  | Icon.hidden <= 0
+| for Icon $enterSiteIcons2:
+  | Act = Icon.data
+  | Icon.text.2 <= 0
+  | Icon.hidden <= 1
 | $pick{enter_site}
