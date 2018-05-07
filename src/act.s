@@ -1,7 +1,7 @@
 use util macros
 
 
-type act{name title/0 icon/No hotkey/0 tier/1 amount/3 hint/0 tab/0 room/0
+type act{name title/0 icon/No hotkey/0 tier/1 maxPicks/3 hint/0 tab/0 room/0
          lore/0 cost/0 mov/1 fatigue/1 cool/0 needs/[] needsGene/[]
          priority/50 range/0 speed/4 animate/No repeat/0
          menu/0 onMenu/0
@@ -16,6 +16,8 @@ type act{name title/0 icon/No hotkey/0 tier/1 amount/3 hint/0 tab/0 room/0
   room/Room // this act places room scaffolds
   mov/Mov //movement points require to execute this action
   fatigue/Fatigue
+  maxPicks/MaxPicks //maximum number of action that can appear in a mission
+  picked //number of actions of this type picked by player
   lore/Lore //amount of lore required to research this action
   cost/Cost //how much to cast it
   cool/Cool //action cooldown

@@ -192,7 +192,6 @@ world.render =
 | when $mode><newBase:
   | Can = $can_place{base $mice_xy}
   | Cur <= if Can then \ui_cursor_target else \ui_cursor_target2
-
 | when $mode><airship:
   | S = $site_at{$mice_xy}
   | Cur <= if S then \ui_cursor_target else \ui_cursor_target2

@@ -59,7 +59,7 @@ ui.create_new_game_setup_dlg =
 | IconsLay = layV s/14 [@SpellsLay @SummonsLay]
 | dlg w/$width h/$height: mtx
   |   0          0 | $img{ui_bookshelf}
-  |   300        20| txt medium 'Pick Spells'
+  |   300        20| txt medium 'Pick Starting Spells'
   |   16 $height-20| infoline
   |   0 $height-170| notification_widget Me
   |  52        52  | IconsLay

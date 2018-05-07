@@ -44,6 +44,9 @@ type ui.$tabs{main}
   notes
   noteLife/1.0
   setupIcons
+  enterSiteDst
+  enterSiteIcons1
+  enterSiteIcons2
 | $site <= $main.site
 | Prm = $cfg.ui
 | $width <= Prm.width
@@ -158,6 +161,7 @@ ui.create_dialog_tabs InitTab =
           defeat($create_defeat_dlg)
           credits($create_credits_dlg)
           world($create_world_dlg)
+          enter_site($create_enter_site_dlg)
 
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
@@ -175,6 +179,7 @@ ui.init =
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}
 | $view.set_brush{0,0}
+| $enter_site{0}
 //| $begin_ingame{1}
 
 export ui
