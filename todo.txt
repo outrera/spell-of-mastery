@@ -1,7 +1,19 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Implement creature and spell pools, based on current turn's seed.
+- Economy:
+    Initial gold: 4000
+    Base cost: 2000
+    Passive income (per world turn): 100
+    Spell cost: 10 (more for higher tiers)
+    Site turn cost (decremented from bounty gold): 10.
+    Typical tier-1 unit cost: 100
+    High tier-5 unit cost: 500
+    Scout cost: 50
+    Expected easy mission cost: 1000
+    Mission bounty is a percent of gold based of enemy's allowance minus number of turns it took to complete the mission.
+    Map could have treasures giving 100 gold each.
+    Similar system was used in Warhammer and it was good enough.
 - Redesign cursed unit to have high defense againse non-echanted weapon, instead of plain invulnerability.
 - Implement player avatar and color selection.
 - gfx blitting can be greatly sped up by creating rle/offset_jump tables on fly, during type determination
@@ -121,6 +133,8 @@ Optimization Possibilities:
 Symta Language Handicaps:
 - do-while loop, to avoid needless `_label again`
 - objects allocated on heap with autopointer cells.
+- `Text.lines{}{...}` is a little confusing and verbose. Consider operator `.{}` for that.
+- Operators `.><` and `.<>` as shorthands for skip and keep. Parens could be used for internal `<` and `>`: Skip .
 - A some file, like common.s, that would be included by default into every other file. Such file would incldue common constants, like TILE_WIDTH.
 - Stuff like `Tile.lay <= Tile.lay.tail` really needs some solution.
 - Allow to specify name of the output executable file and entry point file, other than main. That way we can produce several executable files in the same dir from the same source code base. I.e. we could have sprite sheet dumper utility without touching the main game exe.

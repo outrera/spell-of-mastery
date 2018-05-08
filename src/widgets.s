@@ -63,17 +63,17 @@ font.format MaxLineWidth Text =
 | less Line.end: push Line Lines
 | Lines{?flip.text{' '}}.flip.text{'\n'}
 
-type txt.widget{font_name value} w h v value_/'' font
+type txt.widget{font_name value_} w h v font
 | $font <= font $font_name
+txt.value = "[if $value_.is_fn then $value_{}{} else $value_]"
+txt.`=value` V = $value_ <= V
 txt.render =
-| Text = "[if $value.is_fn then $value{}{} else $value]"
-| when $value_ <> Text
-  | $value_ <= Text
-  | F = $font
-  | $w <= $value_.lines{}{L => F.width{L}}.max
-  | $h <= F.height
+| Text = $value
+| F = $font
+| $w <= Text.lines{}{L => F.width{L}}.max
+| $h <= F.height
 | Me
-txt.draw G X Y = $font.draw{G X Y $value_}
+txt.draw G X Y = $font.draw{G X Y $value}
 txt.as_text = "#txt{[$value]}"
 
 type bar.widget{V} value_/V.clip{0 100} bg/No

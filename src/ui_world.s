@@ -116,17 +116,20 @@ ui.create_enter_site_dlg =
                               (Icon => $enter_site_unpicked{Icon})}
 | $enterSiteIcons1 <= Icons
 | $enterSiteIcons2 <= Icons2
-| dlg w/$width h/$height: mtx
+| W = $width
+| H = $height
+| dlg w/W h/H: mtx
   |   0          0 | $img{ui_bookshelf}
-  |   300        20| txt medium 'Available Spells'
-  |   16 $height-20| infoline
+  | W/2-100     20 | txt medium 'Available Spells'
+  |   16      H-20 | infoline
   |   0         40 | notification_widget Me
-  |  52        52  | IconsLay
-  |   300     290  | txt medium 'Picked Spells'
-  |  52       320  | IconsLay2
-  |  32        $height-48
+  |  52         52 | IconsLay
+  | W/2-100    290 | txt medium 'Picked Spells'
+  |  52        320 | IconsLay2
+  | W/2-100   H-48 | txt medium | => "Gold: [$world.gold]"
+  |  32        H-48
      | button 'Back' skin/medium_small: => $pick{world}
-  |  $width-128   $height-48
+  |  $width-128   H-48
      | button 'Proceed' skin/medium_small: =>
        | for Act Icons{?data}: when Act.picked>0:
          | say [Act.name Act.picked]
@@ -139,7 +142,7 @@ ui.enter_site Site =
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | Icon.text.2 <= Act.maxPicks
-  | Icon.hidden <= 0
+  | Icon.hidden <= not Act.researched
 | for Icon $enterSiteIcons2:
   | Act = Icon.data
   | Icon.text.2 <= 0

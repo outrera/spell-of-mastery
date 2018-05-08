@@ -28,6 +28,7 @@ type world.widget{Main UI W H}
   data/(t)
   mode
   seed
+  turn_seed //prevents player from reloading to get different outcome
   serial
   bg
   fg
@@ -41,6 +42,7 @@ type world.widget{Main UI W H}
   siteLimX
   siteLimY/510
   incomeFactor
+  gold
   tmap/(t) //terrain map
   sterra/(t) //allowed terrain for sites
 | $cfg <= $main.cfg.world
@@ -73,12 +75,14 @@ world.clear =
 | for S $sites: $free_sites.push{S}
 | for K,V $data.list: $data.K <= No
 | $sites.clear
+| $gold <= $cfg.start_gold
 | $picked <= 0
 | $turn <= 0
 | $mode <= 0
 | $serial <= 1
 | $incomeFactor <= 100
 | $seed <= LCG_M.rand
+| $turn_seed <= LCG_M.rand
 | $generate
 
 world.free_site S =
@@ -170,6 +174,7 @@ world.end_turn =
   | when S.type><party: push S Parties
   | $sites.push{S}
 | $turn += 1
+| $turn_seed = ($turn_seed*LCG_A + LCG_B) % LCG_M
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
 | for P Parties: less P.state:
   | C = Cities.find{?attacker^not}
