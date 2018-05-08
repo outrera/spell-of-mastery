@@ -1,6 +1,7 @@
 icon: nil
 lore: 0
 cost: 0
+gold: 10
 mov: 1
 priority: 50
 range: 0 //0=target self

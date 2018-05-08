@@ -1,6 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- Implement picked unit placement.
+- Instead of `summon_` use `unit_`, so act's name could be used to reference unit's type
+- Implemented picked spells count.
 - Economy:
     Initial gold: 4000
     Base cost: 2000
@@ -98,6 +101,7 @@ UI:
 Graphics:
 - New player colors: player{blue},king{purple},warlock{black},witch{red},
                      katzard{green},mime{orange},neutral{white}
+- unit standing on a 1-height cell could obscure the unit below and behind it.
 - icon for regen stat effect
 - icon for dwarf's defend action
 - icon for ghost's phase
@@ -131,6 +135,7 @@ Optimization Possibilities:
 - mouse picking can be done in reverse on draw list
 
 Symta Language Handicaps:
+- `times` macro should have 2 argument form, when there is no need for a count var.
 - do-while loop, to avoid needless `_label again`
 - objects allocated on heap with autopointer cells.
 - `Text.lines{}{...}` is a little confusing and verbose. Consider operator `.{}` for that.

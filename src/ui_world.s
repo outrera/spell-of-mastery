@@ -36,11 +36,22 @@ ui.generate W H Blueprint =
 
 ui.enter_site_proceed =
 | $generate{6 6 forest}
-| $site.data.serial <= $enterSiteDst.serial
+| $site.data.serial <= if $enterSiteDst then $enterSiteDst.serial else 0
+| Ls = []
+| for U $site.units: less U.removed:
+  | when U.type><trigger_landing: push U.xyz Ls
 | $site.new_game
 | Acts = $main.acts
 | for Name,Act Acts:
   | $site.human.enable{Act Act.researched}
+| Ls = Ls.shuffle
+| for Act $enterSiteIcons1{}{?data}: when Act.picked>0: less Ls.end:
+  | Type = "unit[Act.name.drop{6}]"
+  | times I Act.picked:
+    | XYZ = pop Ls
+    | S = $site.human.alloc_unit{Type}
+    | S.aistate <= \spawned
+    | S.move{XYZ}
 | $begin_ingame{0}
 | $unpause
 | $pick{ingame}
@@ -61,6 +72,15 @@ ui.enter_site_picked Icon =
 | less Avail>0:
   | $notify{"Not available"}
   | leave
+| when Act.tab><summon:
+  | NUnits = 0
+  | MaxUnits = $cfg.world.max_units
+  | for Icon $enterSiteIcons2
+    | A = Icon.data
+    | when A.tab><summon: NUnits += A.picked
+  | less NUnits < MaxUnits:
+    | $notify{"Unit limit reached."}
+    | leave
 | Act.picked += 1
 | Icon.text.2 <= Avail-1
 | less Icon.text.2: Icon.hidden <= 1
@@ -131,9 +151,7 @@ ui.create_enter_site_dlg =
      | button 'Back' skin/medium_small: => $pick{world}
   |  $width-128   H-48
      | button 'Proceed' skin/medium_small: =>
-       | for Act Icons{?data}: when Act.picked>0:
-         | say [Act.name Act.picked]
-       //| $enter_site_proceed
+       | $enter_site_proceed
 
 ui.enter_site Site =
 | GUI = get_gui{}

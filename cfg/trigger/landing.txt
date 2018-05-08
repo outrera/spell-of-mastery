@@ -1,0 +1,2 @@
+sprite: special_landing
+show: 0
