@@ -70,7 +70,7 @@ ui.create_panel_tabs =
 | ActIconsLay = layV s/14
                      layH{s/8 $unitActIcons.drop{$unitActIcons.size/2}}
                     ,layH{s/8 $unitActIcons.take{$unitActIcons.size/2}}
-| $panelTabs <= tabs menu: t
+| $panelTabs <= tabs $curPanelTab: t
           unit    | ActIconsLay
           menu    | $create_panel_tab_menu
           brush   | $create_panel_tab_brush

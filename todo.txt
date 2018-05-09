@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- get rid of tabs, so unit abilities tab would always be visible, while say menu or inventory tab would overlay
 - Economy:
     Initial gold: 4000
     Base cost: 2000
@@ -15,7 +14,7 @@ TODO:
     Mission bounty is a percent of gold based of enemy's allowance minus number of turns it took to complete the mission.
     Map could have treasures giving 100 gold each.
     Similar system was used in Warhammer and it was good enough.
-    Each unit's death should be penalized.
+    Each player unit's death should be penalized.
 - AI should try to challenge player. If player brings too many undead, then AI should pick counter-undead units and enchancements.
 - Redesign cursed unit to have high defense againse non-echanted weapon, instead of plain invulnerability.
 - Instead of confusing charging mechanic, have concentrate action, which will boost will over the normally provided amount at the start of the turn. Yet unit sustaining a hit would still lose his concentration and his willpower would be put back to its normal maximum.

@@ -19,7 +19,7 @@ type ui.$tabs{main}
   panelTabsSelect/(t)
   panelTabsDeselect/(t)
   panelBG
-  curPanelTab/menu
+  curPanelTab/unit
   actIcons/[]
   maxUnitActIcons/24
   curActIcon/0
