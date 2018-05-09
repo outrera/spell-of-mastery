@@ -90,6 +90,7 @@ main.cfg_handle_acts =
   | A.lore <= Lore
   | A.cost <= Mana
   | A.cool <= Cool
+  | A.gold <= U.gold
   | Acts."unit_[N]" <= A
 | for Name,Act Acts: Acts.Name <= act Name @Act.list.join
 | for Name,Act Acts: when Act.menu:

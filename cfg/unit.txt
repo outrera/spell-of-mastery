@@ -4,6 +4,7 @@ active: 1
 height: 2
 tier: 1
 cost: 0,0,0 //lore,mana,cool
+gold: 100
 mov: 6
 health: 9 // hit points - number of hits, before this unit is dead
 atk: 0

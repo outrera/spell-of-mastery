@@ -215,6 +215,8 @@ world.draw FB X Y =
         then if S.attacker then $fg.attack else S.gfx
         else $fg.picked
   | FB.blit{S.xy.0-C S.xy.1-C G}
+| Font = font medium
+| Font.draw{FB 400 2 "Gold: [$gold]"}
 
 world.base_placement =
 | less $data."cnt_base"^~{No 0}<$cfg."lim_base"^~{No 1000}:

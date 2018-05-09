@@ -56,6 +56,11 @@ ui.enter_site_proceed =
     | S.move{XYZ}
 | $begin_ingame{0}
 
+ui.enter_site_back =
+| for Act $enterSiteIcons1{}{?data}:
+  | $world.gold += Act.gold*Act.picked
+| $pick{world}
+
 enter_site_pick_infoline Icon =
 | Act = Icon.data
 | Title = Act.title
@@ -82,6 +87,7 @@ ui.enter_site_picked Icon =
     | $notify{"Unit limit reached."}
     | leave
 | Act.picked += 1
+| $world.gold -= Act.gold
 | Icon.text.2 <= Avail-1
 | less Icon.text.2: Icon.hidden <= 1
 | for Icon $enterSiteIcons2:
@@ -97,6 +103,7 @@ ui.enter_site_unpicked Icon =
   | $notify{"can't decrease it any more"}
   | leave
 | Act.picked -= 1
+| $world.gold += Act.gold
 | Icon.text.2 <= Avail-1
 | less Icon.text.2: Icon.hidden <= 1
 | for Icon $enterSiteIcons1:
@@ -149,7 +156,8 @@ ui.create_enter_site_dlg =
   |  52        320 | IconsLay2
   | W/2-100   H-48 | txt medium | => "Gold: [$world.gold]"
   |  32        H-48
-     | button 'Back' skin/medium_small: => $pick{world}
+     | button 'Back' skin/medium_small: =>
+       | $enter_site_back
   |  $width-128   H-48
      | button 'Proceed' skin/medium_small: =>
        | $enter_site_proceed
