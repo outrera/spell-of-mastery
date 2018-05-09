@@ -15,6 +15,7 @@ Marked = 0
 Unexplored = 0
 NDrawnUnits = 0
 NDrawnTiles = 0
+PickedRects = 0
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
@@ -98,8 +99,6 @@ blit_item_from_unit Me = fxn:
 | BI = blit_item Me X Y Z+7  //Z+7 is a hack to avoid cursor cluttering
 | $blitem <= BI
 | BI
-
-PickedRects = 0
 
 unit.draw FB B =
 //| NDrawnUnits++
@@ -438,6 +437,7 @@ view.render_iso =
     | if _tag O then O.draw{FB B} else draw_tile O FB B
 | draw_picked_rects FB PickedRects.list.flip
 | draw_overlay FB Wr
+| PickedRects <= 0
 | BlitItems <= 0
 | BlitUnits <= 0
 

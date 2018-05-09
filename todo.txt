@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Implemented picked spells count.
+- Implement picked spells count.
 - Economy:
     Initial gold: 4000
     Base cost: 2000
