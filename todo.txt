@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- get rid of research_remain
+- get rid of tabs, so unit abilities tab would always be visible, while say menu or inventory tab would overlay
 - Economy:
     Initial gold: 4000
     Base cost: 2000

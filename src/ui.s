@@ -127,8 +127,6 @@ ui.create_main_menu_dlg =
   | X 360 | button 'WORLD EDITOR' skin/scroll: =>
             | $create{8 8}
             | $begin_ingame{1}
-            | $unpause
-            | $pick{ingame}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
   |  $width-80 $height-20
      | button 'Credits' skin/small_medium: =>
@@ -144,10 +142,10 @@ ui.create_credits_dlg =
   |  $width-80 $height-20
      | button 'Exit' skin/small_medium: => $pick_title_menu{pause/0}
 
-ui.create_dialog_tabs InitTab =
+ui.create_dialog_tabs StartTab =
 | $copyrightText <= txt small 'Spell of Mastery v0.4; Copyright (c) 2016-2018 Nikita Sadkov'
 | IsDebug = $cfg.ui.debug><1
-| tabs InitTab: t
+| tabs StartTab: t
           main_menu($create_main_menu_dlg)
           new_game_setup($create_new_game_setup_dlg)
           //new_game_menu($create_new_game_dlg)
@@ -171,8 +169,7 @@ ui.init =
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg
-| Tabs = $create_dialog_tabs{main_menu}
-//| Tabs = $create_dialog_tabs{ingame}
+| Tabs = $create_dialog_tabs{enter_site}
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}
 | $view.set_brush{0,0}

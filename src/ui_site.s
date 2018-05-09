@@ -19,15 +19,13 @@ ui.begin_ingame Editor =
 | $main.music{playlist}
 | $site.editor <= Editor
 | for W $editorWidgets: W.show <= Editor
-
-ui.load_game NewGame Path =
-| $begin_ingame{0}
-| $load{Path}
-| when NewGame: $site.new_game
 | $unpause
 | $pick{ingame}
 
-
+ui.load_game NewGame Path =
+| $load{Path}
+| when NewGame: $site.new_game
+| $begin_ingame{0}
 
 ui.create_panel_tab_menu =
 | SiteIcon = icon menu_site: Icon =>

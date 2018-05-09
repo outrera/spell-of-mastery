@@ -55,8 +55,6 @@ ui.enter_site_proceed =
     | S.aistate <= \spawned
     | S.move{XYZ}
 | $begin_ingame{0}
-| $unpause
-| $pick{ingame}
 
 enter_site_pick_infoline Icon =
 | Act = Icon.data
