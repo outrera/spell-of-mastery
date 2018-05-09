@@ -1,10 +1,9 @@
 use gui widgets ui_icon ui_widgets
 
-ui.update_act_icon I Act Count Unit =
+ui.update_act_icon I Act Unit =
 | Icons = $unitActIcons
 | Active = 1
 | Icon = Icons.I.widget
-| ResearchRemain = Unit.owner.research_remain{Act}
 | ActName = Act.name
 | Icon.data <= ActName
 | Icon.unit <= Unit
@@ -15,10 +14,7 @@ ui.update_act_icon I Act Count Unit =
   | TurnsDone = Unit.site.turn - Cool.0
   | TurnsTotal = Cool.1
   | Icon.grayed <= 100-(TurnsDone*100)/TurnsTotal
-| Number = if ResearchRemain <> 0 then ResearchRemain else No
-| when got Count: Number <= Count
-| Icon.text.init{[0 0 Number]}
-| Frame = if ResearchRemain <> 0 then 'icon_fancy0' else 'icon_fancy1'
+| Icon.text.init{[0 0 Act.picks.($site.human.id)^~{-1 No}]}
 | Icon.frame.init{[3 3 icon_act]}
 | Icon.w <= Icon.fg.w
 | Icon.h <= Icon.fg.h
@@ -30,12 +26,8 @@ ui.update_panel_buttons Unit As =
 | Player = Unit.owner
 | I = 0
 | for Act As:
-  | Count = No
-  | when Act.is_list:
-    | Count <= Act.0
-    | Act <= Act.1
-  | when Unit.can{Act} or Unit.owner.can_research{Act}:
-    | $update_act_icon{I Act Count Unit}
+  | when Unit.can{Act}:
+    | $update_act_icon{I Act Unit}
     | I += 1
 
 ui.on_unit_pick Unit =
@@ -75,17 +67,10 @@ ui.actClickIcon Icon =
 | ActName = Icon.data
 | Act = $main.acts.ActName
 | Cost = Act.cost
-| ResearchRemain = Unit.owner.research_remain{Act}
 | Cool = Unit.cooldown_of{ActName}
 | when Cool:
   | TurnsLeft = Cool.0 + Cool.1 - Unit.site.turn
   | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
-  | leave
-| when ResearchRemain:
-  | Unit.research_act{Act}
-  | leave
-| when got Cost and Cost>0 and Cost>O.mana:
-  | O.notify{"[Act.title] needs [Cost-O.mana] more mana"}
   | leave
 | when Unit.mov < Act.mov:
   | O.notify{"[Act.title] requires [Act.mov] moves."}
@@ -110,8 +95,6 @@ act_icon_infoline Icon =
 | Cost = Act.cost
 | if Cool then
     | Info <= "[Info] ([Cool.0+Cool.1-Unit.site.turn] TURNS TO RECHARGE)"
-  else if not Unit.owner.researched{Act} then
-    | Info <= "research [Info] ([Act.lore] LORE)"
   else when got Cost and Cost:
     | Info <= "[Info] ([Cost] MANA)"
 | Info.upcase

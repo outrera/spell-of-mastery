@@ -43,6 +43,7 @@ ui.enter_site_proceed =
 | $site.new_game
 | Acts = $main.acts
 | for Name,Act Acts:
+  | Act.picks.($site.human.id) <= Act.picked
   | $site.human.enable{Act Act.researched}
 | Ls = Ls.shuffle
 | for Act $enterSiteIcons1{}{?data}:
@@ -161,10 +162,12 @@ ui.enter_site Site =
 | when Site: $enterSiteDst <= Site
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
+  | Act.picked <= 0
   | Icon.text.2 <= Act.maxPicks
   | Icon.hidden <= not Act.researched
 | for Icon $enterSiteIcons2:
   | Act = Icon.data
+  | Act.picked <= 0
   | Icon.text.2 <= 0
   | Icon.hidden <= 1
 | $pick{enter_site}

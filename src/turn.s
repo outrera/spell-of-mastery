@@ -13,7 +13,7 @@ unit.new_turn =
 | for Name,Data RunEs: $run_gene{Name Data Me $xyz}
 | $mov <= $class.mov
 | $fatigue <= max 0: min $fatigue-$stamina $mov-1
-| $will <= $class.will
+| when $will < $class.will: $will <= $class.will
 
 unit.end_turn =
 | Resting = $def >< $class.def and not $engaged

@@ -205,29 +205,10 @@ center_on_actor Me =
   | LastMovedTurn = $site.turn
 
 handle_next_action_cost Me =
-| Charge = 0
 | when $next_action.type >< idle: leave 1
 | less $next_action.type: leave 0
 | less $next_action.valid: leave 0
-| Act = $next_action.act
-| when $next_action.cost and $charging:
-  | if $get{charge}.0.name <> Act.name
-    then | $interrupt
-    else | C = $get{charge}
-         | Charge <= C.1
-         | $owner.mana += C.2
-         | $strip{charge}
-| Cost = $next_action.cost
-| when Cost and $owner.mana<Cost:
-  | $owner.notify{'Not enough mana.'}
-  | leave 0
-| $owner.mana -= Cost
-| when Cost and $will < Cost-Charge:
-  | TId = if $next_action.target then $next_action.target.id else 0
-  | $set{charge [Act Charge Cost TId]}
-  | $owner.notify{"Began charging [Act.title]."}
-  | leave 0
-| $will -= Cost-Charge
+| $will -= $next_action.cost
 | 1
 
 

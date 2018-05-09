@@ -413,17 +413,11 @@ unit.charging_charge = $get{charge}.1
 unit.charging_cost = $get{charge}.2
 
 unit.interrupt =
-| less $charging: leave
-| C = $get{charge}
-| Charge = C.1
-| Mana = C.2
-| $owner.notify{"[C.0.title] was interrupted"}
-| $strip{charge}
-| $owner.mana += Mana
-| when Charge>0:
-  | $sound{fizzle}
-  | E = $site.visual{$xyz energy}
-  | E.fxyz.init{$fxyz}
+| less $will > $class.will: leave
+| $will <= $class.will
+| $sound{fizzle}
+| E = $site.visual{$xyz energy}
+| E.fxyz.init{$fxyz}
 
 unit.harm Attacker Damage =
 | when $ai <> unit: leave //likely collateral in explosion

@@ -18,7 +18,8 @@ type act{name title/0 icon/No hotkey/0 tier/1 maxPicks/3 pickChance/50 gold/0 hi
   fatigue/Fatigue
   maxPicks/MaxPicks //maximum number of action that can appear in a mission
   pickChance/PickChance //chance that one pick of this spells will appear
-  picked //number of actions of this type picked by player
+  picked/-1 //number of actions of this type picked by player
+  picks/(dup 8 -1)
   gold/Gold //cost to pick single instance of this action into battle
   lore/Lore //amount of lore required to research this action
   cost/Cost //how much to cast it
@@ -77,10 +78,8 @@ act.validate Actor XYZ Target Invalid =
   | Invalid{"Needs seen territory."}
   | leave 0
 | when T.unit and not Target or Target.removed: leave 0
-| Cost = $cost
-| when T.will and Target: Cost += Target.will
-| when Cost > O.mana:
-  | Invalid{"Needs [Cost] mana."}
+| when T.will and Target and Target.will > $will:
+  | Invalid{"Needs [Target.will] will."}
   | leave 0
 | Wr = Actor.site
 | when T.pentagram:
@@ -154,6 +153,6 @@ unit.earned Act =
 | Act.needsGene.all{?all{&geneCheck}}
 
 //is specific act is availalble for particular unit?
-unit.can Act = $owner.enabled{Act} and $owner.researched{Act} and $earned{Act}
+unit.can Act = $owner.enabled{Act} and Act.picks.($owner.id) and $earned{Act}
 
 export act

@@ -66,12 +66,6 @@ icon.draw G PX PY =
   | if $picked_overlay
     then G.blit{X Y $picked_overlay^skin}
     else G.rectangle{#0000FF 0 PX-2 PY-2 $w+4 $h+4}
-| Unit = $unit
-| ActName = $data
-| when Unit and not Unit.owner.researched{Unit.main.acts.ActName}:
-  | less ResearchIcon: ResearchIcon <= skin{'icon_research'}
-  | RI = ResearchIcon
-  | G.blit{X Y+$fg.h-RI.h RI}
 | when $grayed:
   | less DisabledIconOverlay: DisabledIconOverlay <= skin{'icon_disabled'}
   | Ov = DisabledIconOverlay
