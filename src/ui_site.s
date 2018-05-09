@@ -66,21 +66,14 @@ ui.create_panel_tab_confirm =
 | NoIcon = icon menu_no: Icon => $confirm_done{no}
 | layH s/4 YesIcon,NoIcon
 
-ui.create_panel_tab_bag =
-| $panelTabsMore.bag <= [$groundActIconsLay]
-| $unitActIconsLay
-
 ui.create_panel_tabs =
 | $actIcons <= $create_act_icons
 | $unitActIcons <= $actIcons.take{$maxUnitActIcons}
 | ActIconsLay = layV s/14
                      layH{s/8 $unitActIcons.drop{$unitActIcons.size/2}}
                     ,layH{s/8 $unitActIcons.take{$unitActIcons.size/2}}
-| $groundActIcons <= $actIcons.drop{$maxUnitActIcons}
-| $groundActIconsLay <= hidden: layV s/4 $groundActIcons.flip
 | $panelTabs <= tabs menu: t
           unit    | ActIconsLay
-          bag     | ActIconsLay
           menu    | $create_panel_tab_menu
           brush   | $create_panel_tab_brush
           confirm | $create_panel_tab_confirm
@@ -100,7 +93,7 @@ ui.panel_tab_picked TabName =
 ui.create_panel_tabs_header =
 | Click = Icon => $panel_tab_picked{Icon.data}
 | TabIconsBare = []
-| TabsIcons = map Name [unit bag menu brush]:
+| TabsIcons = map Name [unit menu brush]:
   | Icon = icon "tab_[Name]" Click
   | Icon.data <= Name
   | when Name><$curPanelTab: Icon.picked<=1
@@ -128,7 +121,6 @@ ui.create_ingame_ui =
   | 146 $height-114 | $panelTabs
   | 164 $height-20  | infoline
   | 0   $height-170 | notification_widget Me
-  | $width-50 80    | $groundActIconsLay
   | 0   $height-128 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0   PY          | $playerWidget
 

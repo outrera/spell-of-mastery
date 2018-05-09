@@ -1,8 +1,7 @@
 use gui widgets ui_icon ui_widgets
 
 ui.update_act_icon I Act Count Unit =
-| Icons = if I<0 then | I <= -(I+1); $groundActIcons 
-          else $unitActIcons
+| Icons = $unitActIcons
 | Active = 1
 | Icon = Icons.I.widget
 | ResearchRemain = Unit.owner.research_remain{Act}
@@ -26,28 +25,22 @@ ui.update_act_icon I Act Count Unit =
 | Icon.hotkey <= Act.hotkey
 | Icons.I.show <= Active
 
-ui.update_panel_buttons Unit As GAs =
+ui.update_panel_buttons Unit As =
 | As = As.take{min{$maxUnitActIcons As.size}}
-| GAs = GAs.take{min{$maxGroundActIcons GAs.size}}
 | Player = Unit.owner
 | I = 0
-| for Act [@As @GAs{[gact ?]}]:
+| for Act As:
   | Count = No
-  | GAct = 0 //ground act
-  | case Act [gact A]
-    | GAct <= 1
-    | Act <= A
   | when Act.is_list:
     | Count <= Act.0
     | Act <= Act.1
   | when Unit.can{Act} or Unit.owner.can_research{Act}:
-    | $update_act_icon{(if GAct then -I-1 else I) Act Count Unit}
+    | $update_act_icon{I Act Count Unit}
     | I += 1
 
 ui.on_unit_pick Unit =
 | for Icon $actIcons: Icon.show <= 0
 | As = 0
-| GAs = []
 | Acts = $main.acts
 | if Unit.has{menu} then
      | MenuActName,XYZ,TargetSerial = Unit.get{menu}
@@ -57,11 +50,8 @@ ui.on_unit_pick Unit =
   else if $curPanelTab >< unit then
      | As <= if Unit.removed then []
              else [@Unit.acts.skip{?tab} @Unit.acts.keep{?tab}]
-  else if $curPanelTab >< bag then
-     | As <= map K,A Unit.items: [A Acts."drop_[K]"]
-     | GAs <= map K,A Unit.cell.items: [A Acts."take_[K]"]
   else leave
-| $update_panel_buttons{Unit As GAs}
+| $update_panel_buttons{Unit As}
 
 unit.research_act Act =
 | O = $owner
@@ -127,7 +117,7 @@ act_icon_infoline Icon =
 | Info.upcase
 
 ui.create_act_icons =
-| map I $maxUnitActIcons+$maxGroundActIcons:
+| map I $maxUnitActIcons:
   | Icon = icon 0: Icon => $actClickIcon{Icon}
   | Icon.infoline_handler <= &act_icon_infoline
   | hidden Icon

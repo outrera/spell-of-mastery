@@ -22,11 +22,8 @@ type ui.$tabs{main}
   curPanelTab/menu
   actIcons/[]
   maxUnitActIcons/24
-  maxGroundActIcons/10
   curActIcon/0
   unitActIcons/[]
-  groundActIcons/[]
-  groundActIconsLay
   menuButtonsX/0
   menuBG
   inputBlocker

@@ -4,6 +4,7 @@ ScreenXY = [0 0]
 BrightFactor = 0
 BlitItems = 0
 BlitUnits = 0
+PickedRects = 0
 XUnit2 =
 YUnit2 =
 XUnit =
@@ -15,7 +16,6 @@ Marked = 0
 Unexplored = 0
 NDrawnUnits = 0
 NDrawnTiles = 0
-PickedRects = 0
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
