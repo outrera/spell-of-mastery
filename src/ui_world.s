@@ -77,6 +77,9 @@ ui.enter_site_picked Icon =
 | less Avail>0:
   | $notify{"Not available"}
   | leave
+| when $world.gold < Act.gold:
+  | $notify{"[Act.gold] gold needed"}
+  | leave
 | when Act.tab><summon:
   | NUnits = 0
   | MaxUnits = $cfg.world.max_units
