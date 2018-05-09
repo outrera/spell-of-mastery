@@ -45,8 +45,9 @@ ui.enter_site_proceed =
 | for Name,Act Acts:
   | $site.human.enable{Act Act.researched}
 | Ls = Ls.shuffle
-| for Act $enterSiteIcons1{}{?data}: when Act.picked>0: less Ls.end:
-  | Type = "unit[Act.name.drop{6}]"
+| for Act $enterSiteIcons1{}{?data}:
+   when Act.picked>0 and Act.tab><summon: less Ls.end:
+  | Type = Act.name
   | times I Act.picked:
     | XYZ = pop Ls
     | S = $site.human.alloc_unit{Type}
@@ -111,6 +112,7 @@ ui.create_enter_site_icons InfoFn PickedFn =
 | Summons = $cfg.world.setup_summons
 | create_pick_icon ActName =
   | Act = Acts.ActName
+  | when no Act: bad "missing act [ActName]"
   | Icon = icon 0 PickedFn
   | Icon.data <= Act
   | Icon.fg <= Act.icon_gfx

@@ -1,8 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Implement picked unit placement.
-- Instead of `summon_` use `unit_`, so act's name could be used to reference unit's type
 - Implemented picked spells count.
 - Economy:
     Initial gold: 4000
@@ -17,6 +15,7 @@ TODO:
     Mission bounty is a percent of gold based of enemy's allowance minus number of turns it took to complete the mission.
     Map could have treasures giving 100 gold each.
     Similar system was used in Warhammer and it was good enough.
+    Each unit's death should be penalized.
 - Redesign cursed unit to have high defense againse non-echanted weapon, instead of plain invulnerability.
 - Implement player avatar and color selection.
 - gfx blitting can be greatly sped up by creating rle/offset_jump tables on fly, during type determination

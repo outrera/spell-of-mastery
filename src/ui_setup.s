@@ -1,5 +1,7 @@
 use gui widgets ui_icon ui_widgets
 
+//stuff related to setting up new campaign game goes here
+
 ui.create_new_game_dlg =
 | X = $menuButtonsX
 | dlg: mtx
@@ -40,6 +42,7 @@ ui.create_new_game_setup_dlg =
 | Summons = $cfg.world.setup_summons
 | create_pick_icon ActName =
   | Act = Acts.ActName
+  | when no Act: bad "missing act [ActName]"
   | Icon = icon 0: Icon => $setup_act_picked{Icon}
   | Icon.data <= [Act Me]
   | Icon.fg <= Act.icon_gfx
