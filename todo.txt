@@ -1,6 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- get rid of research
+- get rid of `mana`
 - Economy:
     Initial gold: 4000
     Base cost: 2000

@@ -298,11 +298,10 @@ site.new_game =
 | if SCfg.explored then $explore{1} else $explore{0}
 | ActNames = $main.acts{}{?0}
 | StartMana = $main.cfg.site.start_mana
-| StartLore = $main.cfg.site.start_lore
 | InitedUnits = reinit_units $active
 | PAI = $main.cfg.ai
 | for P $players:
-  | P.init{StartMana StartLore}
+  | P.init
   | Us = P.units
   | less P.human: when Us.size:
     | for ActName ActNames: P.research_item{ActName}

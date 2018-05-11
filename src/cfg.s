@@ -87,7 +87,6 @@ main.cfg_handle_acts =
   | A = SP.deep_copy
   | A.icon <= "unit_[N]"
   | Lore,Mana,Cool = U.cost
-  | A.lore <= Lore
   | A.cost <= Mana
   | A.cool <= Cool
   | A.gold <= U.gold

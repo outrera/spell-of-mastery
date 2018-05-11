@@ -71,9 +71,6 @@ player.notify Text =
 
 player.main = $site.main
 
-player.lore = $data.lore
-player.`=lore` R = $data.lore <= R
-
 player.explore State =
 | when State
   | for S $sight: S.clear{3}
@@ -97,14 +94,11 @@ player.clear =
 | $leader <= $site.nil
 | $pentagram <= $site.nil
 | $mana <= 0
-| $lore <= 0
 | $data.lossage <= 0
 | $data.mana <= 0
 | for Type,Act $main.acts: $research.Type <= 0
 
-player.init StartMana StartLore =
-| $lore <= StartLore
-| $mana <= StartMana
+player.init =
 
 player.got_unit U =
 | CID = U.class.id
@@ -120,9 +114,6 @@ player.lost_unit U =
 | when U.ai >< pentagram: $pentagram <= $site.nil
 
 player.research_item What =
-| Act = $main.acts.What
-| $research.What <= Act.lore
-| $notify{"Acquired [Act.title]"}
 
 player.enabled Act = Act.players.bit{$id}
 player.enable Act State = Act.players <= Act.players.bitSet{$id State}

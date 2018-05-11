@@ -24,9 +24,7 @@ check_event_condition Me When =
   [researched Player ActName]
     | Act = $main.acts.ActName
     | less got ActName: "Site events references unknown act [ActName]"
-    | ResearchSpent = $players.Player.research.(Act.name)
-    | ResearchRemain = Act.lore - ResearchSpent
-    | ResearchRemain << 0
+    | Act.researched
   [`not` X] | not: check_event_condition Me X
   [`and` A B] | check_event_condition Me A and check_event_condition Me B
   [`or` A B] | check_event_condition Me A or check_event_condition Me B

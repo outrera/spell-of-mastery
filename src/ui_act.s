@@ -45,16 +45,6 @@ ui.on_unit_pick Unit =
   else leave
 | $update_panel_buttons{Unit As}
 
-unit.research_act Act =
-| O = $owner
-| Needs = O.lore-Act.lore
-| when Needs < 0:
-  | O.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
-  | leave
-| O.notify{"Research this?"}
-| $owner.picked <= Me
-| $set{menu [Act.name $xyz research]}
-
 ui.actClickIcon Icon =
 | HKI = $hotKeyInvoke
 | $hotKeyInvoke <= 0

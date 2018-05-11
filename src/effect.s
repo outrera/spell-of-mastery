@@ -348,9 +348,6 @@ effect teleport Arg:
 effect upkeep Amount:
 | $owner.mana -= Amount
 
-effect lore Amount:
-| Target.owner.lore += Amount
-
 effect victory Player Reason:
 | WP = $site.data
 | when Player >< owner: Player <= $owner.id
@@ -374,24 +371,10 @@ effect align How:
 | when T.wallShift and not $site.at{X Y+1 Z}.type><T.around:
   | $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
-unit.yes_research ActName =
-| Act = $main.acts.ActName
-| Needs = $owner.lore-Act.lore
-| when Needs < 0:
-  | $owner.notify{"Not enough lore for `[Act.title]` (collect [-Needs])"}
-  | leave
-| $owner.lore -= Act.lore
-| $owner.research_item{ActName}
-| $sound{gong}
-| leave
-
-effect yes
+effect yes //confirmation
 | MenuActName,XYZ,TargetSerial = $get{menuact}
 | T = 0
 | when got TargetSerial:
-  | when TargetSerial><research:
-    | $yes_research{MenuActName}
-    | leave
   | T <= $active.list.find{?serial><TargetSerial}
   | when no T or not T.alive:
     | $owner.notify{"Target is lost!"}
