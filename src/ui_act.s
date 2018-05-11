@@ -36,9 +36,7 @@ ui.on_unit_pick Unit =
 | Acts = $main.acts
 | if Unit.has{menu} then
      | MenuActName,XYZ,TargetSerial = Unit.get{menu}
-     | As <= if TargetSerial><research
-             then [Acts.m_yes Acts.m_no]
-             else Acts.MenuActName.menu
+     | As <= Acts.MenuActName.menu
   else if $curPanelTab >< unit then
      | As <= if Unit.removed then []
              else [@Unit.acts.skip{?tab} @Unit.acts.keep{?tab}]

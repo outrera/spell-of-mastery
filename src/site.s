@@ -304,7 +304,7 @@ site.new_game =
   | P.init
   | Us = P.units
   | less P.human: when Us.size:
-    | for ActName ActNames: P.research_item{ActName}
+    | //PLACEHOLDER
   | L = P.leader
   | less L.removed:
     | L.alpha <= 255

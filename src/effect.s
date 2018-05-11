@@ -55,7 +55,6 @@ effect gain @Args:
     | Title = ActName.replace{'_' ' '}
     | Player.notify{"Gained knowledge of [Title]."}
   | $site.turn_act{1 Player.id ActName}
-  | Player.research_item{ActName}
 
 effect cool Time: $add_gene{cool Time [$action.type $site.turn Time]}
 

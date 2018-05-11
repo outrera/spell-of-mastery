@@ -31,7 +31,6 @@ type player{id site}
    leader
    pentagram
    data/(t)
-   research/(t) //research and latency
    picked_unit
    picked_serial
    sight // fog of war
@@ -96,7 +95,6 @@ player.clear =
 | $mana <= 0
 | $data.lossage <= 0
 | $data.mana <= 0
-| for Type,Act $main.acts: $research.Type <= 0
 
 player.init =
 
@@ -112,8 +110,6 @@ player.lost_unit U =
   | $unit_counts.CID--
   | $total_units--
 | when U.ai >< pentagram: $pentagram <= $site.nil
-
-player.research_item What =
 
 player.enabled Act = Act.players.bit{$id}
 player.enable Act State = Act.players <= Act.players.bitSet{$id State}
