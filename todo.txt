@@ -16,7 +16,7 @@ TODO:
     Similar system was used in Warhammer and it was good enough.
     Each player unit's death should be penalized.
 - AI should try to challenge player. If player brings too many undead, then AI should pick counter-undead units and enchancements.
-- Redesign cursed unit to have high defense againse non-echanted weapon, instead of plain invulnerability.
+- To eliminate hunt that last monster problem, when during several turns there are no encounters, AI should attack using some of its monster, targeting leader. Otherwise monster would patrol between spawn points.
 - Instead of confusing charging mechanic, have concentrate action, which will boost will over the normally provided amount at the start of the turn. Yet unit sustaining a hit would still lose his concentration and his willpower would be put back to its normal maximum.
 - Implement player avatar and color selection.
 - gfx blitting can be greatly sped up by creating rle/offset_jump tables on fly, during type determination
@@ -99,6 +99,7 @@ UI:
 
 
 Graphics:
+- Grass cliff graphics should at least show a little bit of liff edge.
 - New player colors: player{blue},king{purple},warlock{black},witch{red},
                      katzard{green},mime{orange},neutral{white}
 - unit standing on a 1-height cell could obscure the unit below and behind it.

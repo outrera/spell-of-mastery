@@ -404,7 +404,9 @@ unit.assault Target =
 
 unit.hit Damage Target =
 | Damage = if Damage><user then $atk else Damage
-| when Target.cursed and $blessed: Damage += (Damage*100)/100
+| when Target.cursed:
+  | when $blessed: Damage += Damage
+  | less $blessed: Damage <= max 1 (Damage+1)/2
 | $run_genes{attack}
 | Target.harm{Me Damage}
 

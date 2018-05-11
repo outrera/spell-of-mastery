@@ -460,9 +460,6 @@ unit.effect Effect Target TargetXYZ =
         | less got T.class.inborn.find{shell}: T.strip{shell}
         | leave
       | when $range<<1: Target.run_genes{counter target/Me xyz/Me.xyz}
-      | when T.cursed: less $blessed or $cursed:
-        | $owner.notify{"Can't harm cursed unit! Cast bless or use magic."}
-        | leave
     else if Name >< insulate then RunActEffects<=0
     else if Name >< onAttack then when $onAttack: $effect{$onAttack T T.xyz}
     else if Name >< onHit then
