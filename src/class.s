@@ -31,7 +31,7 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   def/Def               //how many moves it takes to hit this unit
   sight/Sight           //scout range
   range/Range           //attack range
-  will/Will             //amount of mana required to subvert the unit
+  will/Will             //how many will points this unit charges per turn
   cooldown/Cooldown     //number of cycles between unit attacks
   acts/Acts             //acts this unit can perform
   icon/Icon             //icon for this unit

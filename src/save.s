@@ -57,7 +57,7 @@ site.save =
     tids | $main.tid_map{}{?type}
     players | map P $players
               | [P.id P.name P.human 0 P.picked.id 0
-                 P.data.list 0 P.mana]
+                 P.data.list 0 0]
     player | $human.id
     units | Units
     tilemap | map X $w: map Y $h:
@@ -159,7 +159,6 @@ site.load Saved =
   | P = $players.Id
   | P.name <= Name
   | P.human <= Human
-  | P.mana <= Mana
   | for K,V Data: P.data.K <= V
   | P.data.picked <= Picked
 | Explored = Saved.explored

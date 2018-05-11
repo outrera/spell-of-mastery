@@ -52,7 +52,6 @@ unit.ai_pick_target Act =
 
 unit.ai_ability_sub Act =
 | when Act.mov > $mov: leave 0
-| when $owner.mana < Act.cost: leave 0
 | when $cooldown_of{Act.name}: leave 0
 | less $owner.enabled{Act} and $earned{Act}: leave 0
 | when Act.hint >< dismiss: leave 0
@@ -67,11 +66,9 @@ unit.ai_ability_sub Act =
 | Target = $ai_pick_target{Act}
 | less Target: leave 0 //no suitable target for this act
 | Cost = Act.cost
-| Me.owner.mana+=Cost
 | when $can{Act}
   | $order_act{Act Target}
   | leave 1
-| Me.owner.mana -= Cost //havent casted the spell
 | 0
 
 // for final build do some random-shuffle $acts to make it less predictable

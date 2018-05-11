@@ -27,7 +27,6 @@ type player{id site}
    name
    ai
    human //1 for human controlled players
-   mana
    leader
    pentagram
    data/(t)
@@ -92,9 +91,7 @@ player.clear =
 | $picked_serial <= 0
 | $leader <= $site.nil
 | $pentagram <= $site.nil
-| $mana <= 0
 | $data.lossage <= 0
-| $data.mana <= 0
 
 player.init =
 

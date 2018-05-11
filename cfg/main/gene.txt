@@ -27,7 +27,6 @@ ttl: on{timeout},visual{teleport},sound{summon},remove
 ttl_s: on{timeout},remove //silent ttl
 ttl_die: on{timeout},fade_die
 fade_die: on{cycle.12},fade_die_upd
-income1: on{tenant_endturn},tenant,mana{1}
 door_align: on{place},align{door}
 
 //when{harmed has_mana.50}

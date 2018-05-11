@@ -145,8 +145,6 @@ effect notify Text: Target.owner.notify{Text}
 
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
 
-effect mana Amount: Target.owner.mana+=Amount
-
 type unit_getset{unit}
 
 unit_getset.`.` K =
@@ -266,13 +264,6 @@ effect morph ClassName:
 | $morph{Class}
 
 effect charm NewOwner:
-| when Target.will<0:
-  | $owner.notify{"Can't subvert this unit."}
-  | leave
-| when $owner.mana < Target.will:
-  | $owner.notify{"Not enough mana to subvert this unit."}
-  | leave
-| $owner.mana -= Target.will
 | XYZ = Target.xyz.deep_copy
 | Target.remove
 | Target.owner <= $owner
@@ -344,9 +335,6 @@ effect teleport Arg:
 | $reset_goal
 | $forced_order{fastmove TargetXYZ}
 
-effect upkeep Amount:
-| $owner.mana -= Amount
-
 effect victory Player Reason:
 | WP = $site.data
 | when Player >< owner: Player <= $owner.id
@@ -398,7 +386,6 @@ check_when Me Target C =
   [`+` not C] | not: check_when Me Target C
   [`.` below Type] | (Target.cell-1).type><Type
   [`.` has_health A] | Target.health>>A
-  [`.` has_mana A] | $owner.mana>>A
   [`.` has Effect] | Target.has{Effect}
   [`.` hasnt Effect] | not Target.has{Effect}
   [`.` got_child Type] | got Target.child{Type}

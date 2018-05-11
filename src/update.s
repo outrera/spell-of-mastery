@@ -10,9 +10,7 @@ check_event_condition Me When =
 | case When
   [N<eq+atleast Var Value]
     | V = case Var
-        [`.` Player Var]
-          | P = $players.Player
-          | if Var >< mana then P.mana else P.data.Var
+        [`.` Player Var] | $players.Player.data.Var
         Else | $data.Var
     | if got V then if N><eq then V >< Value else V >> Value
       else 0
