@@ -24,7 +24,6 @@ onMove: sound{step}
 acts: (pentagram act_fireball)
 spells:
       (
-      cast_knowledge
       cast_telekinesis
       cast_dispel
       cast_heal

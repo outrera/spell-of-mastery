@@ -15,8 +15,8 @@ Kingdom View:
 - Wizard guild can have several bases (wizard towers). Player starts with a single base, location for which he/she picks at the start of the game. After that additional bases can be build by spending money.
 - Bases have detection facilities, such as scrying devices, exposing roaming monster squads near them. If such squad gets detected, player has choice to intercept it or let it roam further, in that case such squad can attack a city, build a lair or wander away.
 - To intercept roaming monster squads and investigate map sites, player uses airship. Each such flying vessel is commanded by a single mage, and can carry a limited number of creatures and spells into battle. Each turn there is a random selection of creatures that can be summoned for the next mission. Player can hire from this pool of creatures. The summoning pool is randomized each world turn. Such system is simple enough, would favour using less creatures and cheaper ones, make game experience sufficiently random, yet provide some interesting choices for the player. Similarly there is a pool of spells, available for the given turn. Each spells has number of casts based on its tier.
-- At the start of the game, player picks initial spells and creatures. To uncover new creatures and spells player must investigate dungeons, holding secret knowledge or monster settlements.
-- Player may strategically skip a turn in hope of getting a better selection. Creature's and spell's tier determines the chance of their appearance. I.e. dragon (tier=5) unit would appear once per 5 turns on average and will cost a lot of money to bring in, making it very unreliable summon to pick at start of the game. Each unit type also has associated amount, which determines how many such units can appear in a single battle.
+- At the start of the game, player picks initial spells and creatures. To uncover new creatures player must conquer monster settlements. To gain new spells player must investigate dungeons, holding secret knowledge.
+- Player may strategically skip a turn in hope of getting a better selection. Each creature and spell has  a chance of appearance for a given turn for a given base, and the maximum number of such creatures that can appear if at all. Low tier spells are more reliable.
 - Player gains money from successfully intercepting monster attacks, and defending cities. If all cities get captured, player loses the game. There is also a chance the monsters could go directly for one of player's bases. The more successful the player in using said base to intercept attacks the higher are the chances of retaliation. The percentage of total reward gold gained is based on the percent of cities alive. Ruins are restored back to a living city after some time.
 - If monsters capture a city or player's base, they plunder it, turning it into special ruins lair. Which could be liberated given sufficient efforts.
 - Each monster lair has a chance to generate a monster squad, based on its age. Such monster squad also has a difficulty level, so player could anticipate what he will have to deal with and how many creautes and spells he should bring in.
@@ -51,14 +51,14 @@ Spells:
 - Dispel (neutral): removes all the following enchantments:
     shell, bless, fear, invisibility, flight, haste.
   This spell can be resisted, in that case it removes only the resistance enchantment. 
-- Telekinesis (neutral): grabs key, treasure, mana, gains control over rescueable creature, visits quest places, hurls rocks, pushes creature, or operates an object from a distance. Can't be used at chests.
+- Telekinesis (neutral): grabs key, treasure, uncovers fog of war, gains control over rescueable creature, visits quest places, hurls rocks, pushes creature, or operates an object from a distance. Can't be used at chests.
 - Heal (law): target regains 9 health, and gets cured from poison and fear.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Haste (law): target gains 2 additional movement points.
 - Fear (chaos): target loses ability to act for the next three turns.
 - Shell (law): target gains immunity to the next physical attack.
 - Resist (chaos): target gains immunity to the next magical attack.
-- Bless (law): target gains ability to harm undead and break magic doors.
+- Bless (law): makes target deal additional damage to cursed units.
 - Curse (chaos): makes target resistant to non-magical weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible. Doing any action beside movement would cancel invisibility.
 - Firestorm (chaos): sets ground on fire, damaging creatures inside it. Fire expands for several turn.

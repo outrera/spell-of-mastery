@@ -39,7 +39,7 @@ site.find_place_for_part PW PH =
 | H = $h/PCells
 | for Y H: for X W
   | for YY PH: for XX PW:
-    | when YY+Y>>W or XX+X>>H or Slots.(Y+YY).(X+XX): _goto next
+    | when YY+Y>>H or XX+X>>W or Slots.(Y+YY).(X+XX): _goto next
   | push X,Y Ps
   | _label next
 | when Ps.end: leave -1,-1
