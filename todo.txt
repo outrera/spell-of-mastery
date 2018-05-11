@@ -38,10 +38,9 @@ TODO:
 - Move researach to world map. Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
 - Finish minimap implementation, it should show only the current level and reduce saturation for levels below
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
-- Non-blessed AI units shouldn't attack undead enemies, but attack non-undead or run away.
 - Unit's height actually influencing its pathfinding.
 - Proper flyers, that can get above other units (if there is space) and do hit and run tactics. Think about what happens if flyinh unit creates pentagram. Should it land first?
-- Sound on failed attack on undead.
+- Special attack sound and effect blessed/crused units.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key. Unit deselecting would be done with selecting that unit again.
   That should help porting to touch devices.
 - Proper teleporation spell, requires introducing two point actions, probably can be implement using paired actions.
@@ -58,7 +57,6 @@ TODO:
 - store map events in a separate file
 - 1-way portals, leading to situations where enemy can quickly attack player, while player has to find other way.
 - traps
-- Some way to protect area guardians from undead units. Consider some bless fountains/pedestala, giving nearby units ability to fight undeads. Maybe blessed tiles, which cursed units cannot enter. Or just allow all neutral units to harm cursed units.
 - unit width and height, limiting preventing it to move tiny paths.
 - optimize resoure engine, so graphics and sounds would be loaded only when they are needed and deallocated when they are not required.
 - At the end of AI turn, viewport focus should change to the place before AI turn.
