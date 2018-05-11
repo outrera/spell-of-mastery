@@ -74,9 +74,6 @@ unit.`=shelled` State = $flags <= $flags.bitSet{4 State}
 unit.flyer = $flags.bit{5}
 unit.`=flyer` State = $flags <= $flags.bitSet{5 State}
 
-unit.charging = $flags.bit{6}
-unit.`=charging` State = $flags <= $flags.bitSet{6 State}
-
 unit.climber = $flags.bit{9}
 unit.swimmer = $flags.bit{10}
 unit.amphibian = $flags.bit{11}
@@ -410,17 +407,6 @@ unit.hit Damage Target =
 | $run_genes{attack}
 | Target.harm{Me Damage}
 
-unit.charging_act = $get{charge}.0
-unit.charging_charge = $get{charge}.1
-unit.charging_cost = $get{charge}.2
-
-unit.interrupt =
-| less $will > $class.will: leave
-| $will <= $class.will
-| $sound{fizzle}
-| E = $site.visual{$xyz energy}
-| E.fxyz.init{$fxyz}
-
 unit.harm Attacker Damage =
 | when $ai <> unit: leave //likely collateral in explosion
 | when $removed or not $alive: leave //entered building?
@@ -436,13 +422,9 @@ unit.harm Attacker Damage =
   | OnHarm = $class.onHarm
   | when OnHarm: $effect{OnHarm Me $xyz}
   | when $anim><idle or $anim><move: $animate{hit}
-  | when $charging:
-    | $interrupt
-    | when Attacker: Attacker.owner.notify{"Succeed interrupting target's action"}
   | leave
 | when Attacker:
   | AO = Attacker.owner
-  | when $owner.id <> AO.id: AO.lore += $tier
   | $owner.data.lossage += $tier
   | Attacker.kills++
 | $die

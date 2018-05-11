@@ -115,9 +115,6 @@ view.infoline =
   | Stats = "M:[U.moves]:[U.mov]/[U.class.mov] H:[U.health]/[U.class.hp]"
   | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def][DI] F:[U.fatigue]-[U.stamina]"
   | Stats <= "[Stats] S:[U.sight] R:[U.range] W:[U.will]/[U.class.will]"
-  | when U.charging:
-    | CAct, Charge, CCost, TId = U.get{charge}
-    | Stats <= "[Stats] ([CAct.title]: [Charge]/[CCost])"
   | Id = if $site.editor then "[U.id]" else ""
   | Unit <= "[U.owner.name]'s [U.title][Id] [Stats]"
 | "[Unit]\n[Land]"

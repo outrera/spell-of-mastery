@@ -156,8 +156,7 @@ unit.ai_update =
 | when $afraid:
   | when $enemies_in_sight.size: $ai_runaway{1}
   | leave 0
-| when not $charging or $charging_charge+$will>>$charging_cost:
-  | when $ai_ability: leave break
+| when $ai_ability: leave break
 | when $atk:
   | Cs = $reachable
   | case Cs.keep{?0><attack} [[Type Cell]@_]:
