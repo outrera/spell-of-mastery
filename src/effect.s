@@ -169,7 +169,6 @@ effect spell_of_mastery:
 | $site.data.winner <= $owner.id
 | $site.data.victory_type <= 'Victory by casting the Spell of Mastery'
 
-
 effect swap Arg:
 | XYZ = $xyz.copy
 | Target.remove

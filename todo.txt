@@ -1,6 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- Site difficulty level, which should be proportional to player's gold 
+- Tutorial dialogue for the first time player enters a site, explaining the rules.
 - Economy:
     Initial gold: 4000
     Base cost: 2000

@@ -83,6 +83,7 @@ world.clear =
 | $incomeFactor <= 100
 | $seed <= LCG_M.rand
 | $turn_seed <= LCG_M.rand
+| $data.victories <= 0
 | $generate
 
 world.free_site S =
@@ -174,7 +175,7 @@ world.end_turn =
   | when S.type><party: push S Parties
   | $sites.push{S}
 | $turn += 1
-| $turn_seed = ($turn_seed*LCG_A + LCG_B) % LCG_M
+| $turn_seed <= ($turn_seed*LCG_A + LCG_B) % LCG_M
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
 | for P Parties: less P.state:
   | C = Cities.find{?attacker^not}
@@ -235,9 +236,10 @@ world.site_by_serial Serial =
 | for S $sites: when S.serial><Serial: leave S
 | 0
 
-world.leave_site =
-| less $ui.site.data.victory><1: leave
+world.leave_site How =
+| less How><victory: leave
 | S = $site_by_serial{$ui.site.data.serial}
+| less S: leave
 | when S.type><party:
   | $free_site{S}
   | $notify{"You have defeated the raiding party!"}

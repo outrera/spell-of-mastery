@@ -135,19 +135,8 @@ ui.create_ingame_dlg =
   |  0   0| $message_box
 | input_split Ingame: Base In => Base.input{In}
 
-
 ui.update = //called by site.update each game cycle
-| WinnerId = $site.data.winner
-| when got WinnerId:
-  | Winner = $site.players.WinnerId
-  | NextSite = when Winner.human: $site.data.next_site
-  | less got NextSite:
-    | $pause
-    | if Winner.human
-      then | $main.music{"victory.ogg"}
-           | $pick{victory}
-      else | $main.music{"defeat.ogg"}
-           | $pick{defeat}
-  | when got NextSite:
-    | $load{"[$mapsFolder][NextSite].txt"}
-    | $site.new_game
+| when got $site.data.winner:
+  | $pause
+  | $show_results
+  | leave

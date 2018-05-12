@@ -47,13 +47,13 @@ ui.enter_site_proceed =
   | $site.human.enable{Act Act.researched}
 | Ls = Ls.shuffle
 | for Act $enterSiteIcons1{}{?data}:
-   when Act.picked>0 and Act.tab><summon: less Ls.end:
-  | Type = Act.name
-  | times I Act.picked:
-    | XYZ = pop Ls
-    | S = $site.human.alloc_unit{Type}
-    | S.aistate <= \spawned
-    | S.move{XYZ}
+  | when Act.picked>0 and Act.tab><summon: less Ls.end:
+    | Type = Act.name
+    | times I Act.picked:
+      | XYZ = pop Ls
+      | S = $site.human.alloc_unit{Type}
+      | S.aistate <= \spawned
+      | S.move{XYZ}
 | $begin_ingame{0}
 
 ui.enter_site_back =
@@ -174,9 +174,9 @@ ui.enter_site Site =
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | Act.picked <= 0
-  | Icon.text.2 <= 0
-  | times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
-    | Icon.text.2 += 1
+  | Icon.text.2 <= 3
+  /*| times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
+    | Icon.text.2 += 1*/
   | Icon.hidden <= not Act.researched
 | $world.seed <= Seed
 | for Icon $enterSiteIcons2:

@@ -96,26 +96,6 @@ ui.pick_world pause/1 =
 | $main.music{"title.ogg"}
 | $pick{world}
 
-ui.create_victory_dlg =
-| dlg: mtx
-  |   0   0 | $img{ui_victory_bg}
-  | 100 100 | txt medium: =>
-              | Player = $site.players.($site.data.winner)
-              | Type = $site.data.victory_type.replace{_ ' '}
-              | "[Player.name] has won!\n[Type]"
-  | $width-360 $height-100
-        | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
-
-ui.create_defeat_dlg = 
-| dlg: mtx
-  |   0   0 | $img{ui_defeat_bg}
-  | 140 100 | txt medium: =>
-              | Player = $site.human
-              | Type = $site.data.victory_type.replace{_ ' '}
-              | "[Player.name] has been defeated!\n"
-  | $width-360 $height-100
-        | button 'EXIT TO MENU' skin/scroll: => $pick_title_menu{pause/0}
-
 ui.create_main_menu_dlg =
 | X = $menuButtonsX
 | dlg: mtx

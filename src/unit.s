@@ -425,7 +425,7 @@ unit.harm Attacker Damage =
   | leave
 | when Attacker:
   | AO = Attacker.owner
-  | $owner.data.lossage += $tier
+  | $owner.data.lossage += $gold
   | Attacker.kills++
 | $die
 | $action.cycles <= 1

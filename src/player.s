@@ -117,25 +117,10 @@ player.units =
 
 player.seen XYZ = $sight.(XYZ.1).(XYZ.0)>1
 
-update_spell_of_mastery Me P =
-| when P.human: for Q $players:
-  | S = Q.data.spell_of_mastery
-  | when got S and not S%(24*5):
-    | P.notify{"[Q.name] will finish Spell of Mastery in [S/24] seconds"}
-| SOM = P.data.spell_of_mastery
-| when got SOM:
-  | SOM--
-  | less SOM > 0:
-    | $data.winner <= P.id
-    | $data.victory_type <= 'Victory by casting the Spell of Mastery'
-    | leave
-  | P.data.spell_of_mastery <= SOM
-
 player.update =
 | Cycle = $site.cycle
 | when Cycle><0 and $human and not $leader.removed:
   | $site.view.center_at{$leader.xyz cursor/1}
-| update_spell_of_mastery $site Me
 
 alloc_ai_blockers Me =
 | for U $units: less U.removed: when U.ai >< avoid:
@@ -152,21 +137,6 @@ player.make_move =
 | $ai.update
 //|free_ai_blockers $site
 
-player.add_item Name Amount =
-| when Amount > 0: bad "player.remove_item implement positive amount"
-| Amount <= -Amount
-| Piles = []
-| for U $units: when U.ai><flag: 
-  | Available = U.cell.get_item{Name}
-  | when Available: push [U.cell Available] Piles
-| when Piles{?1}.sum<Amount: leave 0
-| for Cell,Avail Piles:
-  | Count = min Amount Avail
-  | Cell.add_item{Name -Count}
-  | Amount -= Count
-  | when Amount < 0: leave 1
-| 1
-
 player.sound Name = when $id >< $site.human.id: $main.sound{Name}
 
 player.lost_leader Leader =
@@ -177,11 +147,11 @@ player.lost_leader Leader =
   | when U.owner.id >< $id: push U RemainingUnits
 | case Leaders [L@Ls]: when Ls.all{?owner.id><L.owner.id}:
   | $site.data.winner <= L.owner.id
-  | $site.data.victory_type <= 'Victory by defeating other leaders.'
+  | $site.data.victory_type <= 'Victory by defeating enemy leaders.'
 | when Leader.owner.human: less Leaders.any{?owner.human}:
   | $site.data.winner <= 0
   | $site.data.victory_type <= 'Defeat by losing your leader.'
-| $site.notify{"[$name] was defeated."}
+//| $site.notify{"[$name] was defeated."}
 | less RemainingUnits.any{?leader}: for U RemainingUnits: U.free
 
 export player
