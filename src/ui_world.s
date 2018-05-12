@@ -169,6 +169,8 @@ ui.enter_site Site =
 | GUI = get_gui{}
 | when got GUI: GUI.cursor <= $img{ui_cursor_point}
 | when Site: $enterSiteDst <= Site
+| Seed = $world.seed
+| $world.seed <= $world.turn_seed
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | Act.picked <= 0
@@ -176,6 +178,7 @@ ui.enter_site Site =
   | times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
     | Icon.text.2 += 1
   | Icon.hidden <= not Act.researched
+| $world.seed <= Seed
 | for Icon $enterSiteIcons2:
   | Act = Icon.data
   | Act.picked <= 0
