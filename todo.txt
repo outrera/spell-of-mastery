@@ -1,6 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- Landing place for enemy units, enemy placement. Ther should be two types of placement: guard and patrol. Guards are placed first, then patrol units are placed. Guards don't move too far from their placement, while patrol units move around patrol points.
+- Map treasures.
+- Base placement cost.
 - Base should be limited to only one operation per turn.
 - Loan mechanics, which allow player to borrow 1000 gold under 5% interest rate
 - Tutorial dialogue for the first time player enters a site, explaining the rules.

@@ -247,7 +247,7 @@ world.leave_site How =
   | Scrap += Act.gold*Act.picked
 | P = $ui.site.human
 | Scrap -= P.data.lossage
-| Scrap <= max 0 Scrap*2/3
+| Scrap <= max 0 Scrap*3/4
 | $gold += Scrap
 | less How><victory:
   | $notify{"You've scrapped [Scrap] gold due to early mission end."}

@@ -24,7 +24,7 @@ sterra: (city grass desert snow)
        ,(base forest mountain grass desert snow)
 
 //stuff related to new game setup
-start_gold: 4000
+start_gold: 1000//3000
 start_spells: 3
 start_summons: 3
 default_picks:

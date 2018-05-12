@@ -34,9 +34,8 @@ ui.generate W H Blueprint =
 | $site.generate{W H Blueprint}
 | $view.clear
 
-ui.enter_site_proceed =
-| $generate{6 6 forest}
-| $site.data.serial <= if $enterSiteDst then $enterSiteDst.serial else 0
+
+ui.place_site_player =
 | Ls = []
 | for U $site.units: less U.removed:
   | when U.type><trigger_landing: push U.xyz Ls
@@ -54,6 +53,31 @@ ui.enter_site_proceed =
       | S = $site.human.alloc_unit{Type}
       | S.aistate <= \spawned
       | S.move{XYZ}
+
+ui.place_site_enemy =
+| Budget = max 400 ($world.site_gold*3+3)/4
+| Units = []
+| Spells = []
+| for Icon $enterSiteIcons1:
+  | Act = Icon.data
+  | if Act.tab><summon then push Act Units
+    else push Act Spells
+| Total = 0
+| Us = Units.shuffle
+| Picked = []
+| for U Us: when U.gold<<100 or (Budget-Total)/max{1 U.gold}>5:
+  | Count = max 1 $world.rand{U.maxPicks}
+  | times I Count: when Total+U.gold << Budget:
+    | Total += U.gold
+    | push U Picked
+| say "[Total]/[Budget]"
+| say Picked{?name}
+
+ui.enter_site_proceed =
+| $generate{6 6 forest}
+| $site.data.serial <= if $enterSiteDst then $enterSiteDst.serial else 0
+| $place_site_player
+| $place_site_enemy
 | $begin_ingame{0}
 
 ui.enter_site_back =
