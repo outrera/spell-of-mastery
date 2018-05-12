@@ -43,6 +43,7 @@ type world.widget{Main UI W H}
   siteLimY/510
   incomeFactor
   gold
+  site_gold //gold when player entered the site
   tmap/(t) //terrain map
   sterra/(t) //allowed terrain for sites
 | $cfg <= $main.cfg.world
@@ -174,9 +175,13 @@ world.end_turn =
   | when S.type><ruin: push S Ruins
   | when S.type><party: push S Parties
   | $sites.push{S}
+| less Cities.size:
+  | $notify{"The last city has fallen. It is game over."}
+  | leave
 | $turn += 1
 | $turn_seed <= ($turn_seed*LCG_A + LCG_B) % LCG_M
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
+| $gold += $cfg.passive_income
 | for P Parties: less P.state:
   | C = Cities.find{?attacker^not}
   | when got C:
@@ -191,7 +196,6 @@ world.end_turn =
   | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
 | when $rand{100}<LSMC: $generate_site{party}
 | when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
-| $notify{"Turn [$turn]"}
 
 world.render =
 | Cur = \ui_cursor_point
@@ -218,6 +222,7 @@ world.draw FB X Y =
   | FB.blit{S.xy.0-C S.xy.1-C G}
 | Font = font medium
 | Font.draw{FB 400 2 "Gold: [$gold]"}
+| Font.draw{FB 500 2 "Turn: [$turn]"}
 
 world.base_placement =
 | less $data."cnt_base"^~{No 0}<$cfg."lim_base"^~{No 1000}:
@@ -237,9 +242,21 @@ world.site_by_serial Serial =
 | 0
 
 world.leave_site How =
-| less How><victory: leave
+| Scrap = 0
+| for Act $ui.enterSiteIcons1{}{?data}:
+  | Scrap += Act.gold*Act.picked
+| P = $ui.site.human
+| Scrap -= P.data.lossage
+| Scrap <= max 0 Scrap*2/3
+| $gold += Scrap
+| less How><victory:
+  | $notify{"You've scrapped [Scrap] gold due to early mission end."}
+  | leave
 | S = $site_by_serial{$ui.site.data.serial}
 | less S: leave
+| Bounty = max 0 ($site_gold*2+2)/3 - $ui.site.turn*10
+| $gold += Bounty
+| $notify{"You earned [Scrap+Bounty] bounty gold!"}
 | when S.type><party:
   | $free_site{S}
   | $notify{"You have defeated the raiding party!"}

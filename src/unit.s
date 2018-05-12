@@ -424,7 +424,6 @@ unit.harm Attacker Damage =
   | when $anim><idle or $anim><move: $animate{hit}
   | leave
 | when Attacker:
-  | AO = Attacker.owner
   | $owner.data.lossage += $gold
   | Attacker.kills++
 | $die

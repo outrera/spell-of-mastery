@@ -44,7 +44,10 @@ ui.create_panel_tab_menu =
 | ExitIcon = icon menu_exit: Icon =>
   | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
 | LeaveIcon = icon menu_leave: Icon =>
-  | $confirm{"Leave this site?" |$0 yes => $pick_world}
+  | $confirm{"Leave this site?"
+     |$0 yes =>
+       | $pick_world
+       | $world.leave_site{retreat}}
 | layV s/4 [(layH s/4 SaveIcon,LoadIcon,SiteIcon,spacer{8 0},ExitIcon)
             (LeaveIcon)]
 

@@ -1,3 +1,4 @@
+passive_income: 100
 max_sites: 1000
 lim_lair: 50
 lim_party: 100

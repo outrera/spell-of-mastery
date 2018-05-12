@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Site difficulty level, which should be proportional to player's gold 
+- Base should be limited to only one operation per turn.
+- Loan mechanics, which allow player to borrow 1000 gold under 5% interest rate
 - Tutorial dialogue for the first time player enters a site, explaining the rules.
 - Economy:
     Initial gold: 4000

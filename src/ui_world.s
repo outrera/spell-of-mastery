@@ -57,8 +57,7 @@ ui.enter_site_proceed =
 | $begin_ingame{0}
 
 ui.enter_site_back =
-| for Act $enterSiteIcons1{}{?data}:
-  | $world.gold += Act.gold*Act.picked
+| $world.gold <= $world.site_gold
 | $pick{world}
 
 enter_site_pick_infoline Icon =
@@ -169,6 +168,7 @@ ui.enter_site Site =
 | GUI = get_gui{}
 | when got GUI: GUI.cursor <= $img{ui_cursor_point}
 | when Site: $enterSiteDst <= Site
+| $world.site_gold <= $world.gold
 | Seed = $world.seed
 | $world.seed <= $world.turn_seed
 | for Icon $enterSiteIcons1:

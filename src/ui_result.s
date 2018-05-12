@@ -7,7 +7,7 @@ ui.create_victory_dlg =
               | "You are victorious!\n"
   | $width-360 $height-100
         | button 'CONTINUE' skin/scroll: =>
-          | $pick{world}
+          | $pick_world
           | $world.leave_site{victory}
 
 ui.create_defeat_dlg = 
@@ -17,7 +17,7 @@ ui.create_defeat_dlg =
               | "You have been defeated!\n"
   | $width-360 $height-100
         | button 'CONTINUE' skin/scroll: =>
-          | $pick{world}
+          | $pick_world
           | $world.leave_site{defeat}
 
 ui.show_results =
