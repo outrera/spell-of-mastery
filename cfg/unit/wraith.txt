@@ -1,5 +1,5 @@
 tier: 2
-cost: 5,8,15
+cost: 200,3,50
 mov: 5
 health: 8
 atk: 3

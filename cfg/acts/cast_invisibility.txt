@@ -1,8 +1,5 @@
 icon: spell_invisibility
 //hotkey: d
-lore: 5
-cost: 4
-cool: 10
 range: 9000
 check: non_leader,unit
 onInit: add{invisible},visual{spell},sound{invisibility}

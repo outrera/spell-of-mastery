@@ -1,5 +1,5 @@
 tier: 1
-cost: 5,6,10
+cost: 100,4,50
 health: 6
 atk: 2
 def: 2

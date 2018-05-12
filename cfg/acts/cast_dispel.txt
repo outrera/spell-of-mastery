@@ -1,8 +1,5 @@
 icon: spell_dispel
-//hotkey: d
-//lore: 5
-//cost: 5
-//cool: 10
+gold: 20
 range: 9000
 check: unit
 onInit: resist,strip{fear},strip{shell},strip{bless},strip{flyer},strip{hasted}

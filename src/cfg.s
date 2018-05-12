@@ -86,10 +86,10 @@ main.cfg_handle_acts =
   | when U.summon<>auto: N <= U.summon
   | A = SP.deep_copy
   | A.icon <= "unit_[N]"
-  | Lore,Mana,Cool = U.cost
-  | A.cost <= Mana
-  | A.cool <= Cool
-  | A.gold <= U.gold
+  | GoldCost,MaxPicks,PickChance = U.cost
+  | A.gold <= GoldCost
+  | A.maxPicks <= MaxPicks
+  | A.pickChance <= PickChance
   | Acts."unit_[N]" <= A
 | for Name,Act Acts: Acts.Name <= act Name @Act.list.join
 | for Name,Act Acts: when Act.menu:

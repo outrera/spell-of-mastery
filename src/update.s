@@ -231,11 +231,14 @@ update_next_action Me =
 | swap $action $next_action
 | $next_action.type <= 0
 | $next_action.priority <= 0
-| AM = $action.act.mov
+| Act = $action.act
+| AM = Act.mov
 | when AM:
   | $mov -= AM
-  | Fat = $action.act.fatigue
+  | Fat = Act.fatigue
   | when Fat: $fatigue += Fat+$fatigue/2
+| when Act.picks.($owner.id) > 0:
+  | Act.picks.($owner.id) -= 1
 | center_on_actor Me
 | $action.start
 | when $anim><move: $pick_facing{$facing}

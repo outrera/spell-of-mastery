@@ -1,8 +1,6 @@
 icon: act_bomb
 title: `Bomb`
 hotkey: b
-//lore: 3
-//cost: 2
 cool: 5
 range: 6
 check: seen,any

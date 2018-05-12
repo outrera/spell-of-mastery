@@ -1,8 +1,5 @@
 icon: spell_fear
-//hotkey: d
-//lore: 5
-//cost: 1
-//cool: 10
+gold: 20
 range: 9000
 check: unit
 onInit: visual{fear},resist,add{afraid 3},sound{fear}

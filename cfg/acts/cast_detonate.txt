@@ -1,8 +1,4 @@
 icon: spell_detonate
-//hotkey: d
-lore: 5
-cost: 3
-cool: 10
 range: 9000
 check: owned,non_leader,unit
 onInit: detonate{health},strip{poison},visual{explosion},sound{explosion}

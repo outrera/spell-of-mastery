@@ -1,10 +1,9 @@
 icon: spell_subvert
 hotkey: m
-//lore: 5
-//cost: 5
-//cool: 10
 tier: 4
-amount: 1
+gold: 200
+maxPicks: 2
+pickChance: 50
 range: 9000
 check: non_leader,will,unit
 onInit: visual{hypnotize},sound{subvert},resist,charm{owner}

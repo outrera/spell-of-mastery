@@ -172,7 +172,9 @@ ui.enter_site Site =
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | Act.picked <= 0
-  | Icon.text.2 <= Act.maxPicks
+  | Icon.text.2 <= 0
+  | times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
+    | Icon.text.2 += 1
   | Icon.hidden <= not Act.researched
 | for Icon $enterSiteIcons2:
   | Act = Icon.data

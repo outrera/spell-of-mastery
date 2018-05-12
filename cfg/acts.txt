@@ -1,8 +1,8 @@
 icon: nil
-lore: 0
-cost: 0
-gold: 100
-mov: 1
+gold: 50
+maxPicks: 6
+pickChance: 50
+mov: 2
 priority: 50
 range: 0 //0=target self
 speed: 4

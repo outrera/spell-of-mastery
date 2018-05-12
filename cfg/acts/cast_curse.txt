@@ -1,8 +1,4 @@
 icon: spell_curse
-//hotkey: d
-lore: 5
-cost: 4
-cool: 10
 range: 9000
 check: non_leader,unit
 onInit: strip{poison},add{curse},visual{curse},sound{curse}
