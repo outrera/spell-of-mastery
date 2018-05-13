@@ -106,7 +106,7 @@ view.infoline =
 | Land = "[X],[Y],[Z]:[$site.at{X Y Z-1}.type][Indoor][Cave]"
 | U = $site.block_at{X,Y,Z}
 | Unit = ""
-| when U:
+| when U and (not U.invisible or U.owner.id><$site.human.id):
   | P = $picked
   | Bonus = if P.id and P.id<>U.id then P.attack_bonus{U} else 0
   | DI = if Bonus > 0 then "-[Bonus]"

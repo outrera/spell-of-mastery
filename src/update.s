@@ -160,6 +160,11 @@ update_path Me =
   | when $xyz >< $goal.xyz:
     | goal_in_range Me
     | leave
+  | for E $nearby_enemies_at{$xyz}:
+    | when E.invisible: E.strip{invisible}
+  | when $xyz.mdist{$goal.xyz} << 1 and ($xyz.2-$goal.xyz.2).abs<<1:
+    | $goal <= 0
+    | leave 0
   | Path = $path_near{$goal.xyz}
   | when Path.end: //cant reach goal from here?
     | $goal <= 0

@@ -34,7 +34,8 @@ view.handle_picked_act Target =
 
 view.handle_pick =
 | Unit = $site.nil
-| when@@it $site.cell{@$cursor}.block: Unit <= it
+| when@@it $site.cell{@$cursor}.block:
+  | less it.invisible: Unit <= it
 | Player = $player
 | less Player.seen{Unit.xyz}: Unit <= $site.nil
 | $ui.on_unit_pick{$picked}
@@ -320,7 +321,11 @@ site.update_picked =
   | leave
 | $last_picked <= U.serial
 | less $act:
-  | for What,Cell U.reachable: $set_mark{Cell.xyz 1 "mark_[What]"}
+  | for What,Cell U.reachable:
+    | when What><attack
+      | B = Cell.block
+      | when B and B.invisible: What <= \move
+    | $set_mark{Cell.xyz 1 "mark_[What]"}
   | leave
 | when $act.range >> 9000: leave
 | UX,UY,UZ = U.xyz

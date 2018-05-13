@@ -6,10 +6,10 @@ unit.order_at Goal Act =
 | Cell = $site.cellp{XYZ}
 | Units = Cell.units
 | OAct = Act
-| less Goal: Goal <= $site.block_at{XYZ}
+| less Goal: Goal <= Cell.block
 | Act <= if Act.is_text then $main.acts.Act
          else if Act then Act
-         else if Goal and $owner.is_enemy{Goal.owner} then
+         else if Goal and $owner.is_enemy{Goal.owner} and not Goal.invisible then
            $main.acts.attack
          else if $owner.human and and got Units.find{?type><mark_jump} then
            $main.acts.act_jump
@@ -30,10 +30,12 @@ unit.order_at Goal Act =
 | when Act.name><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $owner.human and (Act.name><move or Act.name><attack):
   | Mark = "mark_[Act.name]"
-  | Move = Units.keep{U=>U.type^~{mark_swap mark_move}><Mark}
+  | Ms = [mark_move mark_attack mark_swap]
+  | Move = Units.keep{U=>Ms.has{U.type}}
   | less Move.size
     | $owner.notify{'Cant move there'}
     | leave
+  | Goal
 | when $owner.human and Act.name<>attack and Act.range>>1 and Act.range<9000:
   | Move = Units.keep{?type><mark_cast}
   | less Move.size

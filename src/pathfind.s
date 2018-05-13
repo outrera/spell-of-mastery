@@ -55,14 +55,7 @@ unit.list_moves Src Cost =
   | Dst <= Dst.floor
   | when Cost < Dst.cost and CanMove{Me Src Dst}:
     | B = Dst.block
-    | if B then
-        | if fxn $owner.id <> B.owner.id
-          then if B.alive and $atk
-               then push Dst Ms //attack
-               else
-          else when B.speed and B.can_move{}{B Dst Src}:
-               | push Dst Ms //FIXME: consider moving B back
-      else push Dst Ms
+    | when not B or B.alive: push Dst Ms
 | Ms
 
 PFQueue = queue 256*256
@@ -175,7 +168,7 @@ unit.jump_cost = 1
 
 can_jump Src Dst = Dst.empty and fxn Dst.floor-Dst>1
 
-unit.can_attack Src Dst = fxn (Dst.z-Src.z) << 1 or $can_move{}{Me Src Dst}
+unit.can_attack Src Dst = $atk and (fxn (Dst.z-Src.z) << 1 or $can_move{}{Me Src Dst})
 
 unit.reachable =
 | Xs = []
@@ -186,11 +179,13 @@ unit.reachable =
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
-      else if $owner.id <> B.owner.id then Type <= 0
+      else if $owner.id <> B.owner.id then
+        if B.invisible then R <= 0
+        else Type <= 0
       else if B.moves<1 /*or B.engaged*/ then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
-    | for E $nearby_enemies_at{Dst.xyz}:
+    | for E $nearby_enemies_at{Dst.xyz}: less E.invisible:
       | when not E.afraid and $can_attack{E.cell $site.cellp{XYZ}}:
         | R <= \block //engage
       | when $range><1 and not $afraid and $moves >> Dst^path_len+1:

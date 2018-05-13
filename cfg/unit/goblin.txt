@@ -10,4 +10,4 @@ onHit: sound{throw},missile{rock},hit{user},sound{impact}
 onHarm: sound{goblin_hit}
 onDeath: sound{goblin_die}
 onMove: sound{step}
-acts: (act_bomb)
+acts: (act_bomb act_invisibility2)

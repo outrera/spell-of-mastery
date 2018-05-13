@@ -1,0 +1,7 @@
+icon: spell_invisibility
+//hotkey: d
+range: 9000
+check: unit
+onInit: add{invisible},visual{spell},sound{invisibility}
+
+

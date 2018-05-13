@@ -16,6 +16,8 @@ unit.new_turn =
 | when $will < $class.will: $will <= $class.will
 
 unit.end_turn =
+| when $invisible and $nearby_enemies_at{$xyz}.size:
+  | $strip{invisible}
 | Resting = $def >< $class.def and not $engaged
 | when $threatened: $engaged <= 1 //ended its turn near enemy?
 | less $engaged:
