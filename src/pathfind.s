@@ -143,7 +143,7 @@ unit.path_around_to Range XYZ = //Me is unit
 | Target = $site.cell{@XYZ}
 | check Dst =
   | if Dst><Target then 1
-    else if Dst.block then \block
+    else if Dst.block or $threatened_at{Dst.xyz} then \block
     else 0
 | Found = $pathfind{Range &check}
 | if Found then Found.path else []

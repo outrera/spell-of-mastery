@@ -209,6 +209,7 @@ handle_next_action_cost Me =
 | when $next_action.type >< idle: leave 1
 | less $next_action.type: leave 0
 | less $next_action.valid: leave 0
+| when $mov < $next_action.act.mov: leave 0
 | $will -= $next_action.cost
 | 1
 

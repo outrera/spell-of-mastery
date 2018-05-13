@@ -362,7 +362,7 @@ unit.nearby_enemies_at XYZ =
 
 unit.threatened_at XYZ =
 | for E $nearby_enemies_at{XYZ}:
-  | when not E.afraid and $can_attack{E.cell $site.cellp{XYZ}}: leave 1
+  | when not E.afraid and E.can_attack{E.cell $site.cellp{XYZ}}: leave 1
 | 0
 
 unit.threatened = $threatened_at{$xyz}

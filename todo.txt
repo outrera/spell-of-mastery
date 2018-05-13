@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:.
-- Moving past enemy unit shouldn't trigger engaged flag.
+- Sneaking behind enemy shouldn't trigger engaged flag or strip invisibility
 - Ensure AI properly uses goblins bomb and occulus explosion.
 - Map treasures.
 - Base placement cost.
