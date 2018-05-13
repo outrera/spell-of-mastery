@@ -11,4 +11,4 @@ onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{dwarf_hit}
 onDeath: sound{dwarf_die}
 onMove: sound{step}
-acts: (defend)
+acts: (act_defend)

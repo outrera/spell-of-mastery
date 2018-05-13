@@ -128,10 +128,10 @@ effect spread What Harm
       | B = C.block
       | when B: B.harm{Me Harm}
 
-effect detonate Args:
+effect detonate Damage:
 | B = $site.block_at{TargetXYZ}
-| Damage = Target.class.hp
-| Target.harm{Me Damage}
+| when Damage><health: Damage <= Target.class.hp
+| Target.harm{Me Target.class.hp}
 | for D Dirs43
   | B = $site.block_at{TargetXYZ+D}
   | when B: B.harm{Me Damage}

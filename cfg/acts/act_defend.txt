@@ -1,6 +1,5 @@
 icon: spell_shell
-//lore: 2
-//cost: 4
+title: `Defend`
 cool: 0
 check: owned,unit
 onInit: boost_defense{3},visual{spell}

@@ -231,7 +231,7 @@ ai.update_units =
 
 ai.group_roam Types =
 | Units = $player.units
-| UTs = Units.keep{?aistate><spawned}.div{?type}
+| UTs = Units.keep{?aistate><free}.div{?type}
 | As = []
 | Missing = []
 | for T Types:

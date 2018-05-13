@@ -4,7 +4,7 @@ health: 6
 atk: 2
 mov: 2
 def: 0
-range: 3
+range: 4
 speed: 60
 //inborn: (ttl.10{})
 onHit: shell,hit{user},sound{blob_attack}

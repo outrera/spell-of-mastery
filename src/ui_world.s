@@ -71,7 +71,48 @@ ui.place_site_enemy =
     | Total += U.gold
     | push U Picked
 | say "[Total]/[Budget]"
-| say Picked{?name}
+| Patrol = []
+| Guards = []
+| RGuards = []
+| Leader = 0
+| Player = $site.players.2
+| for U $site.units: less U.removed: when U.owner.id <> 1:
+  | when U.leader:
+    | Leader = U.leader
+    | Player <= U.owner
+  | when U.type><unit_lizard:
+    | push U.xyz.copy Patrol
+    | U.free
+  | when U.type><unit_minotaur:
+    | push U.xyz.copy Guards
+    | U.free
+  | when U.type><unit_goblin:
+    | push U.xyz.copy RGuards
+    | U.free
+| SBudget = max 100 ($world.site_gold+3)/4
+| STotal = 0
+| for S Spells: S.picks.(Player.id) <= 0
+| Ss = Spells.shuffle
+| for S Ss: when S.gold<<100 or (SBudget-STotal)/max{1 S.gold}>5:
+  | Count = max 1 $world.rand{S.maxPicks}
+  | times I Count: when STotal+S.gold << SBudget:
+    | STotal += S.gold
+    | S.picks.(Player.id) += 1
+| Picked <= Picked{?name}.shuffle
+| RTs = [unit_blob unit_goblin unit_elf unit_vampire unit_observer]
+| Rs = Picked.keep{U => RTs.has{U}}
+| Ms = Picked.skip{U => RTs.has{U}}
+| RSz = min RGuards.size Rs.size
+| RGuards <= RGuards.shuffle
+| Ps = [@RGuards.take{RSz}
+        @Guards.shuffle
+        @RGuards.drop{RSz}
+        @Patrol.shuffle]
+| for Type [@Rs @Ms]: less Ps.end:
+  | XYZ = pop Ps
+  | S = Player.alloc_unit{Type}
+  | S.aistate <= if Patrol.has{XYZ} then \patrol else \guard
+  | S.move{XYZ}
 
 ui.enter_site_proceed =
 | $generate{6 6 forest}

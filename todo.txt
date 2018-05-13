@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Landing place for enemy units, enemy placement. Ther should be two types of placement: guard and patrol. Guards are placed first, then patrol units are placed. Guards don't move too far from their placement, while patrol units move around patrol points.
+- Occulus should have self destruct ability, which would do minor damage to the enemy.
+- Invisible units should not have sword over them or revel themselves in any other way, but moving closer to them should reveal them.
 - Map treasures.
 - Base placement cost.
 - Base should be limited to only one operation per turn.

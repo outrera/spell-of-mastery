@@ -11,3 +11,4 @@ onHit: shell,hit{user}
 onHarm: visual{blood},sound{oculus_move}
 onDeath: sound{explosion}
 onMove: sound{oculus_move}
+acts: (act_explode)

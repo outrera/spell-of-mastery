@@ -1,2 +1,2 @@
 //acts available to all units
-acts: act_face,act_recall,act_interrupt,act_dismiss
+acts: act_face,act_dismiss

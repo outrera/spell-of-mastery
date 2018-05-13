@@ -154,6 +154,6 @@ ui.init =
 | $bankList.pick{0}
 | $view.set_brush{0,0}
 | $enter_site{0}
-//| $begin_ingame{1}
+| $begin_ingame{1}
 
 export ui
