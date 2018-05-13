@@ -138,14 +138,15 @@ ui.create_dialog_tabs StartTab =
           world($create_world_dlg)
           enter_site($create_enter_site_dlg)
 
+StartInEditor = 0
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
 | $savesFolder <= "[$data][$savesFolder]"
 | $menuBG <= $img{ui_menu_bg}
 | $panelBG <= $img{ui_panel}
 | $view <= view $main Me $width $height-($panelBG.h-10)
-| $create{10 10}
-//| $generate{6 6 forest}
+| when StartInEditor: $create{10 10}
+| less StartInEditor: $generate{6 6 forest}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg
@@ -153,7 +154,7 @@ ui.init =
 | $tabs <= input_split Tabs: Base In => $process_input{Base In}
 | $bankList.pick{0}
 | $view.set_brush{0,0}
-| $enter_site{0}
-| $begin_ingame{1}
+| less StartInEditor: $enter_site{0}
+| when StartInEditor: $begin_ingame{1}
 
 export ui

@@ -77,9 +77,9 @@ ui.create_load_site_dlg =
   | Site = $site
   | Site.human <= Site.players.1
   | Site.human.human <= 1
-  | when Site.editor:
-    | Site.paused <= 1
-    | Site.explore{1}
+  | $site.editor <= 1
+  | Site.paused <= 1
+  | Site.explore{1}
   | hideDlg
 | Dlg <= hidden: DlgW
 | Dlg

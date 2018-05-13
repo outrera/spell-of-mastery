@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
-TODO:
-- Occulus should have self destruct ability, which would do minor damage to the enemy.
+TODO:.
 - Invisible units should not have sword over them or revel themselves in any other way, but moving closer to them should reveal them.
 - Map treasures.
 - Base placement cost.

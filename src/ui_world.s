@@ -70,7 +70,6 @@ ui.place_site_enemy =
   | times I Count: when Total+U.gold << Budget:
     | Total += U.gold
     | push U Picked
-| say "[Total]/[Budget]"
 | Patrol = []
 | Guards = []
 | RGuards = []
