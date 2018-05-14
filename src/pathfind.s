@@ -186,7 +186,7 @@ unit.reachable =
       else if B.moves<1 /*or B.engaged*/ then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
-    | for E $nearby_enemies_at{Dst.xyz}: less E.invisible:
+    | less R or Type><swap: for E $nearby_enemies_at{Dst.xyz}: less E.invisible:
       | when not E.afraid and $can_attack{E.cell $site.cellp{XYZ}}:
         | R <= \block //engage
       | when $range><1 and not $afraid and $moves >> Dst^path_len+1:

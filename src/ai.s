@@ -15,7 +15,9 @@ unit.advance_to GoalXYZ =
 | when no Cell:
   | Path = $path_around_to{10 GoalXYZ}
   | while Path.size and got Moves.find{Path.0}: Cell <= pop Path
-  | when no Cell: leave 2
+  | when no Cell:
+    | $handled <= 1 //FIXME: this may not be correct
+    | leave 2
 | B = Cell.block
 | when B and not B.handled and not $is_enemy{B}:
   | less $handled:
@@ -51,7 +53,7 @@ unit.ai_pick_target Act =
 | if Ts.size then Ts.0 else 0
 
 unit.ai_ability_sub Act =
-| when Act.mov > $mov: leave 0
+| when Act.mov > $moves: leave 0
 | when $cooldown_of{Act.name}: leave 0
 | less $owner.enabled{Act} and $earned{Act}: leave 0
 | when Act.hint >< dismiss: leave 0
@@ -147,7 +149,7 @@ unit.ai_runaway Btrack =
 | $handled <= 1
 
 unit.ai_update =
-| less $mov > 0:
+| less $moves > 0:
   | $handled <= 1
   | leave 0
 | when $afraid:
@@ -162,7 +164,7 @@ unit.ai_update =
       | $backtrack <= $xyz
       | $order_at{Cell.xyz 0}
       | leave break
-  | when $mov:
+  | when $moves:
     | Es = $enemies_in_sight
     | PursueRange = max $sight 10
     | Flt = Cs{[?1 1]}.table //filtering table

@@ -137,6 +137,8 @@ type site{main}
    color_overlay_step
 | $init
 
+site.cur_player = $players.$player
+
 LCG_M = 2147483647
 LCG_M_F = LCG_M.float
 LCG_A = 16807

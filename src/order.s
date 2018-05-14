@@ -28,7 +28,7 @@ unit.order_at Goal Act =
   | $owner.notify{"Not enough moves ([Act.mov] required)"}
   | leave
 | when Act.name><move: Goal <= 0 //otherwise it will hung in swap-loop
-| when $owner.human and (Act.name><move or Act.name><attack):
+| when $site.cur_player.human and (Act.name><move or Act.name><attack):
   | Mark = "mark_[Act.name]"
   | Ms = [mark_move mark_attack mark_swap]
   | Move = Units.keep{U=>Ms.has{U.type}}

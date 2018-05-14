@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:.
-- Ensure AI properly uses goblins bomb and occulus explosion.
+- Get rid of AI pentagram stuff.
 - Map treasures.
 - Base placement cost.
 - Base should be limited to only one operation per turn.

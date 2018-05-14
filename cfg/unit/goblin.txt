@@ -1,6 +1,6 @@
 tier: 1
 cost: 100,4,50
-health: 8
+health: 7
 atk: 1
 def: 1
 range: 3
