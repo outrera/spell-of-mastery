@@ -1,14 +1,14 @@
 tier: 1
 cost: 100,4,50
 health: 6
-atk: 0
-mov: 14
+atk: 1
+mov: 10
 sight: 10
-def: 5
+def: 2
 speed: 20
 inborn: (flyer organic)
+onAttack: self,detonate{3},visual{explosion},sound{explosion}
 onHit: shell,hit{user}
 onHarm: visual{blood},sound{oculus_move}
 onDeath: sound{explosion}
 onMove: sound{oculus_move}
-acts: (act_explode)

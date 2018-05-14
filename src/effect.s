@@ -129,11 +129,12 @@ effect spread What Harm
       | when B: B.harm{Me Harm}
 
 effect detonate Damage:
-| B = $site.block_at{TargetXYZ}
+| XYZ = Target.xyz.copy
+| B = $site.block_at{XYZ}
 | when Damage><health: Damage <= Target.class.hp
 | Target.harm{Me Target.class.hp}
 | for D Dirs43
-  | B = $site.block_at{TargetXYZ+D}
+  | B = $site.block_at{XYZ+D}
   | when B: B.harm{Me Damage}
 
 effect explosion Size:
