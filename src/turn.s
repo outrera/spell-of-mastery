@@ -15,9 +15,15 @@ unit.new_turn =
 | $fatigue <= max 0: min $fatigue-$stamina $mov-1
 | when $will < $class.will: $will <= $class.will
 
+unit.end_turn_invisibility_check =
+| less $invisible: leave
+| for E $nearby_enemies_at{$xyz}
+  | when E.infov{$xyz}:
+    | $strip{invisible}
+    | leave
+
 unit.end_turn =
-| when $invisible and $nearby_enemies_at{$xyz}.size:
-  | $strip{invisible}
+| $end_turn_invisibility_check
 | Resting = $def >< $class.def and not $engaged
 | when $threatened: $engaged <= 1 //ended its turn near enemy?
 | less $engaged:

@@ -360,9 +360,14 @@ unit.nearby_enemies_at XYZ =
   | Us.skip{?empty}.keep{?is_enemy{Me}}.keep{?alive}{E=>push E Es} //.keep{E=>(E.xyz.2-XYZ.2)<<1}
 | Es
 
+unit.infov XYZ = //in field of view
+| if (XYZ-$xyz).take{2}{?sign} <> -$direction then 1 else 0
+
+
 unit.threatened_at XYZ =
 | for E $nearby_enemies_at{XYZ}:
-  | when not E.afraid and E.can_attack{E.cell $site.cellp{XYZ}}: leave 1
+  | when not E.afraid and E.can_attack{E.cell $site.cellp{XYZ}}:
+    | when E.infov{XYZ}: leave 1
 | 0
 
 unit.threatened = $threatened_at{$xyz}
