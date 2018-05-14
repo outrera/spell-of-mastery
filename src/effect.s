@@ -176,15 +176,6 @@ effect swap Arg:
 | $move{TargetXYZ}
 | Target.move{XYZ}
 
-effect recall:
-| P = $owner.pentagram
-| when P.removed: leave
-| Target.remove
-| Target.move{P.xyz}
-| Target.backtrack <= 0
-| Target.reset_goal
-| Target.reset_followers
-
 effect gateway:
 | B = $cell.block
 | less B: leave
@@ -448,12 +439,6 @@ unit.effect Effect Target TargetXYZ =
       | less Block: _goto end
       | T <= Block
     else if Name >< same_z then | XYZ <= XYZ.deep_copy; XYZ.2 <= Me.xyz.2
-    else if Name >< pentagram then
-      | P = $owner.pentagram
-      | when P.removed: _goto end
-      | XYZ.init{P.xyz}
-      | Target <= P
-      | T <= Target
     else if Name >< all_alive then
       | for U $site.active: when U.alive:
         | when U.ai><unit: $effect{Es U U.xyz}

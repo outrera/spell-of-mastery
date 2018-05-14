@@ -56,7 +56,7 @@ int.path =
   | push Cell Path
   | Cell <= Cell.prev
 | Path.tail.list
-int.is_floor_empty = $units.all{U=>U.ai<>pentagram and U.type<>special_node}
+int.is_floor_empty = $units.all{U=>U.type<>special_node}
 list.cell = (Me.1*SiteSize+Me.0)*SiteDepth+Me.2
 int.pile =
 | R = $units.find{?ai><pile}
@@ -306,18 +306,6 @@ site.new_game =
   | Us = P.units
   | less P.human: when Us.size:
     | //PLACEHOLDER
-  | L = P.leader
-  | less L.removed:
-    | L.alpha <= 255
-    | L.delta <= -50
-    | $visual{L.xyz teleport}
-    | C = P.pentagram
-    | less C.removed:
-      | XYZ = C.xyz.copy
-      | C.free
-      | C = P.alloc_unit{special_pentagram}
-      | C.move{XYZ}
-  | when got PAI.(L.type): P.data.aiType <= L.type //got specialized AI
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
 | $end_turn
@@ -334,12 +322,6 @@ site.alloc_unit ClassName Owner =
     | halt //something is really wrong
   | Class <= $main.classes.trigger_missing
 | U = $free_units.pop
-| when Class.ai >< pentagram
-  | Pentagram = Owner.pentagram
-  | less Pentagram.removed:
-    | $free_units.push{U}
-    | leave Pentagram
-  | Owner.pentagram <= U
 | till U.removed: U <= $free_units.pop
 | U.init{Class}
 | when U.leader:

@@ -35,8 +35,7 @@ unit.ai_pick_target Act =
     else $site.units_in_range{Me.xyz Act.range}
 | Ts = Targets.skip{?empty}.keep{?alive}
 | Hint = Act.hint
-| if Hint >< pentagram then
-  else if Hint >< heal then
+| if Hint >< heal then
     | Ts <= Ts.keep{?is_ally{Me}}.keep{?harmed}
   else if Hint >< lifedrain then
     | less $harmed: leave 0
@@ -57,14 +56,6 @@ unit.ai_ability_sub Act =
 | when $cooldown_of{Act.name}: leave 0
 | less $owner.enabled{Act} and $earned{Act}: leave 0
 | when Act.hint >< dismiss: leave 0
-| when Act.hint >< pentagram:
-  | less $owner.pentagram.removed: leave 0
-  | less $cell.is_floor_empty: 
-    | TargetNode = $pathfind{1000 |Dst=>Dst.is_floor_empty}
-    | when TargetNode:
-      | $advance_to{TargetNode.xyz}
-      | leave 1
-    | leave 0
 | Target = $ai_pick_target{Act}
 | less Target: leave 0 //no suitable target for this act
 | Cost = Act.cost
@@ -107,8 +98,6 @@ unit.ai_roam =
            | MoveIn <= 1
         else if AI><hold and not Block and no Vs.find{?ai><unhold}
            then MoveIn <= 1
-        else if AI><pentagram and Owner.is_enemy{V.owner} then
-           | when not Block or Owner.is_enemy{Block}: MoveIn <= 1
         else if AI><avoid then
            | MoveIn <= \block
            | _goto end
@@ -183,52 +172,13 @@ unit.ai_update =
 | $handled <= 1
 | \next
 
-ai.get_clean_pentagram =
-| Pentagram = $player.pentagram
-| when Pentagram.removed: leave 0
-| when not Pentagram.cell.block: leave Pentagram
-| 0
-
-ai.update_build =
-| Leader = $player.leader
-| Pentagram = $get_clean_pentagram
-| less Pentagram: leave 0
-| Spawns = Leader.acts.keep{?onEndTable.spawn^got}
-| less Spawns.size: leave 0
-| Missing = PerCycle.missing_attackers
-| less got Missing: leave
-| for Type Missing:
-  | S = Spawns.find{?onEndTable.spawn >< Type}
-  | when got S and Leader.can{S}:
-    | Leader.order_act{S Me}
-    | leave 1
-| 0
-
-ai.clean_pentagram =
-| Pentagram = $player.pentagram
-| when Pentagram.removed: leave 0
-| B = Pentagram.cell.block
-| less B and B.mov and B.owner.id><$player.id: leave 0
-| Cs = B.reachable.keep{?0><move}
-| Cs = Cs.sort{A B => A.1.xyz.mdist{B.1.xyz}}.flip
-| for Type,Cell Cs:
-  | when not Cell.block and got Cell.units.find{?ai><hold}:
-    | B.order_at{Cell.xyz 0} //move unit out of pentagram
-    | leave 1
-| case Cs [[Type Cell]@_]:
-  | B.order_at{Cell.xyz 0} //move unit out of pentagram
-  | leave 1
-| 0
-
 ai.update_units =
-| when $update_build: leave 0
 | for U OwnedUnits: less U.handled:
   | R = U.ai_update
   | when R >< break: leave 0
 | for U OwnedUnits: when U.handled><wait:
   | R = U.ai_update //handle units with delayed movement
   | when R >< break: leave 0
-| when $clean_pentagram: leave 0
 | 1 //return true, meaning that we have handled all units
 
 ai.group_roam Types =
@@ -246,50 +196,7 @@ ai.group_roam Types =
 | for A As: A.aistate <= \roam
 | leave 1
 
-ai.script =
-| Player = $player
-| PData = Player.data
-| Cfg = $main.cfg
-| AIType = PData.aiType
-| AIStep = PData.aiStep
-| AISteps = Cfg.main.ai.AIType
-| when PData.aiWait > $site.turn: leave 0
-| less got AISteps
-  | $site.notify{"AI: missing type `[AIType]`"}
-  | leave 0
-| AISteps = AISteps.tail
-| less AIStep<AISteps.size:
-  | AIStep <= 0
-  | PData.aiStep <= 0
-| Command = AISteps.AIStep
-| case Command
-  [roam @Types]
-    | less $group_roam{Types{"unit_[?]"}}: leave 0
-    | PData.aiStep++
-  [goto NewAIType when @Condition]
-    | if case Condition [[`>>` lossage X]]
-              PData.lossage+PData.difficulty*2>>X
-      then | PData.aiType <= NewAIType
-           | PData.aiStep <= 0
-      else | PData.aiStep++
-  [goto NewAIType]
-    | PData.aiType <= NewAIType
-    | PData.aiStep <= 0
-  [wait Turns]
-    | PData.aiWait <= $site.turn+Turns
-    | PData.aiStep++
-  [set Var Value]
-    | PData.Var <= Value
-    | PData.aiStep++
-  Else
-    | bad 'invalid AI command: [Command]'
-| leave 1
-
 ai.update_turn =
-| when $player.data.attack_with_guards >< 1:
-  | for U OwnedUnits: U.aistate <= \roam
-  | $player.data.attack_with_guards <= 0
-| when $player.id: while $script><1: //FIXME: this can hung
 | when $update_units: $site.end_turn
 
 ai.update =

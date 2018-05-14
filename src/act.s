@@ -54,7 +54,7 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50 hi
 | for E [@$onInit @$onEnd]: case E [add Name]: push Name Flags
 | $flags <= Flags
 | Allowed = [land water clear seen below outdoor owned ally non_leader organic will
-             menu any unit empty self pentagram
+             menu any unit empty self
              placeable c_fullhp]
 | T = Allowed{[? 0]}.table
 | As = $check
@@ -62,7 +62,7 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50 hi
 | for A As:
   | when no T.A: bad "Act [$name]: illegal check item `[A]`"
   | T.A <= 1
-| less T.unit or T.any or T.empty or T.self or T.pentagram or T.menu:
+| less T.unit or T.any or T.empty or T.self or T.menu:
   | bad "Act [$name]: missing check target type."
 | $check <= T
 
@@ -81,14 +81,6 @@ act.validate Actor XYZ Target Invalid =
   | Invalid{"Needs [Target.will] will."}
   | leave 0
 | Wr = Actor.site
-| when T.pentagram:
-  | P = O.pentagram
-  | when P.removed:
-    | Invalid{"Needs pentagram."}
-    | leave 0
-  | when Wr.block_at{P.xyz}:
-    | Invalid{"Pentagram is blocked."}
-    | leave 0
 | when T.clear:
   | less Actor.cell.is_floor_empty:
     | Invalid{"Needs clear floor."}

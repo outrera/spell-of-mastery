@@ -329,7 +329,6 @@ unit.animate Anim =
 unit.free =
 | when $owner: $owner.lost_unit{Me}
 | when $id >< $owner.leader.id: $owner.leader <= $site.nil
-//| when $id >< $owner.pentagram: $owner.pentagram <= $site.nil
 | when $active: $active <= 2 //request removal from active list
 | less $path.end: $set_path{[]}
 | $reset_goal

@@ -368,6 +368,7 @@ site.update_cursor =
       | when Reverse: Facing <= if Mirror then 1 else 6
       | M = $set_mark{XYZ 0 mark_cube}
       | M.sprite <= Class.default_sprite
+      | M.colors <= $human.colors
       | M.animate{idle}
       | M.pick_facing{Facing}
       | M.alpha <= 110

@@ -12,14 +12,6 @@ ai.picked = $player.picked
 ai.`=picked` V = $player.picked <= V
 
 ai.clear =
-| $data.aiType <= 'default'
-| $data.aiStep <= 0
-| $data.aiWait <= 0
-| $data.difficulty <= 5 // 0=easy, 5=normal, 10=hard
-| $data.aiLeaderHarmTurn <= -24*100000
-| $data.aiCastFlight <= 0
-| $data.aiCastFlightTurn <= -24*100000
-| $data.ai_spells <= []
 
 PlayerColors = [red blue teal purple orange black white yellow]
 
@@ -28,7 +20,6 @@ type player{id site}
    ai
    human //1 for human controlled players
    leader
-   pentagram
    data/(t)
    picked_unit
    picked_serial
@@ -90,7 +81,6 @@ player.clear =
 | $picked_unit <= $site.nil
 | $picked_serial <= 0
 | $leader <= $site.nil
-| $pentagram <= $site.nil
 | $data.lossage <= 0
 
 player.init =
@@ -106,7 +96,6 @@ player.lost_unit U =
 | when CID:
   | $unit_counts.CID--
   | $total_units--
-| when U.ai >< pentagram: $pentagram <= $site.nil
 
 player.enabled Act = Act.players.bit{$id}
 player.enable Act State = Act.players <= Act.players.bitSet{$id State}

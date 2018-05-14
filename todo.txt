@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:.
-- Get rid of AI pentagram stuff.
+- Implement Spell of Mastery (i.e. marking of all nodes). Makes sure nodes are revealed at the start of the mission.
+- Fix minimap - resize it.
 - Map treasures.
 - Base placement cost.
 - Base should be limited to only one operation per turn.

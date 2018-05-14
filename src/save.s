@@ -107,7 +107,6 @@ site.deserialize_unit IdMap X =
   | U.host <= [Host Goal Action Ordered NextAction]
 | U.flags <= Flags
 | when U.leader: U.owner.leader <= U
-| when U.ai >< pentagram: U.owner.pentagram <= U
 | IdMap.Id <= U
 
 remap_tids TidMap LookupTable Xs =

@@ -21,7 +21,7 @@ item: 0
 inborn: (organic leader)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
-acts: (pentagram act_fireball)
+acts: (act_fireball)
 spells:
       (
       cast_telekinesis

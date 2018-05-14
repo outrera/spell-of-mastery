@@ -7,4 +7,4 @@ inborn: (organic)
 onHit: shell,hit{user},sound{devil_attack}
 onHarm: visual{blood},sound{devil_hit}
 onDeath: sound{devil_hit}
-acts: (teleport act_punish)
+acts: (act_teleport act_punish)
