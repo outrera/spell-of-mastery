@@ -1,5 +1,6 @@
 icon: nil
 priority: 50
+mov: 0
 range: 1
 speed: 4
 check: any

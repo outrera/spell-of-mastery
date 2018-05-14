@@ -160,8 +160,7 @@ update_path Me =
   | when $xyz >< $goal.xyz:
     | goal_in_range Me
     | leave
-  | for E $nearby_enemies_at{$xyz}:
-    | when E.invisible: E.strip{invisible}
+  | $reveal_nearby_enemies
   | when $xyz.mdist{$goal.xyz} << 1 and ($xyz.2-$goal.xyz.2).abs<<1:
     | $goal <= 0
     | leave 0
@@ -261,7 +260,9 @@ update_action Me =
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave // ensure animation finishes
   | $action.finish
-  | when $action.act.mov>0 and $threatened: $engaged <= 1
+  | when $action.act.mov>0 and $threatened:
+    | $engaged <= 1
+    | $reveal_nearby_enemies
   | update_next_action Me
   | when $action.type><attack: $cooldown <= $class.cooldown
 | $action.update

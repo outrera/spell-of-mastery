@@ -372,6 +372,10 @@ unit.threatened_at XYZ =
 
 unit.threatened = $threatened_at{$xyz}
 
+unit.reveal_nearby_enemies =
+| for E $nearby_enemies_at{$xyz}:
+  | when E.invisible: E.strip{invisible}
+
 heal_unit Me Amount =
 | less $class.hp: leave
 | $hp += min Amount $class.hp-$health
