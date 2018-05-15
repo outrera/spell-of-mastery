@@ -21,7 +21,7 @@ item: 0
 inborn: (organic leader)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
-acts: (act_fireball)
+acts: (act_fireball act_mastery)
 spells:
       (
       cast_telekinesis
@@ -40,7 +40,6 @@ spells:
       cast_detonate
       cast_armageddon
       cast_subvert
-      spell_of_mastery
       )
 
 

@@ -22,7 +22,7 @@ burns_tenants: on{tenant_endturn},tenant,harm{1},visual1{fire_ring}
 firestorm: on{endturn},spread{special_fire 1}
 enemy_removes: on{entry},tenant,when{enemy},visual{pickup},self,remove
 gateway: on{entry},gateway
-node_aura: on{cycle.12},tenant_mark{effect_aura}
+//node_aura: on{cycle.12},tenant_mark{effect_aura}
 ttl: on{timeout},visual{teleport},sound{summon},remove
 ttl_s: on{timeout},remove //silent ttl
 ttl_die: on{timeout},fade_die

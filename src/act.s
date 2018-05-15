@@ -1,7 +1,12 @@
 use util macros
 
+AllowedChecks =
+  [land water clear seen below outdoor owned ally non_leader organic will
+   menu any unit empty self
+   node placeable c_fullhp]
 
-type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50 hint/0 tab/0 room/0
+type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
+         hint/0 tab/0 room/0
          cost/0 mov/1 fatigue/1 cool/0 needs/[] needsGene/[]
          priority/50 range/0 speed/4 animate/No repeat/0
          menu/0 onMenu/0
@@ -53,10 +58,7 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50 hi
 | Flags = []
 | for E [@$onInit @$onEnd]: case E [add Name]: push Name Flags
 | $flags <= Flags
-| Allowed = [land water clear seen below outdoor owned ally non_leader organic will
-             menu any unit empty self
-             placeable c_fullhp]
-| T = Allowed{[? 0]}.table
+| T = AllowedChecks{[? 0]}.table
 | As = $check
 | less As.is_list: As <= [As]
 | for A As:
@@ -116,10 +118,19 @@ act.validate Actor XYZ Target Invalid =
 | when T.seen and not Wr.seen_from{Actor.xyz XYZ}:
   | Invalid{"Needs to be in line of sight."}
   | leave 0
+| Cell = Wr.cellp{XYZ}
+| when T.node:
+  | Node = Cell.units.find{?type><special_node}
+  | when no Node:
+    | Invalid{"Needs node."}
+    | leave 0
+  | when Node.blessed:
+    | Invalid{"Already activated."}
+    | leave 0
 | when T.below and XYZ.2>>Actor.xyz.2:
   | Invalid{"Needs lower target."}
   | leave 0
-| when T.placeable and not Actor.placeable_at{Wr.cellp{XYZ}}:
+| when T.placeable and not Actor.placeable_at{Cell}:
   | Invalid{"Needs place where this unit can stand."}
   | leave 0
 | when $name >< room_demolish and not Below.cost:

@@ -8,20 +8,6 @@ icon_popup.render =
 | for X $info.items: X.pick{$enabled}
 | $info.render*/
 
-type minimap.widget{Main CenterAt}
-     main/Main w/128 h/128 pressed center/CenterAt
-minimap.draw G PX PY =
-| MM = $main.site.minimap
-| G.blit{PX PY MM}
-
-minimap.center_at P = ($center){P.0*$main.site.w/$w P.1*$main.site.h/$h}
-
-minimap.input In = case In
-  [mice_move _ XY] | when $pressed: $center_at{XY}
-  [mice left 1 XY] | $pressed <= 1; $center_at{XY}
-  [mice left 0 XY] | $pressed <= 0
-
-
 DisabledIconOverlay = 0
 
 type icon.widget{FG OnClick}
@@ -98,4 +84,4 @@ icon.infoline =
 | if $infoline_handler then ($infoline_handler){Me} else ""
 
 
-export minimap icon
+export icon

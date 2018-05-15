@@ -1,9 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:.
-- Implement Spell of Mastery (i.e. marking of all nodes). Makes sure nodes are revealed at the start of the mission.
-- Fix minimap - resize it.
 - Map treasures.
+- Pickable items, like food and potions, that restore health to creatures.
+- Pickable spells, that are chose out of researched spells list.
 - Base placement cost.
 - Base should be limited to only one operation per turn.
 - Loan mechanics, which allow player to borrow 1000 gold under 5% interest rate

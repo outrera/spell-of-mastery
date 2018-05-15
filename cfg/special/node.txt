@@ -3,4 +3,4 @@ ai: hold
 height: 4
 box_xy: (-1 -1)
 platform: 8
-inborn: (node_aura)
+//inborn: (node_aura)

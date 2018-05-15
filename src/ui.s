@@ -9,7 +9,7 @@ type ui.$tabs{main}
   creditsRoll
   view
   paused
-  mapsFolder/"work/sites/"
+  mapsFolder/"parts/"
   savesFolder/"work/saves/"
   world
   worldSiteTabs
@@ -138,7 +138,7 @@ ui.create_dialog_tabs StartTab =
           world($create_world_dlg)
           enter_site($create_enter_site_dlg)
 
-StartInEditor = 1
+StartInEditor = 0
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
 | $savesFolder <= "[$data][$savesFolder]"

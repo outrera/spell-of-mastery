@@ -166,9 +166,27 @@ effect site_set Name Value: $site.data.Name <= Value
 
 effect boost_defense Amount: $def <= min{$def+Amount $class.def+Amount}
 
-effect spell_of_mastery:
-| $site.data.winner <= $owner.id
-| $site.data.victory_type <= 'Victory by casting the Spell of Mastery'
+effect spell_of_mastery_pre:
+| Us = $cell.units
+| Node = Us.find{?type><special_node}
+| less got Node: $owner.notify{"node went missing!"}
+| Node.blessed <= 1
+| S = $site.units_get{TargetXYZ}.find{?type><effect_aura}
+| when no S:
+  | S <= $owner.alloc_unit{effect_aura}
+  | S.alpha <= 255
+  | S.delta <= -50
+  | S.move{TargetXYZ}
+
+site.all_nodes_activated =
+| Nodes = $active.list.keep{(not ?removed and ?type><special_node)}
+| Nodes.all{?blessed}
+
+effect spell_of_mastery_end:
+| when $site.all_nodes_activated:
+  | $site.data.winner <= $owner.id
+  | $site.data.victory_type <= 'Victory by casting the Spell of Mastery'
+
 
 effect swap Arg:
 | XYZ = $xyz.copy
@@ -374,6 +392,7 @@ check_when Me Target C =
   idle | not Target.goal
   rested | $mov><$class.mov
   resting | Target.resting
+  nodes_on | $site.all_nodes_activated
   [`+` not C] | not: check_when Me Target C
   [`.` below Type] | (Target.cell-1).type><Type
   [`.` has_health A] | Target.health>>A

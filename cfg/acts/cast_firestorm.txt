@@ -1,6 +1,6 @@
 icon: spell_firestorm
 range: 9000
 check: any
-onInit: visual{fire_ring},sound{firestorm},spawn{special_fire}
+onInit: visual{fire_ring},sound{fire},spawn{special_fire}
 hint: firestorm
 tab: spell

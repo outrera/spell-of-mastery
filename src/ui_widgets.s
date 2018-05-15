@@ -171,5 +171,19 @@ player_picker.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
+
+type minimap.widget{Main CenterAt}
+     main/Main w/100 h/100 pressed center/CenterAt
+minimap.draw G PX PY =
+| MM = $main.site.minimap
+| G.blit{PX PY MM}
+
+minimap.center_at P = ($center){P.0*$main.site.w/$w P.1*$main.site.h/$h}
+
+minimap.input In = case In
+  [mice_move _ XY] | when $pressed: $center_at{XY}
+  [mice left 1 XY] | $pressed <= 1; $center_at{XY}
+  [mice left 0 XY] | $pressed <= 0
+
 export message_box site_props credits_roll notification_widget
-       player_picker save_dlg load_dlg resource_counters
+       minimap player_picker save_dlg load_dlg resource_counters
