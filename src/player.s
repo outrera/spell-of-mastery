@@ -27,10 +27,6 @@ type player{id site}
    total_units
    unit_counts // counts uwned units for each unit type
    colors
-   gold
-   wood
-   stone
-   iron
    houses
 | $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
@@ -82,6 +78,7 @@ player.clear =
 | $picked_serial <= 0
 | $leader <= $site.nil
 | $data.lossage <= 0
+| $data.gold <= 0
 
 player.init =
 

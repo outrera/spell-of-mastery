@@ -138,7 +138,7 @@ ui.create_dialog_tabs StartTab =
           world($create_world_dlg)
           enter_site($create_enter_site_dlg)
 
-StartInEditor = 0
+StartInEditor = 1
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
 | $savesFolder <= "[$data][$savesFolder]"

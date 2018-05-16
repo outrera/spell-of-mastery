@@ -213,7 +213,11 @@ effect gateway:
 
 effect interrupt: Target.interrupt
 
-effect remove: Target.free
+effect gold Amount:
+| Target.owner.data.gold += Amount
+
+effect remove:
+| Target.free
 
 effect die: when Target.action.type <> die: Target.die
 
