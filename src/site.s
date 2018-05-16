@@ -253,6 +253,8 @@ site.clear =
 | $shake_end <= 0
 | $color_overlay <= []
 | $color_overlay_step <= 0
+| for N,Act $main.acts:
+  | less Act.maxPicks: Act.picks.clear{0}
 
 // force reset of all unit genes and health
 reinit_units Us =

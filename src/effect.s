@@ -216,6 +216,14 @@ effect interrupt: Target.interrupt
 effect gold Amount:
 | Target.owner.data.gold += Amount
 
+effect add_spell Name Amount:
+| Act = $main.acts.Name
+| when no Act:
+  | bad "add_spell: missing act [Name]"
+  | leave
+| OId = Target.owner.id
+| Act.picks.OId += Amount
+
 effect remove:
 | Target.free
 

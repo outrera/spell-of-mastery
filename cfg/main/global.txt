@@ -1,2 +1,2 @@
 //acts available to all units
-acts: act_face,act_dismiss
+acts: act_face,act_potion,act_dismiss

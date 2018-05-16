@@ -1,0 +1,8 @@
+icon: act_potion
+title: `Healing Potion`
+cool: 10
+check: owned,unit
+onInit: heal{9},strip{poison},strip{fear},visual{heal},sound{heal}
+maxPicks: 0
+onEnd: ()
+hint: heal_self
