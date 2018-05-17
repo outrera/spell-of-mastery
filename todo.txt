@@ -1,11 +1,13 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:.
-- Pickable spells, that are chosen out of researched spells list.
 - Base placement cost.
 - Base should be limited to only one operation per turn.
+- Instead of revealing magic nodes, draw unactivated nodes on map using crosses.
+- move map into the top right corner, and rotate it into diamond to match map. Use fill the corner spaces with information about current cut-level, and X,Y coords.
 - Loan mechanics, which allow player to borrow 1000 gold under 5% interest rate
 - Tutorial dialogue for the first time player enters a site, explaining the rules.
+- Pickable spells, that are chosen out of researched spells list.
 - Economy:
     Initial gold: 4000
     Base cost: 2000
