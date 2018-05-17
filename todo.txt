@@ -1,6 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
-TODO:.
+TODO:
+- Leader should be able to teleport in place of any of its units to reach magic nodes faster.
+- put back fog of war
 - Base placement cost.
 - Base should be limited to only one operation per turn.
 - Instead of revealing magic nodes, draw unactivated nodes on map using crosses.

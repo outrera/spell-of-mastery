@@ -1,8 +1,8 @@
 flags: attacker{0 -1},picked{1 -1},engaged{2 1}
-      ,hasted{3 5},shell{4 2},flyer{5 -1},charge{6 9},fireaura{7 0},organic{8 -1}
+      ,hasted{3 5},shell{4 2},flyer{5 -1},heavy{6 -1},fireaura{7 0},organic{8 -1}
       ,climber{9 -1},swimmer{10 -1},amphibian{11 -1},invisible{12 -1}
       ,bless{13 6},cursed{14 3},afraid{15 7},mark{16 -1},resting{17 -1}
-      ,resist{18 8},leader{19 -1}
+      ,resist{18 8},leader{19 -1},disciplined{20 -1}
 
 haste: on{static}
 flyer: on{static}

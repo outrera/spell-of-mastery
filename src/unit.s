@@ -74,6 +74,9 @@ unit.`=shelled` State = $flags <= $flags.bitSet{4 State}
 unit.flyer = $flags.bit{5}
 unit.`=flyer` State = $flags <= $flags.bitSet{5 State}
 
+unit.heavy = $flags.bit{6}
+unit.`=heavy` State = $flags <= $flags.bitSet{6 State}
+
 unit.climber = $flags.bit{9}
 unit.swimmer = $flags.bit{10}
 unit.amphibian = $flags.bit{11}
@@ -96,6 +99,9 @@ unit.resisting = $flags.bit{18}
 unit.`=resisting` State = $flags <= $flags.bitSet{18 State}
 
 unit.leader = $flags.bit{19}
+
+unit.disciplined = $flags.bit{20}
+
 
 //how many other units this unit has killed
 unit.kills = $get{kills}

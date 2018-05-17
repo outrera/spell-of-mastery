@@ -5,7 +5,7 @@ health: 30
 atk: 12
 def: 2
 speed: 34
-inborn: ()
+inborn: (heavy)
 onHit: shell,hit{user},sound{golem_attack}
 onHarm: sound{golem_hit},visual{blood_undead}
 onDeath: sound{golem_die}

@@ -1,7 +1,8 @@
 use util macros
 
 AllowedChecks =
-  [land water clear seen below outdoor owned ally non_leader organic will
+  [land water clear seen below outdoor owned ally
+   non_leader non_disciplined organic will
    menu any unit empty self
    node placeable c_fullhp]
 
@@ -108,6 +109,9 @@ act.validate Actor XYZ Target Invalid =
   | leave 0
 | when T.non_leader and Target and Target.leader:
   | Invalid{"Needs non-leader."}
+  | leave 0
+| when T.non_disciplined and Target and Target.disciplined:
+  | Invalid{"Needs non-disciplined unit."}
   | leave 0
 | when T.organic and not Target.has{organic}:
   | Invalid{"Needs organic."}

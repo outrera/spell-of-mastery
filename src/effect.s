@@ -98,6 +98,48 @@ effect lifedrain Amount:
 | Target.harm{Me Amount}
 | $harm{Me -Amount}
 
+unit.push Target R =
+| B = Target
+| DX,DY,DZ = B.xyz-$xyz
+| N = max 0 R-(DX.abs+DY.abs)
+| BP = B.xyz
+| when $xyz >< BP:
+  | DX <= B.direction.0
+  | DY <= B.direction.1
+| D = if DX.abs>DY.abs then [DX.sign 0 0] else [0 DY.sign 0]
+| TP = BP
+| Trail = []
+| times I N:
+  | T = BP + D*(I+1)
+  | less $site.valid{@T}: done
+  | F = $site.cellp{T}.floor
+  | less F.vacant: done
+  | Prev = TP
+  | TP <= T
+  | push T Trail
+  | less B.flyer:
+    | when (F-1).tile.liquid: done //ensure water blocks non-flyers
+    | when Prev.2 - F.xyz.2 >> 2: done //cliff stops movement
+| when TP<>BP:
+  | B.reset_goal
+  | B.move{TP}
+  | for T Trail:
+    | less got $site.units_get{T}.find{?type><effect_dustend}:
+      | $site.visual{T dustend}
+| $site.visual{B.xyz dust}
+
+
+effect telekinesis:
+| when Target.ai><unit and Target.id:
+  | less Target.flyer or Target.heavy:
+    | when $xyz.mdist{Target.xyz}><1 and ($xyz.1-Target.xyz.1).abs<<1:
+      | $push{Target 6}
+      | $sound{blowaway}
+      | leave
+    | Target.move{Target.xyz+[0 0 2]}
+    | leave
+| $owner.spawn{TargetXYZ unit_telekinesis}
+
 effect shake_screen Cycles: $site.shake{Cycles}
 effect color_overlay @List: $site.set_color_overlay{List}
 
@@ -253,14 +295,17 @@ effect set_tile [X Y Z] Type:
   | leave
 | $site.set{X Y Z Tile}
 
-effect spawn What:
-| when What><auto: What <= $action.act.name
-| S = $owner.alloc_unit{What}
+player.spawn XYZ What =
+| S = $alloc_unit{What}
 | S.aistate <= \spawned
 | less S.alpha:
   | S.alpha <= 255
   | S.delta <= -50
-| S.move{TargetXYZ}
+| S.move{XYZ}
+
+effect spawn What:
+| when What><auto: What <= $action.act.name
+| $owner.spawn{TargetXYZ What}
 
 effect spawn_item ItemType Amount: $cell.add_item{ItemType Amount}
 

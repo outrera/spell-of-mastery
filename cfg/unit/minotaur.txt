@@ -3,7 +3,7 @@ cost: 300,2,50
 health: 15
 atk: 6
 def: 2
-inborn: (organic)
+inborn: (organic heavy)
 onHit: shell,hit{user},sound{minotaur_attack}
 onHarm: visual{blood},sound{minotaur_hit}
 onDeath: sound{minotaur_die}

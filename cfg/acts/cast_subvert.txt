@@ -5,7 +5,7 @@ gold: 200
 maxPicks: 2
 pickChance: 50
 range: 9000
-check: non_leader,will,unit
+check: non_disciplined,unit
 onInit: visual{hypnotize},sound{subvert},resist,charm{owner}
 onEnd: ()
 hint: subvert

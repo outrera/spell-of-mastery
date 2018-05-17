@@ -18,7 +18,7 @@ pickable: 1
 passable: 0
 ai: unit
 item: 0
-inborn: (organic leader)
+inborn: (organic disciplined leader)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
 acts: (act_fireball act_mastery)

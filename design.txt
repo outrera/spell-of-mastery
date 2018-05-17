@@ -51,7 +51,7 @@ Spells:
 - Dispel (neutral): removes all the following enchantments:
     shell, bless, fear, invisibility, flight, haste.
   This spell can be resisted, in that case it removes only the resistance enchantment. 
-- Telekinesis (neutral): grabs key, treasure, uncovers fog of war, gains control over rescueable creature, visits quest places, hurls rocks, pushes creature, or operates an object from a distance. Can't be used at chests.
+- Telekinesis (neutral): grabs key, treasure, uncovers fog of war, pushes nearby creatures, hurls in air distant creatures, operates an object from a distance. Can't be used at chests.
 - Heal (law): target regains 9 health, and gets cured from poison and fear.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Haste (law): target gains 2 additional movement points.
@@ -81,19 +81,19 @@ Orc: has enough health to withstand a single lightning bolt.
 Spider: poisons; can set web trap, climber, entering which enemy creature loses all movement points and gets paralyzed for the next turn.
 Lizard: fast, steed, immune to magic, climber. Good for stalking wizards, who can't harm it.
 Skeleton: cursed.
-Paladin: has blessed attack, that harms cursed units; immune to subversion.
+Paladin: disciplined, blessed.
 Wraith: cursed, incorporeal, sees through walls, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
-Minotaur: has stun-attack ability, disabling enemy for a single turn.
+Minotaur: heavy, has stun-attack ability, disabling enemy for a single turn.
 Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed.
 Vampire: cursed, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
-Cyclops: heavy hitter
-Hydra: moves over water, attacks in all four directions, regenerates 1 hp per turn.
-Golem: slow, stoneskin (any incoming non-magic damage is halved).
+Cyclops: heavy
+Hydra: heavy, moves over water, attacks in all four directions, regenerates 1 hp per turn.
+Golem: heavy, slow, stoneskin (any incoming non-magic damage is halved).
 Gargoyle: flyer, ignores armor.
-Dragon: flyer, can induce fear into nearby creature, harms cursed units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
+Dragon: disciplined, flyer, heavy, can induce fear into nearby creature, harms cursed units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
 
 Types of Creature Movement:
 - Walker
@@ -118,6 +118,7 @@ Creature Properties:
 - Agile: creature can move near enemy, without becoming engaged. I.e. such creature can hit and run.
 - Cursed: creature resists 50% damage from non-magical weapons and poison, but suffers 100% more damage from blessed units.
 - Blessed: creature dues 100% damage to cursed units and breaks magic doors.
+- Disciplined: creature is immune to subversion.
 - Poison: creature can't regenerate and loses health with time, until health drops to 1 or heal is cast.
 - Fire Aura: attacker gets damaged equivalent to their own damage, when melee attacking this creature.
 - Hasted: creature gains additional 2 additional moves per turn.
