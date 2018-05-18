@@ -1,0 +1,11 @@
+icon: spell_teleport
+title: `Superpose`
+hotkey: p
+gold: 20
+cool: 5
+range: 9000
+check: owned,unit
+onInit: set{alpha 0},set{delta 10},visual{teleport},sound{summon},self,set{alpha 0},set{delta 10},visual{teleport}
+onEnd: visual{teleport},set{alpha 255},set{delta -10},self,set{alpha 255},set{delta -10},visual{teleport},target,superpose
+hint: superpose
+tab: spell

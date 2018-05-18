@@ -1,7 +1,6 @@
 icon: spell_teleport
+title: `Teleport`
 hotkey: p
-lore: 0
-cost: 3
 cool: 10
 range: 9000
 check: placeable,empty

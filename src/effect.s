@@ -128,7 +128,6 @@ unit.push Target R =
       | $site.visual{T dustend}
 | $site.visual{B.xyz dust}
 
-
 effect telekinesis:
 | when Target.ai><unit and Target.id:
   | less Target.flyer or Target.heavy:
@@ -139,6 +138,11 @@ effect telekinesis:
     | Target.move{Target.xyz+[0 0 2]}
     | leave
 | $owner.spawn{TargetXYZ unit_telekinesis}
+
+effect superpose:
+| XYZ = $xyz.copy
+| $move{Target.xyz}
+| Target.move{XYZ}
 
 effect shake_screen Cycles: $site.shake{Cycles}
 effect color_overlay @List: $site.set_color_overlay{List}
