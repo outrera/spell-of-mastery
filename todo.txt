@@ -1,6 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- fix rendering cutted tiles, which appear to be cutted improperly
 - put back fog of war, ensure line of sight works properly
 - Base placement cost.
 - Base should be limited to only one operation per turn.
