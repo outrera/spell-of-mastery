@@ -236,7 +236,6 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
 | FBH = $fb.h
 | EndZ = min RoofZ Wr.height{X Y}
 | when fxn BY-((EndZ-1)*ZUnit) > FBH: leave
-| DrawnFold = 0
 | Cur = $cursor
 | CurX = fxn Cur.0
 | CurY = fxn Cur.1
@@ -263,30 +262,40 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
         | B.B_FLAGS <= #80
       | push U BlitUnits
 | NextZ = 0
+| TH = 0
 | fxn: while NextZ < EndZ:
   | Z = NextZ
   | G = Cell.gfx
   | T = Cell.tile
-  | TH = T.height
+  | TH <= T.height
   | NextZ <= Z + TH
   | when G:
     | SZ = Z*ZUnit
     | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
-    | TZ = NextZ - 1
     | SY = BY-SZ
     | less SY>FBH:
-      | less AboveCursor or TZ << ZCut:
-        | when DrawnFold: _goto next
-        | DrawnFold <= 1
-        | G <= Folded
+      | less AboveCursor or NextZ-1 << ZCut: _goto out
       | B = blit_item Cell X*CS Y*CS Z*CS 
-      | B.B_DATA <= G
       | B.B_SX <= BX
       | B.B_SY <= SY-G.h
+      | B.B_DATA <= G
       //| when Fog: B.B_FLAGS <= #40 //dither
       | Cell.blitem <= B
-  | _label next
   | Cell += TH
+| _label out
+| fxn: less AboveCursor or NextZ-1 << ZCut:
+  | Z = ZCut+1
+  | Z = if NextZ-TH < Z then NextZ-TH else Z
+  | Cell = Wr.cell{X Y Z}
+  | when Cell.tile.id:
+    | SZ = Z*ZUnit
+    | SY = BY-SZ
+    | B = blit_item Cell X*CS Y*CS Z*CS 
+    | B.B_SX <= BX
+    | B.B_SY <= SY-Folded.h
+    //| when Fog: B.B_FLAGS <= #40 //dither
+    | B.B_DATA <= Folded
+    | Cell.blitem <= B
 
 render_unexplored Me Wr X Y BX BY =
 | B = blit_item gfx_item{} X*CS Y*CS 0
