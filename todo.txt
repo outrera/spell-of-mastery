@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- put back fog of war, ensure line of sight works properly
+- put back fog of war, ensure line of sight works properly and minimap is unexplored
 - Base placement cost.
 - Base should be limited to only one operation per turn.
 - Instead of actually revealing magic node terrain, draw unactivated nodes on map using crosses.

@@ -22,9 +22,9 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
   room/Room // this act places room scaffolds
   mov/Mov //movement points require to execute this action
   fatigue/Fatigue
-  maxPicks/MaxPicks //maximum number of action that can appear in a mission
+  maxPicks/MaxPicks //maximum number of actions that can appear in a mission
   pickChance/PickChance //chance that one pick of this spells will appear
-  picked/-1 //number of actions of this type picked by player
+  picked/(if MaxPicks then -1 else 0) //number of actions of this type picked by player
   picks/(dup 8 -1)
   gold/Gold //cost to pick single instance of this action into battle
   cost/Cost //how much to cast it
