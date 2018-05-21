@@ -651,7 +651,7 @@ site.upd_pilar X Y =
   | when Above.parts.is_int: //multi-height tile
     | Above <= (Next-Above.parts).tile
   // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
-  | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Var}
+  | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Var+Z}
   | Below <= T
   | T <= Above
   | Cell <= Next

@@ -243,7 +243,8 @@ tile.render X Y Z Below Above Variation =
          | R
 | BelowSlope <= NeibSlope
 | BelowTile <= TT
-| when G.is_list: less $anim_wait: G <= G.(Variation%G.size)
+| when G.is_list:
+  | less $anim_wait: G <= G.(Variation%G.size)
 | fxn: when Opaque and Z > 0:
   | ZZ = Z-1
   | A = Site.at{X+1 Y ZZ}
