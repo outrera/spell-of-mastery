@@ -33,7 +33,9 @@ unit.ai_pick_target Act =
     if R>>9000 then SeenUnits
     else if R><0 then [Me]
     else $site.units_in_range{Me.xyz Act.range}
+| Explored = $owner.sight
 | Ts = Targets.skip{?empty}.keep{?alive}
+| Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
 | Hint = Act.hint
 | if Hint >< heal then
     | Ts <= Ts.keep{?is_ally{Me}}.keep{?harmed}

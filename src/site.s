@@ -476,12 +476,19 @@ unit.explore V =
 | Explored = $owner.sight
 | UX = XYZ.0
 | UY = XYZ.1
-| for X,Y points{UX-Sight UY-Sight Sight*2+1 Sight*2+1}: when fxn (X>>0 and Y>>0):
-  | E = Explored.Y
-  | less E.X: E.X <= 1
-  | E.X += V
+| for DX,DY points_in_diamond{Sight}:
+  | X = UX+DX
+  | Y = UY+DY
+  | when fxn (X>>0 and Y>>0):
+    | E = Explored.Y
+    | less E.X:
+      | E.X <= 1
+      | when $owner.human: $site.upd_pilar{X Y}
+    | E.X += V
 
-site.explore State = for P $players: P.explore{State}
+site.explore State =
+| less State: $minimap.clear{#000000}
+| for P $players: P.explore{State}
 
 site.place_unitS U X Y Z =
 | Cell = $cell{X Y 0}
@@ -598,18 +605,20 @@ site.getSidesSame X Y Z Role = fxn: `[]`
   $role{X Y-1 Z}><Role $role{X+1 Y Z}><Role
   $role{X Y+1 Z}><Role $role{X-1 Y Z}><Role
 
-site.update_minimap X Y Color = fxn:
-| WW = $w
-| WH = $h
-| MW = $minimap.w
-| MH = $minimap.h
-//| SX = (MW-WW)/2
-//| SY = (MH-WH)/2
-| PW = (MW+WW-1)/WW
-| PH = (MH+WH-1)/WH
-| SX = (X-1)*PW
-| SY = (Y-1)*PH
-| times YY PH: times XX PW: $minimap.set{SX+XX SY+YY Color}
+site.update_minimap X Y Color =
+| less $human.sight.Y.X: leave
+| fxn:
+  | WW = $w
+  | WH = $h
+  | MW = $minimap.w
+  | MH = $minimap.h
+  //| SX = (MW-WW)/2
+  //| SY = (MH-WH)/2
+  | PW = (MW+WW-1)/WW
+  | PH = (MH+WH-1)/WH
+  | SX = (X-1)*PW
+  | SY = (Y-1)*PH
+  | times YY PH: times XX PW: $minimap.set{SX+XX SY+YY Color}
 
 upd_floor Me Bottom = fxn:
 | Cell = Bottom
@@ -635,6 +644,7 @@ upd_floor Me Bottom = fxn:
 
 site.upd_pilar X Y =
 | fxn: when X < 0 or Y < 0: leave 0
+| less $human.sight.Y.X: less $editor: leave
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
 | $heighmap.X.Y <= fxn (Cell+$d-2).floor.z

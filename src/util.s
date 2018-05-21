@@ -1,4 +1,4 @@
-use macros
+use macros fxn
 
 Dirs4 = [[0 -1] [1 0] [0 1] [-1 0]]
 Dirs43 = [[0 -1 0] [1 0 0] [0 1 0] [-1 0 0]]
@@ -36,7 +36,10 @@ points_in_matrix Ms =
 | R = Ms.size/2
 | points_in_square{R}.keep{X,Y=>Ms.(R+Y).(R+X)}
 
-points_in_diamond R =
+DCache = dup 16 0
+
+points_in_diamond R = fxn:
+| when R<DCache.size and DCache.R: leave DCache.R
 | Ps = []
 | RR = R*2+1
 | for Y R:
@@ -46,7 +49,9 @@ points_in_diamond R =
     | push [X+I-R Y-R] Ps
     | push [X+I-R R-Y] Ps
 | for I RR: push [I-R 0] Ps
-| Ps
+| L = Ps.list
+| when R<DCache.size: DCache.R <= L
+| L
 
 point_in_rect [RX RY RW RH] [X Y] = RX<<X and X<RX+RW and RY<<Y and Y<RY+RH
 rects_intersect [AX AY AW AH] [BX BY BW BH] =

@@ -177,6 +177,13 @@ type minimap.widget{Main CenterAt}
 minimap.draw G PX PY =
 | MM = $main.site.minimap
 | G.blit{PX PY MM}
+| V = $main.ui.view
+| CX,CY,CZ = V.center
+| St = V.site
+| VX = CX*$w/St.w
+| VY = CY*$h/St.h
+| G.circle{#FFFFFF 0 [PX+VX PY+VY] 16}
+
 
 minimap.center_at P = ($center){P.0*$main.site.w/$w P.1*$main.site.h/$h}
 
