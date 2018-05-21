@@ -136,6 +136,7 @@ unit.draw FB B =
   | CY = max G.h-48 0
   | G.rect{0 CY G.w CutH}
   | YY += CY
+| fxn: when B.B_FLAGS&&&#40: G.dither{1}
 | FB.blit{XX YY G}
 | fxn: for TB B.B_COVER:
   | TB.B_DEPS <= TB.B_DEPS.skip{$id}
@@ -187,7 +188,7 @@ draw_tile Cell FB BlitItem =
 | B = BlitItem
 | G = fxn B.B_DATA
 | Cell.blitem <= 0
-//| when B.B_FLAGS&&&#40: G.dither{1}
+| fxn: when B.B_FLAGS&&&#40: G.dither{1}
 | fxn FB.blit{B.B_SX B.B_SY G}
 | Us = fxn B.B_COVER
 | when Us.end: leave
@@ -245,7 +246,8 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
 | Fog = Explored><1
 | Cell = Wr.cell{X Y 0}
 | Us = Cell.units.unheap
-| when Fog: Us <= Us.skip{(?owner.id or ?class.hp or ?bank><effect)}
+| when Fog: Us <= Us.skip{(?ai><unit)}
+| less Explored: Us <= 0
 | fxn: for U Us: when U.frame:
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
@@ -260,6 +262,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
       | when U.foldable and
               not (TZ+2 < RoofZ and (AboveCursor or TZ+2 << ZCut)):
         | B.B_FLAGS <= #80
+      | when Fog: B.B_FLAGS <= B.B_FLAGS---#40 //dither
       | push U BlitUnits
 | NextZ = 0
 | TH = 0
@@ -279,7 +282,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
       | B.B_SX <= BX
       | B.B_SY <= SY-G.h
       | B.B_DATA <= G
-      //| when Fog: B.B_FLAGS <= #40 //dither
+      | when Fog: B.B_FLAGS <= #40 //dither
       | Cell.blitem <= B
   | Cell += TH
 | _label out
@@ -293,7 +296,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
     | B = blit_item Cell X*CS Y*CS Z*CS 
     | B.B_SX <= BX
     | B.B_SY <= SY-Folded.h
-    //| when Fog: B.B_FLAGS <= #40 //dither
+    | when Fog: B.B_FLAGS <= #40 //dither
     | B.B_DATA <= Folded
     | Cell.blitem <= B
 
@@ -432,7 +435,7 @@ view.render_iso =
         | less BY < 0:
           | E = esc Explored.Y.X //explored is bytes array, so we escape it
           | if E then render_pilar Me Wr X Y BX BY RoofZ E
-            else render_unexplored Me Wr X Y BX BY
+            else //render_unexplored Me Wr X Y BX BY
 | when $mice_click<>left or $brush.0:
   | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
   | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
