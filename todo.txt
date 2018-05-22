@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- show magic nodes locations on minimap
 - Better unit stat indicator. Something like an additional panel, going above current one.
   Instead of Player1's mage write just mage, and instead o Player2's mage write "Enemy mage"
 - Dithered FOW looks bad. Use light.
