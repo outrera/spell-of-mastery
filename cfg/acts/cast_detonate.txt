@@ -1,6 +1,6 @@
 icon: spell_detonate
 range: 9000
 check: owned,non_leader,unit
-onInit: detonate{health},strip{poison},visual{explosion},sound{explosion}
+onInit: detonate{health 3},strip{poison},visual{explosion},sound{explosion}
 hint: detonate
 tab: spell

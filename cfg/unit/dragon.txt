@@ -11,6 +11,6 @@ inborn: (organic heavy flyer)
 onAttack: sound{dragon_attack}
 onHit: visual{incinerate},shell,hit{user},sound{dragon_flame}
 onHarm: visual{blood},sound{dragon_hit}
-onDeath: sound{dragon_death},detonate{4},shake_screen{16}
+onDeath: sound{dragon_death},detonate{4 3},shake_screen{16}
 onMove: sound{dragon_move}
 acts: (act_blowaway)

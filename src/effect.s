@@ -174,14 +174,16 @@ effect spread What Harm
       | B = C.block
       | when B: B.harm{Me Harm}
 
-effect detonate Damage:
+effect detonate Damage MaxH:
 | XYZ = Target.xyz.copy
 | B = $site.block_at{XYZ}
 | when Damage><health: Damage <= Target.class.hp
 | Target.harm{Me Target.class.hp}
 | for D Dirs43
-  | B = $site.block_at{XYZ+D}
-  | when B: B.harm{Me Damage}
+  | C = $site.cellp{XYZ+D}
+  | F = C.floor
+  | B = F.block
+  | when B and (C-F).abs<MaxH: B.harm{Me Damage}
 
 effect explosion Size:
 | for U $site.units_in_range{TargetXYZ Size}:
