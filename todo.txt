@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- fix occulus blowing itself up above enemy, when it tries to throw rock.
 - magic nodes parts in map generator
 - show magic nodes locations on minimap
 - Better unit stat indicator. Something like an additional panel, going above current one.
