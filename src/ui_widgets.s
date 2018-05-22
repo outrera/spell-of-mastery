@@ -182,7 +182,7 @@ minimap.draw G PX PY =
 | St = V.site
 | VX = CX*$w/St.w
 | VY = CY*$h/St.h
-| G.circle{#FFFFFF 0 [PX+VX PY+VY] 16}
+| G.circle{#FFFFFF 0 [PX+VX+4 PY+VY+4] 16}
 
 
 minimap.center_at P = ($center){P.0*$main.site.w/$w P.1*$main.site.h/$h}

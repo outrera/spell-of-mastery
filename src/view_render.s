@@ -261,7 +261,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
       | B.B_SY <= BY
       | when U.foldable and
               not (TZ+2 < RoofZ and (AboveCursor or TZ+2 << ZCut)):
-        | B.B_FLAGS <= #80
+        | B.B_FLAGS <= #80 //cut
       | when Fog: B.B_FLAGS <= B.B_FLAGS---#40 //dither
       | push U BlitUnits
 | NextZ = 0
@@ -290,7 +290,8 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
   | Z = ZCut+1
   | Z = if NextZ-TH < Z then NextZ-TH else Z
   | Cell = Wr.cell{X Y Z}
-  | when Cell.tile.id:
+  | T = Cell.tile
+  | when T.id and not T.unit:
     | SZ = Z*ZUnit
     | SY = BY-SZ
     | B = blit_item Cell X*CS Y*CS Z*CS 

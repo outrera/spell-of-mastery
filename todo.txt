@@ -1,9 +1,13 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- show magic nodes locations on minimap
 - fix occulus blowing itself up above enemy, when it tries to throw rock.
+- magic nodes parts in map generator
+- show magic nodes locations on minimap
+- Better unit stat indicator. Something like an additional panel, going above current one.
+  Instead of Player1's mage write just mage, and instead o Player2's mage write "Enemy mage"
 - Dithered FOW looks bad. Use light.
+- proper line of sight blocking
 - Base placement cost.
 - Base should be limited to only one operation per turn.
 - move map into the top right corner, and rotate it into diamond to match map. Use fill the corner spaces with information about current cut-level, and X,Y coords.
