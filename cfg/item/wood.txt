@@ -1,5 +1,4 @@
 sprite: item_wood
 item: 1
 ai: resource
-height: 0
 box_xy: (-1 -1)

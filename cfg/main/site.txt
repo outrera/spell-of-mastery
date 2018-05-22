@@ -7,5 +7,5 @@ cell_size: 32 // cell edge's size
 tile_size: 64,32,32 //width,height,depth; typical isometric tile cube is 64x32x32
 tile_banks: tile,city//,deco
 class_banks: unit,leader,item,special,trigger
-explored: 0 //all maps are explored from the beginning
+explored: 1 //all maps are explored from the beginning
 bounding_boxes: 0

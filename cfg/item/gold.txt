@@ -1,5 +1,4 @@
 sprite: item_gold
 item: gold{100},sound{pickup},notify{`Found 100 gold.`},visual{pickup},self,remove
 ai: hold
-height: 4
 box_xy: (-1 -1)

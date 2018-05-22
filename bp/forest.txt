@@ -1,5 +1,5 @@
 filler: pond grass rocks
-parts: castle forest ship hill //forest1 forest2 ruins
+parts: castle ship forest hill node1 node2 node3 node4
 spans: (riverh riverv)
 //parentheses mean that only one of these could be placed,
 //entry: grass_entry

@@ -1,7 +1,6 @@
 title: `Pentagram`
 icon: special_pentagram
 sprite: special_pentagram
-empty: 1
 health: 120 // two minutes
 pickable: 0
 sight: 1
