@@ -116,7 +116,7 @@ view.infoline =
   | Stats <= "[Stats] A:[U.atk] D:[U.def]/[U.class.def][DI] F:[U.fatigue]-[U.stamina]"
   | Stats <= "[Stats] S:[U.sight] R:[U.range] W:[U.will]/[U.class.will]"
   | Id = if $site.editor then "[U.id]" else ""
-  | Unit <= "[U.owner.name]'s [U.title][Id] [Stats]"
+  | Unit <= "[U.title][Id] [Stats]"
 | "[Unit]\n[Land]"
 
 export view

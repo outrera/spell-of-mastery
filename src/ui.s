@@ -104,9 +104,9 @@ ui.create_main_menu_dlg =
   | X 220 | button 'NEW GAME' skin/scroll: => $pick_new_game
                                               //$pick{new_game_menu}
   | X 290 | button 'LOAD GAME' skin/scroll: => $pick{load_menu}
-  | X 360 | button 'WORLD EDITOR' skin/scroll: =>
-            | $create{8 8}
-            | $begin_ingame{1}
+  //| X 360 | button 'WORLD EDITOR' skin/scroll: =>
+  //          | $create{8 8}
+  //          | $begin_ingame{1}
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
   |  $width-80 $height-20
      | button 'Credits' skin/small_medium: =>
@@ -138,10 +138,10 @@ ui.create_dialog_tabs StartTab =
           world($create_world_dlg)
           enter_site($create_enter_site_dlg)
 
-StartInEditor = 0
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
 | $savesFolder <= "[$data][$savesFolder]"
+| StartInEditor = $cfg.ui.start_in_editor><1
 | $menuBG <= $img{ui_menu_bg}
 | $panelBG <= $img{ui_panel}
 | $view <= view $main Me $width $height-($panelBG.h-10)

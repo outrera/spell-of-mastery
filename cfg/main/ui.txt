@@ -11,3 +11,4 @@ debug: 1
 max_notes: 4 //number of simultaneous notifications on screen
 note_size: 256
 note_life: 5.0 // in seconds
+start_in_editor: 1
