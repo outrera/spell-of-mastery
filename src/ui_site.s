@@ -27,30 +27,6 @@ ui.load_game NewGame Path =
 | when NewGame: $site.new_game
 | $begin_ingame{0}
 
-ui.create_panel_tab_menu =
-| SiteIcon = icon menu_site: Icon =>
-  | $pause
-  | $siteProperties.show <= 1
-  | $siteProperties.update
-| SaveIcon = icon menu_save: Icon =>
-  | $pause
-  | $saveSiteDlg.show <= 1
-  | $saveSiteDlg.folder <= if $site.editor then $mapsFolder else $savesFolder
-  | $saveSiteDlg.filename.value <= $site.filename
-| LoadIcon = icon menu_load: Icon =>
-  | $pause
-  | $loadSiteDlg.show <= 1
-  | $loadSiteDlg.folder <= if $site.editor then $mapsFolder else $savesFolder
-| ExitIcon = icon menu_exit: Icon =>
-  | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
-| LeaveIcon = icon menu_leave: Icon =>
-  | $confirm{"Leave this site?"
-     |$0 yes =>
-       | $pick_world
-       | $world.leave_site{retreat}}
-| layV s/4 [(layH s/4 SaveIcon,LoadIcon,SiteIcon,spacer{8 0},ExitIcon)
-            (LeaveIcon)]
-
 ui.confirm Msg Fn =
 | $notify{Msg}
 | $confirmFn <= Fn
@@ -75,7 +51,6 @@ ui.create_panel_tabs =
                     ,layH{s/8 $unitActIcons.take{$unitActIcons.size/2}}
 | $panelTabs <= tabs $curPanelTab: t
           unit    | ActIconsLay
-          menu    | $create_panel_tab_menu
           brush   | $create_panel_tab_brush
           confirm | $create_panel_tab_confirm
 | $panelTabs
@@ -91,10 +66,34 @@ ui.panel_tab_picked TabName =
 | when got Ms: for M Ms: M.show <= 1
 | $panelTabs.pick{TabName}
 
+ui.create_panel_tab_menu =
+| SiteIcon = icon menu_site: Icon =>
+  | $pause
+  | $siteProperties.show <= 1
+  | $siteProperties.update
+| SaveIcon = icon menu_save: Icon =>
+  | $pause
+  | $saveSiteDlg.show <= 1
+  | $saveSiteDlg.folder <= if $site.editor then $mapsFolder else $savesFolder
+  | $saveSiteDlg.filename.value <= $site.filename
+| LoadIcon = icon menu_load: Icon =>
+  | $pause
+  | $loadSiteDlg.show <= 1
+  | $loadSiteDlg.folder <= if $site.editor then $mapsFolder else $savesFolder
+| ExitIcon = icon menu_exit: Icon =>
+  | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
+| LeaveIcon = icon menu_leave: Icon =>
+  | $confirm{"Leave this site?"
+     |$0 yes =>
+       | $pick_world
+       | $world.leave_site{retreat}}
+| SaveIcon,LoadIcon,SiteIcon,ExitIcon,LeaveIcon
+
+
 ui.create_panel_tabs_header =
 | Click = Icon => $panel_tab_picked{Icon.data}
 | TabIconsBare = []
-| TabsIcons = map Name [unit menu brush]:
+| TabsIcons = map Name [unit brush]:
   | Icon = icon "tab_[Name]" Click
   | Icon.data <= Name
   | when Name><$curPanelTab: Icon.picked<=1
@@ -108,7 +107,11 @@ ui.create_panel_tabs_header =
 | PlayButton = $create_play_button
 | push PlayButton $editorWidgets
 | EndTurnButton = icon tab_endturn: Icon => $site.end_turn
-| layH s/8 [@TabsIcons spacer{16 0} PlayButton spacer{140 0} EndTurnButton]
+| SaveIcon,LoadIcon,SiteIcon,ExitIcon,LeaveIcon = $create_panel_tab_menu
+| layH s/8 [@TabsIcons spacer{16 0}
+            PlayButton SaveIcon LoadIcon SiteIcon
+            ExitIcon LeaveIcon
+            spacer{120 0} EndTurnButton]
 
 ui.create_ingame_ui =
 | $create_panel_tabs //should preceede create_panel_tabs_header
