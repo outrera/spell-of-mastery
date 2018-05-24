@@ -74,6 +74,10 @@ ui.render =
 | $inputBlocker.show <= $paused or $site.actors.get.size
                      or not ($site.players.($site.player).human
                              or $site.editor)
+| if $site.editor and $site.paused then when $curPanelTab<>brush:
+    $panel_tab_picked{brush}
+  else when $curPanelTab<>unit
+    $panel_tab_picked{unit}
 | HumanName = $site.human.name
 | for PP $playerPickers: PP.picked <= PP.name >< HumanName
 | $tabs.render

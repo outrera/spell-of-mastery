@@ -91,25 +91,11 @@ ui.create_panel_tab_menu =
 
 
 ui.create_panel_tabs_header =
-| Click = Icon => $panel_tab_picked{Icon.data}
-| TabIconsBare = []
-| TabsIcons = map Name [unit brush]:
-  | Icon = icon "tab_[Name]" Click
-  | Icon.data <= Name
-  | when Name><$curPanelTab: Icon.picked<=1
-  | Icon.picked_overlay <= \icon_hl
-  | push Icon TabIconsBare
-  | when Name><brush:
-    | Icon <= hidden Icon
-    | push Icon $editorWidgets
-  | Icon
-| for Icon TabIconsBare: Icon.group <= TabIconsBare
 | PlayButton = $create_play_button
 | push PlayButton $editorWidgets
 | EndTurnButton = icon tab_endturn: Icon => $site.end_turn
 | SaveIcon,LoadIcon,SiteIcon,ExitIcon,LeaveIcon = $create_panel_tab_menu
-| layH s/8 [@TabsIcons spacer{16 0}
-            PlayButton SaveIcon LoadIcon SiteIcon
+| layH s/8 [PlayButton SaveIcon LoadIcon SiteIcon
             ExitIcon LeaveIcon
             spacer{120 0} EndTurnButton]
 

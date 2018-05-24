@@ -88,8 +88,12 @@ ui.create_load_site_dlg =
 
 ui.create_play_button =
 | Icon = icon tab_play: Icon =>
-  | $site.new_game
-  | $unpause
+  | if $site.paused then
+      | $site.new_game
+      | $unpause
+    else
+      | $site.new_game
+      | $site.paused <= 1
 | Icon.picked_fg <= $img{icons_tab_pause}
 | hidden Icon
 
