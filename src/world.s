@@ -43,6 +43,7 @@ type world.widget{Main UI W H}
   siteLimY/510
   incomeFactor
   gold
+  debt
   site_gold //gold when player entered the site
   tmap/(t) //terrain map
   sterra/(t) //allowed terrain for sites
@@ -155,6 +156,11 @@ world.end_turn =
 | when $turn><0 and $data."cnt_base"^~{No 0}<1:
   | $notify{"Place a base first! Click that flag icon."}
   | leave
+| DebtInterest = $debt*$cfg.interest_rate/100
+| when $gold < DebtInterest:
+  | $notify{"You're bankrupt and cant support your debt. It is game over."}
+  | leave
+| $gold -= DebtInterest
 | for S $sites:
   | when S.type >< city and S.attacker:
     | $free_site{S.attacker}
@@ -221,14 +227,42 @@ world.draw FB X Y =
         else $fg.picked
   | FB.blit{S.xy.0-C S.xy.1-C G}
 | Font = font medium
-| Font.draw{FB 400 2 "Gold: [$gold]"}
+| Debt = if $debt>0 then " (debt=[$debt])" else ""
+| Font.draw{FB 300 2 "Gold: [$gold][Debt]"}
 | Font.draw{FB 500 2 "Turn: [$turn]"}
 
 world.base_placement =
 | less $data."cnt_base"^~{No 0}<$cfg."lim_base"^~{No 1000}:
   | $notify{"We are too stretched to build any more bases."}
   | leave
+| BaseCost = $cfg."base_cost"
+| less $gold >> BaseCost:
+  | $notify{"Node enough gold. [BaseCost] required to build a base."}
+  | leave
 | $set_mode{newBase}
+
+world.borrow =
+| DebtCap = $cfg."debt_cap"
+| BorrowAmount = $cfg."borrow_amount"
+| A = min BorrowAmount DebtCap-$debt
+| less A>0:
+  | $notify{"Can't borrow more than [DebtCap]"}
+  | leave
+| $debt += A
+| $gold += A
+
+world.repay =
+| less $debt>0
+  | $notify{"You have no debt"}
+  | leave
+| RepayAmount = $cfg."borrow_amount"
+| Amount = min $gold RepayAmount
+| less Amount>>0
+  | $notify{"No money to repay the debt"}
+  | leave
+| $gold -= Amount
+| $debt -= Amount
+
 
 world.airship_targeting = $set_mode{airship}
 
@@ -271,6 +305,7 @@ world.mode_pick M =
     | $notify{"Can't place new base here."}
     | leave newBase
   | $generate_site{base xy/$mice_xy}
+  | $gold -= $cfg."base_cost"
   | leave 0
 | when M><airship:
   | S = $site_at{$mice_xy}

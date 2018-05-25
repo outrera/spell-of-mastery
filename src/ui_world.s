@@ -17,11 +17,13 @@ ui.site_picked S =
 ui.create_world_dlg =
 | $world <= world $main Me $width $height
 | BY = $height-64
-| BX = $width-220
+| BX = $width-300
 | BP = icon world_flag: Icon => $world.base_placement
 | ET = icon tab_endturn: Icon => $world.end_turn
 | EX = icon menu_exit: Icon => $pick_title_menu
-| WorldButtons = layH s/4 [BP spacer{22 0} ET spacer{22 0} EX]
+| Borrow = icon world_borrow: Icon => $world.borrow
+| Repay = icon world_repay: Icon => $world.repay
+| WorldButtons = layH s/26 [BP Borrow Repay ET EX]
 | dlg w/$width h/$height: mtx
   |   0           0| $world
   |   0 $height-20 | infoline

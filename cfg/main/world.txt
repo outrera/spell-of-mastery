@@ -4,11 +4,17 @@ lim_lair: 50
 lim_party: 100
 lim_base: 10
 lim_city: 30
+base_cost: 1000
 base_reach: 10
 start_cities: 30
 lair_handicap: 10
 lair_spawn_monster_chance: 75
 lair_spawn_lair_chance: 20
+borrow_amount: 500
+debt_cap: 5000
+interest_rate: 10
+
+
 tmap: (grass #306f2a #318133 #4c863b #69904b)
      ,(mountain #393116 #6c5a4d #807a74 #9a938d #d3c6bb)
      ,(forest #001300 #14460f #296823)

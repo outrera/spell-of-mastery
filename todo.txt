@@ -1,13 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- Base should be limited to only one operation per turn.
 - Better unit stat indicator. Something like an additional panel, going above current one.
 - Dithered FOW looks bad. Use light.
 - proper line of sight blocking
-- Base placement cost.
-- Base should be limited to only one operation per turn.
 - move map into the top right corner, and rotate it into diamond to match map. Use fill the corner spaces with information about current cut-level, and X,Y coords.
-- Loan mechanics, which allow player to borrow 1000 gold under 5% interest rate
 - Tutorial dialogue for the first time player enters a site, explaining the rules.
 - Pickable spells, that are chosen out of researched spells list. Defeauted enemy creatures could drop spells too.
 - Economy:
