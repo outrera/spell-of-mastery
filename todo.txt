@@ -2,7 +2,16 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Base should be limited to only one operation per turn.
-- Better unit stat indicator. Something like an additional panel, going above current one.
+- Base reach.
+- Monster attacking in their reach or moving to other place.
+- Magic node placed near wall gets wrong draw order and gets drawn over the unit standing on it.
+- Spell shop: each turn shop gets random selection of spells.
+- Ensure all spells handle concentration properly.
+- Better unit stat indicator: add them as icons to the right of selected unit's frame.
+- Ensure AI uses all spells.
+- Fix minimap clicking near bottom and right corners.
+- Mouse cursor switching Z-levels.
+- Roof and indoor indicators should be displayed right near cursor.
 - Dithered FOW looks bad. Use light.
 - proper line of sight blocking
 - move map into the top right corner, and rotate it into diamond to match map. Use fill the corner spaces with information about current cut-level, and X,Y coords.

@@ -156,11 +156,6 @@ world.end_turn =
 | when $turn><0 and $data."cnt_base"^~{No 0}<1:
   | $notify{"Place a base first! Click that flag icon."}
   | leave
-| DebtInterest = $debt*$cfg.interest_rate/100
-| when $gold < DebtInterest:
-  | $notify{"You're bankrupt and cant support your debt. It is game over."}
-  | leave
-| $gold -= DebtInterest
 | for S $sites:
   | when S.type >< city and S.attacker:
     | $free_site{S.attacker}
@@ -184,15 +179,24 @@ world.end_turn =
 | less Cities.size:
   | $notify{"The last city has fallen. It is game over."}
   | leave
+| less Bases.size:
+  | $notify{"You have no base left. It is game over."}
+  | leave
+| DebtInterest = $debt*$cfg.interest_rate/100
+| when $gold < DebtInterest:
+  | $notify{"You're bankrupt and cant support your debt. It is game over."}
+  | leave
+| $gold -= DebtInterest
 | $turn += 1
 | $turn_seed <= ($turn_seed*LCG_A + LCG_B) % LCG_M
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
-| $gold += $cfg.passive_income
+| $gold += $cfg.passive_income*Bases.size
 | for P Parties: less P.state:
   | C = Cities.find{?attacker^not}
   | when got C:
     | C.attacker <= P
     | P.state <= \raid
+| for B Bases: B.state <= 0
 | LSLC = $cfg.lair_spawn_lair_chance
 | LSMC = $cfg.lair_spawn_monster_chance
 | LH = $cfg.lair_handicap
@@ -264,7 +268,11 @@ world.repay =
 | $debt -= Amount
 
 
-world.airship_targeting = $set_mode{airship}
+world.airship_targeting =
+| when $picked and $picked.state><acted:
+  | $notify{"This base has already acted this turn."}
+  | leave
+| $set_mode{airship}
 
 
 world.set_mode M =
@@ -288,8 +296,10 @@ world.leave_site How =
   | $notify{"You've scrapped [Scrap] gold due to early mission end."}
   | leave
 | S = $site_by_serial{$ui.site.data.serial}
-| less S: leave
-| Bounty = max 0 ($site_gold*2+2)/3 - $ui.site.turn*10
+| less S: leave //skermish game
+| BP = $cfg."site_bounty_percent"
+| Bounty = ($site_gold*BP+BP-1)/100
+| Bounty <= max 0 Bounty-$ui.site.turn*$cfg."site_turn_cost"
 | $gold += Bounty
 | $notify{"You earned [Scrap+Bounty] bounty gold!"}
 | when S.type><party:
@@ -298,6 +308,8 @@ world.leave_site How =
 | when S.type><city and S.attacker:
   | $free_site{S.attacker}
   | $notify{"You have defended the city!"}
+| when $picked:
+  | $picked.state <= \acted
 
 world.mode_pick M =
 | when M><newBase:

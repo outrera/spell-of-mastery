@@ -214,6 +214,12 @@ effect site_set Name Value: $site.data.Name <= Value
 
 effect boost_defense Amount: $def <= min{$def+Amount $class.def+Amount}
 
+effect victory Player Reason:
+| SD = $site.data
+| when Player >< owner: Player <= $owner.id
+| SD.winner <= Player
+| SD.victory_type <= Reason
+
 effect spell_of_mastery_pre:
 | Us = $cell.units
 | Node = Us.find{?type><special_node}
@@ -234,7 +240,6 @@ effect spell_of_mastery_end:
 | when $site.all_nodes_activated:
   | $site.data.winner <= $owner.id
   | $site.data.victory_type <= 'Victory by casting the Spell of Mastery'
-
 
 effect swap Arg:
 | XYZ = $xyz.copy
@@ -406,12 +411,6 @@ effect jumpdown:
 effect teleport Arg:
 | $reset_goal
 | $forced_order{fastmove TargetXYZ}
-
-effect victory Player Reason:
-| WP = $site.data
-| when Player >< owner: Player <= $owner.id
-| WP.winner <= Player
-| WP.victory_type <= Reason
 
 effect face:
 | $face{TargetXYZ}
