@@ -295,19 +295,20 @@ world.leave_site How =
   | Scrap += Act.gold*Act.picked
 | P = $ui.site.human
 | Scrap -= P.data.lossage
-| Scrap <= max 0 Scrap*3/4
+| ScrapPercent = $cfg."site_scrap_percent"
+| Scrap <= max 0 Scrap*ScrapPercent/100
 | $gold += P.data.gold
 | $gold += Scrap
 | less How><victory:
   | $notify{"You've scrapped [Scrap] gold due to early mission end."}
   | leave
 | S = $site_by_serial{$ui.site.data.serial}
-| less S: leave //skermish game
+| less S: leave //skirmish game
 | BP = $cfg."site_bounty_percent"
 | Bounty = ($site_gold*BP+BP-1)/100
 | Bounty <= max 0 Bounty-$ui.site.turn*$cfg."site_turn_cost"
 | $gold += Bounty
-| $notify{"You earned [Scrap+Bounty] bounty gold!"}
+| $notify{"You earned [Bounty] bounty gold and scrapped [Scrap] gold!"}
 | when S.type><party:
   | $free_site{S}
   | $notify{"You have defeated the raiding party!"}
