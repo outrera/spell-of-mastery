@@ -17,7 +17,7 @@ ui.site_picked S =
 ui.create_world_dlg =
 | $world <= world $main Me $width $height
 | BY = $height-64
-| BX = $width-300
+| BX = $width-400
 | BP = icon world_flag: Icon => $world.base_placement
 | ET = icon tab_endturn: Icon => $world.end_turn
 | EX = icon menu_exit: Icon => $pick_title_menu

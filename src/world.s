@@ -223,13 +223,19 @@ world.draw FB X Y =
 | Clock = clock
 | PickBlink = (Clock-Clock.int.float)<0.25
 | C = $siteC
-| PickedId = if $picked then $picked.id else -1
+| P = $picked
+| PickedId = if P then P.id else -1
 | for S $sites: when S.xy.0>0 and S.state <> raid:
   | G = if S.id <> PickedId or
            (PickBlink and not point_in_rect{S.rect $mice_xy})
         then if S.attacker then $fg.attack else S.gfx
         else $fg.picked
   | FB.blit{S.xy.0-C S.xy.1-C G}
+| R = $cfg."base_reach"
+| when P and P.type><base:
+  | FB.circle{#FFFFFF 0 [P.xy.0 P.xy.1] R}
+| when $mode><newBase:
+  | FB.circle{#FFFFFF 0 $mice_xy R}
 | Font = font medium
 | Debt = if $debt>0 then " (debt=[$debt])" else ""
 | Font.draw{FB 300 2 "Gold: [$gold][Debt]"}
@@ -320,6 +326,9 @@ world.mode_pick M =
   | $gold -= $cfg."base_cost"
   | leave 0
 | when M><airship:
+  | less ($mice_xy-$picked.xy).abs < $cfg."base_reach".float:
+    | $notify{"Out of reach."}
+    | leave airship
   | S = $site_at{$mice_xy}
   | less S: leave airship
   | when S.type><party:
