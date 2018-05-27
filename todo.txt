@@ -1,13 +1,13 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Monster parties attacking in their reach or moving to other place.
 - Spell shop: each turn shop gets random selection of spells.
 - Ensure all spells handle concentration properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.
 - Ensure AI uses all spells.
 - Fix minimap clicking near bottom and right corners.
-- Mouse cursor switching Z-levels.
+- Countering city raids and city blueprint
+- Mouse wheel switching Z-levels.
 - Roof and indoor indicators should be displayed right near cursor.
 - Dithered FOW looks bad. Use light.
 - proper line of sight blocking
@@ -150,6 +150,7 @@ Symta Language Handicaps:
 - `times` macro should have 2 argument form, when there is no need for a count var.
 - do-while loop, to avoid needless `_label again`
 - objects allocated on heap with autopointer cells.
+- "when A and B: C" should give warning when `:` is missing.
 - `Text.lines{}{...}` is a little confusing and verbose. Consider operator `.{}` for that.
 - Operators `.><` and `.<>` as shorthands for skip and keep. Parens could be used for internal `<` and `>`: Skip .
 - A some file, like common.s, that would be included by default into every other file. Such file would incldue common constants, like TILE_WIDTH.

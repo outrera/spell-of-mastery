@@ -17,6 +17,9 @@ world_site.rect =
 | C = $world.siteC
 | [$xy.0-C $xy.1-C C*2 C*2]
 
+world_site.move XY =
+| $xy.init{XY}
+
 type world.widget{Main UI W H}
   main/Main
   ui/UI
@@ -49,7 +52,7 @@ type world.widget{Main UI W H}
   sterra/(t) //allowed terrain for sites
 | $cfg <= $main.cfg.world
 | $bg <= $img{world_bg}
-| $siteLimX <= $bg.w
+| $siteLimX <= $bg.w-$siteC
 | $fg <= @table: map N [site picked base city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
 | for V,@Ks $cfg.tmap: for K Ks: $tmap.K <= V
@@ -59,6 +62,43 @@ type world.widget{Main UI W H}
 | $sites <= stack MaxSites
 | $free_sites <= stack $all_sites
 | $clear
+
+
+world.render =
+| Cur = \ui_cursor_point
+| when $mode><newBase:
+  | Can = $can_place{base $mice_xy}
+  | Cur <= if Can then \ui_cursor_target else \ui_cursor_target2
+| when $mode><airship:
+  | S = $site_at{$mice_xy}
+  | Cur <= if S then \ui_cursor_target else \ui_cursor_target2
+| get_gui{}.cursor <= $img{Cur}
+| Me
+
+world.draw FB X Y =
+| FB.blit{0 0 $bg}
+| Clock = clock
+| PickBlink = (Clock-Clock.int.float)<0.25
+| C = $siteC
+| P = $picked
+| PickedId = if P then P.id else -1
+| for S $sites: when S.xy.0>0 and S.state <> raid:
+  | G = if S.id <> PickedId or
+           (PickBlink and not point_in_rect{S.rect $mice_xy})
+        then if S.attacker then $fg.attack else S.gfx
+        else $fg.picked
+  | FB.blit{S.xy.0-C S.xy.1-C G}
+| when P:
+  | when P.type><base:
+    | FB.circle{#FFFFFF 0 [P.xy.0 P.xy.1] $cfg."base_reach"}
+  | when P.type><party:
+    | FB.circle{#FFFFFF 0 [P.xy.0 P.xy.1] $cfg."party_reach"}
+| when $mode><newBase:
+  | FB.circle{#FFFFFF 0 $mice_xy $cfg."base_reach"}
+| Font = font medium
+| Debt = if $debt>0 then " (debt=[$debt])" else ""
+| Font.draw{FB 300 2 "Gold: [$gold][Debt]"}
+| Font.draw{FB 500 2 "Turn: [$turn]"}
 
 LCG_M = 2147483647
 LCG_M_F = LCG_M.float
@@ -108,9 +148,9 @@ world.site_at XY =
 
 world.can_place Type XY =
 | X,Y = XY
-| less Y<$siteLimY: leave 0
 | less X<$siteLimX: leave 0
-| when X>$w-$siteC: leave 0
+| less Y<$siteLimY: leave 0
+| when X<$siteC or Y<$siteC: leave 0
 | less got $sterra.Type.find{$terra_at{XY}}: leave 0
 | when Type><city: for S $sites: when S.type><city:
   | when (S.xy-XY).all{?abs<32}: leave 0
@@ -152,16 +192,47 @@ world.generate =
 | $generate_site{base}
 | $generate_site{party}
 
-world.end_turn =
-| when $turn><0 and $data."cnt_base"^~{No 0}<1:
-  | $notify{"Place a base first! Click that flag icon."}
-  | leave
+//any city remaining in raid state at the end of the turn
+//gets turned into ruins
+world.update_raids =
 | for S $sites:
   | when S.type >< city and S.attacker:
     | $free_site{S.attacker}
     | X,Y = S.xy
     | $free_site{S}
     | R = $generate_site{ruin xy/[X Y]}
+
+world.update_parties Cities Parties =
+| RR = $cfg."party_reach"
+| R = RR.float
+| for P Parties: less P.state:
+  | Cs = Cities.keep{C => (P.xy-C.xy).abs < R and not C.attacker}
+  | if Cs.size then
+      | C = Cs.($rand{Cs.size-1})
+      | C.attacker <= P
+      | P.state <= \raid
+    else
+      | X = 0
+      | Y = 0
+      | I = 0
+      | while 1
+        | X <= ($rand{RR/2}+RR/2)*(if $rand{1} then -1 else 1)+P.xy.0
+        | Y <= ($rand{RR/2}+RR/2)*(if $rand{1} then -1 else 1)+P.xy.1
+        | when (P.xy-[X Y]).abs < R and $can_place{party X,Y}:
+          | _goto found
+        | when I++ > 9000: leave
+      | _label found
+      | P.move{X,Y}
+| when $picked and $picked.state><raid: $picked <= 0
+
+world.end_turn =
+| when $turn><0 and $data."cnt_base"^~{No 0}<1:
+  | $notify{"Place a base first! Click that flag icon."}
+  | leave
+| less $sites.list.any{?type><city}:
+  | $notify{"The last city has fallen. It is game over."}
+  | leave
+| $update_raids
 | Ss = $sites.list
 | $sites.clear
 | Lairs = []
@@ -176,9 +247,6 @@ world.end_turn =
   | when S.type><ruin: push S Ruins
   | when S.type><party: push S Parties
   | $sites.push{S}
-| less Cities.size:
-  | $notify{"The last city has fallen. It is game over."}
-  | leave
 | less Bases.size:
   | $notify{"You have no base left. It is game over."}
   | leave
@@ -191,11 +259,7 @@ world.end_turn =
 | $turn_seed <= ($turn_seed*LCG_A + LCG_B) % LCG_M
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
 | $gold += $cfg.passive_income*Bases.size
-| for P Parties: less P.state:
-  | C = Cities.find{?attacker^not}
-  | when got C:
-    | C.attacker <= P
-    | P.state <= \raid
+| $update_parties{Cities Parties}
 | for B Bases: B.state <= 0
 | LSLC = $cfg.lair_spawn_lair_chance
 | LSMC = $cfg.lair_spawn_monster_chance
@@ -206,40 +270,6 @@ world.end_turn =
   | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
 | when $rand{100}<LSMC: $generate_site{party}
 | when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
-
-world.render =
-| Cur = \ui_cursor_point
-| when $mode><newBase:
-  | Can = $can_place{base $mice_xy}
-  | Cur <= if Can then \ui_cursor_target else \ui_cursor_target2
-| when $mode><airship:
-  | S = $site_at{$mice_xy}
-  | Cur <= if S then \ui_cursor_target else \ui_cursor_target2
-| get_gui{}.cursor <= $img{Cur}
-| Me
-
-world.draw FB X Y =
-| FB.blit{0 0 $bg}
-| Clock = clock
-| PickBlink = (Clock-Clock.int.float)<0.25
-| C = $siteC
-| P = $picked
-| PickedId = if P then P.id else -1
-| for S $sites: when S.xy.0>0 and S.state <> raid:
-  | G = if S.id <> PickedId or
-           (PickBlink and not point_in_rect{S.rect $mice_xy})
-        then if S.attacker then $fg.attack else S.gfx
-        else $fg.picked
-  | FB.blit{S.xy.0-C S.xy.1-C G}
-| R = $cfg."base_reach"
-| when P and P.type><base:
-  | FB.circle{#FFFFFF 0 [P.xy.0 P.xy.1] R}
-| when $mode><newBase:
-  | FB.circle{#FFFFFF 0 $mice_xy R}
-| Font = font medium
-| Debt = if $debt>0 then " (debt=[$debt])" else ""
-| Font.draw{FB 300 2 "Gold: [$gold][Debt]"}
-| Font.draw{FB 500 2 "Turn: [$turn]"}
 
 world.base_placement =
 | less $data."cnt_base"^~{No 0}<$cfg."lim_base"^~{No 1000}:
@@ -260,6 +290,7 @@ world.borrow =
   | leave
 | $debt += A
 | $gold += A
+| $notify{"Loaned [A] gold"}
 
 world.repay =
 | less $debt>0
@@ -272,6 +303,7 @@ world.repay =
   | leave
 | $gold -= Amount
 | $debt -= Amount
+| $notify{"Repaid [Amount] gold"}
 
 
 world.airship_targeting =
