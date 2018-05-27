@@ -41,6 +41,7 @@ type ui.$tabs{main}
   notes
   noteLife/1.0
   setupIcons
+  shopIcons
   enterSiteDst
   enterSiteIcons1
   enterSiteIcons2
@@ -141,6 +142,7 @@ ui.create_dialog_tabs StartTab =
           credits($create_credits_dlg)
           world($create_world_dlg)
           enter_site($create_enter_site_dlg)
+          shop($create_shop_dlg)
 
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
