@@ -376,6 +376,12 @@ unit.find_blit_deps =
     | C++
     | Z++
   | when $blitem.B_DEPS.end: leave
+  | when (esc $ai><unit): //FIXME: hack
+    | for U $cell.units: when U.id<>$id:
+      | CB = U.blitem
+      | when CB:
+        | $blitem.B_DEPS <= [U.id @$blitem.B_DEPS]
+        | CB.B_COVER <= [$blitem @CB.B_COVER]
   | Cell = $site.cell{X+1 Y+1 ZZ}
   | less Cell.invisible:
     | CB = Cell.blitem

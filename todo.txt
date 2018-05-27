@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Monster attacking in their reach or moving to other place.
-- Magic node placed near wall gets wrong draw order and gets drawn over the unit standing on it.
+- Monster parties attacking in their reach or moving to other place.
 - Spell shop: each turn shop gets random selection of spells.
 - Ensure all spells handle concentration properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.
