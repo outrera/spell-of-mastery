@@ -15,6 +15,8 @@ borrow_amount: 500
 debt_cap: 5000
 interest_rate: 5
 
+spell_cost: 500
+
 //recovered part of the unused resource and survived creatures
 site_scrap_percent: 75
 

@@ -17,13 +17,14 @@ ui.site_picked S =
 ui.create_world_dlg =
 | $world <= world $main Me $width $height
 | BY = $height-64
-| BX = $width-400
+| BX = $width-444
 | BP = icon world_flag: Icon => $world.base_placement
+| Shop = icon world_shop: Icon => $enter_shop
 | ET = icon tab_endturn: Icon => $world.end_turn
 | EX = icon menu_exit: Icon => $pick_title_menu
 | Borrow = icon world_borrow: Icon => $world.borrow
 | Repay = icon world_repay: Icon => $world.repay
-| WorldButtons = layH s/26 [BP Borrow Repay ET EX]
+| WorldButtons = layH s/26 [BP Shop Borrow Repay ET EX]
 | dlg w/$width h/$height: mtx
   |   0           0| $world
   |   0 $height-20 | infoline
@@ -241,6 +242,7 @@ ui.enter_site Site =
   | Act = Icon.data
   | Act.picked <= 0
   | Icon.text.2 <= 3
+  //| less Site: Act.researched <= 0
   /*| times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
     | Icon.text.2 += 1*/
   | Icon.hidden <= not Act.researched

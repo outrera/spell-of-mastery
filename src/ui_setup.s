@@ -46,7 +46,7 @@ ui.create_new_game_setup_dlg =
   | Icon = icon 0: Icon => $setup_act_picked{Icon}
   | Icon.data <= [Act Me]
   | Icon.fg <= Act.icon_gfx
-  | Icon.picked_overlay <= \icon_hl
+  | Icon.picked_overlay <= \icon_picked
   | Icon.infoline_handler <= &setup_icon_infoline
   //| Icon.grayed <= 0
   | Icon

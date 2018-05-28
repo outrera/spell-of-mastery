@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Spell shop: each turn shop gets random selection of spells.
+- Instead of pregame setup, allow player picking leader, which will determine the starting spells and creatures.
 - Ensure all spells handle concentration properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.
 - Ensure AI uses all spells.
@@ -9,6 +9,7 @@ TODO:
 - Countering city raids and city blueprint
 - Mouse wheel switching Z-levels.
 - Roof and indoor indicators should be displayed right near cursor.
+- different AI leaders with different gimmicks.
 - Dithered FOW looks bad. Use light.
 - proper line of sight blocking
 - move map into the top right corner, and rotate it into diamond to match map. Use fill the corner spaces with information about current cut-level, and X,Y coords.
