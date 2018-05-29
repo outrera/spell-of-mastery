@@ -15,7 +15,9 @@ borrow_amount: 500
 debt_cap: 5000
 interest_rate: 5
 
-spell_cost: 500
+//shop prices
+spell_buy_cost: 500
+spell_sell_cost: 250
 
 //recovered part of the unused resource and survived creatures
 site_scrap_percent: 75
@@ -42,7 +44,7 @@ sterra: (city grass desert snow)
        ,(base forest mountain grass desert snow)
 
 //stuff related to new game setup
-start_gold: 1000//3000
+start_gold: 1000//6000
 start_spells: 3
 start_summons: 3
 default_picks:

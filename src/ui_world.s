@@ -242,7 +242,7 @@ ui.enter_site Site =
   | Act = Icon.data
   | Act.picked <= 0
   | Icon.text.2 <= 3
-  //| less Site: Act.researched <= 0
+  | less Site: Act.researched <= 0
   /*| times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
     | Icon.text.2 += 1*/
   | Icon.hidden <= not Act.researched

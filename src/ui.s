@@ -42,6 +42,7 @@ type ui.$tabs{main}
   noteLife/1.0
   setupIcons
   shopIcons
+  shopIcons2
   enterSiteDst
   enterSiteIcons1
   enterSiteIcons2

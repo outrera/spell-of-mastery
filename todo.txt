@@ -1,15 +1,17 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Instead of pregame setup, allow player picking leader, which will determine the starting spells and creatures.
-- Ensure all spells handle concentration properly.
+- Allow selling spells.
+- Ensure all spells handle concentration properly. Concentration should increase when unit stands doing nothing.
+- Superpose should work with enemy creatures too. Maybe requiring more concentration or damaging caster a little. That way it would be usable even if player has no creatures. If player use superpose on creature, it should became awakend and start attacking player.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.
 - Ensure AI uses all spells.
 - Fix minimap clicking near bottom and right corners.
 - Countering city raids and city blueprint
 - Mouse wheel switching Z-levels.
 - Roof and indoor indicators should be displayed right near cursor.
-- different AI leaders with different gimmicks.
+- Instead of pregame setup, allow player picking leader, which will determine starting spells and creatures.
+- different AI leaders with different gimmicks: different amount of health and mandatory spells.
 - Dithered FOW looks bad. Use light.
 - proper line of sight blocking
 - move map into the top right corner, and rotate it into diamond to match map. Use fill the corner spaces with information about current cut-level, and X,Y coords.

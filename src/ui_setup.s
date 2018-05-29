@@ -85,7 +85,9 @@ ui.pick_new_game =
   | Icon.picked <= 0
   | Act.researched <= 0
   | when DP.has{Act.name}: $setup_act_picked{Icon}
-| $pick{new_game_setup}
+| $world.clear
+| $pick_world
+//| $pick{new_game_setup}
 
 
 ui.create_scenario_menu =
