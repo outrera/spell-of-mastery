@@ -1,11 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Allow selling spells.
+- Instead of having anti-magic and dispel, have just antimagic, that also strip all enchantments when cast onto enemy, or give protection from the next spell when cast onto ally.
+- Superpose should work with enemy creatures and empty space too, yet damaging caster a little. That way it would be usable even if player has no creatures, could work in combination with heal spell. If player uses superpose on creature, it should awaken and start attacking player's creatures.
 - Ensure all spells handle concentration properly. Concentration should increase when unit stands doing nothing.
-- Superpose should work with enemy creatures too. Maybe requiring more concentration or damaging caster a little. That way it would be usable even if player has no creatures. If player use superpose on creature, it should became awakend and start attacking player.
+- Ensure AI uses all spells properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.
-- Ensure AI uses all spells.
 - Fix minimap clicking near bottom and right corners.
 - Countering city raids and city blueprint
 - Mouse wheel switching Z-levels.

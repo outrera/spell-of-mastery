@@ -1,7 +1,7 @@
 icon: spell_invisibility
 //hotkey: d
 range: 9000
-check: non_leader,unit
+check: unit
 onInit: add{invisible},visual{spell},sound{invisibility}
 hint: benefit
 tab: spell
