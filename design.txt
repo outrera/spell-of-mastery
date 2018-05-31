@@ -49,7 +49,7 @@ Battle View:
 Spells:
 - Knowledge (neutral): converts mana into lore.
   This spell can be resisted, in that case it removes only the resistance enchantment. 
-- Telekinesis (neutral): grabs key, treasure, uncovers fog of war, pushes nearby creatures, hurls in air distant creatures, operates an object from a distance. Can't be used at chests.
+- Telekinesis (neutral): grabs key, treasure, uncovers fog of war, pushes nearby creatures away, and distant creatures closer, operates an object from a distance. Can't be used on chests.
 - Heal (law): target regains 9 health, and gets cured from poison.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Haste (law): target gains 2 additional movement points.
@@ -60,9 +60,9 @@ Spells:
 - Curse (chaos): makes target resistant to non-magical weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible. Doing any action beside movement would cancel invisibility.
 - Firestorm (chaos): sets ground on fire, damaging creatures inside it. Fire expands for several turn.
-- Flight (law): target gains ability to fly.
-- Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health.
-- Subvert (law): gain control over the target creature by spending mana equivalent to creature's willpower.
+- Flight (law): ally gains ability to fly, while enemy would be launched into air, sustaining fall damage, unless it can fly or is too heavy to be lifted.
+- Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health. Otherwise deals minor area of effect damage.
+- Subvert (law): gain control over the target creature by spending mana equivalent to creature's willpower. If cast on allied creature, that creature gains willpower and will be immune to subversion.
 - Armageddon (chaos): all units sustain 5 points of damage.
 - The Spell of Mastery (neutral): banishes all enemy wizards and creatures from this site. Requires to be cast at each of the site's power nodes.
 

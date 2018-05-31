@@ -57,7 +57,7 @@ default_picks:
 
 max_units: 14 //maximum number of units player is allowed to bring in on site
 
-setup_summons:
+summons:
       unit_oculus,
       unit_observer,
       unit_blob,

@@ -39,7 +39,7 @@ ui.setup_act_picked Icon =
 ui.create_new_game_setup_dlg =
 | Acts = $main.acts
 | Spells = $cfg.leader.mage.spells
-| Summons = $cfg.world.setup_summons
+| Summons = $cfg.world.summons
 | create_pick_icon ActName =
   | Act = Acts.ActName
   | when no Act: bad "missing act [ActName]"

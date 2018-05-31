@@ -44,7 +44,7 @@ ui.shop_act_sell Icon =
 ui.create_shop_icons InfoFn PickedFn =
 | Acts = $main.acts
 | Spells = $cfg.leader.mage.spells
-| Summons = $cfg.world.setup_summons
+| Summons = $cfg.world.summons
 | create_pick_icon ActName =
   | Act = Acts.ActName
   | when no Act: bad "missing act [ActName]"

@@ -135,9 +135,13 @@ effect telekinesis:
       | $push{Target 6}
       | $sound{blowaway}
       | leave
-    | Target.move{Target.xyz+[0 0 2]}
+    | $owner.notify{"FIXME: implement pushing closer distant creatures"}
     | leave
 | $owner.spawn{TargetXYZ unit_telekinesis}
+
+effect send_flying:
+| when Target.flyer or Target.heavy: leave
+| Target.move{Target.xyz+[0 0 2]}
 
 effect superpose:
 | XYZ = $xyz.copy

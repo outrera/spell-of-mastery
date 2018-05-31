@@ -184,7 +184,7 @@ ui.enter_site_unpicked Icon =
 ui.create_enter_site_icons InfoFn PickedFn =
 | Acts = $main.acts
 | Spells = $cfg.leader.mage.spells
-| Summons = $cfg.world.setup_summons
+| Summons = $cfg.world.summons
 | create_pick_icon ActName =
   | Act = Acts.ActName
   | when no Act: bad "missing act [ActName]"
