@@ -152,7 +152,7 @@ unit.path_around_to Range XYZ = //Me is unit
 unit.enemies_in_range =
 | O = $owner
 | check B =
-  | when O.is_enemy{B.owner} and B.health and not B.invisible:
+  | when O.is_enemy{B.owner} and B.hp>0 and not B.invisible:
     | leave 1
   | 0
 | $units_in_range{$range}.skip{?empty}.keep{&check}
