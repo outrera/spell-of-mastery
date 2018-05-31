@@ -1,6 +1,6 @@
 icon: spell_lightning
 //lore: 5
-cost: 4
+//cost: 4
 //cool: 10
 range: 9000
 check: unit

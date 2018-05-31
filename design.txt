@@ -48,17 +48,15 @@ Battle View:
 
 Spells:
 - Knowledge (neutral): converts mana into lore.
-- Dispel (neutral): removes all the following enchantments:
-    shell, bless, fear, invisibility, flight, haste.
   This spell can be resisted, in that case it removes only the resistance enchantment. 
 - Telekinesis (neutral): grabs key, treasure, uncovers fog of war, pushes nearby creatures, hurls in air distant creatures, operates an object from a distance. Can't be used at chests.
-- Heal (law): target regains 9 health, and gets cured from poison and fear.
+- Heal (law): target regains 9 health, and gets cured from poison.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Haste (law): target gains 2 additional movement points.
-- Fear (chaos): target loses ability to act for the next three turns.
+- Fear (chaos): target loses ability to act for the next five turns and can only run away.
 - Shell (law): target gains immunity to the next physical attack.
-- Resist (chaos): target gains immunity to the next magical attack.
-- Bless (law): makes target deal additional damage to cursed units.
+- Antimagic (chaos): if target is ally, it is cured from fear and gains immunity to the next magical attack, otherwise target loses all benefical enchantments.
+- Bless (law): makes target deal additional damage to cursed units and immune to lifedrain, it also cures fear.
 - Curse (chaos): makes target resistant to non-magical weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible. Doing any action beside movement would cancel invisibility.
 - Firestorm (chaos): sets ground on fire, damaging creatures inside it. Fire expands for several turn.

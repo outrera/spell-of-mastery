@@ -3,6 +3,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 TODO:
 - Instead of having anti-magic and dispel, have just antimagic, that also strip all enchantments when cast onto enemy, or give protection from the next spell when cast onto ally.
 - Superpose should work with enemy creatures and empty space too, yet damaging caster a little. That way it would be usable even if player has no creatures, could work in combination with heal spell. If player uses superpose on creature, it should awaken and start attacking player's creatures.
+- Fix bless spell, so blessed units would be immune to lifedrain.
 - Ensure all spells handle concentration properly. Concentration should increase when unit stands doing nothing.
 - Ensure AI uses all spells properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.

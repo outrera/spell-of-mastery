@@ -25,7 +25,6 @@ acts: (act_fireball act_mastery)
 spells:
       (
       cast_telekinesis
-      cast_dispel
       cast_heal
       cast_lightning
       cast_haste

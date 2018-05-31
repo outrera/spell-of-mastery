@@ -4,7 +4,7 @@ lore: 0
 cost: 0
 cool: 16
 range: 4
-check: non_leader,organic,unit
+check: organic,unit
 onInit: lifedrain{full},visual{lifedrain},sound{lifedrain},self,visual{heal}
 hint: lifedrain
 tab: spell

@@ -1,7 +1,7 @@
 icon: spell_invisibility
 title: `Invisibility`
 cool: 10
-check: owned,unit
+check: unit
 onInit: add{invisible},visual{spell},sound{invisibility}
 onEnd: ()
-hint: boost
+hint: benefit

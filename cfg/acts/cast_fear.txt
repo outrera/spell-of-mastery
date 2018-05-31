@@ -1,7 +1,8 @@
 icon: spell_fear
 gold: 20
+cool: 5
 range: 9000
 check: unit
-onInit: visual{fear},resist,add{afraid 3},sound{fear}
+onInit: visual{fear},resist,add{afraid 7},sound{fear}
 hint: fear
 tab: spell

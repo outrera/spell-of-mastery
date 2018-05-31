@@ -2,6 +2,13 @@ icon: spell_antimagic
 gold: 10
 range: 9000
 check: unit
-onInit: add{resist},visual{resist},sound{resist}
-hint: benefit
+onInit: when{enemy}
+         ,resist,strip{shell},strip{bless},strip{flyer},strip{hasted}
+         ,strip{invisible},strip{invisible_on_attack}
+         ,visual{spell},sound{dispel}
+         ,endwhen,
+        when{not+enemy}
+         ,add{resist},visual{resist},sound{resist}
+         ,endwhen
+hint: dispel
 tab: spell

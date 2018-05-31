@@ -1,9 +1,0 @@
-icon: spell_dispel
-gold: 10
-range: 9000
-check: unit
-onInit: resist,strip{fear},strip{shell},strip{bless},strip{flyer},strip{hasted}
-       ,strip{invisible},strip{invisible_on_attack}
-       ,visual{spell},sound{dispel}
-hint: dispel
-tab: spell
