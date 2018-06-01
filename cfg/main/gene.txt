@@ -1,10 +1,9 @@
 flags: attacker{0 -1},picked{1 -1},engaged{2 1}
-      ,hasted{3 5},shell{4 2},flyer{5 -1},heavy{6 -1},fireaura{7 0},organic{8 -1}
+      ,leader{3 -1},shell{4 2},flyer{5 -1},heavy{6 -1},fireaura{7 0},organic{8 -1}
       ,climber{9 -1},swimmer{10 -1},amphibian{11 -1},invisible{12 -1}
       ,bless{13 6},cursed{14 3},afraid{15 7},mark{16 -1},resting{17 -1}
-      ,resist{18 8},leader{19 -1},disciplined{20 -1}
+      ,resist{18 8},hasted{19 5},slowed{20 -1},disciplined{21 -1}
 
-haste: on{static}
 flyer: on{static}
 swimmer: on{static}
 amphibian: on{static}
@@ -12,7 +11,6 @@ organic: on{static}
 leader: on{static}
 fireaura: on{counter},harm{2},visual{fire_ring}
 poison: on{endturn},host,when{has_health.2},harm{1}
-hasted: on{endturn},inc{steps,4}
 invisible: on{act},strip{invisible}
 //shell: on{phys_harm},mod{block},sound{shell},visual{shell},strip{shell}
 regen: on{endturn},when{harmed resting},strip{poison},heal{1},visual{heal}

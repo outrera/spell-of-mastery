@@ -11,7 +11,11 @@ unit.new_turn =
     | E.amount <= No
 | when Remove: $strip{?amount><No} //strip genes with zero duration
 | for Name,Data RunEs: $run_gene{Name Data Me $xyz}
-| $mov <= $class.mov
+| Mov = $class.mov
+| when $hasted: Mov += 3
+| MovInc = Mov
+| when $slowed: MovInc <= (MovInc+1)/2
+| $mov <= min Mov $class.mov+MovInc
 | $fatigue <= max 0: min $fatigue-$stamina $mov-1
 | when $will < $class.will: $will <= $class.will
 

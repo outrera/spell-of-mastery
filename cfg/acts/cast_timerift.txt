@@ -1,0 +1,8 @@
+icon: spell_time
+title: `Time Rift`
+range: 9000
+check: unit
+onInit: when{enemy},add{slowed},strip{hasted},inc{mov -3},visual{slow},sound{slowed},endwhen,
+        when{not+enemy},add{hasted},strip{slowed},inc{mov 3},visual{haste},sound{hasted},endwhen
+hint: boost
+tab: spell

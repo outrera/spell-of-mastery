@@ -9,7 +9,7 @@ order_at Me XYZ =
 | U.order_at{XYZ 0}
 
 view.handle_picked_act2 Actor Act XYZ Target =
-| when Target: $site.blink.init{[4 Target]}
+//| when Target: $site.blink.init{[4 Target]}
 | $site.last_picked <= 0
 | when Act.menu:
   | when Act.onMenu: Actor.effect{Act.onMenu Target XYZ}
@@ -54,7 +54,7 @@ view.handle_pick =
   | XYZ = $cursor
   | less $paused:
     | if not Target then order_at Me $cursor
-      else | $site.blink.init{[4 Target]}
+      else //| $site.blink.init{[4 Target]}
            | order_at Me Target.xyz
   | leave
 | when $mice_click >< pick:
@@ -310,6 +310,9 @@ site.set_mark XYZ Bless Type =
 
 site.update_picked =
 | U = $human.picked
+| when U.id and U.invisible and U.owner.is_enemy{$human}:
+  | U.picked <= 0
+  | $human.picked <= $nil
 | when U.id: U.picked <= 1
 | when not U.id or $last_picked<>U.serial or not U.alive: U.picked <= 0
 | ClearBlessed = not U.id or not U.idle or $last_picked<>U.serial

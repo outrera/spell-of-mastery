@@ -105,7 +105,6 @@ Sound:
 
 
 UI:
-- targeted units shouldn't blink
 - add some description to tabs and menu tabs buttons
 - unit profile and main menu options could be a tabs like all others
 - a line from the portrait of current unit to its location on minimap

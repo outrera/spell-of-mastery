@@ -1,6 +1,0 @@
-icon: spell_haste
-range: 9000
-check: unit
-onInit: when{hasnt.haste},add{hasted},strip{slowed},inc{steps,4},visual{haste},sound{hasted}
-hint: boost
-tab: spell

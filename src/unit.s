@@ -68,6 +68,8 @@ unit.`=picked` State = $flags <= $flags.bitSet{1 State}
 unit.engaged = $flags.bit{2}
 unit.`=engaged` State = $flags <= $flags.bitSet{2 State}
 
+unit.leader = $flags.bit{3}
+
 unit.shelled = $flags.bit{4}
 unit.`=shelled` State = $flags <= $flags.bitSet{4 State}
 
@@ -98,9 +100,10 @@ unit.`=resting` State = $flags <= $flags.bitSet{17 State}
 unit.resisting = $flags.bit{18}
 unit.`=resisting` State = $flags <= $flags.bitSet{18 State}
 
-unit.leader = $flags.bit{19}
+unit.hasted = $flags.bit{19}
+unit.slowed = $flags.bit{20}
 
-unit.disciplined = $flags.bit{20}
+unit.disciplined = $flags.bit{21}
 
 
 //how many other units this unit has killed

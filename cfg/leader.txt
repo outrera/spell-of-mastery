@@ -27,7 +27,7 @@ spells:
       cast_telekinesis
       cast_heal
       cast_lightning
-      cast_haste
+      cast_timerift
       cast_fear
       cast_shell
       cast_antimagic
