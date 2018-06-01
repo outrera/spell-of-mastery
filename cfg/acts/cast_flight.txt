@@ -2,7 +2,7 @@ icon: spell_flight
 gold: 100
 range: 9000
 check: unit
-onInit: when{enemy},send_flying,visual{spell},sound{flight}
-        when{not+enemy},add{flyer},visual{heal},sound{flight}
+onInit: when{enemy},send_flying,visual{spell},sound{flight},endwhen,
+        when{not+enemy},add{flyer},visual{heal},sound{flight},endwhen
 hint: benefit
 tab: spell
