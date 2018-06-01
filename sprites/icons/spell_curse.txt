@@ -1,3 +1,3 @@
-author: `craftpix.net`
-license: `OGA-BY 3.0`
-origin: `https://opengameart.org/content/game-icons-of-fantasy-mage-outfit`
+author: `Nikita Sadkov`
+
+//skull sketch came from `https://opengameart.org/content/public-domain-pack`
