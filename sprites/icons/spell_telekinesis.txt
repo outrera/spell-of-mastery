@@ -1,3 +1,2 @@
-author: `pbmojART (pbmoj.art@gmail.com)`
-license: `CC-BY 3.0`
-origin: `http://opengameart.org/content/fantasy-rpg-icons`
+author: `Nikita Sadkov`
+origin: `Spell of Mastery`
