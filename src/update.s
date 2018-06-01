@@ -195,7 +195,9 @@ LastMovedUnit = -1
 LastMovedTurn = -1
 
 unit.seen_by_human = $site.human.seen{$xyz}
-unit.observe = $main.ui.view.center_at{$xyz+[-3 -3 0] cursor/1}
+unit.observe =
+| less $site.valid{@$xyz}: leave
+| $main.ui.view.center_at{$xyz+[-3 -3 0] cursor/1}
 
 center_on_actor Me =
 | less $owner.human: when $action.type<>idle and $health and $seen_by_human:

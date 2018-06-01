@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Fix telekinesis to push distant units closer
 - Superpose should work with enemy creatures and empty space too, yet damaging caster a little. That way it would be usable even if player has no creatures, could work in combination with heal spell. If player uses superpose on creature, it should awaken and start attacking player's creatures.
 - Fix bless spell, so blessed units would be immune to lifedrain.
 - Think about heal dealing damage to cursed creatures.

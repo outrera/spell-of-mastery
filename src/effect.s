@@ -98,31 +98,38 @@ effect lifedrain Amount:
 | Target.harm{Me Amount}
 | $harm{Me -Amount}
 
-unit.push Target R =
-| B = Target
-| DX,DY,DZ = B.xyz-$xyz
-| N = max 0 R-(DX.abs+DY.abs)
+unit.push Attract TargetXYZ R =
+| B = Me
+| SXYZ = B.xyz
+| DXYZ = TargetXYZ
+| DX,DY,DZ = if Attract then DXYZ-SXYZ else SXYZ-DXYZ
 | BP = B.xyz
-| when $xyz >< BP:
+| when DXYZ >< SXYZ:
   | DX <= B.direction.0
   | DY <= B.direction.1
-| D = if DX.abs>DY.abs then [DX.sign 0 0] else [0 DY.sign 0]
-| TP = BP
+| D = max 1 if DX.abs>DY.abs then DY.abs else DX.abs
+| DX /= D
+| DY /= D
 | Trail = []
-| times I N:
-  | T = BP + D*(I+1)
-  | less $site.valid{@T}: done
-  | F = $site.cellp{T}.floor
-  | less F.vacant: done
-  | Prev = TP
-  | TP <= T
-  | push T Trail
-  | less B.flyer:
-    | when (F-1).tile.liquid: done //ensure water blocks non-flyers
-    | when Prev.2 - F.xyz.2 >> 2: done //cliff stops movement
-| when TP<>BP:
+| P = BP.copy
+| PrevP = P.copy
+| when DY or DX: times I R: for YI max{1 DY.abs}:
+  | P.1 += DY.sign
+  | for XI max{1 DX.abs}:
+    | P.0 += DX.sign
+    | less $site.valid{@P}: _goto done
+    | F = $site.cellp{P}.floor
+    | less F.vacant:  _goto done
+    | PrevZ = PrevP.2
+    | PrevP.init{P}
+    | push P Trail
+    | less B.flyer:
+      | when (F-1).tile.liquid:  _goto done //ensure water blocks non-flyers
+      | when PrevZ - F.xyz.2 >> 2:  _goto done //cliff stops movement
+| _label done
+| when PrevP<>BP:
   | B.reset_goal
-  | B.move{TP}
+  | B.move{PrevP}
   | for T Trail:
     | less got $site.units_get{T}.find{?type><effect_dustend}:
       | $site.visual{T dustend}
@@ -132,10 +139,11 @@ effect telekinesis:
 | when Target.ai><unit and Target.id:
   | less Target.flyer or Target.heavy:
     | when $xyz.mdist{Target.xyz}><1 and ($xyz.1-Target.xyz.1).abs<<1:
-      | $push{Target 6}
+      | Target.push{0 $xyz 6}
       | $sound{blowaway}
       | leave
-    | $owner.notify{"FIXME: implement pushing closer distant creatures"}
+    | Target.push{1 $xyz 6}
+    | $sound{blowaway}
     | leave
 | $owner.spawn{TargetXYZ unit_telekinesis}
 
