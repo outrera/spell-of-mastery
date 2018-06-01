@@ -85,7 +85,6 @@ view.clear =
 
 view.center_at XYZ cursor/0 =
 | X,Y,Z = XYZ
-| when Z><1: say 1/0
 | X = X.clip{1 $site.w}
 | Y = Y.clip{1 $site.h}
 | Z = Z.clip{1 $site.d}

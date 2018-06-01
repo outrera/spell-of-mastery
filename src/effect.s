@@ -153,8 +153,8 @@ effect send_flying:
 
 effect superpose:
 | XYZ = $xyz.copy
-| $move{Target.xyz}
-| Target.move{XYZ}
+| $move{TargetXYZ}
+| when Target: Target.move{XYZ}
 
 effect shake_screen Cycles: $site.shake{Cycles}
 effect color_overlay @List: $site.set_color_overlay{List}
@@ -459,6 +459,7 @@ effect no | No
 
 check_when Me Target C =
 | leave: case C
+  target | Target<>0
   ally | not $owner.is_enemy{Target.owner}
   enemy | $owner.is_enemy{Target.owner}
   confirmed | $main.dialog_result><yes

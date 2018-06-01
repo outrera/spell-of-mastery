@@ -1,9 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Superpose should work with enemy creatures and empty space too, yet damaging caster a little. That way it would be usable even if player has no creatures, could work in combination with heal spell. If player uses superpose on creature, it should awaken and start attacking player's creatures.
 - Fix bless spell, so blessed units would be immune to lifedrain.
-- Think about heal dealing damage to cursed creatures.
+- Think about heal dealing damage to cursed creatures, instead of healing them.
+- Instead this stupid curse, have proper raise dead, so any non-cursed creature would leave corpse after death, such corpse would be available for several turns, and can be brought back as a cursed creature of that type with part of its health. (make sure such raised creatures don't count in scraps).
 - Ensure all spells handle concentration properly. Concentration should increase when unit stands doing nothing.
 - Ensure AI uses all spells properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.

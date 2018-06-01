@@ -39,7 +39,7 @@ spells:
       cast_detonate
       cast_armageddon
       cast_subvert
-      cast_superpose
+      cast_teleport
       )
 
 
