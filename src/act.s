@@ -1,10 +1,4 @@
-use util macros
-
-AllowedChecks =
-  [land water clear seen below outdoor owned ally
-   non_leader non_disciplined organic will
-   menu any unit empty self
-   node placeable c_fullhp]
+use util macros act_
 
 type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
          hint/0 tab/0 room/0
@@ -59,87 +53,106 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
 | Flags = []
 | for E [@$onInit @$onEnd]: case E [add Name]: push Name Flags
 | $flags <= Flags
-| T = AllowedChecks{[? 0]}.table
-| As = $check
-| less As.is_list: As <= [As]
-| for A As:
-  | when no T.A: bad "Act [$name]: illegal check item `[A]`"
-  | T.A <= 1
-| less T.unit or T.any or T.empty or T.self or T.menu:
-  | bad "Act [$name]: missing check target type."
-| $check <= T
+| Cs = $check
+| less Cs.is_list: Cs <= [Cs]
+| $check <= Cs.flip.list
+
+CheckTable = t
+
+defcheck any:
+
+defcheck self:
+
+defcheck menu:
+
+defcheck unit: when not Target or Target.removed: leave "Needs unit target."
+
+defcheck empty:
+| when $site.block_at{XYZ}: leave "Needs empty floor."
+
+defcheck will:
+| when Target.will > $will:
+  | leave "Needs [Target.will] concentration."
+
+defcheck clear:
+| less $cell.is_floor_empty: leave "Needs clear floor."
+
+defcheck land:
+| Below = $site.at{XYZ.0 XYZ.1 XYZ.2-1}
+| when Below.liquid or Below.type><void: leave "Needs land."
+
+defcheck water:
+| Below = $site.at{XYZ.0 XYZ.1 XYZ.2-1}
+| when Below.type <> water: leave "Needs water."
+
+defcheck outdoor: less $site.outdoor{XYZ}: leave "Needs outdoor space."
+
+defcheck ally:
+| less Target: leave 1
+| when $is_enemy{Target}: leave "Needs ally."
+
+defcheck owned:
+| less Target: leave 1
+| when Target.owner.id <> $owner.id:
+  | leave "Needs a unit you own."
+
+defcheck non_leader:
+| less Target: leave 1
+| when Target.leader: leave "Needs non-leader."
+
+defcheck non_disciplined:
+| less Target: leave 1
+| when Target.disciplined: leave "Needs non-disciplined unit."
+
+defcheck organic:
+| less Target: leave 1
+| less Target.has{organic}: leave "Needs organic."
+
+defcheck c_fullhp: when $hp < $class.hp: leave "Needs full health."
+
+defcheck seen:
+| less $site.seen_from{$xyz XYZ}: leave "Needs to be in line of sight."
+
+defcheck node:
+| Node = $site.cellp{XYZ}.units.find{?type><special_node}
+| when no Node: leave "Needs node."
+| when Node.blessed: leave "Already activated."
+
+defcheck below: when XYZ.2>>$xyz.2: leave "Needs lower target."
+
+defcheck placeable:
+| less $placeable_at{$site.cellp{XYZ}}:
+  | leave "Needs place where this unit can stand."
+
+defcheck got Gene Err:
+| less Target: leave 1
+| less Target.has{Gene}: leave Err
+
+defcheck no Gene Err:
+| less Target: leave 1
+| when Target.has{Gene}: leave Err
 
 act.validate Actor XYZ Target Invalid =
-| T = $check
 | less Invalid: Invalid <= | M =>
-| O = Actor.owner
 | when Actor.moves < $mov:
   | Invalid{"Needs [$mov] movement points."}
   | leave 0
-| less O.seen{XYZ}:
+| less Actor.owner.seen{XYZ}:
   | Invalid{"Needs seen territory."}
   | leave 0
-| when T.unit and not Target or Target.removed: leave 0
-| when T.will and Target and Target.will > $will:
-  | Invalid{"Needs [Target.will] will."}
-  | leave 0
-| Wr = Actor.site
-| when T.clear:
-  | less Actor.cell.is_floor_empty:
-    | Invalid{"Needs clear floor."}
+| for C $check:
+  | Args = []
+  | when C.is_list:
+    | Args <= C.tail.list
+    | C <= C.0
+  | Fn = CheckTable.C
+  | when no Fn:
+    | Invalid{"Act [$name] has invalid check [C]"}
     | leave 0
-| when T.empty and Wr.block_at{XYZ}:
-  | Invalid{"Needs empty floor."}
-  | leave 0
-| Below = Wr.at{XYZ.0 XYZ.1 XYZ.2-1}
-| when T.land and (Below.liquid or Below.type><void):
-  | Invalid{"Needs land."}
-  | leave 0
-| when T.ally and Actor.is_enemy{Target}:
-  | Invalid{"Needs ally."}
-  | leave 0
-| when T.owned and Target and Target.owner.id<>O.id:
-  | Invalid{"Needs a unit you own."}
-  | leave 0 
-| when T.water and Below.type <> water:
-  | Invalid{"Needs water."}
-  | leave 0
-| when T.outdoor and not Wr.outdoor{XYZ}:
-  | Invalid{"Needs outdoor space."}
-  | leave 0
-| when T.non_leader and Target and Target.leader:
-  | Invalid{"Needs non-leader."}
-  | leave 0
-| when T.non_disciplined and Target and Target.disciplined:
-  | Invalid{"Needs non-disciplined unit."}
-  | leave 0
-| when T.organic and not Target.has{organic}:
-  | Invalid{"Needs organic."}
-  | leave 0
-| when T.c_fullhp and Actor.hp < Actor.class.hp:
-  | Invalid{"Needs full health."}
-  | leave 0
-| when T.seen and not Wr.seen_from{Actor.xyz XYZ}:
-  | Invalid{"Needs to be in line of sight."}
-  | leave 0
-| Cell = Wr.cellp{XYZ}
-| when T.node:
-  | Node = Cell.units.find{?type><special_node}
-  | when no Node:
-    | Invalid{"Needs node."}
+  | R = Fn Actor Target XYZ Args
+  | when R.is_text:
+    | Invalid{R}
     | leave 0
-  | when Node.blessed:
-    | Invalid{"Already activated."}
-    | leave 0
-| when T.below and XYZ.2>>Actor.xyz.2:
-  | Invalid{"Needs lower target."}
-  | leave 0
-| when T.placeable and not Actor.placeable_at{Cell}:
-  | Invalid{"Needs place where this unit can stand."}
-  | leave 0
-| when $name >< room_demolish and not Below.cost:
-  | Invalid{"Cant demolish this."}
-  | leave 0
 | 1
 
 //turns on/off act(s) for player(s)

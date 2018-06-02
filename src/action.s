@@ -179,7 +179,8 @@ action.main = $unit.main
 
 action.cost =
 | Cost = $act.cost
-| when $target and $act.check.will: Cost += $target.class.will
+| when $target and $act.check.has{will}:
+  | Cost += $target.class.will
 | Cost
 action.check = $act.check
 action.onInit = $act.onInit

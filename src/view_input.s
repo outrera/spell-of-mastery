@@ -21,7 +21,7 @@ view.handle_picked_act2 Actor Act XYZ Target =
 
 view.handle_picked_act Target =
 | less $mice_click><pick:
-  | when $site.act.check.unit:
+  | when $site.act.check.has{unit}:
     | Cur = if Target then \ui_cursor_target else \ui_cursor_target2
     | get_gui{}.cursor <= $main.img{Cur}
   | leave

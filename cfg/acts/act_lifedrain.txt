@@ -4,7 +4,7 @@ lore: 0
 cost: 0
 cool: 16
 range: 4
-check: organic,unit
+check: organic,no{bless `Can't lifedrain blessed creature`},unit
 onInit: lifedrain{full},visual{lifedrain},sound{lifedrain},self,visual{heal}
 hint: lifedrain
 tab: spell
