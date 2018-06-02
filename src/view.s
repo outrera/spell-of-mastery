@@ -118,6 +118,11 @@ view.infoline =
   | Stats <= "[Stats] S:[U.sight] R:[U.range] W:[U.will]/[U.class.will]"
   | Id = if $site.editor then "[U.id]" else ""
   | Unit <= "[U.title][Id] [Stats]"
-| "[Unit]\n[Land]"
+| Corpse = ""
+| Cs = $site.cellp{$cursor}.units.keep{?type><special_corpse}
+| less Cs.end:
+  | Class = $main.classes.(Cs.0.get{corpse})
+  | Corpse <= "; [Class.title] corpse"
+| "[Unit]\n[Land][Corpse]"
 
 export view
