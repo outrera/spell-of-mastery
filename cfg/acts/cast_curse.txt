@@ -1,7 +1,0 @@
-icon: spell_curse
-gold: 20
-range: 9000
-check: unit
-onInit: strip{poison},add{cursed},visual{curse},sound{curse}
-hint: curse
-tab: spell

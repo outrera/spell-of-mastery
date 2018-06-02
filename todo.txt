@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Think about heal dealing damage to cursed creatures, instead of healing them.
-- Instead this stupid curse, have proper raise dead, so any non-cursed creature would leave corpse after death, such corpse would be available for several turns, and can be brought back as a cursed creature of that type with part of its health. (make sure such raised creatures don't count in scraps).
+- Heal should deal damage to undead creatures, instead of healing them, because they are too powerful.
 - Ensure all spells handle concentration properly. Concentration should increase when unit stands doing nothing.
 - Ensure AI uses all spells properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.

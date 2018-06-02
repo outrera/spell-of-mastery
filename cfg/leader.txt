@@ -18,7 +18,7 @@ pickable: 1
 passable: 0
 ai: unit
 item: 0
-inborn: (organic disciplined leader)
+inborn: (organic disciplined nocorpse leader)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
 acts: (act_fireball act_mastery)
@@ -32,7 +32,7 @@ spells:
       cast_shell
       cast_antimagic
       cast_bless
-      cast_curse
+      cast_raisedead
       cast_invisibility
       cast_firestorm
       cast_flight

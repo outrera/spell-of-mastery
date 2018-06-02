@@ -85,7 +85,8 @@ unit.amphibian = $flags.bit{11}
 unit.invisible = $flags.bit{12}
 unit.blessed = $flags.bit{13}
 unit.`=blessed` State = $flags <= $flags.bitSet{13 State}
-unit.cursed = $flags.bit{14}
+unit.undead = $flags.bit{14}
+unit.`=undead` State = $flags <= $flags.bitSet{14 State}
 unit.afraid = $flags.bit{15}
 
 unit.can_stand_on_water = $flyer or $swimmer or $amphibian
@@ -104,6 +105,8 @@ unit.hasted = $flags.bit{19}
 unit.slowed = $flags.bit{20}
 
 unit.disciplined = $flags.bit{21}
+unit.nocorpse = $flags.bit{22}
+unit.`=nocorpse` State = $flags <= $flags.bitSet{22 State}
 
 
 //how many other units this unit has killed
@@ -418,9 +421,9 @@ unit.assault Target =
 
 unit.hit Damage Target =
 | Damage = if Damage><user then $atk else Damage
-| when Target.cursed:
+| when Target.undead:
   | when $blessed: Damage += Damage
-  | less $blessed: Damage <= max 1 (Damage+1)/2
+  | less $blessed: Damage <= max 1 (Damage+2)/3
 | $run_genes{attack}
 | Target.harm{Me Damage}
 
@@ -441,7 +444,9 @@ unit.harm Attacker Damage =
   | when $anim><idle or $anim><move: $animate{hit}
   | leave
 | when Attacker:
-  | $owner.data.lossage += $gold
+  | when $gold:
+    | when not $undead or $inborn.has{undead}:
+    | $owner.data.lossage += $gold
   | Attacker.kills++
 | $die
 | $action.cycles <= 1

@@ -330,6 +330,19 @@ effect spawn What:
 | when What><auto: What <= $action.act.name
 | $owner.spawn{TargetXYZ What}
 
+effect resurrect:
+| Cell = $site.cellp{TargetXYZ}
+| less Cell.vacant: leave
+| Cs = Cell.units.keep{?type><special_corpse}
+| when Cs.end: leave
+| C = Cs.0
+| U = $owner.spawn{TargetXYZ C.get{corpse}}
+| U.undead <= 1
+| U.nocorpse <= 1
+| U.hp <= max 1 U.hp/2
+| Cs{?free}
+| 0
+
 effect spawn_item ItemType Amount: $cell.add_item{ItemType Amount}
 
 effect drop ItemType Amount:

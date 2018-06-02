@@ -5,7 +5,7 @@ health: 8
 atk: 3
 def: 2
 speed: 28
-inborn: (cursed flyer)
+inborn: (undead nocorpse flyer)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood_undead},sound{wraith_hit}
 onDeath: sound{wraith_die}

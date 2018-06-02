@@ -70,6 +70,10 @@ defcheck unit: when not Target or Target.removed: leave "Needs unit target."
 defcheck empty:
 | when $site.block_at{XYZ}: leave "Needs empty floor."
 
+defcheck corpse:
+| Cs = $site.cellp{XYZ}.units.keep{?type><special_corpse}
+| when Cs.end: leave "Needs a corpse."
+
 defcheck will:
 | when Target.will > $will:
   | leave "Needs [Target.will] concentration."

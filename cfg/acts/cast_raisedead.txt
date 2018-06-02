@@ -1,0 +1,8 @@
+icon: spell_raisedead
+title: `Raise Dead`
+gold: 50
+range: 9000
+check: empty,corpse
+onInit: resurrect,visual{curse},sound{curse}
+hint: raise
+tab: spell

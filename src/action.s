@@ -79,6 +79,22 @@ dact missile.finish
 | Source.effect{Es $target $xyz}
 | U.free
 
+unit.spawn_corpse =
+| when $removed: leave
+| when $nocorpse: leave
+| less $site.valid{@$xyz}: leave
+| less $ai><unit: leave
+| less got $sprite.anims.corpse: leave
+| $cell.units.keep{?type><special_corpse}{?free}
+| C = $owner.alloc_unit{special_corpse}
+| C.move{$xyz}
+| C.pick_facing{$facing}
+| C.fxyz.init{$fxyz}
+| when $sprite.anims.corpse.0.0:
+  | C.sprite <= $sprite
+  | C.animate{corpse}
+| C.set{corpse $type}
+
 dact die.start
 | U = $unit
 | U.drop_all
@@ -90,6 +106,7 @@ dact die.start
 dact die.finish
 | U = $unit
 | when U.leader and U.hp << 0: U.owner.lost_leader{U}
+| U.spawn_corpse
 | U.free
 
 dact swap.valid

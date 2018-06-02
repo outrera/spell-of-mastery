@@ -7,7 +7,7 @@ def: 6
 sight: 10
 will: 15
 speed: 20
-inborn: (organic heavy flyer)
+inborn: (organic nocorpse heavy flyer)
 onAttack: sound{dragon_attack}
 onHit: visual{incinerate},shell,hit{user},sound{dragon_flame}
 onHarm: visual{blood},sound{dragon_hit}

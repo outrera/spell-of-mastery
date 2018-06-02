@@ -1,5 +1,6 @@
 sprite: special_node
 ai: node
-box_xy: (-1 -1)
+box_xy: (-2 -2)
+draworder: 50
 platform: 8
 //inborn: (node_aura)

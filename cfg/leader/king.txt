@@ -3,7 +3,7 @@ range: 1
 health: 40
 atk: 5
 def: 6
-inborn: (organic leader bless)
+inborn: (organic leader nocorpse bless)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{king_hit}
 onDeath: sound{male_die}

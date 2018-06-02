@@ -110,6 +110,8 @@ sprite.init_anims Anims =
   | [Name Frames]
 | when got $anims.death and no $anims.hit:
   | $anims.hit <= [[$anims.idle.0.0 24]] //supply default hit anim
+| when got $anims.death and no $anims.corpse:
+  | $anims.corpse <= [[$anims.death.last.0 24]] //supply default corpse anim
 | Attack = $anims.attack
 | when no Attack:
   | Attack <= $anims.idle
