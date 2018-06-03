@@ -34,16 +34,23 @@ unit.ai_pick_target Act =
     else if R><0 then [Me]
     else $site.units_in_range{Me.xyz Act.range}
 | Explored = $owner.sight
-| Ts = Targets.skip{?empty}.keep{?alive}
+| Ts = Targets.skip{?ai><unit}.keep{?alive}
 | Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
 | Hint = Act.hint
 | if Hint >< heal then
-    | Ts <= Ts.keep{?is_ally{Me}}.keep{?harmed}
+    | Ts1 = Ts.keep{?is_ally{Me}}.keep{?harmed}.skip{?undead}
+    | Ts2 = Ts.skip{?is_ally{Me}}.keep{?undead}
+    | Ts <= [@Ts1 @Ts2].list
   else if Hint >< lifedrain then
     | less $harmed: leave 0
-    | Ts <= Ts.keep{?is_enemy{Me}}
+    | Ts <= Ts.keep{?is_enemy{Me}}.skip{?undead}.skip{?blessed}
   else if Hint >< harm then
     | Ts <= Ts.keep{?is_enemy{Me}}
+  else if Hint >< telekinesis then
+    | Ts <= Ts.keep{?is_enemy{Me}}.skip{?heavy}
+    | Ts <= Ts.keep{T=>T.xyz.mdist{$xyz}><1}
+  else if Hint >< flight then
+    | Ts <= Ts.keep{?is_ally{Me}}.skip{?heavy}.skip{?flyer}
   else if Hint >< benefit then
     | Ts <= Ts.keep{?is_ally{Me}}
   else leave 0
@@ -51,7 +58,7 @@ unit.ai_pick_target Act =
 | for Flag Act.flags //avoid overriding
   | FlagN = getUnitFlagsTable{}.Flag
   | when got FlagN: Ts <= Ts.skip{T => T.flags.bit{FlagN}}
-| if Ts.size then Ts.0 else 0
+| if Ts.size then Ts.rand else 0
 
 unit.ai_ability_sub Act =
 | when Act.mov > $moves: leave 0

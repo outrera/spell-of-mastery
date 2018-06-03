@@ -337,7 +337,7 @@ effect resurrect:
 | when Cs.end: leave
 | C = Cs.0
 | U = $owner.spawn{TargetXYZ C.get{corpse}}
-| U.undead <= 1
+| U.add_gene{undead 0 []}
 | U.nocorpse <= 1
 | U.hp <= max 1 U.hp/2
 | Cs{?free}

@@ -2,6 +2,7 @@ icon: spell_heal
 gold: 150
 range: 9000
 check: unit
-onInit: heal{9},strip{poison},visual{heal},sound{heal}
+onInit: when{hasnt.undead},heal{9},strip{poison},visual{heal},sound{heal},endwhen,
+        when{has.undead},visual{heal},sound{heal},resist,harm{9},endwhen
 hint: heal
 tab: spell

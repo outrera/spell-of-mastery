@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Heal should deal damage to undead creatures, instead of healing them, because they are too powerful.
+- Ensure jump down works properly.
 - Ensure all spells handle concentration properly. Concentration should increase when unit stands doing nothing.
 - Ensure AI uses all spells properly.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame.

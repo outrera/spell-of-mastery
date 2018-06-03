@@ -1,6 +1,7 @@
 icon: spell_telekinesis
 hotkey: k
 gold: 20
+cool: 5
 range: 9000
 check: any
 onInit: sound{pentagram}

@@ -1,8 +1,8 @@
 icon: spell_flight
 gold: 100
 range: 9000
-check: unit
+check: no{heavy `Creature is too heavy to be lifted.`},unit
 onInit: when{enemy},send_flying,visual{spell},sound{flight},endwhen,
         when{not+enemy},add{flyer},visual{heal},sound{flight},endwhen
-hint: benefit
+hint: flight
 tab: spell
