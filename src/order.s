@@ -38,7 +38,7 @@ unit.order_at Goal Act =
   | Goal
 | when $owner.human and Act.name<>attack and Act.range>>1 and Act.range<9000:
   | Move = Units.keep{?type><mark_cast}
-  | less Move.size
+  | less Move.size: when Act.name<>act_jump:
     | $owner.notify{'Out of range!'}
     | leave
 | $reset_goal

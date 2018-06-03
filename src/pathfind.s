@@ -196,7 +196,7 @@ unit.reachable =
   | F = N.floor
   | less F.block:
     | when fxn N-F>1 and fxn $moves>>$jump_cost:
-      | less got Xs.find{?1<>F}: push [jump F] Xs
+      | less got Xs.find{?1><F}: push [jump F] Xs
 | when fxn $range><1 and not $afraid and fxn $moves>>1:
   | for E $enemies_in_range:
     | when $can_attack{$cell E.cell}: push [attack E.cell] Xs

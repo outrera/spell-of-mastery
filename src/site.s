@@ -117,6 +117,7 @@ type site{main}
    marks
    free_marks
    last_picked
+   last_pickedXYZ/[0 0 0]
    cfg
    data/(t)
    events
@@ -244,6 +245,7 @@ site.clear =
 | $marks.clear
 | $free_marks.clear
 | $last_picked <= 0
+| $last_pickedXYZ.init{0,0,0}
 | for K,V $data: $data.K <= No
 | for U $active.list: U.active <= 0
 | $active.clear

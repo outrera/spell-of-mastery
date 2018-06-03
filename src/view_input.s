@@ -310,6 +310,9 @@ site.set_mark XYZ Bless Type =
 
 site.update_picked =
 | U = $human.picked
+| when $last_pickedXYZ<>U.xyz:
+  | $last_picked <= 0
+  | $last_pickedXYZ.init{U.xyz}
 | when U.id and U.invisible and U.owner.is_enemy{$human}:
   | U.picked <= 0
   | $human.picked <= $nil

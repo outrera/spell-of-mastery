@@ -293,7 +293,7 @@ unit_landed Me =
 | $strip{fallheight}
 | when FH>0:
   | $sound{land}
-  | $harm{Me FH*3-2}
+  | $harm{Me FH*2-1}
 
 unit.sink =
 | $sound{sink}
