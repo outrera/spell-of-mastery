@@ -6,7 +6,8 @@ maxPicks: 2
 pickChance: 50
 range: 9000
 check: non_disciplined,unit
-onInit: visual{hypnotize},sound{subvert},resist,charm{owner}
+onInit: when{enemy},visual{hypnotize},sound{subvert},resist,charm{owner},endwhen,
+        when{not+enemy},add{disciplined},visual{hypnotize},sound{subvert},endwhen
 onEnd: ()
 hint: subvert
 tab: spell

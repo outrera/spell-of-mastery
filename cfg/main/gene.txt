@@ -2,7 +2,7 @@ flags: attacker{0 -1},picked{1 -1},engaged{2 1}
       ,leader{3 -1},shell{4 2},flyer{5 -1},heavy{6 -1},fireaura{7 0},organic{8 -1}
       ,climber{9 -1},swimmer{10 -1},amphibian{11 -1},invisible{12 -1}
       ,bless{13 6},undead{14 3},afraid{15 7},mark{16 -1},resting{17 -1}
-      ,resist{18 8},hasted{19 5},slowed{20 10},disciplined{21 -1}
+      ,resist{18 8},hasted{19 5},slowed{20 10},disciplined{21 11}
       ,nocorpse{22 -1}
 
 flyer: on{static}
