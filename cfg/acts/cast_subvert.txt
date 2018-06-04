@@ -1,8 +1,9 @@
 icon: spell_subvert
 hotkey: m
 tier: 4
+cool: 7
 gold: 200
-maxPicks: 2
+maxPicks: 3
 pickChance: 50
 range: 9000
 check: non_disciplined,unit

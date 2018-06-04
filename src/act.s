@@ -74,10 +74,6 @@ defcheck corpse:
 | Cs = $site.cellp{XYZ}.units.keep{?type><special_corpse}
 | when Cs.end: leave "Needs a corpse."
 
-defcheck will:
-| when Target.will > $will:
-  | leave "Needs [Target.will] concentration."
-
 defcheck clear:
 | less $cell.is_floor_empty: leave "Needs clear floor."
 

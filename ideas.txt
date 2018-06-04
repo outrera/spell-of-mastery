@@ -276,6 +276,11 @@ Cons:
    - It could potentially lead to infinite loops, where both sides have two creatures and swap them to restore armor.
 
 
+Regarding will/mana points, that are lost when creature sustains damage.
+   - Will stat determines how many will points that creature gains per turn and total will point limit. Will also determines the cost of casting harmful enchantment on that unit. If unit is harmed, it loses all it accumulated will points, that is here to simulate concentration. In some respects will points are similar to mana points in stereotypic RPGs.
+   - Removed willpower, because they complicate game mechanics and cooldown solve similar problem to mana regeneration. Damage to caster could also affect cooldown timers.
+
+
 Regarding attack of opportunity, when enemy enters the range, if defender has enough action points:
 Pros:
    - Improves tactical depth
@@ -287,7 +292,7 @@ Subvert spell can be implemented differently:
     - Limit subversion time (i.e. just N turns). make sure player can't disband it.
     - paralyze the caster, while he/she controls the creature, allowing only the "Relinquish Control" action.
     - Limit only to low level creatures.
-  Subvert cost seems the easiest to implement and balance. So the best approach would be combining 
+  Subvert cost seems the easiest to implement and balance. So the best approach would be combining
 
 
 Approaches to defense stat implementation:

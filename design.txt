@@ -33,7 +33,7 @@ Kingdom View:
 - Research: at the start of the game and with each turn player gains a number of lore points, which he then spends to research spells and units. Researching new units requires first capturing their souls. Converting gold to research should be possile too, by paying for guest schoolar's R&D. To research a spell, player picks his base, then clicks reasearch button.
 
 Battle View:
-- Each creature major stats: Moves, Health, Attack, Defense, Fatigue, View, Range, and Will. Some magical artifacts and structures can affect these numbers.
+- Each creature has major stats: Moves, Health, Attack, Defense, Fatigue, View, Range. Some magical artifacts and structures can affect these numbers.
 - Moves determines how many movement point or steps this unit gains per turn. One move allows moving one map square. The more complex is the action the more moves it will require per turn.
 - Health determines how much damage that unit could take, before perishing.
 - Attack determines how many health points that creature's attack removes from victim on its usual attack.
@@ -41,7 +41,6 @@ Battle View:
 - Fatigue decreases movement points and grows exponentially from performing actions. Each turn fatigue is decreased by creature's stamina.
 - Sight determines how far this unit sees.
 - Range determines how far this creature can attack with its normal attack. Not that for artillery units range is usually longer than their sight.
-- Will stat determines how many will points that creature gains per turn and total will point limit. Will also determines the cost of casting harmful enchantment on that unit. If unit is harmed, it loses all it accumulated will points, that is here to simulate concentration. In some respects will points are similar to mana points in stereotypic RPGs.
 - Typial humanoid creature has 6 moves per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5, preventing leader to be able to run away from most creatures. Casting spell or attacking requires 4 moves. Haste gives +4 moves, allowing most units to attack twice.
 - Tier 1 creature costs 5 mana, while ultimate creature, dragon, costs 20.
 - Fall damage equals to FallHeight*3-2

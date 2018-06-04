@@ -194,11 +194,7 @@ site.action Unit = action Unit
 
 action.main = $unit.main
 
-action.cost =
-| Cost = $act.cost
-| when $target and $act.check.has{will}:
-  | Cost += $target.class.will
-| Cost
+action.cost = $act.cost
 action.check = $act.check
 action.onInit = $act.onInit
 action.onHit =

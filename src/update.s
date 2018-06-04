@@ -211,7 +211,6 @@ handle_next_action_cost Me =
 | less $next_action.type: leave 0
 | less $next_action.valid: leave 0
 | when $moves < $next_action.act.mov: leave 0
-| $will -= $next_action.cost
 | 1
 
 

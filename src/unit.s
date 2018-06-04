@@ -41,11 +41,10 @@ type unit.$class{Id Site}
   goal_act //what to do with the goal
   host //what unit hosts this sprite
   host_serial //when host dies, its serial changes
-  fatigue //fatigued unit will less moves
+  fatigue //fatigued unit will have less moves
   mov //movement points remained this turn
   hp // hit points
   def //defense points remained
-  will //will points remained
   flags //various flags (mostly genes)
   genes/[] //active genes
   can_move //movement function
@@ -173,7 +172,6 @@ unit.init Class =
   | $active <= 1
   | $mov <= $class.mov
   | $fatigue <= 0
-  | $will <= $class.will
   | $handled <= 0
   | $aistate <= \initial
   | $ordered.type <= 0

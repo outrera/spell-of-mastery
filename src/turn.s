@@ -17,7 +17,6 @@ unit.new_turn =
 | when $slowed: MovInc <= (MovInc+1)/2
 | $mov <= min Mov $class.mov+MovInc
 | $fatigue <= max 0: min $fatigue-$stamina $mov-1
-| when $will < $class.will: $will <= $class.will
 
 unit.end_turn_invisibility_check =
 | less $invisible: leave
