@@ -34,9 +34,10 @@ unit.ai_pick_target Act =
     else if R><0 then [Me]
     else $site.units_in_range{Me.xyz Act.range}
 | Explored = $owner.sight
-| Ts = Targets.skip{?ai><unit}.keep{?alive}
+| Ts = Targets.keep{?ai><unit}.keep{?alive}
 | Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
 | Hint = Act.hint
+//| less Hint >< superpose: leave 0
 | if Hint >< heal then
     | Ts1 = Ts.keep{?is_ally{Me}}.keep{?harmed}.skip{?undead}
     | Ts2 = Ts.skip{?is_ally{Me}}.keep{?undead}
@@ -46,9 +47,32 @@ unit.ai_pick_target Act =
     | Ts <= Ts.keep{?is_enemy{Me}}.skip{?undead}.skip{?blessed}
   else if Hint >< harm then
     | Ts <= Ts.keep{?is_enemy{Me}}
+  else if Hint >< raise then
+    | Player = $owner
+    | Ts <= $site.active.list.keep{U=>Player.seen{U.xyz}}
+                     .keep{(?ai><corpse and not ?removed)}
+    | Xs = Ts{T=>[T $main.classes.(T.get{corpse})]}.sort{?1.gold>??1.gold}
+    | when Xs.size:
+      | G = Xs.0.1.gold
+      | Xs <= Xs.skip{?1.gold<G}
+    | Ts <= Xs{?0}
+  else if Hint >< superpose then
+    | less $leader: leave 0
+    | less got Ts.keep{?is_enemy{Me}}.find{T=>T.xyz.mdist{$xyz}><1}:
+      | leave 0
+    | Ts <= Ts.keep{?owner.id><$owner.id}
   else if Hint >< telekinesis then
-    | Ts <= Ts.keep{?is_enemy{Me}}.skip{?heavy}
-    | Ts <= Ts.keep{T=>T.xyz.mdist{$xyz}><1}
+    | Ts <= Ts.keep{?is_enemy{Me}}.skip{?heavy}.skip{?flyer}
+    | TR = []
+    | badplace C =
+      | CF = C.floor
+      | C-CF > 1 or (CF-1).tile.liquid
+    | for T Ts.keep{T=>T.xyz.mdist{$xyz}><1}:
+      | when badplace T.telepush{0 $xyz -6}: push T TR
+    | when TR.end:
+      | for T  Ts.skip{T=>T.xyz.mdist{$xyz}><1}:
+        | when badplace T.telepush{1 $xyz -6}: push T TR
+    | Ts <= TR
   else if Hint >< flight then
     | Ts <= Ts.keep{?is_ally{Me}}.skip{?heavy}.skip{?flyer}
   else if Hint >< benefit then

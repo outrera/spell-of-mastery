@@ -98,10 +98,14 @@ effect lifedrain Amount:
 | Target.harm{Me Amount}
 | $harm{Me -Amount}
 
-unit.push Attract TargetXYZ R =
+unit.telepush Attract TargetXYZ R =
 | B = Me
 | SXYZ = B.xyz
 | DXYZ = TargetXYZ
+| Test = 0
+| when R<0:
+  | Test <= 1
+  | R <= -R
 | DX,DY,DZ = if Attract then DXYZ-SXYZ else SXYZ-DXYZ
 | BP = B.xyz
 | when DXYZ >< SXYZ:
@@ -127,6 +131,7 @@ unit.push Attract TargetXYZ R =
       | when (F-1).tile.liquid:  _goto done //ensure water blocks non-flyers
       | when PrevZ - F.xyz.2 >> 2:  _goto done //cliff stops movement
 | _label done
+| when Test: leave $site.cellp{PrevP}
 | when PrevP<>BP:
   | B.reset_goal
   | B.move{PrevP}
@@ -139,10 +144,10 @@ effect telekinesis:
 | when Target.ai><unit and Target.id:
   | less Target.flyer or Target.heavy:
     | when $xyz.mdist{Target.xyz}><1 and ($xyz.1-Target.xyz.1).abs<<1:
-      | Target.push{0 $xyz 6}
+      | Target.telepush{0 $xyz 6}
       | $sound{blowaway}
       | leave
-    | Target.push{1 $xyz 6}
+    | Target.telepush{1 $xyz 6}
     | $sound{blowaway}
     | leave
 | $owner.spawn{TargetXYZ unit_telekinesis}
@@ -333,7 +338,7 @@ effect spawn What:
 effect resurrect:
 | Cell = $site.cellp{TargetXYZ}
 | less Cell.vacant: leave
-| Cs = Cell.units.keep{?type><special_corpse}
+| Cs = Cell.units.keep{?ai><corpse}
 | when Cs.end: leave
 | C = Cs.0
 | U = $owner.spawn{TargetXYZ C.get{corpse}}
