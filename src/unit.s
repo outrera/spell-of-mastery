@@ -116,7 +116,7 @@ unit.`=kills` Value = $set{kills Value}
 unit.sinned = $get{sinned}
 unit.`=sinned` Value = $set{sinned Value}
 
-unit.punish_hp = if $kills>>1 then $hp else $sinned
+unit.punish_hp = if $kills>>1 then $hp*2 else $sinned
 
 unit.`=backtrack` XYZ =
 | less XYZ:
