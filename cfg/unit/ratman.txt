@@ -1,7 +1,7 @@
 tier: 1
 cost: 100,4,50
 health: 8
-atk: 3
+atk: 30//3
 def: 2
 will: 2
 inborn: (organic)

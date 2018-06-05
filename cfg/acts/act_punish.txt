@@ -1,10 +1,10 @@
-icon: spell_heal
+icon: act_attack
 title: `Punish`
 lore: 0
 cost: 0
-cool: 10
+cool: 5
 range: 4
-check: non_leader,unit
+check: non_leader,sinner,unit
 onHit: shell,sound{devil_attack},punish{1000}
 hint: punish
 tab: spell

@@ -37,7 +37,7 @@ unit.ai_pick_target Act =
 | Ts = Targets.keep{?ai><unit}.keep{?alive}
 | Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
 | Hint = Act.hint
-//| less Hint >< superpose: leave 0
+//| less Hint >< teleport: leave 0
 | if Hint >< heal then
     | Ts1 = Ts.keep{?is_ally{Me}}.keep{?harmed}.skip{?undead}
     | Ts2 = Ts.skip{?is_ally{Me}}.keep{?undead}
@@ -61,6 +61,18 @@ unit.ai_pick_target Act =
     | less got Ts.keep{?is_enemy{Me}}.find{T=>T.xyz.mdist{$xyz}><1}:
       | leave 0
     | Ts <= Ts.keep{?owner.id><$owner.id}
+  else if Hint >< teleport then
+    | less $type><unit_devil: leave 0
+    | Ts <= Ts.keep{?is_enemy{Me}}.keep{?punish_hp>3}
+    | TR = []
+    | for T Ts: for C T.cell.neibs{}{?floor}:
+      | when C.vacant and T.xyz.2-C.xyz.2 > -1: push C.xyz TR
+    | Ts <= TR.keep{T => Act.validate{Me T 0 0}}
+    | when Ts.end: 0
+    | leave Ts.rand
+  else if Hint >< punish then
+    | Ts <= Ts.keep{?is_enemy{Me}}.keep{?punish_hp>3}
+    | Ts <= Ts.keep{T=>T.xyz.mdist{$xyz}><1}
   else if Hint >< telekinesis then
     | Ts <= Ts.keep{?is_enemy{Me}}.skip{?heavy}.skip{?flyer}
     | TR = []
@@ -93,7 +105,8 @@ unit.ai_ability_sub Act =
 | less Target: leave 0 //no suitable target for this act
 | Cost = Act.cost
 | when $can{Act}
-  | $order_act{Act Target}
+  | if Target.is_unit then $order_act{Act Target}
+    else $order_at{Target Act}
   | leave 1
 | 0
 

@@ -124,6 +124,10 @@ defcheck placeable:
 | less $placeable_at{$site.cellp{XYZ}}:
   | leave "Needs place where this unit can stand."
 
+defcheck sinner:
+| less Target: leave 1
+| less Target.punish_hp: leave "Needs sinner."
+
 defcheck got Gene Err:
 | less Target: leave 1
 | less Target.has{Gene}: leave Err

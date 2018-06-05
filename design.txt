@@ -83,7 +83,7 @@ Wraith: undead, incorporeal, sees through walls, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: heavy, has stun-attack ability, disabling enemy for a single turn.
-Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone deals damage equivalent to cumulative damage target has ever deed.
+Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone, then deals damage equivalent to cumulative damage target has ever deed to other creatures.
 Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy

@@ -1,4 +1,4 @@
-icon: attack
+icon: act_attack
 hotkey: t
 mov: 1
 fatigue: 2

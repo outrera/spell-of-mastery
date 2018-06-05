@@ -88,9 +88,7 @@ effect harm Damage: Target.harm{Me Damage}
 
 effect hit Damage: $hit{Damage Target}
 
-effect punish MaxDamage:
-| Damage = if Target.kills>>1 then Target.hp else Target.sinned
-| Target.harm{Me min{MaxDamage Damage}}
+effect punish MaxDamage: Target.harm{Me min{MaxDamage Target.punish_hp}}
 
 effect lifedrain Amount:
 | when Amount >< full: Amount <= $class.hp
