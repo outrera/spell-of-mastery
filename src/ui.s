@@ -84,14 +84,6 @@ ui.render =
 | for PP $playerPickers: PP.picked <= PP.name >< HumanName
 | $tabs.render
 
-ui.process_input Base In =
-| Base.input{In}
-| when $inputBlocker.show: leave 
-| case In [key Key 1]
-  | for Icon $actIcons: when Icon.show: when Icon.hotkey><Key:
-    | $hotKeyInvoke <= 1
-    | Icon.on_click{}{Icon}
-
 ui.pick_title_menu pause/1 =
 | when Pause: $pause
 | $main.music{"title.ogg"}
@@ -158,7 +150,7 @@ ui.init =
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg
 | Tabs = $create_dialog_tabs{enter_site}
-| $tabs <= input_split Tabs: Base In => $process_input{Base In}
+| $tabs <= Tabs
 | $bankList.pick{0}
 | $view.set_brush{0,0}
 | less StartInEditor: $enter_site{0}

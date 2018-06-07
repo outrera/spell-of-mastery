@@ -1,9 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- When player presses a key, while site view is in focus, then click minimap and releases key, that key gets locked. Fix that
 - Better unit stat indicator: add them as icons to the right of selected unit's frame, or maybe as a popup, near mouse
-- Better gold sprite
+- Better gold sprite, use simple gold pile
 - Trees should be height=3
 - Finish forest parts.
 - Countering city raids and city blueprint

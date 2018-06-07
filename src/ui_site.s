@@ -114,18 +114,31 @@ ui.create_ingame_ui =
   | 4   $height-124 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0   PY          | $playerWidget
 
+
+ui.process_ingame_input Base In =
+| when $paused: leave 
+| Base.input{In}
+| case In [key Key 1]
+  | for Icon $actIcons: when Icon.show: when Icon.hotkey><Key:
+    | $hotKeyInvoke <= 1
+    | Icon.on_click{}{Icon}
+    | leave
+| case In [key Key 0]
+  | $view.input{In}
+
 ui.create_ingame_dlg =
 | $saveSiteDlg <= $create_save_site_dlg
 | $loadSiteDlg <= $create_load_site_dlg
 | Ingame = dlg w/$width h/$height: mtx
   |  0   0| spacer $width $height
-  |  0   0| $create_ingame_ui
+  |  0   0| input_split $create_ingame_ui: Base In =>
+            | $process_ingame_input{Base In}
   |  0   0| $inputBlocker
   |170 100| $siteProperties
   |170 100| $loadSiteDlg
   |170 100| $saveSiteDlg
   |  0   0| $message_box
-| input_split Ingame: Base In => Base.input{In}
+| Ingame
 
 ui.update = //called by site.update each game cycle
 | when got $site.data.winner:
