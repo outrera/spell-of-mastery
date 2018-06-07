@@ -1,4 +1,4 @@
-use gui widgets ui_icon ui_widgets
+use gui widgets ui_icon ui_widgets ui_minimap
 
 ui.load File =
 | $main.load{File}

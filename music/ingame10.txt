@@ -1,0 +1,3 @@
+author: `Viktor Kraus (https://www.youtube.com/user/Weltenmaler)`
+license: `CC-BY 3.0`
+origin: `https://opengameart.org/content/the-pilgrimage-0`
