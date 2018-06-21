@@ -1,3 +1,3 @@
-author: `Ottorino Respighi`
-license: `Public Domain`
-origin: `https://musopen.org/sheetmusic/10888/ottorino-respighi/ancient-airs-and-dances-suite-no1/`
+Author: `Cleyton R. Xavier 'Doppelganger' (https://soundcloud.com/cleytonr-x)`
+License: `CC-BY-SA 3.0`
+Origin: `https://opengameart.org/content/underwater-theme`

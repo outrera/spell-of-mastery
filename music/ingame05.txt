@@ -1,3 +1,3 @@
-author: `The United States Air Force Heritage of America Band`
-license: `Public Domain`
-origin: `http://imslp.org/wiki/First_Suite_for_Military_Band,_Op.28_No.1_(Holst,_Gustav)`
+Author: `Brandon Morris 'Augmentality' <Brandonmorris12@gmail.com> (http://youtube.com/brandon75689)`
+License: `Public Domain (CC0)`
+Origin: `https://opengameart.org/content/creepy-forest-f`
