@@ -2,7 +2,6 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Better unit stat indicator: add them as icons to the right of selected unit's frame, or maybe as a popup, near mouse
-- Better gold sprite, use simple gold pile
 - Trees should be height=3
 - Finish forest parts.
 - Countering city raids and city blueprint
