@@ -91,7 +91,7 @@ ui.pick_title_menu pause/1 =
 
 ui.pick_world pause/1 =
 | when Pause: $pause
-| $main.music{"title.ogg"}
+| $main.music{"world.ogg"}
 | $pick{world}
 
 ui.create_main_menu_dlg =

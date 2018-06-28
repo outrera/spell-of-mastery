@@ -1,6 +1,6 @@
 class: empty,0
       ,invincible,1
-      ,height,2
+      ,height,3
       ,ai,remove
       ,foldable,1
       ,hit,((effect spell) (sound (tree_hit1 tree_hit2)))
