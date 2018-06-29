@@ -6,8 +6,8 @@ Slots =
 Parts = t
 BluePrints = t
 Spans = @table
-        [riverh,[h [riverhb] riverh1]
-         riverv,[v [rivervb] riverv1]
+        [riverh,[h [riverhb] riverh1 riverh2 riverh3 riverh4 riverh5]
+         riverv,[v [rivervb] riverv1 riverv2 riverv3 riverv4 riverv5]
         ]
 
 Crosses = [[riverh riverv],[riverc1]]
