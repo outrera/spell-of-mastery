@@ -1,4 +1,4 @@
-author: `Battle for Mandicor team`
+author: `Battle for Mandicor Team`
 license: `GPL2`
 origin: `https://sourceforge.net/projects/battle4mandicor/`
 

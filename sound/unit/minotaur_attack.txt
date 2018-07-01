@@ -1,5 +1,5 @@
-author: Nikita Sadkov
-origin: Spell of Mastery
+author: `Nikita Sadkov`
+origin: `Spell of Mastery`
 
 /*
 used following public domain samples:

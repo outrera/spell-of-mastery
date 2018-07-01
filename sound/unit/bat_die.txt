@@ -1,4 +1,4 @@
-author: `Brandon Morris`, Nikita Sadkov
-license: `CC-BY-SA`
+author: `Brandon Morris 'Augmentality' <Brandonmorris12@gmail.com> (http://youtube.com/brandon75689)`, `Nikita Sadkov`
+license: `CC-BY-SA 3.0`
 origin: `https://opengameart.org/content/small-pest-aliencreature`
 //based of a sfx by Brandon Morris

@@ -59,6 +59,23 @@ main.extract_cfg_authors Cfg =
 | for K,V Authors: Authors.K <= V.uniq
 | Authors
 
+main.prepare_credits =
+| GCredits = $credits.graphics.list.sort{?0<??0}
+| SCredits = $credits.sound.list.sort{?0<??0}
+| MCredits = $credits.music.list.sort{?0<??0}
+| GCreditsT = @text: map K,Vs GCredits: "  [K]\n"
+| SCreditsT = @text: map K,Vs SCredits: "  [K]\n"
+| MCreditsT = @text: map K,Vs MCredits: "  [K]\n"
+| $credits <= @text:
+              ["SPELL OF MASTERY CREDITS\n\n"
+               "Designed and Programmed by Nikita Sadkov\n\n\n"
+               "GRAPHICS:\n" GCreditsT
+               "\n\n\nMUSIC:\n" MCreditsT
+               "\n\n\nSOUND:\n" SCreditsT
+               "\n\n\nTHANKS TO:\n"
+               "  Matthew Ostil\n"
+              ]
+
 main.cfg_handle_vars =
 | Main = $cfg.main
 | for BName,Bank $cfg: for PName,Cfgs Bank: for Key,Value Cfgs:

@@ -1,3 +1,3 @@
-author: `Brandon Morris 'Augmentality'`
-license: `CC3-BY-SA`
+author: `Brandon Morris 'Augmentality' <Brandonmorris12@gmail.com> (http://youtube.com/brandon75689)`
+license: `CC-BY-SA 3.0`
 origin: `http://opengameart.org/users/haeldb`
