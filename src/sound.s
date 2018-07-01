@@ -1,7 +1,5 @@
 use gui
 
-PlayList = []
-PlayListIndex = 0
 
 main.load_sounds =
 | Folders = "[$data]sound/".urls.keep{(?1><'' and ?2><'')}{?0}
@@ -10,10 +8,6 @@ main.load_sounds =
 | $sounds <= @table: @join: map Folder Folders:
   | map Name Folder.urls.keep{is.[@_ txt]}{?1}
     | [Name "[Folder][Name]"]
-| for [Path Name Ext] "[$data]/music".urls:
-  | when Ext<>txt: case Name "ingame[X]":
-    | push "[Name].[Ext]" PlayList
-| PlayList <= PlayList.sort
 
 main.sound Name volume/1.0 =
 | when Name.is_list: Name <= Name.rand
@@ -31,17 +25,30 @@ main.sound Name volume/1.0 =
 | when no S: bad "missing sound `[Name]`"
 | sound_play S volume/Volume
 
-Channel = 0
+MusicChannel = 0
+MusicLoop = 0
+MusicName = 0
+PlayList = 0
+PlayListIndex = 0
 
-main.music Name =
-| when Name><playlist_advance:
-  | less PlayList.size: leave
-  | when sound_playing Channel: leave
-  | PlayListIndex <= (PlayListIndex+1)%PlayList.size
-  | Name <= PlayList.PlayListIndex
-| when Name><playlist:
+main.music Name loop/0 =
+| MusicName <= Name
+| MusicLoop <= Loop
+| PL = $cfg.playlist.Name
+| less got PL: PlayList <= 0
+| when got PL:
+  | PlayList <= PL
   | PlayListIndex <= 0
   | less PlayList.size: leave
   | Name <= PlayList.PlayListIndex
-| Channel <= sound_play: sound_load "[$data]/music/[Name]" music/1
+| MusicChannel <= sound_play: sound_load "[$data]/music/[Name].ogg" music/1
 
+main.music_update =
+| when sound_playing MusicChannel: leave
+| Name = MusicName
+| if PlayList and PlayList.size then
+    | when not MusicLoop and PlayListIndex+1 >< PlayList.size: leave
+    | PlayListIndex <= (PlayListIndex+1)%PlayList.size
+    | Name <= PlayList.PlayListIndex
+  else less MusicLoop: leave
+| MusicChannel <= sound_play: sound_load "[$data]/music/[Name].ogg" music/1

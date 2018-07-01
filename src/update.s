@@ -74,7 +74,6 @@ update_units Me =
 | for U NextActive: $active.push{U}
 
 site.update =
-| $main.music{playlist_advance}
 | when $blink.0>0 and not $cycle%12:
   | $blink.0--
   | when $blink.1: $blink.1.picked <= not $blink.1.picked

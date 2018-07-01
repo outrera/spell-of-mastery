@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Finish forest parts.
+- main.load_sounds should create `credits.music`
 - Creatures should have "has_hands" property, so that fast moving scout flyers wount be able to snatch all objects
 - Countering city raids and city blueprint
 - Better unit stat indicator: add them as icons to the right of selected unit's frame, or maybe as a popup, near mouse

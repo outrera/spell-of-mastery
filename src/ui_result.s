@@ -25,9 +25,9 @@ ui.show_results =
 | when no WinnerId: WinnerId <= 0
 | Winner = $site.players.WinnerId
 | if Winner.human
-  then | $main.music{"victory.ogg"}
+  then | $main.music{victory}
        | $site.data.victory <= 1
        | $pick{victory}
-  else | $main.music{"defeat.ogg"}
+  else | $main.music{defeat}
        | $site.data.victory <= 0
        | $pick{defeat}

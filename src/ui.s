@@ -73,6 +73,7 @@ ui.notify Text =
 | $notes.init{[@Used @Free]}
 
 ui.render =
+| $main.music_update
 | $inputBlocker.show <= $paused or $site.actors.get.size
                      or not ($site.players.($site.player).human
                              or $site.editor)
@@ -86,12 +87,12 @@ ui.render =
 
 ui.pick_title_menu pause/1 =
 | when Pause: $pause
-| $main.music{"title.ogg"}
+| $main.music{title}
 | $pick{main_menu}
 
 ui.pick_world pause/1 =
 | when Pause: $pause
-| $main.music{"world.ogg"}
+| $main.music{world loop/1}
 | $pick{world}
 
 ui.create_main_menu_dlg =
@@ -108,7 +109,7 @@ ui.create_main_menu_dlg =
   | X 500 | button 'EXIT' skin/scroll: => get_gui{}.exit
   |  $width-80 $height-20
      | button 'Credits' skin/small_medium: =>
-       | $main.music{"credits.ogg"}
+       | $main.music{credits}
        | $creditsRoll.reset
        | $pick{credits}
 

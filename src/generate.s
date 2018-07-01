@@ -140,10 +140,14 @@ site.generate W H BlueprintName =
     | swap W H
 | for PartName B.parts: $place_part{0 PartName}
 | Ps = []
+| C = 0
 | for Y H: for X W:
   | less Slots.Y.X:
+    | C++
     | when Ps.end: Ps <= B.filler.shuffle
     | $place_part{X,Y Ps^pop}
+| say "[BlueprintName].filler: [B.filler.size]/[C]"
 | $create_borders
 | for X,Y points{1 1 $w+1 $h+1}: $upd_pilar{X Y}
+| $data.music <= B.playlist.0
 | Slots <= 0

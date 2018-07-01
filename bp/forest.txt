@@ -1,5 +1,7 @@
-filler: f_pond f_grass f_rocks1 f_rocks2 f_hill1 f_trees1
+filler: f_pond f_grass f_rocks1 f_rocks2 f_rocks3
+        f_hill1 f_trees1
 parts: fp_castle fp_ship fp_forest fp_hill fp_node1 fp_node2 fp_node3 fp_node4
 spans: (riverh riverv)
+playlist: forest
 //parentheses mean that only one of these could be placed,
 //entry: grass_entry

@@ -16,7 +16,9 @@ ui.create W H =
 | $view.clear
 
 ui.begin_ingame Editor =
-| $main.music{playlist}
+| Music = $site.data.music
+| if got Music then $main.music{Music loop/1}
+  else $main.music{none loop/1}
 | $site.editor <= Editor
 | for W $editorWidgets: W.show <= Editor
 | $unpause
