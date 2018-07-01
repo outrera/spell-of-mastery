@@ -40,13 +40,15 @@ main.music Name loop/0 =
   | PlayList <= PL
   | PlayListIndex <= 0
   | less PlayList.size: leave
+  | PlayListIndex <= PlayList.size.rand-1
   | Name <= PlayList.PlayListIndex
 | MusicChannel <= sound_play: sound_load "[$data]/music/[Name].ogg" music/1
 
 main.music_update =
 | when sound_playing MusicChannel: leave
 | Name = MusicName
-| if PlayList and PlayList.size then
+| if PlayList then
+    | less PlayList.size: leave
     | when not MusicLoop and PlayListIndex+1 >< PlayList.size: leave
     | PlayListIndex <= (PlayListIndex+1)%PlayList.size
     | Name <= PlayList.PlayListIndex

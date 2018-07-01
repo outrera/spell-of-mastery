@@ -146,7 +146,7 @@ ui.init =
 | $panelBG <= $img{ui_panel}
 | $view <= view $main Me $width $height-($panelBG.h-10)
 | when StartInEditor: $create{10 10}
-| less StartInEditor: $generate{6 6 forest}
+| less StartInEditor: $create{1 1}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg
