@@ -1,0 +1,6 @@
+filler: c_house1
+parts: cp_ship cp_node1
+spans: (riverh riverv)
+playlist: forest
+//parentheses mean that only one of these could be placed,
+//entry: grass_entry
