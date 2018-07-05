@@ -117,8 +117,12 @@ ui.place_site_enemy =
   | S.move{XYZ}
 
 ui.enter_site_proceed =
-| $generate{6 6 forest}
-| $site.data.serial <= if $enterSiteDst then $enterSiteDst.serial else 0
+| Site = $enterSiteDst
+| Type = if not Site then \city
+         else if Site and Site.type><city then \city
+         else \forest
+| $generate{6 6 Type}
+| $site.data.serial <= if Site then Site.serial else 0
 | $place_site_player
 | $place_site_enemy
 | $begin_ingame{0}

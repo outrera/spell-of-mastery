@@ -368,6 +368,7 @@ world.mode_pick M =
     | $ui.enter_site{S}
     | leave 0
   | when S.type><city and S.attacker:
+    | $ui.enter_site{S}
     | leave 0
   | $notify{"Nothing to investigate there."}
   | leave airship
