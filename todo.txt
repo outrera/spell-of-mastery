@@ -1,8 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Countering city raids and city blueprint
-- Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects
+- Rethink house walls, so two and more floor buildings would be possible. Consider making walls stackable, just like other tiles.
+- better roof tiling: add angled roofs and tiles in the middle.
+- finish city blueprint
+- Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
+- Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
 - Enemy Wizard Towers Siege.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame, or maybe as a popup, near mouse
 - Roof and indoor indicators should be displayed right near cursor.
