@@ -1,4 +1,4 @@
-sprite: tiles_house2
+sprite: tiles_house
 around: house //this wall goes around house tiles
 dig: 1
 back: house_wall_back

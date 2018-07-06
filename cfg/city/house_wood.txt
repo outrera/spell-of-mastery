@@ -1,0 +1,3 @@
+role: house_wood
+stack: house_wood0,house_wood1,house_wood2
+opaque: 0
