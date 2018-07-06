@@ -1,6 +1,6 @@
 role: dirt
 match: any_cornerside
-lineup: 0
+lineup: 1
 dig: 1
 indoor: dirt
 hp: 100
