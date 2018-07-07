@@ -102,7 +102,7 @@ m_any_stairs Me X Y Z Tile =
 | AS = $role{X Y+1 Z+H}><Role and not $filled{X Y+1 Z+H+1}
 | AW = $role{X-1 Y Z+H}><Role and not $filled{X-1 Y Z+H+1}
 //| D = E.digits{2}
-//| when [X Y]><[6 4]: say [Role [X Y Z] E]
+//| when [X Y]><[5 5]: say [Role [X Y Z] E]
 | if E><SFrontC then
      if      AW and not AN and $filled{X+1 Y Z-H} then E<=SRight
      else if not AW and AN and $filled{X Y+1 Z-H} then E<=SLeft
@@ -235,7 +235,7 @@ tile.render X Y Z Below Above Variation =
       else fxn:
          | Elev = $tiler{}{Site X Y Z Me}
          | FB = TT.fallback
-         | when FB.0><Elev and FB.1><AH:
+         | when esc FB.0><Elev and FB.1><AH:
            | Elev <= (FB.3){Site X Y Z Me}
            | Gs <= FB.2.gfxes
          | NeibSlope <= Elev.digits{2}
@@ -374,6 +374,7 @@ main.load_tiles =
     | Match = T.fallback.3
     | T.fallback.3 <= get_match_fn Match
     | less T.fallback.3: bad "tile [K] has invalid fallback match = [Match]"
+    | T.fallback <= T.fallback.list
   | when T.roof.is_list: T.roof <= [T.roof.0 $tiles.(T.roof.1)]
 
 export tile

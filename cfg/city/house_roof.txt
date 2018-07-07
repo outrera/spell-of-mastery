@@ -1,4 +1,5 @@
 sprite: tiles_house_roof
+role: roof
 match: any_stairs
 opaque: 0
 roof: self
