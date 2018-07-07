@@ -1,4 +1,5 @@
 sprite: tiles_house_wood1
+match: same_side
 aux: 1
 lay: | 2 4 1
      | 5 0 0

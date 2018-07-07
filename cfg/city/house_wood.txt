@@ -1,3 +1,5 @@
 role: house_wood
+match: same_side
+lineup: 0
 stack: house_wood0,house_wood1,house_wood2
 opaque: 0

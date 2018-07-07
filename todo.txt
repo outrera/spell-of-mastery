@@ -1,8 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Rethink house walls, so two and more floor buildings would be possible. Consider making walls stackable, just like other tiles.
-- better roof tiling: add angled roofs and tiles in the middle.
 - finish city blueprint
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
 - Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
