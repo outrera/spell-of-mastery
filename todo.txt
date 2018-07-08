@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- finish city blueprint
+- finish city blueprint: market, church, graveyard, major's house
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
 - Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
 - Enemy Wizard Towers Siege.
