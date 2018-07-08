@@ -1,0 +1,8 @@
+author: `Tim Jonsson`
+xy: 0,0
+height: 3
+class: empty,0
+      ,invincible,1
+      ,height,3
+      ,ai,remove
+      ,foldable,0
