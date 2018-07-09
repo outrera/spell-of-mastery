@@ -1,0 +1,3 @@
+sprite: tiles_bridge
+embed: 2
+lay: 0
