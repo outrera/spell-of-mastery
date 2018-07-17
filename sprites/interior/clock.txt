@@ -1,7 +1,8 @@
-author: `Artem Belov`
-copyright: `Nikita Sadkov`
+author: `Nikita Sadkov`, `Lanea Zimmerman 'Sharm'`
+license: `CC-BY-SA 3.0`
+//losely based on the non-isometric clock by Sharm (http://opengameart.org/content/lpc-modified-base-tiles)
 height: 2
-xy: -10,16
+xy: -8,4
 class: empty,0
       ,invincible,1
       ,height,2
