@@ -1,4 +1,4 @@
-author: `Bonsaiheldin (http://bonsaiheld.org)`, `Nikita Sadkov`
-license: `CC-BY-SA 3.0`
-origin: `http://opengameart.org/content/shiny-rpg-potions-16x16`
+author: `Liz Molnar (https://raventale.itch.io/)`
+license: `Public Domain (CC0)`
+origin: `https://raventale.itch.io/daily-doodles-pixelart-asset-pack`
 xy: 0,6
