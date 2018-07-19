@@ -35,6 +35,7 @@ type view.widget{M UI W H}
   zunit
   d //cell edge size
   keymap
+  lmb_count/0
 | $keymap <= $main.cfg.keymap
 | $fpsGoal <= $main.cfg.ui.fps
 | $fpsD <= $fpsGoal.float+8.0
@@ -99,6 +100,8 @@ view.center_at XYZ cursor/0 =
 view.set_brush NewBrush = $brush.init{NewBrush}
 
 view.site = $main.site
+
+view.units_get XYZ = $site.units_get{XYZ}.skip{?mark}
 
 view.infoline =
 | X,Y,Z = $cursor
