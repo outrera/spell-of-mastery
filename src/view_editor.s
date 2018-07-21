@@ -138,3 +138,28 @@ view.update_brush =
   [obj Bank,Type] | place_object Me Bank Type
   [tile Type] | $place_tile{Type}
 | when $mice_click><right: remove_object_or_tile Me
+
+
+site.update_cursor_brush Bank Type CXYZ =
+| View = $view
+| Mirror = View.key{edit_place_mirrored}
+| Reverse = View.key{edit_place_reversed}
+| ClassName = "[Bank]_[Type]"
+| Class = $main.classes.ClassName
+| XYZ = CXYZ //+ if Mirror then [-Y X Z] else [X -Y Z]
+| Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_get{XYZ}
+| Place = if not Us then 0
+          else if Class.unit then not Us.any{?unit}
+          else not Us.any{?class^address >< Class^address}
+| when Place:
+  | ClassName = "[Bank]_[Type]"
+  | Class = $main.classes.ClassName
+  | Facing = if Mirror then 5 else 3
+  | when Reverse: Facing <= if Mirror then 1 else 6
+  | M = $set_mark{XYZ 0 mark_cube}
+  | M.sprite <= Class.default_sprite
+  | M.colors <= $human.colors
+  | M.animate{idle}
+  | M.pick_facing{Facing}
+  | M.alpha <= 110
+

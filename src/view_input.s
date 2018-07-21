@@ -125,6 +125,7 @@ site.set_mark XYZ Bless Type =
     | M <= $human.alloc_unit{Type}
     | M.mark <= 1
 | M.move{XYZ}
+| M.pick_facing{3}
 | M.blessed <= Bless
 | $marks.push{M}
 | M
@@ -168,37 +169,14 @@ site.update_picked =
         else
           | while Cell.z < $d-1 and not Cell.empty: Cell++
 
-
 site.update_cursor =
-| View = $view
-| CXYZ = View.cursor
-| P = $human
+| CXYZ = $view.cursor
 | if $act
   then | $set_mark{CXYZ 0 mark_cursor_target}
   else | $set_mark{CXYZ 0 mark_cursor0}
        | $set_mark{CXYZ 0 mark_cursor1}
-| case View.brush
-  [obj Bank,Type]
-    | Mirror = View.key{edit_place_mirrored}
-    | Reverse = View.key{edit_place_reversed}
-    | ClassName = "[Bank]_[Type]"
-    | Class = $main.classes.ClassName
-    | XYZ = CXYZ //+ if Mirror then [-Y X Z] else [X -Y Z]
-    | Us = XYZ.0 >> 0 and XYZ.1 >> 0 and $units_get{XYZ}
-    | Place = if not Us then 0
-              else if Class.unit then not Us.any{?unit}
-              else not Us.any{?class^address >< Class^address}
-    | when Place:
-      | ClassName = "[Bank]_[Type]"
-      | Class = $main.classes.ClassName
-      | Facing = if Mirror then 5 else 3
-      | when Reverse: Facing <= if Mirror then 1 else 6
-      | M = $set_mark{XYZ 0 mark_cube}
-      | M.sprite <= Class.default_sprite
-      | M.colors <= $human.colors
-      | M.animate{idle}
-      | M.pick_facing{Facing}
-      | M.alpha <= 110
+| case $view.brush
+  [obj Bank,Type] | $update_cursor_brush{Bank Type CXYZ}
 
 view.update =
 | GUI = get_gui
