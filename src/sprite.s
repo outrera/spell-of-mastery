@@ -55,18 +55,19 @@ missing_frame Me Index Angle =
 //FIXME: move these into sprite loading code
 AngleReplacements = [6,1 6,1 3,0 -1,0 3,1 3,1 3,1 6,0]
 
-sprite.get_frame_at_angle Index Angle Mirror =
+sprite.get_frame_at_angle Index Angle =
 | less $frames: $init
 | OAngle = Angle
 | R = $frames.Index
 | less R.is_list:
   | when no R: missing_frame Me Index OAngle
+  | Mirror = 0
   | when fxn Angle <> 3: Mirror <= 1
   | when R.is_frame_thunk:
     | R <= load_frame Me R.path R.xy
     | $frames.Index <= R
   | leave R,Mirror
-| Mirror <= 0
+| Mirror = 0
 | As = R
 | fxn: till As.Angle
   | Mirror <= AngleReplacements.Angle.1
