@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- finish city blueprint: market, warehouse, church, graveyard, major's house, blacksmith
+- finish city blueprint: market, park, warehouse, church, graveyard, major's house, blacksmith, stores
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
 - Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
 - Implement chests and locked chests. Only creatures with hands would be capable of opening them. Locked chests would have keys located somewhere on the map.
