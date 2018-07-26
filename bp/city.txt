@@ -1,5 +1,5 @@
 filler: c_house1
-parts: cp_ship cp_square cp_node1 cp_market
+parts: cp_ship cp_square cp_node1 cp_market cp_park
 spans: (riverh riverv)
 playlist: forest
 //parentheses mean that only one of these could be placed,

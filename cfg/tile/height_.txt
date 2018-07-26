@@ -1,7 +1,7 @@
 filler: 0
 invisible: 1
+aux: 1
 height: 1
 heavy: 0
-aux: 1
 lay: 0
 unit: 1

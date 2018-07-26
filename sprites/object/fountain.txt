@@ -1,0 +1,9 @@
+author: `Tim Jonsson`
+copyright: `Nikita Sadkov`
+height: 1
+form: | 1 1 1 1
+      | 1 1 1 1
+      | 1 1 1 1
+      | 1 1 1 1
+class: empty,0,height,1,box_xy,(96 96)
+xy: 16,14

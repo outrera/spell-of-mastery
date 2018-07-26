@@ -192,7 +192,12 @@ tile.render X Y Z Below Above Variation =
 | NeibSlope = #@0000
 | T = Me
 | when $indoor and Z < ColumnHeight-1 /*and AH*/: //FIXME: non-ceil tiles?
-  | T <= $indoor
+  | TT = $indoor
+  | less AH:
+    | ZZ = ColumnHeight-1
+    | while Site.at{X Y ZZ}.unit: ZZ--
+    | when ZZ<>ColumnHeight-1: TT <= T
+  | T <= TT
 | when T.water:
   | Neib,Water = T.water
   | when got Site.neibs{X Y Z-TH+1}.find{?type><Neib}:
