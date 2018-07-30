@@ -239,7 +239,6 @@ tile.render X Y Z Below Above Variation =
          | Gs.NeibSlope
       else fxn:
          | Elev = $tiler{}{Site X Y Z Me}
-         | when X><4 and Y><4 and Z><4: say Elev,Elev.digits{2}
          | FB = TT.fallback
          | when esc FB.0><Elev and FB.1><AH:
            | Elev <= (FB.3){Site X Y Z Me}
