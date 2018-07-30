@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- fence sprite
+- fence should take cell corners
+- fence sprite and wall sprite
 - when large object is removed in editor, all objects staying on top of it should be put down.
 - finish city blueprint: market, park, warehouse, church, graveyard, major's house, blacksmith, stores
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.

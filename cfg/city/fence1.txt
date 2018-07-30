@@ -1,0 +1,12 @@
+sprite: tiles_wall
+role: fence_wall
+match: same_side
+filler: 0
+lineup: 0
+opaque: 0
+lay: | 1  4 2
+     | 7 12 0
+     | 2  3 1
+     | 10 9
+     | 11 8
+     | 1 2 13
