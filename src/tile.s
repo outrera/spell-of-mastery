@@ -31,7 +31,8 @@ type tile{As Main Type Role Id stack/0
      around/Around
      back/Back
      unit/Unit //used for units that act as platforms
-     heavy/Heavy //shapes the tile below into a cube
+     heavy/Heavy //1=shapes the tile below into a cube
+                 //2=shapes into cube, but preserves grass
      lineup/Lineup //shaped by tile above into a cube
      dig/Dig
      parts/Parts
@@ -193,9 +194,9 @@ tile.render X Y Z Below Above Variation =
 | T = Me
 | when $indoor and Z < ColumnHeight-1 /*and AH*/: //FIXME: non-ceil tiles?
   | TT = $indoor
-  | less AH:
+  | when AH<>1:
     | ZZ = ColumnHeight-1
-    | while Site.at{X Y ZZ}.unit: ZZ--
+    | while Site.at{X Y ZZ}.heavy<>1: ZZ--
     | when ZZ<>ColumnHeight-1: TT <= T
   | T <= TT
 | when T.water:
