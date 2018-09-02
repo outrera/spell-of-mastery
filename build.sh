@@ -1,1 +1,1 @@
-/Users/nikita/Documents/git/symta/symta ./
+../symta/symta ./
