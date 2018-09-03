@@ -355,7 +355,7 @@ folder_nomalized Path =
 | Folders = Xs.keep{is."[_]/"}
 | Files = Xs.skip{is."[_]/"}
 | Parent = if Path >< '/' or Path.last >< ':' then [] else ['../']
-| [@Parent @Folders @Files]
+| [@Parent @Folders.sort @Files.sort]
 
 type folder_litems.$litems{W H Root F} root/Root f/F litems
 | when not $root.size or $root.last <> '/': $root <= "[$root]/"
