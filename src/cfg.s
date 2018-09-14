@@ -74,7 +74,7 @@ main.prepare_credits =
                "\n\n\nSOUND:\n" SCreditsT
                "\n\n\nTHANKS TO:\n"
                "  Matthew Ostil\n"
-               "  Anonymous supporters from lj.rossia.org"
+               "  Anonymous supporters from lj.rossia.org who donated a few BTC"
               ]
 
 main.cfg_handle_vars =
