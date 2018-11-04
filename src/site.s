@@ -643,6 +643,7 @@ upd_floor Me Bottom = fxn:
     | Cell.floor <= Floor
   | Cell--
   | LastEmpty <= Empty
+| for U Bottom.units: U.floor <= U.cell.floor
 
 site.upd_pilar X Y =
 | fxn: when X < 0 or Y < 0: leave 0
