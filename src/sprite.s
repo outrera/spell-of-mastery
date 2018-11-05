@@ -84,8 +84,7 @@ sprite.init =
 | $path <= if $frame_format >< folder then "[$path]/" else "[$path].png"
 | if $path.last >< '/'
   then init_frames_from_folder Me $path
-  else | say $path
-       | init_frames Me gfx{$path}
+  else init_frames Me gfx{$path}
 | when@@it $shadow: $shadow <= $main.img{it}
 
 siteToSprite X Y =

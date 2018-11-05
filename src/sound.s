@@ -32,6 +32,7 @@ MusicLoop = 0
 MusicName = 0
 PlayList = 0
 PlayListIndex = 0
+MusicId = 0
 
 main.music Name loop/0 =
 | MusicName <= Name
@@ -44,9 +45,12 @@ main.music Name loop/0 =
   | less PlayList.size: leave
   | PlayListIndex <= (PlayList.size-1).rand
   | Name <= PlayList.PlayListIndex
-| MusicChannel <= sound_play: sound_load "[$data]/music/[Name].ogg" music/1
+| when MusicId: sound_free MusicId
+| MusicId <= sound_load "[$data]/music/[Name].ogg" music/1
+| MusicChannel <= sound_play MusicId
 
 main.music_update =
+| less MusicId: leave
 | when sound_playing MusicChannel: leave
 | Name = MusicName
 | if PlayList then
@@ -55,4 +59,7 @@ main.music_update =
     | PlayListIndex <= (PlayListIndex+1)%PlayList.size
     | Name <= PlayList.PlayListIndex
   else less MusicLoop: leave
-| MusicChannel <= sound_play: sound_load "[$data]/music/[Name].ogg" music/1
+| less Name: leave
+| when MusicId: sound_free MusicId
+| MusicId <= sound_load "[$data]/music/[Name].ogg" music/1
+| MusicChannel <= sound_play MusicId
