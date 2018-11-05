@@ -1,4 +1,4 @@
-sprite: tiles_wall_housed1
+sprite: tiles_wall_housew
 role: wall
 match: same_side
 filler: 0

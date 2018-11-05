@@ -328,3 +328,17 @@ The genome metaphor:
   its cost. Some combinations may incur additional costs.
   That would help balancing the game bottom-up.
 - Some AI stuff, like spellcasting can be moved here too.
+
+
+
+Current Walls Tileset Format
+--------------------
+Pros:
+- Less tiles requird.
+- Grass properly overlaps it.
+- Objects fit perfectly near wall, without need of xy hacks.
+- Doors get placed properly in all cases.
+
+Cons:
+- Some assymetry in corners (can be ameliorated with a hack: using additional tiles).
+- Roof looks shifted backwards. (can be ameliorated with a hack: shifting roof xy)
