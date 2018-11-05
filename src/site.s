@@ -603,9 +603,9 @@ site.getCornersSame X Y Z Role = fxn: `[]`
   [$role{X+1 Y+1 Z} $role{X Y+1 Z} $role{X+1 Y Z}].all{Role}
   [$role{X-1 Y+1 Z} $role{X Y+1 Z} $role{X-1 Y Z}].all{Role}
 
-site.getSidesSame X Y Z Role = fxn: `[]`
-  $role{X Y-1 Z}><Role $role{X+1 Y Z}><Role
-  $role{X Y+1 Z}><Role $role{X-1 Y Z}><Role
+site.getSidesSame X Y Z Role = `[]`
+  $role{X fxn{Y-1} Z}><Role $role{fxn{X+1} Y Z}><Role
+  $role{X fxn{Y+1} Z}><Role $role{fxn{X-1} Y Z}><Role
 
 site.update_minimap X Y Color =
 | less $human.sight.Y.X: leave
