@@ -3,7 +3,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 TODO:
 - finish city blueprint: tavern, market, park, warehouse, church, graveyard, major's house, blacksmith, stores
 - wall should consider the form of the wall below
-- roof and house foundation could be a bit shifted
+- House foundation shouldn't stick at the back. Consider some stencil mask for draw function to auto cut tiles.
 
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
 - Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
