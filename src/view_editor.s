@@ -89,8 +89,7 @@ view.place_tile Type =
   | if IsEmbed then
       | when Tile.wall
         | Below = $site.at{X Y $cursor.2-1}
-        | while $cursor.2 > 1 and (Below.around or Below.roof><self
-                                   or Below.type><void):
+        | while $cursor.2 > 1 and (Below.around or Below.type><void):
           | H = $site.at{X Y $cursor.2-1}.height
           | $cursor.2 -= H
           | $anchor.2 <= $cursor.2

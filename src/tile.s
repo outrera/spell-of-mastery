@@ -6,7 +6,7 @@ type tile{As Main Type Role Id stack/0
           height/1 filler/1 invisible/0 match/same_corner shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 indoor/0 liquid/0 opaque/No
-          around/0 back/0 fallback/[0 0 0] roof/0 hp/0 cost/0
+          around/0 back/0 fallback/[0 0 0] hp/0 cost/0
           hit/0 death/0 embed/0 sprite/0 flatGfx/0 lay/No
           struct/0 structTiles/0 colors/[#808080 #A0A0A0]}
      id/Id
@@ -42,7 +42,6 @@ type tile{As Main Type Role Id stack/0
      liquid/Liquid
      opaque/Opaque
      fallback/Fallback
-     roof/Roof
      embed/Embed //embed into what type of other tile
      hp/Hp
      cost/Cost
@@ -79,91 +78,173 @@ m_any_cornerside Site X Y Z Tile =
 | R
 
 //stairs defs
-SLeft   = [1 0 0 0]      //left-stairs
-SLeftR  = [0 1 0 0]      //left-stairs-reversed
-SRightR = [0 0 1 0]      //right-stairs-reversed
-SRight  = [0 0 0 1]      //left-stairs
-SFrontC = SLeft+SRight   //center-corner
-SLeftC  = SLeft+SLeftR   //left-corner
-SRightC = SRight+SRightR //right-corner
-SBackC  = SLeftR+SRightR //back-corner
-SLineH  = SLeftR+SRight
-SLineV  = SRightR+SLeft
-SRightE = SRightR+SLeft+SRight
+BU = [1 0 0 0]  //up
+BR = [0 1 0 0]  //right
+BD = [0 0 1 0]  //down
+BL = [0 0 0 1]  //left
+BS = BU+BL      //south corner
+BW = BU+BR      //west corner
+BE = BL+BD      //east corner
+BN = BR+BD      //north corner
+BH = BR+BL      //horizontal
+BV = BD+BU      //vertical
+BXD = BU+BL+BR  //eXcluding down
+BXU = BL+BD+BR  //eXcluding up
+BXL = BU+BD+BR  //eXcluding left
+BXR = BU+BD+BL  //eXcluding right
 SFlat = [0 0 0 0]
 SFilled = [1 1 1 1]
+
+m_any_gable Me X Y Z Tile =
+| Role = Tile.role
+| H = Tile.height
+| E = `[]` $filled{X Y-1 Z} $filled{X+1 Y Z} $filled{X Y+1 Z} $filled{X-1 Y Z}
+| AU = $role{X Y-1 Z+H}><Role and not $filled{X Y-1 Z+H+1}
+| AR = $role{X+1 Y Z+H}><Role and not $filled{X+1 Y Z+H+1}
+| AD = $role{X Y+1 Z+H}><Role and not $filled{X Y+1 Z+H+1}
+| AL = $role{X-1 Y Z+H}><Role and not $filled{X-1 Y Z+H+1}
+//| D = E.digits{2}
+//| when [X Y Z]><[2 8 6]: say [Role [X Y Z] E]
+| if E><BS then
+     if      AL and not AU and $filled{X+1 Y Z-H} then E<=BL
+     else if not AL and AU and $filled{X Y+1 Z-H} then E<=BU
+     else if $filled{X+1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=BL
+     else if $filled{X Y+1 Z-H} and not $filled{X+1 Y Z-H} then E<=BU
+     else if not AD and AU then E<=BXD
+     else if not AR and AL then E<=BXR
+     else
+  else if E><BW then
+     if      AR and not AU and $filled{X-1 Y Z-H} then E<=BR
+     else if not AR and AU and $filled{X Y+1 Z-H} then E<=BU
+     else if $filled{X-1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=BR
+     else if $filled{X Y+1 Z-H} and not $filled{X-1 Y Z-H} then E<=BU
+     else if not AD and AU then E<=BXD
+     else if not AL and AR then E<=BXL
+     else
+  else if E><BE then
+     if      AL and not AD and $filled{X+1 Y Z-H} then E<=BL
+     else if not AL and AD and $filled{X Y-1 Z-H} then E<=BD
+     else if $filled{X+1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=BL
+     else if $filled{X Y-1 Z-H} and not $filled{X+1 Y Z-H} then E<=BD
+     else if AD and not AU then E<=BXU
+     else if not AR and AL then E<=BXR
+     else
+  else if E><BN then 
+     if      AR and not AD then E<=BR
+     else if not AR and AD then E<=BD
+     else if $filled{X-1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=BR
+     else if $filled{X Y-1 Z-H} and not $filled{X-1 Y Z-H} then E<=BD
+     else
+  else if E><BU then
+     if      $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then
+     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=BR
+     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=BL
+     else
+  else if E><BL then
+     if      $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then
+     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=BD
+     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=BU
+     else
+  else if E><BR then
+     if      $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then
+     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=BD
+     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=BU
+     else
+  else if E><BD then
+     if      $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then
+     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=BR
+     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=BL
+     else
+  else if E><BH then
+   | A = $filled{X Y+1 Z-H}
+   | B = $filled{X Y-1 Z-H}
+   | if      A and not B then E<=BU
+     else if B and not A then E<=BD
+     else E<=SFilled
+  else if E><BV then
+   | A = $filled{X+1 Y Z-H}
+   | B = $filled{X-1 Y Z-H} 
+   | if      A and not B then E<=BL
+     else if B and not A then E<=BR
+     else E<=SFilled
+  else if E><SFlat then
+     if $role{X-1 Y Z-H}><Role then E<=BR
+     else if $role{X Y+1 Z-H}><Role then E<=[1 0 0 0]
+     else if $role{X Y-1 Z-H}><Role then E<=BD
+     else
+  else
+| E
 
 m_any_stairs Me X Y Z Tile =
 | Role = Tile.role
 | H = Tile.height
-| E = `[]` //   north            east             south            west
-           $filled{X Y-1 Z} $filled{X+1 Y Z} $filled{X Y+1 Z} $filled{X-1 Y Z}
-| AN = $role{X Y-1 Z+H}><Role and not $filled{X Y-1 Z+H+1}
-| AE = $role{X+1 Y Z+H}><Role and not $filled{X+1 Y Z+H+1}
-| AS = $role{X Y+1 Z+H}><Role and not $filled{X Y+1 Z+H+1}
-| AW = $role{X-1 Y Z+H}><Role and not $filled{X-1 Y Z+H+1}
+| E = `[]` $filled{X Y-1 Z} $filled{X+1 Y Z} $filled{X Y+1 Z} $filled{X-1 Y Z}
+| AU = $role{X Y-1 Z+H}><Role and not $filled{X Y-1 Z+H+1}
+| AR = $role{X+1 Y Z+H}><Role and not $filled{X+1 Y Z+H+1}
+| AD = $role{X Y+1 Z+H}><Role and not $filled{X Y+1 Z+H+1}
+| AL = $role{X-1 Y Z+H}><Role and not $filled{X-1 Y Z+H+1}
 //| D = E.digits{2}
 //| when [X Y]><[5 5]: say [Role [X Y Z] E]
-| if E><SFrontC then
-     if      AW and not AN and $filled{X+1 Y Z-H} then E<=SRight
-     else if not AW and AN and $filled{X Y+1 Z-H} then E<=SLeft
-     else if $filled{X+1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=SRight
-     else if $filled{X Y+1 Z-H} and not $filled{X+1 Y Z-H} then E<=SLeft
+| if E><BS then
+     if      AL and not AU and $filled{X+1 Y Z-H} then E<=BL
+     else if not AL and AU and $filled{X Y+1 Z-H} then E<=BU
+     else if $filled{X+1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=BL
+     else if $filled{X Y+1 Z-H} and not $filled{X+1 Y Z-H} then E<=BU
      else
-  else if E><SLeftC then
-     if      AE and not AN and $filled{X-1 Y Z-H} then E<=SLeftR
-     else if not AE and AN and $filled{X Y+1 Z-H} then E<=SLeft
-     else if $filled{X-1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=SLeftR
-     else if $filled{X Y+1 Z-H} and not $filled{X-1 Y Z-H} then E<=SLeft
+  else if E><BW then
+     if      AR and not AU and $filled{X-1 Y Z-H} then E<=BR
+     else if not AR and AU and $filled{X Y+1 Z-H} then E<=BU
+     else if $filled{X-1 Y Z-H} and not $filled{X Y+1 Z-H} then E<=BR
+     else if $filled{X Y+1 Z-H} and not $filled{X-1 Y Z-H} then E<=BU
      else
-  else if E><SRightC then
-     if      AW and not AS and $filled{X+1 Y Z-H} then E<=SRight
-     else if not AW and AS and $filled{X Y-1 Z-H} then E<=SRightR
-     else if $filled{X+1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=SRight
-     else if $filled{X Y-1 Z-H} and not $filled{X+1 Y Z-H} then E<=SRightR
+  else if E><BE then
+     if      AL and not AD and $filled{X+1 Y Z-H} then E<=BL
+     else if not AL and AD and $filled{X Y-1 Z-H} then E<=BD
+     else if $filled{X+1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=BL
+     else if $filled{X Y-1 Z-H} and not $filled{X+1 Y Z-H} then E<=BD
      else
-  else if E><SBackC then 
-     if      AE and not AS then E<=SLeftR
-     else if not AE and AS then E<=SRightR
-     else if $filled{X-1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=SLeftR
-     else if $filled{X Y-1 Z-H} and not $filled{X-1 Y Z-H} then E<=SRightR
+  else if E><BN then 
+     if      AR and not AD then E<=BR
+     else if not AR and AD then E<=BD
+     else if $filled{X-1 Y Z-H} and not $filled{X Y-1 Z-H} then E<=BR
+     else if $filled{X Y-1 Z-H} and not $filled{X-1 Y Z-H} then E<=BD
      else
-  else if E><SLeft then
+  else if E><BU then
      if      $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then
-     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=SLeftR
-     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=SRight
+     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=BR
+     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=BL
      else
-  else if E><SRight then
+  else if E><BL then
      if      $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then
-     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=SRightR
-     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=SLeft
+     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=BD
+     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=BU
      else
-  else if E><SLeftR then
+  else if E><BR then
      if      $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then
-     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=SRightR
-     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=SLeft
+     else if $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then E<=BD
+     else if $role{X Y+1 Z-H}><Role and not $filled{X Y+1 Z} then E<=BU
      else
-  else if E><SRightR then
+  else if E><BD then
      if      $role{X Y-1 Z-H}><Role and not $filled{X Y-1 Z} then
-     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=SLeftR
-     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=SRight
+     else if $role{X-1 Y Z-H}><Role and not $filled{X-1 Y Z} then E<=BR
+     else if $role{X+1 Y Z-H}><Role and not $filled{X+1 Y Z} then E<=BL
      else
-  else if E><SLineH then
+  else if E><BH then
    | A = $filled{X Y+1 Z-H}
    | B = $filled{X Y-1 Z-H}
-   | if      A and not B then E<=SLeft
-     else if B and not A then E<=SRightR
+   | if      A and not B then E<=BU
+     else if B and not A then E<=BD
      else E<=SFilled
-  else if E><SLineV then
+  else if E><BV then
    | A = $filled{X+1 Y Z-H}
    | B = $filled{X-1 Y Z-H} 
-   | if      A and not B then E<=SRight
-     else if B and not A then E<=SLeftR
+   | if      A and not B then E<=BL
+     else if B and not A then E<=BR
      else E<=SFilled
   else if E><SFlat then
-     if $role{X-1 Y Z-H}><Role then E<=SLeftR
+     if $role{X-1 Y Z-H}><Role then E<=BR
      else if $role{X Y+1 Z-H}><Role then E<=[1 0 0 0]
-     else if $role{X Y-1 Z-H}><Role then E<=SRightR
+     else if $role{X Y-1 Z-H}><Role then E<=BD
      else
   else
 | E
@@ -279,6 +360,7 @@ get_match_fn Desc = case Desc
   same_side      | &m_same_side
   any_cornerside | &m_any_cornerside
   any_stairs     | &m_any_stairs
+  any_gable      | &m_any_gable
   same_lay       | &m_same_lay
   Else           | 0
 
@@ -381,6 +463,5 @@ main.load_tiles =
     | T.fallback.3 <= get_match_fn Match
     | less T.fallback.3: bad "tile [K] has invalid fallback match = [Match]"
     | T.fallback <= T.fallback.list
-  | when T.roof.is_list: T.roof <= [T.roof.0 $tiles.(T.roof.1)]
 
 export tile

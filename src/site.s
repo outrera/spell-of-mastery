@@ -381,12 +381,6 @@ site.clear_tile_ X Y Z =
 | when Tile.wall:
   | ZZ = 0
   | RT = 0
-  | when Tile.roof.is_list:
-    | H,RoofTile = Tile.roof
-    | RT <= RoofTile
-    | ZZ <= Z+H+1
-    | less ZZ < $d: ZZ <= 0
-    | when ZZ and $at{X Y ZZ}.type><RT.type: $clear_tile{X Y ZZ}
   | for DX,DY Dirs: //tile has associated walls
     | XX = X+DX
     | YY = Y+DY

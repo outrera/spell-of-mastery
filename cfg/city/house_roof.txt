@@ -1,12 +1,10 @@
 sprite: tiles_house_roof
 role: roof
-match: any_corner
-//match: any_gable
+match: any_gable
 opaque: 0
-roof: self
-lay:| 7  6  4
-    | 5 16  2
-    | 3  1  0
-    | 8  9
-    |11 10
-    |12 13 0
+lay: | 6  4 2
+     | 7 16 0
+     | 5  3 1
+     | 6 2
+     | 5 1
+     | 1 2 2
