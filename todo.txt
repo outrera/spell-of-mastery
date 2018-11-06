@@ -2,7 +2,6 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - finish city blueprint: tavern, market, park, warehouse, church, graveyard, major's house, blacksmith, stores
-- window tiles.
 - wall should consider the form of the wall below
 - ladders that would allow craw on the wall; lifts that would work even when there is no wall. They can be implemented using portals.
 
