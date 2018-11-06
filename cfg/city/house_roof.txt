@@ -1,6 +1,7 @@
 sprite: tiles_house_roof
 role: roof
 match: any_gable
+fallback: ((1 1 1 1) 0 house_roof_fallback any_corner)
 opaque: 0
 lay: | 6  4 2
      | 7 16 0
