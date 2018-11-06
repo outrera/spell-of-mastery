@@ -56,6 +56,20 @@ place_object Me Bank Type =
   | U.move{X,Y,Z}
   | U.run_genes{place}
   | U.animate{idle}
+  
+site.place_struct XYZ Tile =
+| XX,YY,ZZ = XYZ
+| Tiles = (Tile.structTiles){N=>$main.tiles.N}
+| IIIs = Tile.struct.tail
+| for Y IIIs.size:
+  | IIs = IIIs.Y
+  | for X IIs.size:
+    | Is = IIs.X
+    | Is = if Is.is_int then [Is] else Is.tail
+    | for Z Is.size
+      | I = Is.Z
+      | when I:
+        | site_place_tile Me XX+X YY+Y ZZ+Z Tiles.(I-1)
 
 site_place_tile Me X Y Z Tile =
 | when X<1 or Y<1 or X>$w or Y>$h: leave
@@ -67,6 +81,13 @@ AnchorHack = -1
 view.place_tile Type =
 | $cursor.2 <= $floor{$cursor}
 | Tile = $main.tiles.Type
+| when Tile.struct:
+  | $site.place_struct{$cursor Tile}
+  | $mice_click <= 0
+  | X,Y,Z = $cursor
+  | till $site.at{X Y Z}.empty: Z++
+  | $cursor.2 <= Z
+  | leave
 | X,Y,Z = $cursor
 | IsBridge = $key{edit_bridge}
 | IsEmpty = $key{edit_over_empty} or Tile.empty
