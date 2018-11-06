@@ -1,4 +1,4 @@
-sprite: tiles_house_roof
+sprite: tiles_roof
 role: roof
 match: any_corner
 opaque: 0
