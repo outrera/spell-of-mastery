@@ -1,5 +1,5 @@
 role: dirt
 lineup: 0
-embed: 1
+embed: 2
 water: water,dirt_water
 stack: dirt0,dirt1,dirt2
