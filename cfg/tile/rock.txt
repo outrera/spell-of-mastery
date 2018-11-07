@@ -1,6 +1,7 @@
 sprite: tiles_rock
 water: water,rock_water
 colors: #4f4f4f,#6b6b6b
+plain: rockp
 //lay: default
 lay: | 7  6  4
      | 5 (16 17)  2
