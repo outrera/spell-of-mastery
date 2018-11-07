@@ -1,5 +1,5 @@
-//grassy version for plain soil
-sprite: tiles_grass
+//grassy version for plain soil (grass)
+sprite: tiles_soilp
 role: soil
 aux: 1
 colors: #4a4c24,#31651d
@@ -9,4 +9,4 @@ lay: |  7  6  4
      |  3  1  0
      |  8     9
      | 11 10
-     | 12 13 14
+     | 12 13 15

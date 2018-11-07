@@ -3,6 +3,6 @@ match: any_cornerside
 lineup: 1
 dig: 1
 indoor: soild
-plain: soilg
+plain: soilp
 water: water,soil_water
 stack: soil0,dirt1,soil2
