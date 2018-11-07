@@ -5,7 +5,7 @@ CellSize = 32 //FIXME: hardcoded
 type tile{As Main Type Role Id stack/0
           height/1 filler/1 invisible/0 match/same_corner shadow/0
           anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
-          parts/0 wallShift/0 indoor/0 liquid/0 opaque/No
+          parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] hp/0 cost/0
           hit/0 death/0 embed/0 sprite/0 flatGfx/0 lay/No
           struct/0 structTiles/0 colors/[#808080 #A0A0A0]}
@@ -38,11 +38,15 @@ type tile{As Main Type Role Id stack/0
      parts/Parts
      wallShift/WallShift //used for calcucalating door`s fine x,y
      tiler/0
+     plain/Plain
      indoor/Indoor
-     liquid/Liquid
+     liquid/Liquid //this tile is liquid
      opaque/Opaque
      fallback/Fallback
      embed/Embed //embed into what type of other tile
+                 //0 = don't embed, but place on top
+                 //1 = embed water
+                 //2 = embed floor
      hp/Hp
      cost/Cost
      hit/Hit //on hit effect
@@ -199,13 +203,6 @@ tile.render X Y Z Below Above Variation =
 | AR = Above.role
 | NeibSlope = #@0000
 | T = Me
-| when $indoor and Z < ColumnHeight-1 /*and AH*/: //FIXME: non-ceil tiles?
-  | TT = $indoor
-  | when AH<>1:
-    | ZZ = ColumnHeight-1
-    | while Site.at{X Y ZZ}.heavy<>1: ZZ--
-    | when ZZ<>ColumnHeight-1: TT <= T
-  | T <= TT
 | when T.water:
   | Neib,Water = T.water
   | when got Site.neibs{X Y Z-TH+1}.find{?type><Neib}:
@@ -374,6 +371,9 @@ main.load_tiles =
   | $tiles.K <= Tile
 | for K,T $tiles
   | when T.stack: T.stack <= T.stack{}{$tiles.?}
+  | when T.plain:
+    | T.plain <= $tiles.(T.plain)
+    | less got T.plain: bad "tile [K] references unknown plain tile"
   | when T.indoor:
     | T.indoor <= $tiles.(T.indoor)
     | less got T.indoor: bad "tile [K] references unknown indoor tile"

@@ -1,0 +1,12 @@
+//grassy version for plain soil
+sprite: tiles_grass
+role: soil
+aux: 1
+colors: #4a4c24,#31651d
+match: same_corner
+lay: |  7  6  4
+     |  5 14  2
+     |  3  1  0
+     |  8     9
+     | 11 10
+     | 12 13 14

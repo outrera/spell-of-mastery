@@ -658,6 +658,17 @@ site.upd_pilar X Y =
   | when Above.parts.is_int: //multi-height tile
     | Above <= (Next-Above.parts).tile
   // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
+  | when T.indoor and Z < H-1:
+    | TT = T.indoor
+    | when Above.heavy<>1:
+      | ZZ = H-1
+      | while $at{X Y ZZ}.heavy<>1: ZZ--
+      | when ZZ<>H-1: TT <= T
+    | T <= TT
+  | when T.plain and not Above.heavy:
+    | when Site.getSides{X Y Z}.all{1} and Site.getCorners{X Y Z}.all{1}:
+      | when X>1 and Y>1 and X<$w and Y < $h:
+        | T <= T.plain
   | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Var+Z}
   | Below <= T
   | T <= Above

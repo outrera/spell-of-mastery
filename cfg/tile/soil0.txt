@@ -1,4 +1,4 @@
-sprite: tiles_plain0
+sprite: tiles_soil0
 aux: 1
 colors: #4a4c24,#31651d
 lay: default
