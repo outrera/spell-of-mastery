@@ -589,11 +589,11 @@ site.getCornersSame X Y Z Role = fxn: `[]`
   [$role{X+1 Y+1 Z} $role{X Y+1 Z} $role{X+1 Y Z}].all{Role}
   [$role{X-1 Y+1 Z} $role{X Y+1 Z} $role{X-1 Y Z}].all{Role}
 
-site.getSidesSame X Y Z Role = `[]`
+site.getSidesRole X Y Z Role = `[]`
   $role{X fxn{Y-1} Z}><Role $role{fxn{X+1} Y Z}><Role
   $role{X fxn{Y+1} Z}><Role $role{fxn{X-1} Y Z}><Role
   
-site.getSidesSame2 X Y Z R = `[]`
+site.getSidesRole2 X Y Z R = `[]`
   ($role{X fxn{Y-1} Z}><R or (not $filled{X Y-1 Z} and $role{X Y-2 Z}><R))
   ($role{fxn{X+1} Y Z}><R or (not $filled{X+1 Y Z} and $role{X+2 Y Z}><R))
   ($role{X fxn{Y+1} Z}><R or (not $filled{X Y+1 Z} and $role{X Y+2 Z}><R))

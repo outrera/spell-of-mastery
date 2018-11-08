@@ -68,18 +68,18 @@ type tile{As Main Type Id stack/0
            | tile As Main Type Id @[parts -(I+1) @As]
     else $parts <= []
 
-m_same_side Site X Y Z Tile = Site.getSidesSame{X Y Z Tile.role}
-m_same_corner Site X Y Z Tile = Site.getCornersSame{X Y Z Tile.role}
+m_role_side Site X Y Z Tile = Site.getSidesRole{X Y Z Tile.match}
+m_role_corner Site X Y Z Tile = Site.getCornersSame{X Y Z Tile.match}
 m_any_side Site X Y Z Tile = Site.getSides{X Y Z}
 m_any_corner Site X Y Z Tile = Site.getCorners{X Y Z}
 
-m_same_wall Site X Y Z Tile =
-| R = Site.getSidesSame2{X Y Z Tile.role}
-| when Site.at{X Y Z-1}.role><Tile.role:
-  | R <= Site.getSidesSame2{X Y Z-1 Tile.role}
+m_role_wall Site X Y Z Tile =
+| R = Site.getSidesRole2{X Y Z Tile.match}
+| when Site.at{X Y Z-1}.role><Tile.match:
+  | R <= Site.getSidesRole2{X Y Z-1 Tile.match}
 | when R >< [0 0 0 0]:
-  | when Site.at{X Y Z+1}.role><Tile.role:
-    | R <= Site.getSidesSame2{X Y Z+1 Tile.role}
+  | when Site.at{X Y Z+1}.role><Tile.match:
+    | R <= Site.getSidesRole2{X Y Z+1 Tile.match}
 | R
 
 m_any_cornerside Site X Y Z Tile =
@@ -113,7 +113,7 @@ BXR = BU+BD+BL  //eXcluding right
 SFlat = [0 0 0 0]
 SFilled = [1 1 1 1]
 
-m_any_stairs Me X Y Z Tile =
+m_role_stairs Me X Y Z Tile =
 | Role = Tile.role
 | H = Tile.height
 | E = `[]` $filled{X Y-1 Z} $filled{X+1 Y Z} $filled{X Y+1 Z} $filled{X-1 Y Z}
@@ -193,7 +193,7 @@ m_any_stairs Me X Y Z Tile =
   else
 | E
 
-m_same_lay Me X Y Z Tile =
+m_role_lay Me X Y Z Tile =
 
 BelowSlope = 0
 ColumnHeight = 0
@@ -295,13 +295,13 @@ get_tiler_fn Match Tiler =
       corner     | &m_any_corner
       side       | &m_any_side
       cornerside | &m_any_cornerside
-      stairs     | &m_any_stairs
       Else       | 0
   else case Tiler
-      corner    | &m_same_corner
-      side      | &m_same_side
-      lay       | &m_same_lay
-      wall      | &m_same_wall
+      corner    | &m_role_corner
+      side      | &m_role_side
+      lay       | &m_role_lay
+      wall      | &m_role_wall
+      stairs    | &m_role_stairs
       Else      | 0
 
 tile.get_tile_sprite TileName SpriteName =
