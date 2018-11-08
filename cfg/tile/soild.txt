@@ -1,6 +1,6 @@
 //dirt version for cave/indoors
-role: soil
-lineup: 0
 aux: 1
+tiler: soil,any,cornerside
+lineup: 0
 water: water,dirt_water
 stack: dirt0,dirt1,dirt2

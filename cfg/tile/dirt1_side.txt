@@ -1,12 +1,11 @@
 sprite: tiles_dirt1
 aux: 1
+tiler: dirt,any,side
 dig: 1
 heavy: 1
 opaque: 1
 filler: 0
 lineup: 0
-match: same_side
-role: dirt
 lay: | 2  4 0
      |10 10 0
      | 3  3 0

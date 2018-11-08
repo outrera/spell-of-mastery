@@ -1,5 +1,4 @@
-role: soil
-match: any_cornerside
+tiler: soil,any,cornerside
 lineup: 1
 dig: 1
 indoor: soild

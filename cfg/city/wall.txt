@@ -1,2 +1,2 @@
-role: castle_wall
+tiler: castle_wall,any,corner
 stack: wall0,wall1,wall2

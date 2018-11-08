@@ -1,6 +1,6 @@
 sprite: tiles_pavement
+tiler: uniq,same,corner
 embed: 2
-match: same_corner
 lay: | 7 6 4
      | 5 8 2
      | 3 1 0

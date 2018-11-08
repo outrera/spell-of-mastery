@@ -1,6 +1,5 @@
 sprite: tiles_wall
-role: fence_wall
-match: same_side
+tiler: uniq,same,wall
 filler: 0
 lineup: 0
 opaque: 0

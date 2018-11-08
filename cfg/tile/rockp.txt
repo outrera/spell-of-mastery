@@ -1,9 +1,8 @@
-//grassy version for plain soil (grass)
+//transition to dirt
 sprite: tiles_rockp
-role: rock
 aux: 1
+tiler: rock,same,corner
 colors: #4a4c24,#31651d
-match: same_corner
 lay: |  7  6  4
      |  5 (15 16)  2
      |  3  1  0

@@ -378,7 +378,7 @@ site.clear_tile_ X Y Z =
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
-| when Tile.match >< wall: //walls span 2 more tiles
+| when Tile.tiler >< wall: //walls span 2 more tiles
   | for DX,DY Dirs: $upd_pilar{X+DX+DX Y+DY+DY}
 
 site.clear_tile X Y Z =
@@ -399,7 +399,7 @@ site.set X Y Z Tile =
 | Removed = Cell.tile
 | $dirty_set{X Y Z Tile}
 | $upd_neibs{X Y}
-| when Tile.match >< wall:
+| when Tile.tiler >< wall:
   | for DX,DY Dirs: $upd_pilar{X+DX+DX Y+DY+DY}
 
 site.floor XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.floor%SiteDepth

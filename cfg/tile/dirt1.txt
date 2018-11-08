@@ -1,6 +1,6 @@
 sprite: tiles_dirt1
 aux: 1
-fallback: ((0 0 0 0) 1 dirt1_side any_side)
+fallback: ((0 0 0 0) 1 dirt1_side)
 lineup: 0
 water: water,dirt_water
 lay: default

@@ -1,6 +1,5 @@
 sprite: tiles_wall_window
-role: wall
-match: wall
+tiler: wall,same,wall
 filler: 0
 lineup: 0
 opaque: 0

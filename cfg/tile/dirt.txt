@@ -1,4 +1,4 @@
-role: dirt
+tiler: dirt,any,side
 lineup: 0
 embed: 2
 water: water,dirt_water

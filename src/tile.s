@@ -1,9 +1,8 @@
 use gfx util fxn
 
-CellSize = 32 //FIXME: hardcoded
-
-type tile{As Main Type Role Id stack/0
-          height/1 filler/1 invisible/0 match/same_corner shadow/0
+type tile{As Main Type Id stack/0
+          tiler/[uniq any corner]
+          height/1 filler/1 invisible/0 shadow/0
           anim_wait/0 water/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] hp/0 cost/0
@@ -13,7 +12,10 @@ type tile{As Main Type Role Id stack/0
      main/Main
      bank/Bank
      type/Type
-     role/Role
+     tiler/Tiler
+     match/0
+     role/0
+     tilerFn/0
      stack/Stack //column base, middle, top segments
      sprite/Sprite
      gfxes_data
@@ -24,7 +26,6 @@ type tile{As Main Type Role Id stack/0
      filler/Filler //true if tile fills space, matching with other tiles
      invisible/Invisible
      shadow/Shadow
-     match/Match
      anim_wait/Anim_wait
      water/Water
      around/Around
@@ -36,7 +37,6 @@ type tile{As Main Type Role Id stack/0
      dig/Dig
      parts/Parts
      wallShift/WallShift //used for calcucalating door`s fine x,y
-     tiler/0
      plain/Plain
      indoor/Indoor
      liquid/Liquid //this tile is liquid
@@ -53,13 +53,19 @@ type tile{As Main Type Role Id stack/0
      struct/Struct
      structTiles/StructTiles
      colors/Colors
+| [Role Match TilerName] = $tiler
+| $role <= Role
+| $match <= Match
+| $tiler <= TilerName
+| when $role><uniq: $role <= $type
+| when $match><same: $match <= $role
 | $empty <= not $id
 | when Cost and Cost.size: $cost <= Cost.group{2}{K,V=>"item_[K]",V}
 | when no $opaque: $opaque <= not $invisible
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1
-           | tile As Main Type Role Id @[parts -(I+1) @As]
+           | tile As Main Type Id @[parts -(I+1) @As]
     else $parts <= []
 
 m_same_side Site X Y Z Tile = Site.getSidesSame{X Y Z Tile.role}
@@ -67,7 +73,7 @@ m_same_corner Site X Y Z Tile = Site.getCornersSame{X Y Z Tile.role}
 m_any_side Site X Y Z Tile = Site.getSides{X Y Z}
 m_any_corner Site X Y Z Tile = Site.getCorners{X Y Z}
 
-m_wall Site X Y Z Tile =
+m_same_wall Site X Y Z Tile =
 | R = Site.getSidesSame2{X Y Z Tile.role}
 | when Site.at{X Y Z-1}.role><Tile.role:
   | R <= Site.getSidesSame2{X Y Z-1 Tile.role}
@@ -238,7 +244,7 @@ tile.render X Y Z Below Above Variation =
 | G = if AH and TT.flatGfx then
          | NeibSlope <= #@1111
          | TT.flatGfx
-      else if $match><same_lay then
+      else if $tiler><lay then
          | XX = 1
          | YY = 1
          | while Site.cell{X-XX Y Z}.type><$type: XX++
@@ -251,7 +257,7 @@ tile.render X Y Z Below Above Variation =
          | NeibSlope <= #@1111
          | Gs.NeibSlope
       else fxn:
-         | Elev = $tiler{}{Site X Y Z Me}
+         | Elev = $tilerFn{}{Site X Y Z Me}
          | FB = TT.fallback
          | when esc FB.0><Elev and FB.1><AH:
            | Elev <= (FB.3){Site X Y Z Me}
@@ -284,16 +290,19 @@ tile.sloped_color =
 main.tile_names Bank =
 | $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort
 
-get_match_fn Desc = case Desc
-  any_corner     | &m_any_corner
-  any_side       | &m_any_side
-  same_corner    | &m_same_corner
-  same_side      | &m_same_side
-  any_cornerside | &m_any_cornerside
-  any_stairs     | &m_any_stairs
-  same_lay       | &m_same_lay
-  wall           | &m_wall
-  Else           | 0
+get_tiler_fn Match Tiler =
+  if Match><any then case Tiler
+      corner     | &m_any_corner
+      side       | &m_any_side
+      cornerside | &m_any_cornerside
+      stairs     | &m_any_stairs
+      Else       | 0
+  else case Tiler
+      corner    | &m_same_corner
+      side      | &m_same_side
+      lay       | &m_same_lay
+      wall      | &m_same_wall
+      Else      | 0
 
 tile.get_tile_sprite TileName SpriteName =
 | Sprite = $main.sprites.SpriteName
@@ -333,7 +342,7 @@ tile.init_gfxes =
 | Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
          else if Lay><default then DefaultLay
          else Lay.tail.list
-| when $match<>same_lay:
+| when $tiler<>lay:
   | $gfxes_data <= dup 16 No
   | for Y LayMap.size:
     | Es = LayMap.Y
@@ -343,7 +352,7 @@ tile.init_gfxes =
       | if Is.is_list then
            | when Is.size: $gfxes_data.E <= Is{?^getFrame}
         else $gfxes_data.E <= Is^getFrame
-| when $match><same_lay:
+| when $tiler><lay:
   | $gfxes_data <= map Is Lay: map _,I,F Is: getFrame{I},F
 | when $flatGfx:
   | G = $get_tile_sprite{"[$bank]_[$type]" "tiles_[$flatGfx]"}.0
@@ -371,9 +380,9 @@ main.load_tiles =
          else | $last_tid++
               | $last_tid
   | As = V.list.join
-  | Tile = tile As Me K V.role^~{K} Id @As
-  | Tile.tiler <= get_match_fn Tile.match
-  | less Tile.tiler: bad "tile [K] has invalid `match` ([Tile.match])"
+  | Tile = tile As Me K Id @As
+  | Tile.tilerFn <= get_tiler_fn Tile.match Tile.tiler
+  | less Tile.tilerFn: bad "tile [K] has invalid tiler=[Tile.tiler]"
   | $tiles.K <= Tile
 | for K,T $tiles
   | when T.stack: T.stack <= T.stack{}{$tiles.?}
@@ -388,11 +397,8 @@ main.load_tiles =
     | less got T.water: bad "tile [K] references unknown water tile"
   | when T.back: T.back <= $tiles.(T.back)
   | when T.fallback.0:
-    | T.fallback.2 <= $tiles.(T.fallback.2)
-    | less got T.fallback.2: bad "tile [K] references unknown fallback tile"
-    | Match = T.fallback.3
-    | T.fallback.3 <= get_match_fn Match
-    | less T.fallback.3: bad "tile [K] has invalid fallback match = [Match]"
-    | T.fallback <= T.fallback.list
+    | FT = $tiles.(T.fallback.2)
+    | when no FT: bad "tile [K] references unknown fallback tile"
+    | T.fallback <= [T.fallback.0 T.fallback.1 FT FT.tilerFn]
 
 export tile
