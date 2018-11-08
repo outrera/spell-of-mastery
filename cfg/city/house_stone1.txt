@@ -1,3 +1,0 @@
-sprite: tiles_house_stone
-aux: 1
-lay: 1

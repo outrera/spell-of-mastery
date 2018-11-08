@@ -1,3 +1,0 @@
-role: house_stone
-stack: house_stone0,house_stone1,house_stone2
-opaque: 0
