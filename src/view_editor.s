@@ -108,18 +108,10 @@ view.place_tile Type =
 | less IsBridge
   | when Tile.embed: IsEmbed <= not IsEmbed
   | if IsEmbed then
-      | when Tile.wall
-        | Below = $site.at{X Y $cursor.2-1}
-        | while $cursor.2 > 1 and (Below.around or Below.type><void):
-          | H = $site.at{X Y $cursor.2-1}.height
-          | $cursor.2 -= H
-          | $anchor.2 <= $cursor.2
-          | $site.clear_tile{@$cursor}
-          | Below <= $site.at{X Y $cursor.2-1}
       | when $cursor.2<<$anchor.2:
         | Below = $site.at{X Y $cursor.2-1}
         | less Below.empty
-          | $site.set{X Y $cursor.2-1 Tile owner/$site.human}
+          | $site.set{X Y $cursor.2-1 Tile}
           | leave
     else
       | when $site.at{X Y $cursor.2-1}.embed><1 and not Tile.embed: 
@@ -128,7 +120,7 @@ view.place_tile Type =
           | $anchor.2 <= Z
           | AnchorHack <= $lmb_count
         | while Z>>0 and $site.at{X Y Z}.embed><1 and not Tile.embed:
-          | $site.set{X Y Z-- Tile owner/$site.human}
+          | $site.set{X Y Z-- Tile}
         | leave
   | AnchorHack <= $lmb_count
 | while 1

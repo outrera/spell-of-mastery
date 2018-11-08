@@ -378,18 +378,8 @@ site.clear_tile_ X Y Z =
 | less Tile.id: leave
 | times I Tile.height
   | $set_{X Y Z-I Filler}
-| when Tile.wall:
-  | ZZ = 0
-  | RT = 0
-  | for DX,DY Dirs: //tile has associated walls
-    | XX = X+DX
-    | YY = Y+DY
-    | TT = Tile.type
-    | when ZZ and $at{XX YY ZZ}.type><RT.type: $clear_tile{XX YY ZZ}
-    | when $at{XX YY Z+1}.around><TT:
-      | when Dirs.all{DX,DY=>$at{XX+DX YY+DY Z}.type<>TT}
-        | $clear_tile{XX YY Z+1}
-
+| when Tile.match >< wall: //walls span 2 more tiles
+  | for DX,DY Dirs: $upd_pilar{X+DX+DX Y+DY+DY}
 
 site.clear_tile X Y Z =
 | $clear_tile_{X Y Z}
@@ -404,11 +394,13 @@ site.dirty_set X Y Z Tile =
 | times I H: $set_{X Y Z+I Ps.I} // push padding
 | $set_{X Y Z+H Tile}
 
-site.set X Y Z Tile owner/0 =
+site.set X Y Z Tile =
 | Cell = $cell{X Y Z}
 | Removed = Cell.tile
 | $dirty_set{X Y Z Tile}
 | $upd_neibs{X Y}
+| when Tile.match >< wall:
+  | for DX,DY Dirs: $upd_pilar{X+DX+DX Y+DY+DY}
 
 site.floor XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.floor%SiteDepth
 
@@ -600,6 +592,12 @@ site.getCornersSame X Y Z Role = fxn: `[]`
 site.getSidesSame X Y Z Role = `[]`
   $role{X fxn{Y-1} Z}><Role $role{fxn{X+1} Y Z}><Role
   $role{X fxn{Y+1} Z}><Role $role{fxn{X-1} Y Z}><Role
+  
+site.getSidesSame2 X Y Z R = `[]`
+  ($role{X fxn{Y-1} Z}><R or (not $filled{X Y-1 Z} and $role{X Y-2 Z}><R))
+  ($role{fxn{X+1} Y Z}><R or (not $filled{X+1 Y Z} and $role{X+2 Y Z}><R))
+  ($role{X fxn{Y+1} Z}><R or (not $filled{X Y+1 Z} and $role{X Y+2 Z}><R))
+  ($role{fxn{X-1} Y Z}><R or (not $filled{X-2 Y Z} and $role{X-2 Y Z}><R))
 
 site.update_minimap X Y Color =
 | less $human.sight.Y.X: leave

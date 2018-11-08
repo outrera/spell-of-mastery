@@ -1,6 +1,6 @@
 sprite: tiles_wall_stone
 role: wall
-match: same_side
+match: wall
 filler: 0
 lineup: 0
 opaque: 0

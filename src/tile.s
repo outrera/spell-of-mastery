@@ -4,7 +4,7 @@ CellSize = 32 //FIXME: hardcoded
 
 type tile{As Main Type Role Id stack/0
           height/1 filler/1 invisible/0 match/same_corner shadow/0
-          anim_wait/0 water/0 wall/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
+          anim_wait/0 water/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
           around/0 back/0 fallback/[0 0 0] hp/0 cost/0
           hit/0 death/0 embed/0 sprite/0 flatGfx/0 lay/No
@@ -27,7 +27,6 @@ type tile{As Main Type Role Id stack/0
      match/Match
      anim_wait/Anim_wait
      water/Water
-     wall/Wall
      around/Around
      back/Back
      unit/Unit //used for units that act as platforms
@@ -67,6 +66,15 @@ m_same_side Site X Y Z Tile = Site.getSidesSame{X Y Z Tile.role}
 m_same_corner Site X Y Z Tile = Site.getCornersSame{X Y Z Tile.role}
 m_any_side Site X Y Z Tile = Site.getSides{X Y Z}
 m_any_corner Site X Y Z Tile = Site.getCorners{X Y Z}
+
+m_wall Site X Y Z Tile =
+| R = Site.getSidesSame2{X Y Z Tile.role}
+| when Site.at{X Y Z-1}.role><Tile.role:
+  | R <= Site.getSidesSame2{X Y Z-1 Tile.role}
+| when R >< [0 0 0 0]:
+  | when Site.at{X Y Z+1}.role><Tile.role:
+    | R <= Site.getSidesSame2{X Y Z+1 Tile.role}
+| R
 
 m_any_cornerside Site X Y Z Tile =
 | R = Site.getCorners{X Y Z}
@@ -284,6 +292,7 @@ get_match_fn Desc = case Desc
   any_cornerside | &m_any_cornerside
   any_stairs     | &m_any_stairs
   same_lay       | &m_same_lay
+  wall           | &m_wall
   Else           | 0
 
 tile.get_tile_sprite TileName SpriteName =
@@ -291,9 +300,6 @@ tile.get_tile_sprite TileName SpriteName =
 | less got Sprite: bad "Tile [TileName] references missing sprite [SpriteName]"
 | Sprite
 
-
-Es = [1111 1000 1100 1001 0100 0001 0110 0011
-        0010 0111 1011 1101 1110 1010 0101 0000]
 DefaultLay =
   [[ 7  6  4]
    [ 5 16  2]
