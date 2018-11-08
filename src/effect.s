@@ -538,7 +538,7 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< onHit then
       if $range><1 and $xyz.2-T.xyz.2>1 then
         | $shot_missile{Target [boulder]
-                        [shell [hit user] [impact explosion] [sound explosion]]}
+                        [shell [hit user] [visual explosion] [sound explosion]]}
       else
         | $effect{$onHit T T.xyz}
     else if Name >< missile then
