@@ -1,5 +1,6 @@
 sprite: special_grave
 ai: corpse
+aux: 1
 box_xy: (-1 -1)
 draworder: 75
 inborn: (ttl_s.5{})
