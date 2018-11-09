@@ -1,5 +1,5 @@
 //transition into dirt
-sprite: tiles_soilp
+sprite: soilp
 aux: 1
 tiler: soil,same,corner
 ztiler: soil,same

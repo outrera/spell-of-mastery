@@ -1,3 +1,4 @@
+sprite: void
 filler: 0
 invisible: 1
 aux: 1

@@ -1,5 +1,5 @@
 //transition to dirt
-sprite: tiles_rockp
+sprite: rockp
 aux: 1
 tiler: rock,same,corner
 ztiler: rock,same

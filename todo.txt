@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - all tiles sprite: params begin with tiles_ (beside a few system one). do something about it.
+- aux param can be autoset, when tile is referenced as fallback or stacked.
 - tiler can be speed up by using integer as a role
 - implement proper water and waterfall tiling
 - a way to place floor, without removing walls; consider extending `b` hotkey 

@@ -2,5 +2,5 @@ tiler: dirt,any,cornerside
 ztiler: soil,same
 dig: 1
 embed: 2
-water: water,dirt_water
+water: water,dirtw
 stack: dirt0,dirt1,dirt2

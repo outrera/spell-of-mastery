@@ -1,5 +1,5 @@
-sprite: tiles_rock
-water: water,rock_water
+sprite: rock
+water: water,rockw
 colors: #4f4f4f,#6b6b6b
 plain: rockp
 //lay: default

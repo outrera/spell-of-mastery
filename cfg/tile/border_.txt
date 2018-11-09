@@ -1,4 +1,4 @@
-sprite: tiles_base_
+sprite: base_
 invisible: 1
 height: 1
 aux: 1

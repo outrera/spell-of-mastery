@@ -1,5 +1,5 @@
-sprite: tiles_dirt2
+sprite: dirt2
 aux: 1
 lineup: 0
-water: water,dirt_water
+water: water,dirtw
 lay: default

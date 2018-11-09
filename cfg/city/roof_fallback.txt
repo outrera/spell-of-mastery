@@ -1,4 +1,4 @@
-sprite: tiles_roof
+sprite: roof
 tiler: roof,any,corner
 opaque: 0
 aux: 1

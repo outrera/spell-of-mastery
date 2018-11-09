@@ -1,4 +1,4 @@
-sprite: tiles_pavement
+sprite: pavement
 tiler: uniq,same,corner
 embed: 2
 lay: | 7 6 4

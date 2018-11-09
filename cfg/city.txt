@@ -1,4 +1,4 @@
-sprite: system_dummy
+sprite: void
 tiler: uniq,any,corner
 filler: 1 //true if it forces other tiles to align with respect to it
 embed: 0 //brush replaces the tile below, during painting

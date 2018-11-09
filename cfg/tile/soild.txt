@@ -3,5 +3,5 @@ aux: 1
 tiler: soil,any,cornerside
 ztiler: soil,same
 lineup: 0
-water: water,dirt_water
+water: water,dirtw
 stack: dirt0,dirt1,dirt2

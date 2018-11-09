@@ -1,4 +1,4 @@
-sprite: tiles_floor_temple
+sprite: floor_temple
 tiler: uniq,same,corner
 embed: 2
 lay: | 7 6 4

@@ -1,4 +1,4 @@
-sprite: tiles_roof
+sprite: roof
 tiler: roof,same,stairs
 fallback: ((1 1 1 1) 0 roof_fallback)
 opaque: 0

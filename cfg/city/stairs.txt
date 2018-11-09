@@ -1,4 +1,4 @@
-sprite: tiles_castle
+sprite: castle
 tiler: stairs,same,stairs
 opaque: 0
 lay: | 6  4 2

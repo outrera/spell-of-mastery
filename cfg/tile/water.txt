@@ -1,4 +1,4 @@
-sprite: tiles_water
+sprite: water
 opaque: 0
 height: 1
 liquid: 1
@@ -6,5 +6,5 @@ lineup: 0
 filler: 0
 embed: 1
 colors: #043c7c,#043c7c
-flatGfx: water_flat
+flatGfx: waterf
 lay: 0

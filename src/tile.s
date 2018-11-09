@@ -311,7 +311,7 @@ get_tiler_fn Match Tiler =
       Else      | 0
 
 tile.get_tile_sprite TileName SpriteName =
-| Sprite = $main.sprites.SpriteName
+| Sprite = $main.sprites."tiles_[SpriteName]"
 | less got Sprite: bad "Tile [TileName] references missing sprite [SpriteName]"
 | Sprite
 
@@ -361,7 +361,7 @@ tile.init_gfxes =
 | when $tiler><lay:
   | $gfxes_data <= map Is Lay: map _,I,F Is: getFrame{I},F
 | when $flatGfx:
-  | G = $get_tile_sprite{"[$bank]_[$type]" "tiles_[$flatGfx]"}.0
+  | G = $get_tile_sprite{"[$bank]_[$type]" $flatGfx}.0
   | $flatGfx <= dup 16 G
 
 main.load_tiles =
@@ -400,7 +400,7 @@ main.load_tiles =
     | less got T.indoor: bad "tile [K] references unknown indoor tile"
   | when T.water:
     | T.water <= [T.water.0 $tiles.(T.water.1)]
-    | less got T.water: bad "tile [K] references unknown water tile"
+    | less got T.water.1: bad "tile [K] references unknown water tile"
   | when T.back: T.back <= $tiles.(T.back)
   | when T.fallback.0:
     | FT = $tiles.(T.fallback.2)

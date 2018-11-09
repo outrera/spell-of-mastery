@@ -1,4 +1,4 @@
-sprite: tiles_wall_stone2
+sprite: wall_stone2
 tiler: uniq,same,wall
 filler: 0
 lineup: 0

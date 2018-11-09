@@ -1,4 +1,4 @@
-sprite: tiles_floor_carpet
+sprite: floor_carpet
 embed: 2
 tiler: uniq,same,corner
 lay: | 7 6 4

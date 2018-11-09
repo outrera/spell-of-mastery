@@ -1,4 +1,4 @@
-sprite: tiles_dirt0
+sprite: dirt0
 aux: 1
 tiler: dirt,any,side
 heavy: 1

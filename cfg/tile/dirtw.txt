@@ -1,0 +1,3 @@
+sprite: dirtw
+aux: 1
+lay: default

@@ -1,4 +1,4 @@
-sprite: tiles_wall_house
+sprite: wall_house
 tiler: wall,same,wall
 filler: 0
 lineup: 0

@@ -4,5 +4,5 @@ lineup: 1
 dig: 1
 indoor: soild
 plain: soilp
-water: water,soil_water
+water: water,soilw
 stack: soil0,dirt1,soil2
