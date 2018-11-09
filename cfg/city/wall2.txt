@@ -1,3 +1,1 @@
-sprite: castle
-aux: 1
 lay: 17

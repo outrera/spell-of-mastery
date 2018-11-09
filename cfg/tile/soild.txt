@@ -1,5 +1,3 @@
-//dirt version for cave/indoors
-aux: 1
 tiler: soil,any,cornerside
 ztiler: soil,same
 lineup: 0

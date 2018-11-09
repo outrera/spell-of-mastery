@@ -1,17 +1,20 @@
 use gfx util fxn
 
-type tile{As Main Type Id stack/0
+type tile{As Main Type Id
+          sprite/0 flatGfx/0 lay/No
           tiler/[uniq any corner] ztiler/[uniq same]
-          height/1 filler/1 invisible/0 shadow/0
+          aux/0 height/1 filler/1 invisible/0 shadow/0
           anim_wait/0 water/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
-          around/0 back/0 fallback/[0 0 0] hp/0
-          hit/0 death/0 embed/0 sprite/0 flatGfx/0 lay/No
-          struct/0 structTiles/0 colors/[#808080 #A0A0A0]}
+          hp/0 hit/0 death/0
+          embed/0
+          stack/0 fallback/[0 0 0] struct/0 structTiles/0 
+          colors/[#808080 #A0A0A0]}
      id/Id
      main/Main
      bank/Bank
      type/Type
+     aux/Aux //don't show tile in editor
      tiler/Tiler
      match/0
      role/0
@@ -30,8 +33,6 @@ type tile{As Main Type Id stack/0
      shadow/Shadow
      anim_wait/Anim_wait
      water/Water
-     around/Around
-     back/Back
      unit/Unit //used for units that act as platforms
      heavy/Heavy //1=shapes the tile below into a cube
                  //2=shapes into cube, but preserves grass
@@ -226,14 +227,6 @@ tile.render X Y Z Below Above Variation =
   | Neib,Water = T.water
   | when got Site.neibs{X Y Z-TH+1}.find{?type><Neib}:
     | T <= Water
-| when $back:
-  | ZZ = Z-$height
-  | A = Site.at{X+1 Y ZZ}
-  | B = Site.at{X Y+1 ZZ}
-  | C = Site.at{X+1 Y+1 ZZ}
-  | Ar = $around
-  | when A.type><Ar or B.type><Ar or C.type><Ar:
-    | T <= $back
 | TT = T
 | ZR = $zmatch //match zrole
 | St = TT.stack
@@ -379,7 +372,6 @@ main.load_tiles =
 | for Bank BankNames: for Type,Tile $cfg.Bank
   | Tile.bank <= Bank
   | Tiles.Type <= Tile
-  | when got Tile.aux: $aux_tiles.Type <= Tile.aux
 | $tiles <= t size/1024
 | for K,V Tiles
   | Id = if K >< void then 0
@@ -391,22 +383,39 @@ main.load_tiles =
   | less Tile.tilerFn: bad "tile [K] has invalid tiler=[Tile.tiler]"
   | $tiles.K <= Tile
 | for K,T $tiles
-  | when T.stack: T.stack <= T.stack{}{$tiles.?}
+  | when T.stack:
+    | T.stack <= T.stack{}{$tiles.?}
+    | for ST T.stack:
+      | less got ST:  bad "tile [K] references unknown stack tile"
+      | ST.aux <= 1
+      | when T.sprite: less ST.sprite: ST.sprite <= T.sprite
+  | when T.structTiles:
+    | T.structTiles <= T.structTiles{}{$tiles.?}
+    | for ST T.structTiles:
+      | less got ST:  bad "tile [K] references unknown struct tile"
+      | ST.aux <= 1
+      | when T.sprite: less ST.sprite: ST.sprite <= T.sprite
   | when T.plain:
     | T.plain <= $tiles.(T.plain)
     | less got T.plain: bad "tile [K] references unknown plain tile"
+    | T.plain.aux <= 1
   | when T.indoor:
     | T.indoor <= $tiles.(T.indoor)
     | less got T.indoor: bad "tile [K] references unknown indoor tile"
+    | T.indoor.aux <= 1
   | when T.water:
-    | T.water <= [T.water.0 $tiles.(T.water.1)]
-    | less got T.water.1: bad "tile [K] references unknown water tile"
-  | when T.back: T.back <= $tiles.(T.back)
+    | WT = $tiles.(T.water.1)
+    | less got WT: bad "tile [K] references unknown water tile"
+    | WT.aux <= 1
+    | T.water <= [T.water.0 WT]
   | when T.fallback.0:
     | FT = $tiles.(T.fallback.2)
     | when no FT: bad "tile [K] references unknown fallback tile"
+    | FT.aux <= 1
     | less FT.sprite: FT.sprite <= (T.sprite or K)
     | T.fallback <= [T.fallback.0 T.fallback.1 FT FT.tilerFn]
-| for K,T $tiles: less T.sprite: T.sprite <= K
+| for K,T $tiles:
+  | less T.sprite: T.sprite <= K
+  | when T.aux: $aux_tiles.K <= T.aux
 
 export tile

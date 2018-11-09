@@ -59,7 +59,7 @@ place_object Me Bank Type =
   
 site.place_struct XYZ Tile =
 | XX,YY,ZZ = XYZ
-| Tiles = (Tile.structTiles){N=>$main.tiles.N}
+| Tiles = Tile.structTiles
 | IIIs = Tile.struct.tail
 | for Y IIIs.size:
   | IIs = IIIs.Y

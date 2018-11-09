@@ -1,2 +1,1 @@
-aux: 1
 lay: default

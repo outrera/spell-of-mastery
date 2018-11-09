@@ -1,4 +1,3 @@
-aux: 1
 lineup: 0
 water: water,dirtw
 lay: default

@@ -452,13 +452,11 @@ effect align How:
 | less $site.at{X Y-1 Z}.empty or $site.at{X Y+1 Z}.empty:
   | $face{$xyz+[1 0 0]}
   | T = $site.at{X Y-1 Z}
-  | when T.wallShift and not $site.at{X+1 Y Z}.type><T.around:
-    | $fxyz.init{$fxyz+[T.wallShift 0 0]}
+  | when T.wallShift: $fxyz.init{$fxyz+[T.wallShift 0 0]}
   | leave
 | $face{$xyz+[0 1 0]}
 | T = $site.at{X-1 Y Z}
-| when T.wallShift and not $site.at{X Y+1 Z}.type><T.around:
-  | $fxyz.init{$fxyz+[0 T.wallShift 0]}
+| when T.wallShift: $fxyz.init{$fxyz+[0 T.wallShift 0]}
 
 effect yes //confirmation
 | MenuActName,XYZ,TargetSerial = $get{menuact}

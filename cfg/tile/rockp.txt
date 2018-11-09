@@ -1,5 +1,3 @@
-//transition to dirt
-aux: 1
 tiler: rock,same,corner
 ztiler: rock,same
 colors: #4a4c24,#31651d

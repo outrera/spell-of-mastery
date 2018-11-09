@@ -1,3 +1,2 @@
-aux: 1
 colors: #4a4c24,#383d32
 lay: default
