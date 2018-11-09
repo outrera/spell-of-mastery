@@ -231,10 +231,10 @@ tile.render X Y Z Below Above Variation =
 | ZR = $zmatch //match zrole
 | St = TT.stack
 | when St:
-  | TT <= if BE then fxn St.2
-          else if BZR <> ZR or fxn BelowSlope><#@1111 then fxn St.0
-          else if AZR <> ZR then fxn St.2
-          else fxn St.1
+  | TT <= fxn: if BE then St.2
+          else if BZR <> ZR or BelowSlope><#@1111 then St.0
+          else if AZR <> ZR then St.2
+          else St.1
 | Gs = TT.gfxes
 | Lineup = 0
 | when AH and $lineup and ($lineup<>other or AZR<>ZR):
@@ -357,6 +357,8 @@ tile.init_gfxes =
   | G = $get_tile_sprite{"[$bank]_[$type]" $flatGfx}.0
   | $flatGfx <= dup 16 G
 
+RoleById = t
+
 main.load_tiles =
 | BankNames = case $cfg.site.tile_banks [@Xs](Xs) X[X]
 | $cfg.site.tile_banks <= BankNames 
@@ -417,5 +419,19 @@ main.load_tiles =
 | for K,T $tiles:
   | less T.sprite: T.sprite <= K
   | when T.aux: $aux_tiles.K <= T.aux
+| LastRoleId = 0
+| Roles = t
+| get_role_id Name =
+  | R = Roles.Name
+  | less got R:
+    | R <= LastRoleId++
+    | Roles.Name <= R
+  | R
+| for K,T $tiles:
+  | T.role <= get_role_id T.role
+  | T.match <= get_role_id T.match
+  | T.zrole <= get_role_id T.zrole
+  | T.zmatch <= get_role_id T.zmatch
+| for K,V Roles: RoleById.V <= K
 
 export tile
