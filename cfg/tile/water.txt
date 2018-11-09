@@ -1,4 +1,3 @@
-sprite: water
 opaque: 0
 height: 1
 liquid: 1

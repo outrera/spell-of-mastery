@@ -1,4 +1,3 @@
-sprite: base_
 invisible: 0
 aux: 1
 lay: 0

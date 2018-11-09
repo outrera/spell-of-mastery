@@ -1,6 +1,5 @@
-sprite: roof
 tiler: roof,same,stairs
-fallback: ((1 1 1 1) 0 roof_fallback)
+fallback: ((1 1 1 1) 0 roofb)
 opaque: 0
 lay: | 6  4 2
      | 7 16 0

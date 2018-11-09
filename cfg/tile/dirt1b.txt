@@ -1,9 +1,8 @@
-sprite: dirt0
 aux: 1
 tiler: dirt,any,side
+dig: 1
 heavy: 1
 opaque: 1
-dig: 0
 filler: 0
 lineup: 0
 lay: | 2  4 0

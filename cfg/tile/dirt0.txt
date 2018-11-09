@@ -1,7 +1,6 @@
-sprite: dirt0
 aux: 1
 tiler: dirt,any,cornerside
-fallback: ((0 0 0 0) 1 dirt0_side)
+fallback: ((0 0 0 0) 1 dirt0b)
 lineup: 0
 water: water,dirtw
 lay: default

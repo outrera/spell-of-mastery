@@ -1,3 +1,2 @@
-sprite: rockw
 aux: 1
 lay: default

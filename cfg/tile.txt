@@ -1,4 +1,5 @@
-sprite: void //used sprite
+sprite: 0 //used sprite, 0=sprite has the same names as the tile
+          //it is also passed to fallback tiles.
 tiler: uniq,any,corner //controls tiling in x,y axes
 ztiler: uniq,same //controls tiling in z-axis
 filler: 1 //true if it forces other tiles to align with respect to it

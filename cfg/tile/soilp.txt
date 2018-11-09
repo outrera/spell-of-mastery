@@ -1,5 +1,4 @@
 //transition into dirt
-sprite: soilp
 aux: 1
 tiler: soil,same,corner
 ztiler: soil,same

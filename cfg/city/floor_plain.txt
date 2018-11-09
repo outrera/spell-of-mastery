@@ -1,3 +1,2 @@
-sprite: floor_plain
 embed: 2
 lay: 0

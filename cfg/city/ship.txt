@@ -1,4 +1,3 @@
-sprite: ship
 structTiles: ship1,ship2,ship3
 struct: | 1,2 1,2 1 1 1 1,3 1,3 1,3
         | 1,2 1,2 1 1 1 1,3 1,3 1,3 0,3

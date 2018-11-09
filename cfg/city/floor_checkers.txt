@@ -1,3 +1,2 @@
-sprite: floor_checkers
 embed: 2
 lay: 0

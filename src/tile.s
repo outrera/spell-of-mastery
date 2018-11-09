@@ -405,6 +405,8 @@ main.load_tiles =
   | when T.fallback.0:
     | FT = $tiles.(T.fallback.2)
     | when no FT: bad "tile [K] references unknown fallback tile"
+    | less FT.sprite: FT.sprite <= (T.sprite or K)
     | T.fallback <= [T.fallback.0 T.fallback.1 FT FT.tilerFn]
+| for K,T $tiles: less T.sprite: T.sprite <= K
 
 export tile

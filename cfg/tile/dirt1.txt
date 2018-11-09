@@ -1,6 +1,5 @@
-sprite: dirt1
 aux: 1
-fallback: ((0 0 0 0) 1 dirt1_side)
+fallback: ((0 0 0 0) 1 dirt1b)
 lineup: 0
 water: water,dirtw
 lay: default

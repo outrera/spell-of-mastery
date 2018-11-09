@@ -1,3 +1,4 @@
+sprite: castle
 tiler: castle_wall,any,corner
 heavy: 2
 stack: wall0,wall1,wall2
