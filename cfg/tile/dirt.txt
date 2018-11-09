@@ -1,5 +1,6 @@
-tiler: dirt,any,side
-lineup: 0
+tiler: dirt,any,cornerside
+ztiler: soil,same
+dig: 1
 embed: 2
 water: water,dirt_water
 stack: dirt0,dirt1,dirt2

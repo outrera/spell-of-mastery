@@ -1,4 +1,5 @@
 tiler: soil,any,cornerside
+ztiler: soil,same
 lineup: 1
 dig: 1
 indoor: soild

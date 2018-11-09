@@ -1,12 +1,13 @@
-sprite: system_dummy
-tiler: uniq,any,corner
+sprite: system_dummy //used sprite
+tiler: uniq,any,corner //controls tiling in x,y axes
+ztiler: uniq,same //controls tiling in z-axis
 filler: 1 //true if it forces other tiles to align with respect to it
-embed: 0 //brush replaces the tile below, during painting
-invisible: 0 //not shown to player
-shadow: 1
-height: 1 // height in world cubes
 heavy: 1 //shapes the tile below into a cube
 lineup: 1 //shaped by tile above into a cube
-dig: 0 //true if can be cleared physically or magically during gameplay
+embed: 0 //brush replaces the tile below, during painting in editor
+invisible: 0 //not shown to player
+shadow: 1 // tile casts shadow
+height: 1 // height in world cubes
 opaque: No //transparent see-through tile, No=decide based on `invisible`
+dig: 0 //true if can be cleared physically or magically during gameplay
 hp: 0 //how hard is it to break this tile

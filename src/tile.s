@@ -1,11 +1,11 @@
 use gfx util fxn
 
 type tile{As Main Type Id stack/0
-          tiler/[uniq any corner]
+          tiler/[uniq any corner] ztiler/[uniq same]
           height/1 filler/1 invisible/0 shadow/0
           anim_wait/0 water/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
-          around/0 back/0 fallback/[0 0 0] hp/0 cost/0
+          around/0 back/0 fallback/[0 0 0] hp/0
           hit/0 death/0 embed/0 sprite/0 flatGfx/0 lay/No
           struct/0 structTiles/0 colors/[#808080 #A0A0A0]}
      id/Id
@@ -16,6 +16,8 @@ type tile{As Main Type Id stack/0
      match/0
      role/0
      tilerFn/0
+     zrole/0
+     zmatch/0
      stack/Stack //column base, middle, top segments
      sprite/Sprite
      gfxes_data
@@ -47,7 +49,6 @@ type tile{As Main Type Id stack/0
                  //1 = embed water
                  //2 = embed floor
      hp/Hp
-     cost/Cost
      hit/Hit //on hit effect
      death/Death //on death effect
      struct/Struct
@@ -59,8 +60,12 @@ type tile{As Main Type Id stack/0
 | $tiler <= TilerName
 | when $role><uniq: $role <= $type
 | when $match><same: $match <= $role
+| [ZRole ZMatch] = Ztiler
+| $zrole <= ZRole
+| $zmatch <= ZMatch
+| when $zrole><uniq: $zrole <= $type
+| when $zmatch><same: $zmatch <= $zrole
 | $empty <= not $id
-| when Cost and Cost.size: $cost <= Cost.group{2}{K,V=>"item_[K]",V}
 | when no $opaque: $opaque <= not $invisible
 | less $parts:
   | if $height>1
@@ -212,9 +217,9 @@ tile.render X Y Z Below Above Variation =
 | less Z: ColumnHeight <= Site.height{X Y}
 | TH = $height
 | BE = Below.empty
-| BR = Below.role
+| BZR = Below.zrole
 | AH = Above.heavy
-| AR = Above.role
+| AZR = Above.zrole
 | NeibSlope = #@0000
 | T = Me
 | when T.water:
@@ -230,16 +235,17 @@ tile.render X Y Z Below Above Variation =
   | when A.type><Ar or B.type><Ar or C.type><Ar:
     | T <= $back
 | TT = T
+| ZR = $zmatch //match zrole
 | St = TT.stack
 | when St:
   | TT <= if BE then fxn St.2
-          else if BR <> $role or fxn BelowSlope><#@1111 then fxn St.0
-          else if AR <> $role then fxn St.2
+          else if BZR <> ZR or fxn BelowSlope><#@1111 then fxn St.0
+          else if AZR <> ZR then fxn St.2
           else fxn St.1
 | Gs = TT.gfxes
 | Lineup = 0
-| when AH and $lineup and ($lineup<>other or AR<>$role):
-  | Lineup <= not Above.stack or AR <> $role
+| when AH and $lineup and ($lineup<>other or AZR<>ZR):
+  | Lineup <= not Above.stack or AZR<>ZR
 | Opaque = $opaque
 | G = if AH and TT.flatGfx then
          | NeibSlope <= #@1111

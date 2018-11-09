@@ -2,6 +2,7 @@
 sprite: tiles_soilp
 aux: 1
 tiler: soil,same,corner
+ztiler: soil,same
 colors: #4a4c24,#31651d
 lay: |  7  6  4
      |  5 14  2

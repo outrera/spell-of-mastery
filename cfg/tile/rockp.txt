@@ -2,6 +2,7 @@
 sprite: tiles_rockp
 aux: 1
 tiler: rock,same,corner
+ztiler: rock,same
 colors: #4a4c24,#31651d
 lay: |  7  6  4
      |  5 (15 16)  2
