@@ -5,7 +5,6 @@ TODO:
 - implement proper water and waterfall tiling
 - finish city blueprint: tavern, market, shop, park, warehouse, church, graveyard, major's house, blacksmith, stores
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. They can be implemented using portals.
-
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
 - Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
 - Implement chests and locked chests. Only creatures with hands would be capable of opening them. Locked chests would have keys located somewhere on the map.

@@ -1,4 +1,5 @@
 sprite: base_
+tiler: soil,same,corner
 invisible: 1
 height: 1
 aux: 1

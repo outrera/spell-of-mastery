@@ -665,8 +665,7 @@ site.upd_pilar X Y =
     | T <= TT
   | when T.plain and not Above.heavy:
     | when Site.getSides{X Y Z}.all{1} and Site.getCorners{X Y Z}.all{1}:
-      | when X>1 and Y>1 and X<$w and Y < $h:
-        | T <= T.plain
+      | T <= T.plain
   | Cell.gfx <= T.render{X Y Z+TH-1 Below Above Var+Z}
   | Below <= T
   | T <= Above
