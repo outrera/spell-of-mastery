@@ -1,4 +1,4 @@
-author: `Liz Molnar (https://raventale.itch.io/)`
+author: `Melissa Krautheim 'MELLE'`
 license: `Public Domain (CC0)`
-origin: `https://raventale.itch.io/daily-doodles-asset-pack-2`
+origin: `https://opengameart.org/content/fantasy-coin-set`
 xy: 0,8
