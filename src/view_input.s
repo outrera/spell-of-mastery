@@ -209,6 +209,7 @@ view.update =
     | $zfix <= 0
     | when $cursor.2>1: $cursor.2--
     | $key_set{edit_down 0}
+    | $zlock <= $cursor.2
   | case $key{edit_up} 1:
     | $zfix <= 0
     | when $cursor.2<$site.d-2: $cursor.2++
@@ -243,7 +244,8 @@ view.input In =
     | when $brush.0 or $site.human.sight.CY.CX:
       | less ($mice_click><left or $mice_click><pick) and not $brush.0:
         | $cursor.init{[CX CY $cursor.2]}
-        | $cursor.2 <= $floor{$cursor}
+        | when not $mice_click or $site.at{@$anchor}.empty:
+          | $cursor.2 <= $floor{$cursor}
         | NewZ = $cursor.2
         | while NewZ and NewZ>>$zlock:
           | $cursor.2 <= NewZ
