@@ -1,6 +1,7 @@
 sprite: 0
 tiler: uniq,any,corner
 filler: 1 //true if it forces other tiles to align with respect to it
+          //use 2 for water tiles
 embed: 0 //brush replaces the tile below, during painting
 invisible: 0 //not shown to player
 shadow: 1

@@ -224,9 +224,12 @@ tile.render X Y Z Below Above Variation =
 | NeibSlope = #@0000
 | T = Me
 | when T.water:
+  | Ns = Site.neibs{X Y Z-TH+1}
   | Neib,Water = T.water
-  | when got Site.neibs{X Y Z-TH+1}.find{?type><Neib}:
-    | T <= Water
+  | when got Ns.find{?type><Neib} and Ns.all{?id}:
+    | when not Site.neibs{X Y Z+1}.all{?id}:
+      | when got Ns.find{?type><Neib}:
+        | T <= Water
 | TT = T
 | ZR = $zmatch //match zrole
 | St = TT.stack
@@ -276,7 +279,9 @@ tile.render X Y Z Below Above Variation =
   | D = Site.at{X+1 Y-1 ZZ}
   | TH = Site.at{X Y ZZ}.height
   | when A.opaque and B.opaque and C.opaque and (D.opaque or D.type><border_)
-         and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH:
+         and A.height>>TH and B.height>>TH and C.height>>TH and D.height>>TH
+         and Site.at{X+1 Y ZZ+1}.opaque and Site.at{X Y+1 ZZ+1}.opaque
+         and Site.at{X+1 Y+1 ZZ+1}.opaque:
     | Site.cell{X Y ZZ}.gfx <= 0
 | leave G
 

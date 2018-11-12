@@ -567,7 +567,9 @@ site.neibs X Y Z = fxn:
 
 site.filled X Y Z = fxn:
 | when X < 0 or Y < 0: leave 1
-| $at{X Y Z}.filler
+| R = $at{X Y Z}.filler
+| when R >< 2: R <= $at{X Y Z+1}.filler<>0
+| R
 
 site.getCorners X Y Z = fxn: `[]`
   [$filled{X-1 Y-1 Z} $filled{X Y-1 Z} $filled{X-1 Y Z}].all{1}

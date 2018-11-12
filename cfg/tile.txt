@@ -3,6 +3,7 @@ sprite: 0 //used sprite, 0=sprite has the same names as the tile
 tiler: uniq,any,corner //controls tiling in x,y axes
 ztiler: uniq,same //controls tiling in z-axis
 filler: 1 //true if it forces other tiles to align with respect to it
+          //use filler=2 for water tiles
 heavy: 1 //shapes the tile below into a cube
 lineup: 1 //shaped by tile above into a cube
 embed: 0 //brush replaces the tile below, during painting in editor

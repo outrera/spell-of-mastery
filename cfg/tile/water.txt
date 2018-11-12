@@ -1,8 +1,8 @@
-opaque: 0
+opaque: 1
 height: 1
 liquid: 1
 lineup: 0
-filler: 0
+filler: 2
 embed: 1
 colors: #043c7c,#043c7c
 flatGfx: waterf
