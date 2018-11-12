@@ -658,10 +658,10 @@ site.upd_pilar X Y =
   // TH-1 is a hack to exclude short tiles from tiling with tall-tiles
   | when T.indoor and Z < H-1:
     | TT = T.indoor
-    | when Above.heavy<>1:
-      | ZZ = H-1
-      | while $at{X Y ZZ}.heavy<>1: ZZ--
-      | when ZZ<>H-1: TT <= T
+    | when Above.heavy><2: //ensure soil under walls still look outdoors
+      | ZZ = Z+1
+      | while $at{X Y ZZ}.heavy><2: ZZ++
+      | when ZZ><H: TT <= T
     | T <= TT
   | when T.plain and not Above.heavy:
     | when Site.getSides{X Y Z}.all{1} and Site.getCorners{X Y Z}.all{1}:

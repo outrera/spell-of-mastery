@@ -79,7 +79,7 @@ site_place_tile Me X Y Z Tile =
 AnchorHack = -1
 
 view.place_tile Type =
-//| when $cursor.2<>$zlock: $cursor.2 <= $floor{$cursor}
+| when $cursor.2<>$zlock: $cursor.2 <= $floor{$cursor}
 | Tile = $main.tiles.Type
 | when Tile.struct:
   | $site.place_struct{$cursor Tile}
