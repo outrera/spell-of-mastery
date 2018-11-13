@@ -1,0 +1,4 @@
+tiler: water,any,wcorner
+colors: #043c7c,#043c7c
+flatGfx: waterf0,waterf1
+lay: 0

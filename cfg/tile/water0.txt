@@ -1,0 +1,9 @@
+tiler: water,any,wcorner
+plain: waterp
+colors: #043c7c,#043c7c
+lay: | 7  6  4
+     | 5 15  2
+     | 3  1  0
+     | 8  9
+     |11 10
+     |12 13 14

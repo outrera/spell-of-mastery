@@ -8,7 +8,7 @@ type tile{As Main Type Id
           parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
           hp/0 hit/0 death/0
           embed/0
-          stack/0 fallback/[0 0 0] struct/0 structTiles/0 
+          stackCapped/0 stack/0 fallback/[0 0 0] struct/0 structTiles/0 
           colors/[#808080 #A0A0A0]}
      id/Id
      main/Main
@@ -21,6 +21,7 @@ type tile{As Main Type Id
      tilerFn/0
      zrole/0
      zmatch/0
+     stackCapped/StackCapped
      stack/Stack //column base, middle, top segments
      sprite/Sprite
      gfxes_data
@@ -78,6 +79,7 @@ m_role_side Site X Y Z Tile = Site.getSidesRole{X Y Z Tile.match}
 m_role_corner Site X Y Z Tile = Site.getCornersSame{X Y Z Tile.match}
 m_any_side Site X Y Z Tile = Site.getSides{X Y Z}
 m_any_corner Site X Y Z Tile = Site.getCorners{X Y Z}
+m_any_wcorner Site X Y Z Tile = Site.getWCorners{X Y Z}
 
 m_role_wall Site X Y Z Tile =
 | R = Site.getSidesRole2{X Y Z Tile.match}
@@ -234,10 +236,18 @@ tile.render X Y Z Below Above Variation =
 | ZR = $zmatch //match zrole
 | St = TT.stack
 | when St:
-  | TT <= fxn: if BE then St.2
-          else if BZR <> ZR or BelowSlope><#@1111 then St.0
-          else if AZR <> ZR then St.2
-          else St.1
+  | TT <= fxn:
+          if $stackCapped then
+            if BZR <> ZR or BelowSlope><#@1111 then
+              if AH then St.1
+              else St.2
+            else if AZR <> ZR then St.2
+            else St.1
+          else
+            if BE then St.2
+            else if BZR <> ZR or BelowSlope><#@1111 then St.0
+            else if AZR <> ZR then St.2
+            else St.1
 | Gs = TT.gfxes
 | Lineup = 0
 | when AH and $lineup and ($lineup<>other or AZR<>ZR):
@@ -245,7 +255,12 @@ tile.render X Y Z Below Above Variation =
 | Opaque = $opaque
 | G = if AH and TT.flatGfx then
          | NeibSlope <= #@1111
-         | TT.flatGfx
+         | if Site.neibs{X Y Z+1}.all{?id} then
+           | NeibSlope <= #@1111
+           | TT.flatGfx.0
+           else
+           | NeibSlope <= $tilerFn{}{Site X Y Z Me}.digits{2}
+           | TT.flatGfx.1
       else if $tiler><lay then
          | XX = 1
          | YY = 1
@@ -299,6 +314,7 @@ get_tiler_fn Match Tiler =
       corner     | &m_any_corner
       side       | &m_any_side
       cornerside | &m_any_cornerside
+      wcorner    | &m_any_wcorner
       Else       | 0
   else case Tiler
       corner    | &m_role_corner
@@ -359,8 +375,9 @@ tile.init_gfxes =
 | when $tiler><lay:
   | $gfxes_data <= map Is Lay: map _,I,F Is: getFrame{I},F
 | when $flatGfx:
-  | G = $get_tile_sprite{"[$bank]_[$type]" $flatGfx}.0
-  | $flatGfx <= dup 16 G
+  | F0 = $get_tile_sprite{"[$bank]_[$type]" $flatGfx.0}.0
+  | F1 = $get_tile_sprite{"[$bank]_[$type]" $flatGfx.1}.0
+  | $flatGfx <= [dup{16 F0} dup{16 F1}]
 
 RoleById = t
 

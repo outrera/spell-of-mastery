@@ -576,6 +576,16 @@ site.getCorners X Y Z = fxn: `[]`
   [$filled{X+1 Y-1 Z} $filled{X Y-1 Z} $filled{X+1 Y Z}].all{1}
   [$filled{X+1 Y+1 Z} $filled{X Y+1 Z} $filled{X+1 Y Z}].all{1}
   [$filled{X-1 Y+1 Z} $filled{X Y+1 Z} $filled{X-1 Y Z}].all{1}
+  
+site.wfilled X Y Z = fxn:
+| when X < 0 or Y < 0: leave 1
+| $at{X Y Z}.filler<>0
+
+site.getWCorners X Y Z = fxn: `[]`
+  [$wfilled{X-1 Y-1 Z} $wfilled{X Y-1 Z} $wfilled{X-1 Y Z}].all{1}
+  [$wfilled{X+1 Y-1 Z} $wfilled{X Y-1 Z} $wfilled{X+1 Y Z}].all{1}
+  [$wfilled{X+1 Y+1 Z} $wfilled{X Y+1 Z} $wfilled{X+1 Y Z}].all{1}
+  [$wfilled{X-1 Y+1 Z} $wfilled{X Y+1 Z} $wfilled{X-1 Y Z}].all{1}
 
 site.getSides X Y Z = fxn: `[]`
   $filled{X Y-1 Z} $filled{X+1 Y Z}
