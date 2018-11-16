@@ -87,6 +87,8 @@ Creatures:
 - Creature that does damage based on defenders movement rate.
 - Creature that has defense base on its remaining steps: unused movement points reduce damage.
 - A unit that uses enemy's attack strength instead of its own.
+- Creature that makes larger damage with each successive hit.
+- Creature that makes larger damage with each health loss.
 - Creature ability doing damage TargetMaxHp-TargetCurHp
 - A creature with ability to reduce target's health by 50%
 - Creature whose strength is proportional to owner's mana.
