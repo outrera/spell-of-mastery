@@ -97,7 +97,6 @@ unit.spawn_corpse =
 
 dact die.start
 | U = $unit
-| U.drop_all
 | less U.anim><death: U.animate{death}
 | less not (U.class.hp-U.hp)>0 or got U.sprite.anims.death:
   | U.free
