@@ -1,10 +1,10 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)
 - finish waterfall tileset
 - move water into separate overlay, that way it could be animated and transparent.
-- finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)
-- shockwave effect on terrain.
+- shockwave effect on terrain, for stuf like powerfull impact or underground movement.
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. They can be implemented using portals.
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
 - Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.

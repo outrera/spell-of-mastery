@@ -1,5 +1,5 @@
-tiler: uniq,same,wall
-ztiler: wall,same
+sprite: wall_wood
+tiler: counter,same,wall
 filler: 0
 lineup: 0
 opaque: 0

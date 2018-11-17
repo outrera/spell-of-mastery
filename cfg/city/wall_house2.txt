@@ -1,0 +1,7 @@
+tiler: wall,same,wall
+ztiler: wall,same
+filler: 0
+lineup: 0
+opaque: 0
+heavy: 2
+stack: wall_house2_0,wall_house2_1,wall_house2_1
