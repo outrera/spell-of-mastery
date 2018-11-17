@@ -1,6 +1,0 @@
-sprite: item_goods
-item: 0
-ai: pile
-aux: 1
-box_xy: (-1 -1)
-

@@ -1,13 +1,5 @@
 use widgets gfx main_data
 
-
-/*
-type icon_popup.widget info enabled resources text/txt{small ''}
-| $info <= layV: map X [$text]: tabs 0: t 1(X) 0(spacer 0 0)
-icon_popup.render =
-| for X $info.items: X.pick{$enabled}
-| $info.render*/
-
 DisabledIconOverlay = 0
 
 type icon.widget{FG OnClick}

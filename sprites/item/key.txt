@@ -1,0 +1,5 @@
+author: `Garrett Wessner (Gwes)
+license: `Public Domain (CC0)`
+origin: `https://opengameart.org/content/dark-fantasy-item-sprites`
+recolors: (#db3a00 #a40000 #7c0000 #5c0400 #440400)
+xy: 0,0

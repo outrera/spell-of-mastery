@@ -29,9 +29,6 @@ place_object Me Bank Type =
 | Mirror = $key{edit_place_mirrored}
 | ClassName = "[Bank]_[Type]"
 | Class = $main.classes.ClassName
-| when Class.item><1:
-  | Cell.add_item{ClassName 1}
-  | leave
 | when Z+Class.height>>$site.d: leave
 | Place = 1
 | Form = if Class.form then Class.form else [[0 0 0]]

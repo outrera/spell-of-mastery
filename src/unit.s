@@ -259,40 +259,7 @@ unit.strip What =
 | $genes.heapfree
 | $genes <= Es.enheap
 
-unit.set_item Name Amount =
-| for E $genes: when E.name><Name:
-  | E.amount <= -Amount
-  | when E.amount >> 0: $strip{Name}
-  | leave
-| $add_gene{Name -Amount []}
-
-unit.add_item Name Amount =  $set_item{Name $get_item{Name}+Amount}
-
-unit.get_item Name =
-| for E $genes: when E.name><Name: leave -E.amount
-| 0
-
-unit.items =
-| Items = []
-| for E $genes: when E.amount<0: push [E.name -E.amount] Items
-| Items
-
-unit.drop_item ItemType Amount =
-| A = min $get_item{ItemType} Amount
-| $add_item{ItemType -A}
-| $cell.add_item{ItemType A}
-
-unit.drop_all =
-| for K,V $items: $drop_item{K V}
-
-unit.acts =
-| Cfg = $main.cfg
-| ItemDefs = Cfg.iacts
-| ItemActs = []
-| for Name,Count $items:
-  | Item = ItemDefs.Name
-  | when got Item: for ActName Item: push Cfg.acts.ActName ItemActs
-| [@$class.acts @ItemActs]
+unit.acts = $class.acts
 
 unit.run_genes Selector target/0 xyz/0 =
 | less Target: Target <= Me

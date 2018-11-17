@@ -1,4 +1,0 @@
-sprite: item_wood
-item: 1
-ai: resource
-box_xy: (-1 -1)

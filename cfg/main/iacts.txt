@@ -1,2 +1,0 @@
-// this file describe acts provided by items
-food: (consume_food)

@@ -131,6 +131,15 @@ Creature Properties:
 - Sinner: creature has spilled blood by killing somebody. Such creatures are vulneraly to specific abilities, like devil's punish ability.
 - Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow.
 
+Objects:
+- Teleporters. Either one-way or two-way.
+- Doors. Spell of Mastery has several door kinds:
+  - Doors that require colored/shaped key. Colored doors are placed using player color selection and use the same palette.
+  - Doors, without a key, that can be closed from any side without a key, but can be opened only from the side from which they closed. Used to implement shortcuts.
+  - Doors that can be bashed out by sufficiently strong character, which has bash door ability.
+  - Doors that can be bashed out with explosion or magic, which has door bashing property.
+- Chests. Similarly to doors, chests have colored locks, that can be opened using the same keys, as doors.
+
 Digging Mechanics:
 - only dirt is diggable.
 - player can only dig tile between two other tiles, that will avoid removing support from ceiling and limits player to creating tunnels, instead of caves.

@@ -19,8 +19,6 @@ effect strip Name:
 | when got Target.class.inborn.find{Name}: leave
 | Target.strip{Name}
 
-effect add_item Name Amount: Target.add_item{Name Amount}
-
 effect tenant_mark Type:
 | Block = $site.block_at{TargetXYZ}
 | S = $site.units_get{TargetXYZ}.find{?type><Type}
@@ -348,23 +346,6 @@ effect resurrect:
 | U.hp <= max 1 U.hp/2
 | Cs{?free}
 | 0
-
-effect spawn_item ItemType Amount: $cell.add_item{ItemType Amount}
-
-effect drop ItemType Amount:
-| when ItemType><_: ItemType <= $action.type.drop{5}
-| MaxAmount = $get_item{ItemType}
-| when Amount><all: Amount <= MaxAmount
-| Amount <= min{MaxAmount Amount}
-| $drop_item{ItemType Amount}
-
-effect take ItemType Amount:
-| when ItemType><_: ItemType <= $action.type.drop{5}
-| MaxAmount = $cell.get_item{ItemType}
-| when Amount><all: Amount <= MaxAmount
-| Amount <= min{MaxAmount Amount}
-| $add_item{ItemType Amount}
-| $cell.add_item{ItemType -Amount}
 
 effect morph ClassName:
 | Class = $main.classes.ClassName

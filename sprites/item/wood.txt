@@ -1,4 +1,0 @@
-author: `David E. Gervais`
-license: `CC-BY`
-origin: `http://pousse.rapiere.free.fr/tome/`
-xy: 0,8

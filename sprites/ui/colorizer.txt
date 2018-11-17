@@ -1,1 +1,3 @@
 author: `Nikita Sadkov`
+//a hacky overlay used to tint whole screen with the current blitter
+
