@@ -1,0 +1,4 @@
+tiler: roof,same,stairs
+fallback: ((1 1 1 1) 0 roof2b)
+opaque: 0
+lay: stairs
