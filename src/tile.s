@@ -329,13 +329,6 @@ tile.get_tile_sprite TileName SpriteName =
 | less got Sprite: bad "Tile [TileName] references missing sprite [SpriteName]"
 | Sprite
 
-DefaultLay =
-  [[ 7  6  4]
-   [ 5 16  2]
-   [ 3  1  0]
-   [ 8  9   ]
-   [11 10   ]
-   [12 13 18]]
 LayMap =
   [[#@0010 #@0011 #@0001]
    [#@0110 #@1111 #@1001]
@@ -343,6 +336,8 @@ LayMap =
    [#@0111 #@1011]
    [#@1110 #@1101]
    [#@1010 #@0101 #@0000]]
+
+TileLays = t
 
 tile.gfxes =
 | Gs = $gfxes_data
@@ -360,7 +355,7 @@ tile.init_gfxes =
 | Lay = $lay
 | less got Lay: Lay <= 0
 | Lay <= if Lay.is_int then map Is LayMap: map I Is: Lay
-         else if Lay><default then DefaultLay
+         else if Lay.is_text then TileLays.Lay.tail.list
          else Lay.tail.list
 | when $tiler<>lay:
   | $gfxes_data <= dup 16 No
@@ -382,6 +377,7 @@ tile.init_gfxes =
 RoleById = t
 
 main.load_tiles =
+| TileLays <= $cfg.tilelays
 | BankNames = case $cfg.site.tile_banks [@Xs](Xs) X[X]
 | $cfg.site.tile_banks <= BankNames 
 | $aux_tiles <= t
