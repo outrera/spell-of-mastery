@@ -4,4 +4,4 @@ filler: 0
 lineup: 0
 opaque: 0
 heavy: 2
-lay: wall
+lay: wall_ext
