@@ -3,7 +3,7 @@ use util
 ClassIdCounter = 1
 
 type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
-           unit/0 box_xy/[0 0] aux/0 speed/0 cooldown/24
+           unit/0 box_xy/[0 0] aux/0 speed/0
            active/0 cost/[0 0 0]
            mov/0 stamina/1 health/0 atk/0 def/0 sight/No range/0 inborn/[]
            acts/[] spells/0 summons/0 rooms/0 icon/0 title/0 item/0
@@ -33,7 +33,6 @@ type class{bank class_name Main pickable/0 empty/0 sprite/system_dummy
   def/Def               //how many moves it takes to hit this unit
   sight/Sight           //scout range
   range/Range           //attack range
-  cooldown/Cooldown     //number of cycles between unit attacks
   acts/Acts             //acts this unit can perform
   icon/Icon             //icon for this unit
   title/Title           //proper unit name shown ingame

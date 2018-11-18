@@ -32,7 +32,7 @@ type unit.$class{Id Site}
   action // currently executing action
   next_action // action to be taken after the current one
   ordered // what owner of this unit has ordered
-  cooldown //cooldown before the unit can attack again
+  delay //delay in cycles(!) before the unit can act again
   handled //unit was already processed
   active // true if this unit resides in the list of active units
   path/[] // path to goal
@@ -166,7 +166,6 @@ unit.init Class =
 | $flags <= 0
 | $alpha <= 0
 | $delta <= 0
-| $cooldown <= 0
 | $from.init{0,0,-1}
 | when $class.active
   | less $active
@@ -175,6 +174,7 @@ unit.init Class =
   | $mov <= $class.mov
   | $fatigue <= 0
   | $handled <= 0
+  | $delay <= 0
   | $aistate <= \initial
   | $ordered.type <= 0
   | $next_action.type <= 0

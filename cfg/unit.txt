@@ -10,10 +10,10 @@ atk: 0
 def: 0
 will: 5
 sight: 7
-cooldown: 16 // cycles before that unit can act again
 speed: 24 // cycles required to move between game world cells
 ascendSpeed: 4 //pixels/per second of vertical movement
 pickable: 1
+empty: 0
 passable: 0 // other units can move on top of this one
 flyer: 0 // can it fly
 range: 1

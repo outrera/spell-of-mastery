@@ -2,6 +2,8 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Fix doors and simplify the implementation, so they would switch to different frame, isntead of morphing. Door should have property who closed them
+- class.empty duplicates class.passable.
+- class.active duplicates class.ai.
 - floating animation for items like keys and flying characters
 - finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)
 - finish waterfall tileset

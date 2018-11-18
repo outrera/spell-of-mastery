@@ -252,8 +252,8 @@ update_action Me =
 | T = $action.target
 | when T and (T.removed or not T.alive): $action.cycles <= 0
 | till $action.cycles > 0 // action is done?
-  | when $cooldown>0:
-    | $cooldown--
+  | when $delay>0:
+    | $delay--
     | leave
   | when $anim<>idle and $anim<>move and $next_action.type <> die and
          and $anim<>hit and
@@ -264,7 +264,6 @@ update_action Me =
     | $engaged <= 1
     | $reveal_nearby_enemies
   | update_next_action Me
-  | when $action.type><attack: $cooldown <= $class.cooldown
 | $action.update
 
 unit.clinging =

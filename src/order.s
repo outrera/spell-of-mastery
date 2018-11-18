@@ -65,7 +65,7 @@ unit.die =
 | $animate{death}
 | $forced_order{die 0}
 | $order.priority <= 2000
-| $cooldown <= 0
+| $delay <= 0 //no delay in death
 
 unit.reset_goal =
 | less $path.end: $set_path{[]}

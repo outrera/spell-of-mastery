@@ -27,7 +27,7 @@ unit.serialize = //unit serializer for savegames
   | Goal = if $goal then [$goal.id $goal_act.name] else 0
   | Path = if $path.end then 0 else [$path 0]
   | Active <= list $from $anim $anim_step $anim_wait
-                   $fatigue $cooldown Genes Host Goal Path
+                   $fatigue $delay Genes Host Goal Path
                    $action.save $ordered.save $next_action.save
                    $mov $def
 | Facing = $facing
@@ -85,7 +85,7 @@ site.deserialize_unit IdMap X =
   | Facing <= Facing.1
 | U.pick_facing{Facing}
 | when Active:
-  | [From Anim AnimStep AnimWait Fatigue Cool Genes Host Goal Path
+  | [From Anim AnimStep AnimWait Fatigue Delay Genes Host Goal Path
      Action Ordered NextAction Mov Def @More] = Active
   | U.mov <= Mov
   | U.fatigue <= Fatigue^~{unused 0}
@@ -94,7 +94,7 @@ site.deserialize_unit IdMap X =
   | U.animate{Anim}
   | U.anim_step <= AnimStep
   | U.anim_wait <= AnimWait
-  | U.cooldown <= Cool
+  | U.delay <= Delay
   | for E U.genes: $free_gene{E}
   | U.genes.heapfree
   | U.genes <= if Genes.is_list and not Genes.end

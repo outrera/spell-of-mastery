@@ -1,6 +1,11 @@
-proto: door_proto
-aux: 0
 sprite: special_door
-title: `Door (closed)`
+title: `Door`
+active: 1
 empty: 0
-acts: (door_open)
+passable: 0
+height: 2
+ai: door
+inborn: (door_align)
+onHit: sound{cut}
+onHurt: visual{blood_undead},sound{door_hit}
+onDeath: visual{explosion},sound{door_die}
