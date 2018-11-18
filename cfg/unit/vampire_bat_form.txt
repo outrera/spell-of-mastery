@@ -10,7 +10,6 @@ mov: 14
 sight: 10
 cool: 10
 aux: 1
-summon: 0
 inborn: (undead nocorpse flyer)
 onHit: hit{user},sound{bat_attack}
 onHarm: visual{blood_undead},sound{bat_hit}

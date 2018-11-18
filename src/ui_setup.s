@@ -38,7 +38,7 @@ ui.setup_act_picked Icon =
 
 ui.create_new_game_setup_dlg =
 | Acts = $main.acts
-| Spells = $cfg.leader.mage.spells
+| Spells = $cfg.world.spells
 | Summons = $cfg.world.summons
 | create_pick_icon ActName =
   | Act = Acts.ActName

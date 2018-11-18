@@ -1,9 +1,15 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Fix doors and simplify the implementation, so they would switch to different frame, isntead of morphing. Door should have property who closed them
-- class.empty duplicates class.passable.
+- class.unit duplicates class.ai. see grep "\.unit[^s]" *.s
+- class.passable duplicates class.empty.
+- class.empty duplicates class.height
 - class.active duplicates class.ai.
+- class.item needs better name. Something like just `trigger`.
+- tile.unit should have better name, like tile.object
+- cfg_handle_acts creates unit table based on cost. we don't really need these
+  unuts to be summoning actions anymore. Simpler table would suffice.
+- Fix doors and simplify the implementation, so they would switch to different frame, isntead of morphing. Door should have property who closed them
 - floating animation for items like keys and flying characters
 - finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)
 - finish waterfall tileset

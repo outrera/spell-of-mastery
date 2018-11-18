@@ -1,25 +1,21 @@
-unit: 1
 sprite: auto
 active: 1
 height: 2
+pickable: 1
+empty: 0
+passable: 0 // other units can move on top of this one
 tier: 1
-cost: 100,3,50 //goldCost,maxPicks,pickChance
+cost: 0
 mov: 6
 health: 9 // hit points - number of hits, before this unit is dead
 atk: 0
 def: 0
 will: 5
 sight: 7
+range: 1
 speed: 24 // cycles required to move between game world cells
 ascendSpeed: 4 //pixels/per second of vertical movement
-pickable: 1
-empty: 0
-passable: 0 // other units can move on top of this one
-flyer: 0 // can it fly
-range: 1
 ai: unit
 aux: 0
-summon: auto
-item: 0
 impact: sound{attack2}
 moves: sound{step}

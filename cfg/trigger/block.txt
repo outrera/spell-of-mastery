@@ -1,7 +1,0 @@
-sprite: special_missing
-show: 0
-empty: 0
-unit: 1
-passable: 0
-height: 2
-active: 1

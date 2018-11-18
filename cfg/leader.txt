@@ -1,6 +1,5 @@
 //NOTE: ensure all leaders have 32 frames of attack animation
 //      otherwise some leader could put more damage than the other
-unit: 1
 sprite: auto
 active: 1
 height: 2
@@ -17,30 +16,7 @@ pickable: 1
 empty: 0
 passable: 0
 ai: unit
-item: 0
 inborn: (organic disciplined nocorpse leader)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
 acts: (act_fireball act_mastery)
-spells:
-      (
-      cast_telekinesis
-      cast_heal
-      cast_lightning
-      cast_timerift
-      cast_fear
-      cast_shell
-      cast_antimagic
-      cast_bless
-      cast_raisedead
-      cast_invisibility
-      cast_firestorm
-      cast_flight
-      cast_detonate
-      cast_armageddon
-      cast_subvert
-      cast_teleport
-      )
-
-
-rooms: ()

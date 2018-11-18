@@ -147,19 +147,36 @@ Objects:
 
 
 Object properties:
-- empty: true if unit occupies physical space.
+- cost: 0=cannot be summoned, else goldCost,maxPicks,pickChance triplet.
+- empty: true if unit occupies physical space. duplicates height. remove it.
+- height: tall units can't pass under short passages, while units like
+  bats fly into a window.
+- platform: increased Z position of all other units inside this cell.
 - ai:
   - unit: behaves like normal unit.
   - key: item that opens chest, door or activates other object of same color.
   - gate: two-way teleporter, that transfers unit to the same colored
      teleporter (think what happen if there are more than two portals
      of the same color).
-  - 
+- tier: how powerful is this unit; currently unused, but can serve as a hint for AI, or to some spells from affecting low/high tier units.
+- item: trigger script, run when unit enters tile residing this object.
+  Give it better name.
+- inborn: what genes this unit has on creation.
 - passable: duplicates empty; removed it.
 - active (unit is updated by engine each cycle): duplicates ai; remove it.
-- pickable: can be picked by plater; duplicates ai; remove it.
-- 
-
+- aux: auxilary object, like corpse or pathfinder node; don't show it in editor.
+- pickable: can be picked by player; duplicates ai; remove it.
+- show: renderer shows this unit ingame's viewport.
+- speed: cycles required to move between game world cells; cosmetic value.
+- ascendSpeed: pixels/per second of vertical movement; cosmetic value.
+- foldable: if 1, renderer can cut top part of it to reveal stuff behind.
+- draworder: unit with lower draw order are drawn first;
+  for units in the same cell; should be simplified to symbolic value.
+- box_xy: modifies xy during rendering, in effect inluencing its draworder,
+  for units in nearby cells; should be simplified to symbolic value.
+- sprite: name of the sprite. `auto` - determines sprite name from filename.
+- acts: abilities this unit posesses.
+- spells: spells this unit can cast.
 
 Digging Mechanics:
 - only dirt is diggable.

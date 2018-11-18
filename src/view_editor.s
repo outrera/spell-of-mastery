@@ -9,7 +9,7 @@ site.update_cursor_brush Bank Type CXYZ =
 | XYZ = CXYZ //+ if Mirror then [-Y X Z] else [X -Y Z]
 | when XYZ.0<0 or XYZ.1<0: leave 0
 | Us = $units_get{XYZ}
-| when Class.unit and Us.any{?unit}: leave 0
+| less Class.empty or Us.all{?empty}: leave 0
 | when Us.any{?class^address >< Class^address}: leave 0
 | ClassName = "[Bank]_[Type]"
 | Class = $main.classes.ClassName

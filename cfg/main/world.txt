@@ -82,3 +82,23 @@ summons:
       unit_golem,
       unit_gargoyle,
       unit_dragon
+
+spells:
+      (
+      cast_telekinesis
+      cast_heal
+      cast_lightning
+      cast_timerift
+      cast_fear
+      cast_shell
+      cast_antimagic
+      cast_bless
+      cast_raisedead
+      cast_invisibility
+      cast_firestorm
+      cast_flight
+      cast_detonate
+      cast_armageddon
+      cast_subvert
+      cast_teleport
+      )

@@ -249,7 +249,7 @@ ai.update =
 | PerCycle <= t
 | Player = $player
 | SeenUnits <= $site.active.list.keep{U=>Player.seen{U.xyz}}
-                     .keep{(?unit and not ?removed)}
+                     .keep{(?ai><unit and not ?removed)}
 | PID = Player.id
 | OwnedUnits <= SeenUnits.keep{?owner.id><PID}
 | SeenEnemies <= SeenUnits.keep{?owner.is_enemy{Player}}.skip{?invisible}
