@@ -1,12 +1,8 @@
 author: `Tim Jonsson`
 copyright: `Nikita Sadkov`
+class: height,2,foldable,1
 xy: 0,8
 form: | 2 2
       | 2 2
 frames: folder
 anims: | idle (idle0 6)
-
-class: empty,0
-      ,invincible,1
-      ,height,2
-      ,foldable,1

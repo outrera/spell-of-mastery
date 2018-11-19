@@ -1,9 +1,1 @@
-class: empty,0
-      ,invincible,1
-      ,height,3
-      ,ai,remove
-      ,foldable,1
-      ,hit,((effect spell) (sound (tree_hit1 tree_hit2)))
-      ,death,((effect spell) (sound (tree_hit1 tree_hit2)) (sound tree_death)
-             //(spawn_item (item_wood 10))
-             )
+class: height,0

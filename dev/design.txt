@@ -165,6 +165,7 @@ Object properties:
   Give it better name.
 - inborn: what genes this unit has on creation.
 - active (unit is updated by engine each cycle): duplicates ai; remove it.
+- movable: can be moved by sufficiently strong units.
 - aux: auxilary object, like corpse or pathfinder node; don't show it in editor.
 - pickable: can be picked by player; duplicates ai; remove it.
 - show: renderer shows this unit ingame's viewport.
@@ -175,6 +176,7 @@ Object properties:
   for units in the same cell; should be simplified to symbolic value.
 - box_xy: modifies xy during rendering, in effect inluencing its draworder,
   for units in nearby cells; should be simplified to symbolic value.
+- editor: drawn only in site editor mode.
 - sprite: name of the sprite. `auto` - determines sprite name from filename.
 - acts: abilities this unit posesses.
 - spells: spells this unit can cast.

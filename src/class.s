@@ -4,7 +4,7 @@ ClassIdCounter = 1
 
 type class{bank class_name Main
            title/0 icon/0
-           height/0 empty/0 platform/0
+           height/0 platform/0
            sprite/system_dummy
            speed/0 ascendSpeed/4
            cost/0
@@ -18,7 +18,6 @@ type class{bank class_name Main
   type/"[Bank]_[Class_name]"
   block/0               //acts as map block
   default_sprite/Sprite
-  empty/Empty           //other units can move through this one
   draworder/Draworder
   platform/Platform     //increased tenants position on screen
   height/Height         //height in tiles

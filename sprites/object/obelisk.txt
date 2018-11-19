@@ -1,4 +1,3 @@
 author: `Nikita Sadkov`
-height: 2
-class: empty,0,height,2
+class: height,2
 xy: 0,16

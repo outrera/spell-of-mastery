@@ -15,7 +15,7 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   anims
   faces/Faces //numer of facing directions this sprite has
   class/Class //should we autocreate class for this sprite?
-  margins/Margins
+  margins/Margins //use for fonts
   font/Font
   icon/Icon
   shadow/Shadow //shadow sprite or 0 if sprite doesnt cast shadow

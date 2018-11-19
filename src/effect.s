@@ -165,7 +165,7 @@ effect color_overlay @List: $site.set_color_overlay{List}
 
 effect area As: //area{any,3,harm{magic.2}}
 | [Whom Range @Es] = As
-| Ts = $site.units_in_range{TargetXYZ Range}.skip{?empty}
+| Ts = $site.units_in_range{TargetXYZ Range}.keep{?height} //cant harm bushes?
 | case Whom [exclude_self W]:
   | Whom <= W
   | Ts <= Ts.skip{?id><$id}

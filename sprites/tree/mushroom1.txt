@@ -1,9 +1,4 @@
 author: `Artem Belov`
 copyright: `Nikita Sadkov`
-height: 2
 xy: 0,4
-class: empty,0
-      ,invincible,1
-      ,height,2
-      ,ai,remove
-      ,foldable,1
+class: height,2,foldable,1

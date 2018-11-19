@@ -1,8 +1,3 @@
 author: `Tim Jonsson`
+class: height,3,foldable,0
 xy: 0,0
-height: 3
-class: empty,0
-      ,invincible,1
-      ,height,3
-      ,ai,remove
-      ,foldable,0

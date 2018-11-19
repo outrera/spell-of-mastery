@@ -13,7 +13,6 @@ will: 2
 sight: 7
 speed: 28
 pickable: 1
-empty: 0
 ai: unit
 inborn: (organic disciplined nocorpse leader)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}

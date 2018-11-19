@@ -1,5 +1,5 @@
 author: `Artem Belov`
+class: height,1
+xy: 16,10
 form: | 4
       | 4
-xy: 16,10
-class: height,1

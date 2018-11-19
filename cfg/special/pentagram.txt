@@ -1,10 +1,6 @@
 title: `Pentagram`
 icon: special_pentagram
 sprite: special_pentagram
-health: 120 // two minutes
-pickable: 0
-sight: 1
 ai: pentagram
 inborn: (enemy_removes)
-
 acts: ()

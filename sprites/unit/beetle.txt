@@ -1,7 +1,6 @@
 author: Redshrike, `Sergey Abramov (InQvisions Company)`
 license: `GPL3`
 source: `http://opengameart.org/content/lpc-in-battle-rpg-sprites`
-height: 4
 xy: 0,4
 frames: list,((`3-idle0+2+9` (10 10 52 44)) (`6-idle0+2+9` (100 10 52 45)) (`3-move2+0+8` (190 10 58 43)) (`3-move3+0+8` (190 100 55 43)) (`6-move2+0+8` (280 10 58 43)) (`6-move3+0+8` (280 100 52 44)) (`3-hit1+0+6` (370 10 77 47)) (`6-hit1+0+6` (460 10 77 47)))
 anims: | idle (idle0 24)

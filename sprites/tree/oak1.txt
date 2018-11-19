@@ -1,3 +1,3 @@
 author: `Tim Jonsson`
-height: 16
 xy: 16,8
+class: height,2,foldable,1

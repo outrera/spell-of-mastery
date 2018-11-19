@@ -1,6 +1,6 @@
 author: `Artem Belov`
 copyright: `Nikita Sadkov`
-height: 1
+class: height,1
 xy: -2,8
 frames: folder
 anims: | idle (idle0 6)

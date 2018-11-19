@@ -45,6 +45,7 @@ type unit.$class{Id Site}
   mov //movement points remained this turn
   hp // hit points
   def //defense points remained
+  height
   flags //various flags (mostly genes)
   genes/[] //active genes
   can_move //movement function
@@ -77,6 +78,8 @@ unit.`=flyer` State = $flags <= $flags.bitSet{5 State}
 
 unit.heavy = $flags.bit{6}
 unit.`=heavy` State = $flags <= $flags.bitSet{6 State}
+
+unit.empty = fxn $height><0
 
 unit.climber = $flags.bit{9}
 unit.swimmer = $flags.bit{10}
@@ -161,6 +164,7 @@ unit.init Class =
 | $serial <= $site.serial
 | $site.serial++
 | $animate{idle}
+| $height <= $class.height
 | $hp <= $class.hp
 | $def <= $class.def
 | $flags <= 0

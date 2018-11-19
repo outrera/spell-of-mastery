@@ -1,8 +1,7 @@
 author: `Tim Jonsson`
 copyright: `Nikita Sadkov`
-height: 2
+class: height,2,active,1
 xy: 0,4
 frames: 33*88
 anims: | idle time-4 0  1  2  3
-class: empty,0,active,1
 

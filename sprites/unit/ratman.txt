@@ -1,6 +1,5 @@
 author: `Matthew Griebner`, `Aleksandr Zabylov 'Shurga' <d_shurga@mail.ru>`, `Natasha Guseva`
 copyright: `Nikita Sadkov`
-height: 4
 rect: (40 64 -10)
 //xy: 0,32
 //frames: folder

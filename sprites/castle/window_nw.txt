@@ -1,6 +1,6 @@
 author: `Tim Jonsson`
 copyright: `Nikita Sadkov`
-height: 2
+class: height,2
+xy: 32,14
 form: | 1
       | 1
-xy: 32,14

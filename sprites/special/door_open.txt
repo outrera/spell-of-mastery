@@ -1,7 +1,5 @@
 author: `Tim Jonsson`
 copyright: `Nikita Sadkov`
-shadow: 0
-height: 4
 xy: 6,-1
 frames: folder
 anims: | idle (idle0 9)

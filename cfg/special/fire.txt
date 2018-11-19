@@ -1,7 +1,4 @@
 sprite: effect_fire
-sight: 1
-//ai: avoid
-health: 7
-height: 2
 box_xy: (1 1)
+ai: hazard
 inborn: (burns_visitors burns_tenants firestorm ttl_die.3{})

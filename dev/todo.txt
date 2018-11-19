@@ -1,14 +1,15 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- class.passable duplicates class.empty.
 - class.empty duplicates class.height
 - class.active duplicates class.ai.
 - class.item needs better name. Something like just `trigger`.
 - tile.unit should have better name, like tile.object
+- rename class.platform to class.fheight (fine height)
 - cfg_handle_acts creates unit table based on cost. we don't really need these
-  unuts to be summoning actions anymore. Simpler table would suffice.
+  units to be summoning actions anymore. Simpler table would suffice.
 - Fix doors and simplify the implementation, so they would switch to different frame, isntead of morphing. Door should have property who closed them
+- all objects should be destructible by sufficiently strong creatures.
 - floating animation for items like keys and flying characters
 - finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)
 - finish waterfall tileset
@@ -160,6 +161,7 @@ Optimization Possibilities:
 - obstacles blocking sight, would require precomputed sight tree, where one blocked node would block sight to all children.
 - when updating tiles, we can also mark doorways, so that flyers and jumpers could pick between multiple Z-levels
 - mouse picking can be done in reverse on draw list
+- simple animated objects don't have to be active, and can be processed by rendering code.
 
 Symta Language Handicaps:
 - `times` macro should have 2 argument form, when there is no need for a count var.

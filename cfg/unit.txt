@@ -2,7 +2,6 @@ sprite: auto
 active: 1
 height: 2
 pickable: 1
-empty: 0
 tier: 1
 cost: 0
 mov: 6

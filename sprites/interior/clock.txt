@@ -1,13 +1,5 @@
 author: `Nikita Sadkov`, `Lanea Zimmerman 'Sharm'`
 license: `CC-BY-SA 3.0`
 //losely based on the non-isometric clock by Sharm (http://opengameart.org/content/lpc-modified-base-tiles)
-height: 2
+class: height,2,foldable,1
 xy: -8,4
-class: empty,0
-      ,invincible,1
-      ,height,2
-      ,foldable,1
-      ,hit,((effect spell) (sound (tree_hit1 tree_hit2)))
-      ,death,((effect spell) (sound (tree_hit1 tree_hit2)) (sound tree_death)
-             //(spawn_item (item_wood 10))
-             )

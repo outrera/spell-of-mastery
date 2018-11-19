@@ -157,7 +157,7 @@ Spells:
 - Phantom: creates a copy of target unit, that deals the same damage, but dies in a single hit.
 - Simulacrum (law): creates illusionary copy of target creature to confuse the enemy. Simulacrum dies from a single hit.
 - Disguise: makes creature look like target creature, until it acts (simple movement doesn't break the illusion).
-- Anonymise: Target assumes generic sprite and its characteristics are hidden with `???` 
+- Anonymise: Target assumes generic sprite and its characteristics are hidden with `???`
 - Enrage: when target can attack, limits its actions to attack. I.e. it can't retreat or move around the enemy.
 - Spells that do both good/bad to you and your enemy.
 - Regeneration: target starts regenerating even outside of power node.
@@ -169,6 +169,7 @@ Spells:
 - Exorcise: a cheap spell that damages cursed units, but has no effect on uncursed units. Damage output is similar to lightning. Should kill most weak undeads outright.
 - Banish: target temporarily disappears and then returns to its caster's pentagram. If pentagram occupied, then banished unit dies.
 - Descend/Ascend: move unit between layers.
+- Shrink: decrease unit's height by 1, reducing its strength and allowing it where it was previously unabable too.
 - Stalker: homing projectile, that wanders with time towards target enemy, hitting anyone standing on the way.
 - Almagest: switches day to night and night to day; Kalispera - sets time to evening; Kalimera - sets time to day.
 - Open Node: tears the fabric of reality to open new magic node, which should be placed several cells away from an existing node, to promote territorial control.

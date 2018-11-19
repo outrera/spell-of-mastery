@@ -1,4 +1,3 @@
-height: 4
 //xy: 0,64
 frames: folder
 anims: | idle (idle0 4)

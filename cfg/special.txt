@@ -1,4 +1,2 @@
-empty: 1
-height: 0
 active: 1
 box_xy: (-1 -1)

@@ -1,3 +1,2 @@
 faces: 8
-class: empty,0,height,1
-height: 1
+class: height,1

@@ -1,7 +1,5 @@
 faces: 8
-class: empty,1
-      ,box_xy,(2 2)
+class: box_xy,(2 2)
       ,speed,24
       ,active,1
-      ,height,1
-      ,passable,0
+      ,height,0
