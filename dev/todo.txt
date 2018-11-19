@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- class.unit duplicates class.ai. see grep "\.unit[^s]" *.s
 - class.passable duplicates class.empty.
 - class.empty duplicates class.height
 - class.active duplicates class.ai.
@@ -153,6 +152,7 @@ Graphics:
 - beetle needs attack animation;
 
 Optimization Possibilities:
+- No reason to draw opaque emedded tiles fully - draw just the 64x32 top.
 - Optimize unit and action structure to take less space.
 - use cell index directly instead of unit_goal wrapper
 - when all four corners of object sprite are hidden, don't allow selecting it, also, dont draw it. requires probing pixels inside framebuffer

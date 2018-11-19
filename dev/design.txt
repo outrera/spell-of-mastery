@@ -5,7 +5,7 @@ General:
 - The basic idea is to design an X-Com inspired game, but in a fantasy setting. Instead of different kind of weapons, that must be researched, Spell of Mastery has different kind of researcheable creatures, serving different roles: melee, bomb throwing, artillery and snipers. The enchantment spells play the role of equipment, say instead of physical armor item, there are magic shield enchantment, and instead of medkits some creatures specialize in healing. Further plans would be rethinking X-Com's geoscape for fantasy setting, i.e. kingdom view, where monsters are invading, and instead of base, player has ivory tower for wizard and cities he must protect. Instead of alien encounters or alien bases, there would be dungeons and ruins to explore. Additionally zeppelins, flying ships, flying islands/castles could be introduced for transporting squad on kingdom view. Instead of corporations there are different competing wizard orders and castles with lords/kings.
 - Other sources of inspiration are Spellcraft: Aspects of Valor, Lords of Chaos, and Magic & Mayhem.
 - Completely determenistic game mechanics (i.e. game design doesn't use random dice rolls). Random rolls are allowed only for world and site generation, and for AI players decision making.
-- Randomly generated maps should present a challenge for the spell selection. For example, a river could block access to nodes, unless player has flight spell, bridge building units, has water walking units or teleportation. Such map would be unwinnable if player doesn't have required tools. Same way could be with cliffs, blocking access to non-climbers.
+- Randomly generated maps should present a challenge for the player's spell selection (which is somewhat randomized too). For example, a river could block access to nodes, unless player has flight spell, bridge building units, units that can dig under the river, has water walking units or teleportation. Such map would be unwinnable if player doesn't have required tools. Same way could be with cliffs, blocking access to non-climbers.
 
 Background Story:
 The Great King [KingName] the [First, Second, Third] of [Dynasty Name] has hired your wizard guild to protect his kingdom from increasing monster attacks and investigate their cause. The King has promised to pay hefty amount of money for each attack on his cities you help preventing and even more money have you succeed putting an end to these attacks. The king also allows you to establish a few bases of operation. Good luck on your quest!
@@ -38,7 +38,7 @@ Battle View:
 - Health determines how much damage that unit could take, before perishing.
 - Attack determines how many health points that creature's attack removes from victim on its usual attack.
 - Defense determines how many moves it would cost for other creature to attack this one. While it doesn't take much strength to kill a rat, yet rat is a very agile creature, so it takes a lot of speed to hit it and really slow moving creature wont be able to catch a rat at all. At the same time, bat being fast, may bite some unarmored creature and run away. Player may pick against which attacker his creature should concentrate its defense for the next turn, ignoring attacks from other ones. Lost defense points are regenerated at the end of a turn, if creature is not engaged, based on remaining movement points. A creature that successfuly defended can counter-attack, if it has some movement points. Creatures defending against attacks coming from below get defence bonus (upto +2), while attacks from above decrease defence. Creature's facing direction also affects its defence: creature hit from side gets -1 penalty to defence, creature hit from back gets -3 penalty to defence.
-- Fatigue decreases movement points and grows exponentially from performing actions. Each turn fatigue is decreased by creature's stamina.
+- Fatigue decreases movement points allocated at the turn's start, it grows exponentially from performing actions. Each turn fatigue is decreased by creature's stamina.
 - Sight determines how far this unit sees.
 - Range determines how far this creature can attack with its normal attack. Not that for artillery units range is usually longer than their sight.
 - Typial humanoid creature has 6 moves per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5, preventing leader to be able to run away from most creatures. Casting spell or attacking requires 4 moves. Haste gives +4 moves, allowing most units to attack twice.
@@ -73,7 +73,7 @@ Imp: digs terrain, builds bridges, cuts trees, places traps, constructs doors an
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: throws bombs, which damage whole area.
 Elf: shooter.
-Dwarf: has defend ability, which reduces all incoming damage to 1
+Dwarf: has defend ability, which reduces all incoming damage to 1; digs terrain.
 Orc: has enough health to withstand a single lightning bolt.
 Spider: poisons; can set web trap, climber, entering which enemy creature loses all movement points and gets paralyzed for the next turn.
 Lizard: fast, steed, immune to magic, climber. Good for stalking wizards, who can't harm it.
@@ -82,15 +82,15 @@ Paladin: disciplined, blessed.
 Wraith: undead, incorporeal, sees through walls, flyer, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
-Minotaur: heavy, has stun-attack ability, disabling enemy for a single turn.
+Minotaur: heavy, strong, has stun-attack ability, disabling enemy for a single turn.
 Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone, then deals damage equivalent to cumulative damage target has ever deed to other creatures.
 Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
-Cyclops: heavy
-Hydra: heavy, moves over water, attacks in all four directions, regenerates 1 hp per turn.
-Golem: heavy, slow, stoneskin (any incoming non-magic damage is halved).
+Cyclops: heavy, strong
+Hydra: heavy, strong, moves over water, attacks in all four directions, regenerates 1 hp per turn.
+Golem: heavy, strong, slow, stoneskin (any incoming non-magic damage is halved).
 Gargoyle: flyer, ignores armor.
-Dragon: disciplined, flyer, heavy, can induce fear into nearby creature, harms undead units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
+Dragon: disciplined, flyer, heavym strong, can induce fear into nearby creature, harms undead units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
 
 Types of Creature Movement:
 - Walker
@@ -113,7 +113,7 @@ Creature Properties:
 - Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near of a non-afraid enemy, like moving into adjanced cell (unless it is directly behind it), or ending its turn in a cell near an enemy. Allied units can still swap places with engaged unit, takin its place.
 - Threatened: this creature has started its turn near enemy, if at the end of its first action it remains threatened, it becomes engaged.
 - Agile: creature can move near enemy, without becoming engaged. I.e. such creature can hit and run.
-- Undead: creature resists 1/3 damage from non-magical weapons and poison, but suffers 100% more damage from blessed units.
+- Undead: creature resists 1/3 damage from non-magical weapons and poison, but suffers 100% more damage from blessed units. Undead units don't have fatigue and restore full movement on each turn.
 - Blessed: creature dues 100% damage to undead units and breaks magic doors.
 - Disciplined: creature is immune to subversion.
 - Poison: creature can't regenerate and loses health with time, until health drops to 1 or heal is cast.
@@ -129,7 +129,8 @@ Creature Properties:
 - Supravision: obstacles don't block this creature's sight
 - Darkvision: this creature doesn't suffer sight penalty at night.
 - Sinner: creature has spilled blood by killing somebody. Such creatures are vulneraly to specific abilities, like devil's punish ability.
-- Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow.
+- Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow. Fragile objects would break under such unit.
+- Strong: creature can bash chests and doors; can lift and push heavy objects.
 
 Objects:
 - Teleporters. Either one-way or two-way.
@@ -179,7 +180,7 @@ Object properties:
 - spells: spells this unit can cast.
 
 Digging Mechanics:
-- only dirt is diggable.
+- only dirt is diggable by normal means.
 - player can only dig tile between two other tiles, that will avoid removing support from ceiling and limits player to creating tunnels, instead of caves.
 - digging height>>3 dirt wall creates height=2 tunnel, but only if that cell is near height=3 wall.
 - digging height=2 wall lowers it, but only if it isn't surrounded by height=3 walls.
@@ -187,5 +188,5 @@ Digging Mechanics:
 - digged out dirt could be restored.
 
 Liquid dynamics:
-- Water emitter increasing water pressure of its tile: when pressure reaches 5 it either leaks into neiboring tiles, or into the tile above, if water reaches map edge, it goes back into emitter or falls with rain.
+- Water emitter increasing water pressure of its tile: when pressure reaches 5 it either leaks into neiboring tiles, or into the tile above, if water reaches map edge (or loses pressure to 1), it goes back into emitter or falls with rain.
 - Units standing in waster with height higher or equal to ther gets drowned, unless they have swimming ability.

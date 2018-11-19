@@ -3,7 +3,6 @@ active: 1
 height: 2
 pickable: 1
 empty: 0
-passable: 0 // other units can move on top of this one
 tier: 1
 cost: 0
 mov: 6

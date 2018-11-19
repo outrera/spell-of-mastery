@@ -4,7 +4,7 @@ ClassIdCounter = 1
 
 type class{bank class_name Main
            title/0 icon/0
-           height/0 empty/0 passable/1 platform/0
+           height/0 empty/0 platform/0
            sprite/system_dummy
            speed/0 ascendSpeed/4
            cost/0
@@ -22,7 +22,6 @@ type class{bank class_name Main
   draworder/Draworder
   platform/Platform     //increased tenants position on screen
   height/Height         //height in tiles
-  passable/Passable     //other units can move on top of this one
   box_xy/Box_xy         //bounding box x,y correction
   aux/Aux               //auxilary unit, like mark
   speed/Speed           //cycles to move between cells
@@ -58,7 +57,7 @@ type class{bank class_name Main
   | less $title: $title <= $class_name.title
   | $id <= ClassIdCounter++
   | when $inborn.has{leader}: $acts <= [@$acts @Main.cfg.world.spells].list
-| less $empty
+| when $height and $ai <> unit:
   | Block = Main.tiles."h[$height]_"
   | when got Block: $block <= Block
 

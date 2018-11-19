@@ -30,29 +30,27 @@ place_object Me Bank Type =
 | ClassName = "[Bank]_[Type]"
 | Class = $main.classes.ClassName
 | when Z+Class.height>>$site.d: leave
-| Place = 1
 | Form = if Class.form then Class.form else [[0 0 0]]
-| for XX,YY,ZZ Form: when Place:
+| for XX,YY,ZZ Form: //check if we can place it here
   | XYZ = [X Y Z] + if Mirror then [-YY XX ZZ] else [XX -YY ZZ]
   | Us = $site.units_get{XYZ}.skip{?bank><mark}
-  | Place <= if not $site.valid{@XYZ} then 0
-             else if not Class.empty then Us.all{?empty}
-             else not Us.any{?class^address >< Class^address}
-  | when Place:
-    | X,Y,Z = XYZ
-    | H = if Class.passable then Class.height else 2
-    | Place <= H.list.all{I=>$site.get{X,Y,Z+I}.empty}
-    | less Place: $main.sound{illegal}
-| when Place
-  | U = $player.alloc_unit{ClassName}
-  | Facing = if Mirror then 5 else 3
-  | Reverse = $key{edit_place_reversed}
-  | when Reverse: Facing <= if Mirror then 1 else 6
-  | U.pick_facing{Facing}
-  | when $key{edit_random_facing}: U.facing <= 3.rand
-  | U.move{X,Y,Z}
-  | U.run_genes{place}
-  | U.animate{idle}
+  | Place = if not $site.valid{@XYZ} then 0
+            else if not Class.empty then Us.all{?empty}
+            else not Us.any{?class^address >< Class^address}
+  | less Place: leave
+  | X2,Y2,Z2 = XYZ
+  | less Class.height.list.all{I=>$site.get{X2,Y2,Z2+I}.empty}:
+    | $main.sound{illegal}
+    | leave
+| U = $player.alloc_unit{ClassName}
+| Facing = if Mirror then 5 else 3
+| Reverse = $key{edit_place_reversed}
+| when Reverse: Facing <= if Mirror then 1 else 6
+| U.pick_facing{Facing}
+| when $key{edit_random_facing}: U.facing <= 3.rand
+| U.move{X,Y,Z}
+| U.run_genes{place}
+| U.animate{idle}
   
 site.place_struct XYZ Tile =
 | XX,YY,ZZ = XYZ

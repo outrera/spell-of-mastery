@@ -100,6 +100,8 @@ Creatures:
 - A creature that is permanently invisible, unless under the sight of oculus.
 - Creature alignments: either chaotic, lawful or neutral. Then some creatures can deal additional damage to some alignments.
 - Elemental weakness. I.e. slimes being weak to fire
+- Creature that can move diagonally.
+- Creature that can pass near enemy, without being threatened.
 
 Spells:
 - Genocide (chaos): kill all units of specific type, both enemy and allied. Requires two times the mana, needed to subvert target creature.
@@ -150,7 +152,8 @@ Spells:
 - Awareness: caster gets know when somebody casts a spell and reveal the location. Should be useful for tracking down enemy, trying to hide in the fog of war.
 - Detect Curse: reveals for of war around cursed units.
 - Detect Illusion: target creature can now see invisible enemies, hidden doors and discern illusionary creatures.
-- Spy: wizard learns the next unknown spell, casted by any wizard.
+- Spy: wizard learns the next spell, cast by any wizard.
+- Spell Trap: wizard captures the next spell, cast by any wizard.
 - Phantom: creates a copy of target unit, that deals the same damage, but dies in a single hit.
 - Simulacrum (law): creates illusionary copy of target creature to confuse the enemy. Simulacrum dies from a single hit.
 - Disguise: makes creature look like target creature, until it acts (simple movement doesn't break the illusion).
@@ -333,10 +336,25 @@ The genome metaphor:
 
 
 
+Current 64x64 Cubes Tileset Format, instead of say 8x8 cubes. or 64x32
+--------------------
+Pros:
+- Efficient.
+- Uniform and easy to implement.
+- Easy for human player to understand, as opposed to lower granularity, like in Heroes of Might & Magic 4
+- Other tile formats can still be simulated with hacks.
+
+Cons:
+- Some assymetry in corners (can be ameliorated with a hack: using additional tiles).
+- Roof looks shifted backwards. (can be ameliorated with a hack: shifting roof xy)
+
+
+
+
 Current Walls Tileset Format
 --------------------
 Pros:
-- Less tiles requird.
+- Less tiles required.
 - Grass properly overlaps it.
 - Objects fit perfectly near wall, without need of xy hacks.
 - Doors get placed properly in all cases.
