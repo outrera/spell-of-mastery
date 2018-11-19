@@ -61,7 +61,7 @@ Spells:
 - Firestorm (chaos): sets ground on fire, damaging creatures inside it. Fire expands for several turn.
 - Flight (law): ally gains ability to fly, while enemy would be launched into air, sustaining fall damage, unless it can fly or is too heavy to be lifted.
 - Detonate (chaos): controlled creature explodes, dealing damage to all neighbors, equivalent to creature's health. Otherwise deals minor area of effect damage.
-- Subvert (law): gain control over the target creature by spending mana equivalent to creature's willpower. If cast on allied creature, that creature gains willpower and will be immune to subversion.
+- Subvert (law): gain control over the target creature, unless it is disciplined. If cast on allied creature, that creature gains disciplined and will be immune to subversion.
 - Armageddon (chaos): all units sustain 5 points of damage.
 - The Spell of Mastery (neutral): banishes all enemy wizards and creatures from this site. Requires to be cast at each of the site's power nodes.
 
@@ -88,9 +88,9 @@ Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills ra
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy, strong
 Hydra: heavy, strong, moves over water, attacks in all four directions, regenerates 1 hp per turn.
-Golem: heavy, strong, slow, stoneskin (any incoming non-magic damage is halved).
+Golem: disciplined, heavy, strong, slow, stoneskin (any incoming non-magic damage is halved).
 Gargoyle: flyer, ignores armor.
-Dragon: disciplined, flyer, heavym strong, can induce fear into nearby creature, harms undead units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
+Dragon: flyer, heavy, strong, can induce fear into nearby creature, harms undead units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
 
 Types of Creature Movement:
 - Walker
@@ -153,6 +153,7 @@ Object properties:
 - height: tall units can't pass under short passages, while units like
   bats fly into a window.
 - platform: increased Z position of all other units inside this cell.
+- fragile: objects breaks under heavy units.
 - ai:
   - unit: behaves like normal unit.
   - key: item that opens chest, door or activates other object of same color.
@@ -163,7 +164,6 @@ Object properties:
 - item: trigger script, run when unit enters tile residing this object.
   Give it better name.
 - inborn: what genes this unit has on creation.
-- passable: duplicates empty; removed it.
 - active (unit is updated by engine each cycle): duplicates ai; remove it.
 - aux: auxilary object, like corpse or pathfinder node; don't show it in editor.
 - pickable: can be picked by player; duplicates ai; remove it.
