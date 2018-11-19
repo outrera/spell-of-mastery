@@ -334,6 +334,17 @@ The genome metaphor:
   That would help balancing the game bottom-up.
 - Some AI stuff, like spellcasting can be moved here too.
 
+Squares vs Hexagons
+--------------------
+Squares pros:
+- Simple: easier for player to get into, without losing directions.
+- Cheap: just 4 directions of movement, requires 2 sprite orientation angles.
+- Easier to implement tilesets: just 4 corners, instead of 6.
+
+Squares cons:
+- Less realistic movement.
+- Requires hacks to implement round looking tiles and effects, like explosions.
+- Reduced number of melee unit interactions.
 
 
 Current 64x64 Cubes Tileset Format, instead of say 8x8 cubes. or 64x32
@@ -341,14 +352,11 @@ Current 64x64 Cubes Tileset Format, instead of say 8x8 cubes. or 64x32
 Pros:
 - Efficient.
 - Uniform and easy to implement.
-- Easy for human player to understand, as opposed to lower granularity, like in Heroes of Might & Magic 4
+- Easy for human player to understand, as opposed to higher granularity, like in Heroes of Might & Magic 4
 - Other tile formats can still be simulated with hacks.
 
 Cons:
-- Some assymetry in corners (can be ameliorated with a hack: using additional tiles).
-- Roof looks shifted backwards. (can be ameliorated with a hack: shifting roof xy)
-
-
+- Requires hacks to place items of a size less than a tile.
 
 
 Current Walls Tileset Format
