@@ -6,6 +6,7 @@ TODO:
 - class.item needs better name. Something like just `trigger`.
 - tile.unit should have better name, like tile.object
 - rename class.platform to class.fheight (fine height)
+- worl map should have separate mask layer determining site types.
 - cfg_handle_acts creates unit table based on cost. we don't really need these
   units to be summoning actions anymore. Simpler table would suffice.
 - Fix doors and simplify the implementation, so they would switch to different frame, isntead of morphing. Door should have property who closed them

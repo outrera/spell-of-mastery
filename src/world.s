@@ -34,6 +34,7 @@ type world.widget{Main UI W H}
   turn_seed //prevents player from reloading to get different outcome
   serial
   bg
+  mask
   fg
   fow
   turn
@@ -52,6 +53,7 @@ type world.widget{Main UI W H}
   sterra/(t) //allowed terrain for sites
 | $cfg <= $main.cfg.world
 | $bg <= $img{world_bg}
+| $mask <= $img{world_bg_mask}
 | $siteLimX <= $bg.w-$siteC
 | $fg <= @table: map N [site picked base city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
@@ -136,7 +138,7 @@ world.free_site S =
 | $free_sites.push{S}
 
 world.terra_at XY =
-| T = $tmap.|$bg.get{XY.0.clip{0 $bg.w} XY.1.clip{0 $bg.h}}
+| T = $tmap.|$mask.get{XY.0.clip{0 $mask.w} XY.1.clip{0 $mask.h}}
 | when no T: T <= \void
 | T
 
