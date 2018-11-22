@@ -1,5 +1,5 @@
 faces: 8
 class: box_xy,(2 2)
       ,speed,24
-      ,active,1
+      ,ai,visual
       ,height,0

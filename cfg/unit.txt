@@ -1,5 +1,4 @@
 sprite: auto
-active: 1
 height: 2
 pickable: 1
 tier: 1

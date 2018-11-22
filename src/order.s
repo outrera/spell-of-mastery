@@ -9,7 +9,8 @@ unit.order_at Goal Act =
 | less Goal: Goal <= Cell.block
 | Act <= if Act.is_text then $main.acts.Act
          else if Act then Act
-         else if Goal and $owner.is_enemy{Goal.owner} and not Goal.invisible then
+         else if Goal and $owner.is_enemy{Goal.owner}
+                 and not Goal.invisible then
            $main.acts.attack
          else if $owner.human and and got Units.find{?type><mark_jump} then
            $main.acts.act_jump

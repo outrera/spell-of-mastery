@@ -3,4 +3,3 @@ icon: special_pentagram
 sprite: special_pentagram
 ai: pentagram
 inborn: (enemy_removes)
-acts: ()

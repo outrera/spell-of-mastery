@@ -140,10 +140,8 @@ goal_in_range Me =
 | less Act.repeat><1: $goal <= 0
 
 update_path Me =
-| when not $goal or $goal.serial <> $goal_serial or $goal.removed
-       or not $goal.alive:
-  | $goal <= 0
-  | $set_path{[]}
+| when not $goal or $goal.serial <> $goal_serial or $goal.removed:
+  | $reset_goal
   | leave
 | Act = $goal_act
 | R = Act.range

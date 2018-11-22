@@ -4,13 +4,13 @@ ClassIdCounter = 1
 
 type class{bank class_name Main
            title/0 icon/0
+           sprite/Sprite
            height/0 platform/0
-           sprite/system_dummy
            speed/0 ascendSpeed/4
            cost/0
            mov/0 stamina/1 health/0 atk/0 def/0 sight/No range/0
            inborn/[] acts/[]
-           active/0 pickable/0 ai/0 show/1 gate/0
+           pickable/0 ai/0 show/1 gate/0
            tier/0
            counter/0 item/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
            aux/0 foldable/0 draworder/100 box_xy/[0 0]}
@@ -38,7 +38,7 @@ type class{bank class_name Main
   title/Title           //proper unit name shown ingame
   item/Item             //for item units
   ai/Ai                 //how AI treats this unit
-  active/Active         //update unit each cycle?
+  active/0              //update unit each cycle?
   pickable/Pickable     //can be picked?
   show/Show             //show this unit ingame
   counter/Counter       //counter-attack script
@@ -51,6 +51,9 @@ type class{bank class_name Main
   onMove/OnMove         //called when unit enters a cell
   gate/Gate             //gateway, teleporting units to other cell
   foldable/Foldable     //fold unit`s sprite when cursor is behind
+| $active <= if Sprite.anims.idle.size>1 then 1
+             else if $inborn.size or $ai><unit or $ai><visual then 1
+             else 0
 | when $active:
   | when Cost: $gold <= Cost.0
   | less $title: $title <= $class_name.title
@@ -66,17 +69,15 @@ main.load_classes =
 | BankNames = case $cfg.site.class_banks [@Xs](Xs) X[X]
 | $classes <= @table: @join: map BankName BankNames
   | map Name,Cfgs $cfg.BankName
-    | R = class BankName Name Me @Cfgs.list.join
-    | DS = R.default_sprite
-    | when DS><auto: DS <= "unit_[Name]"
-    | S = $sprites.DS
-    | less got S: bad "missing sprite `[DS]` for `[BankName]_[Name]`"
-    | R.default_sprite <= S
-    | "[BankName]_[Name]",R
+    | SN = Cfgs.'sprite'
+    | when no SN: SN <= "system_dummy"
+    | when SN><auto: SN <= "unit_[Name]"
+    | S = $sprites.SN
+    | less got S: bad "missing sprite `[SN]` for `[BankName]_[Name]`"
+    | Cfgs.sprite <= S
+    | "[BankName]_[Name]",|class BankName Name Me @Cfgs.list.join
 | for S $sprites{}{?1}.keep{?class}
-  | C = class S.bank S.name Me @S.class
-  | C.default_sprite <= S
-  | $classes."[S.bank]_[S.name]" <= C
+  | $classes."[S.bank]_[S.name]" <= class S.bank S.name Me sprite S @S.class
 | for K,V $classes:
   | when V.active:
     | As = []

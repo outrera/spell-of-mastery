@@ -171,8 +171,8 @@ unit.init Class =
 | $alpha <= 0
 | $delta <= 0
 | $from.init{0,0,-1}
-| when $class.active
-  | less $active
+| when $class.active:
+  | less $active: // at some point there was double active bug.
     | $site.active.push{Me}
   | $active <= 1
   | $mov <= $class.mov
@@ -321,11 +321,6 @@ unit.free =
 | $genes.heapfree
 | $genes <= []
 | $site.free_unit{Me}
-
-//a faster solution would be keeping the linked list of all targeters
-unit.reset_followers =
-| for U $site.active: when U.goal and U.goal.id><$id:
-  | U.reset_goal
 
 unit.removed = fxn $xyz.2 >< -1
 

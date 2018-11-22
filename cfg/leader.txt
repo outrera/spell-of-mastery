@@ -1,7 +1,6 @@
 //NOTE: ensure all leaders have 32 frames of attack animation
 //      otherwise some leader could put more damage than the other
 sprite: auto
-active: 1
 height: 2
 tier: 5
 mov: 5

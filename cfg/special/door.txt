@@ -1,6 +1,5 @@
 sprite: special_door
 title: `Door`
-active: 1
 height: 2
 ai: door
 inborn: (door_align)

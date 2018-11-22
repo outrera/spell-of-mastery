@@ -1,7 +1,9 @@
 use gfx util fxn
 
 type sprite{main Bank Name filepath/0 xy/[0 0]
-            frames/0 faces/0 anims/default recolors/0
+            frames/0 faces/0
+            anims/default //if 0, we don't need to produce anims
+            recolors/0
             class/0 margins/0
             font/Font icon/0 shadow/0 form/0
             rect/[40 76 -4]

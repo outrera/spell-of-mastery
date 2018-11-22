@@ -1,11 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- class.empty duplicates class.height
-- class.active duplicates class.ai.
 - class.item needs better name. Something like just `trigger`.
 - tile.unit should have better name, like tile.object
-- rename class.platform to class.fheight (fine height)
+- rename class.platform to class.fheight (fine height).
 - worl map should have separate mask layer determining site types.
 - cfg_handle_acts creates unit table based on cost. we don't really need these
   units to be summoning actions anymore. Simpler table would suffice.
