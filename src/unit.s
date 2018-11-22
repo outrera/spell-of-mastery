@@ -13,7 +13,7 @@ type unit.$class{Id Site}
   owner // player controlling this unit
   fxyz/[0 0 0] // fine X,Y,Z
   xyz/[0 0 -1] // site cell X,Y,Z
-  zhack // used to make unit appear standing on platform
+  zhack // accomotates for fheight of underlaying terrain
   cell/0 //cell this unit resides in
   floor/0 // ground cell under this unit
   from/[0 0 0] //where this unit moved from
@@ -434,10 +434,10 @@ unit.fine_move FXYZ =
 | $fxyz.init{FXYZ}
 | $zhack <= 0
 | when $ai >< unit:
-  | Platform = $site.units_get{$xyz}.find{?platform}
-  | when got Platform: $zhack <= -Platform.platform
+  | Platform = $site.units_get{$xyz}.find{?fheight}
+  | when got Platform: $zhack <= -Platform.fheight
 | RUs = []
-| when $platform:
+| when $fheight:
   | RUs <= $site.units_get{$xyz}{[? ?fxyz]}
   | RUs{?0.remove}
 | $site.place_unit{Me}

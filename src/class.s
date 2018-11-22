@@ -5,7 +5,7 @@ ClassIdCounter = 1
 type class{bank class_name Main
            title/0 icon/0
            sprite/Sprite
-           height/0 platform/0
+           height/0
            speed/0 ascendSpeed/4
            cost/0
            mov/0 stamina/1 health/0 atk/0 def/0 sight/No range/0
@@ -19,8 +19,8 @@ type class{bank class_name Main
   block/0               //acts as map block
   default_sprite/Sprite
   draworder/Draworder
-  platform/Platform     //increased tenants position on screen
   height/Height         //height in tiles
+  fheight/0             //fine height (when unit takes only part of a tile)
   box_xy/Box_xy         //bounding box x,y correction
   aux/Aux               //auxilary unit, like mark
   speed/Speed           //cycles to move between cells
@@ -51,6 +51,9 @@ type class{bank class_name Main
   onMove/OnMove         //called when unit enters a cell
   gate/Gate             //gateway, teleporting units to other cell
   foldable/Foldable     //fold unit`s sprite when cursor is behind
+| when $height.is_list:
+  | $fheight <= $height.2
+  | $height <= $height.1
 | $active <= if Sprite.anims.idle.size>1 then 1
              else if $inborn.size or $ai><unit or $ai><visual then 1
              else 0
