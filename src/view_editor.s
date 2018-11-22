@@ -134,7 +134,7 @@ remove_object_or_tile Me =
 | Brush = $brush
 | T = $site.at{X Y Z-1}
 | Us = $units_get{X,Y,Z}
-| when T.unit and not Us.size:
+| when T.proxy and not Us.size:
   | while $site.at{X Y Z}.type >< T.type: Z++
   | ZZ = Z - T.height
   | BelowUs = $units_get{X,Y,ZZ}

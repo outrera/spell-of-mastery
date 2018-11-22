@@ -1,7 +1,8 @@
+//a proxy tile for units of different sizes
 filler: 0
 invisible: 1
 aux: 1
 height: 1
 heavy: 0
 lay: 0
-unit: 1
+proxy: 1

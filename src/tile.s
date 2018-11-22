@@ -4,7 +4,7 @@ type tile{As Main Type Id
           sprite/0 flatGfx/0 lay/No
           tiler/[uniq any corner] ztiler/[uniq same]
           aux/0 height/1 filler/1 invisible/0 shadow/0
-          anim_wait/0 water/0 bank/0 unit/0 heavy/1 lineup/1 dig/0
+          anim_wait/0 water/0 bank/0 proxy/0 heavy/1 lineup/1 dig/0
           parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
           hp/0 hit/0 death/0
           embed/0
@@ -34,7 +34,7 @@ type tile{As Main Type Id
      shadow/Shadow
      anim_wait/Anim_wait
      water/Water
-     unit/Unit //used for units that act as platforms
+     proxy/Proxy //acts as a tilemap proxy for some unit
      heavy/Heavy //1=shapes the tile below into a cube
                  //2=shapes into cube, but preserves grass
      lineup/Lineup //shaped by tile above into a cube
@@ -55,7 +55,7 @@ type tile{As Main Type Id
      death/Death //on death effect
      struct/Struct
      structTiles/StructTiles
-     colors/Colors
+     colors/Colors //minimap colors
 | [Role Match TilerName] = $tiler
 | $role <= Role
 | $match <= Match

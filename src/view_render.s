@@ -248,7 +248,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
 | Us = Cell.units.unheap
 | when Fog: Us <= Us.skip{(?ai><unit)}
 | less Explored: Us <= 0
-| fxn: for U Us: when U.frame:
+| fxn: for U Us: when U.frame: //render units
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
   | TZ = Z-1
@@ -266,7 +266,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
       | push U BlitUnits
 | NextZ = 0
 | TH = 0
-| fxn: while NextZ < EndZ:
+| fxn: while NextZ < EndZ: //render tiles
   | Z = NextZ
   | G = Cell.gfx
   | T = Cell.tile
@@ -286,12 +286,12 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
       | Cell.blitem <= B
   | Cell += TH
 | _label out
-| fxn: less AboveCursor or NextZ-1 << ZCut:
+| fxn: less AboveCursor or NextZ-1 << ZCut: //draw folded column marker
   | Z = ZCut+1
   | Z = if NextZ-TH < Z then NextZ-TH else Z
   | Cell = Wr.cell{X Y Z}
   | T = Cell.tile
-  | when T.id and not T.unit:
+  | when T.id and not T.proxy:
     | SZ = Z*ZUnit
     | SY = BY-SZ
     | B = blit_item Cell X*CS Y*CS Z*CS 
