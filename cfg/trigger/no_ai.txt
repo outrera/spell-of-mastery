@@ -1,5 +1,4 @@
 sprite: special_no_ai
-item: remove
-show: 0
+trigger: remove{}
 ai: avoid
 note: `points places that ai should avoid`

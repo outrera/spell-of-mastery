@@ -1,4 +1,2 @@
 sprite: special_trigger6
-item: world_set{trigger6 1}
-show: 0
-
+trigger: world_set{trigger6 1}

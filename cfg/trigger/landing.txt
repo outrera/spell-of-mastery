@@ -1,2 +1,2 @@
 sprite: special_landing
-show: 0
+note: `a place where site generator can place player's unit`

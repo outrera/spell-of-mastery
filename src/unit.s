@@ -421,8 +421,8 @@ unit.harm Attacker Damage =
 unit.on_entry =
 | for U $cell.units: U.run_genes{entry}
 
-unit_pickup_items Me =
-| for U $cell.units: when U.item.is_list: U.effect{U.item Me $xyz}
+unit_run_triggers Me =
+| for U $cell.units: when U.trigger.is_list: U.effect{U.trigger Me $xyz}
 
 unit.fine_move FXYZ =
 | C = $site.c
@@ -444,7 +444,7 @@ unit.fine_move FXYZ =
 | for U,F RUs: U.fine_move{F}
 | $floor <= $cell.floor
 | $environment_updated
-| when $ai >< unit: unit_pickup_items Me
+| when $ai >< unit: unit_run_triggers Me
 | Me
 
 unit.move XYZ =

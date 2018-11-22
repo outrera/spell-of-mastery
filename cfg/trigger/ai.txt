@@ -1,4 +1,3 @@
 sprite: special_ai
-show: 0
 ai: hold
 note: `used to to point places for AI to guard`

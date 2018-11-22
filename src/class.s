@@ -12,7 +12,7 @@ type class{bank class_name Main
            inborn/[] acts/[]
            pickable/0 ai/0 show/1 gate/0
            tier/0
-           counter/0 item/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
+           counter/0 trigger/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
            aux/0 foldable/0 draworder/100 box_xy/[0 0]}
   id                    //for unit counts table
   type/"[Bank]_[Class_name]"
@@ -36,7 +36,6 @@ type class{bank class_name Main
   acts/Acts             //acts this unit can perform
   icon/Icon             //icon for this unit
   title/Title           //proper unit name shown ingame
-  item/Item             //for item units
   ai/Ai                 //how AI treats this unit
   active/0              //update unit each cycle?
   pickable/Pickable     //can be picked?
@@ -45,6 +44,7 @@ type class{bank class_name Main
   tier/Tier             //unit power-level
   inborn/Inborn         //inborn abilities
   onAttack/OnAttack     //called when unit starts its attack
+  trigger/Trigger       //called when unit enters cell of this object
   onHit/OnHit           //called when attack hits the enemy
   onHarm/OnHarm         //called when unit receives damage
   onDeath/OnDeath       //called when unit dies

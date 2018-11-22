@@ -1,5 +1,4 @@
 sprite: system_dummy
-show: 0
 ai: unhold
 inborn: (ttl{6})
 note: `temporary trigger, disabling hold property`

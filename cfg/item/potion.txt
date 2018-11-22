@@ -1,4 +1,4 @@
 sprite: item_potion
-item: add_spell{act_potion 1},sound{pickup},notify{`Found Health Potion.`},visual{pickup},self,remove
+trigger: add_spell{act_potion 1},sound{pickup},notify{`Found Health Potion.`},visual{pickup},self,remove
 ai: hold
 box_xy: (-1 -1)
