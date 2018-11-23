@@ -1,0 +1,5 @@
+author: `Shepardskin (https://twitter.com/Shepardskin)`, `Nikita Sadkov`
+origin: `https://opengameart.org/content/6-adventure-game-backgrounds`
+class: height,2
+xy: -2,8
+//I've heavily edited the original sprite.
