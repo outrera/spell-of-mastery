@@ -1,0 +1,5 @@
+author: `Pancake Bob (http://pancakebobapps.wixsite.com/apps)`,`Nikita Sadkov`
+license: `CC-BY-SA 4.0`
+origin: `https://opengameart.org/content/gramophone`
+xy: 0,8
+class: height,0

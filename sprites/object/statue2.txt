@@ -1,4 +1,5 @@
 author: `Shepardskin (https://twitter.com/Shepardskin)`, `Nikita Sadkov`
+license: `CC-BY 3.0`
 origin: `https://opengameart.org/content/6-adventure-game-backgrounds`
 class: height,2
 xy: -2,8
