@@ -3,4 +3,5 @@ copyright: `Nikita Sadkov`
 xy: 8,14
 frames: folder
 anims: | idle (idle0 9)
+       | open (open0 9)
        | death (idle0 12)

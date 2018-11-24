@@ -35,7 +35,7 @@ view.handle_picked_act Target =
 view.handle_pick =
 | Unit = $site.nil
 | when@@it $site.cell{@$cursor}.block:
-  | less it.invisible: Unit <= it
+  | when it.ai><unit: less it.invisible: Unit <= it
 | Player = $player
 | less Player.seen{Unit.xyz}: Unit <= $site.nil
 | $ui.on_unit_pick{$picked}

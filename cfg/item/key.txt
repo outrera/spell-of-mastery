@@ -1,4 +1,4 @@
 sprite: item_key
 ai: key
 box_xy: (1 1)
-
+trigger: addkey{},visual{pickup},sound{pickup},self,remove

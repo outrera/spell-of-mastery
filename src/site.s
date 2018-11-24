@@ -241,7 +241,6 @@ reinit_units Us =
   | Facing = U.facing
   | XYZ.init{U.xyz}
   | FXYZ.init{U.fxyz}
-  | Items = U.items
   | when U.leader: U.hp <= U.class.hp
   | U.free
   | less U.ordered.type><die:

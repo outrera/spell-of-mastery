@@ -201,6 +201,43 @@ effect detonate Damage MaxH:
   | B = F.block
   | when B and (C-F).abs<MaxH: B.harm{Me Damage}
 
+effect addkey:
+| Color = $owner.color
+| Target.owner.notify{"Acquired [Color] key, which opens [Color] locks."}
+| $site.data."haskey_[Target.id]_[$owner.id]" <= 1
+
+open_door Me =
+| C = $owner.alloc_unit{special_opend}
+| C.move{$xyz}
+| C.pick_facing{$facing}
+| C.fxyz.init{$fxyz}
+| C.sprite <= $sprite
+| C.animate{open}
+| C.set{door $type}
+| $free
+
+close_door Me =
+| C = $owner.alloc_unit{$get{door}}
+| C.move{$xyz}
+| C.pick_facing{$facing}
+| C.fxyz.init{$fxyz}
+| C.animate{idle}
+| $free
+
+effect switch:
+| XYZ = [TargetXYZ.0 TargetXYZ.1 $xyz.2]
+| Us = [@$site.units_get{XYZ} @$site.units_get{XYZ+[0 0 1]}]
+| when XYZ.2>1: Us <= [@Us @$site.units_get{XYZ-[0 0 1]}]
+| for U Us
+    if U.ai >< door then
+      | open_door U
+      | leave
+    else if U.ai >< opend then
+      | close_door U
+      | leave
+    else
+| $owner.notify{"There is nothing to interact with."}
+
 effect explosion Size:
 | for U $site.units_in_range{TargetXYZ Size}:
   | Damage = max 1 Size-TargetXYZ.mdist{U.xyz}

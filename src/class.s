@@ -62,7 +62,7 @@ type class{bank class_name Main
   | less $title: $title <= $class_name.title
   | $id <= ClassIdCounter++
   | when $inborn.has{leader}: $acts <= [@$acts @Main.cfg.world.spells].list
-| when $height and $ai <> unit:
+| when $height and $ai <> unit and $ai <> door:
   | Block = Main.tiles."h[$height]_"
   | when got Block: $block <= Block
 

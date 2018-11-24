@@ -1,6 +1,0 @@
-author: `Tim Jonsson`
-copyright: `Nikita Sadkov`
-xy: 6,-1
-frames: folder
-anims: | idle (idle0 9)
-       | death (idle0 12)

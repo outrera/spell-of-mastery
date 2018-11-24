@@ -1,0 +1,5 @@
+sprite: special_door
+ai: opend
+aux: 1
+box_xy: (-1 -1)
+draworder: 75

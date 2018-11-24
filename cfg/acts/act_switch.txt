@@ -1,0 +1,9 @@
+icon: act_switch
+title: `Interact`
+//hotkey: s
+mov: 1
+range: 1
+check: any
+onInit: animate{idle},face
+onEnd: (switch)
+hint: switch

@@ -8,7 +8,9 @@ Leader abilities:
 - Dual-cast: allows casting two different spells on two different locations on the same turn.
 
 General:
-- Some why to spy on what spells enemy has.
+- Inventory dialogue, which would also show what unit portrait and stats. Use Heroes of Might & Magic 4 template as layout. While creatures are hired and paid per mission, inventory items are preserved unless lost or their durability falls to 0. Such items can be either purchased in shop or found on mission.
+- Hero units, that can participate in several missions and unlock abilities, if some objectives for that here are achieved. For example, paladin hero may be required to participate in a mission against heretics to gain new abilities.
+- Some way to spy on what spells enemy has.
 - Unit behind cover (1-height cell) should gain defense advantage.
 - When fire consumes some burnable item, consider increasing fire's health.
 - Consider using liquid mechanics for fire, having pressure, that would increase it's spreading speed.
