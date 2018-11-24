@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Fix doors and simplify the implementation, so they would switch to different frame, isntead of morphing. Door should have property who closed them
-- acquired key indicators right near gold and current turn.
+- implement colored doors and keys: acquired key indicators appear right near gold and current turn.
 - all objects should be destructible by sufficiently strong creatures.
 - floating animation for items like keys and flying characters.
 - invisibility transparency should be pulsating.

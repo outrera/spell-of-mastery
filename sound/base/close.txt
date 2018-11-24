@@ -1,0 +1,3 @@
+author: `Kenney Vleugels (http://www.kenney.nl)`
+license: `Public Domain (CC0)`
+origin: `ttp://opengameart.org/content/50-rpg-sound-effects`

@@ -3,7 +3,7 @@ use util macros act_
 type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
          hint/0 tab/0 room/0
          cost/0 mov/1 fatigue/1 cool/0 needs/[] needsGene/[]
-         priority/50 range/0 speed/4 animate/No repeat/0
+         priority/50 range/0 speed/4 delay/0 animate/No repeat/0
          menu/0 onMenu/0
          check/unit onInit/[] onHit/OnHit onEnd/[]}
   title/Title
@@ -28,6 +28,7 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
   priority/Priority
   range/Range //range
   speed/Speed //number of cycles before unit can act again
+  delay/Delay //number cooldown cycles, after action completes.
   animate/Animate
   repeat/Repeat //repeat action, while possible (i.e. tree is not chopped)
   check/Check //what it can target (see Allowed below)

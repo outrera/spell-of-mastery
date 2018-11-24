@@ -257,11 +257,13 @@ update_action Me =
          and $anim<>hit and
          ($anim_step <> $anim_seq.size-1 or $anim_wait > 1):
     | leave // ensure animation finishes
+  | Delay = $action.act.delay
   | $action.finish
   | when $action.act.mov>0 and $threatened:
     | $engaged <= 1
     | $reveal_nearby_enemies
   | update_next_action Me
+  | $delay <= Delay
 | $action.update
 
 unit.clinging =

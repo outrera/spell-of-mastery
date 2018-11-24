@@ -207,6 +207,7 @@ effect addkey:
 | $site.data."haskey_[Target.id]_[$owner.id]" <= 1
 
 open_door Me =
+| $sound{open}
 | C = $owner.alloc_unit{special_opend}
 | C.move{$xyz}
 | C.pick_facing{$facing}
@@ -217,6 +218,7 @@ open_door Me =
 | $free
 
 close_door Me =
+| $sound{close}
 | C = $owner.alloc_unit{$get{door}}
 | C.move{$xyz}
 | C.pick_facing{$facing}

@@ -288,7 +288,7 @@ unit.change_owner NewOwner =
 | when FXYZ: $fine_move{FXYZ}
 | NewOwner.got_unit{Me}
 
-unit.idle = not $ordered.type and
+unit.idle = not $ordered.type and not $delay and
            [$action $next_action].all{?type^~{0 idle} >< idle}
 
 unit.pick_facing F =

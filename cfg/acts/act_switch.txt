@@ -4,6 +4,7 @@ title: `Interact`
 mov: 1
 range: 1
 check: any
+delay: 2 //required for view_input to update movement marks
 onInit: animate{idle},face
 onEnd: (switch)
 hint: switch
