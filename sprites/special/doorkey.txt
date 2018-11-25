@@ -2,7 +2,7 @@ author: `Nikita Sadkov`, `Blasphemer Team`
 //losely based of a door texure from Blashpemer
 //I've repladed wood with solid color and drawn a keylock.
 recolors: (#db3a00 #a40000 #7c0000 #5c0400 #440400)
-xy: 8,14
+xy: 8,12
 frames: folder
 anims: | idle (idle0 9)
        | open (open0 9)
