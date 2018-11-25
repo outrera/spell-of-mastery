@@ -204,9 +204,17 @@ effect detonate Damage MaxH:
 effect addkey:
 | Color = $owner.color
 | Target.owner.notify{"Acquired [Color] key, which opens [Color] locks."}
-| $site.data."haskey_[Target.id]_[$owner.id]" <= 1
+| $site.data."haskey_p[Target.owner.id]_k[$owner.id]" <= 1
 
-open_door Me =
+check_key Actor Me =
+| less got $site.data."haskey_p[Actor.id]_k[$owner.id]":
+  | Color = $owner.color
+  | Actor.owner.notify{"This door requires [Color] key."}
+  | leave 0
+| 1
+
+open_door Actor Me =
+| less $aiArg.has{locked} and check_key Actor Me: leave
 | $sound{open}
 | C = $owner.alloc_unit{special_opend}
 | C.move{$xyz}
@@ -217,9 +225,12 @@ open_door Me =
 | C.set{door $type}
 | $free
 
-close_door Me =
+close_door Actor Me =
+| DoorType = $get{door}
+| DoorClass = $main.classes.DoorType
+| less DoorClass.aiArg.has{locked} and check_key Actor Me: leave
 | $sound{close}
-| C = $owner.alloc_unit{$get{door}}
+| C = $owner.alloc_unit{DoorType}
 | C.move{$xyz}
 | C.pick_facing{$facing}
 | C.fxyz.init{$fxyz}
@@ -232,10 +243,10 @@ effect switch:
 | when XYZ.2>1: Us <= [@Us @$site.units_get{XYZ-[0 0 1]}]
 | for U Us
     if U.ai >< door then
-      | open_door U
+      | open_door Me U
       | leave
     else if U.ai >< opend then
-      | close_door U
+      | close_door Me U
       | leave
     else
 | $owner.notify{"There is nothing to interact with."}

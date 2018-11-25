@@ -1,4 +1,4 @@
-sprite: special_door
+sprite: special_doorkey
 ai: opend
 aux: 1
 box_xy: (-1 -1)

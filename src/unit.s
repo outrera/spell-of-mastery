@@ -62,6 +62,8 @@ unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $site.main
 
+unit.ai = $class.ai
+
 unit.picked = $flags.bit{1}
 unit.`=picked` State = $flags <= $flags.bitSet{1 State}
 

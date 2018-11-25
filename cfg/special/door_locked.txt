@@ -1,0 +1,8 @@
+sprite: special_doorkey
+title: `Door`
+height: 2
+ai: door,locked
+inborn: (door_align)
+onHit: sound{cut}
+onHurt: visual{blood_undead},sound{door_hit}
+onDeath: visual{explosion},sound{door_die}

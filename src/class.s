@@ -10,13 +10,16 @@ type class{bank class_name Main
            cost/0
            mov/0 stamina/1 health/0 atk/0 def/0 sight/No range/0
            inborn/[] acts/[]
-           pickable/0 ai/0 show/1 gate/0
+           ai/0
+           pickable/0 show/1 gate/0
            tier/0
            counter/0 trigger/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
            aux/0 foldable/0 draworder/100 box_xy/[0 0]}
   id                    //for unit counts table
   type/"[Bank]_[Class_name]"
   block/0               //acts as map block
+  icon/Icon             //icon for this unit
+  title/Title           //proper unit name shown ingame
   default_sprite/Sprite
   draworder/Draworder
   height/Height         //height in tiles
@@ -34,15 +37,14 @@ type class{bank class_name Main
   sight/Sight           //scout range
   range/Range           //attack range
   acts/Acts             //acts this unit can perform
-  icon/Icon             //icon for this unit
-  title/Title           //proper unit name shown ingame
   ai/Ai                 //how AI treats this unit
+  aiArg/[]              //additional data for ai
   active/0              //update unit each cycle?
-  pickable/Pickable     //can be picked?
+  pickable/Pickable     //can be picked by player?
   show/Show             //show this unit ingame
-  counter/Counter       //counter-attack script
   tier/Tier             //unit power-level
   inborn/Inborn         //inborn abilities
+  counter/Counter       //counter-attack script
   onAttack/OnAttack     //called when unit starts its attack
   trigger/Trigger       //called when unit enters cell of this object
   onHit/OnHit           //called when attack hits the enemy
@@ -51,6 +53,9 @@ type class{bank class_name Main
   onMove/OnMove         //called when unit enters a cell
   gate/Gate             //gateway, teleporting units to other cell
   foldable/Foldable     //fold unit`s sprite when cursor is behind
+| case $ai [X@Xs]:
+  | $aiArg <= Xs
+  | $ai <= X
 | when $height.is_list:
   | $fheight <= $height.2
   | $height <= $height.1
