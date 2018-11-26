@@ -204,17 +204,12 @@ effect detonate Damage MaxH:
 effect addkey:
 | Color = $owner.color
 | Target.owner.notify{"Acquired [Color] key, which opens [Color] locks."}
-| $site.data."haskey_p[Target.owner.id]_k[$owner.id]" <= 1
-
-check_key Actor Me =
-| less got $site.data."haskey_p[Actor.owner.id]_k[$owner.id]":
-  | Color = $owner.color
-  | Actor.owner.notify{"This door requires [Color] key."}
-  | leave 0
-| 1
+| Target.owner.data.keys <= Target.owner.data.keys --- (1<<<$owner.id)
 
 open_door Actor Me =
-| when $aiArg.has{locked} and not check_key Actor Me: leave
+| when $aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:
+  | Actor.owner.notify{"This door requires [$owner.color] key."}
+  | leave
 | $sound{open}
 | C = $owner.alloc_unit{special_opend}
 | C.move{$xyz}
@@ -228,7 +223,9 @@ open_door Actor Me =
 close_door Actor Me =
 | DoorType = $get{door}
 | DoorClass = $main.classes.DoorType
-| when DoorClass.aiArg.has{locked} and not check_key Actor Me: leave
+| when DoorClass.aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:
+  | Actor.owner.notify{"This door requires [$owner.color] key."}
+  | leave
 | $sound{close}
 | C = $owner.alloc_unit{DoorType}
 | C.move{$xyz}

@@ -72,25 +72,6 @@ site_props.update =
 | $width.value <= "[W.w]"
 | $height.value <= "[W.h]"
 
-
-Indicators = 0
-type resource_counters.widget{view} site w/0 h/0
-| $site <= $view.site
-
-resource_counters.main = $site.main
-
-resource_counters.draw G X Y =
-| less Indicators: Indicators <= $main.img{ui_indicators}
-| Cursor = 
-| IX = ($view.w-Indicators.w)/2
-| IY = 0
-| P = $site.human
-| G.blit{IX IY Indicators}
-| Font = font medium
-| Font.draw{G IX+232 IY+2 "[$site.turn]:[$site.player]"}
-| Debug = $site.data.debug
-| when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
-
 type notification_widget.widget{ui} site w/0 h/0
 notification_widget.draw G X Y =
 | Font = font medium
@@ -172,4 +153,4 @@ player_picker.input In =
                     | $pressed <= 0
 
 export message_box site_props credits_roll notification_widget
-       player_picker save_dlg load_dlg resource_counters
+       player_picker save_dlg load_dlg

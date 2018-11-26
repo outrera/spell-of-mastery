@@ -27,7 +27,6 @@ type player{id site}
    total_units
    unit_counts // counts uwned units for each unit type
    colors
-   houses
 | $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | MaxSize = $site.maxSize
@@ -79,6 +78,7 @@ player.clear =
 | $leader <= $site.nil
 | $data.lossage <= 0
 | $data.gold <= 0
+| $data.keys <= 0
 
 player.init =
 
@@ -93,6 +93,8 @@ player.lost_unit U =
 | when CID:
   | $unit_counts.CID--
   | $total_units--
+
+player.haskey N = $data.keys &&& (1<<<N)
 
 player.enabled Act = Act.players.bit{$id}
 player.enable Act State = Act.players <= Act.players.bitSet{$id State}

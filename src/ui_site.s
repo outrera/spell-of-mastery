@@ -1,5 +1,26 @@
 use gui widgets ui_icon ui_widgets ui_minimap
 
+Indicators = 0
+type resource_counters.widget{view} site w/0 h/0
+| $site <= $view.site
+
+resource_counters.main = $site.main
+
+resource_counters.draw G X Y =
+| less Indicators: Indicators <= $main.img{ui_indicators}
+| Cursor = 
+| IX = ($view.w-Indicators.w)/2
+| IY = 0
+| G.blit{IX IY Indicators}
+| Font = font medium
+| Font.draw{G IX+232 IY+2 "[$site.turn]:[$site.player]"}
+| Debug = $site.data.debug
+| when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
+| P = $site.human
+| for I 8: when P.haskey{I}:
+  | Color = $site.players.I.colors.1
+  | G.rectangle{Color 1 IX+149+(I%4)*8 IY+6+7*(I/4) 4 4}
+
 ui.load File =
 | $main.load{File}
 | $view.clear
