@@ -17,6 +17,7 @@ resource_counters.draw G X Y =
 | Debug = $site.data.debug
 | when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
 | P = $site.human
+| Font.draw{G IX+40 IY+2 "[P.data.gold]"}
 | for I 8: when P.haskey{I}:
   | Color = $site.players.I.colors.1
   | G.rectangle{Color 1 IX+149+(I%4)*8 IY+6+7*(I/4) 4 4}
