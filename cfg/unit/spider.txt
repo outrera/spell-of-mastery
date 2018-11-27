@@ -9,3 +9,4 @@ onHit: shell,hit{user},macro{poison},sound{spider_attack}
 onHarm: visual{blood},sound{spider_hit}
 onDeath: sound{spider_death}
 onMove: sound{step}
+acts: (act_bash)

@@ -9,4 +9,4 @@ onHit: shell,hit{user},visual{lifedrain},sound{lifedrain}
 onHarm: visual{blood_undead},sound{ifrit_hit}
 onDeath: sound{wraith_die}
 onMove: sound{step}
-acts: (act_lifedrain vampire_bat_form_on)
+acts: (act_bash act_lifedrain vampire_bat_form_on)

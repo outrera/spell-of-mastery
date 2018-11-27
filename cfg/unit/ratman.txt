@@ -1,7 +1,7 @@
 tier: 1
 cost: 100,4,50
 health: 8
-atk: 30//3
+atk: 3
 def: 2
 will: 2
 inborn: (organic)
@@ -9,4 +9,4 @@ onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{rat_death}
 onDeath: sound{rat_death}
 onMove: sound{step}
-acts: (act_invisibility)
+acts: (act_bash act_invisibility)

@@ -112,6 +112,8 @@ unit.disciplined = $flags.bit{21}
 unit.nocorpse = $flags.bit{22}
 unit.`=nocorpse` State = $flags <= $flags.bitSet{22 State}
 
+unit.strong = $flags.bit{23}
+
 
 //how many other units this unit has killed
 unit.kills = $get{kills}

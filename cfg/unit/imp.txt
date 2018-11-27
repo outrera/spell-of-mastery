@@ -9,3 +9,4 @@ onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{imp_hit}
 onDeath: sound{imp_die}
 onMove: sound{step}
+acts: (act_bash)

@@ -10,3 +10,4 @@ onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{griffin_hit}
 onDeath: sound{griffin_die}
 onMove: sound{griffin_move}
+acts: (act_bash)

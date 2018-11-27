@@ -8,4 +8,4 @@ onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{halfling_hit}
 onDeath: sound{halfling_die}
 onMove: sound{step}
-acts: (act_invisibility)
+acts: (act_bash act_invisibility)

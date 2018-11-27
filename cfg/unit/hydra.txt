@@ -6,8 +6,9 @@ atk: 10
 def: 4
 cooldown: 4
 speed: 28
-inborn: (organic heavy regen amphibian)
+inborn: (organic strong heavy regen amphibian)
 onHit: hydra_targets,when{enemy},shell,hit{user},macro{poison},sound{hydra_attack}
 onHarm: visual{blood},sound{hydra_hit}
 onDeath: sound{hydra_hit}
 onMove: sound{step}
+acts: (act_bash)

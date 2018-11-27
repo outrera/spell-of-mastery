@@ -11,3 +11,4 @@ onHit: shell,hit{user}//,sound{cut}
 onHarm: visual{blood},sound{lizard_hit}
 onDeath: sound{devil_hit}
 onMove: sound{lizard_move}
+acts: (act_bash)

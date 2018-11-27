@@ -4,6 +4,7 @@ ClassIdCounter = 1
 
 type class{bank class_name Main
            title/0 icon/0
+           durability/No
            sprite/Sprite
            height/0
            speed/0 ascendSpeed/4
@@ -32,6 +33,7 @@ type class{bank class_name Main
   mov/Mov               //movement points this unit gains per turn
   stamina/Stamina       //fatigue decrement speed
   hp/Health             //health points
+  durability/Durability //amount of HP attacker has to pay for bashing it
   atk/Atk               //damage this unit deals on attack
   def/Def               //how many moves it takes to hit this unit
   sight/Sight           //scout range

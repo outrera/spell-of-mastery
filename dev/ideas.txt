@@ -6,6 +6,7 @@ REMEMBER THAT EVERY FEATURE SHOULD HAVE WEIGHT IN IT AND SHOULD NEVER BE A BURDE
 
 Leader abilities:
 - Dual-cast: allows casting two different spells on two different locations on the same turn.
+- Sort spells into tiers, with caster having limited number of slots per tier, D&D or Chrono Cross style.
 
 General:
 - Inventory dialogue, which would also show what unit portrait and stats. Use Heroes of Might & Magic 4 template as layout. While creatures are hired and paid per mission, inventory items are preserved unless lost or their durability falls to 0. Such items can be either purchased in shop or found on mission.

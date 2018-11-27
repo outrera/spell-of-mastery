@@ -1,0 +1,10 @@
+icon: act_bash
+title: `Bash`
+//hotkey: s
+mov: 1
+range: 1
+//needsGene: strong
+check: any
+delay: 2 //required for view_input to update movement marks
+onHit: (bash)
+hint: bash

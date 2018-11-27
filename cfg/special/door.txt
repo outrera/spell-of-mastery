@@ -1,6 +1,7 @@
 sprite: special_door
 title: `Door`
 height: 2
+durability: 5
 ai: door
 inborn: (door_align)
 onHit: sound{cut}

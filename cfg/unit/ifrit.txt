@@ -10,4 +10,4 @@ onHit: shell,hit{user},sound{explosion}
 onHarm: visual{blood},sound{ifrit_hit}
 onDeath: sound{ifrit_death}
 onMove: sound{ifrit_move}
-acts: (act_fireball)
+acts: (act_bash act_fireball)

@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- all objects should be destructible by sufficiently strong creatures.
+- implement colored chests
 - floating animation for items like keys and flying characters.
 - invisibility transparency should be pulsating.
 - finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)

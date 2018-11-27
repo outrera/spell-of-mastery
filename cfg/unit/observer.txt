@@ -12,4 +12,4 @@ onHit: resist,hit{user},visual{energy_ring},sound{observer_impact}
 onHarm: visual{blood},sound{observer_hit}
 onDeath: sound{observer_die}
 onMove: sound{observer_move}
-acts: (act_explode)
+acts: (act_bash act_explode)

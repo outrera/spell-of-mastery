@@ -1,6 +1,7 @@
 sprite: special_doorkey
 title: `Door`
 height: 2
+durability: 10
 ai: door,locked
 inborn: (door_align)
 onHit: sound{cut}

@@ -3,8 +3,9 @@ cost: 400,1,50
 health: 20
 atk: 10
 def: 1
-inborn: (organic heavy)
+inborn: (organic strong heavy)
 onHit: shell,hit{user},sound{cyclops_club}
 onHarm: visual{blood},sound{cyclops_hit}
 onDeath: sound{cyclops_die}
 onMove: sound{step}
+acts: (act_bash)

@@ -248,6 +248,21 @@ effect switch:
     else
 | $owner.notify{"There is nothing to interact with."}
 
+effect bash:
+| XYZ = [TargetXYZ.0 TargetXYZ.1 $xyz.2]
+| Us = [@$site.units_get{XYZ} @$site.units_get{XYZ+[0 0 1]}]
+| when XYZ.2>1: Us <= [@Us @$site.units_get{XYZ-[0 0 1]}]
+| for U Us: when got U.durability:
+  | less $hp>U.durability:
+    | $owner.notify{"Not enough health to bash this."}
+    | leave
+  | $hp -= if $strong then (U.durability+1)/2 else U.durability
+  | U.free
+  | $sound{bash}
+  | $site.visual{XYZ dustend}
+  | leave
+| $owner.notify{"There is nothing to bash."}
+
 effect explosion Size:
 | for U $site.units_in_range{TargetXYZ Size}:
   | Damage = max 1 Size-TargetXYZ.mdist{U.xyz}

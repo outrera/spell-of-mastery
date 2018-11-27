@@ -10,4 +10,4 @@ onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood_undead},sound{wraith_hit}
 onDeath: sound{wraith_die}
 onMove: sound{wraith_move}
-acts: (act_invisibility act_phase)
+acts: (act_bash act_invisibility act_phase)

@@ -8,4 +8,4 @@ onHit: shell,hit{user},sound{devil_attack}
       ,when{hasnt.leader},punish{1000}
 onHarm: visual{blood},sound{devil_hit}
 onDeath: sound{devil_hit}
-acts: (act_teleport)
+acts: (act_bash act_teleport)

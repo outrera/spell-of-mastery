@@ -130,7 +130,7 @@ Creature Properties:
 - Darkvision: this creature doesn't suffer sight penalty at night.
 - Sinner: creature has spilled blood by killing somebody. Such creatures are vulneraly to specific abilities, like devil's punish ability.
 - Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow. Fragile objects would break under such unit.
-- Strong: creature can bash chests and doors; can lift and push heavy objects.
+- Strong: creature can bash chests and doors for half the normal health cost; can lift and push heavy objects.
 
 Objects:
 - Teleporters. Either one-way or two-way.
@@ -140,7 +140,7 @@ Objects:
     but can be opened only from the side from which they closed.
     Used to implement map traversal shortcuts and set area visit dependency.
     Encourages exploration.
-  - Doors that can be bashed out by sufficiently strong character,
+  - Doors that can be bashed out by sufficiently strong and healthy character,
     which has bash door ability.
   - Doors that can be bashed out with explosion or magic,
     which has door bashing property.
