@@ -1,0 +1,8 @@
+sprite: special_chest
+title: `Chest`
+height: 1
+durability: 10
+ai: chest,locked
+onHit: sound{cut}
+onHurt: visual{blood_undead},sound{door_hit}
+onDeath: visual{explosion},sound{door_die}

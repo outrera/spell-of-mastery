@@ -234,6 +234,27 @@ close_door Actor Me =
 | C.animate{idle}
 | $free
 
+open_chest Actor Me =
+| when $aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:
+  | Actor.owner.notify{"This chest requires [$owner.color] key."}
+  | leave
+| $sound{open}
+| ItemType = $get{item}
+| when ItemType:
+  | C = $owner.alloc_unit{ItemType}
+  | C.move{$xyz}
+  | C.pick_facing{$facing}
+  | C.fxyz.init{$fxyz}
+/*| C = $owner.alloc_unit{special_opend}
+| C.move{$xyz}
+| C.pick_facing{$facing}
+| C.fxyz.init{$fxyz}
+| C.sprite <= $sprite
+| C.animate{open}
+| C.set{door $type}*/
+| $free
+
+
 effect switch:
 | XYZ = [TargetXYZ.0 TargetXYZ.1 $xyz.2]
 | Us = [@$site.units_get{XYZ} @$site.units_get{XYZ+[0 0 1]}]
@@ -244,6 +265,9 @@ effect switch:
       | leave
     else if U.ai >< opend then
       | close_door Me U
+      | leave
+    else if U.ai >< chest then
+      | open_chest Me U
       | leave
     else
 | $owner.notify{"There is nothing to interact with."}

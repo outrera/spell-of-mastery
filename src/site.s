@@ -235,7 +235,7 @@ reinit_units Us =
 | InitedUnits = []
 | XYZ = [0 0 0]
 | FXYZ = [0 0 0]
-| for U Us: less U.removed
+| for U Us: less U.removed:
   | Type = U.type
   | Owner = U.owner
   | Facing = U.facing
@@ -260,6 +260,13 @@ handle_attack_triggers Us =
          | AttackTrigger.free
     else | U.aistate <= \guard
 
+new_game_init_chests Us = 
+| for U Us: when U.ai><chest:
+  | for T U.site.units_get{U.xyz+[0 0 1]}:
+     | when T.ai >< item:
+       | U.set{item T.type}
+       | T.free
+
 site.new_game =
 | $actors.set{[]}
 | $seed <= LCG_M.rand
@@ -274,6 +281,7 @@ site.new_game =
 | if SCfg.explored then $explore{1} else $explore{0}
 | ActNames = $main.acts{}{?0}
 | InitedUnits = reinit_units $active
+| new_game_init_chests $active
 | PAI = $main.cfg.ai
 | for P $players:
   | P.init
