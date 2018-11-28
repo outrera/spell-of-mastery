@@ -115,12 +115,6 @@ unit.draw FB B =
   | XX -= GW%2
   | G.flop
 | S = $sprite
-| when S.shadow:
-  | S = $site.shadow
-  | ZZ = fxn: $cell-$floor
-  | I = fxn: min (ZZ/16).abs S.nframes-1
-  | SGfx = S.I
-  | fxn: FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
 | Colors = $colors
 | when Colors:
   | Rs = S.colors
@@ -129,13 +123,25 @@ unit.draw FB B =
     | times I 5:
       | R = fxn Rs.I
       | when got R: _ffi_set uint32_t CM R Colors.I
-| fxn: when $flyer
-  | YY -= 16
-  | Y -= 16
-  | less $class.inbornFlyer: //floating animation
+| when $active:
+  | when S.shadow:
+    | S = $site.shadow
+    | ZZ = fxn: $cell-$floor
+    | I = fxn: min (ZZ/16).abs S.nframes-1
+    | SGfx = S.I
+    | fxn: FB.blit{X+8 Y-38+ZZ*ZUnit SGfx}
+  | fxn: when $flyer
+    | YY -= 16
+    | Y -= 16
+    | less $class.inbornFlyer: //floating animation
+      | C = $site.cycle
+      | YY += FloatDYs.((C/3+$id)%FloatDYs.size)
+  | Alpha = $alpha
+  | when $invisible:
     | C = $site.cycle
-    | YY += FloatDYs.((C/3+$id)%FloatDYs.size)
-| G.alpha{$alpha}
+    | Alpha -= 20*FloatDYs.((C/4+$id)%FloatDYs.size)
+    | Alpha <= max 0 Alpha
+  | G.alpha{Alpha}
 | fxn: when B.B_FLAGS&&&#80:
   | CutH = 48
   | CY = max G.h-48 0

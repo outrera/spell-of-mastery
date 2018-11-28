@@ -3,5 +3,4 @@ title: `Invisibility`
 cool: 10
 check: unit
 onInit: add{invisible},visual{spell},sound{invisibility}
-onEnd: ()
 hint: benefit
