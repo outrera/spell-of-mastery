@@ -100,6 +100,8 @@ blit_item_from_unit Me = fxn:
 | $blitem <= BI
 | BI
 
+FloatDYs = [0 0 1 2 3 3 2 1]
+
 unit.draw FB B =
 //| NDrawnUnits++
 | X = fxn B.B_SX
@@ -130,6 +132,9 @@ unit.draw FB B =
 | fxn: when $flyer
   | YY -= 16
   | Y -= 16
+  | less $class.inbornFlyer: //floating animation
+    | C = $site.cycle
+    | YY += FloatDYs.((C/3+$id)%FloatDYs.size)
 | G.alpha{$alpha}
 | fxn: when B.B_FLAGS&&&#80:
   | CutH = 48
