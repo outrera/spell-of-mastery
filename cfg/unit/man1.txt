@@ -1,3 +1,4 @@
+title: `Man`
 tier: 1
 cost: 50,6,50
 health: 3
