@@ -374,3 +374,30 @@ Pros:
 Cons:
 - Some assymetry in corners (can be ameliorated with a hack: using additional tiles).
 - Roof looks shifted backwards. (can be ameliorated with a hack: shifting roof xy)
+
+
+Quest/Objective Types
+--------------------
+- Retrieve item/characer(s).
+- Bring item/characer to location(s). Optionally perform some actions there.
+- Defeat N monsters of some kind.
+- Acquire N items of some kind.
+- Uncover N map cells (or visit several locations).
+- Defeat some boss monster.
+- Defend some location or escort a character.
+- Solve a puzzle (very general objective), by exploring the world/environment, gathering clues/observations and using them to make conclusions.
+
+Optionally quests can be timed, or encumbered by some other constraint, like player should avoid some character (hide and seek game).
+
+
+Background Motivation
+--------------------
+- Mercenary: character is being paid. Nothing personal, just business.
+- Vegneance: they killed your family, burned your house, etc..
+- Help: character has to find vital cure to save the king, dispel the curse from the village, etc...
+- Trial: character has to prove something to someone, or just to gain some fame.
+- Mistery: character tries to uncover some mystery (similar to trial).
+- Survival: character has to survive alien invasion, zombie apocalypse, etc..
+- Escape: character is a prisons, who tries to escape his prison.
+- Curse: character acts out of pure madness, or tries to overcome it (somewhat similar to curse).
+- Sandbox: no particular motivation, player creates his own story or watches emergent ones, possible intervening in the developement.
