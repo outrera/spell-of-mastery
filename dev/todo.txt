@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)
+- Enemy Wizard Towers Siege.
 - finish waterfall tileset
 - AI door pathfinding can be implemented by marking impassable all doors we don't have keys to.
 - move water into separate overlay, that way it could be animated and transparent.
@@ -9,8 +10,6 @@ TODO:
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. They can be implemented using portals.
 - Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
 - Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
-- Implement chests and locked chests. Only creatures with hands would be capable of opening them. Locked chests would have keys located somewhere on the map.
-- Enemy Wizard Towers Siege.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame, or maybe as a popup, near mouse
 - Roof and indoor indicators should be displayed right near cursor.
 - Mouse wheel switching Z-levels.
