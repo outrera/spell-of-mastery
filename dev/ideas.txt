@@ -392,12 +392,15 @@ Optionally quests can be timed, or encumbered by some other constraint, like pla
 
 Background Motivation
 --------------------
-- Mercenary: character is being paid. Nothing personal, just business.
-- Vegneance: they killed your family, burned your house, etc..
+- Money: character is enterpreneur, a mercenary being paid, or a thief. Nothing personal, just business.
 - Help: character has to find vital cure to save the king, dispel the curse from the village, etc...
 - Trial: character has to prove something to someone, or just to gain some fame.
-- Mistery: character tries to uncover some mystery (similar to trial).
+- Mystery: character tries to uncover some mystery, i.e. character lost memory (similar to trial).
+- Vegneance: they killed your family, burned your house, etc..
+- Good: character pursues some greater good.
 - Survival: character has to survive alien invasion, zombie apocalypse, etc..
 - Escape: character is a prisons, who tries to escape his prison.
 - Curse: character acts out of pure madness, or tries to overcome it (somewhat similar to curse).
+- Procreation: games, like civilization, where you have to increase population.
+- Hedonism: character is in search of pleasures. Think Hellraiser style motivation. Too general category.
 - Sandbox: no particular motivation, player creates his own story or watches emergent ones, possible intervening in the developement.
