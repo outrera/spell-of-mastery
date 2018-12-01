@@ -6,6 +6,7 @@ right: d
 floor_up: `e`
 floor_down: `q`
 pause: ` ` //remntant from the realtime prototype
+screenshot: f2
 
 /*up: up
 left: left

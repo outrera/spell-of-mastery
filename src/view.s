@@ -36,6 +36,7 @@ type view.widget{M UI W H}
   d //cell edge size
   keymap
   lmb_count/0
+  make_screenshot/0
 | $keymap <= $main.cfg.keymap
 | $fpsGoal <= $main.cfg.ui.fps
 | $fpsD <= $fpsGoal.float+8.0

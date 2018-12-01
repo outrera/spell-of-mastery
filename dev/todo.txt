@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite)
+- finish city blueprint: tavern, market, shop, park, warehouse, temple/church, graveyard, major's house, blacksmith, stores, stables (finally the time to use horse sprite), barracks
 - stainglass windows for church
 - ensure green side is friendly to human player.
 - random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.

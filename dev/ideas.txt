@@ -351,7 +351,7 @@ Squares cons:
 - Reduced number of melee unit interactions.
 
 
-Current 64x64 Cubes Tileset Format, instead of say 8x8 cubes. or 64x32
+Current 64x64x64 cube cells format and 64x64x128 humanoid sprite format. Instead of say 8x8 cubes, or 64x64x32 boxes.
 --------------------
 Pros:
 - Efficient.

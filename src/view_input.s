@@ -206,6 +206,9 @@ view.update =
     | $cursor.2 <= NewZ
   | $zlock <= $cursor.2
   | $key_set{floor_up 0}
+| case $key{screenshot} 1:
+  | $key_set{screenshot 0}
+  | $make_screenshot <= 1
 | when $brush.0:
   | case $key{edit_down} 1:
     | $zfix <= 0

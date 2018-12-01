@@ -477,6 +477,13 @@ view.render_frame =
 //| $fb.clear{#929292/*#00A0C0*/}
 | $fb.blit{0 0 $main.img{ui_stars}}
 | $render_iso
+| when $make_screenshot:
+  | $make_screenshot <= 0
+  | I = 0
+  | fn I = "screenshots/[I].png"
+  | while fn{I}.exists: I++
+  | $fb.save{fn{I}}
+  | say "Saved [fn{I}]"
 | InfoText = []
 | when $cfg.show_frame: push "Frame=[$frame]" InfoText
 | when $cfg.show_cycle: push "Cycle=[$site.cycle]" InfoText
