@@ -1,0 +1,7 @@
+tiler: wall,same,wall
+ztiler: sglass,same
+filler: 0
+lineup: 0
+opaque: 0
+heavy: 2
+stack: wall_stainglass0,wall_stainglass1,wall_stainglass2

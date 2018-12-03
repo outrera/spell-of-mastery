@@ -1,0 +1,4 @@
+author: `Nikita Sadkov`
+copyright: `Nikita Sadkov`
+xy: 0,0
+frames: 64*64
