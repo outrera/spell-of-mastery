@@ -8,6 +8,7 @@ TODO:
 - add locked doors and chests.
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset
+- map item, that would explore whole map for the player.
 - Make generic human character, using skeleton and knight sprites.
 - AI door pathfinding can be implemented by marking impassable all doors we don't have keys to.
 - move water into separate overlay, that way it could be animated and transparent.
