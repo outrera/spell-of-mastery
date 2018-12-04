@@ -1,6 +1,6 @@
 author: `Tim Jonsson`
 copyright: `Nikita Sadkov`
-xy: 8,12
+xy: 10,12
 frames: folder
 anims: | idle (idle0 9)
        | open (open0 9)

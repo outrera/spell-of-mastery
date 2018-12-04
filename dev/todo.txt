@@ -1,11 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- finish city blueprint: shop, warehouse, graveyard, major's house, stores, stables (finally the time to use horse sprite), barracks, jail
+- finish city blueprint: shop, warehouse, stores, stables (finally the time to use horse sprite), barracks, jail
 - stainglass windows for church
 - ensure green side is friendly to human player.
 - random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.
-- add locked doors and chests.
+- add locked doors and chests to map items.
+- a way to add fine x,y offset to item placement.
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset
 - map item, that would explore whole map for the player.

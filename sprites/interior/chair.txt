@@ -1,0 +1,6 @@
+author: `Tim Jonsson`
+copyright: `Nikita Sadkov`
+xy: 0,8
+class: height,0
+frames: folder
+anims: | idle (idle0 6)
