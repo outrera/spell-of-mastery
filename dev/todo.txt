@@ -105,6 +105,13 @@ Bugs:
 - multicell units, like table, react badly when drawing tiles under them. disallow drawing at all
 - `update_picked` and unit.picked should use different picking strucutre. current is error prone and had led to bugs previously
 - projectiles hung up, when their sender dies
+-  From time to time we get heizenbug in save
+ `list` has no method `id`
+  Stack Trace:
+    0x100dc0530:???:-1,-1,???
+    0x1248e07c0:unit.serialize:20,15,./src/save.s
+    0x1248e4e10:site.save:37,10,./src/save.s
+    0x12427a330:save_dlg.filename:83,0,./src/ui_widgets.s
 
 Sound:
 - fix sound issues, where sounds are affected by height
