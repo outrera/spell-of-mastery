@@ -2,9 +2,9 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - finish city blueprint: shop, warehouse, stores, stables (finally the time to use horse sprite), barracks, jail
-- stainglass windows for church
 - ensure green side is friendly to human player.
 - random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.
+- Random door type tokenx, that can be locked or unlocked.
 - add locked doors and chests to map items.
 - a way to add fine x,y offset to item placement.
 - Enemy Wizard Towers Siege.

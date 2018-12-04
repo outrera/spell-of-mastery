@@ -360,7 +360,14 @@ unit.find_blit_deps =
   | Mirror = $facing >< 5
   | for DX,DY,DZ $form:
     | XX,YY,ZZ = $xyz + if Mirror then [-DY DX DZ] else [DX -DY DZ]
-    | $add_dep{$site.cell{XX YY ZZ-1}}
+    | when $height>1:
+      | $add_dep{$site.cell{XX-1 YY ZZ+1}}
+      | $add_dep{$site.cell{XX YY-1 ZZ+1}}
+      | $add_dep{$site.cell{XX-1 YY-1 ZZ+1}}
+    | when $height<<1:
+      | $add_dep{$site.cell{XX-1 YY ZZ}}
+      | $add_dep{$site.cell{XX YY-1 ZZ}}
+      | $add_dep{$site.cell{XX-1 YY-1 ZZ}}
   | leave
 | fxn:
   | C = $cell+1
