@@ -125,6 +125,48 @@ Stack Trace:
   0x12bc31700:unnamed:74,48,./src/ui_editor.s
    0x1291229c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
 
+// following happend when trying to move windows when it is just loaded:   
+
+   `int` has no method `.`
+   Stack Trace:
+     0x1018e9530:???:-1,-1,???
+     0x123ed30c0:unit._:7,0,./src/unit.s
+     0x123eccfe0:unit.blitem:7,0,./src/unit.s
+     0x1245d6820:draw_tile:196,27,./src/view_render.s
+     0x1245fdfb0:view.render_iso:418,16,./src/view_render.s
+     0x12460b980:view.render_frame:481,18,./src/view_render.s
+     0x1246165c0:view.draw:518,17,./src/view_render.s
+     0x1230335f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+     0x123564410:dlg.draw:117,17,/Users/macbook/Documents/GitHub/symta/src/gui.s
+     0x1230335f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+     0x123564410:dlg.draw:117,17,/Users/macbook/Documents/GitHub/symta/src/gui.s
+
+
+`int` has no method `.`
+Stack Trace:
+  0x101957530:???:-1,-1,???
+  0x123fbf0c0:unit._:7,0,./src/unit.s
+  0x123fb8fe0:unit.blitem:7,0,./src/unit.s
+  0x1246c2820:draw_tile:196,27,./src/view_render.s
+  0x1246e9fb0:view.render_iso:418,16,./src/view_render.s
+  0x1246f7980:view.render_frame:481,18,./src/view_render.s
+  0x1247025c0:view.draw:518,17,./src/view_render.s
+  0x1230815f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+  0x123654410:dlg.draw:117,17,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x1230815f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+  0x123654410:dlg.draw:117,17,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x1230815f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+  0x123664330:gui.render:166,11,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x123682ba0:unnamed:157,11,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x12362d5d0:event_loop:3,13,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x12362ec20:show:12,7,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x12365b920:gui:137,0,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x125a54590:main.run:51,9,./src/main2.s
+  0x1226efa50:<toplevel>:4,4,./src/main.s
+  0x12320df50:<init>:-1,-1,unknown
+abortingAbort trap: 6
+
+
 
 
 Sound:
