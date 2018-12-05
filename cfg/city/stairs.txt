@@ -1,4 +1,6 @@
-sprite: castle
+sprite: stairs
 tiler: stairs,same,stairs
+ztiler: castle,same
 opaque: 0
-lay: stairs
+heavy: 2
+lay: stairs_min

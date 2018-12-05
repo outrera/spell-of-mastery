@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- finish city blueprint: shop, warehouse, stores, stables (finally the time to use horse sprite), barracks, jail
+- finish city blueprint: warehouse, stables (finally the time to use horse sprite), barracks with jail/dungeon underneach
 - ensure green side is friendly to human player.
 - random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.
 - Random door type tokenx, that can be locked or unlocked.
@@ -113,6 +113,19 @@ Bugs:
     0x1248e07c0:unit.serialize:20,15,./src/save.s
     0x1248e4e10:site.save:37,10,./src/save.s
     0x12427a330:save_dlg.filename:83,0,./src/ui_widgets.s
+- and in load    
+Stack Trace:
+  0x1082fd530:???:-1,-1,???
+  0x12a58eb50:site.alloc_unit:297,32,./src/site.s
+  0x12a590ee0:player.alloc_unit:316,28,./src/site.s
+  0x12bd527e0:site.deserialize_unit:71,30,./src/save.s
+  0x12bd63260:site.load:132,16,./src/save.s
+  0x12bd77680:main.load:199,15,./src/save.s
+  0x12bae8780:ui.load:24,13,./src/ui_site.s
+  0x12bc31700:unnamed:74,48,./src/ui_editor.s
+   0x1291229c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
+
+
 
 Sound:
 - fix sound issues, where sounds are affected by height

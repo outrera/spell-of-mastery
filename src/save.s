@@ -78,12 +78,12 @@ site.deserialize_unit IdMap X =
   | XYZ <= A
   | U.from.init{B}
 | U.hp <= HP
+| U.pick_facing{Facing}
 | U.move{XYZ}
 | U.fxyz.init{FXYZ}
 | when Facing.is_list:
   | U.sprite <= $main.sprites.(Facing.0)
   | Facing <= Facing.1
-| U.pick_facing{Facing}
 | when Active:
   | [From Anim AnimStep AnimWait Fatigue Delay Genes Host Goal Path
      Action Ordered NextAction Mov Def @More] = Active

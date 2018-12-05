@@ -1,3 +1,4 @@
-sprite: castle
+ztiler: castle,same
+heavy: 2
 embed: 2
-lay: 14
+lay: 0
