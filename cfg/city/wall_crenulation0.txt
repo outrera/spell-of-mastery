@@ -1,0 +1,7 @@
+tiler: crenulation,same,wall
+ztiler: wall,same
+filler: 0
+lineup: 0
+opaque: 0
+heavy: 2
+lay: wall_min
