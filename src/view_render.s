@@ -205,8 +205,9 @@ draw_tile Cell FB BlitItem =
 | when Us.end: leave
 | for U Us:
   | UB = U.blitem
-  | UB.B_DEPS <= UB.B_DEPS.skip{Cell}
-  | when UB.B_DEPS.end: U.draw{FB UB}
+  | when UB: //multi-cell objects can be already drawn
+    | UB.B_DEPS <= UB.B_DEPS.skip{Cell}
+    | when UB.B_DEPS.end: U.draw{FB UB}
 
 type gfx_item
 
