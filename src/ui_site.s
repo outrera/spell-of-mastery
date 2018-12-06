@@ -12,7 +12,7 @@ resource_counters.draw G X Y =
 | IX = ($view.w-Indicators.w)/2
 | IY = 0
 | G.blit{IX IY Indicators}
-| Font = font titleb
+| Font = font medium
 | Font.draw{G IX+232 IY+3 "[$site.turn]:[$site.player]"}
 | Debug = $site.data.debug
 | when got Debug: Font.draw{G IX+148 IY+32 "[Debug]"}
