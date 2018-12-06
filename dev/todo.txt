@@ -1,7 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- finish city blueprint: warehouse, stables (finally the time to use horse sprite), barracks with jail/dungeon underneach
+- dungeon tileset for jail. Would require additional xy tiler: odd cells would have tiles with stones, while even more plain texture.
+- stables in barracks (finally the time to use horse sprite)
+- finish city blueprint: warehouse
+- dwarf helmet could use some recoloring, and some better axe and shild design could be re-used, like the publi domain item art from Dungeon Crawl Stone Soup
+- a code to cut lower part of the floor diamon, when it also acts as a roof.
 - ensure green side is friendly to human player.
 - random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.
 - Random door type tokenx, that can be locked or unlocked.
@@ -10,6 +14,7 @@ TODO:
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset
 - map item, that would explore whole map for the player.
+- Draw darker version of stained glass, when it is outside (check for roo on the tile before it). Same algorithm could be used for interior walls.
 - Make generic human character, using skeleton and knight sprites.
 - AI door pathfinding can be implemented by marking impassable all doors we don't have keys to.
 - move water into separate overlay, that way it could be animated and transparent.
