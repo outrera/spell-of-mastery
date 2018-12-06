@@ -56,14 +56,14 @@ type site_props.$base{site callback} name description width height base
                 'Width:',$width
                 'Height:',$height
                ]
-| MarginW = 65
-| MarginH = 50
+| MW = 104
+| MH = 92
 | $base <= dlg: mtx
-  | -MarginW  -MarginH | $site.main.img{ui_scroll}
-  | 130  10 | txt title 'Properties'
-  |  15  40 | layV s/8 PropFields{(txt small ?0)}
-  | 100  36 | layV PropFields{?1}
-  |  15 305 | button 'Done' skin/medium_small: => ($callback){Me}
+  | 0  0 | $site.main.img{ui_box}
+  | 265  18 | txt header 'Properties'
+  |  15+MW  40+MH | layV s/8 PropFields{(txt small ?0)}
+  | 100+MW  36+MH | layV PropFields{?1}
+  |  15+MW 305+MH | button 'Done' skin/medium_small: => ($callback){Me}
 
 site_props.update =
 | W = $site
@@ -85,21 +85,21 @@ type save_dlg.$base{site start cancelCB loadCB}
   base picked title filename button widget
 | $button <= button 'Save' skin/medium_small: => ($loadCB){$picked}
 | $button.state <= 'normal'
-| MarginW = 65
-| MarginH = 50
-| $title <= txt title 'Save'
+| $title <= txt header 'Save'
 | $filename <= txt_input{''}
-| $widget <= folder_widget 320 160 $start: File =>
+| $widget <= folder_widget 320 240 $start: File =>
   | $picked <= File
   | FN = File.url.1
   | when FN<>'': $filename.value <= FN
+| MW = 104
+| MH = 92
 | $base <= dlg: mtx
-  | -MarginW   -MarginH | $site.main.img{ui_scroll}
-  | 130  10 | $title
-  |  15  40 | $filename
-  |  15  60 | $widget
-  |  15 305 | $button
-  | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
+  |   0   0 | $site.main.img{ui_box}
+  | 300  18 | $title
+  |  15+MW  10+MH | $filename
+  |  15+MW  40+MH | $widget
+  |  15+MW 305+MH | $button
+  | 220+MW 305+MH | button 'Cancel' skin/medium_small: => ($cancelCB){}
 save_dlg.folder = $widget.folder
 save_dlg.`=folder` V = $widget.folder <= V
 save_dlg.render =
@@ -110,20 +110,20 @@ type load_dlg.$base{site start cancelCB loadCB}
   filename base picked title widget
 | LoadButton = button 'Load' skin/medium_small: => ($loadCB){$picked}
 | LoadButton.state <= 'disabled'
-| MarginW = 65
-| MarginH = 50
-| $title <= txt title 'Load'
-| $widget <= folder_widget 320 160 $start: File =>
+| $title <= txt header 'Load'
+| $widget <= folder_widget 320 240 $start: File =>
   | $picked <= File
   | LoadButton.state <= if File.exists and File.urls.size >< 0
     then 'normal'
     else 'disabled'
+| MW = 104
+| MH = 92
 | $base <= dlg: mtx
-  | -MarginW   -MarginH | $site.main.img{ui_scroll}
-  | 130  10 | $title
-  |  15  40 | $widget
-  |  15 305 | LoadButton
-  | 220 305 | button 'Cancel' skin/medium_small: => ($cancelCB){}
+  |   0   0| $site.main.img{ui_box}
+  | 300  18 | $title
+  |  15+MW  10+MH | $widget
+  |  15+MW 305+MH | LoadButton
+  | 220+MW 305+MH | button 'Cancel' skin/medium_small: => ($cancelCB){}
 load_dlg.folder = $widget.folder
 load_dlg.`=folder` V = $widget.folder <= V
 
