@@ -8,7 +8,7 @@ type tile{As Main Type Id
           parts/0 wallShift/0 plain/0 indoor/0 liquid/0 opaque/No
           hp/0 hit/0 death/0
           embed/0
-          stackCapped/0 stack/0 fallback/[0 0 0] struct/0 structTiles/0 
+          stackMethod/0 stack/0 fallback/[0 0 0] struct/0 structTiles/0 
           colors/[#808080 #A0A0A0]}
      id/Id
      main/Main
@@ -21,7 +21,7 @@ type tile{As Main Type Id
      tilerFn/0
      zrole/0
      zmatch/0
-     stackCapped/StackCapped
+     stackMethod/StackMethod
      stack/Stack //column base, middle, top segments
      sprite/Sprite
      gfxes_data
@@ -237,12 +237,21 @@ tile.render X Y Z Below Above Variation =
 | St = TT.stack
 | when St:
   | TT <= fxn:
-          if $stackCapped then
-            if BZR <> ZR or BelowSlope><#@1111 then
-              if AH then St.1
-              else St.2
-            else if AZR <> ZR then St.2
-            else St.1
+          if $stackMethod then
+             if $stackMethod >< 1 then
+                if BZR <> ZR or BelowSlope><#@1111 then
+                  if AH then St.1
+                  else St.2
+                else if AZR <> ZR then St.2
+                else St.1
+             else
+                if BZR <> ZR or BelowSlope><#@1111 then
+                  if Below.empty then St.2
+                  else St.0
+                else if AZR <> ZR then
+                  if BZR >< ZR and Site.at{X Y Z-2}.zrole<>ZR then St.1
+                  else St.2
+                else St.1
           else
             if BE then St.2
             else if BZR <> ZR or BelowSlope><#@1111 then St.0
