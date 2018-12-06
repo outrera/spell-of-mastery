@@ -1,0 +1,4 @@
+author: `TSpring-Enterprises`
+license: `Public Domain (CC0)`
+origin: `https://opengameart.org/content/springwrite-16x16-pixel-font`
+frames: 16*16

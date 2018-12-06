@@ -3,7 +3,7 @@ use gui widgets ui_icon ui_widgets
 ui.create_victory_dlg =
 | dlg: mtx
   |   0   0 | $img{ui_victory_bg}
-  | 100 100 | txt medium: =>
+  | 100 100 | txt titleb: =>
               | "You are victorious!\n"
   | $width-360 $height-100
         | button 'CONTINUE' skin/scroll: =>
@@ -13,7 +13,7 @@ ui.create_victory_dlg =
 ui.create_defeat_dlg = 
 | dlg: mtx
   |   0   0 | $img{ui_defeat_bg}
-  | 140 100 | txt medium: =>
+  | 140 100 | txt titleb: =>
               | "You have been defeated!\n"
   | $width-360 $height-100
         | button 'CONTINUE' skin/scroll: =>

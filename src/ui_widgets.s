@@ -60,7 +60,7 @@ type site_props.$base{site callback} name description width height base
 | MarginH = 50
 | $base <= dlg: mtx
   | -MarginW  -MarginH | $site.main.img{ui_scroll}
-  | 130  10 | txt medium 'Properties'
+  | 130  10 | txt title 'Properties'
   |  15  40 | layV s/8 PropFields{(txt small ?0)}
   | 100  36 | layV PropFields{?1}
   |  15 305 | button 'Done' skin/medium_small: => ($callback){Me}
@@ -87,7 +87,7 @@ type save_dlg.$base{site start cancelCB loadCB}
 | $button.state <= 'normal'
 | MarginW = 65
 | MarginH = 50
-| $title <= txt medium 'Save'
+| $title <= txt title 'Save'
 | $filename <= txt_input{''}
 | $widget <= folder_widget 320 160 $start: File =>
   | $picked <= File
@@ -112,7 +112,7 @@ type load_dlg.$base{site start cancelCB loadCB}
 | LoadButton.state <= 'disabled'
 | MarginW = 65
 | MarginH = 50
-| $title <= txt medium 'Load'
+| $title <= txt title 'Load'
 | $widget <= folder_widget 320 160 $start: File =>
   | $picked <= File
   | LoadButton.state <= if File.exists and File.urls.size >< 0
@@ -128,7 +128,7 @@ load_dlg.folder = $widget.folder
 load_dlg.`=folder` V = $widget.folder <= V
 
 type credits_roll.widget{ui text} cycle txt
-| $txt <= txt medium $text
+| $txt <= txt titleb $text
 
 credits_roll.draw G PX PY =
 | R = $txt.render

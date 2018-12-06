@@ -79,13 +79,13 @@ ui.create_shop_dlg =
 | H = $height
 | dlg w/$width h/$height: mtx
   |   0          0 | $img{ui_bookshelf}
-  |   300        20| txt medium 'Buy Spells'
+  |   300        20| txt titleb 'Buy Spells'
   |   16 $height-20| infoline
   |   0 $height-170| notification_widget Me
   |  52        52  | IconsLay
-  | W/2-100    290 | txt medium 'Sell Spells'
+  | W/2-100    290 | txt titleb 'Sell Spells'
   |  52        320 | IconsLay2
-  | W/2-100   H-48 | txt medium | => "Gold: [$world.gold-TotalCost]"
+  | W/2-100   H-48 | txt titleb | => "Gold: [$world.gold-TotalCost]"
   |  32        $height-48
      | button 'Back' skin/medium_small: => $pick{world}
   |  $width-128   $height-48

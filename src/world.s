@@ -97,7 +97,7 @@ world.draw FB X Y =
     | FB.circle{#FFFFFF 0 [P.xy.0 P.xy.1] $cfg."party_reach"}
 | when $mode><newBase:
   | FB.circle{#FFFFFF 0 $mice_xy $cfg."base_reach"}
-| Font = font medium
+| Font = font titleb
 | Debt = if $debt>0 then " (debt=[$debt])" else ""
 | Font.draw{FB 300 2 "Gold: [$gold][Debt]"}
 | Font.draw{FB 500 2 "Turn: [$turn]"}

@@ -221,13 +221,13 @@ ui.create_enter_site_dlg =
 | H = $height
 | dlg w/W h/H: mtx
   |   0          0 | $img{ui_bookshelf}
-  | W/2-100     20 | txt medium 'Available Spells'
+  | W/2-100     20 | txt titleb 'Available Spells'
   |   16      H-20 | infoline
   |   0         40 | notification_widget Me
   |  52         52 | IconsLay
-  | W/2-100    290 | txt medium 'Picked Spells'
+  | W/2-100    290 | txt titleb 'Picked Spells'
   |  52        320 | IconsLay2
-  | W/2-100   H-48 | txt medium | => "Gold: [$world.gold]"
+  | W/2-100   H-48 | txt titleb | => "Gold: [$world.gold]"
   |  32        H-48
      | button 'Back' skin/medium_small: =>
        | $enter_site_back
