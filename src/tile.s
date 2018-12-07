@@ -9,6 +9,7 @@ type tile{As Main Type Id
           hp/0 hit/0 death/0
           embed/0
           stackMethod/0 stack/0 fallback/[0 0 0] struct/0 structTiles/0 
+          cycle/0
           colors/[#808080 #A0A0A0]}
      id/Id
      main/Main
@@ -55,6 +56,7 @@ type tile{As Main Type Id
      death/Death //on death effect
      struct/Struct
      structTiles/StructTiles
+     cycle/Cycle
      colors/Colors //minimap colors
 | [Role Match TilerName] = $tiler
 | $role <= Role
@@ -225,6 +227,7 @@ tile.render X Y Z Below Above Variation =
 | AZR = Above.zrole
 | NeibSlope = #@0000
 | T = Me
+| when T.cycle: T <= T.cycle.((X+Y)%T.cycle.size)
 | when T.water:
   | Ns = Site.neibs{X Y Z-TH+1}
   | Neib,Water = T.water
@@ -437,6 +440,13 @@ main.load_tiles =
     | less got WT: bad "tile [K] references unknown water tile"
     | WT.aux <= 1
     | T.water <= [T.water.0 WT]
+  | when T.cycle:
+    | T.cycle <= map N T.cycle:
+        if N><self then T
+        else | OT = $tiles.N
+             | less got OT: bad "tile [K] references unknown cycle tile"
+             | OT.aux <= 1
+             | OT
   | when T.fallback.0:
     | FT = $tiles.(T.fallback.2)
     | when no FT: bad "tile [K] references unknown fallback tile"

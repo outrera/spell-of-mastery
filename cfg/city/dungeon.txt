@@ -1,6 +1,7 @@
 sprite: dungeon
 ztiler: dungeon,same
 tiler: dungeon,any,corner
+cycle: self,dungeonb,dungeona
 heavy: 2
 stackMethod: 2
 stack: dungeon0,dungeon1,dungeon2

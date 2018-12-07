@@ -1,0 +1,6 @@
+sprite: dungeona
+ztiler: dungeon,same
+tiler: dungeon,any,corner
+heavy: 2
+stackMethod: 2
+stack: dungeona0,dungeona1,dungeona2
