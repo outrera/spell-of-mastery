@@ -2,7 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - stables in barracks (finally the time to use horse sprite)
-- large gates for barracks
+- large gates for barracks: have them as two separate doors, that would open in tandem (i.e. opening any door would also open similar doors nearby).
 - finish city blueprint: warehouse
 - fix 100% cpu time, despite huge framerate
 - dwarf helmet could use some recoloring, and some better axe and shild design could be re-used, like the publi domain item art from Dungeon Crawl Stone Soup
