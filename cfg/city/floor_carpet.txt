@@ -1,8 +1,9 @@
 embed: 2
 tiler: uniq,same,corner
-lay: | 7 6 4
+lay: floor_ext
+/*lay: | 7 6 4
      | 5 8 2
      | 3 1 0
      | 8 8
      | 8 8
-     | 8 8 8
+     | 8 8 8*/

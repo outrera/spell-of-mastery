@@ -1,0 +1,4 @@
+tiler: castle,same,corner
+ztiler: castle,same
+heavy: 2
+stack: castle0,castle0,castle0
