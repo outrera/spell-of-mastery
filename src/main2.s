@@ -45,6 +45,7 @@ type main{Data}
   | N,$classes{}{?1}.keep{(?bank >< N and not ?aux)}{?class_name}.sort
 | $prepare_credits
 //| $sprites.unit_cyclops.save{frames "work/sd/cyclops"}; halt
+//| $sprites.unit_horse.save{sheet "work/sd/horse"}; halt
 | $init_unit_flags
 | site Me
 

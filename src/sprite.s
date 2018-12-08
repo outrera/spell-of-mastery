@@ -223,6 +223,12 @@ main.spr Name =
 | less got S: bad "missing sprite `[Name]`"
 | S
 
+sprite.preload =
+| less $frames: $init
+| for K,V $frames:
+  | $K
+  | for Angle 8: $get_frame_at_angle{K Angle}
+
 //Following code is used to create sprite sheets and
 //save optimized frames
 //How = sheet/frames/framesXY
@@ -230,6 +236,7 @@ sprite.save How Dst =
 | Rs = []
 | WW = 1
 | HH = 1
+| $preload //ensure all frames are in memory.
 | for F $frames:
   | AnimName = F.0
   | G0 = F.1.3
