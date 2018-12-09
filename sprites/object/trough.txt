@@ -1,0 +1,5 @@
+author: `City Building Game Art (http://www.citybuildingkit.com/)`, `Nikita Sadkov`
+//based of a public domain sprite
+origin: `https://opengameart.org/content/farming-game-chicken-coop`
+class: height,0
+xy: 0,14
