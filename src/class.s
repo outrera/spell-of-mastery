@@ -64,6 +64,7 @@ type class{bank class_name Main
   | $height <= $height.1
 | $active <= if Sprite.anims.idle.size>1 then 1
              else if $inborn.size or $ai><unit or $ai><visual then 1
+             else if $ai><door then 1
              else if $ai><chest then 1
              else 0
 | when $active:

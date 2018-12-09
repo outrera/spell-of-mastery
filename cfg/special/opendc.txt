@@ -1,0 +1,7 @@
+//covers unit standing in this cell.
+sprite: special_doorkey
+ai: opend
+aux: 1
+//foldable: 1
+box_xy: (3 3)
+draworder: 75

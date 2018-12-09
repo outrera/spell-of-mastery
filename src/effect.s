@@ -206,12 +206,16 @@ effect addkey:
 | Target.owner.notify{"Acquired [Color] key, which opens [Color] locks."}
 | Target.owner.data.keys <= Target.owner.data.keys --- (1<<<$owner.id)
 
-open_door Actor Me =
+
+open_door Actor Me Depth =
 | when $aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:
   | Actor.owner.notify{"This door requires [$owner.color] key."}
   | leave
-| $sound{open}
-| C = $owner.alloc_unit{special_opend}
+| Double = $aiArg.has{double} //double doors?
+| XYZ = $xyz.copy
+| when Depth<1: $sound{open}
+| C = if  $aiArg.has{cover} then $owner.alloc_unit{special_opendc}
+      else $owner.alloc_unit{special_opend}
 | C.move{$xyz}
 | C.pick_facing{$facing}
 | C.fxyz.init{$fxyz}
@@ -219,20 +223,30 @@ open_door Actor Me =
 | C.animate{open}
 | C.set{door $type}
 | $free
+| when Double:
+  | for D Dirs43
+    | for Door $site.units_get{XYZ+D}.keep{(?ai><door and ?aiArg.has{double})}
+      | less Door.removed:
+        | open_door Actor Door Depth+1
 
-close_door Actor Me =
+close_door Actor Me Depth =
 | DoorType = $get{door}
 | DoorClass = $main.classes.DoorType
+| when Depth: less DoorClass.aiArg.has{double}: leave
 | when DoorClass.aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:
   | Actor.owner.notify{"This door requires [$owner.color] key."}
   | leave
-| $sound{close}
+| when Depth<1: $sound{close}
 | C = $owner.alloc_unit{DoorType}
 | C.move{$xyz}
 | C.pick_facing{$facing}
 | C.fxyz.init{$fxyz}
 | C.animate{idle}
 | $free
+| when C.aiArg.has{double}: //double doors?
+  | for D Dirs43
+    | for Door C.site.units_get{C.xyz+D}.keep{?ai><opend}
+      | less Door.removed: close_door Actor Door Depth+1
 
 open_chest Actor Me =
 | when $aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:
@@ -261,10 +275,10 @@ effect switch:
 | when XYZ.2>1: Us <= [@Us @$site.units_get{XYZ-[0 0 1]}]
 | for U Us
     if U.ai >< door then
-      | open_door Me U
+      | open_door Me U 0
       | leave
     else if U.ai >< opend then
-      | close_door Me U
+      | close_door Me U 0
       | leave
     else if U.ai >< chest then
       | open_chest Me U
@@ -516,7 +530,8 @@ effect face:
 effect align How:
 | less How><door: bad "effect align: cant [How]-align"
 | X,Y,Z = $xyz
-| less $site.at{X Y-1 Z}.empty or $site.at{X Y+1 Z}.empty:
+| when ($site.at{X-1 Y Z}.empty and $site.at{X+1 Y Z}.empty) or
+       not ($site.at{X Y-1 Z}.empty or $site.at{X Y+1 Z}.empty):
   | $face{$xyz+[1 0 0]}
   | T = $site.at{X Y-1 Z}
   | when T.wallShift: $fxyz.init{$fxyz+[T.wallShift 0 0]}
