@@ -180,10 +180,8 @@ site.update_cursor =
 | case $view.brush
   [obj Bank,Type] | $update_cursor_brush{Bank Type CXYZ}
 
-view.update =
+view.update UpdatePlay =
 | GUI = get_gui
-| StartTime = GUI.ticks
-| when $wakeupTime>StartTime: leave 1
 | case $key{pause} 1:
   | $paused <= not $paused
   | $key_set{pause 0}
@@ -227,12 +225,10 @@ view.update =
 | $site.update_picked
 | $site.update_cursor
 | when $brush.0: $update_brush
-| $update_play
-| less $paused:
-  | times I $main.cfg.ui.game_speed: $main.update
-| FinishTime = GUI.ticks
-| Wait = 1.0/$fpsGoal.float - (FinishTime-StartTime)
-| when Wait > 0.0: $wakeupTime <= FinishTime+Wait
+| when UpdatePlay
+  | $update_play
+  | less $paused:
+    | times I $main.cfg.ui.game_speed: $main.update
 | 1
 
 view.floor XYZ =

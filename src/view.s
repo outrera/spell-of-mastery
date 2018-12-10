@@ -21,7 +21,6 @@ type view.widget{M UI W H}
   infoText/txt{small info}
   fps/1
   fpsT/0.0
-  wakeupTime/0.0
   fpsGoal/24 // goal frames per second
   fpsD/30.0
   cfg
@@ -68,7 +67,6 @@ view.picked = $player.picked
 view.`=picked` Us = $player.picked <= Us
 
 view.clear =
-| $wakeupTime <= 0.0
 | $zlock <= 0
 | $zfix <= 1
 | $blit_origin.init{[$w/2 $h/2-170]-[32 $view_size/4*$zunit]}

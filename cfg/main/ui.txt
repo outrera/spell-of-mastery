@@ -1,11 +1,13 @@
 width: 800
 height: 600
-fps: 24
+fps: 30
 show_fps: 1
 show_cycle: 0
 show_frame: 0
 show_load: 1
+game_fps: 24 // updates per second
 game_speed: 2 // game cycles (updates) per frame
+              // how fast animations are played
 scroll_speed: 1
 debug: 1
 max_notes: 4 //number of simultaneous notifications on screen

@@ -517,16 +517,23 @@ view.calc_fps StartTime FinishTime =
 | SleepTime = 1.0/$fpsD - DT
 | SleepTime
 
+NextUpdate = 0.0
+NextRender = 0.0
+
 view.draw FB X Y =
 | $fb <= FB
 | NDrawnTiles <= 0
 | NDrawnUnits <= 0
 | GUI = get_gui
 | StartTime = GUI.ticks
-| $update
+| if StartTime<NextUpdate then $update{0} //just update input
+  else | $update{1}
+       | NextUpdate <= StartTime + 1.0/$main.cfg.ui.game_speed.float
+| when StartTime < NextRender: GUI.sleep{NextRender-StartTime}
 | $render_frame
 | FinishTime = GUI.ticks
-| $calc_fps{StartTime FinishTime}
+| SleepSeconds = $calc_fps{StartTime FinishTime}
 | $fb <= 0 //no framebuffer outside of view.draw
+| when SleepSeconds > 0.0: GUI.sleep{SleepSeconds}
 
 view.render = Me
