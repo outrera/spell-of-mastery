@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- finish city blueprint: warehouse
 - fix 100% cpu time, despite huge framerate
 - dwarf helmet could use some recoloring, and some better axe and shild design could be re-used, like the publi domain item art from Dungeon Crawl Stone Soup
 - a code to cut lower part of the floor diamon, when it also acts as a roof.
