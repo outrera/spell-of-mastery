@@ -2,7 +2,6 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - fix 100% cpu time, despite huge framerate
-- dwarf helmet could use some recoloring, and some better axe and shild design could be re-used, like the publi domain item art from Dungeon Crawl Stone Soup
 - a code to cut lower part of the floor diamon, when it also acts as a roof.
 - ensure green side is friendly to human player.
 - random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.
