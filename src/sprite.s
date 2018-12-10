@@ -1,9 +1,11 @@
 use gfx util fxn
 
+BuiltinRecolors = [#db3a00 #a40000 #7c0000 #5c0400 #440400]
+
 type sprite{main Bank Name filepath/0 xy/[0 0]
             frames/0 faces/0
             anims/default //if 0, we don't need to produce anims
-            recolors/0
+            recolor/0
             class/0 margins/0
             font/Font icon/0 shadow/0 form/0
             rect/[40 76 -4]
@@ -23,9 +25,11 @@ type sprite{main Bank Name filepath/0 xy/[0 0]
   shadow/Shadow //shadow sprite or 0 if sprite doesnt cast shadow
   form //X,Y this sprite occupies
   rect/Rect //selection rect
-  recolors/Recolors //indices of recolorable colors
+  recolor/Recolor
+  recolors/0 //indices of recolorable colors
   colors/0
   path
+| when $recolor: $recolors <= BuiltinRecolors
 | when Form: $init_form{Form}
 | when Anims: $init_anims{Anims}
 | $path <= Filepath
