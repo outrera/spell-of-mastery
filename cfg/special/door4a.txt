@@ -1,5 +1,5 @@
 sprite: special_door4a
-title: `Door`
+title: `Gate`
 height: 2
 durability: 5
 ai: door,double,cover
