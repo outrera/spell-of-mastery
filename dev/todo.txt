@@ -4,7 +4,7 @@ TODO:
 - random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.
 - ensure green side is friendly to human player.
 - a code to cut lower part of the floor diamond, when it also acts as a roof.
-- Random door type tokenx, that can be locked or unlocked.
+- A token for random door type, which can be locked or unlocked.
 - add locked doors and chests to map items.
 - a way to add fine x,y offset to item placement.
 - Enemy Wizard Towers Siege.
@@ -127,6 +127,17 @@ Stack Trace:
    0x1291229c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
 
 
+`list` has no method `id`
+Stack Trace:
+  0x10ac46530:???:-1,-1,???
+  0x12e81e7c0:unit.serialize:20,15,./src/save.s
+  0x12e822e10:site.save:37,10,./src/save.s
+  0x12e194f00:save_dlg.filename:83,0,./src/ui_widgets.s
+  0x12df6d560:ui.main:2,0,./src/ui.s
+  0x12e8510d0:main.save:197,15,./src/save.s
+  0x12e602d50:ui.save:27,13,./src/ui_site.s
+  0x12e6ed070:unnamed:61,49,./src/ui_editor.s
+  0x12ba6b9c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
 
 
 

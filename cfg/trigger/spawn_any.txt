@@ -1,2 +1,0 @@
-sprite: special_spawn_any
-

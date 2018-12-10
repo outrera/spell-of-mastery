@@ -40,8 +40,10 @@ ui.generate W H Blueprint =
 
 ui.place_site_player =
 | Ls = []
-| for U $site.units: less U.removed:
-  | when U.type><trigger_landing: push U.xyz Ls
+| LeaderXYZ = 0
+| for U $site.units: less U.removed: when U.owner.id >< 1:
+  | when U.type><trigger_spawn_patrol: push U.xyz Ls
+  | when U.type><trigger_spawn_leader: LeaderXYZ <= U.xyz
 | $site.new_game
 | Acts = $main.acts
 | for Name,Act Acts:
@@ -56,7 +58,11 @@ ui.place_site_player =
       | S = $site.human.alloc_unit{Type}
       | S.aistate <= \spawned
       | S.move{XYZ}
-
+| when LeaderXYZ:
+  | S = $site.human.alloc_unit{leader_mage}
+  | S.aistate <= \spawned
+  | S.move{LeaderXYZ}
+      
 ui.place_site_enemy =
 | Budget = max 400 ($world.site_gold*3+3)/4
 | Units = []
@@ -76,21 +82,23 @@ ui.place_site_enemy =
 | Patrol = []
 | Guards = []
 | RGuards = []
-| Leader = 0
-| Player = $site.players.2
-| for U $site.units: less U.removed: when U.owner.id <> 1:
-  | when U.leader:
-    | Leader = U.leader
-    | Player <= U.owner
-  | when U.type><unit_lizard:
+| Player = $site.players.5 //for now we use hardcoded player 5 for enemy
+| LeaderXYZ = 0
+| for U $site.units: less U.removed: when U.owner.id >< 5:
+  | when U.type><trigger_spawn_leader: LeaderXYZ <= U.xyz
+  | when U.type><trigger_spawn_patrol:
     | push U.xyz.copy Patrol
     | U.free
-  | when U.type><unit_minotaur:
+  | when U.type><trigger_spawn_guard:
     | push U.xyz.copy Guards
     | U.free
-  | when U.type><unit_goblin:
+  | when U.type><trigger_spawn_ranged:
     | push U.xyz.copy RGuards
     | U.free
+| when LeaderXYZ:
+  | S = Player.alloc_unit{leader_heretic}
+  | S.aistate <= \spawned
+  | S.move{LeaderXYZ}
 | SBudget = max 100 ($world.site_gold+3)/4
 | STotal = 0
 | for S Spells: S.picks.(Player.id) <= 0

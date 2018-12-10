@@ -528,7 +528,7 @@ view.draw FB X Y =
 | StartTime = GUI.ticks
 | if StartTime<NextUpdate then $update{0} //just update input
   else | $update{1}
-       | NextUpdate <= StartTime + 1.0/$main.cfg.ui.game_speed.float
+       | NextUpdate <= StartTime + 1.0/$main.cfg.ui.game_fps.float
 | when StartTime < NextRender: GUI.sleep{NextRender-StartTime}
 | $render_frame
 | FinishTime = GUI.ticks
