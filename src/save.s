@@ -62,6 +62,7 @@ site.save =
     events | $events{}{?1}
     tids | $main.tid_map{}{?type}
     players | map P $players
+              | P.data.allies <= P.allies
               | [P.id P.name P.human 0 P.picked.id 0
                  P.data.list 0 0]
     player | $human.id
@@ -196,6 +197,7 @@ site.load Saved =
   | U.next_action.load{IdMap NextAction}
 | $serial <= Saved.serial
 | for P $players:
+  | P.allies <= P.data.allies^~{0}
   | when got@@it P.data.picked:
     | U = IdMap.(it)
     | when got U: P.picked <= U

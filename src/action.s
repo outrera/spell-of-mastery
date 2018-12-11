@@ -112,7 +112,7 @@ dact swap.valid
 | T = $target
 | less $target and not $target.removed: leave 0
 | U = $unit
-| U.owner.id >< T.owner.id and T.idle
+| U.owner.is_ally{T.owner} and T.idle
 
 dact swap.start
 | U = $unit

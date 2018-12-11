@@ -273,6 +273,7 @@ site.new_game =
 | SCfg = $main.cfg.site
 | for K,V SCfg: $data.K <= V
 | for ActName,Act $main.acts: Act.players <= #FFFFFF
+| for P $players: P.make_ally{P}
 | $human <= $players.1
 | $human.human <= 1
 | $cycle <= 0
@@ -283,6 +284,8 @@ site.new_game =
 | InitedUnits = reinit_units $active
 | new_game_init_chests $active
 | PAI = $main.cfg.ai
+| $players.1.make_ally{$players.2}
+| $players.2.make_ally{$players.1}
 | for P $players:
   | P.init
   | Us = P.units

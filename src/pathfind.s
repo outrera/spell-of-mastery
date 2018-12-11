@@ -180,7 +180,7 @@ unit.reachable =
     | Type = \move
     | B = Dst.block
     | if not B then R <= 0
-      else if $owner.id <> B.owner.id then
+      else if $owner.is_enemy{B.owner} then
         if B.invisible then R <= 0
         else Type <= 0
       else if B.moves<1 /*or B.engaged*/ then Type <= 0

@@ -265,7 +265,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
   | UX,UY,Z = XYZ
   | TZ = Z-1
   | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
-    | when not U.invisible or U.owner.id><$player.id or $brush.0:
+    | when not U.invisible or $player.is_ally{U.owner} or $brush.0:
       | B = blit_item_from_unit U
       | FX,FY,FZ = U.fxyz
       | BX,BY = esc ScreenXY + to_iso{FX FY FZ}

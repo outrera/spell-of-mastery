@@ -20,6 +20,7 @@ type player{id site}
    ai
    human //1 for human controlled players
    leader
+   allies
    data/(t)
    picked_unit
    picked_serial
@@ -47,7 +48,10 @@ player.`=picked` U =
 | $picked_unit <= U
 | $picked_serial <= U.serial
 
-player.is_enemy P = $id <> P.id
+player.is_ally P = $allies.bit{P.id}
+player.is_enemy P = not $allies.bit{P.id}
+
+player.make_ally P = $allies <= $allies.bitSet{P.id 1}
 
 player.notify Text =
 | less $human: leave
@@ -79,6 +83,7 @@ player.clear =
 | $data.lossage <= 0
 | $data.gold <= 0
 | $data.keys <= 0
+| $allies <= 0
 
 player.init =
 

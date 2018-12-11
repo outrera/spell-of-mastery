@@ -37,7 +37,6 @@ ui.generate W H Blueprint =
 | $site.generate{W H Blueprint}
 | $view.clear
 
-
 ui.place_site_player =
 | Ls = []
 | LeaderXYZ = []
@@ -47,6 +46,8 @@ ui.place_site_player =
   | when U.type><trigger_spawn_patrol: push U.xyz Ls
   | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
 | $site.new_game
+//| $players.1.make_ally{$players.2}
+//| $players.2.make_ally{$players.1}
 | Acts = $main.acts
 | for Name,Act Acts:
   | Act.picks.($site.human.id) <= Act.picked
