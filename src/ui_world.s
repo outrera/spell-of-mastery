@@ -40,10 +40,12 @@ ui.generate W H Blueprint =
 
 ui.place_site_player =
 | Ls = []
-| LeaderXYZ = 0
+| LeaderXYZ = []
+| ItemPlaces = []
 | for U $site.units: less U.removed: when U.owner.id >< 1:
+  | when U.type><trigger_spawn_item: push U.xyz ItemPlaces
   | when U.type><trigger_spawn_patrol: push U.xyz Ls
-  | when U.type><trigger_spawn_leader: LeaderXYZ <= U.xyz
+  | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
 | $site.new_game
 | Acts = $main.acts
 | for Name,Act Acts:
@@ -58,11 +60,22 @@ ui.place_site_player =
       | S = $site.human.alloc_unit{Type}
       | S.aistate <= \spawned
       | S.move{XYZ}
-| when LeaderXYZ:
+| Items = $cfg.site.spawn_items.group{2}
+| TotalDensity = Items{?1}.sum.float
+| when Items.size: for XYZ ItemPlaces.shuffle:
+  | for (I=0; I<1000000; I++):
+    | ItemName,ItemDensity = Items.loop{I}
+    | when 1.0.rand < ItemDensity.float/TotalDensity:
+      | Item = $site.human.alloc_unit{"item_[ItemName]"}
+      | Item.aistate <= \spawned
+      | Item.move{XYZ}
+      | done
+| when LeaderXYZ.size:
+  | LeaderXYZ <= LeaderXYZ.shuffle
   | S = $site.human.alloc_unit{leader_mage}
   | S.aistate <= \spawned
-  | S.move{LeaderXYZ}
-      
+  | S.move{LeaderXYZ.0}
+
 ui.place_site_enemy =
 | Budget = max 400 ($world.site_gold*3+3)/4
 | Units = []

@@ -78,7 +78,8 @@ site.save =
 site.deserialize_unit IdMap X =
 | [Type Id Serial Owner XYZ FXYZ Facing Flags HP Active] = X
 | U = $players.Owner.alloc_unit{Type}
-| less Active: U.change_owner{$players.0} //kludge
+| less Active or U.default_sprite.recolor:
+  | U.change_owner{$players.0} //kludge
 | U.serial <= Serial
 | case XYZ A,B:
   | XYZ <= A
