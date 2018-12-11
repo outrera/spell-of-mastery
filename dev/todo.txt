@@ -1,11 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- token for random item placement
 - ensure green side is friendly to human player.
-- a code to cut lower part of the floor diamond, when it also acts as a roof.
+- add locked doors, chests and keys to spawn tokens. Only same colored spawn tokens may spawn keys.
 - A token for random door type, which can be locked or unlocked.
-- add locked doors and chests to map items.
 - a way to add fine x,y offset to item placement.
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset
@@ -107,40 +105,6 @@ Bugs:
 - multicell units, like table, react badly when drawing tiles under them. disallow drawing at all
 - `update_picked` and unit.picked should use different picking strucutre. current is error prone and had led to bugs previously
 - projectiles hung up, when their sender dies
--  From time to time we get heizenbug in save
- `list` has no method `id`
-  Stack Trace:
-    0x100dc0530:???:-1,-1,???
-    0x1248e07c0:unit.serialize:20,15,./src/save.s
-    0x1248e4e10:site.save:37,10,./src/save.s
-    0x12427a330:save_dlg.filename:83,0,./src/ui_widgets.s
-- and in load    
-Stack Trace:
-  0x1082fd530:???:-1,-1,???
-  0x12a58eb50:site.alloc_unit:297,32,./src/site.s
-  0x12a590ee0:player.alloc_unit:316,28,./src/site.s
-  0x12bd527e0:site.deserialize_unit:71,30,./src/save.s
-  0x12bd63260:site.load:132,16,./src/save.s
-  0x12bd77680:main.load:199,15,./src/save.s
-  0x12bae8780:ui.load:24,13,./src/ui_site.s
-  0x12bc31700:unnamed:74,48,./src/ui_editor.s
-   0x1291229c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
-
-
-`list` has no method `id`
-Stack Trace:
-  0x10ac46530:???:-1,-1,???
-  0x12e81e7c0:unit.serialize:20,15,./src/save.s
-  0x12e822e10:site.save:37,10,./src/save.s
-  0x12e194f00:save_dlg.filename:83,0,./src/ui_widgets.s
-  0x12df6d560:ui.main:2,0,./src/ui.s
-  0x12e8510d0:main.save:197,15,./src/save.s
-  0x12e602d50:ui.save:27,13,./src/ui_site.s
-  0x12e6ed070:unnamed:61,49,./src/ui_editor.s
-  0x12ba6b9c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
-
-unit.serialize: host is list: (0 0 (idle 4 50 (0 0 0) 0) 0 0)
-
 
 
 Sound:
@@ -186,6 +150,7 @@ Graphics:
 - beetle needs attack animation;
 
 Optimization Possibilities:
+- a code to cut lower part of the floor diamond, when it also acts as a roof.
 - No reason to draw opaque emedded tiles fully - draw just the 64x32 top.
 - Optimize unit and action structure to take less space.
 - use cell index directly instead of unit_goal wrapper

@@ -16,5 +16,5 @@ debug: 1
 default_site: forest
 //default_site: city
 //start: menu
-start: site
-//start: editor
+//start: site
+start: editor
