@@ -18,9 +18,9 @@ action.load IdMap Saved =
 | $xyz.init{XYZ}
 
 
-check_for_list Type X =
+check_for_list U Type X =
 | when X.is_list:
-  | say "unit.serialize: [Type] is list: [X]"
+  | say "unit.serialize: [U.type], [Type] is list: [X]"
   | halt
 
 unit.serialize = //unit serializer for savegames
@@ -28,8 +28,8 @@ unit.serialize = //unit serializer for savegames
 | when $active:
   | Genes = if $genes.end then 0
             else $genes.map{E=>[E.when E.name E.amount E.data]}
-  | check_for_list host $host
-  | Host = if $host then $host.id else 0
+  | check_for_list Me host $host
+  | Host = if $host and not $host.is_list then $host.id else 0
   | Goal = if $goal then [$goal.id $goal_act.name] else 0
   | Path = if $path.end then 0 else [$path 0]
   | Active <= list $from $anim $anim_step $anim_wait
@@ -90,7 +90,7 @@ site.deserialize_unit IdMap X =
 | when Facing.is_list:
   | U.sprite <= $main.sprites.(Facing.0)
   | Facing <= Facing.1
-| when Active and U.active: //check that the class is still active
+| when Active and U.class.active: //check that the class is still active
   | [From Anim AnimStep AnimWait Fatigue Delay Genes Host Goal Path
      Action Ordered NextAction Mov Def @More] = Active
   | U.mov <= Mov

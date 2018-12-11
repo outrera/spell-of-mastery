@@ -83,9 +83,9 @@ ui.place_site_enemy =
 | Guards = []
 | RGuards = []
 | Player = $site.players.5 //for now we use hardcoded player 5 for enemy
-| LeaderXYZ = 0
+| LeaderXYZ = []
 | for U $site.units: less U.removed: when U.owner.id >< 5:
-  | when U.type><trigger_spawn_leader: LeaderXYZ <= U.xyz
+  | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
   | when U.type><trigger_spawn_patrol:
     | push U.xyz.copy Patrol
     | U.free
@@ -95,10 +95,11 @@ ui.place_site_enemy =
   | when U.type><trigger_spawn_ranged:
     | push U.xyz.copy RGuards
     | U.free
-| when LeaderXYZ:
+| when LeaderXYZ.size:
+  | LeaderXYZ <= LeaderXYZ.shuffle
   | S = Player.alloc_unit{leader_heretic}
   | S.aistate <= \spawned
-  | S.move{LeaderXYZ}
+  | S.move{LeaderXYZ.0}
 | SBudget = max 100 ($world.site_gold+3)/4
 | STotal = 0
 | for S Spells: S.picks.(Player.id) <= 0

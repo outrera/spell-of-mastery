@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- random unit type and item placement objects. I.e. instead of lizard, minotaur and goblin, have special tokens for AI auto placed units. While these monsters would stand for themselves. Same with enemy leader, which should be able to appear in different places.
+- when out of camera unit casts spell, center first on the caster and its target.
+- token for tandom item placement
 - ensure green side is friendly to human player.
 - a code to cut lower part of the floor diamond, when it also acts as a roof.
 - A token for random door type, which can be locked or unlocked.

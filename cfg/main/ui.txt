@@ -6,7 +6,7 @@ show_cycle: 0
 show_frame: 0
 show_load: 1
 game_fps: 24 // updates per second
-game_speed: 2 // game cycles (updates) per frame
+game_speed: 3 // game cycles (updates) per frame
               // how fast animations are played
 scroll_speed: 1
 max_notes: 4 //number of simultaneous notifications on screen
@@ -16,5 +16,5 @@ debug: 1
 default_site: forest
 //default_site: city
 //start: menu
-//start: site
-start: editor
+start: site
+//start: editor
