@@ -408,6 +408,8 @@ unit.harm Attacker Damage =
 | $hp -= Damage
 | when Attacker: Attacker.sinned += Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
+| when $owner.human:
+  | $owner.notify{"Your [$title] sustained [Damage] points of damage."}
 | when $hp > 0:
   | OnHarm = $class.onHarm
   | when OnHarm: $effect{OnHarm Me $xyz}

@@ -243,7 +243,9 @@ ai.group_roam Types =
 | leave 1
 
 ai.update_turn =
-| when $update_units: $site.end_turn
+| when $site.turn><0 //ensure human player always gets first turn
+       or $update_units:
+  | $site.end_turn
 
 ai.update =
 | PerCycle <= t

@@ -192,14 +192,15 @@ LastMovedUnit = -1
 LastMovedTurn = -1
 
 unit.seen_by_human = $site.human.seen{$xyz}
-unit.observe =
+
+unit.observe_force =
 | less $site.valid{@$xyz}: leave
 | $main.ui.view.center_at{$xyz+[-3 -3 0] cursor/1}
 
-center_on_actor Me =
+unit.observe =
 | less $owner.human: when $action.type<>idle and $health and $seen_by_human:
   | when LastMovedUnit <> $serial or LastMovedTurn <> $site.turn:
-    | $observe
+    | $observe_force
   | LastMovedUnit = $serial
   | LastMovedTurn = $site.turn
 
@@ -242,7 +243,7 @@ update_next_action Me =
   | when Fat: $fatigue += Fat+$fatigue/2
 | when Act.picks.($owner.id) > 0:
   | Act.picks.($owner.id) -= 1
-| center_on_actor Me
+| $observe
 | $action.start
 | when $anim><move: $pick_facing{$facing}
 

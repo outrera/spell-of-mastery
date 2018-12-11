@@ -590,7 +590,9 @@ unit.effect Effect Target TargetXYZ =
   | less E.is_list: E <= [E []]
   | Name,@Args = E
   | F = Effects.Name
-  | if got F then F{Me T XYZ Args}
+  | if got F then
+      //| when T: T.observe
+      | F{Me T XYZ Args}
     else if Name >< when then
       | When = Args
       | Cs = if When.is_list and not When.end and When.0<>`.` and When.0<>`+`
