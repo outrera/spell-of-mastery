@@ -126,7 +126,7 @@ ui.place_site_enemy =
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
-| Type = if not Site then \city
+| Type = if not Site then $cfg.ui.default_site
          else if Site and Site.type><city then \city
          else \forest
 | $generate{6 6 Type}

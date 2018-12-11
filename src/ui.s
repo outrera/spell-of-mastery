@@ -141,20 +141,28 @@ ui.create_dialog_tabs StartTab =
 ui.init =
 | $mapsFolder <= "[$data][$mapsFolder]"
 | $savesFolder <= "[$data][$savesFolder]"
-| StartInEditor = $cfg.ui.start_in_editor><1
+| Start = $cfg.ui.start
 | $menuBG <= $img{ui_menu_bg}
 | $panelBG <= $img{ui_panel}
 | $view <= view $main Me $width $height-($panelBG.h-10)
-| when StartInEditor: $create{10 10}
-| less StartInEditor: $create{1 1}
+| when Start><editor: $create{10 10}
+| less Start><editor: $create{1 1}
 | $message_box <= message_box Me
 | $inputBlocker <= hidden: spacer $width $height
 | $siteProperties <= $create_site_props_dlg
-| Tabs = $create_dialog_tabs{enter_site}
+| STab = case Start
+         world | \world
+         site | \enter_site
+         editor | \main_menu
+         Else | \main_menu
+| Tabs = $create_dialog_tabs{STab}
 | $tabs <= Tabs
 | $bankList.pick{0}
 | $view.set_brush{0,0}
-| less StartInEditor: $enter_site{0}
-| when StartInEditor: $begin_ingame{1}
+| case Start
+    world | $pick_world
+    site  | $enter_site{0}
+    editor | $begin_ingame{1}
+    Else | $pick_title_menu
 
 export ui

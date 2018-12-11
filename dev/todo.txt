@@ -139,6 +139,7 @@ Stack Trace:
   0x12e6ed070:unnamed:61,49,./src/ui_editor.s
   0x12ba6b9c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
 
+unit.serialize: host is list: (0 0 (idle 4 50 (0 0 0) 0) 0 0)
 
 
 
