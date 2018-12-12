@@ -1,4 +1,5 @@
-sprite: special_no_ai
+sprite: special_token
+text: `NOAI`
 trigger: remove{}
 ai: avoid
 note: `points places that ai should avoid`

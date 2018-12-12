@@ -1,2 +1,3 @@
-sprite: special_missing
+sprite: special_token
+text: `ERR`
 note: `placeholder for missing objects`

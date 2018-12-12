@@ -142,6 +142,10 @@ unit.draw FB B =
     | Alpha -= 20*FloatDYs.((C/4+$id)%FloatDYs.size)
     | Alpha <= max 0 Alpha
   | G.alpha{Alpha}
+  | when $class.text:
+    | Font = font trigger
+    | TX,TY = $class.text_xy
+    | Font.draw{FB XX+TX YY+TY $class.text}
 | fxn: when B.B_FLAGS&&&#80:
   | CutH = 48
   | CY = max G.h-48 0

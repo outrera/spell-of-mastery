@@ -1,2 +1,2 @@
-sprite: special_spawn_guard
-
+sprite: special_token
+text: `GRD`

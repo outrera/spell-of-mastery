@@ -1,4 +1,5 @@
-sprite: special_trigger0
+sprite: special_token
+text: `T0`
 trigger: world_set{trigger0 1}
 
 

@@ -1,4 +1,0 @@
-author: `Nikita Sadkov`
-copyright: `Nikita Sadkov`
-recolor: 1
-xy: 0,15

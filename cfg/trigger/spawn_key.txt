@@ -1,2 +1,2 @@
-sprite: special_spawn_key
-
+sprite: special_token
+text: `KEY`

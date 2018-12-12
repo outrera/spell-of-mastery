@@ -1,2 +1,2 @@
-sprite: special_spawn_ranged
-
+sprite: special_token
+text: `RNG`

@@ -1,3 +1,4 @@
-sprite: special_ai
+sprite: special_token
+text: `GOAL`
 ai: hold
 note: `used to to point places for AI to guard`

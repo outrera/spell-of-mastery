@@ -1,6 +1,7 @@
 use util
 
 ClassIdCounter = 1
+ZeroXY = [0 0]
 
 type class{bank class_name Main
            title/0 icon/0
@@ -15,7 +16,8 @@ type class{bank class_name Main
            pickable/0 show/1 gate/0
            tier/0
            counter/0 trigger/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
-           aux/0 foldable/0 draworder/100 box_xy/[0 0]}
+           aux/0 foldable/0 draworder/100 box_xy/ZeroXY
+           text/0 text_xy/ZeroXY}
   id                    //for unit counts table
   type/"[Bank]_[Class_name]"
   block/0               //acts as map block
@@ -56,6 +58,8 @@ type class{bank class_name Main
   gate/Gate             //gateway, teleporting units to other cell
   foldable/Foldable     //fold unit`s sprite when cursor is behind
   inbornFlyer/0
+  text/Text
+  text_xy/Text_xy
 | case $ai [X@Xs]:
   | $aiArg <= Xs
   | $ai <= X
@@ -67,6 +71,7 @@ type class{bank class_name Main
              else if $ai><door then 1
              else if $ai><chest then 1
              else if $ai><item then 1
+             else if $text then 1
              else 0
 | when $active:
   | when Cost: $gold <= Cost.0

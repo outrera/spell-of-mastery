@@ -1,2 +1,3 @@
-sprite: special_spawn_leader
+sprite: special_token
+text: `LDR`
 

@@ -2,8 +2,6 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - unit.get and unit.set should return No, if there is no such param.
-- dynamically generated text over triggers.
-- A token for random door type, which can be locked or unlocked.
 - a way to add fine x,y offset to item placement.
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset

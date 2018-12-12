@@ -1,3 +1,4 @@
-sprite: special_attacker
+sprite: special_token
+text: `ATK`
 ai: attack
-note: `unit sharing cell with this object becomes aggressive`
+note: `unit sharing cell with this token becomes aggressive`

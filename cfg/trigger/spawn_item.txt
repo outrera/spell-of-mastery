@@ -1,2 +1,2 @@
-sprite: special_spawn_item
-
+sprite: special_token
+text: `ITEM`

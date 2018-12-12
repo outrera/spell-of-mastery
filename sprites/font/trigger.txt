@@ -1,0 +1,4 @@
+author: `usr_share`
+license: `Public Domain (CC0)`
+origin: `https://opengameart.org/content/the-collection-of-8-bit-fonts-for-grafx2-r2`
+frames: 16*16

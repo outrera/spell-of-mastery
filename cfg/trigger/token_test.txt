@@ -1,0 +1,3 @@
+sprite: special_token
+text: `TEST`
+text_xy: 0,0

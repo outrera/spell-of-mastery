@@ -1,2 +1,3 @@
-sprite: special_trigger6
+sprite: special_token
+text: `T6`
 trigger: world_set{trigger6 1}
