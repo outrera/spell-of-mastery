@@ -203,9 +203,13 @@ effect detonate Damage MaxH:
 
 effect addkey:
 | Color = $owner.color
+| when Target.owner.data.keys.bit{$owner.id}: leave
 | Target.owner.notify{"Acquired [Color] key, which opens [Color] locks."}
-| Target.owner.data.keys <= Target.owner.data.keys --- (1<<<$owner.id)
-
+| Target.owner.data.keys <= Target.owner.data.keys.bitSet{$owner.id 1}
+| Target.set{keys [$owner.id @Target.get{keys}^~{0 []}]}
+| $site.visual{$xyz pickup}
+| Target.sound{pickup}
+| $free
 
 open_door Actor Me Depth =
 | when $aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:

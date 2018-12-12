@@ -66,6 +66,7 @@ type class{bank class_name Main
              else if $inborn.size or $ai><unit or $ai><visual then 1
              else if $ai><door then 1
              else if $ai><chest then 1
+             else if $ai><item then 1
              else 0
 | when $active:
   | when Cost: $gold <= Cost.0

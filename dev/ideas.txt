@@ -79,6 +79,7 @@ General:
 - Harmed creatures getting penalties to their attack, defense regen and steps.
 
 Creatures:
+- Creature, which heals other creatures by sacrificing a bit of its own health.
 - Creature that does damage based on range to the target.
 - Creature that is immune to ranged attacks.
 - Creature that is immune to blessed attacks.
