@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- add locked doors, chests and keys to spawn tokens. Only same colored spawn tokens may spawn keys.
+- ensure player loses key, when creature that picked it is killed and the key spawns near that creature.
+- dynamically generated text over triggers.
 - A token for random door type, which can be locked or unlocked.
 - a way to add fine x,y offset to item placement.
 - Enemy Wizard Towers Siege.

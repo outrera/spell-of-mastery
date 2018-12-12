@@ -37,17 +37,24 @@ ui.generate W H Blueprint =
 | $site.generate{W H Blueprint}
 | $view.clear
 
-ui.place_site_player =
+ui.place_site_player = //should it be part site?
 | Ls = []
 | LeaderXYZ = []
 | ItemPlaces = []
-| for U $site.units: less U.removed: when U.owner.id >< 1:
-  | when U.type><trigger_spawn_item: push U.xyz ItemPlaces
-  | when U.type><trigger_spawn_patrol: push U.xyz Ls
-  | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
+| KeyPlaces = dup 16 []
+| DoorPlaces = dup 16 []
+| for U $site.units: less U.removed:
+  | when U.type><trigger_spawn_key:
+    | push U.xyz KeyPlaces.(U.owner.id)
+  | when U.type><trigger_spawn_door:
+    | push U.xyz DoorPlaces.(U.owner.id)
+  | when U.owner.id >< 1:
+    | when U.type><trigger_spawn_item: push U.xyz ItemPlaces
+    | when U.type><trigger_spawn_patrol: push U.xyz Ls
+    | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
 | $site.new_game
-//| $players.1.make_ally{$players.2}
-//| $players.2.make_ally{$players.1}
+//| $site.players.1.make_ally{$site.players.2}
+//| $site.players.2.make_ally{$site.players.1}
 | Acts = $main.acts
 | for Name,Act Acts:
   | Act.picks.($site.human.id) <= Act.picked
@@ -71,6 +78,20 @@ ui.place_site_player =
       | Item.aistate <= \spawned
       | Item.move{XYZ}
       | done
+| for OwnerId,Places KeyPlaces.i: when Places.size:
+  | Places <= Places.shuffle
+  | S = $site.players.OwnerId.alloc_unit{item_key}
+  | S.aistate <= \spawned
+  | S.move{Places.0}
+| for OwnerId,Places DoorPlaces.i: when Places.size:
+  | Places <= Places.shuffle
+  | S = $site.players.OwnerId.alloc_unit{special_door_locked}
+  | S.aistate <= \spawned
+  | S.move{Places.0}
+  | for XYZ Places.tail: //remaining doors are unlocked
+    | S = $site.players.OwnerId.alloc_unit{special_door}
+    | S.aistate <= \spawned
+    | S.move{XYZ}
 | when LeaderXYZ.size:
   | LeaderXYZ <= LeaderXYZ.shuffle
   | S = $site.human.alloc_unit{leader_mage}
