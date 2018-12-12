@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- a way to add fine x,y offset to item placement.
+- locking cursor cell, while picking fine xyz; out of grid placement should also allow placing multiple same typed non-unit objects into the same cell.
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset
 - map item, that would explore whole map for the player.

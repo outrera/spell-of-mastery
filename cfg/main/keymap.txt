@@ -26,3 +26,7 @@ edit_place_mirrored: m
 edit_place_reversed: n
 edit_place_embed: b //tile replaces the tile under cursor
 edit_random_facing: z
+
+
+edit_fine_xy: x
+edit_reset_fine_xy: c

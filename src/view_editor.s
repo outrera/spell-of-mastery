@@ -22,6 +22,9 @@ site.update_cursor_brush Bank Type CXYZ =
 | M.animate{idle}
 | M.pick_facing{Facing}
 | M.alpha <= 110
+| case View.key{edit_fine_xy} 1:
+  | X,Y = View.viewToSitePixels{View.mice_xy}
+  | M.fxyz.init{[X Y M.fxyz.2]}
 
 place_object Me Bank Type =
 | X,Y,Z = $cursor
@@ -52,7 +55,11 @@ place_object Me Bank Type =
 | U.move{X,Y,Z}
 | U.run_genes{place}
 | U.animate{idle}
-  
+| case $key{edit_fine_xy} 1:
+  | X,Y = $viewToSitePixels{$mice_xy}
+  | U.fxyz.init{[X Y U.fxyz.2]}
+
+
 site.place_struct XYZ Tile =
 | XX,YY,ZZ = XYZ
 | Tiles = Tile.structTiles

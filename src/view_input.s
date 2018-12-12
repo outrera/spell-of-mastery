@@ -81,6 +81,14 @@ view.viewToSite P =
 | [RX RY] = [RX RY] + $view_origin
 | [RX.clip{1 $site.w} RY.clip{1 $site.h}]
 
+view.viewToSitePixels P =
+| X,Y = P - $blit_origin - [$yunit -$yunit+$zunit]
+| WH = $xunit*$yunit
+| RX = (Y*$xunit + X*$yunit)/$yunit
+| RY = (Y*$xunit - X*$yunit)/$xunit
+| RX,RY = [RX RY] + [$view_origin.0*$xunit $view_origin.1*$yunit]
+| [RX/2 RY]
+
 view.mice_rect =
 | AX,AY = $mice_xy_anchor
 | MX,MY = $mice_xy
