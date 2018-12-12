@@ -95,13 +95,13 @@ unit.spawn_corpse =
   | C.animate{corpse}
 | C.set{corpse $type}
 | Ks = $get{keys}
-| when Ks:
+| when got Ks:
   | $owner.notify{"You lost key[if Ks.size>1 then 's' else '']"}
   | for KId Ks:
     | Key = $site.players.KId.alloc_unit{item_key}
     | Key.move{$xyz}
     | $owner.data.keys <= $owner.data.keys.bitSet{KId 0}
-  | $set{keys []}
+  | $set{keys No}
 
 dact die.start
 | U = $unit

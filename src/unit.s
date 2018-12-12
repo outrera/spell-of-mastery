@@ -116,11 +116,11 @@ unit.strong = $flags.bit{23}
 
 
 //how many other units this unit has killed
-unit.kills = $get{kills}
+unit.kills = $get{kills}^~{0}
 unit.`=kills` Value = $set{kills Value}
 
 //how much that unit harmed other units
-unit.sinned = $get{sinned}
+unit.sinned = $get{sinned}^~{0}
 unit.`=sinned` Value = $set{sinned Value}
 
 unit.punish_hp = if $kills>>1 then $hp*2 else $sinned
@@ -247,7 +247,7 @@ unit.set Name Value =
 
 unit.get Name =
 | for E $genes: when E.name><Name: leave E.data.unheap
-| 0
+| No
 
 unit.strip What =
 | Check = if What.is_fn then What else E => E.name><What

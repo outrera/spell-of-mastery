@@ -287,7 +287,7 @@ unit.update_fall =
 
 unit_landed Me =
 | $velocity.2 <= 0.0
-| FH = $get{fallheight}
+| FH = $get{fallheight}^~{0}
 | $strip{fallheight}
 | when FH>0:
   | $sound{land}

@@ -180,7 +180,7 @@ unit.ai_runaway Btrack =
     | Best <= R
 | when Best:
   | $order_at{Best.xyz 0}
-  | when Btrack: less $get{btrack}: $backtrack <= $xyz
+  | when Btrack and no $get{btrack}: $backtrack <= $xyz
 | $handled <= 1
 
 unit.ai_update =
@@ -213,7 +213,7 @@ unit.ai_update =
       | leave break
 | when $aistate <> roam:
   | BtXYZ = $get{btrack}
-  | when BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
+  | when got BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
 | when $aistate >< roam and $ai_roam: leave break
 | $handled <= 1
 | \next

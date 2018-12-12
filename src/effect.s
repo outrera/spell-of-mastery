@@ -206,7 +206,7 @@ effect addkey:
 | when Target.owner.data.keys.bit{$owner.id}: leave
 | Target.owner.notify{"Acquired [Color] key, which opens [Color] locks."}
 | Target.owner.data.keys <= Target.owner.data.keys.bitSet{$owner.id 1}
-| Target.set{keys [$owner.id @Target.get{keys}^~{0 []}]}
+| Target.set{keys [$owner.id @Target.get{keys}^~{[]}]}
 | $site.visual{$xyz pickup}
 | Target.sound{pickup}
 | $free
@@ -258,7 +258,7 @@ open_chest Actor Me =
   | leave
 | $sound{open}
 | ItemType = $get{item}
-| when ItemType:
+| when got ItemType:
   | C = $owner.alloc_unit{ItemType}
   | C.move{$xyz}
   | C.pick_facing{$facing}
