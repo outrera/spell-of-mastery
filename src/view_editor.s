@@ -10,7 +10,8 @@ site.update_cursor_brush Bank Type CXYZ =
 | when XYZ.0<0 or XYZ.1<0: leave 0
 | Us = $units_get{XYZ}
 | when Class.height and Us.any{?height}: leave 0
-| when Us.any{?class^address >< Class^address}: leave 0
+| when Us.any{?class^address >< Class^address}:
+  | when View.key{edit_fine_xy} <> 1: leave 0
 | ClassName = "[Bank]_[Type]"
 | Class = $main.classes.ClassName
 | Facing = if Mirror then 5 else 3
@@ -40,7 +41,8 @@ place_object Me Bank Type =
   | Us = $site.units_get{XYZ}.skip{?bank><mark}
   | Place = if not $site.valid{@XYZ} then 0
             else if Class.height then not Us.any{?height}
-            else not Us.any{?class^address >< Class^address}
+            else $key{edit_fine_xy} >< 1
+                 or not Us.any{?class^address >< Class^address}
   | less Place: leave
   | X2,Y2,Z2 = XYZ
   | less Class.height.list.all{I=>$site.get{X2,Y2,Z2+I}.empty}:

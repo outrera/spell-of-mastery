@@ -248,6 +248,7 @@ view.input In =
 | case In
   [mice_move _ XY]
     | $mice_xy.init{XY}
+    | when $key{edit_fine_xy}: leave
     | less $mice_click: $mice_xy_anchor.init{XY}
     | CX,CY = $viewToSite{$mice_xy}
     | when $brush.0 or $site.human.sight.CY.CX:
