@@ -254,6 +254,9 @@ Regarding experience coming from casting spells or other actions:
     - Makes it hard to truly limit player's income.
 
 
+UI:
+- A few slots for recently used spells. Could disorient player.
+
 Linking leader's health to it's mana, so that any damage to the leader first subtracts from the mana:
 - A leader that got damanged receives no mana that turn, to prevent health refilling quicker than leader spends it.
 - Could be implemented as a spell instead, which would provide a lot more tactical nuances, including ability to dispel it, as well as some creatures getting support from the mana pool.

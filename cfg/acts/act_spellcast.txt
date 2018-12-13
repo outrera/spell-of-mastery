@@ -1,0 +1,8 @@
+icon: act_spellcast
+title: `Cast Spell`
+needsGene: (spellcaster)
+mov: 0
+check: self
+menu: `<spell>` //m_yes,m_no
+animate: No
+hint: spell

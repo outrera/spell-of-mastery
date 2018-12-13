@@ -1,0 +1,5 @@
+author: `Jeremias König 'Der_Wisch'`, `Nikita Sadkov`
+license: `CC-BY-SA 3.0` //while original is PD, this modification is CC-BY-SA 3.0
+origin: `http://opengameart.org/content/ghoul-hand`
+
+//this version was slightly edited by myself --Nikita Sadkov

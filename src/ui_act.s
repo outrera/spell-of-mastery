@@ -37,9 +37,16 @@ ui.on_unit_pick Unit =
 | if Unit.has{menu} then
      | MenuActName,XYZ,TargetSerial = Unit.get{menu}
      | As <= Acts.MenuActName.menu
+     | when As >< `<spell>`:
+       | Spells = Unit.acts.keep{?tab><spell}
+       | Back = Acts.m_back 
+       | As <= if Spells.size>>12
+               then [@Spells.take{12} Back @Spells.drop{12}]
+               else [Back @Spells]
   else if $curPanelTab >< unit then
      | As <= if Unit.removed then []
-             else [@Unit.acts.skip{?tab} @Unit.acts.keep{?tab}]
+             else [@Unit.acts.skip{?tab}
+                   @Unit.acts.keep{(?tab and ?tab<>spell)}]
   else leave
 | $update_panel_buttons{Unit As}
 

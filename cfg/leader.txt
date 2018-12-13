@@ -13,7 +13,7 @@ sight: 7
 speed: 28
 pickable: 1
 ai: unit
-inborn: (organic disciplined nocorpse leader)
+inborn: (organic disciplined nocorpse leader spellcaster)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
 acts: (act_fireball act_mastery)

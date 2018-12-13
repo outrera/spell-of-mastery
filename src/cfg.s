@@ -109,7 +109,7 @@ main.cfg_handle_acts =
   | A.pickChance <= PickChance
   | Acts."unit_[N]" <= A
 | for Name,Act Acts: Acts.Name <= act Name @Act.list.join
-| for Name,Act Acts: when Act.menu:
+| for Name,Act Acts: when Act.menu and Act.menu.0<>'<':
   | Act.menu <= map ActName Act.menu:
     | SubAct = Acts.ActName
     | less got SubAct:

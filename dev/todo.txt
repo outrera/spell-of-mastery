@@ -1,11 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- locking cursor cell, while picking fine xyz; out of grid placement should also allow placing multiple same typed non-unit objects into the same cell.
+- Better spellbook. Currently it completely clutters actions menus. A few slots for recently used spells.
+- Better flight spell animation
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset
 - map item, that would explore whole map for the player.
-- Draw darker version of stained glass, when it is outside (check for roo on the tile before it). Same algorithm could be used for interior walls.
+- Draw darker version of stained glass, when it is outside (check for roof on the tile before it). Same algorithm could be used for interior walls.
 - Make generic human character, using skeleton and knight sprites.
 - AI door pathfinding can be implemented by marking impassable all doors we don't have keys to.
 - move water into separate overlay, that way it could be animated and transparent.
