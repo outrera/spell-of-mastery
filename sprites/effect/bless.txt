@@ -1,4 +1,5 @@
 author: `Nikita Sadkov`
-xy: 22,-44
-frames: 44*44
-anims: | idle time-18 0
+xy: 14,-30
+frames: folder
+anims: | idle (idle0 3) (idle1 3) (idle2 3) (idle3 3) (idle4 3)
+              (idle5 3) (idle6 3) (idle7 3) (idle8 3) (idle9 3)
