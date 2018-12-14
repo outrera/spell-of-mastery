@@ -3,6 +3,6 @@ gold: 100
 range: 9000
 check: no{heavy `Creature is too heavy to be lifted.`},unit
 onInit: when{enemy},send_flying,visual{spell},sound{flight},endwhen,
-        when{not+enemy},add{flyer},visual{heal},sound{flight},endwhen
+        when{not+enemy},add{flyer},visual{wings},sound{flight},endwhen
 hint: flight
 tab: spell
