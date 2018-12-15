@@ -3,5 +3,5 @@ author: `Nikita Sadkov`, Nineball
 xy: 0,-10
 frames: folder
 anims: | idle (idle00 5) (idle01 5) (idle02 5) (idle03 5) (idle04 5)
-              (idle05 5) (idle06 5) (idle07 5) (idle08 5) (idle09 5)
+              (idle05 5) (idle06 5) (idle07 5) (idle08 7) (idle09 5)
               (idle10 5)

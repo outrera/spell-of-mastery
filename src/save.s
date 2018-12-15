@@ -28,7 +28,7 @@ unit.serialize = //unit serializer for savegames
 | when $active:
   | Genes = if $genes.end then 0
             else $genes.map{E=>[E.when E.name E.amount E.data]}
-  | check_for_list Me host $host
+  //| check_for_list Me host $host
   | Host = if $host and not $host.is_list then $host.id else 0
   | Goal = if $goal then [$goal.id $goal_act.name] else 0
   | Path = if $path.end then 0 else [$path 0]

@@ -2,6 +2,7 @@ use util
 
 ClassIdCounter = 1
 ZeroXY = [0 0]
+ActiveAIs = [unit visual door chest node item]
 
 type class{bank class_name Main
            title/0 icon/0
@@ -66,13 +67,9 @@ type class{bank class_name Main
 | when $height.is_list:
   | $fheight <= $height.2
   | $height <= $height.1
-| $active <= if Sprite.anims.idle.size>1 then 1
-             else if $inborn.size or $ai><unit or $ai><visual then 1
-             else if $ai><door then 1
-             else if $ai><chest then 1
-             else if $ai><item then 1
-             else if $text then 1
-             else 0
+| $active <= if Sprite.anims.idle.size>1 or $inborn.size or $text then 1
+             else if ActiveAIs.has{$ai} then 1
+             else 0 
 | when $active:
   | when Cost: $gold <= Cost.0
   | less $title: $title <= $class_name.title

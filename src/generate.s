@@ -138,7 +138,10 @@ site.generate W H BlueprintName =
     | swap FreeSpansX FreeSpansY
     | swap UsedSpansX UsedSpansY
     | swap W H
-| for PartName B.parts: $place_part{0 PartName}
+| for PartName B.parts:
+  | when PartName.is_list: PartName <= PartName.rand
+  | less $place_part{0 PartName}:
+    | say "failed to place [PartName]"
 | Ps = []
 | C = 0
 | for Y H: for X W:

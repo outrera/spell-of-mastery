@@ -1,6 +1,10 @@
-filler: c_house1
-parts: cp_ship cp_square cp_node1 cp_market cp_park
-spans: (riverh riverv)
+filler: c_house1 c_house2
+//no more than five large 2x2 parts can be placed on a single map
+parts: cp_church cp_barracks cp_rich_house
+       (cp_square cp_warehouse) (cp_park cp_tavern cp_market)
+       cp_ship cp_node1 cp_blacksmith
+       cp_shop
+spans: //(riverh riverv)
 playlist: forest
 //parentheses mean that only one of these could be placed,
 //entry: grass_entry

@@ -9,6 +9,7 @@ Leader abilities:
 - Sort spells into tiers, with caster having limited number of slots per tier, D&D or Chrono Cross style.
 
 General:
+- Random node placement tokens.
 - Inventory dialogue, which would also show what unit portrait and stats. Use Heroes of Might & Magic 4 template as layout. While creatures are hired and paid per mission, inventory items are preserved unless lost or their durability falls to 0. Such items can be either purchased in shop or found on mission.
 - Hero units, that can participate in several missions and unlock abilities, if some objectives for that here are achieved. For example, paladin hero may be required to participate in a mission against heretics to gain new abilities.
 - Some way to spy on what spells enemy has.

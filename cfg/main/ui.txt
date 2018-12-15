@@ -13,8 +13,8 @@ max_notes: 4 //number of simultaneous notifications on screen
 note_size: 256
 note_life: 5.0 // in seconds
 debug: 1
-default_site: forest
-//default_site: city
+//default_site: forest
+default_site: city
 //start: menu
-//start: site
-start: editor
+start: site
+//start: editor
