@@ -1,3 +1,2 @@
 author: `Nikita Sadkov`
 origin: `Spell of Mastery`
-xy: 4,-7

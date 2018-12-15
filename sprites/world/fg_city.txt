@@ -1,2 +1,2 @@
-author: `Nikita Sadkov`
+author: `rgbfumes`
 origin: `Spell of Mastery`

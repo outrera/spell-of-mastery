@@ -42,7 +42,7 @@ type world.widget{Main UI W H}
   all_sites
   free_sites
   picked //picked site
-  siteC/8
+  siteC/16
   siteLimX
   siteLimY/510
   incomeFactor
@@ -55,7 +55,7 @@ type world.widget{Main UI W H}
 | $bg <= $img{world_bg}
 | $mask <= $img{world_bg_mask}
 | $siteLimX <= $bg.w-$siteC
-| $fg <= @table: map N [site picked base city lair party ruin attack]
+| $fg <= @table: map N [site picked attacked base city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
 | for V,@Ks $cfg.tmap: for K Ks: $tmap.K <= V
 | for K,@Vs $cfg.sterra: $sterra.K <= Vs
@@ -85,11 +85,14 @@ world.draw FB X Y =
 | P = $picked
 | PickedId = if P then P.id else -1
 | for S $sites: when S.xy.0>0 and S.state <> raid:
-  | G = if S.id <> PickedId or
-           (PickBlink and not point_in_rect{S.rect $mice_xy})
-        then if S.attacker then $fg.attack else S.gfx
-        else $fg.picked
-  | FB.blit{S.xy.0-C S.xy.1-C G}
+  | if S.attacker and S.type><city then
+       FB.blit{S.xy.0-C S.xy.1-C $fg.attack}
+    else FB.blit{S.xy.0-C S.xy.1-C S.gfx}
+  | when S.id >< PickedId
+    | less PickBlink and not point_in_rect{S.rect $mice_xy}:
+      | FB.blit{S.xy.0-C S.xy.1-C $fg.picked}
+  | when S.attacker: when PickBlink:
+    | FB.blit{S.xy.0-C S.xy.1-C $fg.attacked}
 | when P:
   | when P.type><base:
     | FB.circle{#FFFFFF 0 [P.xy.0 P.xy.1] $cfg."base_reach"}
