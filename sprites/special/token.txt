@@ -2,3 +2,5 @@ author: `Nikita Sadkov`
 copyright: `Nikita Sadkov`
 recolor: 1
 xy: 0,15
+frames: folder
+anims: | idle (idle0 9)

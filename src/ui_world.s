@@ -120,21 +120,23 @@ ui.place_site_enemy =
 | Player = $site.players.5 //for now we use hardcoded player 5 for enemy
 | LeaderXYZ = []
 | for U $site.units: less U.removed: when U.owner.id >< 5:
-  | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
+  | when U.type><trigger_spawn_leader:
+    | push [U.xyz.copy U.facing] LeaderXYZ
   | when U.type><trigger_spawn_patrol:
-    | push U.xyz.copy Patrol
+    | push [U.xyz.copy U.facing] Patrol
     | U.free
   | when U.type><trigger_spawn_guard:
-    | push U.xyz.copy Guards
+    | push [U.xyz.copy U.facing] Guards
     | U.free
   | when U.type><trigger_spawn_ranged:
-    | push U.xyz.copy RGuards
+    | push [U.xyz.copy U.facing] RGuards
     | U.free
 | when LeaderXYZ.size:
-  | LeaderXYZ <= LeaderXYZ.shuffle
+  | XYZ,Facing = LeaderXYZ.shuffle.0
   | S = Player.alloc_unit{leader_heretic}
   | S.aistate <= \spawned
-  | S.move{LeaderXYZ.0}
+  | S.move{XYZ}
+  | S.pick_facing{Facing}
 | SBudget = max 100 ($world.site_gold+3)/4
 | STotal = 0
 | for S Spells: S.picks.(Player.id) <= 0
@@ -155,10 +157,11 @@ ui.place_site_enemy =
         @RGuards.drop{RSz}
         @Patrol.shuffle]
 | for Type [@Rs @Ms]: less Ps.end:
-  | XYZ = pop Ps
+  | XYZ,Facing = pop Ps
   | S = Player.alloc_unit{Type}
   | S.aistate <= if Patrol.has{XYZ} then \patrol else \guard
   | S.move{XYZ}
+  | S.pick_facing{Facing}
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
