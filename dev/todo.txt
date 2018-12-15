@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - World map needs movement animation and sounds, like when raiding party attacks city.
+- Use several types of setlements: village, hamlet and city. That would allow for more site types and make world map less ugly.
 - One shot spell items, that are usable on at the give location.
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset

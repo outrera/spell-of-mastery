@@ -1,2 +1,2 @@
-author: `Nikita Sadkov`
-origin: `Spell of Mastery`
+author: `OpenClipart-Vectors`,`Nikita Sadkov`
+origin: `https://pixabay.com/en/skull-greyskull-castle-gatehouse-575905/`
