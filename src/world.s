@@ -51,6 +51,7 @@ type world.widget{Main UI W H}
   site_gold //gold when player entered the site
   tmap/(t) //terrain map
   sterra/(t) //allowed terrain for sites
+  etsounds/(t) //sounds already played this turn
 | $cfg <= $main.cfg.world
 | $bg <= $img{world_bg}
 | $mask <= $img{world_bg_mask}
@@ -131,6 +132,7 @@ world.clear =
 | $seed <= LCG_M.rand
 | $turn_seed <= LCG_M.rand
 | $data.victories <= 0
+| for K,V $etsounds: $etsounds.K <= 0
 | $generate
 
 world.free_site S =
@@ -173,6 +175,11 @@ world.generate_xy Type =
 | less $can_place{Type X,Y}: _goto again
 | X,Y
 
+world.sound Sound =
+| when Sound and $etsounds.Sound^~{0} < $turn:
+  | $main.sound{Sound}
+  | $etsounds.Sound <= $turn
+
 world.generate_site Type xy/0 =
 | Lim = 
 | less $data."cnt_[Type]"^~{No 0}<$cfg."lim_[Type]"^~{No 1000}:
@@ -190,6 +197,9 @@ world.generate_site Type xy/0 =
 | when no S.gfx: S.gfx <= $fg.site
 | $sites.push{S}
 | $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}+1
+| Sound = if S.type><party then \w_enemy
+          else 0
+| $sound{Sound}
 | S
 
 world.generate =
@@ -216,6 +226,7 @@ world.update_parties Cities Parties =
       | C = Cs.($rand{Cs.size-1})
       | C.attacker <= P
       | P.state <= \raid
+      | $sound{w_raid}
     else
       | X = 0
       | Y = 0
