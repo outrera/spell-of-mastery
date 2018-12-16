@@ -172,6 +172,8 @@ ui.enter_site_proceed =
 | $site.data.serial <= if Site then Site.serial else 0
 | $place_site_player
 | $place_site_enemy
+| $site.human.data.gold += $world.gold
+| $world.gold <= 0
 | $begin_ingame{0}
 
 ui.enter_site_back =
