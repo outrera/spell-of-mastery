@@ -1,0 +1,8 @@
+author: `Steve 'Grahhhhh'`
+license: `Public Domain (CC0)`
+origin: `https://opengameart.org/content/animated-reveal-grid`
+xy: -24,-24
+frames: folder
+anims: | idle (idle0 3) (idle1 3) (idle2 3) (idle3 3) (idle4 3)
+              (idle5 3)
+              (idle4 3) (idle3 3) (idle2 3) (idle1 3) (idle0 3)

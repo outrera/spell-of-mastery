@@ -1,7 +1,7 @@
 use gui util widgets stack
 
-MoveSpeed = 0.75
-SoundDist = 0.5
+MoveTime = 0.75
+SoundDist = 0.3
 
 type world_site{Id World}
   world/World //world this sites belongs to
@@ -9,6 +9,7 @@ type world_site{Id World}
   serial //serial guaranteed to be unique for the duration of the game
   type //city, ruin, lair, base, party
   gfx //representation on world map
+  gfx2 //alternatve gfx for animation
   turn //turn this site came to life
   name
   attacker/0
@@ -18,6 +19,8 @@ type world_site{Id World}
   act/[0 0]
   tstart
   tfinish
+  move_time
+  hide
   state
   data
 
@@ -28,11 +31,13 @@ world_site.rect =
 world_site.move XY =
 | $xy.init{XY}
 
-world_site.anim_move XY =
+world_site.sched Act Target XY =
 | $xy_goal.init{XY}
 | $xy_from.init{$xy}
+| $act.init{Act,Target}
 | $tstart <= 0
 | $tfinish <= 0
+| $move_time <= MoveTime
 
 type world.widget{Main UI W H}
   main/Main
@@ -102,9 +107,11 @@ world.draw FB X Y =
 | P = $picked
 | PickedId = if P then P.id else -1
 | for S $sites: when S.xy.0>0 and S.state <> raid:
+  | when S.hide: pass
+  | Gfx = S.gfx2 or S.gfx
   | if S.attacker and S.type><city then
        FB.blit{S.xy.0-C S.xy.1-C $fg.attack}
-    else FB.blit{S.xy.0-C S.xy.1-C S.gfx}
+    else FB.blit{S.xy.0-C S.xy.1-C Gfx}
   | when S.id >< PickedId
     | less PickBlink and not point_in_rect{S.rect $mice_xy}:
       | FB.blit{S.xy.0-C S.xy.1-C $fg.picked}
@@ -211,15 +218,20 @@ world.generate_site Type xy/0 =
 | S.serial <= $serial++
 | S.turn <= $turn
 | S.xy.init{X,Y}
+| S.xy_goal.init{-100,-100}
+| S.act.init{0,0}
 | S.gfx <= $fg.Type
 | S.attacker <= 0
 | S.state <= 0
+| S.hide <= 0
 | when no S.gfx: S.gfx <= $fg.site
+| S.gfx2 <= 0
 | $sites.push{S}
 | $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}+1
-| Sound = if S.type><party then \w_enemy
-          else 0
-| $sound{Sound}
+| when $phase><spawn_sched:
+  | S.sched{spawn 0 S.xy}
+  | S.hide <= 1
+  | S.move_time <= MoveTime*0.5
 | S
 
 world.generate =
@@ -237,15 +249,15 @@ world.update_raids =
     | $free_site{S}
     | R = $generate_site{ruin xy/[X Y]}
 
-world.update_parties Cities Parties =
+world.sched_actions Cities Parties =
 | RR = $cfg."party_reach"
 | R = RR.float
 | for P Parties: less P.state:
-  | Cs = Cities.keep{C => (P.xy-C.xy).abs < R and not C.attacker}
+  | Cs = Cities.keep{C => (P.xy-C.xy).abs < R and not C.act.0><raided}
   | if Cs.size then
       | C = Cs.($rand{Cs.size-1})
-      | P.anim_move{C.xy}
-      | P.act.init{raid,C}
+      | C.act.0 <= \raided
+      | P.sched{raid C C.xy}
     else
       | X = 0
       | Y = 0
@@ -257,8 +269,19 @@ world.update_parties Cities Parties =
           | _goto found
         | when I++ > 9000: leave
       | _label found
-      | P.anim_move{X,Y}
-      | P.act.init{move,0}
+      | P.sched{move 0 X,Y}
+
+world.sched_spawns Lairs =
+| $phase <= \spawn_sched
+| LSLC = $cfg.lair_spawn_lair_chance
+| LSMC = $cfg.lair_spawn_monster_chance
+| LH = $cfg.lair_handicap
+| for L Lairs:
+  | A = $turn - L.turn
+  | when $rand{5}<A and $rand{100}<LSMC: $generate_site{party}
+  | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
+| when $rand{100}<LSMC: $generate_site{party}
+| when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
 
 world.end_turn =
 | when $phase<>normal: leave
@@ -295,44 +318,48 @@ world.end_turn =
 | $turn_seed <= ($turn_seed*LCG_A + LCG_B) % LCG_M
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
 | $gold += $cfg.passive_income*Bases.size
-| $update_parties{Cities Parties}
+| $sched_actions{Cities Parties}
 | for B Bases: B.state <= 0
-| LSLC = $cfg.lair_spawn_lair_chance
-| LSMC = $cfg.lair_spawn_monster_chance
-| LH = $cfg.lair_handicap
-| for L Lairs:
-  | A = $turn - L.turn
-  | when $rand{5}<A and $rand{100}<LSMC: $generate_site{party}
-  | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
-| when $rand{100}<LSMC: $generate_site{party}
-| when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
-| $phase <= \raiders
+| $sched_spawns{Lairs}
+| $phase <= \move
 
 world.update =
 | when $phase><normal: leave
-| when $phase><raiders
-  | for S $sites.list: when S.xy_goal.0 >> 0:
-    | T = get_gui{}.ticks
-    | less S.tstart
-      | S.tstart <= get_gui{}.ticks
-      | S.tfinish <= S.tstart+MoveSpeed
-    | when T < S.tfinish:
-      | DX,DY = S.xy_goal-S.xy_from
-      | TD = (T-S.tstart)/(S.tfinish-S.tstart)
-      | S.xy.init{S.xy_from + [(DX.float*TD).int (DY.float*TD).int]}
-      | leave
-    | S.xy.init{S.xy_goal}
-    | S.xy_goal.init{-100,-100}
-    | Act,Goal = S.act
-    | when Act><raid:
-      | Goal.attacker <= S
-      | S.state <= \raid
-      | $sound{w_raid}
-      | when $picked and $picked.id >< S.id: $picked <= 0
+| for S $sites.list: when S.xy_goal.0 >> 0 and S.act.0><$phase:
+  | Act,Goal = S.act
+  | S.hide <= 0
+  | T = get_gui{}.ticks
+  | less S.tstart
+    | S.tstart <= get_gui{}.ticks
+    | S.tfinish <= S.tstart+S.move_time
+  | when T < S.tfinish:
+    | DX,DY = S.xy_goal-S.xy_from
+    | TD = (T-S.tstart)/(S.tfinish-S.tstart)
+    | S.xy.init{S.xy_from + [(DX.float*TD).int (DY.float*TD).int]}
+    | when Act><spawn:
+      | Wrp = $main.sprites.effect_warp
+      | Fs = Wrp.anims.idle
+      | N = min (Fs.size.float*TD).int Fs.size-1
+      | when N<Fs.size/2: S.hide <= 1
+      | S.gfx2 <= Wrp.get_frame_at_angle{Fs.N.0 3}.0
     | leave
-  | $phase <= \spawn
-| when $phase><spawn
-  | $phase <= \normal
+  | S.xy.init{S.xy_goal}
+  | S.xy_goal.init{-100,-100}
+  | S.act.init{0,0}
+  | S.gfx2 <= 0
+  | when Act><raid:
+    | S.state <= \raid
+    | Goal.attacker <= S
+    | $sound{w_raid}
+    | when $picked and $picked.id >< S.id: $picked <= 0
+  | when Act><spawn:
+    | when S.type><party or S.type><lair: $sound{w_enemy}
+  | leave
+| $phase <= case $phase
+    move | \raid
+    raid | \spawn
+    spawn | \normal
+    Else | \normal
 
 world.base_placement =
 | less $data."cnt_base"^~{No 0}<$cfg."lim_base"^~{No 1000}:
