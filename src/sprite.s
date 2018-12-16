@@ -85,6 +85,10 @@ sprite.get_frame_at_angle Index Angle =
   | As.Angle <= R
 | R,Mirror
 
+sprite.lerp D Angle Anim = //D ranges from 0.0 to 1.0
+| Fs = $anims.Anim
+| N = min (Fs.size.float*D).int Fs.size-1
+| $get_frame_at_angle{Fs.N.0 Angle}.0
 
 sprite.init =
 | $path <= if $frame_format >< folder then "[$path]/" else "[$path].png"

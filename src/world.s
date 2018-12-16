@@ -10,6 +10,7 @@ type world_site{Id World}
   type //city, ruin, lair, base, party
   gfx //representation on world map
   gfx2 //alternatve gfx for animation
+  gfx2xy/[0 0]
   turn //turn this site came to life
   name
   attacker/0
@@ -108,10 +109,13 @@ world.draw FB X Y =
 | PickedId = if P then P.id else -1
 | for S $sites: when S.xy.0>0 and S.state <> raid:
   | when S.hide: pass
-  | Gfx = S.gfx2 or S.gfx
-  | if S.attacker and S.type><city then
+  | if S.attacker and S.type><city and not S.gfx2 then
        FB.blit{S.xy.0-C S.xy.1-C $fg.attack}
-    else FB.blit{S.xy.0-C S.xy.1-C Gfx}
+    else
+    | when not S.gfx2 or S.act.0><raze:
+      | FB.blit{S.xy.0-C S.xy.1-C S.gfx}
+    | when S.gfx2:
+      | FB.blit{S.xy.0-C+S.gfx2xy.0 S.xy.1-C+S.gfx2xy.1 S.gfx2}
   | when S.id >< PickedId
     | less PickBlink and not point_in_rect{S.rect $mice_xy}:
       | FB.blit{S.xy.0-C S.xy.1-C $fg.picked}
@@ -226,6 +230,7 @@ world.generate_site Type xy/0 =
 | S.hide <= 0
 | when no S.gfx: S.gfx <= $fg.site
 | S.gfx2 <= 0
+| S.gfx2xy.init{0,0}
 | $sites.push{S}
 | $data."cnt_[Type]" <= $data."cnt_[Type]"^~{No 0}+1
 | when $phase><spawn_sched:
@@ -241,19 +246,18 @@ world.generate =
 
 //any city remaining in raid state at the end of the turn
 //gets turned into ruins
-world.update_raids =
+world.sched_raze =
 | for S $sites:
   | when S.type >< city and S.attacker:
-    | $free_site{S.attacker}
-    | X,Y = S.xy
-    | $free_site{S}
-    | R = $generate_site{ruin xy/[X Y]}
+    | S.sched{raze 0 S.xy}
 
 world.sched_actions Cities Parties =
 | RR = $cfg."party_reach"
 | R = RR.float
 | for P Parties: less P.state:
-  | Cs = Cities.keep{C => (P.xy-C.xy).abs < R and not C.act.0><raided}
+  | Cs = Cities.keep{C => (P.xy-C.xy).abs < R
+                          and not C.act.0><raided
+                          and not C.attacker}
   | if Cs.size then
       | C = Cs.($rand{Cs.size-1})
       | C.act.0 <= \raided
@@ -291,7 +295,7 @@ world.end_turn =
 | less $sites.list.any{?type><city}:
   | $notify{"The last city has fallen. It is game over."}
   | leave
-| $update_raids
+| $sched_raze
 | Ss = $sites.list
 | $sites.clear
 | Lairs = []
@@ -321,7 +325,7 @@ world.end_turn =
 | $sched_actions{Cities Parties}
 | for B Bases: B.state <= 0
 | $sched_spawns{Lairs}
-| $phase <= \move
+| $phase <= \raze
 
 world.update =
 | when $phase><normal: leave
@@ -332,21 +336,28 @@ world.update =
   | less S.tstart
     | S.tstart <= get_gui{}.ticks
     | S.tfinish <= S.tstart+S.move_time
+    | when Act><raze: $sound{dragon_flame}
   | when T < S.tfinish:
     | DX,DY = S.xy_goal-S.xy_from
     | TD = (T-S.tstart)/(S.tfinish-S.tstart)
     | S.xy.init{S.xy_from + [(DX.float*TD).int (DY.float*TD).int]}
     | when Act><spawn:
-      | Wrp = $main.sprites.effect_warp
-      | Fs = Wrp.anims.idle
-      | N = min (Fs.size.float*TD).int Fs.size-1
-      | when N<Fs.size/2: S.hide <= 1
-      | S.gfx2 <= Wrp.get_frame_at_angle{Fs.N.0 3}.0
+      | when TD < 0.5: S.hide <= 1
+      | S.gfx2 <= $main.sprites.effect_warp.lerp{TD 3 idle}
+    | when Act><raze:
+      | S.gfx2 <= $main.sprites.effect_incinerate.lerp{TD 3 idle}
+      | S.gfx2xy.init{-16,-110}
     | leave
   | S.xy.init{S.xy_goal}
   | S.xy_goal.init{-100,-100}
   | S.act.init{0,0}
   | S.gfx2 <= 0
+  | S.gfx2xy.init{0,0}
+  | when Act><raze:
+    | $free_site{S.attacker}
+    | X,Y = S.xy
+    | $free_site{S}
+    | R = $generate_site{ruin xy/[X Y]}
   | when Act><raid:
     | S.state <= \raid
     | Goal.attacker <= S
@@ -356,6 +367,7 @@ world.update =
     | when S.type><party or S.type><lair: $sound{w_enemy}
   | leave
 | $phase <= case $phase
+    raze | \move
     move | \raid
     raid | \spawn
     spawn | \normal
