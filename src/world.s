@@ -1,5 +1,8 @@
 use gui util widgets stack
 
+MoveSpeed = 0.75
+SoundDist = 0.5
+
 type world_site{Id World}
   world/World //world this sites belongs to
   id/Id // numeric id, which can be reused
@@ -10,6 +13,11 @@ type world_site{Id World}
   name
   attacker/0
   xy/[-100 -100]
+  xy_from/[-100 -100]
+  xy_goal/[-100 -100]
+  act/[0 0]
+  tstart
+  tfinish
   state
   data
 
@@ -19,6 +27,12 @@ world_site.rect =
 
 world_site.move XY =
 | $xy.init{XY}
+
+world_site.anim_move XY =
+| $xy_goal.init{XY}
+| $xy_from.init{$xy}
+| $tstart <= 0
+| $tfinish <= 0
 
 type world.widget{Main UI W H}
   main/Main
@@ -52,6 +66,7 @@ type world.widget{Main UI W H}
   tmap/(t) //terrain map
   sterra/(t) //allowed terrain for sites
   etsounds/(t) //sounds already played this turn
+  phase/normal
 | $cfg <= $main.cfg.world
 | $bg <= $img{world_bg}
 | $mask <= $img{world_bg_mask}
@@ -68,6 +83,7 @@ type world.widget{Main UI W H}
 
 
 world.render =
+| $update
 | Cur = \ui_cursor_point
 | when $mode><newBase:
   | Can = $can_place{base $mice_xy}
@@ -132,7 +148,8 @@ world.clear =
 | $seed <= LCG_M.rand
 | $turn_seed <= LCG_M.rand
 | $data.victories <= 0
-| for K,V $etsounds: $etsounds.K <= 0
+| $phase <= \normal
+| for K,V $etsounds: $etsounds.K <= 0.0
 | $generate
 
 world.free_site S =
@@ -176,9 +193,12 @@ world.generate_xy Type =
 | X,Y
 
 world.sound Sound =
-| when Sound and $etsounds.Sound^~{0} < $turn:
+| GUI = get_gui{}
+| when no GUI: leave //GUI is not ready yet
+| T = GUI.ticks
+| when Sound and $etsounds.Sound^~{0.0} < T:
   | $main.sound{Sound}
-  | $etsounds.Sound <= $turn
+  | $etsounds.Sound <= T + SoundDist
 
 world.generate_site Type xy/0 =
 | Lim = 
@@ -224,9 +244,8 @@ world.update_parties Cities Parties =
   | Cs = Cities.keep{C => (P.xy-C.xy).abs < R and not C.attacker}
   | if Cs.size then
       | C = Cs.($rand{Cs.size-1})
-      | C.attacker <= P
-      | P.state <= \raid
-      | $sound{w_raid}
+      | P.anim_move{C.xy}
+      | P.act.init{raid,C}
     else
       | X = 0
       | Y = 0
@@ -238,10 +257,11 @@ world.update_parties Cities Parties =
           | _goto found
         | when I++ > 9000: leave
       | _label found
-      | P.move{X,Y}
-| when $picked and $picked.state><raid: $picked <= 0
+      | P.anim_move{X,Y}
+      | P.act.init{move,0}
 
 world.end_turn =
+| when $phase<>normal: leave
 | when $turn><0 and $data."cnt_base"^~{No 0}<1:
   | $notify{"Place a base first! Click that flag icon."}
   | leave
@@ -286,6 +306,33 @@ world.end_turn =
   | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
 | when $rand{100}<LSMC: $generate_site{party}
 | when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
+| $phase <= \raiders
+
+world.update =
+| when $phase><normal: leave
+| when $phase><raiders
+  | for S $sites.list: when S.xy_goal.0 >> 0:
+    | T = get_gui{}.ticks
+    | less S.tstart
+      | S.tstart <= get_gui{}.ticks
+      | S.tfinish <= S.tstart+MoveSpeed
+    | when T < S.tfinish:
+      | DX,DY = S.xy_goal-S.xy_from
+      | TD = (T-S.tstart)/(S.tfinish-S.tstart)
+      | S.xy.init{S.xy_from + [(DX.float*TD).int (DY.float*TD).int]}
+      | leave
+    | S.xy.init{S.xy_goal}
+    | S.xy_goal.init{-100,-100}
+    | Act,Goal = S.act
+    | when Act><raid:
+      | Goal.attacker <= S
+      | S.state <= \raid
+      | $sound{w_raid}
+      | when $picked and $picked.id >< S.id: $picked <= 0
+    | leave
+  | $phase <= \spawn
+| when $phase><spawn
+  | $phase <= \normal
 
 world.base_placement =
 | less $data."cnt_base"^~{No 0}<$cfg."lim_base"^~{No 1000}:
@@ -393,6 +440,7 @@ world.mode_pick M =
 world.cancel_mode = $set_mode{0}
 
 world.input In =
+| when $phase<>normal: leave
 | case In
   [mice_move _ XY]
     | $mice_xy.init{XY}
