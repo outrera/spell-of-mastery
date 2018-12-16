@@ -112,7 +112,7 @@ world.draw FB X Y =
   | if S.attacker and S.type><city and not S.gfx2 then
        FB.blit{S.xy.0-C S.xy.1-C $fg.attack}
     else
-    | when not S.gfx2 or S.act.0><raze:
+    | when not S.gfx2:
       | FB.blit{S.xy.0-C S.xy.1-C S.gfx}
     | when S.gfx2:
       | FB.blit{S.xy.0-C+S.gfx2xy.0 S.xy.1-C+S.gfx2xy.1 S.gfx2}
@@ -336,7 +336,9 @@ world.update =
   | less S.tstart
     | S.tstart <= get_gui{}.ticks
     | S.tfinish <= S.tstart+S.move_time
-    | when Act><raze: $sound{dragon_flame}
+    | when Act><raze:
+      | $sound{dragon_flame}
+      | $generate_site{ruin xy/S.xy}
   | when T < S.tfinish:
     | DX,DY = S.xy_goal-S.xy_from
     | TD = (T-S.tstart)/(S.tfinish-S.tstart)
@@ -346,7 +348,7 @@ world.update =
       | S.gfx2 <= $main.sprites.effect_warp.lerp{TD 3 idle}
     | when Act><raze:
       | S.gfx2 <= $main.sprites.effect_incinerate.lerp{TD 3 idle}
-      | S.gfx2xy.init{-16,-110}
+      | S.gfx2xy.init{-26,-112}
     | leave
   | S.xy.init{S.xy_goal}
   | S.xy_goal.init{-100,-100}
@@ -355,9 +357,7 @@ world.update =
   | S.gfx2xy.init{0,0}
   | when Act><raze:
     | $free_site{S.attacker}
-    | X,Y = S.xy
     | $free_site{S}
-    | R = $generate_site{ruin xy/[X Y]}
   | when Act><raid:
     | S.state <= \raid
     | Goal.attacker <= S
