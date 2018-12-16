@@ -77,7 +77,8 @@ type world.widget{Main UI W H}
 | $bg <= $img{world_bg}
 | $mask <= $img{world_bg_mask}
 | $siteLimX <= $bg.w-$siteC
-| $fg <= @table: map N [site picked attacked base city lair party ruin attack]
+| $fg <= @table: map N [site picked attacked
+                        base airship city lair party ruin attack]
   | [N $img{"world_fg_[N]"}]
 | for V,@Ks $cfg.tmap: for K Ks: $tmap.K <= V
 | for K,@Vs $cfg.sterra: $sterra.K <= Vs
@@ -365,6 +366,9 @@ world.update =
     | when $picked and $picked.id >< S.id: $picked <= 0
   | when Act><spawn:
     | when S.type><party or S.type><lair: $sound{w_enemy}
+  | when Act><flight:
+    | $ui.enter_site{Goal}
+    | $free_site{S}
   | leave
 | $phase <= case $phase
     raze | \move
@@ -466,14 +470,14 @@ world.mode_pick M =
     | leave airship
   | S = $site_at{$mice_xy}
   | less S: leave airship
-  | when S.type><party:
-    | $ui.enter_site{S}
-    | leave 0
-  | when S.type><city and S.attacker:
-    | $ui.enter_site{S}
-    | leave 0
-  | $notify{"Nothing to investigate there."}
-  | leave airship
+  | ValidDst = 
+  | when S.type><part
+        or (S.type<>city and S.attacker):
+    | $notify{"Nothing to investigate there."}
+    | leave airship
+  | A = $generate_site{airship xy/$picked.xy}
+  | A.sched{flight S S.xy}
+  | $phase <= \flight
 | leave 0
 
 world.cancel_mode = $set_mode{0}

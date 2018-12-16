@@ -176,7 +176,7 @@ ui.enter_site_proceed =
 
 ui.enter_site_back =
 | $world.gold <= $world.site_gold
-| $pick{world}
+| $pick_world
 
 enter_site_pick_infoline Icon =
 | Act = Icon.data
@@ -303,4 +303,5 @@ ui.enter_site Site =
   | Act.picked <= 0
   | Icon.text.2 <= 0
   | Icon.hidden <= 1
+| $main.music{briefing}
 | $pick{enter_site}
