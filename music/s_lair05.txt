@@ -1,0 +1,4 @@
+Author: `Glass <la_recherche at hotmail dot com>`
+License: `GPL2`
+Origin: `http://www.worldforge.org/index.php/downloads/`
+//originally glitterdark_ambientloop.ogg by Glass <la_recherche at hotmail dot com>

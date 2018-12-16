@@ -1,0 +1,4 @@
+author: `Dan-Knoflicek-Macro (https://soundcloud.com/macro-1)`
+license: `CC-BY 3.0`
+origin: `http://opengameart.org/users/macro`
+//originally World Travel.mp3

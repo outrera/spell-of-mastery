@@ -1,0 +1,6 @@
+Author: `Pascal Belisle <pacethemusician@hotmail.com>  (https://soundcloud.com/pascalbelisle)`
+License: `CC-BY 3.0`
+Origin: `https://ansimuz.itch.io/tiny-rpg-forest`
+//Music License
+//You are free to use the music in your projects as long as you give appropriate credit.
+ 

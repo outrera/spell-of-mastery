@@ -1,0 +1,4 @@
+author: `Dan-Knoflicek-Macro (https://soundcloud.com/macro-1)`, `Nikita Sadkov`
+license: `CC-BY 3.0`
+origin: `http://opengameart.org/users/macro`
+//edited out of World Travel.mp3

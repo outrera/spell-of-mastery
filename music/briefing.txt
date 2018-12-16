@@ -1,0 +1,3 @@
+Author: `Patrick de Arteaga 'Varon Kein' (patrickdearteaga.com)`
+License: `CC-BY 3.0`
+Origin: `https://opengameart.org/content/mc-infested-city`

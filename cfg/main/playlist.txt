@@ -1,3 +1,2 @@
-forest: ingame01,ingame02,ingame03,ingame04,
-        ingame05,ingame06,ingame07,ingame08,
-        ingame09,ingame10,ingame11
+forest: s_forest01,s_forest02,s_forest03,s_forest04,s_forest05
+city: s_city01,s_city02,s_city03,s_city04,s_city05,s_city06

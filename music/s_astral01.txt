@@ -1,0 +1,3 @@
+Author: `Johan Brodd 'jobromedia'`
+License: `GPL3`
+Origin: `http://opengameart.org/content/at-the-dimensional-gates`,`http://opengameart.org/content/crystaline-caverns`

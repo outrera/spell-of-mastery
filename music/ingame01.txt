@@ -1,3 +1,0 @@
-author: `Brylie Christopher Oxley 'brylie'`, `fisu (https://freesound.org/people/fisu/)`
-license: `CC-BY 4.0`
-origin: `https://opengameart.org/content/brylie-christopher-oxley-morning-birdsong`

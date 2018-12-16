@@ -1,0 +1,3 @@
+Author: `Thor Christopher Arisland 'tcarisland' (http://www.tcarisland.com)`
+License: `CC-BY 4.0`
+Origin: `https://opengameart.org/content/ice-cold`

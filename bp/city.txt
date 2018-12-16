@@ -5,6 +5,6 @@ parts: cp_church cp_barracks cp_rich_house
        cp_ship cp_node1 cp_blacksmith
        cp_shop
 spans: //(riverh riverv)
-playlist: forest
+playlist: city
 //parentheses mean that only one of these could be placed,
 //entry: grass_entry

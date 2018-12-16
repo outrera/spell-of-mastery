@@ -2,6 +2,6 @@ icon: spell_bless
 gold: 20
 range: 9000
 check: no{undead `Can't bless undead creature`},unit
-onInit: add{bless},strip{fear},visual{bless},sound{heal}
+onInit: add{bless},strip{fear},visual{bless},sound{bless}
 hint: bless
 tab: spell
