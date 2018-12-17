@@ -106,7 +106,7 @@ ui.create_panel_tab_menu =
   | $loadSiteDlg.folder <= if $site.editor then $mapsFolder else $savesFolder
 | ExitIcon = icon menu_exit: Icon =>
   | $confirm{"Sure want to exit?" |$0 yes => $pick_title_menu}
-| LeaveIcon = icon menu_leave: Icon =>
+| LeaveIcon = icon menu_world: Icon =>
   | $confirm{"Leave this site?"
      |$0 yes =>
        | $pick_world
