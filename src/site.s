@@ -293,7 +293,8 @@ site.new_game =
     | //PLACEHOLDER
 | when got@@it $players.find{?human}: $human <= it
 | handle_attack_triggers InitedUnits
-| $end_turn
+| $turn <= 1
+| $player <= 1
 | $paused <= 0
 
 site.notify Text = $main.ui.notify{Text}

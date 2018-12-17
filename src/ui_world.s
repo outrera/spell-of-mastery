@@ -61,6 +61,7 @@ ui.enter_site_proceed =
 | $generate{6 6 Type}
 | $site.data.serial <= if Site then Site.serial else 0
 | $place_site_players
+| $site.new_game
 | $begin_ingame{0}
 
 ui.enter_site_back =

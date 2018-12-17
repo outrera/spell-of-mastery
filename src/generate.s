@@ -172,7 +172,6 @@ site.generate_human_player Gold PlayerActs =
     | when U.type><trigger_spawn_item: push U.xyz ItemPlaces
     | when U.type><trigger_spawn_patrol: push U.xyz Ls
     | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
-| $new_game
 //| $players.1.make_ally{$players.2}
 //| $players.2.make_ally{$players.1}
 | Acts = $main.acts

@@ -6,6 +6,6 @@ cost: 2
 cool: 5
 range: 6
 check: seen,unit
-onInit: victory{owner hello},missile{fireball},visual{fbhit},sound{explosion},resist,harm{5}
+onInit: missile{fireball},visual{fbhit},sound{explosion},resist,harm{5}
 hint: harm
 

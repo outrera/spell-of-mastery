@@ -16,4 +16,4 @@ ai: unit
 inborn: (organic disciplined nocorpse leader spellcaster)
 onHit: missile{bolt},resist,hit{user},visual{bolt_impact},sound{explosion}
 onMove: sound{step}
-acts: (act_fireball act_mastery)
+acts: (act_fireball act_mastery act_win)

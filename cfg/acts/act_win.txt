@@ -1,0 +1,8 @@
+icon: spell_bless
+title: `Win the Map`
+cool: 0
+check: owned,unit
+onInit: victory{owner hello}
+onEnd: ()
+range: 0
+hint: win
