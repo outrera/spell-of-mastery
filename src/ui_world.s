@@ -1,7 +1,7 @@
 use gui widgets ui_icon ui_widgets world
 
 ui.create_world_base_tab =
-| icon world_airship: Icon => $world.airship_targeting
+| icon world_compass: Icon => $world.airship_targeting
 
 ui.create_world_city_tab =
 | Shop = icon world_shop: Icon => $enter_shop
