@@ -476,7 +476,7 @@ world.mode_pick M =
   | S = $site_at{$mice_xy}
   | less S: leave airship
   | ValidDst = 
-  | when S.type><part
+  | less S.type><party
         or (S.type<>city and S.attacker):
     | $notify{"Nothing to investigate there."}
     | leave airship
