@@ -35,7 +35,7 @@ view.handle_picked_act Target =
 view.handle_pick =
 | Unit = $site.nil
 | when@@it $site.cell{@$cursor}.block:
-  | when it.ai><unit:
+  | when it.ai><unit and it.pickable:
     | less it.invisible and it.owner.is_enemy{$site.human}:
       | Unit <= it
 | Player = $player

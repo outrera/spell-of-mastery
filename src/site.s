@@ -241,6 +241,7 @@ reinit_units Us =
   | Facing = U.facing
   | XYZ.init{U.xyz}
   | FXYZ.init{U.fxyz}
+  | AIState = U.aistate
   | when U.leader: U.hp <= U.class.hp
   | U.free
   | less U.ordered.type><die:
@@ -248,6 +249,7 @@ reinit_units Us =
     | U.move{XYZ}
     | U.pick_facing{Facing}
     | U.fxyz.init{FXYZ}
+    | U.aistate <= AIState
     | push U InitedUnits
 | InitedUnits
 

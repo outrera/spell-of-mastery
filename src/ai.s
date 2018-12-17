@@ -68,8 +68,7 @@ unit.ai_pick_target Act =
     | for T Ts: for C T.cell.neibs{}{?floor}:
       | when C.vacant and T.xyz.2-C.xyz.2 > -1: push C.xyz TR
     | Ts <= TR.keep{T => Act.validate{Me T 0 0}}
-    | when Ts.end: 0
-    | leave Ts.rand
+    | leave: if Ts.end then 0 else Ts.rand
   else if Hint >< punish then
     | Ts <= Ts.keep{?is_enemy{Me}}.keep{?punish_hp>3}
     | Ts <= Ts.keep{T=>T.xyz.mdist{$xyz}><1}
@@ -94,7 +93,7 @@ unit.ai_pick_target Act =
 | for Flag Act.flags //avoid overriding
   | FlagN = getUnitFlagsTable{}.Flag
   | when got FlagN: Ts <= Ts.skip{T => T.flags.bit{FlagN}}
-| if Ts.size then Ts.rand else 0
+| if Ts.end then 0 else Ts.rand
 
 unit.ai_ability_sub Act =
 | when Act.mov > $moves: leave 0

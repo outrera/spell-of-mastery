@@ -221,6 +221,7 @@ site.generate_human_player Gold PlayerActs =
 site.generate_ai Side Budget SpellBudget Units Spells Rand =
 | Total = 0
 | Us = Units.shuffle
+//| Budget <= 10000
 | Picked = []
 | for U Us: when U.gold<<100 or (Budget-Total)/max{1 U.gold}>5:
   | Count = max 1 Rand{U.maxPicks}
