@@ -1,0 +1,5 @@
+author: `KnoblePersona`
+license: `CC-BY 3.0`
+origin: `https://opengameart.org/content/pine-tree-pack`
+xy: 0,0
+class: height,0,foldable,1

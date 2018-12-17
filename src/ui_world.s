@@ -37,131 +37,21 @@ ui.generate W H Blueprint =
 | $site.generate{W H Blueprint}
 | $view.clear
 
-ui.place_site_player = //should it be part site?
-| Ls = []
-| LeaderXYZ = []
-| ItemPlaces = []
-| KeyPlaces = dup 16 []
-| DoorPlaces = dup 16 []
-| for U $site.units: less U.removed:
-  | when U.type><trigger_spawn_key:
-    | push U.xyz KeyPlaces.(U.owner.id)
-  | when U.type><trigger_spawn_door:
-    | push U.xyz DoorPlaces.(U.owner.id)
-  | when U.owner.id >< 1:
-    | when U.type><trigger_spawn_item: push U.xyz ItemPlaces
-    | when U.type><trigger_spawn_patrol: push U.xyz Ls
-    | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
-| $site.new_game
-//| $site.players.1.make_ally{$site.players.2}
-//| $site.players.2.make_ally{$site.players.1}
-| Acts = $main.acts
-| for Name,Act Acts:
-  | Act.picks.($site.human.id) <= Act.picked
-  | $site.human.enable{Act Act.researched}
-| Ls = Ls.shuffle
-| for Act $enterSiteIcons1{}{?data}:
-  | when Act.picked>0 and Act.tab><summon: less Ls.end:
-    | Type = Act.name
-    | times I Act.picked:
-      | XYZ = pop Ls
-      | S = $site.human.alloc_unit{Type}
-      | S.aistate <= \spawned
-      | S.move{XYZ}
-| Items = $cfg.site.spawn_items.group{2}
-| TotalDensity = Items{?1}.sum.float
-| when Items.size: for XYZ ItemPlaces.shuffle:
-  | for (I=0; I<1000000; I++):
-    | ItemName,ItemDensity = Items.loop{I}
-    | when 1.0.rand < ItemDensity.float/TotalDensity:
-      | Item = $site.human.alloc_unit{"item_[ItemName]"}
-      | Item.aistate <= \spawned
-      | Item.move{XYZ}
-      | done
-| for OwnerId,Places KeyPlaces.i: when Places.size:
-  | Places <= Places.shuffle
-  | S = $site.players.OwnerId.alloc_unit{item_key}
-  | S.aistate <= \spawned
-  | S.move{Places.0}
-| for OwnerId,Places DoorPlaces.i: when Places.size:
-  | Places <= Places.shuffle
-  | S = $site.players.OwnerId.alloc_unit{special_door_locked}
-  | S.aistate <= \spawned
-  | S.move{Places.0}
-  | for XYZ Places.tail: //remaining doors are unlocked
-    | S = $site.players.OwnerId.alloc_unit{special_door}
-    | S.aistate <= \spawned
-    | S.move{XYZ}
-| when LeaderXYZ.size:
-  | LeaderXYZ <= LeaderXYZ.shuffle
-  | S = $site.human.alloc_unit{leader_mage}
-  | S.aistate <= \spawned
-  | S.move{LeaderXYZ.0}
-
-ui.place_site_enemy =
+ui.place_ai_player =
 | Budget = max 400 ($world.site_gold*3+3)/4
+| SpellBudget = max 100 ($world.site_gold+3)/4
 | Units = []
 | Spells = []
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | if Act.tab><summon then push Act Units
     else push Act Spells
-| Total = 0
-| Us = Units.shuffle
-| Picked = []
-| for U Us: when U.gold<<100 or (Budget-Total)/max{1 U.gold}>5:
-  | Count = max 1 $world.rand{U.maxPicks}
-  | times I Count: when Total+U.gold << Budget:
-    | Total += U.gold
-    | push U Picked
-| Patrol = []
-| Guards = []
-| RGuards = []
-| Player = $site.players.5 //for now we use hardcoded player 5 for enemy
-| LeaderXYZ = []
-| for U $site.units: less U.removed: when U.owner.id >< 5:
-  | when U.type><trigger_spawn_leader:
-    | push [U.xyz.copy U.facing] LeaderXYZ
-  | when U.type><trigger_spawn_patrol:
-    | push [U.xyz.copy U.facing] Patrol
-    | U.free
-  | when U.type><trigger_spawn_guard:
-    | push [U.xyz.copy U.facing] Guards
-    | U.free
-  | when U.type><trigger_spawn_ranged:
-    | push [U.xyz.copy U.facing] RGuards
-    | U.free
-| when LeaderXYZ.size:
-  | XYZ,Facing = LeaderXYZ.shuffle.0
-  | S = Player.alloc_unit{leader_heretic}
-  | S.aistate <= \spawned
-  | S.move{XYZ}
-  | S.pick_facing{Facing}
-| SBudget = max 100 ($world.site_gold+3)/4
-| STotal = 0
-| for S Spells: S.picks.(Player.id) <= 0
-| Ss = Spells.shuffle
-| for S Ss: when S.gold<<100 or (SBudget-STotal)/max{1 S.gold}>5:
-  | Count = max 1 $world.rand{S.maxPicks}
-  | times I Count: when STotal+S.gold << SBudget:
-    | STotal += S.gold
-    | S.picks.(Player.id) += 1
-| Picked <= Picked{?name}.shuffle
-| RTs = [unit_blob unit_goblin unit_elf unit_vampire unit_observer]
-| Rs = Picked.keep{U => RTs.has{U}}
-| Ms = Picked.skip{U => RTs.has{U}}
-| RSz = min RGuards.size Rs.size
-| RGuards <= RGuards.shuffle
-| Ps = [@RGuards.take{RSz}
-        @Guards.shuffle
-        @RGuards.drop{RSz}
-        @Patrol.shuffle]
-| for Type [@Rs @Ms]: less Ps.end:
-  | XYZ,Facing = pop Ps
-  | S = Player.alloc_unit{Type}
-  | S.aistate <= if Patrol.has{XYZ} then \patrol else \guard
-  | S.move{XYZ}
-  | S.pick_facing{Facing}
+| $site.generate_ai{5 Budget SpellBudget Units Spells | N => $world.rand{N}}
+
+ui.place_site_players =
+| $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
+| $world.gold <= 0
+| $place_ai_player
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
@@ -170,10 +60,7 @@ ui.enter_site_proceed =
          else \forest
 | $generate{6 6 Type}
 | $site.data.serial <= if Site then Site.serial else 0
-| $place_site_player
-| $place_site_enemy
-| $site.human.data.gold += $world.gold
-| $world.gold <= 0
+| $place_site_players
 | $begin_ingame{0}
 
 ui.enter_site_back =

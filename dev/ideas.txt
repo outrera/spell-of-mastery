@@ -109,6 +109,7 @@ Creatures:
 - Creature that can pass near enemy, without being threatened.
 
 Spells:
+- Taboo: forbids use of some ability or a class of abilities.
 - Genocide (chaos): kill all units of specific type, both enemy and allied. Requires two times the mana, needed to subvert target creature.
 - Time Stop: enemy loses its turn.
 - Torando/Whirlwind: nearby units are pushed away from tornado, similarly to dragon's blow away

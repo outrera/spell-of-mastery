@@ -130,9 +130,14 @@ world.draw FB X Y =
 | when $mode><newBase:
   | FB.circle{#FFFFFF 0 $mice_xy $cfg."base_reach"}
 | Font = font titleb
+| FontS = font title
+| print X Y Text =
+  | FontS.draw{FB X-2 Y-2 Text}
+  | FontS.draw{FB X+2 Y+2 Text}
+  | Font.draw{FB X Y Text}
 | Debt = if $debt>0 then " (debt=[$debt])" else ""
-| Font.draw{FB 300 2 "Gold: [$gold][Debt]"}
-| Font.draw{FB 500 2 "Turn: [$turn]"}
+| print{200 2 "Gold: [$gold][Debt]"}
+| print{500 2 "Turn: [$turn]"}
 
 LCG_M = 2147483647
 LCG_M_F = LCG_M.float
