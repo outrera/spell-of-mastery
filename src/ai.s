@@ -210,6 +210,13 @@ unit.ai_update =
       | $advance_to{E.xyz}
       | less $handled: $handled <= 1
       | leave break
+| when $aistate >< patrol:
+  | Ps = $owner.patrol_points.unheap
+  | less Ps.end:
+    | PXYZ = Ps.rand
+    | $advance_to{PXYZ}
+    | less $handled: $handled <= 1
+    | leave break
 | when $aistate <> roam:
   | BtXYZ = $get{btrack}
   | when got BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0

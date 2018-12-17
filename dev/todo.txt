@@ -2,7 +2,6 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Buy and sell spells should be part of city interface.
-- AI unit patrolling
 - Use several types of setlements: village, hamlet and city. That would allow for more site types and make world map less ugly.
 - A hint screen, accessible through button: it would associate spell of mastery with node graphics. An explain that alternative way to complete mission would be defeating enemy wizard.
 - One shot spell items, that are usable on at the give location.
@@ -106,19 +105,6 @@ Bugs:
 - multicell units, like table, react badly when drawing tiles under them. disallow drawing at all
 - `update_picked` and unit.picked should use different picking strucutre. current is error prone and had led to bugs previously
 - projectiles hung up, when their sender dies
-
-
-index out of bounds
-bad call: () `.` -1
-Stack Trace:
-  0x1035070d0:list.`.`:0,0,builtin
-  0x1244d0500:list.rand:690,10,/Users/macbook/Documents/GitHub/symta/src/core_.s
-  0x127280c70:unit.ai_pick_target:29,24,./src/ai.s
-  0x12728d020:unit.ai_ability_sub:98,24,./src/ai.s
-  0x12728f7b0:unit.ai_ability:119,16,./src/ai.s
-  0x127294b70:unit.ai_update:185,15,./src/ai.s
-  0x12729a8f0:ai.update_units:220,16,./src/ai.s
-
 
 
 Sound:

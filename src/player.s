@@ -28,6 +28,7 @@ type player{id site}
    total_units
    unit_counts // counts uwned units for each unit type
    colors
+   patrol_points/[]
 | $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | MaxSize = $site.maxSize
@@ -83,6 +84,8 @@ player.clear =
 | $data.lossage <= 0
 | $data.gold <= 0
 | $data.keys <= 0
+| $patrol_points.heapfree
+| $patrol_points <= []
 | $allies <= 0
 
 player.init =

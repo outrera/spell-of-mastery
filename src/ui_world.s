@@ -48,11 +48,6 @@ ui.place_ai_player =
     else push Act Spells
 | $site.generate_ai{5 Budget SpellBudget Units Spells | N => $world.rand{N}}
 
-ui.place_site_players =
-| $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
-| $world.gold <= 0
-| $place_ai_player
-
 ui.enter_site_proceed =
 | Site = $enterSiteDst
 | Type = if not Site then $cfg.ui.default_site
@@ -60,8 +55,10 @@ ui.enter_site_proceed =
          else \forest
 | $generate{6 6 Type}
 | $site.data.serial <= if Site then Site.serial else 0
-| $place_site_players
+| $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
+| $world.gold <= 0
 | $site.new_game
+| $place_ai_player
 | $begin_ingame{0}
 
 ui.enter_site_back =

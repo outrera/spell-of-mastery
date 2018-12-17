@@ -214,7 +214,7 @@ site.generate_human_player Gold PlayerActs =
 | when LeaderXYZ.size:
   | LeaderXYZ <= LeaderXYZ.shuffle
   | S = $human.alloc_unit{leader_mage}
-  | S.aistate <= \spawned
+  | S.aistate <= \guard
   | S.move{LeaderXYZ.0}
 | $human.data.gold += Gold
 
@@ -233,7 +233,7 @@ site.generate_ai Side Budget SpellBudget Units Spells Rand =
 | RGuards = []
 | Player = $players.Side //for now we use hardcoded player 5 for enemy
 | LeaderXYZ = []
-| for U $units: less U.removed: when U.owner.id >< 5:
+| for U $units: less U.removed: when U.owner.id >< Player.id:
   | when U.type><trigger_spawn_leader:
     | push [U.xyz.copy U.facing] LeaderXYZ
   | when U.type><trigger_spawn_patrol:
@@ -245,10 +245,11 @@ site.generate_ai Side Budget SpellBudget Units Spells Rand =
   | when U.type><trigger_spawn_ranged:
     | push [U.xyz.copy U.facing] RGuards
     | U.free
+| Player.patrol_points <= Patrol{?0}.enheap
 | when LeaderXYZ.size:
   | XYZ,Facing = LeaderXYZ.shuffle.0
   | S = Player.alloc_unit{leader_heretic}
-  | S.aistate <= \spawned
+  | S.aistate <= \guard
   | S.move{XYZ}
   | S.pick_facing{Facing}
 | SBudget = SpellBudget
@@ -270,9 +271,10 @@ site.generate_ai Side Budget SpellBudget Units Spells Rand =
         @Guards.shuffle
         @RGuards.drop{RSz}
         @Patrol.shuffle]
+| PatrolXYZs = Patrol{?0}
 | for Type [@Rs @Ms]: less Ps.end:
   | XYZ,Facing = pop Ps
   | S = Player.alloc_unit{Type}
-  | S.aistate <= if Patrol.has{XYZ} then \patrol else \guard
+  | S.aistate <= if PatrolXYZs.has{XYZ} then \patrol else \guard
   | S.move{XYZ}
   | S.pick_facing{Facing}
