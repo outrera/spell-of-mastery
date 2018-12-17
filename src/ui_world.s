@@ -3,10 +3,17 @@ use gui widgets ui_icon ui_widgets world
 ui.create_world_base_tab =
 | icon world_airship: Icon => $world.airship_targeting
 
+ui.create_world_city_tab =
+| Shop = icon world_shop: Icon => $enter_shop
+| Borrow = icon world_borrow: Icon => $world.borrow
+| Repay = icon world_repay: Icon => $world.repay
+| layH s/10 [Shop Borrow Repay]
+
 ui.create_worldSiteTabs =
 | $worldSiteTabs <= tabs none: t
     none | spacer 0 0
     base | $create_world_base_tab
+    city | $create_world_city_tab
 | $worldSiteTabs
 
 ui.site_picked S =
@@ -17,14 +24,11 @@ ui.site_picked S =
 ui.create_world_dlg =
 | $world <= world $main Me $width $height
 | BY = $height-64
-| BX = $width-444
+| BX = $width-240
 | BP = icon world_flag: Icon => $world.base_placement
-| Shop = icon world_shop: Icon => $enter_shop
 | ET = icon tab_endturn: Icon => $world.end_turn
 | EX = icon menu_exit: Icon => $pick_title_menu
-| Borrow = icon world_borrow: Icon => $world.borrow
-| Repay = icon world_repay: Icon => $world.repay
-| WorldButtons = layH s/26 [BP Shop Borrow Repay ET EX]
+| WorldButtons = layH s/26 [BP ET EX]
 | dlg w/$width h/$height: mtx
   |   0           0| $world
   |   0 $height-20 | infoline

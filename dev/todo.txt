@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Buy and sell spells should be part of city interface.
 - Use several types of setlements: village, hamlet and city. That would allow for more site types and make world map less ugly.
 - A hint screen, accessible through button: it would associate spell of mastery with node graphics. An explain that alternative way to complete mission would be defeating enemy wizard.
 - One shot spell items, that are usable on at the give location.
