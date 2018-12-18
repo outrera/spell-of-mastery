@@ -267,7 +267,7 @@ world.sched_actions Villages Cities Parties =
 | Targets = [@Cities @Villages].shuffle
 | for P Parties: less P.state:
   | Cs = Targets.keep{C => (P.xy-C.xy).abs < R
-                           and not C.act.0><raided
+                           and C.act.0<>raided
                            and not C.attacker}
   | if Cs.size then
       | C = Cs.($rand{Cs.size-1})
@@ -337,6 +337,11 @@ world.end_turn =
 | $gold += $cfg.passive_income*Bases.size
 | $sched_actions{Villages Cities Parties}
 | for B Bases: B.state <= 0
+| for V Villages.shuffle: less V.attacker or V.act.0><raided:
+  | when $data."cnt_city"^~{0} < $cfg."lim_city"^~{1000}:
+    | when $rand{100} < $cfg."village_growth_chance":
+      | $generate_site{city xy/V.xy}
+      | $free_site{V}
 | $sched_spawns{Lairs}
 | $phase <= \raze
 
@@ -526,13 +531,14 @@ world.infoline =
 | S = $site_at{$mice_xy}
 | SiteName =
    if not S then 0
-   else if S.type><party then "Raiding Party"
-   else if S.type><city then "City"
-   else if S.type><village then "Village"
-   else if S.type><ruin then "Ruins of a Settlement"
-   else if S.type><lair then "Monster Lair"
-   else if S.type><base then "Your base of operation"
-   else 0
+   else case S.type
+     party | "Raiding Party"
+     city | "City"
+     village | "Village"
+     ruin | "Ruins of a Settlement"
+     lair | "Monster Lair"
+     base | "Your base of operation"
+     Else | 0
 | when SiteName: R <= "[R], [SiteName]" 
 | R
 

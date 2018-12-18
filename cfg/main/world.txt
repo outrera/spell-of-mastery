@@ -4,7 +4,7 @@ lim_lair: 50
 lim_party: 100
 lim_base: 10
 lim_city: 15
-lim_village: 30
+lim_village: 100
 base_cost: 1000
 base_reach: 2000 //200
 party_reach: 200
@@ -16,6 +16,7 @@ lair_spawn_lair_chance: 20
 borrow_amount: 500
 debt_cap: 5000
 interest_rate: 5
+village_growth_chance: 5
 
 //shop prices
 spell_buy_cost: 500

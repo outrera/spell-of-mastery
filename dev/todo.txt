@@ -2,12 +2,15 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 
-- Each turn unsieged village can be promoted to a city, when number of cities is less than than limit
 - Spoils of war info should be placed onto victory screen.
 - Factors controlling site difficulty.
+- Instead of raiders generated at random places, have interdimensional gates, each of which would have a chance to generate raider. Player can attempt to close these gates at any moment, but that would require him to have really large army or a lot of luck and tactics, becasue at these sites AI would actively seek player's leader, trying to kill him.
 - Make sure door works properly: opens by moving onto it, blocks projectile and line of sight
 - A hint screen, accessible through button: it would associate spell of mastery with node graphics. An explain that alternative way to complete mission would be defeating enemy wizard.
+- Several enemy wizard versions, each with different health and defence.
 - One shot spell items, that are usable on at the give location.
+- Dungeon exploration, that would give gold and access to new spells.
+- The castle level with king strong fighter and queen magic user.
 - Enemy Wizard Towers Siege.
 - finish waterfall tileset
 - map item, that would explore whole map for the player.

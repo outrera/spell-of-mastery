@@ -113,7 +113,9 @@ Creatures:
 Spells:
 - Taboo: forbids use of some ability or a class of abilities.
 - Genocide (chaos): kill all units of specific type, both enemy and allied. Requires two times the mana, needed to subvert target creature.
+- Polymorph: player is give a list of creature into which target can be polymorphed.
 - Time Stop: enemy loses its turn.
+- Guardian Angel: if a creature is killed, it gets resurrected. Creatures with such enchacements have a halo of ther heads.
 - Torando/Whirlwind: nearby units are pushed away from tornado, similarly to dragon's blow away
 - Morph (law): caster is morphed into the target creature, that is present on map and seen, until caster cancels effect (need some way to preserve casters original health).
 - Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
