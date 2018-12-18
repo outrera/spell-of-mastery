@@ -1,0 +1,5 @@
+author: `Nethack: Falcon's Eye Team`, Nikita Sadkov
+license: `NETHACK GENERAL PUBLIC LICENSE`
+origin: `http://falconseye.sourceforge.net/`
+
+//This is a heavily edited version of Nethack's dungeon entrance. It is distributed as separate work using nethacks license.
