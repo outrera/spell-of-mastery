@@ -47,6 +47,10 @@ sterra: (city grass desert snow)
        ,(party shore forest mountain grass desert snow)
        ,(base forest mountain grass desert snow)
 
+// difficulty factors
+df_ruin: 3.0
+df_city: 1.5
+
 //stuff related to new game setup
 start_gold: 1000//6000
 start_spells: 3
