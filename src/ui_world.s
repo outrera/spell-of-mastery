@@ -42,8 +42,11 @@ ui.generate W H Blueprint =
 | $view.clear
 
 ui.place_ai_player =
-| Budget = max 400 ($world.site_gold*3+3)/4
-| SpellBudget = max 100 ($world.site_gold+3)/4
+| Gold = $world.site_gold
+| when $enterSiteDst><ruin: Gold <= Gold*3 //increase difficulty
+| when $enterSiteDst><city: Gold <= Gold*3/2
+| Budget = max 400 (Gold*3+3)/4
+| SpellBudget = max 100 (Gold+3)/4
 | Units = []
 | Spells = []
 | for Icon $enterSiteIcons1:
@@ -55,7 +58,9 @@ ui.place_ai_player =
 ui.enter_site_proceed =
 | Site = $enterSiteDst
 | Type = if not Site then $cfg.ui.default_site
-         else if Site and Site.type><city then \city
+         else if Site.type><city then \city
+         else if Site.type><village then \city
+         else if Site.type><ruin then \city
          else \forest
 | $generate{6 6 Type}
 | $site.data.serial <= if Site then Site.serial else 0

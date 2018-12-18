@@ -3,11 +3,13 @@ max_sites: 1000
 lim_lair: 50
 lim_party: 100
 lim_base: 10
-lim_city: 30
+lim_city: 15
+lim_village: 30
 base_cost: 1000
 base_reach: 2000 //200
 party_reach: 200
-start_cities: 30
+start_cities: 10
+start_villages: 20
 lair_handicap: 10
 lair_spawn_monster_chance: 75
 lair_spawn_lair_chance: 20
@@ -38,6 +40,7 @@ tmap: (grass #076600)
      ,(river #00467f)
      ,(sea #002d57)
 sterra: (city grass desert snow)
+       ,(village grass desert snow)
        ,(ruin grass desert snow)
        ,(lair forest mountain grass desert snow)
        ,(party shore forest mountain grass desert snow)

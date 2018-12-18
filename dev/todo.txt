@@ -1,7 +1,10 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Use several types of setlements: hamlet, village, burg, town and city. That would allow for more site types and make world map less ugly.
+
+- Each turn unsieged village can be promoted to a city, when number of cities is less than than limit
+- Spoils of war info should be placed onto victory screen.
+- Factors controlling site difficulty.
 - Make sure door works properly: opens by moving onto it, blocks projectile and line of sight
 - A hint screen, accessible through button: it would associate spell of mastery with node graphics. An explain that alternative way to complete mission would be defeating enemy wizard.
 - One shot spell items, that are usable on at the give location.

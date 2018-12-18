@@ -78,7 +78,9 @@ type world.widget{Main UI W H}
 | $mask <= $img{world_bg_mask}
 | $siteLimX <= $bg.w-$siteC
 | $fg <= @table: map N [site picked attacked
-                        base airship city lair party ruin attack]
+                        base airship city village
+                        lair party ruin
+                        city_siege village_siege]
   | [N $img{"world_fg_[N]"}]
 | for V,@Ks $cfg.tmap: for K Ks: $tmap.K <= V
 | for K,@Vs $cfg.sterra: $sterra.K <= Vs
@@ -110,8 +112,9 @@ world.draw FB X Y =
 | PickedId = if P then P.id else -1
 | for S $sites: when S.xy.0>0 and S.state <> raid:
   | when S.hide: pass
-  | if S.attacker and S.type><city and not S.gfx2 then
-       FB.blit{S.xy.0-C S.xy.1-C $fg.attack}
+  | if S.attacker and not S.gfx2 then
+       if S.type><city then FB.blit{S.xy.0-C S.xy.1-C $fg.city_siege}
+       else FB.blit{S.xy.0-C S.xy.1-C $fg.village_siege}
     else
     | when not S.gfx2:
       | FB.blit{S.xy.0-C S.xy.1-C S.gfx}
@@ -247,6 +250,7 @@ world.generate_site Type xy/0 =
 
 world.generate =
 | for I $cfg.start_cities: $generate_site{city}
+| for I $cfg.start_villages: $generate_site{village}
 | $generate_site{base}
 | $generate_site{party}
 
@@ -254,16 +258,17 @@ world.generate =
 //gets turned into ruins
 world.sched_raze =
 | for S $sites:
-  | when S.type >< city and S.attacker:
+  | when S.attacker:
     | S.sched{raze 0 S.xy}
 
-world.sched_actions Cities Parties =
+world.sched_actions Villages Cities Parties =
 | RR = $cfg."party_reach"
 | R = RR.float
+| Targets = [@Cities @Villages].shuffle
 | for P Parties: less P.state:
-  | Cs = Cities.keep{C => (P.xy-C.xy).abs < R
-                          and not C.act.0><raided
-                          and not C.attacker}
+  | Cs = Targets.keep{C => (P.xy-C.xy).abs < R
+                           and not C.act.0><raided
+                           and not C.attacker}
   | if Cs.size then
       | C = Cs.($rand{Cs.size-1})
       | C.act.0 <= \raided
@@ -306,6 +311,7 @@ world.end_turn =
 | $sites.clear
 | Lairs = []
 | Cities = []
+| Villages = []
 | Bases = []
 | Ruins = []
 | Parties = []
@@ -313,6 +319,7 @@ world.end_turn =
   | when S.type><base: push S Bases
   | when S.type><lair: push S Lairs
   | when S.type><city: push S Cities
+  | when S.type><village: push S Villages
   | when S.type><ruin: push S Ruins
   | when S.type><party: push S Parties
   | $sites.push{S}
@@ -328,7 +335,7 @@ world.end_turn =
 | $turn_seed <= ($turn_seed*LCG_A + LCG_B) % LCG_M
 | $incomeFactor <= Cities.size*100/(Cities.size+Ruins.size)
 | $gold += $cfg.passive_income*Bases.size
-| $sched_actions{Cities Parties}
+| $sched_actions{Villages Cities Parties}
 | for B Bases: B.state <= 0
 | $sched_spawns{Lairs}
 | $phase <= \raze
@@ -455,9 +462,13 @@ world.leave_site How =
 | when S.type><party:
   | $free_site{S}
   | $notify{"You have defeated the raiding party!"}
-| when S.type><city and S.attacker:
+| when S.type><ruin:
+  | $generate_site{village xy/S.xy}
+  | $free_site{S}
+  | $notify{"You have cleansed the ruins of the settlement!"}
+| when S.attacker:
   | $free_site{S.attacker}
-  | $notify{"You have defended the city!"}
+  | $notify{"You have defended the [S.type]!"}
 | when $picked:
   | $picked.state <= \acted
 
@@ -476,8 +487,7 @@ world.mode_pick M =
   | S = $site_at{$mice_xy}
   | less S: leave airship
   | ValidDst = 
-  | less S.type><party
-        or (S.type<>city and S.attacker):
+  | less S.type><party or S.type><ruin or S.attacker:
     | $notify{"Nothing to investigate there."}
     | leave airship
   | A = $generate_site{airship xy/$picked.xy}
@@ -507,9 +517,25 @@ world.input In =
     | $mice_xy.init{XY}
 
 world.infoline =
-| R = "[$mice_xy]:[$terra_at{$mice_xy}]"
+| when 0:
+  | R = "[$mice_xy]:[$terra_at{$mice_xy}]"
+  | S = $site_at{$mice_xy}
+  | when S: R <= "[R]:[S.type]([S.serial])" 
+  | leave R
+| R = "[$terra_at{$mice_xy}]"
 | S = $site_at{$mice_xy}
-| when S: R <= "[R]:[S.type]([S.serial])" 
+| SiteName =
+   if not S then 0
+   else if S.type><party then "Raiding Party"
+   else if S.type><city then "City"
+   else if S.type><village then "Village"
+   else if S.type><ruin then "Ruins of a Settlement"
+   else if S.type><lair then "Monster Lair"
+   else if S.type><base then "Your base of operation"
+   else 0
+| when SiteName: R <= "[R], [SiteName]" 
 | R
+
+
 
 export world

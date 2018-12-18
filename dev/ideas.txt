@@ -10,6 +10,8 @@ Leader abilities:
 
 General:
 - Random node placement tokens.
+- Autobalance spell and unit prices, based on supply and demand. I.e. if player keeps using some single combination it's cost will increase for the next use.
+- More settlement sizes, each offering different set of bonuses to the player: hamlet, village, burg, town and city.
 - Inventory dialogue, which would also show what unit portrait and stats. Use Heroes of Might & Magic 4 template as layout. While creatures are hired and paid per mission, inventory items are preserved unless lost or their durability falls to 0. Such items can be either purchased in shop or found on mission.
 - Hero units, that can participate in several missions and unlock abilities, if some objectives for that here are achieved. For example, paladin hero may be required to participate in a mission against heretics to gain new abilities.
 - Some way to spy on what spells enemy has.
