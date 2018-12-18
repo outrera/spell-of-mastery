@@ -44,7 +44,6 @@ ui.generate W H Blueprint =
 ui.place_ai_player =
 | Gold = $world.site_gold
 | DF = $cfg.world."df_[$enterSiteDst.type]"^~{1.0}
-| say DF
 | Gold <= (Gold.float*DF).int
 | Budget = max 400 (Gold*3+3)/4
 | SpellBudget = max 100 (Gold+3)/4
