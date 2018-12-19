@@ -444,7 +444,13 @@ world.site_by_serial Serial =
 | for S $sites: when S.serial><Serial: leave S
 | 0
 
-world.leave_site How =
+
+world.site_bounty Turn =
+| BP = $cfg."site_bounty_percent"
+| Bounty = ($site_gold*BP+BP-1)/100
+| max 0 Bounty-Turn*$cfg."site_turn_cost"
+
+world.site_spoils How Apply =
 | Scrap = 0
 | for Act $ui.enterSiteIcons1{}{?data}:
   | Scrap += Act.gold*Act.picked
@@ -452,28 +458,34 @@ world.leave_site How =
 | Scrap -= P.data.lossage
 | ScrapPercent = $cfg."site_scrap_percent"
 | Scrap <= max 0 Scrap*ScrapPercent/100
-| $gold += P.data.gold
-| $gold += Scrap
+| when Apply: $gold <= $gold + P.data.gold + Scrap
 | less How><victory:
-  | $notify{"You've scrapped [Scrap] gold due to early mission end."}
-  | leave
+  | leave: if Scrap
+       then "You've scrapped [Scrap] gold due to early mission end."
+       else ""
 | S = $site_by_serial{$ui.site.data.serial}
-| less S: leave //skirmish game
-| BP = $cfg."site_bounty_percent"
-| Bounty = ($site_gold*BP+BP-1)/100
-| Bounty <= max 0 Bounty-$ui.site.turn*$cfg."site_turn_cost"
-| $gold += Bounty
-| $notify{"You earned [Bounty] bounty gold and scrapped [Scrap] gold!"}
+| less S: //skirmish game
+  | leave "You've scrapped [Scrap] gold."
+| Bounty = $site_bounty{$ui.site.turn}
+| when Apply: $gold += Bounty
+| T = "You earned [Bounty] bounty gold and scrapped [Scrap] gold!"
+| T2 = 0
 | when S.type><party:
-  | $free_site{S}
-  | $notify{"You have defeated the raiding party!"}
+  | when Apply: $free_site{S}
+  | T2 <= "You have defeated the raiding party!"
 | when S.type><ruin:
-  | $generate_site{village xy/S.xy}
-  | $free_site{S}
-  | $notify{"You have cleansed the ruins of the settlement!"}
+  | when Apply:
+    | $generate_site{village xy/S.xy}
+    | $free_site{S}
+  | T2 <= "You have cleansed the ruins of the settlement!"
 | when S.attacker:
-  | $free_site{S.attacker}
-  | $notify{"You have defended the [S.type]!"}
+  | when Apply: $free_site{S.attacker}
+  | T2 <= "You have defended the [S.type]!"
+| when T2: T <= "[T]\n[T2]"
+| T
+
+world.leave_site How =
+| $site_spoils{How 1}
 | when $picked:
   | $picked.state <= \acted
 

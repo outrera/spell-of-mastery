@@ -109,8 +109,9 @@ ui.create_panel_tab_menu =
 | LeaveIcon = icon menu_world: Icon =>
   | $confirm{"Leave this site?"
      |$0 yes =>
-       | $pick_world
-       | $world.leave_site{retreat}}
+       | $site.data.winner <= No
+       | $site.data.retreat <= 1
+       | $show_results}
 | SaveIcon,LoadIcon,SiteIcon,ExitIcon,LeaveIcon
 
 

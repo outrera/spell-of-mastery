@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Spoils of war info should be placed onto victory screen.
 - Instead of raiders generated at random places, have interdimensional gates, each of which would have a chance to generate raider. Player can attempt to close these gates at any moment, but that would require him to have really large army or a lot of luck and tactics, becasue at these sites AI would actively seek player's leader, trying to kill him.
 - Make sure door works properly: opens by moving onto it, blocks projectile and line of sight
 - A hint screen, accessible through button: it would associate spell of mastery with node graphics. An explain that alternative way to complete mission would be defeating enemy wizard.
@@ -166,8 +165,10 @@ Optimization Possibilities:
 - simple animated objects don't have to be active, and can be processed by rendering code.
 
 Symta Language Handicaps:
+- Absence of proper heap is the greatest handicap.
 - `times` macro should have 2 argument form, when there is no need for a count var.
 - do-while loop, to avoid needless `_label again`
+- A work around for case `$LongAndExpensiveExpression.field` where $LongAndExpensiveExpression can be No or 0, and we still need to provide a dummy with a `field`. Maybe a syntatic sugar like `$LongAndExpensiveExpression.~(Default)field`, would do ass default for a field?
 - objects allocated on heap with autopointer cells.
 - "when A and B: C" should give warning when `:` is missing.
 - `Text.lines{}{...}` is a little confusing and verbose. Consider operator `.{}` for that.

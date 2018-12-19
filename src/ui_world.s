@@ -43,7 +43,8 @@ ui.generate W H Blueprint =
 
 ui.place_ai_player =
 | Gold = $world.site_gold
-| DF = $cfg.world."df_[$enterSiteDst.type]"^~{1.0}
+| DF = if $enterSiteDst then $cfg.world."df_[$enterSiteDst.type]"^~{1.0}
+       else 1.0
 | Gold <= (Gold.float*DF).int
 | Budget = max 400 (Gold*3+3)/4
 | SpellBudget = max 100 (Gold+3)/4
@@ -58,10 +59,11 @@ ui.place_ai_player =
 ui.enter_site_proceed =
 | Site = $enterSiteDst
 | Type = if not Site then $cfg.ui.default_site
-         else if Site.type><city then \city
-         else if Site.type><village then \city
-         else if Site.type><ruin then \city
-         else \forest
+         else case Site.type
+           city | \city
+           village | \city
+           ruin | \city
+           Else | \forest
 | $generate{6 6 Type}
 | $site.data.serial <= if Site then Site.serial else 0
 | $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
