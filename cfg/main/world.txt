@@ -5,14 +5,17 @@ lim_party: 100
 lim_base: 10
 lim_city: 15
 lim_village: 100
+lim_rifts: 10
 base_cost: 1000
 base_reach: 2000 //200
 party_reach: 200
 start_cities: 10
 start_villages: 20
-lair_handicap: 10
-lair_spawn_monster_chance: 75
-lair_spawn_lair_chance: 20
+start_rifts: 5
+rift_reach: 200
+rift_handicap: 10
+spawn_monster_chance: 15
+spawn_rift_chance: 4
 borrow_amount: 500
 debt_cap: 5000
 interest_rate: 5
@@ -43,6 +46,7 @@ tmap: (grass #076600)
 sterra: (city grass desert snow)
        ,(village grass desert snow)
        ,(ruin grass desert snow)
+       ,(rift shore forest mountain snow)
        ,(lair forest mountain grass desert snow)
        ,(party shore forest mountain grass desert snow)
        ,(base forest mountain grass desert snow)

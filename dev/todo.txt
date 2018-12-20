@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Instead of raiders generated at random places, have interdimensional gates, each of which would have a chance to generate raider. Player can attempt to close these gates at any moment, but that would require him to have really large army or a lot of luck and tactics, becasue at these sites AI would actively seek player's leader, trying to kill him.
+- Dungeons and lairs. Conquering lair unlocks monster type, while conquering dungeon unlocks spell. On dungeon map player is faced exclusively against particular monster type, while on lair levels player is faced against enemy wizard, that can cast unlimited number of that particular layer's spell, but also has some monsters.
+- Site difficulty should be based not just on the gold amount, but also the world map's turn, number of bases, number of cities, number of lair conquered - which is larger.
 - Make sure door works properly: opens by moving onto it, blocks projectile and line of sight
 - A hint screen, accessible through button: it would associate spell of mastery with node graphics. An explain that alternative way to complete mission would be defeating enemy wizard.
 - Several enemy wizard versions, each with different health and defence.

@@ -1,0 +1,5 @@
+author: `Artem Belov`
+origin: `The Spell of Mastery`
+frames: 34*28
+xy: 0,0
+anims: | idle time-6 0 1 2 3 4

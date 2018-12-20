@@ -103,12 +103,15 @@ world.render =
 | get_gui{}.cursor <= $img{Cur}
 | Me
 
+Frame = 0
+
 world.draw FB X Y =
 | FB.blit{0 0 $bg}
 | Clock = clock
 | PickBlink = (Clock-Clock.int.float)<0.25
 | C = $siteC
 | P = $picked
+| when (get_gui{}.ticks*24.0).int%5><0: Frame++
 | PickedId = if P then P.id else -1
 | for S $sites: when S.xy.0>0 and S.state <> raid:
   | when S.hide: pass
@@ -117,7 +120,12 @@ world.draw FB X Y =
        else FB.blit{S.xy.0-C S.xy.1-C $fg.village_siege}
     else
     | when not S.gfx2:
-      | FB.blit{S.xy.0-C S.xy.1-C S.gfx}
+      | G = S.gfx
+      | when S.type >< rift:
+        | Wait = 33
+        | F = ((Frame+S.xy.0+S.xy.1)%Wait).float/Wait.float
+        | G <= $main.sprites.world_fg_rift.lerp{F 3 idle}
+      | FB.blit{S.xy.0-C S.xy.1-C G}
     | when S.gfx2:
       | FB.blit{S.xy.0-C+S.gfx2xy.0 S.xy.1-C+S.gfx2xy.1 S.gfx2}
   | when S.id >< PickedId
@@ -196,11 +204,19 @@ world.can_place Type XY =
 | less Y<$siteLimY: leave 0
 | when X<$siteC or Y<$siteC: leave 0
 | less got $sterra.Type.find{$terra_at{XY}}: leave 0
-| when Type><city: for S $sites: when S.type><city:
-  | when (S.xy-XY).all{?abs<32}: leave 0
+| when Type><city or Type><village:
+  | for S $sites: when S.type><city or S.type><village:
+    | when (S.xy-XY).all{?abs<48}: leave 0
 | C2 = $siteC*2
 | R = [X-$siteC Y-$siteC C2 C2]
 | for S $sites: when rects_intersect{R S.rect}: leave 0
+| when Type><rift: for S $sites: when S.type><rift:
+  | when (S.xy-XY).all{?abs<64}: leave 0
+| when Type><party:
+  | RR = $cfg."rift_reach"
+  | R = RR.float
+  | when $sites.list.keep{?type><rift}.all{C => (XY-C.xy).abs >> R}:
+    | leave 0
 | 1
 
 world.generate_xy Type =
@@ -251,6 +267,7 @@ world.generate_site Type xy/0 =
 world.generate =
 | for I $cfg.start_cities: $generate_site{city}
 | for I $cfg.start_villages: $generate_site{village}
+| for I $cfg.start_rifts: $generate_site{rift}
 | $generate_site{base}
 | $generate_site{party}
 
@@ -286,17 +303,15 @@ world.sched_actions Villages Cities Parties =
       | _label found
       | P.sched{move 0 X,Y}
 
-world.sched_spawns Lairs =
+world.sched_spawns Rifts =
 | $phase <= \spawn_sched
-| LSLC = $cfg.lair_spawn_lair_chance
-| LSMC = $cfg.lair_spawn_monster_chance
-| LH = $cfg.lair_handicap
-| for L Lairs:
+| SRC = $cfg.spawn_rift_chance
+| SMC = $cfg.spawn_monster_chance
+| LH = $cfg.rift_handicap
+| for L Rifts:
   | A = $turn - L.turn
-  | when $rand{5}<A and $rand{100}<LSMC: $generate_site{party}
-  | when $rand{LH}<A and $rand{100}<LSLC: $generate_site{lair}
-| when $rand{100}<LSMC: $generate_site{party}
-| when $rand{max{1 LH/2}}<$turn and $rand{100}<LSLC: $generate_site{lair}
+  | when $rand{100}<SMC: $generate_site{party}
+  | when $rand{LH}<A and $rand{100}<SRC: $generate_site{rift}
 
 world.end_turn =
 | when $phase<>normal: leave
@@ -315,6 +330,7 @@ world.end_turn =
 | Bases = []
 | Ruins = []
 | Parties = []
+| Rifts = []
 | for S Ss: when S.xy.0>0
   | when S.type><base: push S Bases
   | when S.type><lair: push S Lairs
@@ -322,6 +338,7 @@ world.end_turn =
   | when S.type><village: push S Villages
   | when S.type><ruin: push S Ruins
   | when S.type><party: push S Parties
+  | when S.type><rift: push S Rifts
   | $sites.push{S}
 | less Bases.size:
   | $notify{"You have no base left. It is game over."}
@@ -340,9 +357,10 @@ world.end_turn =
 | for V Villages.shuffle: less V.attacker or V.act.0><raided:
   | when $data."cnt_city"^~{0} < $cfg."lim_city"^~{1000}:
     | when $rand{100} < $cfg."village_growth_chance":
-      | $generate_site{city xy/V.xy}
+      | XY = V.xy.deep_copy
       | $free_site{V}
-| $sched_spawns{Lairs}
+      | $generate_site{city xy/XY}
+| $sched_spawns{Rifts}
 | $phase <= \raze
 
 world.update =
@@ -382,7 +400,7 @@ world.update =
     | $sound{w_raid}
     | when $picked and $picked.id >< S.id: $picked <= 0
   | when Act><spawn:
-    | when S.type><party or S.type><lair: $sound{w_enemy}
+    | when S.type><party or S.type><rift: $sound{w_enemy}
   | when Act><flight:
     | $ui.enter_site{Goal}
     | $free_site{S}
@@ -546,10 +564,12 @@ world.infoline =
    else case S.type
      party | "Raiding Party"
      city | "City"
-     village | "Village"
+     village | "Village (grows into city with time)"
      ruin | "Ruins of a Settlement"
-     lair | "Monster Lair"
+     lair | "Creature Lair (conquer to unlock new mercenaries)"
+     dungeon | "Dungeon (explore to unlock new spell)"
      base | "Your base of operation"
+     rift | "Rift"
      Else | 0
 | when SiteName: R <= "[R], [SiteName]" 
 | R
