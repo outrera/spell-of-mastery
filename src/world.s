@@ -12,7 +12,7 @@ type world_site{Id World}
   gfx2 //alternatve gfx for animation
   gfx2xy/[0 0]
   turn //turn this site came to life
-  name
+  name //name of city lair
   attacker/0
   xy/[-100 -100]
   xy_from/[-100 -100]
@@ -79,7 +79,7 @@ type world.widget{Main UI W H}
 | $siteLimX <= $bg.w-$siteC
 | $fg <= @table: map N [site picked attacked
                         base airship city village
-                        lair party ruin
+                        lair dungeon party ruin
                         city_siege village_siege]
   | [N $img{"world_fg_[N]"}]
 | for V,@Ks $cfg.tmap: for K Ks: $tmap.K <= V
@@ -268,6 +268,14 @@ world.generate =
 | for I $cfg.start_cities: $generate_site{city}
 | for I $cfg.start_villages: $generate_site{village}
 | for I $cfg.start_rifts: $generate_site{rift}
+| Spells = $cfg.spells
+| Summons = $cfg.summons
+| for N Spells:
+  | S = $generate_site{dungeon}
+  | S.state <= N
+| for N Summons:
+  | S = $generate_site{lair}
+  | S.state <= N
 | $generate_site{base}
 | $generate_site{party}
 
@@ -559,6 +567,8 @@ world.infoline =
   | leave R
 | R = "[$terra_at{$mice_xy}]"
 | S = $site_at{$mice_xy}
+| Acts = $main.acts
+| Class = $main.classes
 | SiteName =
    if not S then 0
    else case S.type
@@ -566,8 +576,8 @@ world.infoline =
      city | "City"
      village | "Village (grows into city with time)"
      ruin | "Ruins of a Settlement"
-     lair | "Creature Lair (conquer to unlock new mercenaries)"
-     dungeon | "Dungeon (explore to unlock new spell)"
+     lair | "[Class.(S.state).title] lair: conquer to unlock this creature."
+     dungeon | "Dungeon: contains the spell of [Acts.(S.state).title]"
      base | "Your base of operation"
      rift | "Rift"
      Else | 0

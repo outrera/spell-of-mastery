@@ -49,7 +49,11 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
   | $needsGene <= map N $needsGene:
     | if N.is_text or N.0><'-' then [N] else []
 | when $cool>0: $onInit <= [[cool $cool] @$onInit]
-| less $title: $title <= $name.replace{_ ' '}
+| less $title:
+  | T = $name.replace{_ ' '}
+  | when T.size > 5 and T.take{5}><"cast ":
+    | T <= T.drop{5}
+  | $title <= T.title
 | Flags = []
 | for E [@$onInit @$onEnd]: case E [add Name]: push Name Flags
 | $flags <= Flags

@@ -48,6 +48,7 @@ sterra: (city grass desert snow)
        ,(ruin grass desert snow)
        ,(rift shore forest mountain snow)
        ,(lair forest mountain grass desert snow)
+       ,(dungeon forest mountain grass desert snow)
        ,(party shore forest mountain grass desert snow)
        ,(base forest mountain grass desert snow)
 
