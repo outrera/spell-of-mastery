@@ -1,8 +1,9 @@
 icon: spell_lightning
 gold: 150
 range: 9000
+cool: 5
 check: unit
-//check: outdoor,non_leader,unit
+check: outdoor,non_leader,unit
 onInit: visual{lightning},sound{lightning},resist,harm{9}
 hint: harm
 tab: spell

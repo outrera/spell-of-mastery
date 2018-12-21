@@ -1,6 +1,6 @@
 tier: 1
 cost: 50,6,50
-health: 6
+health: 7
 atk: 2
 mov: 2
 def: 0

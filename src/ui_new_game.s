@@ -62,7 +62,7 @@ ui.create_new_game_setup_dlg =
 | IconsLay = layV s/14 [@SpellsLay @SummonsLay]
 | dlg w/$width h/$height: mtx
   |   0          0 | $img{ui_bookshelf}
-  |   300        20| txt medium 'Pick Starting Spells'
+  |   300        20| txt medium 'Pick Starting Spells and Creatures'
   |   16 $height-20| infoline
   |   0 $height-170| notification_widget Me
   |  52        52  | IconsLay
@@ -70,6 +70,16 @@ ui.create_new_game_setup_dlg =
      | button 'Back' skin/medium_small: => $pick{main_menu}
   |  $width-128   $height-48
      | button 'Proceed' skin/medium_small: =>
+       | MercCnt = $cfg.world.summons_count
+       | MercLim = $cfg.world.start_summons
+       | SpellCnt = $cfg.world.spells_count
+       | SpellLim = $cfg.world.start_spells
+       | when MercCnt < MercLim:
+         | $notify{"You can unlock [MercLim-MercCnt] more creatures."}
+         | leave 
+       | when SpellCnt < SpellLim:
+         | $notify{"You can unlock [SpellLim-SpellCnt] more spells."}
+         | leave 
        | for Icon Icons: when Icon.picked:
          | Act = Icon.data.0
          | Act.researched <= 1
@@ -86,8 +96,8 @@ ui.pick_new_game =
   | Act.researched <= 0
   | when DP.has{Act.name}: $setup_act_picked{Icon}
 | $world.clear
-| $pick_world
-//| $pick{new_game_setup}
+//| $pick_world
+| $pick{new_game_setup}
 
 
 ui.create_scenario_menu =

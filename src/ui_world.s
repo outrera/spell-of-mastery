@@ -4,10 +4,10 @@ ui.create_world_base_tab =
 | icon world_compass: Icon => $world.airship_targeting
 
 ui.create_world_city_tab =
-| Shop = icon world_shop: Icon => $enter_shop
+//| Shop = icon world_shop: Icon => $enter_shop
 | Borrow = icon world_borrow: Icon => $world.borrow
 | Repay = icon world_repay: Icon => $world.repay
-| layH s/10 [Shop Borrow Repay]
+| layH s/10 [/*Shop*/ Borrow Repay]
 
 ui.create_worldSiteTabs =
 | $worldSiteTabs <= tabs none: t
@@ -63,6 +63,8 @@ ui.enter_site_proceed =
            city | \city
            village | \city
            ruin | \city
+           lair | \forest
+           dungeon | \forest
            Else | \forest
 | $generate{6 6 Type}
 | $site.data.serial <= if Site then Site.serial else 0
@@ -166,11 +168,11 @@ ui.create_enter_site_dlg =
 | H = $height
 | dlg w/W h/H: mtx
   |   0          0 | $img{ui_bookshelf}
-  | W/2-100     20 | txt titleb 'Available Spells'
+  | W/2-100     20 | txt titleb 'Available Picks:'
   |   16      H-20 | infoline
   |   0         40 | notification_widget Me
   |  52         52 | IconsLay
-  | W/2-100    290 | txt titleb 'Picked Spells'
+  | W/2-100    290 | txt titleb 'Picked:'
   |  52        320 | IconsLay2
   | W/2-100   H-48 | txt titleb | => "Gold: [$world.gold]"
   |  32        H-48
@@ -190,10 +192,13 @@ ui.enter_site Site =
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | Act.picked <= 0
-  | Icon.text.2 <= 3
   //| less Site: Act.researched <= 0
-  /*| times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
-    | Icon.text.2 += 1*/
+  | if $cfg.ui.picks_always_available><1 then
+      | Icon.text.2 <= 3
+    else
+      | Icon.text.2 <= 0
+      | times I Act.maxPicks: when $world.rand{100} < Act.pickChance:
+        | Icon.text.2 += 1
   | Icon.hidden <= not Act.researched
 | $world.seed <= Seed
 | for Icon $enterSiteIcons2:

@@ -270,10 +270,11 @@ world.generate =
 | for I $cfg.start_rifts: $generate_site{rift}
 | Spells = $cfg.spells
 | Summons = $cfg.summons
-| for N Spells:
+| Acts = $main.acts
+| for N Spells: less Acts.N.researched:
   | S = $generate_site{dungeon}
   | S.state <= N
-| for N Summons:
+| for N Summons: less Acts.N.researched:
   | S = $generate_site{lair}
   | S.state <= N
 | $generate_site{base}
@@ -411,7 +412,7 @@ world.update =
     | when S.type><party or S.type><rift: $sound{w_enemy}
   | when Act><flight:
     | $ui.enter_site{Goal}
-    | $free_site{S}
+    | $free_site{S} //no need for airship
   | leave
 | $phase <= case $phase
     raze | \move
@@ -494,8 +495,23 @@ world.site_spoils How Apply =
   | leave "You've scrapped [Scrap] gold."
 | Bounty = $site_bounty{$ui.site.turn}
 | when Apply: $gold += Bounty
-| T = "You earned [Bounty] bounty gold and scrapped [Scrap] gold!"
+| T = "You earned [Bounty] bounty gold and scrapped [Scrap] gold."
 | T2 = 0
+| Acts = $main.acts
+| Class = $main.classes
+| when S.type><dungeon:
+  | Act = Acts.(S.state)
+  | when Apply:
+    | Act.researched <= 1
+    | $free_site{S}
+  | T2 <= "You have discovered the spell of [Act.title]."
+| when S.type><lair:
+  | Name = S.state
+  | Act = Acts.Name
+  | when Apply:
+    | Act.researched <= 1
+    | $free_site{S}
+  | T2 <= "New mercenary type unlocked: [Class.Name.title]."
 | when S.type><party:
   | when Apply: $free_site{S}
   | T2 <= "You have defeated the raiding party!"
@@ -529,8 +545,9 @@ world.mode_pick M =
     | leave airship
   | S = $site_at{$mice_xy}
   | less S: leave airship
-  | ValidDst = 
-  | less S.type><party or S.type><ruin or S.attacker:
+  | ValidDst =
+  | Investigable = [party ruin lair dungeon] 
+  | less Investigable.has{S.type} or S.attacker:
     | $notify{"Nothing to investigate there."}
     | leave airship
   | A = $generate_site{airship xy/$picked.xy}
@@ -578,8 +595,8 @@ world.infoline =
      ruin | "Ruins of a Settlement"
      lair | "[Class.(S.state).title] lair: conquer to unlock this creature."
      dungeon | "Dungeon: contains the spell of [Acts.(S.state).title]"
-     base | "Your base of operation"
-     rift | "Rift"
+     base | "Wizard Tower: your base of operation."
+     rift | "Rift: monster are spawned near it."
      Else | 0
 | when SiteName: R <= "[R], [SiteName]" 
 | R
