@@ -16,7 +16,7 @@ debug: 1
 picks_always_available: 0
 //default_site: forest
 default_site: city
-start: menu
+//start: menu
 //start: site
 //start: world
-//start: editor
+start: editor

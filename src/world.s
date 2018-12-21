@@ -589,14 +589,14 @@ world.infoline =
 | SiteName =
    if not S then 0
    else case S.type
-     party | "Raiding Party"
+     party | "Raiding Party. These creatures are up to no good."
      city | "City"
-     village | "Village (grows into city with time)"
+     village | "Village. It will grow into city with time"
      ruin | "Ruins of a Settlement"
-     lair | "[Class.(S.state).title] lair: conquer to unlock this creature."
-     dungeon | "Dungeon: contains the spell of [Acts.(S.state).title]"
-     base | "Wizard Tower: your base of operation."
-     rift | "Rift: monster are spawned near it."
+     lair | "[Class.(S.state).title] creatures inhabit this land. Conquer to have them in your army."
+     dungeon | "Local mages guard the knowledge of [Acts.(S.state).title] spell."
+     base | "Wizard Tower - your base of operation."
+     rift | "It is rummored that raiding parties appear in this region."
      Else | 0
 | when SiteName: R <= "[R], [SiteName]" 
 | R
