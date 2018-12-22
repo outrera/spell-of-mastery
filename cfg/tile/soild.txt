@@ -1,5 +1,5 @@
 tiler: soil,any,cornerside
 ztiler: soil,same
-lineup: 0
+lineup: 1
 water: water,dirtw
 stack: dirt0,dirt1,dirt2

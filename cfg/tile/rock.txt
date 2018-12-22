@@ -1,6 +1,10 @@
+tiler: soil,any,cornerside
+ztiler: rock,same
 water: water,rockw
 colors: #4f4f4f,#6b6b6b
 plain: rockp
+heavy: 1
+lineup: 1
 //lay: default
 lay: | 7  6  4
      | 5 15  2
