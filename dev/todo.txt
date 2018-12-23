@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Finish rock tileset. Otherwise we will have problem creating proper dungeon and lair maps.
 - Create lair map blueprint: player is faced exclusively against monsters of lair type.
 - Create dungeon map blueprint:  player is faced against several enemy wizard, that can cast unlimited number of that particular dungeon's spell. It also has some monsters. To finish dungeon map, player has to either find all keys to the chest with the spell, defeat all enemy wizards, or cat the spell of mastety at all nodes.
 - Bases beyond the first one, should be limited only to existing base radius.
