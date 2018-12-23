@@ -15,8 +15,8 @@ note_life: 5.0 // in seconds
 debug: 1
 picks_always_available: 0
 //default_site: forest
-default_site: city
+default_site: lair
 //start: menu
-//start: site
+start: site
 //start: world
-start: editor
+//start: editor

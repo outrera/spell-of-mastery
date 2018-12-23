@@ -58,15 +58,20 @@ ui.place_ai_player =
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
+| W = 6
+| H = 6
 | Type = if not Site then $cfg.ui.default_site
          else case Site.type
            city | \city
            village | \city
            ruin | \city
-           lair | \forest
-           dungeon | \forest
+           lair | \lair
+           dungeon | \lair
            Else | \forest
-| $generate{6 6 Type}
+| when Type><lair:
+  | W <= 3
+  | H <= 3
+| $generate{W H Type}
 | $site.data.serial <= if Site then Site.serial else 0
 | $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
 | $world.gold <= 0
