@@ -18,7 +18,7 @@ default_ai_budget: 1000
 default_dweller: unit_ratman
 //default_site: forest
 default_site: lair
-start: menu
+//start: menu
 //start: site
 //start: world
-//start: editor
+start: editor

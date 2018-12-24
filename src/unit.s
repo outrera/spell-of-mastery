@@ -382,9 +382,10 @@ unit.assault Target =
 | Hit = min{Def $mov}
 | $mov -= Hit
 | Def -= Hit
-| when Def > 0:
+| when Def > 0: //miss?
   | Target.def <= Def-1
   | Target.counter_attack{Me}
+  | $sound{miss}
   | leave 0
 | Target.def <= Target.class.def
 | leave 1
