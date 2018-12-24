@@ -4,9 +4,9 @@ mov: 8
 health: 10
 atk: 2
 def: 8
-inborn: (flyer bless)
-onHit: shell,hit{user},sound{impact}
+inborn: (nocorpse flyer bless)
+onHit: shell,hit{user},sound{gargoyle_attack}
 onHarm: visual{blood_undead},sound{devil_hit}
-onDeath: sound{dragon_death}
+onDeath: sound{gargoyle_death}
 onMove: sound{dragon_move}
 acts: (act_bash)

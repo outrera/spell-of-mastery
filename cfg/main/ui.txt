@@ -15,7 +15,7 @@ note_life: 5.0 // in seconds
 debug: 1
 picks_always_available: 0
 default_ai_budget: 1000
-default_dweller: unit_ratman
+default_dweller: ratman
 //default_site: forest
 default_site: lair
 //start: menu

@@ -1,0 +1,3 @@
+author: `messersm (http://sourceforge.net/projects/rte-game/)`
+license: `Public Domain (CC0)`
+origin: `https://opengameart.org/content/space-sound-effects`

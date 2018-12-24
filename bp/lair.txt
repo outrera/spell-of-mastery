@@ -1,3 +1,4 @@
+wh: 3,3
 filler: l_cave1
 parts: lp_opening lp_ship lp_node1 lp_node2 lp_node3 lp_node4
 spans: //(riverh riverv)

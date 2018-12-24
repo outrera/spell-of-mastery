@@ -1,3 +1,4 @@
+wh: 6,6
 filler: c_house1 c_house2
 //no more than five large 2x2 parts can be placed on a single map
 parts: cp_church cp_barracks cp_rich_house

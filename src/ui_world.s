@@ -37,8 +37,8 @@ ui.create_world_dlg =
   |  BX        BY  | WorldButtons
 
 
-ui.generate W H Blueprint =
-| $site.generate{W H Blueprint}
+ui.generate Blueprint =
+| $site.generate{Blueprint}
 | $view.clear
 
 ui.place_ai_player Dweller =
@@ -58,8 +58,6 @@ ui.place_ai_player Dweller =
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
-| W = 6
-| H = 6
 | Dweller = 0
 | Type = if not Site then $cfg.ui.default_site
          else case Site.type
@@ -70,11 +68,9 @@ ui.enter_site_proceed =
            dungeon | \lair
            Else | \forest
 | when Type><lair:
-  | W <= 3
-  | H <= 3
   | Dweller <= if Site then Site.state
                else $cfg.ui."default_dweller"
-| $generate{W H Type}
+| $generate{Type}
 | $site.data.serial <= if Site then Site.serial else 0
 | $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
 | $world.gold <= 0

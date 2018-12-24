@@ -90,8 +90,9 @@ site.place_part XY P =
 // also add `cross` for shore mixed with river
 
 
-site.generate W H BlueprintName =
+site.generate BlueprintName =
 | B = $get_blueprint{BlueprintName}
+| [_,W,H] = B.wh
 | $clear
 | $w <= W*PCells
 | $h <= H*PCells

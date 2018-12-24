@@ -385,6 +385,10 @@ unit.assault Target =
 | when Def > 0: //miss?
   | Target.def <= Def-1
   | Target.counter_attack{Me}
+  | when $owner.human:
+    | $owner.notify{"Your [$title] missed [Target.title]."}
+  | when Target.owner.human:
+    | $owner.notify{"[$title] missed your [Target.title]."}
   | $sound{miss}
   | leave 0
 | Target.def <= Target.class.def

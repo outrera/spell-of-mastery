@@ -1,3 +1,4 @@
+wh: 6,6
 filler: f_trees1 f_trees2 f_trees3 f_trees4
         f_grass1 f_grass2 f_grass3
         f_rocks1 f_rocks2 f_rocks3
