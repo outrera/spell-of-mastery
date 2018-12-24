@@ -94,6 +94,7 @@ type world.widget{Main UI W H}
 world.render =
 | $update
 | Cur = \ui_cursor_point
+| when $phase<>normal: Cur <= \ui_cursor_hourglass
 | when $mode><newBase:
   | Can = $can_place{base $mice_xy}
   | Cur <= if Can then \ui_cursor_target else \ui_cursor_target2

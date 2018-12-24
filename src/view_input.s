@@ -45,7 +45,9 @@ view.handle_pick =
 | when $site.act:
   | $handle_picked_act{Target}
   | leave
-| get_gui{}.cursor <= $main.img{ui_cursor_point}
+| get_gui{}.cursor <=
+  if $main.ui.inputBlocker.show then $main.img{ui_cursor_hourglass}
+  else $main.img{ui_cursor_point}
 | less $mice_click:
   //| when Target: get_gui{}.cursor <= $main.img{ui_cursor_glass}
   | leave
