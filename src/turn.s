@@ -1,4 +1,4 @@
-use util
+use util gui
 
 unit.new_turn =
 | Remove = 0
@@ -43,6 +43,8 @@ unit.end_turn =
 
 site.new_turn =
 
+EndTurnTicks = 0.0
+
 EndTurnLoop = 0
 player.new_turn =
 | less $total_units:
@@ -53,10 +55,12 @@ player.new_turn =
 | EndTurnLoop <= 0
 | say "[$name] ([$color]) begins turn [$site.turn]"
 | for U $units: U.new_turn
-| when $human: $sound{new_turn}
+| when $human and get_gui{}.ticks>EndTurnTicks+2.0:
+  | $sound{new_turn}
 
 player.end_turn =
 | for U $units: U.end_turn
+| when $human: EndTurnTicks <= get_gui{}.ticks
 
 site.end_turn =
 | $last_picked <= 0
