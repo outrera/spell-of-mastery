@@ -53,6 +53,7 @@ player.new_turn =
 | EndTurnLoop <= 0
 | say "[$name] ([$color]) begins turn [$site.turn]"
 | for U $units: U.new_turn
+| when $human: $sound{new_turn}
 
 player.end_turn =
 | for U $units: U.end_turn

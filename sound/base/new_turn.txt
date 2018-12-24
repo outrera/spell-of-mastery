@@ -1,0 +1,3 @@
+author: `tgfcoder <https://twitter.com/tgfcoder>`
+license: `CC-BY-SA 3.0`
+origin: `https://opengameart.org/content/modern-dojo-battle`

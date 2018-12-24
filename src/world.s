@@ -418,7 +418,9 @@ world.update =
     raze | \move
     move | \raid
     raid | \spawn
-    spawn | \normal
+    spawn
+        | $sound{new_turn} 
+        | \normal
     Else | \normal
 
 world.base_placement =
