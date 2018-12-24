@@ -218,16 +218,27 @@ site.generate_human_player Gold PlayerActs =
   | S.move{LeaderXYZ.0}
 | $human.data.gold += Gold
 
-site.generate_ai Side Budget SpellBudget Units Spells Rand =
+site.generate_ai Side Budget Dweller Units Spells Rand =
 | Total = 0
 | Us = Units.shuffle
-//| Budget <= 10000
 | Picked = []
-| for U Us: when U.gold<<100 or (Budget-Total)/max{1 U.gold}>5:
-  | Count = max 1 Rand{U.maxPicks}
-  | times I Count: when Total+U.gold << Budget:
-    | Total += U.gold
+| SpellBudget = 0
+| when Dweller:
+  | U = $main.acts.Dweller
+  | Count = 0
+  | Budget <= max Budget U.gold*3
+  | while Total+U.gold << Budget and Count < 10000:
     | push U Picked
+    | Total += U.gold
+    | Count += 1
+| less Dweller:
+  | SpellBudget <= (Budget+3)/4
+  | Budget <= (Budget*3+3)/4
+  | for U Us: when U.gold<<100 or (Budget-Total)/max{1 U.gold}>5:
+    | Count = max 1 Rand{U.maxPicks}
+    | times I Count: when Total+U.gold << Budget:
+      | Total += U.gold
+      | push U Picked
 | Patrol = []
 | Guards = []
 | RGuards = []

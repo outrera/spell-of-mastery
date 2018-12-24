@@ -191,7 +191,9 @@ update_fade Me =
 LastMovedUnit = -1
 LastMovedTurn = -1
 
-unit.seen_by_human = $site.human.seen{$xyz}
+unit.seen_by_human =
+| H = $site.human
+| H.seen{$xyz} and (not $invisible or $owner.is_ally{H})
 
 unit.observe_force =
 | less $site.valid{@$xyz}: leave

@@ -41,25 +41,26 @@ ui.generate W H Blueprint =
 | $site.generate{W H Blueprint}
 | $view.clear
 
-ui.place_ai_player =
-| Gold = $world.site_gold
-| DF = if $enterSiteDst then $cfg.world."df_[$enterSiteDst.type]"^~{1.0}
-       else 1.0
-| Gold <= (Gold.float*DF).int
-| Budget = max 400 (Gold*3+3)/4
-| SpellBudget = max 100 (Gold+3)/4
+ui.place_ai_player Dweller =
+| Budget = $cfg.ui."default_ai_budget"
+| when $enterSiteDst
+  | Gold = $world.site_gold
+  | DF = $cfg.world."df_[$enterSiteDst.type]"^~{1.0}
+  | Gold <= (Gold.float*DF).int
+  | Budget <= max{500 Gold}
 | Units = []
 | Spells = []
 | for Icon $enterSiteIcons1:
   | Act = Icon.data
   | if Act.tab><summon then push Act Units
     else push Act Spells
-| $site.generate_ai{5 Budget SpellBudget Units Spells | N => $world.rand{N}}
+| $site.generate_ai{5 Budget Dweller Units Spells | N => $world.rand{N}}
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
 | W = 6
 | H = 6
+| Dweller = 0
 | Type = if not Site then $cfg.ui.default_site
          else case Site.type
            city | \city
@@ -71,12 +72,14 @@ ui.enter_site_proceed =
 | when Type><lair:
   | W <= 3
   | H <= 3
+  | Dweller <= if Site then Site.state
+               else $cfg.ui."default_dweller"
 | $generate{W H Type}
 | $site.data.serial <= if Site then Site.serial else 0
 | $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
 | $world.gold <= 0
 | $site.new_game
-| $place_ai_player
+| $place_ai_player{Dweller}
 | $begin_ingame{0}
 
 ui.enter_site_back =

@@ -14,9 +14,11 @@ note_size: 256
 note_life: 5.0 // in seconds
 debug: 1
 picks_always_available: 0
+default_ai_budget: 1000
+default_dweller: unit_ratman
 //default_site: forest
 default_site: lair
-//start: menu
-start: site
+start: menu
+//start: site
 //start: world
 //start: editor
