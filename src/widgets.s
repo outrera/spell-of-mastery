@@ -230,12 +230,12 @@ litems.`=data` Ys =
 litems.pick NP =
 | less $xs.size: leave
 | NP <= @clip 0 $xs.size-1 NP
-| when NP <> $picked
+| when NP <> $picked:
   | K = $picked - $o
-  | when K >> 0 and K < $lines:
-    | $box.items.K.state <= \normal
+  | when K >> 0 and K < $lines: $box.items.K.state <= \normal
   | $picked <= NP
-  | $box.items.(NP-$o).state <= \picked
+  | K = NP-$o
+  | when K >> 0 and K < $lines: $box.items.K.state <= \picked
 | $f $xs.NP
 litems.input In = case In
   [mice left 1 P] | have $ih: $box.items.0.render.h
