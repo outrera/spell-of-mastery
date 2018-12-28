@@ -7,7 +7,7 @@ atk: 2
 def: 0
 will: 5
 speed: 18
-inborn: (organic)
+inborn: (organic nocorpse)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{horse_die}
 onDeath: sound{horse_die}

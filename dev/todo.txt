@@ -2,7 +2,8 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Create dungeon map blueprint:  player is faced against several enemy wizard, that can cast unlimited number of that particular dungeon's spell. It also has some monsters. To finish dungeon map, player has to either find all keys to the chest with the spell, defeat all enemy wizards, or cat the spell of mastety at all nodes.
-- Bases beyond the first one, should be limited only to existing base radius.
+- Telekinesis hand animation.
+- Placing bases beyond the first one, should be limited only to existing base radius.
 - Alternative to invasion way of diplomatically unlocking spells and mercenaries, that also don't waste base turn, but cost money.
 - Units without hands, like Oculus shouldn't be able to pickup items.
 - Site difficulty should be based not just on the gold amount, but also the world map's turn, number of bases, number of cities, number of lair conquered - which is larger.
