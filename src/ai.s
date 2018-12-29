@@ -274,6 +274,7 @@ ai.update =
                      .keep{(?ai><unit and not ?removed)}
 | PID = Player.id
 | OwnedUnits <= SeenUnits.keep{?owner.id><PID}
+| OwnedUnits <= [@OwnedUnits.keep{?leader} @OwnedUnits.skip{?leader}].list
 | SeenEnemies <= SeenUnits.keep{?owner.is_enemy{Player}}.skip{?invisible}
 | $update_turn
 | SeenUnits <= 0

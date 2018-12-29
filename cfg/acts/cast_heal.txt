@@ -1,7 +1,7 @@
 icon: spell_heal
 gold: 150
 tier: 1
-cool: 3
+cool: 4
 range: 9000
 check: unit
 onInit: when{hasnt.undead},heal{9},strip{poison},visual{heal},sound{heal},endwhen,
