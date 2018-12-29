@@ -41,7 +41,7 @@ ui.generate Blueprint =
 | $site.generate{Blueprint}
 | $view.clear
 
-ui.place_ai_player Dweller Spell =
+ui.place_ai_player Side Leader Dweller Spell =
 | Budget = $cfg.ui."default_ai_budget"
 | when $enterSiteDst
   | Gold = $world.site_gold
@@ -54,10 +54,13 @@ ui.place_ai_player Dweller Spell =
   | Act = Icon.data
   | if Act.tab><summon then push Act Units
     else push Act Spells
-| $site.generate_ai{5 Budget Dweller Spell Units Spells | N => $world.rand{N}}
+| $site.generate_ai{Side Leader Budget Dweller Spell Units Spells
+                    | N => $world.rand{N}}
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
+| Side = 5
+| Leader = \leader_heretic
 | Dweller = 0
 | Spell = 0
 | Type = if not Site then $cfg.ui.default_site
@@ -72,6 +75,8 @@ ui.enter_site_proceed =
   | Dweller <= if Site then Site.state
                else $cfg.ui."default_dweller"
 | when Type><dungeon:
+  | Leader <= \leader_katzard
+  | Side <= 3
   | Spell <= if Site then Site.state
              else "cast_[$cfg.ui."default_spell"]"
 | $generate{Type}
@@ -79,7 +84,7 @@ ui.enter_site_proceed =
 | $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
 | $world.gold <= 0
 | $site.new_game
-| $place_ai_player{Dweller Spell}
+| $place_ai_player{Side Leader Dweller Spell}
 | $begin_ingame{0}
 
 ui.enter_site_back =

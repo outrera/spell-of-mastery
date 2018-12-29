@@ -219,7 +219,7 @@ site.generate_human_player Gold PlayerActs =
   | S.move{LeaderXYZ.0}
 | $human.data.gold += Gold
 
-site.generate_ai Side Budget Dweller Spell Units Spells Rand =
+site.generate_ai Side LeaderType Budget Dweller Spell Units Spells Rand =
 | Total = 0
 | Us = Units.shuffle
 | Picked = []
@@ -243,9 +243,10 @@ site.generate_ai Side Budget Dweller Spell Units Spells Rand =
 | Patrol = []
 | Guards = []
 | RGuards = []
-| Player = $players.Side //for now we use hardcoded player 5 for enemy
+| Player = $players.Side
+| SourceSide = 5
 | LeaderXYZ = []
-| for U $units: less U.removed: when U.owner.id >< Player.id:
+| for U $units: less U.removed: when U.owner.id >< SourceSide:
   | when U.type><trigger_spawn_leader:
     | push [U.xyz.copy U.facing] LeaderXYZ
   | when U.type><trigger_spawn_patrol:
@@ -260,7 +261,7 @@ site.generate_ai Side Budget Dweller Spell Units Spells Rand =
 | Player.patrol_points <= Patrol{?0}.enheap
 | when LeaderXYZ.size:
   | XYZ,Facing = LeaderXYZ.shuffle.0
-  | S = Player.alloc_unit{leader_heretic}
+  | S = Player.alloc_unit{LeaderType}
   | S.aistate <= \guard
   | S.move{XYZ}
   | S.pick_facing{Facing}
