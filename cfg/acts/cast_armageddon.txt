@@ -1,8 +1,6 @@
 icon: spell_armageddon
-//lore: 15
-//cost: 10
-//cool: 20
 gold: 150
+cool: 10
 maxPicks: 1
 pickChance: 75
 check: unit

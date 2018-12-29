@@ -86,8 +86,22 @@ unit.ai_pick_target Act =
     | Ts <= TR
   else if Hint >< flight then
     | Ts <= Ts.keep{?is_ally{Me}}.skip{?heavy}.skip{?flyer}
+  else if Hint >< trift then
+    | Ts <= Ts.skip{?hasted}.skip{?slowed}
+  else if Hint >< fear then
+    | Ts <= Ts.skip{?is_ally{Me}}.skip{?afraid}
   else if Hint >< benefit then
     | Ts <= Ts.keep{?is_ally{Me}}
+  else if Hint >< antimagic then
+    | As = Ts.keep{?is_ally{Me}}.skip{?resisting}
+    | Es = Ts.skip{?is_ally{Me}}
+    | Es <= Es.keep{U=>(U.blessed and not U.inborn.has{bless})
+                      or (U.flyer and not U.inborn.has{flyer})
+                      or U.hasted or U.shelled
+                      or (U.resisting and not U.inborn.has{resist})}
+    | Ts <= [@As @Es]
+  else  if Hint >< armageddon then
+    | Ts <= [Me]
   else leave 0
 | Ts <= Ts.keep{T => Act.validate{Me T.xyz T 0}}
 | for Flag Act.flags //avoid overriding

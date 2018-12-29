@@ -8,7 +8,7 @@ onInit: when{enemy}
          ,visual{spell},sound{dispel}
          ,endwhen,
         when{not+enemy}
-         ,strip{slowed},add{resist},visual{resist},sound{resist}
+         ,strip{slowed},strip{afraid},add{resist},visual{resist},sound{resist}
          ,endwhen
-hint: dispel
+hint: antimagic
 tab: spell

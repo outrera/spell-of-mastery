@@ -1,11 +1,13 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- On dungeon maps, enemy wizard should be limited only to dungeon's particular spell.
+- dungeons should have Katzard as a host wizard.
+- slime should have proper movement sound
 - lock high-tier spells and creatures at the start selection screen
 - Hidden even height=1 tile before cursor. Otherwise it is too hard to see anything in tights passages.
 - Ruin spells and lair dwellers should be secret, so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost.
 - Telekinesis hand animation.
+- Lightning cast onto own units provides them with electrical shield.
 - Placing bases beyond the first one, should be limited only to existing base radius.
 - Alternative to invasion way of diplomatically unlocking spells and mercenaries, that also don't waste base turn, but cost money.
 - Units without hands, like Oculus shouldn't be able to pickup items.

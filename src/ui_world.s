@@ -41,7 +41,7 @@ ui.generate Blueprint =
 | $site.generate{Blueprint}
 | $view.clear
 
-ui.place_ai_player Dweller =
+ui.place_ai_player Dweller Spell =
 | Budget = $cfg.ui."default_ai_budget"
 | when $enterSiteDst
   | Gold = $world.site_gold
@@ -54,11 +54,12 @@ ui.place_ai_player Dweller =
   | Act = Icon.data
   | if Act.tab><summon then push Act Units
     else push Act Spells
-| $site.generate_ai{5 Budget Dweller Units Spells | N => $world.rand{N}}
+| $site.generate_ai{5 Budget Dweller Spell Units Spells | N => $world.rand{N}}
 
 ui.enter_site_proceed =
 | Site = $enterSiteDst
 | Dweller = 0
+| Spell = 0
 | Type = if not Site then $cfg.ui.default_site
          else case Site.type
            city | \city
@@ -70,12 +71,15 @@ ui.enter_site_proceed =
 | when Type><lair:
   | Dweller <= if Site then Site.state
                else $cfg.ui."default_dweller"
+| when Type><dungeon:
+  | Spell <= if Site then Site.state
+             else "cast_[$cfg.ui."default_spell"]"
 | $generate{Type}
 | $site.data.serial <= if Site then Site.serial else 0
 | $site.generate_human_player{$world.gold $enterSiteIcons1{}{?data}}
 | $world.gold <= 0
 | $site.new_game
-| $place_ai_player{Dweller}
+| $place_ai_player{Dweller Spell}
 | $begin_ingame{0}
 
 ui.enter_site_back =

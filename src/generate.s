@@ -219,7 +219,7 @@ site.generate_human_player Gold PlayerActs =
   | S.move{LeaderXYZ.0}
 | $human.data.gold += Gold
 
-site.generate_ai Side Budget Dweller Units Spells Rand =
+site.generate_ai Side Budget Dweller Spell Units Spells Rand =
 | Total = 0
 | Us = Units.shuffle
 | Picked = []
@@ -267,12 +267,16 @@ site.generate_ai Side Budget Dweller Units Spells Rand =
 | SBudget = SpellBudget
 | STotal = 0
 | for S Spells: S.picks.(Player.id) <= 0
-| Ss = Spells.shuffle
-| for S Ss: when S.gold<<100 or (SBudget-STotal)/max{1 S.gold}>5:
-  | Count = max 1 Rand{S.maxPicks}
-  | times I Count: when STotal+S.gold << SBudget:
-    | STotal += S.gold
-    | S.picks.(Player.id) += 1
+| when Spell:
+  | S = $main.acts.Spell
+  | S.picks.(Player.id) <= 9000
+| less Spell:
+  | Ss = Spells.shuffle
+  | for S Ss: when S.gold<<100 or (SBudget-STotal)/max{1 S.gold}>5:
+    | Count = max 1 Rand{S.maxPicks}
+    | times I Count: when STotal+S.gold << SBudget:
+      | STotal += S.gold
+      | S.picks.(Player.id) += 1
 | Picked <= Picked{?name}.shuffle
 | RTs = [unit_blob unit_goblin unit_elf unit_vampire unit_observer]
 | Rs = Picked.keep{U => RTs.has{U}}

@@ -49,12 +49,12 @@ Battle View:
 Spells:
 - Telekinesis (neutral): grabs key, treasure, uncovers fog of war, pushes nearby creatures away, and distant creatures closer, operates an object from a distance. Can't be used on chests.
 - Teleport (neutral): teleports caster to picked location on the map; if destination is occupied by other unit, it swaps places with caster.
-- Heal (law): target regains 9 health, and gets cured from poison.
+- Heal (law): target regains 9 health, and gets cured from poison. Damages undeads instead of healing them.
 - Lightning (chaos): target loses 9 health. Target must be outdoor.
 - Time Rift (law): ally target gains 3 additional movement points per turn, while enemy restores only half of its move points.
 - Fear (chaos): target loses ability to act for the next five turns and can only run away.
 - Shell (law): target gains immunity to the next physical attack.
-- Antimagic (chaos): if target is ally, it is cured from fear and gains immunity to the next magical attack, otherwise target loses all benefical enchantments.
+- Antimagic (chaos): if target is ally, it is cured from fear and slownes, and gains immunity to the next magical attack. Enemy target loses all benefical enchantments.
 - Bless (law): makes target deal additional damage to undead units and immune to lifedrain, it also cures fear.
 - Raise Dead (chaos): resurrects creature's corpse as undead, which is resistant to non-magical weapon, but vulnerable to blessed units.
 - Invisibility (law): target becomes invisible. Doing any action beside movement would cancel invisibility.
