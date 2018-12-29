@@ -10,5 +10,5 @@ speed: 60
 onHit: shell,hit{user},sound{blob_attack}
 onHarm: visual{blood_undead},sound{blob_hit}
 onDeath: sound{blob_hit}
-onMove: sound{step}
+onMove: sound{blob_move}
 acts: (act_blobspawn)

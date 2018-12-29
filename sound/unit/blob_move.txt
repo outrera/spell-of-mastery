@@ -1,0 +1,3 @@
+author: `Various Authors`
+license: `MIT`
+origin: `https://github.com/jonburesh/sintelgame`
