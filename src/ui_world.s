@@ -65,7 +65,7 @@ ui.enter_site_proceed =
            village | \city
            ruin | \city
            lair | \lair
-           dungeon | \lair
+           dungeon | \dungeon
            Else | \forest
 | when Type><lair:
   | Dweller <= if Site then Site.state

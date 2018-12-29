@@ -25,6 +25,7 @@ ui.create_defeat_dlg =
           | $world.leave_site{defeat}
 
 ui.show_results = //called when we have a winner
+| get_gui{}.cursor <= $main.img{ui_cursor_point}
 | WinnerId = $site.data.winner
 | when no WinnerId: WinnerId <= 0
 | Winner = $site.players.WinnerId

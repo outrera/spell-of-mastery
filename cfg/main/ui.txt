@@ -17,8 +17,8 @@ picks_always_available: 0
 default_ai_budget: 1000
 default_dweller: ratman
 //default_site: forest
-default_site: lair
-//start: menu
+default_site: dungeon
+start: menu
 //start: site
 //start: world
-start: editor
+//start: editor

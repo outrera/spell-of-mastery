@@ -1,7 +1,7 @@
 icon: spell_subvert
 hotkey: m
 tier: 4
-cool: 7
+cool: 5
 gold: 200
 maxPicks: 3
 pickChance: 50

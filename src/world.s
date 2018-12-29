@@ -414,6 +414,8 @@ world.update =
   | when Act><flight:
     | $ui.enter_site{Goal}
     | $free_site{S} //no need for airship
+    | get_gui{}.cursor <= $img{ui_cursor_point}
+    | $phase <= \normal
   | leave
 | $phase <= case $phase
     raze | \move
@@ -515,6 +517,13 @@ world.site_spoils How Apply =
     | Act.researched <= 1
     | $free_site{S}
   | T2 <= "New mercenary type unlocked: [Class.Name.title]."
+| when S.type><dungeon:
+  | Name = S.state
+  | Act = Acts.Name
+  | when Apply:
+    | Act.researched <= 1
+    | $free_site{S}
+  | T2 <= "New spell unlocked: [Act.title]."
 | when S.type><party:
   | when Apply: $free_site{S}
   | T2 <= "You have defeated the raiding party!"

@@ -1,0 +1,7 @@
+wh: 3,3
+filler: d_room1
+parts: dp_entrance dp_ship dp_lab dp_living_room dp_storage dp_junction
+spans: //(riverh riverv)
+playlist: forest
+//parentheses mean that only one of these could be placed,
+//entry: grass_entry

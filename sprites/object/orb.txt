@@ -1,3 +1,6 @@
 author: `Artem Belov`
-class: height,1
+copyright: `Nikita Sadkov`
+class: height,2
 xy: 0,8
+frames: folder
+anims: | idle time-4 idle0 idle1 idle2 idle3 idle4 idle5
