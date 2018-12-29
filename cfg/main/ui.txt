@@ -16,10 +16,10 @@ debug: 1
 picks_always_available: 0
 default_ai_budget: 1000
 default_dweller: ratman
-default_spell: fear
+default_spell: detonate
 //default_site: forest
 default_site: dungeon
 //start: menu
-start: site
+//start: site
 //start: world
-//start: editor
+start: editor

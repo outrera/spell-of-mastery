@@ -1,6 +1,9 @@
 icon: spell_raisedead
 title: `Raise Dead`
+tier: 3
+cool: 5
 gold: 50
+maxPicks: 3
 range: 9000
 check: empty,corpse
 onInit: resurrect,visual{curse},sound{curse}

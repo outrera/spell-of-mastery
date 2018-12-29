@@ -37,7 +37,7 @@ unit.ai_pick_target Act =
 | Ts = Targets.keep{?ai><unit}.keep{?alive}
 | Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
 | Hint = Act.hint
-//| less Hint >< teleport: leave 0
+//| less Hint >< detonate: leave 0
 | if Hint >< heal then
     | Ts1 = Ts.keep{?is_ally{Me}}.keep{?harmed}.skip{?undead}
     | Ts2 = Ts.skip{?is_ally{Me}}.keep{?undead}
@@ -100,7 +100,11 @@ unit.ai_pick_target Act =
                       or U.hasted or U.shelled
                       or (U.resisting and not U.inborn.has{resist})}
     | Ts <= [@As @Es]
-  else  if Hint >< armageddon then
+  else if Hint >< detonate then
+    | Ts <= Ts.keep{?is_ally{Me}}
+    | Ts <= Ts.keep{T => | Vs = $site.detonate_victims{T.xyz}.skip{?is_ally{T}}
+                         | Vs.size and T.health << Vs.map{?health}.sum}
+  else if Hint >< armageddon then
     | Ts <= [Me]
   else leave 0
 | Ts <= Ts.keep{T => Act.validate{Me T.xyz T 0}}

@@ -190,16 +190,22 @@ effect spread What Harm
       | B = C.block
       | when B: B.harm{Me Harm}
 
-effect detonate Damage MaxH:
+site.detonate_victims XYZ =
+| Height = 3
+| Vs = []
+| for D Dirs43
+  | C = $cellp{XYZ+D}
+  | F = C.floor
+  | B = F.block
+  | when B and (C-F).abs<Height: push B Vs
+| Vs
+
+effect detonate Damage:
 | XYZ = Target.xyz.copy
 | B = $site.block_at{XYZ}
 | when Damage><health: Damage <= Target.class.hp
 | Target.harm{Me Target.class.hp}
-| for D Dirs43
-  | C = $site.cellp{XYZ+D}
-  | F = C.floor
-  | B = F.block
-  | when B and (C-F).abs<MaxH: B.harm{Me Damage}
+| for V $site.detonate_victims{XYZ}: V.harm{Me Damage}
 
 effect addkey:
 | Color = $owner.color
