@@ -92,6 +92,8 @@ unit.ai_pick_target Act =
     | Ts <= Ts.skip{?is_ally{Me}}.skip{?afraid}
   else if Hint >< benefit then
     | Ts <= Ts.keep{?is_ally{Me}}
+  else if Hint >< bless then
+    | Ts <= Ts.keep{?is_ally{Me}}
   else if Hint >< antimagic then
     | As = Ts.keep{?is_ally{Me}}.skip{?resisting}
     | Es = Ts.skip{?is_ally{Me}}

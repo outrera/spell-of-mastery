@@ -40,6 +40,10 @@ ui.create_new_game_setup_dlg =
 | Acts = $main.acts
 | Spells = $cfg.world.spells
 | Summons = $cfg.world.summons
+| LSpells = $cfg.world.locked_spells
+| LSummons = $cfg.world.locked_summons
+| Spells <= Spells.skip{S=>LSpells.has{S}}
+| Summons <= Summons.skip{S=>LSummons.has{S}}
 | create_pick_icon ActName =
   | Act = Acts.ActName
   | when no Act: bad "missing act [ActName]"

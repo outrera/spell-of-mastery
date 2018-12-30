@@ -19,7 +19,7 @@ default_dweller: ratman
 default_spell: detonate
 //default_site: forest
 default_site: dungeon
-//start: menu
+start: menu
 //start: site
 //start: world
-start: editor
+//start: editor

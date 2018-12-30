@@ -1,9 +1,10 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- lock high-tier spells and creatures at the start selection screen
-- Hidden even height=1 tile before cursor. Otherwise it is too hard to see anything in tights passages.
-- Ruin spells and lair dwellers should be secret, so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost.
+- Ensure AI properly handles the rest of spells, like firestorm and subvert.
+- Hide even height=1 tile before cursor. Otherwise it is too hard to see anything in tight passages.
+- Imp digging and building action.
+- Ruin spells and lair dwellers should be secret (show only their difficutly, as different sprite, a number of start or a plain number), so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost.
 - Telekinesis hand animation.
 - Lightning cast onto own units provides them with electrical shield.
 - Placing bases beyond the first one, should be limited only to existing base radius.

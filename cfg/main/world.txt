@@ -72,6 +72,21 @@ default_picks:
 
 max_units: 14 //maximum number of units player is allowed to bring in on site
 
+locked_summons:
+     unit_cyclops,
+     unit_observer,
+     unit_golem,
+     unit_hydra,
+     unit_dragon
+
+locked_spells:
+      cast_firestorm,
+      cast_teleport,
+      cast_subvert,
+      cast_raisedead,
+      cast_flight,
+      cast_armageddon
+
 summons:
       unit_oculus,
       unit_observer,
@@ -108,12 +123,12 @@ spells:
       cast_shell
       cast_antimagic
       cast_bless
-      cast_raisedead
       cast_invisibility
-      cast_firestorm
-      cast_flight
       cast_detonate
-      cast_armageddon
-      cast_subvert
+      cast_firestorm
       cast_teleport
+      cast_subvert
+      cast_raisedead
+      cast_flight
+      cast_armageddon
       )
