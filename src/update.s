@@ -197,7 +197,8 @@ unit.seen_by_human =
 
 unit.observe_force =
 | less $site.valid{@$xyz}: leave
-| $main.ui.view.center_at{$xyz+[-3 -3 0] cursor/1}
+| $main.ui.view.center_at{$xyz+[0 0 0] cursor/1}
+| $main.ui.view.center_at{$xyz+[-3 -3 0] cursor/0}
 
 unit.observe =
 | less $owner.human: when $action.type<>idle and $health and $seen_by_human:

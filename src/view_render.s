@@ -258,7 +258,14 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
 | CurY = fxn Cur.1
 | CurH = fxn (CurX+CurY)/2
 | AboveCursor = fxn CurH >> (X+Y)/2
-| ZCut = fxn: max Cur.2 0
+/*| DXY = [X Y]-[CurX CurY]
+| when DXY.0 and DXY.1:
+  | A = DXY.0.float
+  | B = DXY.1.float
+  | when A<B: swap A B
+  | when (A/B).abs>2.0:
+    | AboveCursor <= 1*/
+| ZCut = fxn: max Cur.2-1 0
 | Fog = Explored><1
 | Cell = Wr.cell{X Y 0}
 | Us = Cell.units.unheap

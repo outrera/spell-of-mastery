@@ -90,8 +90,8 @@ view.center_at XYZ cursor/0 =
 | Z = Z.clip{1 $site.d}
 | $center.init{X,Y,Z}
 | when Cursor:
-  | $zlock <= if $site.outdoor{$center} then $site.d-2 else Z
-| when Cursor: $cursor.init{X,Y,Z}
+  | $zlock <= Z//if $site.outdoor{$center} then $site.d-2 else Z
+  | $cursor.init{X,Y,Z}
 | VO = -[$h/$yunit $h/$yunit]+[X Y]-[Z/$zunit Z/$zunit]+[6 6]
 | when Z > 31: VO += [2 2] //hack to improve high altitude centering
 | $view_origin.init{VO-[6 6]}
