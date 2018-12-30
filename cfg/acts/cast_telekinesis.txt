@@ -5,6 +5,6 @@ cool: 5
 range: 9000
 check: any
 onInit: sound{pentagram}
-onEnd: visual{spell},telekinesis
+onEnd: visual{telekinesis},visual{spell},telekinesis
 hint: telekinesis
 tab: spell

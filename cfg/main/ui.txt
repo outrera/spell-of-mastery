@@ -20,6 +20,6 @@ default_spell: bless
 //default_site: forest
 default_site: dungeon
 //start: menu
-start: site
+//start: site
 //start: world
-//start: editor
+start: editor

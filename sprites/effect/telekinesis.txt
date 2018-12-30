@@ -1,0 +1,10 @@
+author: `marquet (http://marquetgames.tumblr.com/)`
+license: `CC-BY 3.0`
+origin: `https://opengameart.org/content/tv-run-game-all-the-old-art`
+class: box_xy,(-1 -1)
+      ,speed,24
+      ,ai,visual
+      ,height,0
+frames: 100*100
+xy: 0,-12
+anims: | idle time-20 0
