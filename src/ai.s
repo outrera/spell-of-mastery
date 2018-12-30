@@ -84,8 +84,8 @@ unit.ai_pick_target Act =
       | C-CF > 1 or (CF-1).tile.liquid
     | for T Ts.keep{T=>T.xyz.mdist{$xyz}><1}:
       | when badplace T.telepush{0 $xyz -6}: push T TR
-    | when TR.end:
-      | for T  Ts.skip{T=>T.xyz.mdist{$xyz}><1}:
+    | when TR.end: //else try pushing enemy away
+      | for T Ts.skip{T=>T.xyz.mdist{$xyz}><1}:
         | when badplace T.telepush{1 $xyz -6}: push T TR
     | Ts <= TR
   else if Hint >< flight then
