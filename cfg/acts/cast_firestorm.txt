@@ -1,5 +1,8 @@
 icon: spell_firestorm
 range: 9000
+gold: 100
+maxPicks: 4
+cool: 4
 check: any
 onInit: visual{fire_ring},sound{fire},spawn{special_fire}
 hint: firestorm

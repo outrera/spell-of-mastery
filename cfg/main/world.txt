@@ -72,6 +72,7 @@ default_picks:
 
 max_units: 14 //maximum number of units player is allowed to bring in on site
 
+// items not available at startup
 locked_summons:
      unit_cyclops,
      unit_observer,

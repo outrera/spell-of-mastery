@@ -441,6 +441,8 @@ site.block_at_safe XYZ =
 
 site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
+site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
+
 unit.explore V =
 | Sight = $sight
 | when no Sight: leave

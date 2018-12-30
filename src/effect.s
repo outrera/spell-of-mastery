@@ -174,17 +174,21 @@ effect area As: //area{any,3,harm{magic.2}}
 | for T Ts: $effect{Es T T.xyz}
 
 effect spread What Harm
-| when $hp < 2:
-  | when $action.type <> die: $die
+| Fuel = $get{fuel}.0
+| when Fuel < 2:
+  | when $action.type >< die: leave
+  | $add_gene{fade_die 0 []}
+  //| when $action.type <> die: $die
   | leave
 | for C $site.cellp{TargetXYZ}.floor.neibs{}{?floor}:
   | XYZ = C.xyz
-  | when C.empty and (XYZ.2-TargetXYZ.2).abs<<1 and no C.units.find{?type><What}:
+  | when C.empty and (XYZ.2-TargetXYZ.2).abs<<1
+         and no C.units.find{?type><What}:
     | S = $owner.alloc_unit{What}
     | less S.alpha:
       | S.alpha <= 255
       | S.delta <= -50
-    | S.hp <= $hp-1
+    | S.set{fuel [Fuel-1]}
     | S.move{XYZ}
     | when Harm:
       | B = C.block

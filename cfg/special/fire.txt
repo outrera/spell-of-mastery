@@ -1,4 +1,4 @@
 sprite: effect_fire
 box_xy: (1 1)
 ai: hazard
-inborn: (burns_visitors burns_tenants firestorm ttl_die.3{})
+inborn: (burns_visitors burns_tenants firestorm fuel{7} ttl_die.2{})

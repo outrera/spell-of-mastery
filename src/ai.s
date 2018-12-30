@@ -5,10 +5,11 @@ OwnedUnits = 0
 SeenEnemies = 0
 PerCycle = 0
 
-unit.advance_to GoalXYZ =
+unit.advance_to GoalXYZ safe/0 =
 | when $xyz >< GoalXYZ: leave 1
 | Path = $path_to{GoalXYZ}
 | less Path.size: leave 2
+| when Safe and Path.has{C=>$site.is_hazard{C.xyz}}: leave 0
 | Moves = map C $reachable: C.1
 | Cell = No
 | while Path.size and got Moves.find{Path.0}: Cell <= pop Path
@@ -47,6 +48,8 @@ unit.ai_pick_target Act =
     | Ts <= Ts.keep{?is_enemy{Me}}.skip{?undead}.skip{?blessed}
   else if Hint >< harm then
     | Ts <= Ts.keep{?is_enemy{Me}}
+  else if Hint >< firestorm then
+    | Ts <= Ts.keep{?is_enemy{Me}}
   else if Hint >< raise then
     | Player = $owner
     | Ts <= $site.active.list.keep{U=>Player.seen{U.xyz}}
@@ -60,7 +63,8 @@ unit.ai_pick_target Act =
     | less $leader: leave 0
     | less got Ts.keep{?is_enemy{Me}}.find{T=>T.xyz.mdist{$xyz}><1}:
       | leave 0
-    | Ts <= Ts.keep{?owner.id><$owner.id}
+    | Ts <= Ts.keep{?owner.id><$owner.id}.keep{T=>T.xyz.mdist{$xyz}>5}
+    | when Ts.size>1: Ts <= [Ts.sort{?gold>??gold}.0]
   else if Hint >< teleport then
     | less $type><unit_devil: leave 0
     | Ts <= Ts.keep{?is_enemy{Me}}.keep{?punish_hp>3}
@@ -102,6 +106,11 @@ unit.ai_pick_target Act =
                       or U.hasted or U.shelled
                       or (U.resisting and not U.inborn.has{resist})}
     | Ts <= [@As @Es]
+  else if Hint >< subvert then
+    | Ts <= Ts.keep{?is_enemy{Me}}.sort{?gold>??gold}
+    | when Ts.size
+      | G = Ts.0.gold
+      | Ts <= Ts.skip{?gold<G}
   else if Hint >< detonate then
     | Ts <= Ts.keep{?is_ally{Me}}
     | Ts <= Ts.keep{T => | Vs = $site.detonate_victims{T.xyz}.skip{?is_ally{T}}
@@ -194,9 +203,10 @@ unit.ai_runaway Btrack =
     | Found = $site.closest_reach{$sight Me R E.xyz}
     | Path = if Found then Found.path else []
     | when Path.size<Dist: Dist <= Path.size
-  | when BestDist<Dist:
-    | BestDist <= Dist
-    | Best <= R
+  | when $path_to{R.xyz}.map{C=>$site.is_hazard{C.xyz}<>0}.sum<2:
+    | when BestDist<Dist:
+      | BestDist <= Dist
+      | Best <= R
 | when Best:
   | $order_at{Best.xyz 0}
   | when Btrack and no $get{btrack}: $backtrack <= $xyz
@@ -208,7 +218,7 @@ unit.ai_update =
   | leave 0
 | when $afraid:
   | when $enemies_in_sight.size: $ai_runaway{1}
-  | leave 0
+  | leave break
 | when $ai_ability: leave break
 | when $atk:
   | Cs = $reachable
@@ -239,8 +249,12 @@ unit.ai_update =
     | leave break
 | when $aistate <> roam:
   | BtXYZ = $get{btrack}
-  | when got BtXYZ and $advance_to{BtXYZ}: $backtrack <= 0
+  | when got BtXYZ and $advance_to{BtXYZ safe/1}:
+    | $backtrack <= 0
 | when $aistate >< roam and $ai_roam: leave break
+| when $site.is_hazard{$xyz}:
+  | $ai_runaway{1}
+  | leave break
 | $handled <= 1
 | \next
 

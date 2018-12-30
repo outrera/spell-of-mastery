@@ -1,11 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Ensure AI properly handles the rest of spells, like firestorm and subvert.
+- Antimagic should cancel subvert.
 - Hide even height=1 tile before cursor. Otherwise it is too hard to see anything in tight passages.
 - Imp digging and building action.
-- Ruin spells and lair dwellers should be secret (show only their difficutly, as different sprite, a number of start or a plain number), so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost.
+- Ruin spells and lair dwellers should be secret (show only their difficutly, as different sprite, a number of start or a plain number), so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost. Ensure player cannot use save/load to scumsave them.
 - Telekinesis hand animation.
+- Burned ground for firestorm, which could also be used for vulcaing tiles.
 - Lightning cast onto own units provides them with electrical shield.
 - Placing bases beyond the first one, should be limited only to existing base radius.
 - Alternative to invasion way of diplomatically unlocking spells and mercenaries, that also don't waste base turn, but cost money.
