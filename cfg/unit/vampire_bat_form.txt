@@ -2,9 +2,10 @@ sprite: unit_bat
 title: `Vampire` 
 icon: unit_bat
 tier: 3
-health: 3
-atk: 4
-def: 30
+height: 1
+health: 12
+atk: 1
+def: 16
 range: 1
 mov: 14
 sight: 10

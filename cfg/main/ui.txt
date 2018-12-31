@@ -21,6 +21,6 @@ default_spell: bless
 //default_site: dungeon
 default_site: lair
 //start: menu
-start: site
+//start: site
 //start: world
-//start: editor
+start: editor

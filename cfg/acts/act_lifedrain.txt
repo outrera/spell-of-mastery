@@ -1,11 +1,9 @@
 icon: act_lifedrain
 title: `Lifedrain`
-lore: 0
-cost: 0
 cool: 16
 range: 4
 check: no{undead `Can't lifedrain undead creature`}
       ,no{bless `Can't lifedrain blessed creature`},organic,unit
 onInit: lifedrain{full},visual{lifedrain},sound{lifedrain},self,visual{heal}
 hint: lifedrain
-tab: spell
+

@@ -194,7 +194,7 @@ unit.init Class =
 unit.morph Class =
 | when Class.is_text: Class <= $main.classes.Class
 | $owner.lost_unit{Me}
-| $hp <= Class.hp + $hp - $class.hp
+| $hp <= max 1 | Class.hp + $hp - $class.hp
 | $class <= Class
 | $sprite <= if $show or $site.editor
              then $default_sprite

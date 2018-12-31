@@ -24,6 +24,8 @@ type player{id site}
    data/(t)
    picked_unit
    picked_serial
+   picked_save
+   picked_save_serial
    sight // fog of war
    total_units
    unit_counts // counts uwned units for each unit type
@@ -80,6 +82,8 @@ player.clear =
 | $ai.clear
 | $picked_unit <= $site.nil
 | $picked_serial <= 0
+| $picked_save <= $site.nil
+| $picked_save_serial <= 0
 | $leader <= $site.nil
 | $data.lossage <= 0
 | $data.gold <= 0

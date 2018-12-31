@@ -46,6 +46,19 @@ site.new_turn =
 EndTurnTicks = 0.0
 
 EndTurnLoop = 0
+
+player.store_picked =
+| $picked_unit.picked <= 0
+| $picked_save <= $picked_unit
+| $picked_save_serial <= $picked_serial
+| $picked <= $site.nil
+
+player.restore_picked =
+| when $picked_save.serial >< $picked_save_serial and $picked_save.alive:
+  | $picked <= $picked_save
+  | $picked.picked <= 1
+
+
 player.new_turn =
 | less $total_units:
   | if EndTurnLoop++ > 16
@@ -55,10 +68,12 @@ player.new_turn =
 | EndTurnLoop <= 0
 | say "[$name] ([$color]) begins turn [$site.turn]"
 | for U $units: U.new_turn
+| $restore_picked
 | when $human and get_gui{}.ticks>EndTurnTicks+2.0:
   | $sound{new_turn}
 
 player.end_turn =
+| $store_picked
 | for U $units: U.end_turn
 | when $human: EndTurnTicks <= get_gui{}.ticks
 

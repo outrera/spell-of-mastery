@@ -98,6 +98,18 @@ unit.ai_pick_target Act =
     | Ts <= Ts.skip{?is_ally{Me}}.skip{?afraid}
   else if Hint >< benefit then
     | Ts <= Ts.keep{?is_ally{Me}}
+  else if Hint >< batform0 then
+    | Ts <= []
+    | less @end $site.units_in_range{$xyz 3}.skip{?is_ally{Me}}:
+      | Ts <= [Me]
+  else if Hint >< batform1 then
+    | Ts <= []
+    | say $site.units_in_range{$xyz 3}.skip{?is_ally{Me}}
+    | when @end $site.units_in_range{$xyz 3}.skip{?is_ally{Me}}:
+      | Ts <= [Me]
+  else if Hint >< lifedrain then
+    | when $class.hp-$hp < 4: leave 0
+    | Ts <= Ts.skip{?is_ally{Me}}.skip{?undead}.skip{?blessed}
   else if Hint >< bless then
     | Ts <= Ts.keep{?is_ally{Me}}
   else if Hint >< antimagic then

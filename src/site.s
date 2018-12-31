@@ -548,7 +548,7 @@ site.units_in_range Center R =
   | Y = XYZ.1
   | when X>0 and X<<$w and Y>0 and Y<<$h:
     | for U $column_units_get{X Y}: when $seen_from{Center U.xyz}: push U Units
-| Units
+| Units.keep{?ai><unit}
 
 site.neibs X Y Z = fxn:
   [$at{X Y-1 Z} $at{X+1 Y Z} $at{X Y+1 Z} $at{X-1 Y Z}
