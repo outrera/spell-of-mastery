@@ -1,0 +1,9 @@
+icon: act_bridge
+title: `Build Bridge`
+mov: 4
+range: 1
+zfree: 2
+check: same_z,water,any
+delay: 2 //required for view_input to update movement marks
+onHit: sound{hammer},bridge
+hint: bridge

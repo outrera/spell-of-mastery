@@ -445,6 +445,14 @@ effect dig:
 | $site.visual{DXYZ dustend}
 | when TargetXYZ >< $xyz: $move{DXYZ}
 
+effect bridge:
+| X,Y,Z = TargetXYZ
+| Tile = $main.tiles.floor_wood
+| DXYZ = X,Y,Z-1
+| $site.set{X Y Z-1 Tile}
+| $site.visual{TargetXYZ dustend}
+| when DXYZ >< $xyz: $move{TargetXYZ}
+
 player.spawn XYZ What =
 | S = $alloc_unit{What}
 | S.aistate <= \spawned

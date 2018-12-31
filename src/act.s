@@ -92,6 +92,9 @@ defcheck water:
 | Below = $site.at{XYZ.0 XYZ.1 XYZ.2-1}
 | when Below.type <> water: leave "Needs water."
 
+defcheck same_z:
+| when (XYZ.2-$xyz.2).abs>0: leave "Too far."
+
 defcheck digable:
 | DZ = XYZ.2
 | when DZ><1: leave "Cant dig any further."
@@ -101,6 +104,8 @@ defcheck digable:
 | when DZ-SZ>2 or SZ-DZ>0: leave "Too far."
 | when $site.cellp{[XYZ.0 XYZ.1 XYZ.2-1]}.neibs8.any{?tile.liquid}:
   | leave "Can't dig near liquid."
+
+
 
 
 defcheck outdoor: less $site.outdoor{XYZ}: leave "Needs outdoor space."
