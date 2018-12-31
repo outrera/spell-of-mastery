@@ -138,6 +138,7 @@ unit.draw FB B =
       | YY += FloatDYs.((C/3+$id)%FloatDYs.size)
   | Alpha = $alpha
   | when $invisible:
+    | Alpha <= 127
     | C = $site.cycle
     | Alpha -= 20*FloatDYs.((C/4+$id)%FloatDYs.size)
     | Alpha <= max 0 Alpha

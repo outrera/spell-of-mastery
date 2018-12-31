@@ -33,10 +33,10 @@ unit.ai_pick_target Act =
 | Targets =
     if R>>9000 then SeenUnits
     else if R><0 then [Me]
-    else $site.units_in_range{Me.xyz Act.range}
-| Explored = $owner.sight
+    else $site.units_in_range{$xyz R}
 | Ts = Targets.keep{?ai><unit}.keep{?alive}
-| Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
+//| Explored = $owner.sight
+//| Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
 | Hint = Act.hint
 //| less Hint >< detonate: leave 0
 | if Hint >< heal then
@@ -65,12 +65,14 @@ unit.ai_pick_target Act =
       | leave 0
     | Ts <= Ts.keep{?owner.id><$owner.id}.keep{T=>T.xyz.mdist{$xyz}>5}
     | when Ts.size>1: Ts <= [Ts.sort{?gold>??gold}.0]
-  else if Hint >< teleport then
-    | less $type><unit_devil: leave 0
-    | Ts <= Ts.keep{?is_enemy{Me}}.keep{?punish_hp>3}
+  else if Hint >< phase or Hint >< teleport then
+    | less $atk: leave 0
+    | Ts = SeenUnits.keep{?is_enemy{Me}}.keep{?alive}
+    | when $type><unit_devil: Ts <= Ts.keep{?punish_hp>3}
     | TR = []
     | for T Ts: for C T.cell.neibs{}{?floor}:
-      | when C.vacant and T.xyz.2-C.xyz.2 > -1: push C.xyz TR
+      | when C.vacant and C.xyz.mdist{$xyz} << R and (T.xyz.2-C.xyz.2).abs < 2:
+        | push C.xyz TR
     | Ts <= TR.keep{T => Act.validate{Me T 0 0}}
     | leave: if Ts.end then 0 else Ts.rand
   else if Hint >< punish then

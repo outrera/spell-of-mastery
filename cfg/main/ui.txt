@@ -15,11 +15,12 @@ note_life: 5.0 // in seconds
 debug: 1
 picks_always_available: 0
 default_ai_budget: 1000
-default_dweller: ratman
+default_dweller: unit_wraith
 default_spell: bless
 //default_site: forest
-default_site: dungeon
+//default_site: dungeon
+default_site: lair
 //start: menu
-//start: site
+start: site
 //start: world
-start: editor
+//start: editor

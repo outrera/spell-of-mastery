@@ -4,7 +4,7 @@ mov: 8
 health: 10
 atk: 2
 def: 8
-inborn: (nocorpse flyer)
+inborn: (nocorpse flyer nocorpse)
 onHit: shell,hit{user},sound{gargoyle_attack}
 onHarm: visual{blood_undead},sound{devil_hit}
 onDeath: sound{gargoyle_death}

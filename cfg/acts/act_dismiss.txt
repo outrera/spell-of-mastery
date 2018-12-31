@@ -4,7 +4,7 @@ needsGene: (-leader)
 mov: 0
 check: self
 menu: m_yes,m_no
-onMenu: notify{`Dismiss this creature? Are you sure?`}
+onMenu: insulate,notify{`Dismiss this creature? Are you sure?`}
 animate: No
-onInit: sound{cancel},visual{teleport},remove
+onInit: insulate,sound{cancel},visual{teleport},remove
 hint: dismiss

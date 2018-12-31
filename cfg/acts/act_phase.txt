@@ -1,12 +1,10 @@
 icon: spell_teleport
 title: `Phase Shift`
 hotkey: p
-//lore: 5
-//cost: 3
-//cool: 5
-range: 2
+cool: 8
+range: 10
 mov: 2
 check: placeable,empty
-onInit: self,visual{teleport},sound{summon},set{alpha 0},set{delta 10}
-onEnd: visual{teleport},teleport{self},self,set{alpha 255},set{delta -10}
-hint: teleport
+onInit: insulate,self,sound{phase},set{alpha 0},set{delta 10}
+onEnd: insulate,teleport{self},self,set{alpha 255},set{delta -10}
+hint: phase
