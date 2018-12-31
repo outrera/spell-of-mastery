@@ -1,3 +1,0 @@
-author: `Koen Witters`
-license: `MIT`
-origin: `https://github.com/koonsolo/MysticMine`

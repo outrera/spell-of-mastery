@@ -3,6 +3,7 @@ title: `Look At`
 hotkey: f
 mov: 0
 range: 1
+zfree: 1
 check: any
 onInit: animate{idle},face
 hint: face

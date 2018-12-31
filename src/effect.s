@@ -436,6 +436,15 @@ effect set_tile [X Y Z] Type:
   | leave
 | $site.set{X Y Z Tile}
 
+effect dig:
+| X,Y,Z = TargetXYZ
+| Tile = $main.tiles.void
+| DXYZ = X,Y,Z-1
+| $site.set{X Y Z-1 Tile}
+| $sound{excavate}
+| $site.visual{DXYZ dustend}
+| when TargetXYZ >< $xyz: $move{DXYZ}
+
 player.spawn XYZ What =
 | S = $alloc_unit{What}
 | S.aistate <= \spawned

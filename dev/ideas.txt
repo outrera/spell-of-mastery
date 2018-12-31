@@ -112,13 +112,13 @@ Creatures:
 
 Spells:
 - Taboo: forbids use of some ability or a class of abilities.
-- Genocide (chaos): kill all units of specific type, both enemy and allied. Requires two times the mana, needed to subvert target creature.
-- Polymorph: player is give a list of creature into which target can be polymorphed.
+- Genocide (chaos): kill all units of specific type (make it an item, so player wont be able to able genocide most powerful enemy at will).
+- Polymorph: player is given a list of creatures into which target can be polymorphed. Alternatively, each creature has custom polymorph list, so that tier-1 creature won't be polymorphed into tier-4.
 - Time Stop: enemy loses its turn.
 - Guardian Angel: if a creature is killed, it gets resurrected. Creatures with such enchacements have a halo of ther heads.
 - Torando/Whirlwind: nearby units are pushed away from tornado, similarly to dragon's blow away
 - Morph (law): caster is morphed into the target creature, that is present on map and seen, until caster cancels effect (need some way to preserve casters original health).
-- Equilibrium (law): target creature gets damage proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
+- Equilibrium (law): target creature gets damage (or heals) proportional to the total creatures its owner has, minus total creatures caster owns. Consider including tiers, so player won't be punished for using low-tier creatures. This spell is one way to break positive feedback.
 - Reveal Spells/Items: shows on minimap places where items are located.
 - Slow (chaos): target unit moves at half of its speed.
 - Teleport: allows teleporting any creature to any visible location.
@@ -138,7 +138,7 @@ Spells:
 - Excavate: reamoves height=2 pilar of dirt.
 - Water to Lava: converts all water to lava, disallowing passage over it and damagin units standing on it.
 - Terraforming spells: raise/lower elevation, create/remove water pool, etc...
-- Freeze Water: freezes all water on the map, allowing units to pass over it.
+- Freeze Water: freezes all water/lava on the map, allowing units to pass over it, and also killing units caught inside of water/lava.
 - Water to Earth: targets attached to water dirt cell, turning it to water.
 - Drought: temporary removes all water, replacing it with special empty aux tile
 - Earth to Water: targets attached to dirt water cell, turning it to dirt.
@@ -189,8 +189,7 @@ Spells:
 - Palantir: wizard creates a scrying ball, keeping a creature near ball allows player to see through the fog of war. Yet it doesn't explore the map and doesn't reveal invisible creatures. Also provide some cover structures to counter it, maybe disallow indoors scrying to promote creation of tunnels and buildings by players.
 - Wind: nearby target gets displaced, similarly to tornado.
 - Geomancy: affect all units standing on a terrain of specific kind.
-- Raise Dead: resurrect recently killed unit as undead.
-- Guardian Angel: killed unit gets resurrected at pentagram.
+- Guardian Angel: killed unit gets immediately resurrected.
 - Clone Self: creates clone of self, which will continue leading, if creator dies
 - Passion: caster loses health, but gains mana.
 - Mana Shield: harm to target unti is converted in mana loss.

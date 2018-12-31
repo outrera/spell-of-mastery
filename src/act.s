@@ -3,7 +3,9 @@ use util macros act_
 type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
          hint/0 tab/0
          cost/0 mov/1 fatigue/1 cool/0 needs/[] needsGene/[]
-         priority/50 range/0 speed/4 delay/0 animate/No repeat/0
+         priority/50
+         range/0 zfree/0
+         speed/4 delay/0 animate/No repeat/0
          menu/0 onMenu/0
          check/unit onInit/[] onHit/OnHit onEnd/[]}
   title/Title
@@ -26,6 +28,7 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
   needsGene/NeedsGene //available only when unit has specific gene
   priority/Priority
   range/Range //range
+  zfree/Zfree //Z value is not locked to range
   speed/Speed //number of cycles before unit can act again
   delay/Delay //number cooldown cycles, after action completes.
   animate/Animate
@@ -88,6 +91,17 @@ defcheck land:
 defcheck water:
 | Below = $site.at{XYZ.0 XYZ.1 XYZ.2-1}
 | when Below.type <> water: leave "Needs water."
+
+defcheck digable:
+| DZ = XYZ.2
+| when DZ><1: leave "Cant dig any further."
+| less $site.at{XYZ.0 XYZ.1 XYZ.2-1}.dig><1:
+  | leave "Undiggable terrain."
+| SZ = $xyz.2
+| when DZ-SZ>2 or SZ-DZ>0: leave "Too far."
+| when $site.cellp{[XYZ.0 XYZ.1 XYZ.2-1]}.neibs8.any{?tile.liquid}:
+  | leave "Can't dig near liquid."
+
 
 defcheck outdoor: less $site.outdoor{XYZ}: leave "Needs outdoor space."
 

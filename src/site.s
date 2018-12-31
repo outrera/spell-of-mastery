@@ -48,6 +48,11 @@ int.south = fxn Me+CellsLineSize
 int.west = fxn Me-SiteDepth
 int.east = fxn Me+SiteDepth
 int.neibs = fxn [Me-CellsLineSize Me+CellsLineSize Me-SiteDepth Me+SiteDepth]
+int.neibs8 =
+  | N = fxn Me-CellsLineSize
+  | S = fxn Me+CellsLineSize
+  | fxn [N S Me-SiteDepth Me+SiteDepth
+         N-SiteDepth N+SiteDepth S-SiteDepth S+SiteDepth]
 int.climbable = $neibs.any{?empty^not}
 int.path =
 | Cell = Me

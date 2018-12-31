@@ -76,6 +76,8 @@ ui.actClickIcon Icon =
 | $site.act <= Act
 | $site.act_unit.init{Unit,Unit.serial}
 | $site.last_picked <= 0
+| when Act.zfree >< 2:
+  | $view.zlock <= Unit.xyz.2
 | when HKI: $view.mice_click <= \leftup //FIXME: kludge
 
 act_icon_infoline Icon =

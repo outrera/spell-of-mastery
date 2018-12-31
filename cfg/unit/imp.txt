@@ -1,5 +1,6 @@
 tier: 2
 cost: 100,4,50
+height: 1
 health: 6
 atk: 2
 def: 1
@@ -9,4 +10,4 @@ onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{imp_hit}
 onDeath: sound{imp_die}
 onMove: sound{step}
-acts: (act_bash)
+acts: (act_bash act_dig)

@@ -1,8 +1,0 @@
-icon: spell_excavate
-//lore: misc.tier1_lcost
-//cost: 100
-range: 1
-repeat: 1
-check: any
-onInit: same_z,idle_void{0} //kludge: idle if goal is void
-onHit: same_z,dig{target}

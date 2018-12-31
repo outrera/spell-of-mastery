@@ -1,0 +1,9 @@
+icon: act_dig
+title: `Dig`
+mov: 4
+range: 1
+zfree: 2
+check: digable,any
+delay: 2 //required for view_input to update movement marks
+onHit: sound{mining},dig
+hint: dig
