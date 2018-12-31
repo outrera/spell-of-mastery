@@ -386,6 +386,7 @@ effect gateway:
 | A = T.cell.block
 | B.move{T.xyz}
 | B.reset_goal
+| when B.owner.human: B.observe_force
 | when A:
   | AH = A.health
   | BH = B.health

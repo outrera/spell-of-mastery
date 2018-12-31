@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Ensure gateways work properly. For now we have two types.
 - Make sure door works properly: opens by moving onto it, blocks projectile and line of sight
 - Ruin spells and lair dwellers should be secret (show only their difficutly, as different sprite, a number of start or a plain number), so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost. Ensure player cannot use save/load to scumsave them.
 - Burned ground for firestorm, which could also be used for vulcaing tiles.
@@ -115,6 +114,24 @@ Bugs:
 - multicell units, like table, react badly when drawing tiles under them. disallow drawing at all
 - `update_picked` and unit.picked should use different picking strucutre. current is error prone and had led to bugs previously
 - projectiles hung up, when their sender dies
+
+AI crashes when trying to move unit into portal, when other side is occupied.
+fatal: out of memory
+at ip=0x1240b0b24 sp=0x7ffeeddfc490
+Stack Trace:
+  0x101e0c0d0:list.`.`:0,0,builtin
+  0x1240b08d0:int.prev:35,9,./src/site.s
+  0x1240b2ff0:int.path:56,9,./src/site.s
+  0x124611740:unit.path_to:131,17,./src/pathfind.s
+  0x125be07b0:unit.advance_to:7,31,./src/ai.s
+  0x125c01ad0:unit.ai_update:228,15,./src/ai.s
+  0x125c08c50:ai.update_units:274,16,./src/ai.s
+  0x125c0d640:ai.update_turn:298,15,./src/ai.s
+  0x125c0dfe0:ai.update:303,10,./src/ai.s
+  0x124549b20:player.make_move:133,17,./src/player.s
+  0x12483e340:site.update:75,12,./src/update.s
+  0x124827fc0:main.update:3,12,./src/update.s
+
 
 
 Sound:

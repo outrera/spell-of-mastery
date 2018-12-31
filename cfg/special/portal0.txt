@@ -1,0 +1,5 @@
+sprite: effect_portal1
+box_xy: (0 0)
+inborn: (gateway)
+gate: 1
+ai: gate

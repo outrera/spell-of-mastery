@@ -57,9 +57,11 @@ int.climbable = $neibs.any{?empty^not}
 int.path =
 | Cell = Me
 | Path = []
-| while Cell
+| I = 0
+| while Cell and fxn I < 1000:
   | push Cell Path
   | Cell <= Cell.prev
+  | I += 1
 | Path.tail.list
 int.is_floor_empty = $units.all{U=>U.type<>special_node}
 list.cell = (Me.1*SiteSize+Me.0)*SiteDepth+Me.2

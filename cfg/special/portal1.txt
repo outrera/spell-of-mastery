@@ -1,5 +1,5 @@
-sprite: effect_gate
+sprite: effect_portal2
 box_xy: (0 0)
 inborn: (gateway)
-gate: 1
+gate: 2
 ai: gate

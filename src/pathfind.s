@@ -77,7 +77,7 @@ site.pathfind MaxCost U StartCell Check =
   | NextCost = fxn Cost+1
   | Ms = U.list_moves{Src NextCost}
   | when Src.gate:
-    | when Src.prev and fxn Src.prev.mdist{Src}><1:
+    | when Src.prev and fxn Src.prev.xyz.mdist{Src.xyz}><1:
       | Ms <= [Src.gate.cell]
   | for Dst Ms:
     | Dst.prev <= Src
