@@ -113,7 +113,7 @@ Creatures:
 Spells:
 - Taboo: forbids use of some ability or a class of abilities.
 - Genocide (chaos): kill all units of specific type (make it an item, so player wont be able to able genocide most powerful enemy at will).
-- Polymorph: player is given a list of creatures into which target can be polymorphed. Alternatively, each creature has custom polymorph list, so that tier-1 creature won't be polymorphed into tier-4.
+- Polymorph: enemy creature is polymorphed into the tier below (I.e. vampire is morphed inti ghost, and ghost into skeleton), while friendly creatures morph into tier above current (ghost into vampire). If creature is of the lowest tier, it is polymorphed into a harmless critter, like sheep or chicken. Watch for health. A polymorphable creature will have polymorphable inborn gene, with two arguments. 
 - Time Stop: enemy loses its turn.
 - Guardian Angel: if a creature is killed, it gets resurrected. Creatures with such enchacements have a halo of ther heads.
 - Torando/Whirlwind: nearby units are pushed away from tornado, similarly to dragon's blow away

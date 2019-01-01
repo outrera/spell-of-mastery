@@ -172,14 +172,22 @@ site.update_picked =
 | for X,Y points_in_diamond{$act.range}
   | XX = UX+X
   | YY = UY+Y
+  | passable Cell =
+    | when Cell.empty: leave 1
+    | P = $proxy_at{Cell.xyz}
+    | when P and P.passCursor: leave 1
+    | 0
   | when XX >> 1 and YY >> 1:
     | Cell = $cell{XX YY 1}
     | while Cell.z < $d-1:
-      | if Cell.empty then
-          | $set_mark{Cell.xyz 1 mark_cast}
-          | while Cell.z < $d-1 and Cell.empty: Cell++
+      | P = $proxy_at{Cell.xyz}
+      | if passable Cell then
+          | P = $proxy_below{Cell.xyz}
+          | less P and P.passCursor:
+            | $set_mark{Cell.xyz 1 mark_cast}
+          | while Cell.z < $d-1 and passable Cell: Cell++
         else
-          | while Cell.z < $d-1 and not Cell.empty: Cell++
+          | while Cell.z < $d-1 and not passable Cell: Cell++
 
 site.update_cursor =
 | CXYZ = $view.cursor
@@ -243,35 +251,44 @@ view.update UpdatePlay =
 
 view.floor XYZ =
 | less $zfix: leave XYZ.2
-| if $key{edit_over_empty} then $site.floor_void{XYZ} else $site.floor{XYZ}
+| when $key{edit_over_empty}: leave $site.floor_void{XYZ}
+| Z = $site.floor{XYZ}
+| P = $site.proxy_below{XYZ.0,XYZ.1,Z}
+| when P and P.passCursor: leave P.xyz.2
+| Z
+
+view.mice_move XY =
+| $mice_xy.init{XY}
+| when $key{edit_fine_xy}: leave
+| less $mice_click: $mice_xy_anchor.init{XY}
+| CX,CY = $viewToSite{$mice_xy}
+| less $brush.0 or $site.human.sight.CY.CX: leave
+| when ($mice_click><left or $mice_click><pick) and not $brush.0: leave
+| $cursor.init{[CX CY $cursor.2]}
+| when not $mice_click or $site.at{@$anchor}.empty:
+  | $cursor.2 <= $floor{$cursor}
+| less $brush.0
+  | P = $site.proxy_at{$cursor}
+  | when P and P.passCursor: leave
+| NewZ = $cursor.2
+| while NewZ and NewZ>>$zlock:
+  | $cursor.2 <= NewZ
+  | NewZ <= $site.down{$cursor}
+| NewZ = $cursor.2
+| while NewZ and NewZ<<$zlock:
+  | $cursor.2 <= NewZ
+  | NewZ <= $site.up{$cursor}
+| Ds = [[1 0] [0 1] [-1 0] [0 -1]]
+| X,Y,NewZ = $cursor
+| while NewZ>$zlock+1:
+  | less Ds.all{[XD YD] => $site.at{X+XD Y+YD NewZ}.empty}:
+    | $cursor.2 <= NewZ
+  | NewZ--
 
 view.input In =
 //| when $paused: leave
 | case In
-  [mice_move _ XY]
-    | $mice_xy.init{XY}
-    | when $key{edit_fine_xy}: leave
-    | less $mice_click: $mice_xy_anchor.init{XY}
-    | CX,CY = $viewToSite{$mice_xy}
-    | when $brush.0 or $site.human.sight.CY.CX:
-      | less ($mice_click><left or $mice_click><pick) and not $brush.0:
-        | $cursor.init{[CX CY $cursor.2]}
-        | when not $mice_click or $site.at{@$anchor}.empty:
-          | $cursor.2 <= $floor{$cursor}
-        | NewZ = $cursor.2
-        | while NewZ and NewZ>>$zlock:
-          | $cursor.2 <= NewZ
-          | NewZ <= $site.down{$cursor}
-        | NewZ = $cursor.2
-        | while NewZ and NewZ<<$zlock:
-          | $cursor.2 <= NewZ
-          | NewZ <= $site.up{$cursor}
-        | Ds = [[1 0] [0 1] [-1 0] [0 -1]]
-        | X,Y,NewZ = $cursor
-        | while NewZ>$zlock+1:
-          | less Ds.all{[XD YD] => $site.at{X+XD Y+YD NewZ}.empty}:
-            | $cursor.2 <= NewZ
-          | NewZ--
+  [mice_move _ XY] | $mice_move{XY}
   [mice left State XY]
     | $lmb_count++
     | $zfix <= 1

@@ -1,7 +1,9 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Make sure door works properly: opens by moving onto it, blocks projectile and line of sight
+- Make sure AI properly handles doors. Doors should have special door triggers before them to guide pathfinder.
+- rename site.at and site.get to atp
+- Witch sprite needs some rework: make it two pixels shorter and 1 pixel wider.
 - Ruin spells and lair dwellers should be secret (show only their difficutly, as different sprite, a number of start or a plain number), so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost. Ensure player cannot use save/load to scumsave them.
 - Observer should have reveal ability, removing invisibility from all units near cast target.
 - Cyclops should have cannibalize corpse ability, restoring its health.

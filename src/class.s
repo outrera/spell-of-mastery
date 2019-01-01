@@ -59,6 +59,7 @@ type class{bank class_name Main
   gate/Gate             //gateway, teleporting units to other cell
   foldable/Foldable     //fold unit`s sprite when cursor is behind
   inbornFlyer/0
+  passCursor/0
   text/Text
   text_xy/Text_xy
 | case $ai [X@Xs]:
@@ -76,7 +77,8 @@ type class{bank class_name Main
   | $id <= ClassIdCounter++
   | when $inborn.has{leader}: $acts <= [@$acts @Main.cfg.world.spells].list
   | when $inborn.has{flyer}: $inbornFlyer <= 1
-| when $height and $ai <> unit and $ai <> door:
+| when $ai >< door: $passCursor <= 1
+| when $height and $ai <> unit:
   | Block = Main.tiles."h[$height]_"
   | when got Block: $block <= Block
 

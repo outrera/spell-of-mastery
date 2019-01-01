@@ -347,7 +347,19 @@ site.cellp P =
 | fxn (P.1*$maxSize+P.0)*$d+P.2
 site.at X Y Z = $cell{X Y Z}.tile
 site.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
+site.atp XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
 site.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V
+
+site.proxy_below XYZ =
+| X,Y,Z = XYZ
+| Tile = $atp{X,Y,Z-1}
+| less Tile.proxy: leave 0
+| leave $block_at{X,Y,Z-Tile.height}
+
+site.proxy_at XYZ =
+| Tile = $atp{XYZ}
+| less Tile.proxy: leave 0
+| leave $block_at{XYZ}
 
 site.pilar X Y =
 | H = $height{X Y}

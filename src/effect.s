@@ -250,6 +250,9 @@ close_door Actor Me Depth =
 | when DoorClass.aiArg.has{locked} and not Actor.owner.haskey{$owner.id}:
   | Actor.owner.notify{"This door requires [$owner.color] key."}
   | leave
+| when $site.block_at{$xyz} or $site.block_at{$xyz+[0 0 1]}:
+  | Actor.owner.notify{"Door is blocked."}
+  | leave
 | when Depth<1: $sound{close}
 | C = $owner.alloc_unit{DoorType}
 | C.move{$xyz}
