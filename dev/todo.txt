@@ -3,6 +3,8 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 TODO:
 - Make sure door works properly: opens by moving onto it, blocks projectile and line of sight
 - Ruin spells and lair dwellers should be secret (show only their difficutly, as different sprite, a number of start or a plain number), so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost. Ensure player cannot use save/load to scumsave them.
+- Observer should have reveal ability, removing invisibility from all units near cast target.
+- Cyclops should have cannibalize corpse ability, restoring its health.
 - Burned ground for firestorm, which could also be used for vulcaing tiles.
 - Lightning cast onto own units provides them with electrical shield.
 - Placing bases beyond the first one, should be limited only to existing base radius.
