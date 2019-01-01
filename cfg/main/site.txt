@@ -9,4 +9,4 @@ tile_banks: tile,city//,deco
 class_banks: unit,leader,item,special,trigger
 bounding_boxes: 0
 spawn_items: gold,100,potion,100
-explored: 1 //all maps are explored from the beginning
+explored: 0 //all maps are explored from the beginning

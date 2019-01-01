@@ -293,6 +293,7 @@ effect switch:
 | for U Us
     if U.ai >< door then
       | open_door Me U 0
+      | $explore
       | leave
     else if U.ai >< opend then
       | close_door Me U 0

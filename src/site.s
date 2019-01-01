@@ -461,22 +461,33 @@ site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
 site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
 
-unit.explore V =
-| Sight = $sight
-| when no Sight: leave
+unit.seen_cells =
+| XYZ = $xyz
+| UZ = XYZ.2
+| Ps = [XYZ]
+| SeeCheck = | Src Dst => 1
+| Check =
+  | Dst =>
+    | DXYZ = Dst.xyz
+    | push DXYZ Ps
+    | R = if (DXYZ.2-UZ)>1 then \block else 0
+    | R
+| $site.seen_cells{$sight $cell SeeCheck Check}
+| Ps
+
+unit.explore @V =
+| when no $sight: leave
 | XYZ = $xyz
 | Explored = $owner.sight
 | UX = XYZ.0
 | UY = XYZ.1
-| for DX,DY points_in_diamond{Sight}:
-  | X = UX+DX
-  | Y = UY+DY
-  | when fxn (X>>0 and Y>>0):
-    | E = Explored.Y
-    | less E.X:
-      | E.X <= 1
-      | when $owner.human: $site.upd_pilar{X Y}
-    | E.X += V
+| UZ = XYZ.2
+| for X,Y,Z $seen_cells:
+  | E = Explored.Y
+  | less E.X:
+    | E.X <= 2
+    | when $owner.human: $site.upd_pilar{X Y}
+  //| E.X += V
 
 site.explore State =
 | less State: $minimap.clear{#000000}

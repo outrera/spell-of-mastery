@@ -121,6 +121,42 @@ site.closest_reach MaxCost U StartCell TargetXYZ =
 | $pathfind{MaxCost U StartCell &check}
 | Best
 
+can_see Src Cost SeeCheck =
+| Ms = []
+| for Dst Src.neibs
+  | Dst <= Dst.floor
+  | when Cost < Dst.cost and SeeCheck{Src Dst}:
+    | push Dst Ms
+| Ms
+
+site.seen_cells MaxCost StartCell SeeCheck Check =
+| X,Y,Z = StartCell.xyz
+| StartCost = $new_cost
+| MaxCost+=StartCost
+| StartCell.cost <= StartCost
+| StartCell.prev <= 0
+| PFQueue.reset
+| PFQueue.push{StartCell}
+| R = 0
+| till PFQueue.end
+  | Src = PFQueue.pop
+  | Cost = Src.cost
+  | NextCost = fxn Cost+1
+  | Ms = can_see{Src NextCost SeeCheck}
+  | for Dst Ms:
+    | Dst.prev <= Src
+    | C = Check Dst
+    | when C:
+      | if C><block then _goto skip
+        else | Dst.prev <= Src
+             | R <= Dst
+             | _goto end
+    | Dst.cost <= NextCost
+    | when fxn NextCost<MaxCost: PFQueue.push{Dst}
+    | _label skip
+| _label end
+| R
+
 site.find MaxCost U StartCell Check =
 | Found = $pathfind{MaxCost U StartCell Check}
 | if Found then Found else 0

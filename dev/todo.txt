@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- rename site.get to site.atp
-- z-dimension for sight. For no we can just trace the floor and ceil. With height=2 cliffs blocking vision at their top cell.
+- z-dimension for sight. For no we can just trace the floor and ceil. With height=2 cliffs blocking vision at their top cell. FOV gets update only at the start of the turn, based on all player unit's sight. Yet explored gets update immidiately.
 - Make sure AI properly handles doors. Doors should have special door triggers before them to guide pathfinder.
 - Witch sprite needs some rework: make it two pixels shorter and 1 pixel wider.
 - Ruin spells and lair dwellers should be secret (show only their difficutly, as different sprite, a number of start or a plain number), so player will have some incentive for exploration, instead of going directly for his build order goal. Make sure visiting ruins incurs some cost. Ensure player cannot use save/load to scumsave them.
