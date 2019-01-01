@@ -45,7 +45,7 @@ place_object Me Bank Type =
                  or not Us.any{?class^address >< Class^address}
   | less Place: leave
   | X2,Y2,Z2 = XYZ
-  | less Class.height.list.all{I=>$site.get{X2,Y2,Z2+I}.empty}:
+  | less Class.height.list.all{I=>$site.atp{X2,Y2,Z2+I}.empty}:
     | $main.sound{illegal}
     | leave
 | U = $player.alloc_unit{ClassName}

@@ -346,7 +346,6 @@ site.cellp P =
 | P <= P.list
 | fxn (P.1*$maxSize+P.0)*$d+P.2
 site.at X Y Z = $cell{X Y Z}.tile
-site.get XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
 site.atp XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
 site.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V
 
