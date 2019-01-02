@@ -40,6 +40,7 @@ ui.create_new_game_setup_dlg =
 | Acts = $main.acts
 | Spells = $cfg.world.spells
 | Summons = $cfg.world.summons
+| for N [@Spells @Summons]: Acts.N.researched <= 0
 | LSpells = $cfg.world.locked_spells
 | LSummons = $cfg.world.locked_summons
 | Spells <= Spells.skip{S=>LSpells.has{S}}

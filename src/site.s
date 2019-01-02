@@ -490,16 +490,18 @@ unit.seen_cells =
 unit.explore =
 | when no $sight: leave
 | M = $owner.seen_mask
-| for Cell $seen_cells:
-  | S = Cell.seen
-  | less S&&&M:
-    | Cell.seen <= S---M
-    | when $owner.human:
-      | EM = $owner.explored_mask
-      | when S&&&M<>M:
-        | X,Y,Z = Cell.xyz
-        | $site.update_minimap{X Y}
-        //| $site.upd_pilar{X Y} //FIXME: use this to hide changes to terrain
+| EM = $owner.explored_mask
+| if $owner.human then fxn: for Cell $seen_cells:
+  | S = CellsSeen.Cell
+  | when (S&&&M)<>M:
+    | CellsSeen.Cell <= S---M
+    | when (S&&&EM)<>EM:
+      | X,Y,Z = Cell.xyz
+      | $site.update_minimap{X Y}
+      //| $site.upd_pilar{X Y} //FIXME: use this to hide changes to terrain
+  else fxn: for Cell $seen_cells:
+  | S = CellsSeen.Cell
+  | CellsSeen.Cell <= S---M
 
 site.explore State =
 | less State: $minimap.clear{#000000}

@@ -1,4 +1,4 @@
-use util gui
+use util gui fxn
 
 unit.new_turn =
 | Remove = 0
@@ -72,9 +72,19 @@ player.new_turn =
 | when $human and get_gui{}.ticks>EndTurnTicks+2.0:
   | $sound{new_turn}
 
+player.update_fow Us =
+| when Us.size:
+  | Ss = $site.cells_seen
+  | M = (#FFFFFFFF+++$seen_mask)---$explored_mask
+  | fxn: for I Ss.size: Ss.I <= Ss.I&&&M
+
 player.end_turn =
 | $store_picked
-| for U $units: U.end_turn
+| Us = $units
+| $update_fow{Us}
+| for U Us:
+  | U.explore
+  | U.end_turn
 | when $human: EndTurnTicks <= get_gui{}.ticks
 
 site.end_turn =

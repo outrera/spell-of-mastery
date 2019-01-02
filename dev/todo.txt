@@ -2,7 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Ensure player cannot move cursor into unexplored territory. Watch for floor/ceil changes. Ensure minimap gets updates properly with current level.
-- FOV gets update only at the start of the turn, based on all player unit's sight. Yet explored gets update immidiately.
+- Better sfx for hydra movement.
 - Ghost infravision (implement it using that good old diamond).
 - A way to recruit green player units, as those in tavern.
 - Time of day: every 4th world map turn should night, so any site investigation during it would be with bonus for undead and handicap for all normal units, especially those who cannot see in the dark. The day turn should do the opposite, giving handicap to undead.

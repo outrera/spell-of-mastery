@@ -18,6 +18,7 @@ NDrawnUnits = 0
 NDrawnTiles = 0
 CellsSeen =
 SeenMask = 0
+ExplMask = 0
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
@@ -154,7 +155,7 @@ unit.draw FB B =
   | CY = max G.h-48 0
   | G.rect{0 CY G.w CutH}
   | YY += CY
-| fxn: when B.B_FLAGS&&&#40: G.dither{1}
+| fxn: when B.B_FLAGS&&&#40: G.brighten{-64} //G.dither{1}
 | FB.blit{XX YY G}
 | fxn: for TB B.B_COVER:
   | TB.B_DEPS <= TB.B_DEPS.skip{$id}
@@ -206,7 +207,7 @@ draw_tile Cell FB BlitItem =
 | B = BlitItem
 | G = fxn B.B_DATA
 | Cell.blitem <= 0
-| fxn: when B.B_FLAGS&&&#40: G.dither{1}
+| fxn: when B.B_FLAGS&&&#40: G.brighten{-64} //G.dither{1}
 | fxn FB.blit{B.B_SX B.B_SY G}
 | Us = fxn B.B_COVER
 | when Us.end: leave
@@ -221,7 +222,7 @@ type gfx_item
 gfx_item.draw FB BlitItem =
 | B = BlitItem
 | G = B.B_DATA
-//| when B.B_FLAGS&&&#40: G.dither{1}
+//| when B.B_FLAGS&&&#40: G.brighten{-64} //G.dither{1}
 | FB.blit{B.B_SX B.B_SY G}
 
 render_cursor Me Wr BX BY CursorXYZ =
@@ -277,7 +278,11 @@ render_pilar Me Wr X Y BX BY RoofZ =
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
   | TZ = Z-1
-  | less (U.floor.seen&&&SeenMask)><SeenMask: _goto skip_unit
+  | Seen = U.floor.seen
+  | if (Seen&&&SeenMask)><SeenMask then Fog <= 0
+    else
+    | when (Seen&&&ExplMask)<>ExplMask or U.ai: _goto skip_unit
+    | Fog <= 1
   | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
     | when not U.invisible or $player.is_ally{U.owner} or $brush.0:
       | B = blit_item_from_unit U
@@ -299,7 +304,11 @@ render_pilar Me Wr X Y BX BY RoofZ =
   | T = Cell.tile
   | TH <= T.height
   | NextZ <= Z + TH
-  | less (Cell.seen&&&SeenMask)><SeenMask: _goto skip_cell
+  | Seen = Cell.seen
+  | if (Seen&&&SeenMask)><SeenMask then Fog <= 0
+    else
+    | when (Seen&&&ExplMask)<>ExplMask: _goto skip_cell
+    | Fog <= 1
   | when G:
     | SZ = Z*ZUnit
     | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
@@ -439,6 +448,7 @@ view.render_iso =
 | BlitItems <= []
 | BlitUnits <= []
 | PickedRects <= stack 256
+| ExplMask <= $player.explored_mask
 | SeenMask <= $player.seen_mask
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
