@@ -258,38 +258,44 @@ view.floor XYZ =
 | Z
 
 view.mice_move XY =
+| Ds = 0
+| NewZ = 0
 | $mice_xy.init{XY}
 | when $key{edit_fine_xy}: leave
 | less $mice_click: $mice_xy_anchor.init{XY}
 | CX,CY = $viewToSite{$mice_xy}
-| less $brush.0 or $site.human.sight.CY.CX: leave
 | when ($mice_click><left or $mice_click><pick) and not $brush.0: leave
-| $cursor.init{[CX CY $cursor.2]}
+| CZ = $cursor.2
 | when not $mice_click or $site.at{@$anchor}.empty:
-  | $cursor.2 <= $floor{$cursor}
+  | CZ <= $floor{$cursor}
 | less $brush.0
-  | P = $site.proxy_at{$cursor}
-  | when P and P.passCursor: leave
-| NewZ = $cursor.2
+  | P = $site.proxy_at{CX,CY,CZ}
+  | when P and P.passCursor: _goto end
+| NewZ <= CZ
 | while NewZ and NewZ>>$zlock:
-  | $cursor.2 <= NewZ
-  | NewZ <= $site.down{$cursor}
-| NewZ = $cursor.2
+  | CZ <= NewZ
+  | NewZ <= $site.down{CX,CY,CZ}
+| NewZ <= CZ
 | while NewZ and NewZ<<$zlock:
-  | $cursor.2 <= NewZ
-  | NewZ <= $site.up{$cursor}
-| Ds = [[1 0] [0 1] [-1 0] [0 -1]]
-| X,Y,NewZ = $cursor
+  | CZ <= NewZ
+  | NewZ <= $site.up{CX,CY,CZ}
+| Ds <= [[1 0] [0 1] [-1 0] [0 -1]]
+| NewZ <= CZ
 | while NewZ>$zlock+1:
-  | less Ds.all{[XD YD] => $site.at{X+XD Y+YD NewZ}.empty}:
-    | $cursor.2 <= NewZ
+  | less Ds.all{[XD YD] => $site.at{CX+XD CY+YD NewZ}.empty}:
+    | CZ <= NewZ
   | NewZ--
+| _label end
+| less $brush.0:
+  | less $site.human.seen{CX,CY,CZ}: CZ <= $cursor.2
+| $cursor.init{CX,CY,CZ}
 
 view.input In =
 //| when $paused: leave
 | case In
   [mice_move _ XY] | $mice_move{XY}
   [mice left State XY]
+    | less $site.human.seen{$cursor}: leave
     | $lmb_count++
     | $zfix <= 1
     | $mice_click <= if State then \left else \leftup
@@ -297,6 +303,7 @@ view.input In =
       else when $site.at{@$cursor}.empty: $cursor.2 <= $floor{$cursor}
     | when State: $mice_xy_anchor.init{XY}
   [mice right State XY]
+    | less $site.human.seen{$cursor}: leave
     | $zfix <= 1
     | $site.last_picked <= 0
     | $mice_click <= if State then \right else \rightup

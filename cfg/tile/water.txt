@@ -1,4 +1,5 @@
 tiler: water,any,wcorner
+colors: #043c7c,#043c7c
 ztiler: water,same
 opaque: 1
 liquid: 1

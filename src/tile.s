@@ -206,9 +206,6 @@ m_role_stairs Me X Y Z Tile =
 m_role_lay Me X Y Z Tile =
 
 BelowSlope = 0
-ColumnHeight = 0
-BelowTile = 0
-BelowG = 0
 
 list.loop I =
 | S = $size
@@ -219,7 +216,6 @@ tile.render X Y Z Below Above Variation =
   | BelowSlope <= #@1111
   | leave 0
 | Site = $main.site
-| less Z: ColumnHeight <= Site.height{X Y}
 | TH = $height
 | BE = Below.empty
 | BZR = Below.zrole
@@ -295,7 +291,6 @@ tile.render X Y Z Below Above Variation =
          | R = fxn Gs.NeibSlope
          | R
 | BelowSlope <= NeibSlope
-| BelowTile <= TT
 | when G.is_list:
   | less $anim_wait: G <= G.(Variation%G.size)
 | fxn: when Opaque and Z > 0:
@@ -311,12 +306,6 @@ tile.render X Y Z Below Above Variation =
          and Site.at{X+1 Y+1 ZZ+1}.opaque:
     | Site.cell{X Y ZZ}.gfx <= 0
 | leave G
-
-tile.sloped_color =
-| T = BelowTile
-| less T: leave 0
-| BelowTile <= 0
-| if BelowSlope><#@1111 then T.colors.1 else T.colors.0
 
 main.tile_names Bank =
 | $tiles{}{?1}.keep{?bank><Bank}{?type}.skip{$aux_tiles.?^got}.sort

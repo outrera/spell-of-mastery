@@ -1,4 +1,5 @@
 tiler: soil,any,cornerside
+colors: #4a4c24,#31651d
 ztiler: soil,same
 lineup: 1
 dig: 1

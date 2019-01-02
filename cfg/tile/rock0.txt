@@ -1,5 +1,4 @@
 tiler: rock,any,cornerside
-colors: #4f4f4f,#6b6b6b
 fallback: ((0 0 0 0) 1 rock0b)
 plain: rockp
 lay: | 7  6  4

@@ -50,9 +50,6 @@ site.save =
 | $data.turn <= $turn
 | $data.player <= $player
 | $data.paused <= $paused
-| less $editor:
-  | map Id,Active ActivePlayers.i.keep{?.1}
-    | [Id $players.Id.sight{}{X=>rle_encode X}]
 | list version(0.2) w($w) h($h) serial($serial) cycle($cycle) seed($seed)
     filename | $filename
     name | $name

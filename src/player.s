@@ -26,17 +26,17 @@ type player{id site}
    picked_serial
    picked_save
    picked_save_serial
-   sight // fog of war
    total_units
    unit_counts // counts uwned units for each unit type
    colors
    patrol_points/[]
    seen_mask
+   explored_mask
 | $seen_mask <= 3 <<< $id*2
+| $explored_mask <= 1 <<< $id*2
 | $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | MaxSize = $site.maxSize
-| $sight <= dup MaxSize: MaxSize.bytes
 | $ai <= ai Me
 | Cs = $main.img{ui_colors}
 | when $id<Cs.h: $colors <= map I 5: Cs.get{I $id}
@@ -70,7 +70,6 @@ player.seen XYZ =
 | (C.seen&&&M) >< M
 
 player.clear =
-| for Xs $sight: Xs.clear{3}
 | $total_units <= 0
 | $unit_counts.clear{0}
 | $ai.clear

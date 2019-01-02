@@ -1,2 +1,1 @@
-colors: #311e17,#31651d
 lay: default

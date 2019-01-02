@@ -277,7 +277,7 @@ render_pilar Me Wr X Y BX BY RoofZ =
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
   | TZ = Z-1
-  | less (U.cell.seen&&&SeenMask)><SeenMask: _goto skip_unit
+  | less (U.floor.seen&&&SeenMask)><SeenMask: _goto skip_unit
   | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
     | when not U.invisible or $player.is_ally{U.owner} or $brush.0:
       | B = blit_item_from_unit U

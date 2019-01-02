@@ -35,8 +35,6 @@ unit.ai_pick_target Act =
     else if R><0 then [Me]
     else $site.units_in_range{$xyz R}
 | Ts = Targets.keep{?ai><unit}.keep{?alive}
-//| Explored = $owner.sight
-//| Ts = Ts.keep{T => Explored.(T.xyz.1).(T.xyz.0)>1}
 | Hint = Act.hint
 //| less Hint >< detonate: leave 0
 | if Hint >< heal then

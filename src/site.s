@@ -470,11 +470,12 @@ unit.seen_cells =
 | UZ = XYZ.2
 | Cs = [$cell]
 | SeeCheck = | Src Dst => 1
+| Site = $site
 | Check =
   | Dst =>
     | push Dst Cs
     | DXYZ = Dst.xyz
-    | R = if (DXYZ.2-UZ)>1 then
+    | R = if (DXYZ.2-UZ)>1 or not Site.seen_from{XYZ DXYZ} then
             | D = Dst-1
             | while D.xyz.2>>UZ:
               | push D Cs
@@ -494,8 +495,11 @@ unit.explore =
   | less S&&&M:
     | Cell.seen <= S---M
     | when $owner.human:
-      | X,Y,Z = Cell.xyz
-      //| $site.upd_pilar{X Y}
+      | EM = $owner.explored_mask
+      | when S&&&M<>M:
+        | X,Y,Z = Cell.xyz
+        | $site.update_minimap{X Y}
+        //| $site.upd_pilar{X Y} //FIXME: use this to hide changes to terrain
 
 site.explore State =
 | less State: $minimap.clear{#000000}
@@ -634,8 +638,17 @@ site.getSidesRole2 X Y Z R = fxn: `[]`
   ($role{X Y+1 Z}><R or (not $filled{X Y+1 Z} and $role{X Y+2 Z}><R))
   ($role{X-1 Y Z}><R or (not $filled{X-2 Y Z} and $role{X-2 Y Z}><R))
 
-site.update_minimap X Y Color =
-| less $human.sight.Y.X: leave
+
+site.update_minimap X Y =
+| fxn: when X < 1 or Y < 1: leave 0
+| M = $human.explored_mask
+| upd_floor Me $cell{X Y 0}
+| Cell = $cell{X Y $d-1}.floor
+| less (Cell.seen&&&M)><M: leave
+| Cell = Cell-1
+| T = Cell.tile
+| Sloped = not Cell.neibs8.any{C => (C-1).empty or C.tile.liquid}
+| Color = T.colors.Sloped
 | fxn:
   | WW = $w
   | WH = $h
@@ -674,10 +687,13 @@ upd_floor Me Bottom = fxn:
 
 site.upd_pilar X Y =
 | fxn: when X < 0 or Y < 0: leave 0
-| less $human.sight.Y.X: less $editor: leave
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
-| $heighmap.X.Y <= fxn (Cell+$d-2).floor.z
+| Floor = fxn (Cell+$d-2).floor
+| $heighmap.X.Y <= fxn Floor.z
+| less $editor:
+  | M = $human.seen_mask
+  | less (Floor.seen&&&M)><M: leave
 | for U $column_units_get{X Y}: U.environment_updated
 | Var = $variation.Y.X
 | H = $height{X Y}
@@ -706,7 +722,7 @@ site.upd_pilar X Y =
   | T <= Above
   | Cell <= Next
   | Z += TH
-| $update_minimap{X Y T.sloped_color}
+| $update_minimap{X Y}
 
 site.upd_neibs X Y =
 | for DX,DY Dirs: $upd_pilar{X+DX Y+DY}

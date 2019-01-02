@@ -103,10 +103,15 @@ view.site = $main.site
 view.units_get XYZ = $site.units_get{XYZ}.skip{?mark}
 
 view.infoline =
+| EoD = $site.editor or $main.cfg.ui.debug><1 
+| less $site.human.seen{$cursor}: leave "unseen"
 | X,Y,Z = $cursor
-| Indoor = if $site.up{$cursor} then ':indoor' else ':outdoor'
-| Cave = if $site.down{$cursor} then ":roof" else ""
-| Land = "[X],[Y],[Z]:[$site.at{X Y Z-1}.type][Indoor][Cave]"
+| Os = []
+| when EoD: push "[X],[Y],[Z]" Os
+| push (if $site.up{$cursor} then 'indoor' else 'outdoor') Os
+| when EoD and $site.down{$cursor}: push "roof" Os
+| when $site.at{X Y Z-1}.dig: push "diggable" Os
+| Land = Os.flip.infix{":"}.text
 | U = $site.block_at{X,Y,Z}
 | Unit = ""
 | when U and (not U.invisible or U.owner.id><$site.human.id):
@@ -118,7 +123,7 @@ view.infoline =
   | Stats = "Mov:[U.moves]/[U.class.mov] HP:[U.health]/[U.class.hp]"
   | Stats <= "[Stats] Atk:[U.atk] Def:[U.def]/[U.class.def][DI] Fatigue:[U.fatigue]-[U.stamina]"
   | Stats <= "[Stats] Sight:[U.sight] Range:[U.range]"
-  | Id = if $site.editor then "[U.id]" else ""
+  | Id = if EoD then "[U.id]" else ""
   | Unit <= "[U.title][Id] [Stats]"
 | Corpse = ""
 | Cs = $site.cellp{$cursor}.units.keep{?type><special_corpse}
