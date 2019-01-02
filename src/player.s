@@ -31,6 +31,8 @@ type player{id site}
    unit_counts // counts uwned units for each unit type
    colors
    patrol_points/[]
+   seen_mask
+| $seen_mask <= 3 <<< $id*2
 | $unit_counts <= dup 300 //FIXME: should not be hardcoded
 | $name <= if $id >< 0 then "Independents" else "Player[$id]"
 | MaxSize = $site.maxSize
@@ -62,18 +64,10 @@ player.notify Text =
 
 player.main = $site.main
 
-player.explore State =
-| when State
-  | for S $sight: S.clear{3}
-  | for U $units: U.explore{1}
-  | leave
-| for S $sight: S.clear{0}
-| for U $units: U.explore{1}
-
-
-//or 0 if the cell is unexplored
-//else number of units seeing this cell + 1
-player.explored X,Y,Z = $sight.Y.X
+player.seen XYZ =
+| C = $site.cellp{XYZ}
+| M = $seen_mask
+| (C.seen&&&M) >< M
 
 player.clear =
 | for Xs $sight: Xs.clear{3}
@@ -114,8 +108,6 @@ player.enable Act State = Act.players <= Act.players.bitSet{$id State}
 player.units =
 | PID = $id
 | $site.active.list.keep{(?owner.id >< PID and not ?removed)}
-
-player.seen XYZ = $sight.(XYZ.1).(XYZ.0)>1
 
 player.update =
 | Cycle = $site.cycle

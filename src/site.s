@@ -11,6 +11,7 @@ CellsPrev =
 CellsFloor =
 CellsGate =
 CellsBlitem =
+CellsSeen =
 SiteSize = 1 //max site size
 SiteDepth = 1
 CellsLineSize = 1
@@ -24,6 +25,8 @@ int.invisible = $tile.invisible
 int.type = $tile.type
 int.units = fxn CellsUnits.Me
 int.`=units` V = fxn: CellsUnits.Me <= V
+int.seen = fxn: CellsSeen.Me
+int.`=seen` V = fxn: CellsSeen.Me <= V
 int.gfx = fxn CellsGfxes.Me
 int.`=gfx` V = fxn: CellsGfxes.Me <= V
 int.blitem = fxn CellsBlitem.Me
@@ -158,6 +161,7 @@ site.init =
 | CellsFloor <= dup $ncells 0
 | CellsGate <= dup $ncells 0
 | CellsBlitem <= dup $ncells 0
+| CellsSeen <= dup $ncells #FFFFFFFF
 | $heighmap <= dup $maxSize: @bytes $maxSize
 | MaxUnits = $cfg.max_units
 | $units <= MaxUnits{(unit ? Me)}
@@ -288,7 +292,7 @@ site.new_game =
 | $cycle <= 0
 | $turn <= 0
 | $player <= 0
-| if SCfg.explored then $explore{1} else $explore{0}
+| $explore{SCfg.explored <> 0}
 | ActNames = $main.acts{}{?0}
 | InitedUnits = reinit_units $active
 | new_game_init_chests $active
@@ -464,34 +468,41 @@ site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
 unit.seen_cells =
 | XYZ = $xyz
 | UZ = XYZ.2
-| Ps = [XYZ]
+| Cs = [$cell]
 | SeeCheck = | Src Dst => 1
 | Check =
   | Dst =>
+    | push Dst Cs
     | DXYZ = Dst.xyz
-    | push DXYZ Ps
-    | R = if (DXYZ.2-UZ)>1 then \block else 0
+    | R = if (DXYZ.2-UZ)>1 then
+            | D = Dst-1
+            | while D.xyz.2>>UZ:
+              | push D Cs
+              | D -= 1
+            | \block
+          else
+            | 0
     | R
 | $site.seen_cells{$sight $cell SeeCheck Check}
-| Ps
+| [@Cs @Cs{?-1}].list
 
-unit.explore @V =
+unit.explore =
 | when no $sight: leave
-| XYZ = $xyz
-| Explored = $owner.sight
-| UX = XYZ.0
-| UY = XYZ.1
-| UZ = XYZ.2
-| for X,Y,Z $seen_cells:
-  | E = Explored.Y
-  | less E.X:
-    | E.X <= 2
-    | when $owner.human: $site.upd_pilar{X Y}
-  //| E.X += V
+| M = $owner.seen_mask
+| for Cell $seen_cells:
+  | S = Cell.seen
+  | less S&&&M:
+    | Cell.seen <= S---M
+    | when $owner.human:
+      | X,Y,Z = Cell.xyz
+      //| $site.upd_pilar{X Y}
 
 site.explore State =
 | less State: $minimap.clear{#000000}
-| for P $players: P.explore{State}
+| CellsSeen.clear{if State then #FFFFFFFF else 0}
+| for U $active: U.explore
+
+site.cells_seen = CellsSeen
 
 site.place_unitS U X Y Z =
 | Cell = $cell{X Y 0}
@@ -519,10 +530,9 @@ site.place_unit U =
   | when Target:
     | U.cell.gate <= Target
     | Target.cell.gate <= U
-| U.explore{1}
+| U.explore
 
 site.remove_unitS U X Y Z = fxn:
-| U.explore{-1}
 | Cell = $cell{X Y 0}
 | K = Cell.units
 | Cell.units <= K.unheap.skip{X=>fxn X.id><U.id}.enheap
@@ -772,7 +782,8 @@ site.set_color_overlay List =
 | $color_overlay_step <= 0
 
 site.sound_at XYZ ForceExplored SoundName =
-| less ForceExplored or $human.explored{XYZ} > 1: leave 0
+| M = $human.seen_mask
+| less ForceExplored or ($cellp{XYZ}.seen&&&M)><M: leave 0
 | CXYZ = $main.ui.view.center
 | V = 1.0 / | max 1.0 (CXYZ - XYZ).abs*0.5
 | when V>0.01: $main.sound{SoundName volume/V}

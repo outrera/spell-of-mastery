@@ -276,13 +276,6 @@ open_chest Actor Me =
   | C.move{$xyz}
   | C.pick_facing{$facing}
   | C.fxyz.init{$fxyz}
-/*| C = $owner.alloc_unit{special_opend}
-| C.move{$xyz}
-| C.pick_facing{$facing}
-| C.fxyz.init{$fxyz}
-| C.sprite <= $sprite
-| C.animate{open}
-| C.set{door $type}*/
 | $free
 
 

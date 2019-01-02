@@ -16,6 +16,8 @@ Marked = 0
 Unexplored = 0
 NDrawnUnits = 0
 NDrawnTiles = 0
+CellsSeen =
+SeenMask = 0
 
 to_iso X Y Z = [X-Y (X+Y)/2-Z]
 
@@ -250,7 +252,7 @@ render_cursor Me Wr BX BY CursorXYZ =
   | B.B_SY <= BY-GH-ZZ
   | Z <= UnitZ
 
-render_pilar Me Wr X Y BX BY RoofZ Explored =
+render_pilar Me Wr X Y BX BY RoofZ =
 | FBH = $fb.h
 | EndZ = min RoofZ Wr.height{X Y}
 | when fxn BY-((EndZ-1)*ZUnit) > FBH: leave
@@ -267,15 +269,15 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
   | when (A/B).abs>2.0:
     | AboveCursor <= 1*/
 | ZCut = fxn: max Cur.2-1 0
-| Fog = Explored><1
+| Fog = 0
 | Cell = Wr.cell{X Y 0}
 | Us = Cell.units.unheap
 | when Fog: Us <= Us.skip{(?ai><unit)}
-| less Explored: Us <= 0
 | fxn: for U Us: when U.frame: //render units
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
   | TZ = Z-1
+  | less (U.cell.seen&&&SeenMask)><SeenMask: _goto skip_unit
   | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
     | when not U.invisible or $player.is_ally{U.owner} or $brush.0:
       | B = blit_item_from_unit U
@@ -288,6 +290,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
         | B.B_FLAGS <= #80 //cut
       | when Fog: B.B_FLAGS <= B.B_FLAGS---#40 //dither
       | push U BlitUnits
+  | _label skip_unit
 | NextZ = 0
 | TH = 0
 | fxn: while NextZ < EndZ: //render tiles
@@ -296,6 +299,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
   | T = Cell.tile
   | TH <= T.height
   | NextZ <= Z + TH
+  | less (Cell.seen&&&SeenMask)><SeenMask: _goto skip_cell
   | when G:
     | SZ = Z*ZUnit
     | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
@@ -308,6 +312,7 @@ render_pilar Me Wr X Y BX BY RoofZ Explored =
       | B.B_DATA <= G
       | when Fog: B.B_FLAGS <= #40 //dither
       | Cell.blitem <= B
+  | _label skip_cell
   | Cell += TH
 | _label out
 | fxn: less AboveCursor or NextZ-1 << ZCut: //draw folded column marker
@@ -434,7 +439,7 @@ view.render_iso =
 | BlitItems <= []
 | BlitUnits <= []
 | PickedRects <= stack 256
-| Explored = Wr.human.sight
+| SeenMask <= $player.seen_mask
 | FB = $fb
 | Z = if $mice_click then $anchor.2 else $cursor.2
 | RoofZ = Wr.roof{$cursor}
@@ -471,10 +476,7 @@ view.render_iso =
       | BX = XXX + XX*XUnit2
       | less BX < -64 or BX>FBW:
         | BY = YYY + XX*YUnit2
-        | less BY < 0:
-          | E = esc Explored.Y.X //explored is bytes array, so we escape it
-          | if E then render_pilar Me Wr X Y BX BY RoofZ E
-            else //render_unexplored Me Wr X Y BX BY
+        | less BY < 0: render_pilar Me Wr X Y BX BY RoofZ
 | when $mice_click<>left or $brush.0:
   | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
   | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
@@ -491,6 +493,7 @@ view.render_iso =
 | PickedRects <= 0
 | BlitItems <= 0
 | BlitUnits <= 0
+| CellsSeen <= 0
 
 view.render_frame =
 | IsNight = $site.data.night><1

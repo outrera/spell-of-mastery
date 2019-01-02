@@ -486,6 +486,6 @@ unit.sees_facing Target =
   else if D >< -TD then \front
   else \side
 
-unit.sound SoundName = $site.sound_at{$xyz $id^not SoundName}
+unit.sound SoundName = $site.sound_at{$floor.xyz $id^not SoundName}
 
 export unit init_unit_module

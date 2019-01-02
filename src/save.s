@@ -50,7 +50,6 @@ site.save =
 | $data.turn <= $turn
 | $data.player <= $player
 | $data.paused <= $paused
-| Explored = No
 | less $editor:
   | map Id,Active ActivePlayers.i.keep{?.1}
     | [Id $players.Id.sight{}{X=>rle_encode X}]
@@ -72,7 +71,6 @@ site.save =
               | YY = Y+1
               | Ts = $pilar{XX YY}
               | map T Ts: if T.parts.is_int then T.parts else T.id
-    explored | Explored
     enabled | map Name,Act $main.acts: Name,Act.players
 
 
@@ -168,16 +166,6 @@ site.load Saved =
   | P.human <= Human
   | for K,V Data: P.data.K <= V
   | P.data.picked <= Picked
-| Explored = Saved.explored
-| when got Explored:
-  | for PID,Sight Explored
-    | PS = $players.PID.sight
-    | WH = min{Sight.size $maxSize}
-    | for I WH
-      | Dst = PS.I
-      | Src = map X Sight.I^rle_decode: if X then 1 else 0
-      | if Dst.size><Src.size then Src.init{Src}
-        else for J WH: Dst.J <= Src.J
 | $human <= $players.(Saved.player)
 | for X Saved.units: $deserialize_unit{IdMap X}
 | Acts = $main.acts
