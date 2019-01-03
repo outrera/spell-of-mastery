@@ -17,6 +17,7 @@ type class{bank class_name Main
            pickable/0 show/1 gate/0
            tier/0
            counter/0 trigger/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
+           onMoveStep/0
            aux/0 foldable/0 draworder/100 box_xy/ZeroXY
            text/0 text_xy/ZeroXY}
   id                    //for unit counts table
@@ -55,7 +56,8 @@ type class{bank class_name Main
   onHit/OnHit           //called when attack hits the enemy
   onHarm/OnHarm         //called when unit receives damage
   onDeath/OnDeath       //called when unit dies
-  onMove/OnMove         //called when unit enters a cell
+  onMove/OnMove         //called when unit starts moving
+  onMoveStep/OnMoveStep //called on new movement animation loop cycle
   gate/Gate             //gateway, teleporting units to other cell
   foldable/Foldable     //fold unit`s sprite when cursor is behind
   inbornFlyer/0

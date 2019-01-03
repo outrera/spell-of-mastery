@@ -99,10 +99,15 @@ update_anim Me =
     | $animate{idle}
 | $anim_step <= ($anim_step+1)%$anim_seq.size
 | Step = $anim_seq.$anim_step
-| when Step.0><impact:
-  | when $anim><attack: $action.onHit
-  | update_anim Me
-  | leave
+| less Step.1:
+  | when Step.0><impact:
+    | when $anim><attack: $action.onHit
+    | update_anim Me
+    | leave
+  | when Step.0><step:
+    | when got@@it $class.onMoveStep: $effect{it Me $xyz}
+    | update_anim Me
+    | leave
 | $pick_facing{$facing}
 | $anim_wait <= Step.1
 
