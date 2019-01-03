@@ -449,25 +449,7 @@ site.seen_from A B = fxn:
   | _label end
   | R
 
-site.fxyz XYZ =
-| CellSize = $c
-| [XYZ.0*CellSize XYZ.1*CellSize XYZ.2*CellSize]
-
-site.units_get X,Y,Z = $cell{X Y Z}.units.unheap
-
-site.column_units_get X Y = $cell{X Y 0}.units.unheap
-
-site.block_at XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.block
-
-site.block_at_safe XYZ =
-| when XYZ.0<1: leave 0
-| when XYZ.1<1: leave 0
-| when XYZ.2<1: leave 0
-| $cell{XYZ.0 XYZ.1 XYZ.2}.block
-
-site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
-
-site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
+site.cells_seen = CellsSeen
 
 site.dir_cell Src Dst = fxn:
 | SX = Src.0
@@ -487,7 +469,7 @@ site.seen_cells Origin Sight Fn =
     | Fn Dst
     | Dst-=1
     | Fn Dst
-    | while Dst.z>>UZ or ($dir_cell{Dst.xyz XYZ}+1).tile.transparent:
+    | while ($dir_cell{Dst.xyz XYZ}+1).tile.transparent:
       | Dst -= 1
       | Fn Dst
     | 0
@@ -498,7 +480,25 @@ site.explore State =
 | CellsSeen.clear{if State then #FFFFFFFF else 0}
 | less State: for U $active: U.explore
 
-site.cells_seen = CellsSeen
+site.fxyz XYZ =
+| CellSize = $c
+| [XYZ.0*CellSize XYZ.1*CellSize XYZ.2*CellSize]
+
+site.units_get X,Y,Z = $cell{X Y Z}.units.unheap
+
+site.column_units_get X Y = $cell{X Y 0}.units.unheap
+
+site.block_at XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.block
+
+site.block_at_safe XYZ =
+| when XYZ.0<1: leave 0
+| when XYZ.1<1: leave 0
+| when XYZ.2<1: leave 0
+| $cell{XYZ.0 XYZ.1 XYZ.2}.block
+
+site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
+
+site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
 
 site.place_unitS U X Y Z =
 | Cell = $cell{X Y 0}

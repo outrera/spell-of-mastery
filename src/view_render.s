@@ -328,15 +328,18 @@ render_pilar Me Wr X Y BX BY RoofZ =
   | Z = if NextZ-TH < Z then NextZ-TH else Z
   | Cell = Wr.cell{X Y Z}
   | T = Cell.tile
+  | Seen = Cell.seen
+  | when (Seen&&&ExplMask)<>ExplMask: _goto skip_fold
   | when T.id and not T.proxy:
     | SZ = Z*ZUnit
     | SY = BY-SZ
     | B = blit_item Cell X*CS Y*CS Z*CS 
     | B.B_SX <= BX
     | B.B_SY <= SY-Folded.h
-    | when Fog: B.B_FLAGS <= #40 //dither
+    //| when Fog: B.B_FLAGS <= #40 //dither
     | B.B_DATA <= Folded
     | Cell.blitem <= B
+  | _label skip_fold
 
 render_unexplored Me Wr X Y BX BY =
 | B = blit_item gfx_item{} X*CS Y*CS 0
