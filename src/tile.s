@@ -45,7 +45,7 @@ type tile{As Main Type Id
      plain/Plain
      indoor/Indoor
      liquid/Liquid //this tile is liquid
-     opaque/Opaque
+     opaque/Opaque //opaque for the purposes of not rendering hidden tiles
      fallback/Fallback
      embed/Embed //embed into what type of other tile
                  //0 = don't embed, but place on top
@@ -58,7 +58,7 @@ type tile{As Main Type Id
      structTiles/StructTiles
      cycle/Cycle
      colors/Colors //minimap colors
-     transparent
+     transparent //doesnt block sight?
 | [Role Match TilerName] = $tiler
 | $role <= Role
 | $match <= Match

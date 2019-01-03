@@ -311,7 +311,7 @@ unit.update =
     then | when $xyz<>$host.xyz: $move{$host.xyz}
          | $fxyz.init{$host.fxyz}
     else $die
-| when fxn $cell > $floor and $action.type><idle:
+| when fxn $cell > $floor and $action.type><idle and not $block:
   | $update_fall
   | leave
 | when $velocity.2<0.0: unit_landed Me

@@ -252,10 +252,18 @@ view.update UpdatePlay =
 view.floor XYZ =
 | less $zfix: leave XYZ.2
 | when $key{edit_over_empty}: leave $site.floor_void{XYZ}
-| Z = $site.floor{XYZ}
-| P = $site.proxy_below{XYZ.0,XYZ.1,Z}
+| X,Y,Z = XYZ
+| P = $site.proxy_below{X,Y,Z}
+| while P and P.passCursor:
+  | Z -= 1
+  | P <= $site.proxy_below{X,Y,Z}
+| P = $site.proxy_at{X,Y,Z}
+| while P and P.passCursor: leave P.xyz.2
+| FZ = $site.floor{XYZ}
+| P = $site.proxy_below{X,Y,FZ}
 | when P and P.passCursor: leave P.xyz.2
-| Z
+| FZ
+
 
 view.mice_move XY =
 | Ds = 0

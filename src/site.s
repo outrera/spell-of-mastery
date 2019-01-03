@@ -350,7 +350,7 @@ site.cellp P =
 | P <= P.list
 | fxn (P.1*$maxSize+P.0)*$d+P.2
 site.at X Y Z = $cell{X Y Z}.tile
-site.atp XYZ = $cell{XYZ.0 XYZ.1 XYZ.2}.tile
+site.atp XYZ = fxn: $cell{XYZ.0 XYZ.1 XYZ.2}.tile
 site.set_ X Y Z V = CellsTile.($cell{X Y Z}) <= V
 
 site.proxy_below XYZ =
@@ -465,14 +465,21 @@ site.seen_cells Origin Sight Fn =
 | Fn: fxn Origin-1
 | Check =
   | Dst => fxn:
-    | less $seen_from{Dst.xyz XYZ}: leave \block
+    | less $seen_from{Dst.xyz XYZ}:
+      | Dst = Dst-Dst.z+UZ-1
+      | while not Dst.empty:
+        | C = $dir_cell{Dst.xyz XYZ}
+        | less C.tile.transparent or (C+1).tile.transparent: leave 0
+        | Fn Dst
+        | Dst += 1
+      | leave 0
     | Fn Dst
     | Dst-=1
     | Fn Dst
     | while ($dir_cell{Dst.xyz XYZ}+1).tile.transparent:
       | Dst -= 1
       | Fn Dst
-    | 0
+    | 1
 | $seen_cells_search{Sight Origin Check}
 
 site.explore State =

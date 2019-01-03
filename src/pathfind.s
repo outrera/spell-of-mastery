@@ -126,7 +126,6 @@ site.seen_cells_search MaxCost StartCell Check =
 | StartCost = $new_cost
 | MaxCost+=StartCost
 | StartCell.cost <= StartCost
-| StartCell.prev <= 0
 | PFQueue.reset
 | PFQueue.push{StartCell}
 | R = 0
@@ -137,18 +136,9 @@ site.seen_cells_search MaxCost StartCell Check =
   | for Dst Src.neibs
     | Dst <= Dst.floor
     | when NextCost < Dst.cost:
-      | Dst.prev <= Src
-      | C = Check Dst
-      | when C:
-        | if C><block then _goto skip
-          else | Dst.prev <= Src
-               | R <= Dst
-               | _goto end
-      | Dst.cost <= NextCost
-      | when fxn NextCost<MaxCost: PFQueue.push{Dst}
-      | _label skip
-| _label end
-| R
+      | when Check Dst:
+        | Dst.cost <= NextCost
+        | when fxn NextCost<MaxCost: PFQueue.push{Dst}
 
 site.find MaxCost U StartCell Check =
 | Found = $pathfind{MaxCost U StartCell Check}

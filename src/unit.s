@@ -346,15 +346,13 @@ unit.infov XYZ = //in field of view
 
 unit.seen_cells =
 | Cs = []
-| Fn = | C => push C Cs
-| $site.seen_cells{$cell $sight Fn}
+| $site.seen_cells{$cell $sight | C => push C Cs}
 | Cs.list
 
 unit.explore =
 | when no $sight: leave
 | $owner.explore{$seen_cells}
 
-  
 unit.fow_hides = $class.fow_hides
 
 unit.threatened_at XYZ =
@@ -466,7 +464,7 @@ unit.fine_move FXYZ =
   | RUs{?0.remove}
 | $site.place_unit{Me}
 | for U,F RUs: U.fine_move{F}
-| $floor <= $cell.floor
+| $floor <= if $block then $xyz.2 else $cell.floor
 | $environment_updated
 | when $ai >< unit: unit_run_triggers Me
 | Me
