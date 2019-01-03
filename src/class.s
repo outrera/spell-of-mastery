@@ -62,6 +62,7 @@ type class{bank class_name Main
   passCursor/0
   text/Text
   text_xy/Text_xy
+  fow_hides/0 //unit is not seen under fog of war
 | case $ai [X@Xs]:
   | $aiArg <= Xs
   | $ai <= X
@@ -81,6 +82,7 @@ type class{bank class_name Main
 | when $height and $ai <> unit:
   | Block = Main.tiles."h[$height]_"
   | when got Block: $block <= Block
+| $fow_hides <= $ai><unit or Bank >< mark
 
 class.form = $default_sprite.form
 

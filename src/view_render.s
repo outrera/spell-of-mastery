@@ -273,7 +273,6 @@ render_pilar Me Wr X Y BX BY RoofZ =
 | Fog = 0
 | Cell = Wr.cell{X Y 0}
 | Us = Cell.units.unheap
-| when Fog: Us <= Us.skip{(?ai><unit)}
 | fxn: for U Us: when U.frame: //render units
   | XYZ = U.xyz
   | UX,UY,Z = XYZ
@@ -281,7 +280,7 @@ render_pilar Me Wr X Y BX BY RoofZ =
   | Seen = U.floor.seen
   | if (Seen&&&SeenMask)><SeenMask then Fog <= 0
     else
-    | when (Seen&&&ExplMask)<>ExplMask or U.ai: _goto skip_unit
+    | when (Seen&&&ExplMask)<>ExplMask or U.fow_hides: _goto skip_unit
     | Fog <= 1
   | when TZ < RoofZ and (AboveCursor or TZ << ZCut) and UX><X and UY><Y:
     | when not U.invisible or $player.is_ally{U.owner} or $brush.0:

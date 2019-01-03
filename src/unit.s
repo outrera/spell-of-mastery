@@ -354,6 +354,9 @@ unit.explore =
 | when no $sight: leave
 | $owner.explore{$seen_cells}
 
+  
+unit.fow_hides = $class.fow_hides
+
 unit.threatened_at XYZ =
 | for E $nearby_enemies_at{XYZ}:
   | when not E.afraid and E.can_attack{E.cell $site.cellp{XYZ}}:

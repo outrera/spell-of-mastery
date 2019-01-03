@@ -1,3 +1,4 @@
+use fxn
 /*hline X Y L F =
 | E = X+L
 | D = if X<E then 1 else -1
@@ -118,7 +119,8 @@ line_calls AX AY BX BY F =
   | less F{X Y}: leave 0
 | 1
 
-line_calls3d AX AY AZ BX BY BZ F =
+//voxel ray tracer
+line_calls3d AX AY AZ BX BY BZ F = fxn:
 | DX = BX - AX
 | DY = BY - AY
 | DZ = BZ - AZ

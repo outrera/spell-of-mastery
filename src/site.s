@@ -424,9 +424,13 @@ site.roof XYZ =
 
 site.seen_from A B = fxn:
 | when A.2 < B.2: swap A B //hack to accomodate for line_calls3d quirks
-| AX,AY,AZ = A
-| BX,BY,BZ = B
-| when [AX AY].mdist{[BX BY]}><1: //units near cliff should see each other
+| AX = A.0
+| AY = A.1
+| AZ = A.2
+| BX = B.0
+| BY = B.1
+| BZ = B.2
+| when ((BX-AX).abs + (BY-AY).abs) >< 1://units near cliff see each other
   | Dst = $cell{BX BY BZ}
   | times I AZ-BZ: less (Dst+I).tile.transparent: leave 0
   | leave 1
