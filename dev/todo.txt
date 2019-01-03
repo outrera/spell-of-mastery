@@ -1,8 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- fix doors in fow
-- Better sfx for hydra movement.
+- Unseen terrain should be drawn just black, otherwise dungeon innards get drawn.
 - Ghost infravision (implement it using that good old diamond).
 - A way to recruit green player units, as those in tavern.
 - Time of day: every 4th world map turn should night, so any site investigation during it would be with bonus for undead and handicap for all normal units, especially those who cannot see in the dark. The day turn should do the opposite, giving handicap to undead.
@@ -140,6 +139,41 @@ Stack Trace:
   0x124549b20:player.make_move:133,17,./src/player.s
   0x12483e340:site.update:75,12,./src/update.s
   0x124827fc0:main.update:3,12,./src/update.s
+
+AI crashes on attack
+
+arg 1 isnt int, in: int.`<` 0 `user`
+Stack Trace:
+  0x10f4fd6a0:int.`<`:0,0,builtin
+  0x1302d78c0:_.<<:4,9,/Users/macbook/Documents/GitHub/symta/src/core_.s
+  0x131ad0cd0:unit.harm:414,26,./src/unit.s
+  0x1334ab800:harm__36:84,18,./src/effect.s
+  0x1303159c0:list.apply:331,13,/Users/macbook/Documents/GitHub/symta/src/core_.s
+  0x1302da790:fn.{}:38,12,/Users/macbook/Documents/GitHub/symta/src/core_.s
+  0x133524ad0:unit.effect:607,36,./src/effect.s
+  0x133524ad0:unit.effect:607,36,./src/effect.s
+  0x131e60e30:action.onHit:206,13,./src/action.s
+  0x131f9ab10:update_anim:93,15,./src/update.s
+  0x131fcb440:unit.update:304,12,./src/update.s
+  0x131f92880:update_units:65,16,./src/update.s
+  0x131f94180:site.update:75,12,./src/update.s
+  0x131f7de00:main.update:3,12,./src/update.s
+  0x132609530:view.update:200,23,./src/view_input.s
+  0x13220eb30:view.draw:549,17,./src/view_render.s
+  0x130c4b5f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+  0x131125400:dlg.draw:117,17,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x130c4b5f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+  0x131125400:dlg.draw:117,17,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x130c4b5f0:gfx.blit:77,17,/Users/macbook/Documents/GitHub/symta/src/gfx.s
+  0x131135320:gui.render:166,11,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x131153230:unnamed:157,11,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x1310fe5c0:event_loop:3,13,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x1310ffc10:show:12,7,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x13112c910:gui:137,0,/Users/macbook/Documents/GitHub/symta/src/gui.s
+  0x1337395a0:main.run:52,9,./src/main2.s
+  0x130288a50:<toplevel>:4,4,./src/main.s
+  0x13120df50:<init>:-1,-1,unknown
+
 
 
 
