@@ -1,4 +1,4 @@
-use bits macros
+use bits macros fxn
 
 type ai{player} site
 | $site <= $player.site
@@ -68,6 +68,24 @@ player.seen XYZ =
 | C = $site.cellp{XYZ}
 | M = $seen_mask
 | (C.seen&&&M) >< M
+
+player.explore Cells = fxn:
+| CellsSeen = $site.cells_seen
+| M = $seen_mask
+| less $human:
+  | for Cell Cells:
+    | S = CellsSeen.Cell
+    | CellsSeen.Cell <= S---M
+  | leave
+| EM = $explored_mask
+| for Cell Cells:
+  | S = CellsSeen.Cell
+  | when (S&&&M)<>M:
+    | CellsSeen.Cell <= S---M
+    | when (S&&&EM)<>EM:
+      | X,Y,Z = Cell.xyz
+      | $site.update_minimap{X Y}
+      //| $site.upd_pilar{X Y} //FIXME: use this to hide changes to terrain
 
 player.clear =
 | $total_units <= 0

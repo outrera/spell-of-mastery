@@ -465,48 +465,25 @@ site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
 site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
 
-unit.seen_cells =
-| XYZ = $xyz
-| UZ = XYZ.2
-| Cs = [$cell]
-| SeeCheck = | Src Dst => 1
-| Site = $site
+site.seen_cells Origin Sight Fn =
+| XYZ = Origin.xyz
+| UZ = fxn XYZ.2
+| Fn Origin
+| Fn: fxn Origin-1
 | Check =
   | Dst =>
-    | push Dst Cs
-    | DXYZ = Dst.xyz
-    | R = if (DXYZ.2-UZ)>1 or not Site.seen_from{XYZ DXYZ} then
-            | D = Dst-1
-            | while D.xyz.2>>UZ:
-              | push D Cs
-              | D -= 1
-            | \block
-          else
-            | 0
-    | R
-| $site.seen_cells{$sight $cell SeeCheck Check}
-| [@Cs @Cs{?-1}].list
-
-unit.explore =
-| when no $sight: leave
-| M = $owner.seen_mask
-| EM = $owner.explored_mask
-| if $owner.human then fxn: for Cell $seen_cells:
-  | S = CellsSeen.Cell
-  | when (S&&&M)<>M:
-    | CellsSeen.Cell <= S---M
-    | when (S&&&EM)<>EM:
-      | X,Y,Z = Cell.xyz
-      | $site.update_minimap{X Y}
-      //| $site.upd_pilar{X Y} //FIXME: use this to hide changes to terrain
-  else fxn: for Cell $seen_cells:
-  | S = CellsSeen.Cell
-  | CellsSeen.Cell <= S---M
+    | less $seen_from{Dst.xyz XYZ}: leave \block
+    | Fn Dst
+    | fxn: while Dst.z>>UZ:
+      | Dst -= 1
+      | Fn Dst
+    | 0
+| $seen_cells_search{Sight Origin Check}
 
 site.explore State =
 | less State: $minimap.clear{#000000}
 | CellsSeen.clear{if State then #FFFFFFFF else 0}
-| for U $active: U.explore
+| less State: for U $active: U.explore
 
 site.cells_seen = CellsSeen
 

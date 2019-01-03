@@ -20,7 +20,7 @@ default_spell: bless
 default_site: forest
 default_site: dungeon
 //default_site: city
-start: menu
+//start: menu
 //start: site
 //start: world
-//start: editor
+start: editor

@@ -121,15 +121,7 @@ site.closest_reach MaxCost U StartCell TargetXYZ =
 | $pathfind{MaxCost U StartCell &check}
 | Best
 
-can_see Src Cost SeeCheck =
-| Ms = []
-| for Dst Src.neibs
-  | Dst <= Dst.floor
-  | when Cost < Dst.cost and SeeCheck{Src Dst}:
-    | push Dst Ms
-| Ms
-
-site.seen_cells MaxCost StartCell SeeCheck Check =
+site.seen_cells_search MaxCost StartCell Check =
 | X,Y,Z = StartCell.xyz
 | StartCost = $new_cost
 | MaxCost+=StartCost
@@ -142,18 +134,19 @@ site.seen_cells MaxCost StartCell SeeCheck Check =
   | Src = PFQueue.pop
   | Cost = Src.cost
   | NextCost = fxn Cost+1
-  | Ms = can_see{Src NextCost SeeCheck}
-  | for Dst Ms:
-    | Dst.prev <= Src
-    | C = Check Dst
-    | when C:
-      | if C><block then _goto skip
-        else | Dst.prev <= Src
-             | R <= Dst
-             | _goto end
-    | Dst.cost <= NextCost
-    | when fxn NextCost<MaxCost: PFQueue.push{Dst}
-    | _label skip
+  | for Dst Src.neibs
+    | Dst <= Dst.floor
+    | when NextCost < Dst.cost:
+      | Dst.prev <= Src
+      | C = Check Dst
+      | when C:
+        | if C><block then _goto skip
+          else | Dst.prev <= Src
+               | R <= Dst
+               | _goto end
+      | Dst.cost <= NextCost
+      | when fxn NextCost<MaxCost: PFQueue.push{Dst}
+      | _label skip
 | _label end
 | R
 

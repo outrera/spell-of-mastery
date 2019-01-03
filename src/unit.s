@@ -344,6 +344,15 @@ unit.nearby_enemies_at XYZ =
 unit.infov XYZ = //in field of view
 | if (XYZ-$xyz).take{2}{?sign} <> -$direction then 1 else 0
 
+unit.seen_cells =
+| Cs = []
+| Fn = | C => push C Cs
+| $site.seen_cells{$cell $sight Fn}
+| Cs.list
+
+unit.explore =
+| when no $sight: leave
+| $owner.explore{$seen_cells}
 
 unit.threatened_at XYZ =
 | for E $nearby_enemies_at{XYZ}:

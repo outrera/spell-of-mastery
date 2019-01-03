@@ -68,7 +68,7 @@ Spells:
 
 Summonable Creatures:
 Oculus: flyer, scout, clears invisibility from enemy units in sight. Can explode dealing minor damage.
-Blob: slow, when in full health, can divide into two blobs of half the health.
+Blob: slow, when in full health, can divide into two blobs of half the health. Consumes enemy bodies to regain health. To consume just move the blob over the body. If its health is isn't full, the body gets consumed.
 Imp: digs terrain, builds bridges, cuts trees, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: throws bombs, which damage whole area.
@@ -83,6 +83,7 @@ Wraith: undead, flyer, sees through walls, passess through walls, becomes invisi
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: heavy, strong, has stun-attack ability, disabling enemy for a single turn.
+Zombie: undead, any humanoid killed by zombie turns into zombie.
 Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone, then deals damage equivalent to cumulative damage target has ever deed to other creatures.
 Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
