@@ -78,7 +78,7 @@ effect visual1 Effect: //this one guards against multiple instances
 | when got E: leave
 | $site.visual{TargetXYZ Effect}
 
-effect sound Sound: $sound{Sound}
+effect sound Sound: $site.sound_at{TargetXYZ 0 Sound}
 
 effect heal Amount: Target.harm{Me -Amount}
 
