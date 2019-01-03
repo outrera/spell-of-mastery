@@ -58,6 +58,7 @@ type tile{As Main Type Id
      structTiles/StructTiles
      cycle/Cycle
      colors/Colors //minimap colors
+     transparent
 | [Role Match TilerName] = $tiler
 | $role <= Role
 | $match <= Match
@@ -71,6 +72,7 @@ type tile{As Main Type Id
 | when $zmatch><same: $zmatch <= $zrole
 | $empty <= not $id
 | when no $opaque: $opaque <= not $invisible
+| $transparent <= $empty or $liquid
 | less $parts:
   | if $height>1
     then | $parts <= @flip: map I $height-1

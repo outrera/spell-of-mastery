@@ -428,7 +428,7 @@ site.seen_from A B = fxn:
 | BX,BY,BZ = B
 | when [AX AY].mdist{[BX BY]}><1: //units near cliff should see each other
   | Dst = $cell{BX BY BZ}
-  | times I AZ-BZ: less (Dst+I).tile.empty: leave 0
+  | times I AZ-BZ: less (Dst+I).tile.transparent: leave 0
   | leave 1
 | PX = AX //prev X
 | PY = AY
@@ -438,10 +438,10 @@ site.seen_from A B = fxn:
   | DX = X-PX
   | DY = Y-PY
   | when DX*DX><1 and DY*DY><1:
-    | less $at{PX+DX PY Z}.empty or $at{PX PY+DY Z}.empty: _goto end
+    | less $at{PX+DX PY Z}.transparent or $at{PX PY+DY Z}.transparent: _goto end
   | PX <= X
   | PY <= Y
-  | R <= $at{X Y Z}.empty
+  | R <= $at{X Y Z}.transparent
   | _label end
   | R
 
@@ -465,16 +465,25 @@ site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
 site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
 
+site.dir_cell Src Dst = fxn:
+| SX = Src.0
+| SY = Src.1
+| DX = Dst.0
+| DY = Dst.1
+| $cell{SX+(DX-SX).sign SY+(DY-SY).sign Src.2}
+
 site.seen_cells Origin Sight Fn =
 | XYZ = Origin.xyz
 | UZ = fxn XYZ.2
 | Fn Origin
 | Fn: fxn Origin-1
 | Check =
-  | Dst =>
+  | Dst => fxn:
     | less $seen_from{Dst.xyz XYZ}: leave \block
     | Fn Dst
-    | fxn: while Dst.z>>UZ:
+    | Dst-=1
+    | Fn Dst
+    | while Dst.z>>UZ or ($dir_cell{Dst.xyz XYZ}+1).tile.transparent:
       | Dst -= 1
       | Fn Dst
     | 0
