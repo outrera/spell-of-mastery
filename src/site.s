@@ -467,11 +467,16 @@ site.seen_cells Origin Sight Fn =
   | Dst => fxn:
     | less $seen_from{Dst.xyz XYZ}:
       | Dst = Dst-Dst.z+UZ-1
-      | while not Dst.empty:
-        | C = $dir_cell{Dst.xyz XYZ}
-        | less C.tile.transparent or (C+1).tile.transparent: leave 0
-        | Fn Dst
-        | Dst += 1
+      | Cs = if ($dir_cell{Dst.xyz XYZ}+1).tile.transparent
+             then [Dst @Dst.neibs.keep{?>0}].list
+             else [Dst]
+      | for Dst Cs:
+        | while not Dst.empty:
+          | C = $dir_cell{Dst.xyz XYZ}
+          | less C.tile.transparent or (C+1).tile.transparent: _goto skip
+          | Fn Dst
+          | Dst += 1
+        | _label skip
       | leave 0
     | Fn Dst
     | Dst-=1
