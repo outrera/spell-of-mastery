@@ -207,7 +207,8 @@ draw_tile Cell FB BlitItem =
 | B = BlitItem
 | G = fxn B.B_DATA
 | Cell.blitem <= 0
-| fxn: when B.B_FLAGS&&&#40: G.brighten{-64} //G.dither{1}
+| fxn: when B.B_FLAGS&&&#140:
+  | G.brighten{if B.B_FLAGS&&&#100 then -250 else -64}
 | fxn FB.blit{B.B_SX B.B_SY G}
 | Us = fxn B.B_COVER
 | when Us.end: leave
@@ -306,8 +307,7 @@ render_pilar Me Wr X Y BX BY RoofZ =
   | Seen = Cell.seen
   | if (Seen&&&SeenMask)><SeenMask then Fog <= 0
     else
-    | when (Seen&&&ExplMask)<>ExplMask: _goto skip_cell
-    | Fog <= 1
+    | Fog <= if (Seen&&&ExplMask)<>ExplMask then #140 else #40
   | when G:
     | SZ = Z*ZUnit
     | when G.is_list: G <= G.((Wr.cycle/T.anim_wait)%G.size)
@@ -318,7 +318,7 @@ render_pilar Me Wr X Y BX BY RoofZ =
       | B.B_SX <= BX
       | B.B_SY <= SY-G.h
       | B.B_DATA <= G
-      | when Fog: B.B_FLAGS <= #40 //dither
+      | B.B_FLAGS <= Fog
       | Cell.blitem <= B
   | _label skip_cell
   | Cell += TH
