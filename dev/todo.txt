@@ -6,6 +6,7 @@ TODO:
 - Units without hands, like Oculus shouldn't be able to pickup items or open doors. Have humanoid property.
 - A way to recruit green player units, as those in tavern.
 - Time of day: every 4th world map turn should night, so any site investigation during it would be with bonus for undead and handicap for all normal units, especially those who cannot see in the dark. The day turn should do the opposite, giving handicap to undead.
+- Waterfalls: when top tile is water, any exposed tiles are covered with water.
 - Action hotkeying.
 - Make sure AI properly handles doors. Doors should have special door triggers before them to guide pathfinder.
 - Witch sprite needs some rework: make it two pixels shorter and 1 pixel wider.

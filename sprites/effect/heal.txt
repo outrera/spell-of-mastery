@@ -1,7 +1,6 @@
-author: `Wesnoth Team`
-license: `GPL2`
-origin: `wesnoth.org`
-xy: 0,0
+author: `Nikita Sadkov`
+xy: 0,-16
 frames: folder
-anims: | idle (idle0 3) (idle1 3) (idle2 3) (idle3 3)
-              (idle4 3) (idle5 3) (idle6 3) (idle7 3)
+anims: | idle (idle00 2) (idle01 2) (idle02 2) (idle03 2)
+              (idle04 2) (idle05 2) (idle06 2) (idle07 2)
+              (idle08 2) (idle09 2) (idle10 2) (idle11 2)
