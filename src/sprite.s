@@ -129,7 +129,7 @@ sprite.init_anims Anims =
   | $anims.attack <= Attack
 | Move = $anims.move 
 | when got Move and no Move.find{?0><step}:
-  | $anims.move <= [step @Move]
+  | $anims.move <= [[step 0] @Move]
 | when no Attack.find{?0><impact}:
   | $anims.attack <= if Attack.size>1
                      then [@Attack.lead [impact 0] Attack.last]

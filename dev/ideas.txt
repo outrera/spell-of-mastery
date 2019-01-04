@@ -10,6 +10,7 @@ Leader abilities:
 
 General:
 - Random node placement tokens.
+- Lords of Chaos style tall grass, which impedes vision of non-flyers.
 - Autobalance spell and unit prices, based on supply and demand. I.e. if player keeps using some single combination it's cost will increase for the next use.
 - More settlement sizes, each offering different set of bonuses to the player: hamlet, village, burg, town and city.
 - Inventory dialogue, which would also show what unit portrait and stats. Use Heroes of Might & Magic 4 template as layout. While creatures are hired and paid per mission, inventory items are preserved unless lost or their durability falls to 0. Such items can be either purchased in shop or found on mission.
@@ -155,7 +156,7 @@ Spells:
 - Bloodlust (chaos): target unit gains +1 damage
 - Protection (law): target unit gains +1 defense
 - Disease: unit contaminates other units, getting 2-cells near him, forcing owner to desperse the forces. Undead units would still contract disease, but get no damage from it.
-- Entangle: Target is unable to move, but still can attack.
+- Entangle: Target is unable to move, but still can attack. If made area of effect spell, the entangled units can still be allowed to move, but get only 1 movement point.
 - Pacify: decreases target's attack, but increases its defense.
 - Scrying/Tag: once cast on enemy creature, player can track it and see area around it.
 - Visions: removes fog of war for one turn.

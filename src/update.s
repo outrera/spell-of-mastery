@@ -91,26 +91,6 @@ site.update =
 | $cycle++
 | $view.ui.update
 
-update_anim Me =
-| when $anim_wait-- > 1: leave
-| when $anim_step+1 >< $anim_seq.size:
-  | when $anim >< death: leave
-  | when $anim >< attack or $anim><hit:
-    | $animate{idle}
-| $anim_step <= ($anim_step+1)%$anim_seq.size
-| Step = $anim_seq.$anim_step
-| less Step.1:
-  | when Step.0><impact:
-    | when $anim><attack: $action.onHit
-    | update_anim Me
-    | leave
-  | when Step.0><step:
-    | when got@@it $class.onMoveStep: $effect{it Me $xyz}
-    | update_anim Me
-    | leave
-| $pick_facing{$facing}
-| $anim_wait <= Step.1
-
 unit_check_move Me Dst =
 | less $speed: leave 0
 | Src = $xyz
@@ -323,7 +303,7 @@ unit.update =
 | when $class.hp and (fxn $cell-1).tile.liquid and not $can_stand_on_water:
   | $sink
   | leave
-| update_anim Me
+| $update_anim
 | when $idle: update_path Me
 | update_order Me
 | update_fade Me

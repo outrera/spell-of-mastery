@@ -309,9 +309,29 @@ unit.animate Anim =
 | when no $anim_seq:
   | $anim_seq <= $sprite.anims.idle
   | less got $anim_seq: bad "unit [$type] is missing `idle` anim"
-| $anim_step <= 0
+| $anim_step <= -1
+| $anim_wait <= 0
+| $update_anim
+
+unit.update_anim =
+| when $anim_wait-- > 1: leave
+| when $anim_step+1 >< $anim_seq.size:
+  | when $anim >< death: leave
+  | when $anim >< attack or $anim><hit:
+    | $animate{idle}
+| $anim_step <= ($anim_step+1)%$anim_seq.size
+| Step = $anim_seq.$anim_step
+| less Step.1:
+  | when Step.0><impact:
+    | when $anim><attack: $action.onHit
+    | $update_anim
+    | leave
+  | when Step.0><step:
+    | when got@@it $class.onMoveStep: $effect{it Me $xyz}
+    | $update_anim
+    | leave
 | $pick_facing{$facing}
-| $anim_wait <= $anim_seq.$anim_step.1
+| $anim_wait <= Step.1
 
 unit.free =
 | when $owner: $owner.lost_unit{Me}
