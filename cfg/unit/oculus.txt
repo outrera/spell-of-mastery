@@ -7,7 +7,7 @@ mov: 10
 sight: 10
 def: 2
 speed: 20
-inborn: (flyer organic)
+inborn: (flyer organic nocorpse)
 onAttack: self,add{nocorpse},detonate{3 100},visual{explosion},sound{explosion}
 onHit: shell,hit{user}
 onHarm: visual{blood},sound{oculus_move}
