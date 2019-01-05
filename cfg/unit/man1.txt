@@ -5,7 +5,7 @@ health: 3
 atk: 2
 def: 0
 will: 5
-inborn: (organic)
+inborn: (organic humanoid)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{male_hit}
 onDeath: sound{male_die}

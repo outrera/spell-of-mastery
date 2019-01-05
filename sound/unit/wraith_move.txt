@@ -1,3 +1,5 @@
-author: `Tuomo Untinen 'Reemax' (http://tuomount.kapsi.fi/)`
+author: `Tuomo Untinen 'Reemax' (http://tuomount.kapsi.fi/)`, `Nikita Sadkov`
 license: `CC-BY 3.0`
 origin: `http://opengameart.org/content/rpg-sound-package`
+
+//I've removed clicking sound --Nikita

@@ -1,5 +1,6 @@
 icon: act_switch
 title: `Interact`
+needsGene: (humanoid)
 //hotkey: s
 mov: 1
 range: 1

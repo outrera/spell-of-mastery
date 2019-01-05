@@ -6,7 +6,7 @@ atk: 3
 def: 6
 will: 10
 speed: 30
-inborn: (organic bless)
+inborn: (organic bless humanoid)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{knight_hit}
 onDeath: sound{male_die}

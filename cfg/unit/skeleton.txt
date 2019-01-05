@@ -4,7 +4,7 @@ health: 6
 atk: 2
 def: 2
 //speed: 24
-inborn: (undead nocorpse)
+inborn: (undead nocorpse humanoid)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood_undead},sound{skeleton_hit}
 onDeath: sound{skeleton_die}

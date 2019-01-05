@@ -5,7 +5,7 @@ atk: 1
 def: 1
 range: 3
 mov: 6
-inborn: (organic)
+inborn: (organic humanoid)
 onHit: sound{throw},missile{rock},hit{user},sound{impact}
 onHarm: sound{goblin_hit}
 onDeath: sound{goblin_die}

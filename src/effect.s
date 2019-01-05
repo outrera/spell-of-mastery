@@ -573,7 +573,7 @@ effect yes //confirmation
 | MenuActName,XYZ,TargetSerial = $get{menuact}
 | T = 0
 | when got TargetSerial:
-  | T <= $active.list.find{?serial><TargetSerial}
+  | T <= $site.active.list.find{?serial><TargetSerial}
   | when no T or not T.alive:
     | $owner.notify{"Target is lost!"}
     | leave

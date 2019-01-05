@@ -4,7 +4,7 @@ health: 7
 atk: 3
 def: 0
 range: 6
-inborn: (organic)
+inborn: (organic humanoid)
 onHit: shell,hit{user},sound{arrow_hit}
 onHarm: visual{blood},sound{elf_hit}
 onDeath: sound{male_die}

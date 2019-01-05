@@ -5,7 +5,7 @@ health: 10
 atk: 3
 def: 2
 speed: 22
-inborn: (organic fireaura flyer)
+inborn: (organic fireaura flyer humanoid)
 onHit: shell,hit{user},sound{explosion}
 onHarm: visual{blood},sound{ifrit_hit}
 onDeath: sound{ifrit_death}

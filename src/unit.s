@@ -116,6 +116,9 @@ unit.strong = $flags.bit{23}
 
 unit.xrsight = $flags.bit{25}
 
+unit.humanoid = $flags.bit{26}
+
+
 //how many other units this unit has killed
 unit.kills = $get{kills}^~{0}
 unit.`=kills` Value = $set{kills Value}

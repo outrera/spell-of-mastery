@@ -1,4 +1,4 @@
 sprite: item_gold
 ai: item,gold
-trigger: gold{100},sound{pickup},notify{`Found 100 gold.`},visual{pickup},self,remove
+trigger: when{has.humanoid},gold{100},sound{pickup},notify{`Found 100 gold.`},visual{pickup},self,remove
 box_xy: (-1 -1)
