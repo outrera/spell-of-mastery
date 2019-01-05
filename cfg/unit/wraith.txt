@@ -4,8 +4,8 @@ mov: 5
 health: 8
 atk: 3
 def: 2
-speed: 28
-inborn: (undead nocorpse flyer)
+speed: 30
+inborn: (undead nocorpse flyer xrsight)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood_undead},sound{wraith_hit}
 onDeath: sound{wraith_die}

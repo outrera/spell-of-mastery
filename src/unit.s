@@ -114,6 +114,7 @@ unit.`=nocorpse` State = $flags <= $flags.bitSet{22 State}
 
 unit.strong = $flags.bit{23}
 
+unit.xrsight = $flags.bit{25}
 
 //how many other units this unit has killed
 unit.kills = $get{kills}^~{0}
@@ -364,8 +365,27 @@ unit.nearby_enemies_at XYZ =
 unit.infov XYZ = //in field of view
 | if (XYZ-$xyz).take{2}{?sign} <> -$direction then 1 else 0
 
+site.xr_seen_cells Cell Sight F =
+| UX,UY,UZ = Cell.xyz
+| for DX,DY points_in_diamond{Sight}:
+  | X = UX+DX
+  | Y = UY+DY
+  | when X>0 and Y>0:
+    | Z = 0
+    | H = $height{X Y}
+    | C = $cell{X Y 0}
+    | EC = C+H
+    | while C < EC:
+      | when not C.empty
+        | F C
+        | when (C+1).empty: F C+1
+      | C += 1
+
 unit.seen_cells =
 | Cs = []
+| when $xrsight:
+  | $site.xr_seen_cells{$cell $sight | C => push C Cs}
+  | leave Cs.list
 | $site.seen_cells{$cell $sight | C => push C Cs}
 | Cs.list
 

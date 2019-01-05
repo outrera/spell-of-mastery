@@ -1,4 +1,5 @@
 tier: 1
+title: `Magic Eye`
 cost: 100,4,50
 height: 1
 health: 6

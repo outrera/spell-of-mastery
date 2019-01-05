@@ -67,7 +67,7 @@ Spells:
 
 
 Summonable Creatures:
-Oculus: flyer, scout, clears invisibility from enemy units in sight. Can explode dealing minor damage.
+Mage's Eye: flyer, scout, clears invisibility from enemy units in sight. Can explode dealing minor damage.
 Blob: slow, when in full health, can divide into two blobs of half the health. Consumes enemy bodies to regain health. To consume just move the blob over the body. If its health is isn't full, the body gets consumed.
 Imp: digs terrain, builds bridges, cuts trees, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
 Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
@@ -127,8 +127,9 @@ Creature Properties:
 - Afraid: creature can't attack.
 - Regen: creature restores 1 hit point at the end of its turn, if it isn't engaged and has full defense.
 - Organic: non-undead and non-mechanical units can be target by attacks like life stealing.
-- Supravision: obstacles don't block this creature's sight
-- Darkvision: this creature doesn't suffer sight penalty at night.
+- xray sight: obstacles don't block this creature's sight
+- true sight: reveals invisible creatures on sight
+- darkvision: this creature doesn't suffer sight penalty at night.
 - Sinner: creature has spilled blood by killing somebody. Such creatures are vulneraly to specific abilities, like devil's punish ability.
 - Heavy: cannot be lifted into air by tornado, telekinesis, flight spell or dragon wings blow. Fragile objects would break under such unit.
 - Strong: creature can bash chests and doors for half the normal health cost; can lift and push heavy objects.
