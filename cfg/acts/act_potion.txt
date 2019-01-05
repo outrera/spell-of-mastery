@@ -3,7 +3,7 @@ title: `Healing Potion`
 needsGene: (humanoid)
 cool: 10
 check: owned,unit
-onInit: heal{9},strip{poison},strip{fear},visual{heal},sound{heal}
+onInit: heal{9},strip{poison},visual{heal},sound{potion}
 maxPicks: 0
 onEnd: ()
-hint: heal_self
+hint: heal

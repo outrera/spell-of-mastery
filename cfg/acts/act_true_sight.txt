@@ -1,0 +1,6 @@
+icon: spell_reveal_invisible
+title: `True Sight`
+//cool: 10
+check: owned,unit
+onInit: reveal_invisible{10},visual{spell},sound{reveal_invisible}
+hint: detector

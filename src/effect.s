@@ -544,6 +544,11 @@ effect blowaway R BlowSelf:
           | $site.visual{T dustend}
     | $site.visual{B.xyz dust}
 
+effect reveal_invisible R:
+| for B $site.units_in_range{TargetXYZ R}: when B.ai >< unit:
+  | less $is_ally{B}:
+    | B.strip{invisible}
+
 effect jumpdown:
 | $reset_goal
 | $animate{idle}
@@ -685,6 +690,6 @@ unit.effect Effect Target TargetXYZ =
       | for U $site.active: when $is_enemy{U}:
         | when U.ai><unit: $effect{Es U U.xyz}
       | _goto end
-    else bad "no effect handler for [Name]{[Args]} of [Me]"
+    else bad "no effect handler for [Name]{[Args]} of [$type]/[$id]"
 | _label end
 | when RunActEffects: $run_genes{act}
