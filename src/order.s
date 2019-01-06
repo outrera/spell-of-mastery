@@ -6,7 +6,7 @@ unit.order_at Goal Act =
 | Cell = $site.cellp{XYZ}
 | Units = Cell.units
 | OAct = Act
-| less Goal: Goal <= Cell.block
+| less Goal: Goal <= $block_at{Cell}
 | Act <= if Act.is_text then $main.acts.Act
          else if Act then Act
          else if Goal and $owner.is_enemy{Goal.owner}

@@ -3,7 +3,7 @@ flags: attacker{0 -1},picked{1 -1},engaged{2 1}
       ,climber{9 -1},swimmer{10 -1},amphibian{11 -1},invisible{12 -1}
       ,bless{13 6},undead{14 3},afraid{15 7},mark{16 -1},resting{17 -1}
       ,resist{18 8},hasted{19 5},slowed{20 10},disciplined{21 11}
-      ,nocorpse{22 -1},strong{23 -1},spellcaster{24 -1},xrsight{25 -1},humanoid{26 -1}
+      ,nocorpse{22 -1},strong{23 -1},spellcaster{24 -1},xrsight{25 -1},humanoid{26 -1},flying{27 -1}
 
 flyer: on{static}
 swimmer: on{static}

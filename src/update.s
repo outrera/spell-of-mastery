@@ -91,6 +91,11 @@ site.update =
 | $cycle++
 | $view.ui.update
 
+unit.block_at Cell = if $flying then (Cell+1).block else Cell.block
+unit.block_atp XYZ =
+| Cell = $site.cellp{XYZ}
+| if $flying then (Cell+1).block else Cell.block
+
 unit_check_move Me Dst =
 | less $speed: leave 0
 | Src = $xyz
@@ -103,7 +108,7 @@ unit_check_move Me Dst =
 | Below = $site.at{X Y $site.floor{X,Y,Z}-1}
 | when Below.type><water:
   | less $flyer or $amphibian or $swimmer: leave 0
-| B = $site.block_at{Dst}
+| B = $block_atp{Dst}
 | less B: leave move
 | if $is_enemy{B}
   then //when B.alive and $atk: leave attack

@@ -139,6 +139,7 @@ unit.draw FB B =
     | less $class.inbornFlyer: //floating animation
       | C = $site.cycle
       | YY += FloatDYs.((C/3+$id)%FloatDYs.size)
+    | when $flying: YY -= 64
   | Alpha = $alpha
   | when $invisible:
     | Alpha <= 127
@@ -169,6 +170,7 @@ unit.draw FB B =
 | when $picked:
   | RX = X+XUnit2 - RW/2
   | RY = Y+RY-RH
+  | when $flying: RY -= 64
   | PickedRects.push{[RX RY RW RH],Me}
 
 

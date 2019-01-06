@@ -118,6 +118,8 @@ unit.xrsight = $flags.bit{25}
 
 unit.humanoid = $flags.bit{26}
 
+unit.flying = $flags.bit{27}
+unit.`=flying` State = $flags <= $flags.bitSet{27 State}
 
 //how many other units this unit has killed
 unit.kills = $get{kills}^~{0}

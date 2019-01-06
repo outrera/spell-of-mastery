@@ -508,8 +508,6 @@ site.block_at_safe XYZ =
 | when XYZ.2<1: leave 0
 | $cell{XYZ.0 XYZ.1 XYZ.2}.block
 
-site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
-
 site.is_hazard XYZ = $units_get{XYZ}.any{?ai><hazard}
 
 site.place_unitS U X Y Z =
@@ -517,7 +515,9 @@ site.place_unitS U X Y Z =
 | Cell.units <= Cell.units.cons{U}
 | fxn: Cell += Z
 | Cell.units <= Cell.units.cons{U}
-| less U.empty: Cell.block <= U
+| less U.empty:
+  | if U.flying then (Cell+1).block <= U
+    else Cell.block <= U
 
 site.place_unit U =
 | XYZ = U.xyz
@@ -551,7 +551,8 @@ site.remove_unitS U X Y Z = fxn:
 | Cell.units <= Us.enheap
 | K.heapfree
 | less U.empty:
-  | Cell.block <= 0
+  | if U.flying then (Cell+1).block <= 0
+    else Cell.block <= 0
   | for U Us: less U.empty: Cell.block <= U
 
 site.remove_unit U =

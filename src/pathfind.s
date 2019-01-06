@@ -1,17 +1,17 @@
 use queue util fxn
 
 land_can_move Me Src Dst =
-| H = Dst.z-Src.z
+| H = fxn Dst.z-Src.z
 | fxn: when H > 1 or H < -1: leave 0
 | Dst.tile.empty and not (fxn Dst-1).tile.liquid
 
 amphibian_can_move Me Src Dst =
-| H = Dst.z-Src.z
+| H = fxn Dst.z-Src.z
 | fxn: when H > 1 or H < -1: leave 0
 | Dst.tile.empty
 
 swimmer_can_move Me Src Dst =
-| H = Dst.z-Src.z
+| H = fxn Dst.z-Src.z
 | fxn: when H > 1 or H < -1: leave 0
 | Dst.tile.empty and (fxn Dst-1).tile.type><water
 
@@ -193,11 +193,13 @@ unit.can_attack Src Dst = $atk and (fxn (Dst.z-Src.z) << 1 or $can_move{}{Me Src
 unit.reachable =
 | Xs = []
 | XYZ = $xyz
+| Flying = $flying
 | less $engaged: when $moves>0: $find{$moves
   | Dst =>
     | R = \block
     | Type = \move
-    | B = Dst.block
+    | D = if Flying then Dst+1 else Dst
+    | B = D.block
     | if not B then R <= 0
       else if $owner.is_enemy{B.owner} then
         if B.invisible then R <= 0

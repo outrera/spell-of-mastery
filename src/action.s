@@ -44,9 +44,11 @@ move_finish Me =
 | U.strip{toXYZ}
 
 
+site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
+
 dact move.valid
 | U = $unit
-| U.site.no_block_at{$xyz} and U.can_move{}{U U.cell $xyz.cell}
+| not U.block_atp{$xyz} and U.can_move{}{U U.cell $xyz.cell}
 
 dact move.start
 | move_start Me

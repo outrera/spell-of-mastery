@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Proper flying units: just allow units fly 2 cells above ground, when there is a space. That way no unit fill fly too high. Shifting attack/movement layer would be done by pressing hotkey. Ensure engaged units can change layers.  When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight. When in tight passages, flyers will temprorarily ground.
+- Flying flyers should get additional damage from ranged units. And there must be magic bow spell, which would turn any unit into ranged one.
 - Ensure flyers have choice of floor, when there are several openings in column.
 - Inventory for humanoids: allow them to pickup weapon and shields
 - A way to recruit green player units, as those in tavern.
