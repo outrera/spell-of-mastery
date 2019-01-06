@@ -1,0 +1,7 @@
+icon: act_fly_up
+title: `Fly Up`
+//cool: 10
+mov: 0
+check: owned,unit
+onInit: insulate,animate{idle},fly{up}
+hint: flyup

@@ -368,6 +368,14 @@ effect spell_of_mastery_end:
   | $site.data.winner <= $owner.id
   | $site.data.victory_type <= 'Victory by casting the Spell of Mastery'
 
+effect fly Arg:
+| when Arg><up:
+  | when ($cell-1).empty: leave
+  | when $xyz.2+3>$site.d: leave
+  | $move{$xyz+[0 0 2]}
+  | leave
+| say Arg
+
 effect swap Arg:
 | XYZ = $xyz.copy
 | Target.remove

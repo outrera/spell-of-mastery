@@ -9,6 +9,7 @@ Leader abilities:
 - Sort spells into tiers, with caster having limited number of slots per tier, D&D or Chrono Cross style.
 
 General:
+- Children NPCs, which would pickpoint player's wizard, stealing gold, if he has any. These NPCs would also be killable by enemy creatures and try their best to get into player's creatures way, blocking them.
 - Random node placement tokens.
 - Lords of Chaos style tall grass, which impedes vision of non-flyers.
 - Autobalance spell and unit prices, based on supply and demand. I.e. if player keeps using some single combination it's cost will increase for the next use.
