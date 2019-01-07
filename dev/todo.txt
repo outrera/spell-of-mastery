@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Currently flying units hung trying to move around ground, when they can just fly over them.
+- Ensure unit gets enaged, when flying up to another flying enemy.
 - Ensure engaged units cant ascend/descend.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
