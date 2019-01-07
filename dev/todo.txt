@@ -1,9 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Second click should select unit above ground.
 - Ensure unit gets enaged, when flying up to another flying enemy.
-- Ensure engaged units cant ascend/descend.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
 - Flying flyers shouldn't be able to attack units at range on different layer.

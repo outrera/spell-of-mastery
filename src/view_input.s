@@ -34,7 +34,13 @@ view.handle_picked_act Target =
 
 view.handle_pick =
 | Unit = $site.nil
-| Block = $site.cell{@$cursor}.block or $site.cell{@($cursor+[0 0 1])}.block
+| Block0 = $site.cell{@$cursor}.block
+| Block1 = $site.cell{@($cursor+[0 0 1])}.block
+| Block = if $picked and $cursor><$picked.xyz
+  then | if $picked.flying then Block0
+         else Block1
+  else 0
+| less Block: Block <= Block0 or Block1
 | when Block:
   | when Block.ai><unit and Block.pickable:
     | less Block.invisible and Block.owner.is_enemy{$site.human}:
