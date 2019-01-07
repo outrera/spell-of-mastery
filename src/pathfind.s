@@ -162,7 +162,7 @@ unit.path_around_to Range XYZ = //Me is unit
 | Target = $site.cell{@XYZ}
 | check Dst =
   | if Dst><Target then 1
-    else if Dst.block then \block
+    else if $block_at{Dst} then \block
     else if $threatened_at{Dst.xyz} and XYZ.mdist{Dst.xyz}<>1 then \block
     else 0
 | Found = $pathfind{Range &check}

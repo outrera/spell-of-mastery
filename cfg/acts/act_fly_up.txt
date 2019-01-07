@@ -1,5 +1,5 @@
 icon: act_fly_up
-title: `Fly Up`
+title: `Ascend`
 //cool: 10
 mov: 0
 check: owned,unit

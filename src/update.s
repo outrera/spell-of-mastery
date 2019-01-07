@@ -91,11 +91,6 @@ site.update =
 | $cycle++
 | $view.ui.update
 
-unit.block_at Cell = if $flying then (Cell+1).block else Cell.block
-unit.block_atp XYZ =
-| Cell = $site.cellp{XYZ}
-| if $flying then (Cell+1).block else Cell.block
-
 unit_check_move Me Dst =
 | less $speed: leave 0
 | Src = $xyz

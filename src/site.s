@@ -33,7 +33,9 @@ int.blitem = fxn CellsBlitem.Me
 int.`=blitem` V = fxn: CellsBlitem.Me <= V
 int.block = fxn CellsBlock.Me //unit blocking the tile
 int.`=block` V = fxn: CellsBlock.Me <= V
-int.vacant = $empty and not $block
+int.vacant_for U =
+| less $empty: leave 0
+| not: if U.flying then (Me+1).block else $block
 int.cost = CellsCost.Me
 int.`=cost` V = CellsCost.Me <= V
 int.prev = CellsPrev.Me
@@ -553,7 +555,8 @@ site.remove_unitS U X Y Z = fxn:
 | less U.empty:
   | if U.flying then (Cell+1).block <= 0
     else Cell.block <= 0
-  | for U Us: less U.empty: Cell.block <= U
+  //| for U Us: less U.empty: //hack for several blockers in single cell
+  //  | if U.flying then (Cell+1).block <= U else Cell.block <= U
 
 site.remove_unit U =
 | when U.removed: leave

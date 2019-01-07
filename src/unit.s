@@ -401,7 +401,7 @@ unit.explore =
 unit.fow_hides = $class.fow_hides
 
 unit.threatened_at XYZ =
-| for E $nearby_enemies_at{XYZ}:
+| for E $nearby_enemies_at{XYZ}: when E.flying >< $flying:
   | when not E.afraid and E.can_attack{E.cell $site.cellp{XYZ}}:
     | when E.infov{XYZ}: leave 1
 | 0
@@ -522,9 +522,18 @@ unit.move XYZ =
 | Me
 
 unit.remove =
+| Cell = $cell
 | when $removed: leave
 | $site.remove_unit{Me}
 | $xyz.2 <= -1
+| when $type><unit_ratman:
+  | B = Cell.block
+  | when B: say B.type
+
+unit.block_at Cell = if $flying then (Cell+1).block else Cell.block
+unit.block_atp XYZ =
+| Cell = $site.cellp{XYZ}
+| if $flying then (Cell+1).block else Cell.block
 
 unit.environment_updated =
 

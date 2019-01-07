@@ -43,9 +43,6 @@ move_finish Me =
 | U.strip{fromXYZ}
 | U.strip{toXYZ}
 
-
-site.no_block_at XYZ = not $cell{XYZ.0 XYZ.1 XYZ.2}.block
-
 dact move.valid
 | U = $unit
 | not U.block_atp{$xyz} and U.can_move{}{U U.cell $xyz.cell}

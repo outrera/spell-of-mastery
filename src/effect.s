@@ -122,7 +122,7 @@ unit.telepush Attract TargetXYZ R =
     | P.0 += DX.sign
     | less $site.valid{@P}: _goto done
     | F = $site.cellp{P}.floor
-    | less F.vacant:  _goto done
+    | less F.vacant_for{B}:  _goto done
     | PrevZ = PrevP.2
     | PrevP.init{P}
     | push P Trail
@@ -370,6 +370,9 @@ effect spell_of_mastery_end:
 
 //check that no block prevents us from landing
 unit.fly_down =
+| when $cell.block:
+  | $owner.notify{"There is a unit below."}
+  | leave
 | XYZ = $xyz.copy
 | $remove
 | $flying <= 0
@@ -377,6 +380,14 @@ unit.fly_down =
 
 //FIXME: check that no unit or block prevents us from flying
 unit.fly_up =
+| C = $cell
+| when (C+1).block:
+  | $owner.notify{"There is a unit above."}
+  | leave
+| for I $class.height+2:
+  | less (C+I+1).empty:
+    | $owner.notify{"Ceiling is too low to fly."}
+    | leave
 | XYZ = $xyz.copy
 | $remove
 | $flying <= 1
@@ -481,7 +492,7 @@ effect spawn What:
 
 effect resurrect:
 | Cell = $site.cellp{TargetXYZ}
-| less Cell.vacant: leave
+| less Cell.empty and not Cell.block: leave
 | Cs = Cell.units.keep{?ai><corpse}
 | when Cs.end: leave
 | C = Cs.0
@@ -545,7 +556,7 @@ effect blowaway R BlowSelf:
       | T = BP + D*(I+1)
       | less $site.valid{@T}: done
       | F = $site.cellp{T}.floor
-      | less F.vacant: done
+      | less F.vacant_for{B}: done
       | Prev = TP
       | TP <= T
       | push T Trail
