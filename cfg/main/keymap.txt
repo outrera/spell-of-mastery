@@ -22,11 +22,12 @@ edit_up: `'`
 edit_down: `;`
 
 // following keys control how objects should be placed
+edit_place_flying: v
 edit_place_mirrored: m
 edit_place_reversed: n
-edit_place_embed: b //tile replaces the tile under cursor
+edit_place_embed: x //tile replaces the tile under cursor
 edit_random_facing: z
 
 
-edit_fine_xy: x
+edit_fine_xy: b
 edit_reset_fine_xy: c

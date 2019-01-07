@@ -368,7 +368,16 @@ effect spell_of_mastery_end:
   | $site.data.winner <= $owner.id
   | $site.data.victory_type <= 'Victory by casting the Spell of Mastery'
 
-//check that no block prevents us from landing
+unit.can_fly_down = $flying and not $cell.block
+unit.can_fly_up =
+| when not $flyer or $flying: leave 0
+| C = $cell
+| when (C+1).block: leave 0
+| for I $class.height+2:
+  | less (C+I+1).empty:
+    | leave 0
+| 1
+
 unit.fly_down =
 | when $cell.block:
   | $owner.notify{"There is a unit below."}
@@ -378,8 +387,13 @@ unit.fly_down =
 | $strip{flying}
 | $move{XYZ}
 
-//FIXME: check that no unit or block prevents us from flying
 unit.fly_up =
+| when $flying:
+  | $owner.notify{"This is already flying."}
+  | leave
+| less $flyer:
+  | $owner.notify{"This unit cannot fly."}
+  | leave
 | C = $cell
 | when (C+1).block:
   | $owner.notify{"There is a unit above."}

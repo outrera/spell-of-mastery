@@ -252,6 +252,7 @@ reinit_units Us =
   | Type = U.type
   | Owner = U.owner
   | Facing = U.facing
+  | Flying = U.flying
   | XYZ.init{U.xyz}
   | FXYZ.init{U.fxyz}
   | AIState = U.aistate
@@ -263,6 +264,7 @@ reinit_units Us =
     | U.pick_facing{Facing}
     | U.fxyz.init{FXYZ}
     | U.aistate <= AIState
+    | when Flying: U.fly_up
     | push U InitedUnits
 | InitedUnits
 
@@ -522,7 +524,6 @@ site.place_unitS U X Y Z =
     else Cell.block <= U
 
 site.place_unit U =
-| when U.type >< unit_gargoyle: U.set{flying 1}
 | XYZ = U.xyz
 | if U.form then
     | Mirror = U.facing >< 5

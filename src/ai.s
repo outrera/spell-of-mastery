@@ -102,7 +102,6 @@ unit.ai_pick_target Act =
       | Ts <= [Me]
   else if Hint >< batform1 then
     | Ts <= []
-    | say $site.units_in_range{$xyz 3}.skip{?is_ally{Me}}
     | when @end $site.units_in_range{$xyz 3}.skip{?is_ally{Me}}:
       | Ts <= [Me]
   else if Hint >< lifedrain then
@@ -223,6 +222,30 @@ unit.ai_runaway Btrack =
   | when Btrack and no $get{btrack}: $backtrack <= $xyz
 | $handled <= 1
 
+unit.ai_find_target GiveOrder =
+| Cs = $reachable
+| case Cs.keep{?0><attack} [[Type Cell]@_]:
+  | Block = (fxn Cell+$flying).block
+  | when Block and not Block.invisible:
+    | when GiveOrder:
+      | $backtrack <= $xyz
+      | $order_at{Cell.xyz 0}
+    | leave 1
+| when $moves:
+  | Es = $enemies_in_sight
+  | PursueRange = max $sight 10
+  | Flt = Cs{[?1 1]}.table //filtering table
+  | Es = Es.skip{E => Flt.(E.cell)><1}
+  | EsR = Es.keep{E => $path_to{E.xyz}.size<PursueRange}
+  | less EsR.size: EsR <= Es.keep{E => $path_near{E.xyz}.size<PursueRange}
+  | case EsR [E@_]:
+    | when GiveOrder:
+      | $backtrack <= $xyz
+      | $advance_to{E.xyz}
+      | less $handled: $handled <= 1
+    | leave 1
+| 0
+
 unit.ai_update =
 | less $moves > 0:
   | $handled <= 1
@@ -232,26 +255,22 @@ unit.ai_update =
   | leave break
 | when $ai_ability: leave break
 | when $atk:
-  | Cs = $reachable
-  | case Cs.keep{?0><attack} [[Type Cell]@_]:
-    | Block = (fxn Cell+$flying).block
-    | when Block: say Block
-    | when Block and not Block.invisible:
-      | $backtrack <= $xyz
-      | $order_at{Cell.xyz 0}
-      | leave break
-  | when $moves:
-    | Es = $enemies_in_sight
-    | PursueRange = max $sight 10
-    | Flt = Cs{[?1 1]}.table //filtering table
-    | Es = Es.skip{E => Flt.(E.cell)><1}
-    | EsR = Es.keep{E => $path_to{E.xyz}.size<PursueRange}
-    | less EsR.size: EsR <= Es.keep{E => $path_near{E.xyz}.size<PursueRange}
-    | case EsR [E@_]:
-      | $backtrack <= $xyz
-      | $advance_to{E.xyz}
-      | less $handled: $handled <= 1
-      | leave break
+  | R = $ai_find_target{1}
+  | when R: leave break
+  | when $can_fly_down:
+    | $flying <= 0
+    | R = $ai_find_target{0}
+    | $flying <= 1
+    | when R:
+      | $fly_down
+      | when $ai_find_target{1}: leave break
+  | when $can_fly_up:
+    | $flying <= 1
+    | R = $ai_find_target{0}
+    | $flying <= 0
+    | when R:
+      | $fly_up
+      | when $ai_find_target{1}: leave break
 | when $aistate >< patrol:
   | Ps = $owner.patrol_points.unheap
   | less Ps.end:

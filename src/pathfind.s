@@ -210,9 +210,10 @@ unit.can_attack Src Dst = $atk and (fxn (Dst.z-Src.z) << 1 or $can_move{}{Me Src
 
 unit.reachable =
 | Xs = []
+| when fxn $moves<1: leave Xs
 | XYZ = $xyz
 | Flying = $flying
-| less $engaged: when $moves>0: $find{$moves
+| less $engaged: $find{$moves
   | Dst =>
     | R = \block
     | Type = \move
@@ -237,9 +238,10 @@ unit.reachable =
   | less F.block:
     | when fxn N-F>1 and fxn $moves>>$jump_cost:
       | less got Xs.find{?1><F}: push [jump F] Xs
-| when fxn $range><1 and not $afraid and fxn $moves>>1:
+| when fxn $moves<1 or $afraid: leave Xs
+| when fxn $range><1:
   | for E $enemies_in_range:
     | when $can_attack{$cell E.cell}: push [attack E.cell] Xs
-| when fxn $range>1 and not $afraid and fxn $moves>>1:
+| when fxn $range>1:
   | for E $enemies_in_range: push [attack E.cell] Xs
 | Xs

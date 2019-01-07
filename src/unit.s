@@ -200,6 +200,7 @@ unit.init Class =
 unit.morph Class =
 | when Class.is_text: Class <= $main.classes.Class
 | $owner.lost_unit{Me}
+| OrigHP = $hp
 | $hp <= max 1 | Class.hp + $hp - $class.hp
 | $class <= Class
 | $sprite <= if $show or $site.editor
@@ -211,6 +212,7 @@ unit.morph Class =
   | D = -$hp + 1
   | $hp <= 1
   | $harm{Me D}
+| when not OrigHP or not $class.hp: $hp <= 0
 
 unit.find_dna Name = $main.cfg.gene.Name
 
@@ -522,9 +524,6 @@ unit.remove =
 | when $removed: leave
 | $site.remove_unit{Me}
 | $xyz.2 <= -1
-| when $type><unit_ratman:
-  | B = Cell.block
-  | when B: say B.type
 
 unit.block_at Cell = (fxn Cell+$flying).block
 unit.block_atp XYZ = (fxn $site.cellp{XYZ}+$flying).block

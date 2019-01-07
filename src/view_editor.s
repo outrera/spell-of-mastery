@@ -32,6 +32,7 @@ place_object Me Bank Type =
 | less Z << $anchor.2: leave
 | Cell = $site.cell{X Y Z}
 | Mirror = $key{edit_place_mirrored}
+| Flying = $key{edit_place_flying}
 | ClassName = "[Bank]_[Type]"
 | Class = $main.classes.ClassName
 | when Z+Class.height>>$site.d: leave
@@ -57,6 +58,7 @@ place_object Me Bank Type =
 | U.move{X,Y,Z}
 | U.run_genes{place}
 | U.animate{idle}
+| when Flying and U.flyer and U.can_fly_up: U.fly_up
 | case $key{edit_fine_xy} 1:
   | X,Y = $viewToSitePixels{$mice_xy}
   | U.fxyz.init{[X Y U.fxyz.2]}

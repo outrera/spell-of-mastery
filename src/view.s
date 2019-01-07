@@ -112,7 +112,7 @@ view.infoline =
 | when EoD and $site.down{$cursor}: push "roof" Os
 | when $site.at{X Y Z-1}.dig: push "diggable" Os
 | Land = Os.flip.infix{":"}.text
-| U = $site.block_at{X,Y,Z}
+| U = $site.block_at{X,Y,Z} or $site.block_at{X,Y,Z+1}
 | Unit = ""
 | when U and (not U.invisible or U.owner.id><$site.human.id):
   | P = $picked
