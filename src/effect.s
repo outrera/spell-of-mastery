@@ -386,6 +386,7 @@ unit.fly_down =
 | $remove
 | $strip{flying}
 | $move{XYZ}
+| when $threatened: $set{engaged 1}
 
 unit.fly_up =
 | when $flying:
@@ -406,6 +407,7 @@ unit.fly_up =
 | $remove
 | $set{flying 1}
 | $move{XYZ}
+| when $threatened: $set{engaged 1}
 
 effect fly Arg: if Arg><down then $fly_down else $fly_up
 
