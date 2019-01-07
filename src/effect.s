@@ -433,7 +433,7 @@ effect swap Arg:
 | Target.move{XYZ}
 
 effect gateway:
-| B = $cell.block
+| B = Target
 | less B: leave
 | T = $cell.gate
 | less T: leave

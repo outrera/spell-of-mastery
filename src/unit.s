@@ -484,7 +484,7 @@ unit.harm Attacker Damage =
 
 //called when unit enters cell ingame, not in editor or game-init
 unit.on_entry =
-| for U $cell.units: U.run_genes{entry}
+| for U $cell.units: U.run_genes{entry target/Me}
 
 unit_run_triggers Me =
 | for U $cell.units: when U.trigger.is_list: U.effect{U.trigger Me $xyz}
