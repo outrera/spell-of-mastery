@@ -522,6 +522,7 @@ site.place_unitS U X Y Z =
     else Cell.block <= U
 
 site.place_unit U =
+| when U.type >< unit_gargoyle: U.set{flying 1}
 | XYZ = U.xyz
 | if U.form then
     | Mirror = U.facing >< 5

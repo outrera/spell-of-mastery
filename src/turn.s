@@ -20,11 +20,8 @@ unit.new_turn =
 | $fatigue <= max 0: min $fatigue-$stamina $mov-1
 
 unit.end_turn_invisibility_check =
-| less $invisible: leave
-| for E $nearby_enemies_at{$xyz}
-  | when E.infov{$xyz}:
-    | $strip{invisible}
-    | leave
+| when $invisible:
+  | for E $nearby_enemies_at{$cell}: E.try_detecting{Me}
 
 unit.end_turn =
 | $end_turn_invisibility_check

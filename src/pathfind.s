@@ -163,7 +163,7 @@ unit.path_around_to Range XYZ = //Me is unit
 | check Dst =
   | if Dst><Target then 1
     else if $block_at{Dst} then \block
-    else if $threatened_at{Dst.xyz} and XYZ.mdist{Dst.xyz}<>1 then \block
+    else if $threatened_at{Dst} and XYZ.mdist{Dst.xyz}<>1 then \block
     else 0
 | Found = $pathfind{Range &check}
 | if Found then Found.path else []
@@ -171,10 +171,18 @@ unit.path_around_to Range XYZ = //Me is unit
 unit.enemies_in_range =
 | O = $owner
 | check B =
-  | when O.is_enemy{B.owner} and B.hp>0 and not B.invisible:
-    | leave 1
+  | when B.ai><unit and O.is_enemy{B.owner} and B.hp>0 and not B.invisible:
+    | when $flying><B.flying: leave 1
   | 0
-| $units_in_range{$range}.skip{?empty}.keep{&check}
+| $units_in_range{$range}.keep{&check}
+
+unit.nearby_enemies_at Cell =
+| Es = []
+| for C Cell.neibs: for U C.floor.units: when $is_enemy{U}: push U Es
+| Es
+
+unit.reachable_nearby_enemies_at Cell =
+| $nearby_enemies_at{Cell}.skip{?invisible}.keep{?flying><$flying}
 
 path_len Cell =
 | C = 0
@@ -207,11 +215,12 @@ unit.reachable =
       else if B.moves<1 /*or B.engaged*/ then Type <= 0
       else Type <= \swap
     | when Type: push [Type Dst] Xs
-    | less R or Type><swap: for E $nearby_enemies_at{Dst.xyz}: less E.invisible:
-      | when not E.afraid and $can_attack{E.cell $site.cellp{XYZ}}:
+    | less R or Type><swap:
+      | when $threatened_at{Dst}:
         | R <= \block //engage
-      | when $range><1 and not $afraid and $moves >> Dst^path_len+1:
-        | when $can_attack{Dst E.cell}: push [attack E.cell] Xs
+      | for E $reachable_nearby_enemies_at{Dst}:
+        | when $range><1 and not $afraid and $moves >> Dst^path_len+1:
+          | when $can_attack{Dst E.cell}: push [attack E.cell] Xs
     | R}
 | less $flyer or $climber: for N $cell.neibs: when N.empty:
   | F = N.floor
