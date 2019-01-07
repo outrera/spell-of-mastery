@@ -1,7 +1,8 @@
 icon: act_fly_up
 title: `Ascend`
+needsGene: (flyer -flying -engaged)
 //cool: 10
 mov: 0
 check: owned,unit
 onInit: insulate,animate{idle},fly{up}
-hint: flyup
+hint: ascend

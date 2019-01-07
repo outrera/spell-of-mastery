@@ -249,7 +249,7 @@ update_action Me =
   | Delay = $action.act.delay
   | $action.finish
   | when $action.act.mov>0 and $threatened:
-    | $engaged <= 1
+    | $set{engaged 1}
     | $reveal_nearby_enemies
   | update_next_action Me
   | $delay <= Delay

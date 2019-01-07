@@ -47,10 +47,10 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
   icon_gfx //icon graphics for fast access
 | $onInitTable <= $onInit.table
 | $onEndTable <= $onEnd.table
-| when $needsGene <> []:
+| less $needsGene.end:
   | when $needsGene.is_text or $needsGene.0><'-': $needsGene <= [$needsGene]
   | $needsGene <= map N $needsGene:
-    | if N.is_text or N.0><'-' then [N] else []
+    | if N.is_text or N.0><'-' then [N] else N
 | when $cool>0: $onInit <= [[cool $cool] @$onInit]
 | less $title:
   | T = $name.replace{_ ' '}
@@ -196,7 +196,7 @@ site.turn_act State Players ActNames =
 
 unit.earned Act =
 | geneCheck N = if N.is_list then not $has{N.1} else $has{N}
-| Act.needsGene.all{?all{&geneCheck}}
+| Act.needsGene.all{?any{&geneCheck}}
 
 //is specific act is availalble for particular unit?
 unit.can Act = $owner.enabled{Act} and Act.picks.($owner.id) and $earned{Act}

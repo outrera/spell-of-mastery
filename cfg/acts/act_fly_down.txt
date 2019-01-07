@@ -1,7 +1,8 @@
 icon: act_fly_down
 title: `Descend`
+needsGene: (flyer flying -engaged)
 //cool: 10
 mov: 0
 check: owned,unit
 onInit: insulate,animate{idle},fly{down}
-hint: flydown
+hint: descend

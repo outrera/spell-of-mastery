@@ -29,7 +29,7 @@ unit.end_turn_invisibility_check =
 unit.end_turn =
 | $end_turn_invisibility_check
 | Resting = $def >< $class.def and not $engaged
-| when $threatened: $engaged <= 1 //ended its turn near enemy?
+| when $threatened: $set{engaged 1} //ended its turn near enemy?
 | less $engaged:
   | DefInc = max 0: min $moves $class.def-$def
   | $def += DefInc
@@ -39,7 +39,7 @@ unit.end_turn =
 | $run_genes{endturn}
 | $resting <= Resting
 | $handled <= 0
-| $engaged <= 0
+| $strip{engaged}
 
 site.new_turn =
 

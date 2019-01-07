@@ -375,7 +375,7 @@ unit.fly_down =
   | leave
 | XYZ = $xyz.copy
 | $remove
-| $flying <= 0
+| $strip{flying}
 | $move{XYZ}
 
 //FIXME: check that no unit or block prevents us from flying
@@ -390,7 +390,7 @@ unit.fly_up =
     | leave
 | XYZ = $xyz.copy
 | $remove
-| $flying <= 1
+| $set{flying 1}
 | $move{XYZ}
 
 effect fly Arg: if Arg><down then $fly_down else $fly_up

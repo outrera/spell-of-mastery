@@ -1,11 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- Second click should select unit above ground.
 - Ensure unit gets enaged, when flying up to another flying enemy.
 - Ensure engaged units cant ascend/descend.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
-- Flying flyers should get additional damage from ranged units. And there must be magic bow spell, which would turn any unit into ranged one.
+- Flying flyers shouldn't be able to attack units at range on different layer.
 - Ensure flyers have choice of floor, when there are several openings in column.
 - Inventory for humanoids: allow them to pickup weapon and shields
 - A way to recruit green player units, as those in tavern.
