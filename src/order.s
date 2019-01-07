@@ -56,6 +56,7 @@ unit.order_act Act Target =
 // order taking over any other order
 unit.forced_order Act Target =
 | O = $order.init{Act Target}
+| $site.actors.set{[Me @$site.actors.get]}
 | O.priority <= 1000
 | O.cycles <= 0
 | O

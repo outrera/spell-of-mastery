@@ -264,7 +264,7 @@ reinit_units Us =
     | U.pick_facing{Facing}
     | U.fxyz.init{FXYZ}
     | U.aistate <= AIState
-    | when Flying: U.fly_up
+    | when Flying: U.fly_up{0}
     | push U InitedUnits
 | InitedUnits
 

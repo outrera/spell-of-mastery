@@ -19,6 +19,7 @@ flyer_can_move Me Src Dst =
 | less Dst.tile.empty: leave 0
 | SZ = Src.z
 | DZ = Dst.z
+//| when SZ<>DZ and DZ<30: say SZ,DZ
 | fxn: if SZ<DZ
   then | fxn: when DZ > $site.d-3: leave 0
        | times I DZ-SZ: less (Src+I).tile.empty: leave 0

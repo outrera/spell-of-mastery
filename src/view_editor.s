@@ -58,7 +58,7 @@ place_object Me Bank Type =
 | U.move{X,Y,Z}
 | U.run_genes{place}
 | U.animate{idle}
-| when Flying and U.flyer and U.can_fly_up: U.fly_up
+| when Flying and U.flyer and U.can_fly_up: U.fly_up{0}
 | case $key{edit_fine_xy} 1:
   | X,Y = $viewToSitePixels{$mice_xy}
   | U.fxyz.init{[X Y U.fxyz.2]}

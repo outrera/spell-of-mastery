@@ -262,15 +262,15 @@ unit.ai_update =
     | R = $ai_find_target{0}
     | $flying <= 1
     | when R:
-      | $fly_down
-      | when $ai_find_target{1}: leave break
+      | $fly_down{1}
+      | leave break
   | when $can_fly_up:
     | $flying <= 1
     | R = $ai_find_target{0}
     | $flying <= 0
     | when R:
-      | $fly_up
-      | when $ai_find_target{1}: leave break
+      | $fly_up{1}
+      | leave break
 | when $aistate >< patrol:
   | Ps = $owner.patrol_points.unheap
   | less Ps.end:

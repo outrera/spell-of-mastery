@@ -21,7 +21,8 @@ move_start Me =
 | U.move{$xyz}
 | U.set{toXYZ U.fxyz}
 | U.fxyz.init{U.get{fromXYZ}}
-| U.facing <= Dirs.locate{X,Y}
+| NewFacing = Dirs.locate{X,Y}
+| when got NewFacing: U.facing <= NewFacing
 | when U.anim<>move: U.animate{move}
 | $cycles <= U.speed
 | when X >< -Y: $cycles <= max 1 $cycles*3/2
@@ -42,6 +43,23 @@ move_finish Me =
 | U.strip{startCycles}
 | U.strip{fromXYZ}
 | U.strip{toXYZ}
+| ZMove = U.get{zmove}
+| when got ZMove:
+  | FloorXYZ = U.floor.xyz
+  | when ZMove:
+    | when U.xyz.2-FloorXYZ.2>>2:
+      | U.move{FloorXYZ}
+      | U.strip{zmove}
+      | U.fly_up{0}
+      | leave
+    | U.forced_order{move U.xyz+[0 0 1]}
+    | leave
+  | when U.xyz.2-FloorXYZ.2<<0:
+    | U.move{FloorXYZ}
+    | U.strip{zmove}
+    | when U.threatened: U.set{engaged 1}
+    | leave
+  | U.forced_order{move U.xyz-[0 0 1]}
 
 dact move.valid
 | U = $unit

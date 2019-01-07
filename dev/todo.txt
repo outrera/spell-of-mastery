@@ -2,10 +2,10 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Ensure flyers are immune to spells like firestorm.
-- Proper animation for ascend and descend.
 - Ensure AI won't cant firestorm on flying units and ascends his own units standing in hazard.
 - Ensure flyers don't trigger stuff like items and portals.
-- Ensure AI descends units to pickup items and enter portals
+- Ensure AI descends units to pickup items and enter portals.
+- Think about fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker that are still vulnerable to melee attacks.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
 - Flying flyers shouldn't be able to attack units at range on different layer.

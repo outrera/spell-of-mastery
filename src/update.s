@@ -297,8 +297,9 @@ unit.update =
          | $fxyz.init{$host.fxyz}
     else $die
 | when fxn $cell > $floor and $action.type><idle and not $block:
-  | $update_fall
-  | leave
+  | when no $get{zmove}:
+    | $update_fall
+    | leave
 | when $velocity.2<0.0: unit_landed Me
 | when $class.hp and (fxn $cell-1).tile.liquid and not $can_stand_on_water:
   | $sink

@@ -378,17 +378,24 @@ unit.can_fly_up =
     | leave 0
 | 1
 
-unit.fly_down =
+unit.fly_down Animate =
 | when $cell.block:
   | $owner.notify{"There is a unit below."}
   | leave
 | XYZ = $xyz.copy
 | $remove
 | $strip{flying}
-| $move{XYZ}
-| when $threatened: $set{engaged 1}
+| less Animate:
+  | when $threatened: $set{engaged 1}
+  | leave
+| $move{XYZ+[0 0 2]}
+| $set{zmove 0}
+| $reset_goal
+| $owner.explore{[$cell-1 $cell-2]}
+| $mov += 2
+| $forced_order{move $xyz-[0 0 1]}
 
-unit.fly_up =
+unit.fly_up Animate =
 | when $flying:
   | $owner.notify{"This is already flying."}
   | leave
@@ -403,13 +410,21 @@ unit.fly_up =
   | less (C+I+1).empty:
     | $owner.notify{"Ceiling is too low to fly."}
     | leave
-| XYZ = $xyz.copy
-| $remove
-| $set{flying 1}
-| $move{XYZ}
-| when $threatened: $set{engaged 1}
+| less Animate:
+  | XYZ = $xyz.copy
+  | $remove
+  | $set{flying 1}
+  | $move{XYZ}
+  | when $threatened: $set{engaged 1}
+  | leave
+| $set{zmove 1}
+| $reset_goal
+| $animate{idle}
+| $owner.explore{[$cell+1 $cell+2]}
+| $mov += 2
+| $forced_order{move $xyz+[0 0 1]}
 
-effect fly Arg: if Arg><down then $fly_down else $fly_up
+effect fly Arg: if Arg><down then $fly_down{1} else $fly_up{1}
 
 effect swap Arg:
 | XYZ = $xyz.copy

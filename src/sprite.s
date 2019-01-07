@@ -65,6 +65,8 @@ sprite.get_frame_at_angle Index Angle =
 | less $frames: $init
 | OAngle = Angle
 | R = $frames.Index
+| when not Angle.is_int or Angle > 7:
+  | bad "get_frame_at_angle: invalid Angle=[Angle]"
 | less R.is_list:
   | when no R: missing_frame Me Index OAngle
   | Mirror = 0
