@@ -1,4 +1,4 @@
 sprite: item_key
 ai: item,key
 box_xy: (2 2)
-trigger: when{has.humanoid},addkey{}
+trigger: when{has.humanoid hasnt.flying},addkey{}

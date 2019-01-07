@@ -1,5 +1,5 @@
 sprite: item_potion
 title: `Health Potion`
 ai: item,potion
-trigger: when{has.humanoid},add_spell{act_potion 1},sound{pickup},notify{`Found Health Potion.`},visual{pickup},self,remove
+trigger: when{has.humanoid hasnt.flying},add_spell{act_potion 1},sound{pickup},notify{`Found Health Potion.`},visual{pickup},self,remove
 box_xy: (-1 -1)

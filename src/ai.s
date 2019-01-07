@@ -47,7 +47,7 @@ unit.ai_pick_target Act =
   else if Hint >< harm then
     | Ts <= Ts.keep{?is_enemy{Me}}
   else if Hint >< firestorm then
-    | Ts <= Ts.keep{?is_enemy{Me}}
+    | Ts <= Ts.keep{?is_enemy{Me}}.skip{?flyer}
   else if Hint >< raise then
     | Player = $owner
     | Ts <= $site.active.list.keep{U=>Player.seen{U.xyz}}

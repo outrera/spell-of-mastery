@@ -1,15 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Ensure flyers are immune to spells like firestorm.
-- Ensure AI won't cant firestorm on flying units and ascends his own units standing in hazard.
-- Ensure flyers don't trigger stuff like items and portals.
-- Ensure AI descends units to pickup items and enter portals.
-- Think about fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker that are still vulnerable to melee attacks.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
-- Flying flyers shouldn't be able to attack units at range on different layer.
 - Ensure flyers have choice of floor, when there are several openings in column.
+- Think about fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker that are still vulnerable to melee attacks.
+- Flying flyers shouldn't be able to attack units at range on different layer.
 - Inventory for humanoids: allow them to pickup weapon and shields
 - A way to recruit green player units, as those in tavern.
 - Coordinate AI defence. When one of AI units sees reachable enemy, it should notify all seen friends about its presence. Store unit id and serial
