@@ -69,6 +69,10 @@ player.seen XYZ =
 | M = $seen_mask
 | (C.seen&&&M) >< M
 
+player.seen_cell Cell =
+| M = $seen_mask
+| (Cell.seen&&&M) >< M
+
 player.explore Cells = fxn:
 | CellsSeen = $site.cells_seen
 | M = $seen_mask

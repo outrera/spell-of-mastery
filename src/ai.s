@@ -1,4 +1,4 @@
-use macros unit_flags util
+use macros unit_flags util fxn
 
 SeenUnits = 0
 OwnedUnits = 0
@@ -19,7 +19,7 @@ unit.advance_to GoalXYZ safe/0 =
   | when no Cell:
     | $handled <= 1 //FIXME: this may not be correct
     | leave 2
-| B = Cell.block
+| B = (Cell+$flying).block
 | when B and not B.handled and not $is_enemy{B}:
   | less $handled:
     | $handled <= \wait //try to avoid swapping
@@ -172,13 +172,14 @@ unit.ai_roam =
 | OId = Owner.id
 | Us = Site.units_get{$xyz}
 | when got Us.find{?ai><hold} and no Us.find{?ai><unhold}: leave 0
+| Flying = $flying
 | Check = Dst =>
   | MoveIn = 0
   | Vs = Dst.units
   | for V Vs
     | AI = V.ai
     | when AI:
-      | Block = Dst.block
+      | Block = (fxn Dst+Flying).block
       | if AI><unit and Block and Owner.is_enemy{Block.owner}
            and not Block.invisible then
            | MoveIn <= 1
@@ -201,12 +202,10 @@ unit.ai_roam =
 | $advance_to{TargetXYZ}
 | leave 1
 
-unit.enemies_in_sight =
-| $units_in_range{$sight}.keep{X=>$is_enemy{X} and not X.invisible}
-
 unit.ai_runaway Btrack =
 | Es = $enemies_in_sight
-| Rs = $reachable{}{?1}.skip{?block}
+| Flying = $flying
+| Rs = $reachable{}{?1}.skip{C => (fxn C+Flying).block}
 | Best = 0
 | BestDist = 0
 | for R Rs:
@@ -235,7 +234,8 @@ unit.ai_update =
 | when $atk:
   | Cs = $reachable
   | case Cs.keep{?0><attack} [[Type Cell]@_]:
-    | Block = Cell.block
+    | Block = (fxn Cell+$flying).block
+    | when Block: say Block
     | when Block and not Block.invisible:
       | $backtrack <= $xyz
       | $order_at{Cell.xyz 0}

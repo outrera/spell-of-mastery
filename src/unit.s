@@ -358,7 +358,7 @@ in_range Me XYZ =
 | less fxn XYZ.mdist{$xyz}<<$range: leave 0
 | $site.seen_from{$xyz $goal.xyz}
 
-unit.units_in_range Range = $site.units_in_range{Me.xyz Range}
+unit.units_in_range Range = $site.units_in_range{$xyz Range}
 
 unit.infov XYZ = //in field of view
 | if (XYZ-$xyz).take{2}{?sign} <> -$direction then 1 else 0
@@ -526,10 +526,8 @@ unit.remove =
   | B = Cell.block
   | when B: say B.type
 
-unit.block_at Cell = if $flying then (Cell+1).block else Cell.block
-unit.block_atp XYZ =
-| Cell = $site.cellp{XYZ}
-| if $flying then (Cell+1).block else Cell.block
+unit.block_at Cell = (fxn Cell+$flying).block
+unit.block_atp XYZ = (fxn $site.cellp{XYZ}+$flying).block
 
 unit.environment_updated =
 

@@ -51,11 +51,12 @@ unit.update_move_method =
 unit.list_moves Src Cost =
 | Ms = []
 | CanMove = $can_move
+| Flying = $flying
 | for Dst Src.neibs
   | Dst <= Dst.floor
   | when Cost < Dst.cost and CanMove{Me Src Dst}:
-    | B = Dst.block
-    | when not B or B.alive: push Dst Ms
+    | B = (fxn Dst+Flying).block
+    | fxn: when B><0 or B.hp>0: push Dst Ms
 | Ms
 
 PFQueue = queue 256*256
@@ -102,6 +103,7 @@ site.closest_reach MaxCost U StartCell TargetXYZ =
 | TCell = $cell{@TargetXYZ}
 | BestL = [TX-X TY-Y].abs
 | Best = 0
+| Flying = U.flying
 | check Dst =
   | R = 0
   | DX,DY,DZ = Dst.xyz
@@ -112,10 +114,10 @@ site.closest_reach MaxCost U StartCell TargetXYZ =
     | when BestL < 1.4:
       | when fxn Best><TCell: | R <= 1; _goto end
       | less TCell.tile.empty: | R <= 1; _goto end
-      | B = TCell.block
+      | B = (fxn TCell+Flying).block
       | when B:
         | less B.speed: | R <= 1; _goto end
-        | when not U.atk and U.owner.is_enemy{B.owner}: | R <= 1; _goto end
+        | when not U.atk and U.is_enemy{B}: | R <= 1; _goto end
   | _label end
   | R
 | $pathfind{MaxCost U StartCell &check}
@@ -149,7 +151,7 @@ unit.find MaxCost Check = $site.find{MaxCost Me $cell Check}
 unit.pathfind MaxCost Check = $site.pathfind{MaxCost Me $cell Check}
 
 unit.path_to XYZ =
-| Target = $site.cell{@XYZ}
+| Target = $site.cellp{XYZ}
 | Found = $site.pathfind{1000 Me $cell ?><Target}
 | if Found then Found.path else []
 
@@ -171,10 +173,18 @@ unit.path_around_to Range XYZ = //Me is unit
 unit.enemies_in_range =
 | O = $owner
 | check B =
-  | when B.ai><unit and O.is_enemy{B.owner} and B.hp>0 and not B.invisible:
+  | when O.is_enemy{B.owner} and not B.invisible:
     | when $flying><B.flying: leave 1
   | 0
 | $units_in_range{$range}.keep{&check}
+
+unit.enemies_in_sight =
+| O = $owner
+| check B =
+  | when O.is_enemy{B.owner} and not B.invisible and O.seen_cell{B.cell}:
+    | when $flying><B.flying: leave 1
+  | 0
+| $units_in_range{$sight}.keep{&check}
 
 unit.nearby_enemies_at Cell =
 | Es = []
@@ -206,7 +216,7 @@ unit.reachable =
   | Dst =>
     | R = \block
     | Type = \move
-    | D = if Flying then Dst+1 else Dst
+    | D = Dst+Flying
     | B = D.block
     | if not B then R <= 0
       else if $owner.is_enemy{B.owner} then

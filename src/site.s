@@ -589,13 +589,16 @@ site.new_goal XYZ =
 
 site.units_in_range Center R =
 | Units = []
-| for X,Y points_in_diamond{R}
-  | XYZ = Center+[X Y 0]
-  | X = XYZ.0
-  | Y = XYZ.1
+| CX = Center.0
+| CY = Center.1
+| for DX,DY points_in_diamond{R}
+  | X = CX + DX
+  | Y = CY + DY
   | when X>0 and X<<$w and Y>0 and Y<<$h:
-    | for U $column_units_get{X Y}: when $seen_from{Center U.xyz}: push U Units
-| Units.keep{?ai><unit}
+    | for U $column_units_get{X Y}:
+      | when U.hp>0 and $seen_from{Center U.xyz}:
+        | push U Units
+| Units
 
 site.neibs X Y Z = fxn:
   [$at{X Y-1 Z} $at{X+1 Y Z} $at{X Y+1 Z} $at{X-1 Y Z}

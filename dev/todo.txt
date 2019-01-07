@@ -3,6 +3,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 TODO:
 - Ensure enemy flying units properly descend when attacking land units.
 - Ensure unit gets enaged, when flying up to another flying enemy.
+- Ensure flyers are immune to spells like firestorm.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
 - Flying flyers shouldn't be able to attack units at range on different layer.
