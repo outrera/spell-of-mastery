@@ -1,6 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- When flight spell gets dispelled while unit in the air above another unit, this unit fall and damage unit below it.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
 - Ensure flyers have choice of floor, when there are several openings in column.

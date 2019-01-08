@@ -294,7 +294,7 @@ unit.update =
 | when $host:
   | if $host.serial >< $host_serial and not $host.removed
     then | when $xyz<>$host.xyz: $move{$host.xyz}
-         | $fxyz.init{$host.fxyz}
+         | $fxyz.init{$host.fxyz+[0 0 $flying*64]}
     else $die
 | when fxn $cell > $floor and $action.type><idle and not $block:
   | when no $get{zmove}:

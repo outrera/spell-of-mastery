@@ -70,7 +70,8 @@ effect macro Name:
 
 effect visual Effect:
 | E = $site.visual{TargetXYZ Effect}
-| when Target: E.fxyz.init{Target.fxyz}
+| when Target:
+  | E.fxyz.init{Target.fxyz+[0 0 64*Target.flying]}
 
 effect visual1 Effect: //this one guards against multiple instances
 | Type = "effect_[Effect]"
