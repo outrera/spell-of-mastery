@@ -274,6 +274,9 @@ unit.strip What =
   | $site.free_gene{E}
 | $genes.heapfree
 | $genes <= Es.enheap
+| when What><flyer and $flying:
+  | $strip{flying}
+  | $move{$xyz+[0 0 2]}
 
 unit.acts = $class.acts
 
@@ -441,7 +444,7 @@ unit.assault Target =
   | when $owner.human:
     | $owner.notify{"Your [$title] missed [Target.title]."}
   | when Target.owner.human:
-    | $owner.notify{"[$title] missed your [Target.title]."}
+    | Target.owner.notify{"[$title] missed your [Target.title]."}
   | $sound{miss}
   | leave 0
 | Target.def <= Target.class.def
@@ -463,12 +466,13 @@ unit.harm Attacker Damage =
   | leave
 | $resting <= 0
 | Damage <= max 1 Damage
+| DHP = min $hp Damage
 | $hp -= Damage
 | when Attacker: Attacker.sinned += Damage
 | less $owner.human: $owner.ai.harm{Attacker Me}
 | when $owner.human:
   | Died = if $hp > 0 then "" else " and died"
-  | $owner.notify{"Your [$title] sustained [Damage] points of damage[Died]."}
+  | $owner.notify{"Your [$title] sustained [DHP] points of damage[Died]."}
 | when $hp > 0:
   | OnHarm = $class.onHarm
   | when OnHarm: $effect{OnHarm Me $xyz}

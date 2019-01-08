@@ -1,11 +1,12 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- When flight spell gets dispelled while unit in the air above another unit, this unit fall and damage unit below it.
+- Ensure flying units have correct rendering order compared to tiles behind them.
 - When unit is flying above ground, obstacles like tress stop blocking line of sight and unit gains +1 to sight.
 - When in tight passages, flyers will temprorarily ground.
 - Ensure flyers have choice of floor, when there are several openings in column.
-- Think about fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker that are still vulnerable to melee attacks.
+- Think about fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker that are still vulnerable to melee attacks. Also, when player picks flight spell with ranged units, AI could counter that with his own flying rangers.
+- When above water, unit and shadow should be rendered shifted 16 pixels down.
 - Flying flyers shouldn't be able to attack units at range on different layer.
 - Inventory for humanoids: allow them to pickup weapon and shields
 - A way to recruit green player units, as those in tavern.
