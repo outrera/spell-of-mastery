@@ -403,6 +403,10 @@ unit.find_blit_deps =
       | $add_dep{$site.cell{XX YY-1 ZZ}}
       | $add_dep{$site.cell{XX-1 YY-1 ZZ}}
   | leave
+| C = $cell
+| when $active and $flying:
+  | C += 2
+  | ZZ += 2
 | fxn:
   | C = $cell+1
   | Z = ZZ+1
