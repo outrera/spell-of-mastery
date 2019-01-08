@@ -274,7 +274,7 @@ unit.strip What =
   | $site.free_gene{E}
 | $genes.heapfree
 | $genes <= Es.enheap
-| when What><flyer and $flying:
+| when What><flyer and not $flyer and $flying:
   | $strip{flying}
   | $move{$xyz+[0 0 2]}
 
