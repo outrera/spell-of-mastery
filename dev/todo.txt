@@ -1,7 +1,8 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Remove blob's divie ability (as it would duplicate zombie). Ensure blob has its consume ability, restoring it to half of its health. AI uses this blobs ability.
+- Limit number of fireballs leader gains for map.
+- Remove blob's divide ability (as it would duplicate zombie). Ensure blob has its consume ability, restoring it to half of its health. AI uses this blobs ability.
 - Ensure AI flyer under or above enemy flyer can still attack it - move them near and then fly up.
 - Ensure flyers have choice of floor, when there are several openings in column.
 - Fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker which is still vulnerable to melee attacks. - Make griffin into a hit-n-run flyer that doesn't engage with enemy.

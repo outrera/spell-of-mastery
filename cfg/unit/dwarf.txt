@@ -1,5 +1,6 @@
 tier: 2
 cost: 200,3,50
+height: 1
 mov: 5
 health: 9
 atk: 3
