@@ -158,6 +158,11 @@ site.generate BlueprintName =
 
 
 
+player.set_act_picks Name Count =
+| Act = $main.acts.Name
+| when Count><default: Count <= Act.maxPicks
+| Act.picks.($id) <= Count
+
 site.generate_human_player Gold PlayerActs =
 | Ls = []
 | LeaderXYZ = []
@@ -179,6 +184,7 @@ site.generate_human_player Gold PlayerActs =
 | for Name,Act Acts:
   | Act.picks.($human.id) <= Act.picked
   | $human.enable{Act Act.researched}
+| $human.set_act_picks{act_fireball 3}
 | Ls = Ls.shuffle
 | for Act PlayerActs:
   | when Act.picked>0 and Act.tab><summon: less Ls.end:
@@ -244,6 +250,7 @@ site.generate_ai Side LeaderType Budget Dweller Spell Units Spells Rand =
 | Guards = []
 | RGuards = []
 | Player = $players.Side
+| Player.set_act_picks{act_fireball 4}
 | SourceSide = 5
 | LeaderXYZ = []
 | for U $units: less U.removed: when U.owner.id >< SourceSide:

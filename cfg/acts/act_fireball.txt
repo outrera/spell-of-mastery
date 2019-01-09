@@ -1,6 +1,7 @@
 icon: spell_fireball
 title: `Fireball`
-hotkey: f
+//hotkey: f
+maxPicks: 3
 lore: 3
 cost: 2
 cool: 5

@@ -517,7 +517,7 @@ unit.fine_move FXYZ =
   | RUs{?0.remove}
 | $site.place_unit{Me}
 | for U,F RUs: U.fine_move{F}
-| $floor <= if $block then $xyz.2 else $cell.floor
+| $floor <= if $block then $cell else $cell.floor
 | $environment_updated
 | when $ai >< unit: unit_run_triggers Me
 | Me
