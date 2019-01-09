@@ -1,32 +1,58 @@
 use queue util fxn
 
-land_can_move Me Src Dst =
+land_can_move1 Me Src Dst =
 | H = fxn Dst.z-Src.z
 | fxn: when H > 1 or H < -1: leave 0
 | Dst.tile.empty and not (fxn Dst-1).tile.liquid
 
-amphibian_can_move Me Src Dst =
+land_can_move2 Me Src Dst =
+| H = fxn Dst.z-Src.z
+| fxn: when H > 1 or H < -1: leave 0
+| Dst.tile.empty and (fxn Dst+1).tile.empty
+  and not (fxn Dst-1).tile.liquid
+
+amphibian_can_move1 Me Src Dst =
 | H = fxn Dst.z-Src.z
 | fxn: when H > 1 or H < -1: leave 0
 | Dst.tile.empty
 
-swimmer_can_move Me Src Dst =
+amphibian_can_move2 Me Src Dst =
+| H = fxn Dst.z-Src.z
+| fxn: when H > 1 or H < -1: leave 0
+| Dst.tile.empty and (fxn Dst+1).tile.empty
+
+swimmer_can_move1 Me Src Dst =
 | H = fxn Dst.z-Src.z
 | fxn: when H > 1 or H < -1: leave 0
 | Dst.tile.empty and (fxn Dst-1).tile.type><water
 
-flyer_can_move Me Src Dst =
+swimmer_can_move2 Me Src Dst =
+| H = fxn Dst.z-Src.z
+| fxn: when H > 1 or H < -1: leave 0
+| Dst.tile.empty and (fxn Dst+1).tile.empty
+  and (fxn Dst-1).tile.type><water
+
+flyer_can_move1 Me Src Dst =
 | less Dst.tile.empty: leave 0
 | SZ = Src.z
 | DZ = Dst.z
-//| when SZ<>DZ and DZ<30: say SZ,DZ
 | fxn: if SZ<DZ
   then | fxn: when DZ > $site.d-3: leave 0
        | times I DZ-SZ: less (Src+I).tile.empty: leave 0
   else times I SZ-DZ: less (Dst+I).tile.empty: leave 0
 | 1
 
-climber_can_move Me Src Dst =
+flyer_can_move2 Me Src Dst =
+| less Dst.tile.empty: leave 0
+| SZ = Src.z
+| DZ = Dst.z
+| fxn: if SZ<DZ
+  then | fxn: when DZ > $site.d-3: leave 0
+       | times I DZ-SZ: less (Src+I).tile.empty: leave 0
+  else times I SZ-DZ: less (Dst+I).tile.empty: leave 0
+| (fxn Dst+1).tile.empty
+
+climber_can_move1 Me Src Dst =
 | less Dst.tile.empty: leave 0
 | when (fxn Dst-1).tile.liquid: leave 0
 | SZ = Src.z
@@ -39,12 +65,36 @@ climber_can_move Me Src Dst =
        | times I SZ-DZ: less (Dst+I).tile.empty: leave 0
 | 1
 
+climber_can_move2 Me Src Dst =
+| less Dst.tile.empty: leave 0
+| when (fxn Dst-1).tile.liquid: leave 0
+| SZ = Src.z
+| DZ = Dst.z
+| fxn: if SZ<DZ
+  then | when DZ-SZ > 3: leave 0
+       | when DZ > $site.d-3: leave 0
+       | times I DZ-SZ: less (Src+I).tile.empty: leave 0
+  else | when SZ-DZ > 3: leave 0
+       | times I SZ-DZ: less (Dst+I).tile.empty: leave 0
+| (fxn Dst+1).tile.empty
+
+//FIXME: this can be optimized to a table lookup,
+// if all movement bits are place near in the $flags
 unit.update_move_method =
-| $can_move <= if $flyer then &flyer_can_move
-               else if $amphibian then &amphibian_can_move
-               else if $swimmer then &swimmer_can_move
-               else if $climber then &climber_can_move
-               else &land_can_move
+| $can_move <=
+   if fxn $height><1 then
+     if $flyer then &flyer_can_move1
+     else if $amphibian then &amphibian_can_move1
+     else if $swimmer then &swimmer_can_move1
+     else if $climber then &climber_can_move1
+     else &land_can_move1
+   else
+     if $flyer then &flyer_can_move2
+     else if $amphibian then &amphibian_can_move2
+     else if $swimmer then &swimmer_can_move2
+     else if $climber then &climber_can_move2
+     else &land_can_move2
+
 
 //note: here order is important, or path will go zig-zag
 //Dirs = [[-1 -1] [1 1] [1 -1] [-1 1] [0 -1] [1 0] [0 1] [-1 0]]

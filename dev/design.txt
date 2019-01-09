@@ -68,30 +68,35 @@ Spells:
 
 Summonable Creatures:
 Magic Eye: flyer, scout, clears invisibility from enemy units in sight. Doesn't attack, but can explode dealing minor damage to nearby enemies.
-Blob: slow, when in full health, can divide into two blobs of half the health. Consumes enemy bodies to regain health. To consume just move the blob over the body. If its health is isn't full, the body gets consumed.
-Imp: digs terrain, builds bridges, cuts trees, places traps, constructs doors and supernatural doors (that only enchanted creatures can attack).
-Ratman: becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
+Blob: slow, short, consumes enemy bodies to regain health. To consume just move the blob over the body. If its health is isn't full, the body gets consumed.
+Imp: short, digs terrain, builds bridges, cuts trees, places traps, constructs doors.
+Ratman: short, becomes invisible, allowing him to move past enemies and steal treasures, or surprise attack.
 Goblin: throws bombs, which damage whole area.
 Elf: shooter.
-Dwarf: has defend ability, which reduces all incoming damage to 1; digs terrain.
+Dwarf: short, has defend ability, which reduces all incoming damage to 1.
 Orc: has enough health to withstand a single lightning bolt.
-Spider: poisons; can set web trap, climber, entering which enemy creature loses all movement points and gets paralyzed for the next turn.
-Lizard: fast, steed, immune to magic, climber. Good for stalking wizards, who can't harm it.
+Spider: short, poisons, can set web trap, climber, entering which enemy creature loses all movement points and gets paralyzed for the next turn.
+Lizard: fast, short, steed, immune to magic, climber. Good for stalking wizards, who can't harm it.
 Skeleton: undead.
 Paladin: disciplined, blessed.
 Wraith: undead, flyer, sees through walls, passess through walls, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
 Griffin: flyer, steed, counter attacks on melee attack.
 Minotaur: heavy, strong, has stun-attack ability, disabling enemy for a single turn.
-Zombie: undead, any humanoid killed by zombie turns into zombie.
+Zombie: undead; any non-undead humanoid killed by zombie turns into zombie.
 Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone, then deals damage equivalent to cumulative damage target has ever deed to other creatures.
 Vampire: undead, shooter, turns into bat, heals on attack. Creatures it kills raise from dead as undeads, with little health.
 Observer: slow flyer magic attack, draws pentagrams, cast spells (slow, fireball, teleport). Its attack strength is equal to its enemy.
 Cyclops: heavy, strong
-Hydra: heavy, strong, moves over water, attacks in all four directions, regenerates 1 hp per turn.
+Hydra: heavy, strong, moves over water, attacks in all four directions, regenerates 1 hp per turn, unless threatened.
 Golem: disciplined, heavy, strong, slow, stoneskin (any incoming non-magic damage is halved).
 Gargoyle: flyer, ignores armor.
 Dragon: flyer, heavy, strong, can induce fear into nearby creature, harms undead units, can send nearby units flying into respective directions, explodes on death (damaging all nearby creatures).
+
+Recruitable and NPC:
+- Halfling: short, climber, becomes invisible.
+- Man/Woman: a villager or city dweller. Common victim on invanders.
+- Child: short, humanoid, doesnt attack, steals money, keys and potions from unsuspecting players. Tries to get into player creatures way. If killed, summons an enraged paladin, who will try to avenge child's death.
 
 Types of Creature Movement:
 - Walker
@@ -114,6 +119,8 @@ Creature Properties:
 - Threatened: this creature has started its turn near enemy, if at the end of its first action it remains threatened, it becomes engaged.
 - Flying: this creature is in the air: its sight is increased, it can see over obstacles, fly over enemy defenders and attack other flying creatures. While in flight, units cant pickup items on the ground.
 - Agile: creature can move near enemy, without becoming engaged. I.e. such creature can hit and run.
+- Short: unit can squeeze through tight height=1 passages, while normal units require at least height=2 passages.
+- Tall: unit requires passages of height=2 or larger. Many undergound tunnels would be out of reach for such units.
 - Undead: creature resists 1/3 damage from non-magical weapons and poison, but suffers 100% more damage from blessed units. Undead units don't have fatigue and restore full movement on each turn.
 - Blessed: creature dues 100% damage to undead units and breaks magic doors.
 - Disciplined: creature is immune to subversion.

@@ -1,15 +1,15 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Unit's height actually influencing its pathfinding.
+- Remove blob's divie ability (as it would duplicate zombie). Ensure blob has its consume ability, restoring it to half of its health. AI uses this blobs ability.
 - Ensure AI flyer under or above enemy flyer can still attack it - move them near and then fly up.
 - Ensure flyers have choice of floor, when there are several openings in column.
 - Fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker which is still vulnerable to melee attacks. - Make griffin into a hit-n-run flyer that doesn't engage with enemy.
 - when player picks flight spell with ranged units, AI should counter that with its own flyers.
 - When above water, unit and shadow should be rendered shifted 16 pixels down.
-- Flying flyers shouldn't be able to attack units at range on different layer.
-- Inventory for humanoids: allow them to pickup weapon and shields
 - A way to recruit green player units, as those in tavern.
+- Think about making sight as light, that way cells further can be somewhat darker
+- Inventory for humanoids: allow them to pickup weapon and shields
 - Coordinate AI defence. When one of AI units sees reachable enemy, it should notify all seen friends about its presence. Store unit id and serial
 - Exploding barrels.
 - Roof collapse:

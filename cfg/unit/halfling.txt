@@ -4,7 +4,7 @@ height: 1
 health: 4
 atk: 2
 def: 6
-inborn: (organic humanoid)
+inborn: (organic humanoid climber)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{halfling_hit}
 onDeath: sound{halfling_die}
