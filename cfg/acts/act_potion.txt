@@ -1,6 +1,7 @@
 icon: act_potion
 title: `Healing Potion`
 needsGene: (humanoid)
+mov: 5
 cool: 10
 check: owned,unit
 onInit: heal{9},strip{poison},visual{heal},sound{potion}
