@@ -111,13 +111,32 @@ unit_check_move Me Dst =
        | leave swap
 | 0
 
+update_path_move_flying Me XYZ =
+| when not $flying and $get{updzmv}><1:
+  | $strip{updzmv}
+  | GXYZ = $goal.xyz.copy
+  | GAct = $goal_act
+  | GCell = $site.cellp{GXYZ}
+  | $reset_goal
+  | when $reachable.has{?1><GCell}:
+    | $order_at{GXYZ GAct}
+  | leave 1
+| when $flying:
+  | Cell = $site.cellp{XYZ}
+  | for I $height: less (Cell+2+I).empty:
+    | $fly_down{1}
+    | $set{updzmv 1}
+    | leave 1
+| 0
+
 update_path_move Me XYZ =
 | M = unit_check_move Me XYZ
 | less M: leave 0
 | Us = $site.units_get{XYZ}.skip{?empty}
 | Target = if Us.end then 0 else Us.0
+| when $flyer:
+  | when update_path_move_flying Me XYZ: leave
 | $order.init{M | Target or XYZ}
-
 
 goal_in_range Me =
 | Act = $goal_act

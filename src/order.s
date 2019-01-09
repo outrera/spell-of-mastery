@@ -36,7 +36,6 @@ unit.order_at Goal Act =
   | less Move.size
     | $owner.notify{'Cant move there'}
     | leave
-  | Goal
 | when $owner.human and Act.name<>attack and Act.range>>1 and Act.range<9000:
   | Move = Units.keep{?type><mark_cast}
   | less Move.size or (Act.zfree and XYZ.mdist{$xyz}><1):

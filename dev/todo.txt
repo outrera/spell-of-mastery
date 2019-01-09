@@ -1,9 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- When in tight passages, flyers will temprorarily ground.
+- Unit's height actually influencing its pathfinding.
+- Ensure AI flyer under or above enemy flyer can still attack it - move them near and then fly up.
 - Ensure flyers have choice of floor, when there are several openings in column.
-- Think about fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker that are still vulnerable to melee attacks. Also, when player picks flight spell with ranged units, AI could counter that with his own flying rangers.
+- Fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker which is still vulnerable to melee attacks. - Make griffin into a hit-n-run flyer that doesn't engage with enemy.
+- when player picks flight spell with ranged units, AI should counter that with its own flyers.
 - When above water, unit and shadow should be rendered shifted 16 pixels down.
 - Flying flyers shouldn't be able to attack units at range on different layer.
 - Inventory for humanoids: allow them to pickup weapon and shields
@@ -90,8 +92,6 @@ TODO:
 - Move researach to world map. Player should be only able to research the creatures it has captured the essence of. To do that player must defeat that unit and investigate its corpse. There could be a spell that would protect target creatures from being scavenged, if player doesn't want enemy to gain knowledge of how to summon it. The spells on the other hand must be pre-selected by player, based on difficulty. Additional spells could be gained by spying. 
 - Finish minimap implementation, it should show only the current level and reduce saturation for levels below
 - Each spell should have tier, associated with difficulty level at which enemy wizard would be allowed to use it.
-- Unit's height actually influencing its pathfinding.
-- Proper flyers, that can get above other units (if there is space) and do hit and run tactics. Think about what happens if flyinh unit creates pentagram. Should it land first?
 - Special attack sound and effect blessed/crused units.
 - Change all control to left mouse button. Right would be used for cancelation. Swapping could be done be holding shift-key. Unit deselecting would be done with selecting that unit again.
   That should help porting to touch devices.

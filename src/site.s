@@ -557,8 +557,8 @@ site.remove_unitS U X Y Z = fxn:
 | less U.empty:
   | if U.flying then (Cell+1).block <= 0
     else Cell.block <= 0
-  //| for U Us: less U.empty: //hack for several blockers in single cell
-  //  | if U.flying then (Cell+1).block <= U else Cell.block <= U
+  | for U Us: less U.empty: //hack for swap to work
+    | (Cell+U.flying).block <= U
 
 site.remove_unit U =
 | when U.removed: leave

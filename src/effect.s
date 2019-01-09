@@ -374,8 +374,8 @@ unit.can_fly_up =
 | when not $flyer or $flying: leave 0
 | C = $cell
 | when (C+1).block: leave 0
-| for I $class.height+2:
-  | less (C+I+1).empty:
+| for I $class.height:
+  | less (C+2+I).empty:
     | leave 0
 | 1
 
@@ -391,7 +391,6 @@ unit.fly_down Animate =
   | leave
 | $move{XYZ+[0 0 2]}
 | $set{zmove 0}
-| $reset_goal
 | $owner.explore{[$cell-1 $cell-2]}
 | $mov += 2
 | $forced_order{move $xyz-[0 0 1]}
@@ -407,8 +406,8 @@ unit.fly_up Animate =
 | when (C+1).block:
   | $owner.notify{"There is a unit above."}
   | leave
-| for I $class.height+2:
-  | less (C+I+1).empty:
+| for I $class.height:
+  | less (C+2+I).empty:
     | $owner.notify{"Ceiling is too low to fly."}
     | leave
 | less Animate:
@@ -419,7 +418,6 @@ unit.fly_up Animate =
   | when $threatened: $set{engaged 1}
   | leave
 | $set{zmove 1}
-| $reset_goal
 | $animate{idle}
 | $owner.explore{[$cell+1 $cell+2]}
 | $mov += 2

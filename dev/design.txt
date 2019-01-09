@@ -112,7 +112,7 @@ Creature Properties:
 - Leader: this creature is a leader. If it dies and its owner has no other leaders, then its owner loses.
 - Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near of a non-afraid enemy, like moving into adjanced cell (unless it is directly behind it), or ending its turn in a cell near an enemy. Allied units can still swap places with engaged unit, takin its place.
 - Threatened: this creature has started its turn near enemy, if at the end of its first action it remains threatened, it becomes engaged.
-- Flying: this creature is in the air: its sight is increased, it can see over obstacles, fly over enemy defenders and attack other flying creatures.
+- Flying: this creature is in the air: its sight is increased, it can see over obstacles, fly over enemy defenders and attack other flying creatures. While in flight, units cant pickup items on the ground.
 - Agile: creature can move near enemy, without becoming engaged. I.e. such creature can hit and run.
 - Undead: creature resists 1/3 damage from non-magical weapons and poison, but suffers 100% more damage from blessed units. Undead units don't have fatigue and restore full movement on each turn.
 - Blessed: creature dues 100% damage to undead units and breaks magic doors.
