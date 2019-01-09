@@ -389,7 +389,13 @@ unit.seen_cells =
 | when $xrsight:
   | $site.xr_seen_cells{$cell $sight | C => push C Cs}
   | leave Cs.list
-| $site.seen_cells{$cell $sight | C => push C Cs}
+| Cell = $cell
+| Sight = $sight
+| when $flying and not (Cell-1).empty:
+  | when (Cell+2).empty and (Cell+1+$height).empty:
+    | Cell += 2
+    | Sight += 1
+| $site.seen_cells{Cell Sight | C => push C Cs}
 | Cs.list
 
 unit.explore =
