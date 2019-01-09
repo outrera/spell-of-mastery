@@ -3,4 +3,5 @@ priority: 50
 range: 1
 speed: 4
 mov: 1
+fatigue: 0
 check: any
