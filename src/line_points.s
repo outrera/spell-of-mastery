@@ -119,7 +119,7 @@ line_calls AX AY BX BY F =
   | less F{X Y}: leave 0
 | 1
 
-//voxel ray tracer
+//voxel ray caster / ray marching
 line_calls3d AX AY AZ BX BY BZ F = fxn:
 | DX = BX - AX
 | DY = BY - AY
