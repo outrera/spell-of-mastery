@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Don't draw cursor inside unexplored tiles, for it can betray their form, like i.e. grass blades
 - Ensure flyers have choice of floor, when there are several openings in column.
 - Fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker which is still vulnerable to melee attacks. - Make griffin into a hit-n-run flyer that doesn't engage with enemy.
 - when player picks flight spell with ranged units, AI should counter that with its own flyers.

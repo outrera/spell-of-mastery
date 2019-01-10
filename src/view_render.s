@@ -13,7 +13,6 @@ ZUnit =
 CS =
 Folded = 0
 Marked = 0
-Unexplored = 0
 NDrawnUnits = 0
 NDrawnTiles = 0
 CellsSeen =
@@ -230,6 +229,15 @@ gfx_item.draw FB BlitItem =
 //| when B.B_FLAGS&&&#40: G.brighten{-64} //G.dither{1}
 | FB.blit{B.B_SX B.B_SY G}
 
+/*
+//left here just to demonstrate the usage of gfx_item
+render_unexplored Me Wr X Y BX BY =
+| B = blit_item gfx_item{} X*CS Y*CS 0
+| B.B_DATA <= Unexplored
+| B.B_SX <= BX
+| B.B_SY <= BY-$zunit-Unexplored.h*/
+
+
 render_cursor Me Wr BX BY CursorXYZ =
 | X,Y,CurZ = CursorXYZ
 | Z = 0
@@ -344,12 +352,6 @@ render_pilar Me Wr X Y BX BY RoofZ =
     | B.B_DATA <= Folded
     | Cell.blitem <= B
   | _label skip_fold
-
-render_unexplored Me Wr X Y BX BY =
-| B = blit_item gfx_item{} X*CS Y*CS 0
-| B.B_DATA <= Unexplored
-| B.B_SX <= BX
-| B.B_SY <= BY-$zunit-Unexplored.h
 
 colorize G Layer Color =
 | Alpha = Color >>> 24
@@ -484,7 +486,6 @@ view.render_iso =
 | less Folded:
   | Folded <= Wr.main.img{ui_cell_folded}
   | Marked <= Wr.main.img{ui_cell_marked}
-  | Unexplored <= Wr.main.img{ui_cell_unexplored}
 | FBW = FB.w
 | fxn: times YY VS
   | Y = YY + VY
@@ -497,7 +498,7 @@ view.render_iso =
       | less BX < -64 or BX>FBW:
         | BY = YYY + XX*YUnit2
         | less BY < 0: render_pilar Me Wr X Y BX BY RoofZ
-| when $mice_click<>left or $brush.0:
+| when $mice_click<>left or $brush.0: when $player.seen{$cursor}:
   | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
   | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
   | render_cursor Me Wr BX BY $cursor
