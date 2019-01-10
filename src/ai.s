@@ -265,6 +265,31 @@ unit.ai_find_flight_attack State =
       | leave 1
 | 0
 
+unit.ai_flyer_update =
+| if $can_fly_down then
+    | $flying <= 0
+    | R = $ai_find_target{0}
+    | $flying <= 1
+    | when R:
+      | $fly_down{1}
+      | leave 1
+  else when $flying:
+    | B = $cell.block
+    | when B and $is_enemy{B} and $ai_find_flight_attack{$flying}:
+      | leave 1
+| if $can_fly_up then
+    | $flying <= 1
+    | R = $ai_find_target{0}
+    | $flying <= 0
+    | when R:
+      | $fly_up{1}
+      | leave 1
+  else less $flying:
+    | B = ($cell+1).block
+    | when B and $is_enemy{B} and $ai_find_flight_attack{$flying}:
+      | leave 1
+| 0
+
 unit.ai_update =
 | less $moves > 0:
   | $handled <= 1
@@ -276,28 +301,7 @@ unit.ai_update =
 | when $atk:
   | R = $ai_find_target{1}
   | when R: leave break
-  | if $can_fly_down then
-      | $flying <= 0
-      | R = $ai_find_target{0}
-      | $flying <= 1
-      | when R:
-        | $fly_down{1}
-        | leave break
-    else when $flying:
-      | B = $cell.block
-      | when B and $is_enemy{B} and $ai_find_flight_attack{$flying}:
-        | leave break
-  | if $can_fly_up then
-      | $flying <= 1
-      | R = $ai_find_target{0}
-      | $flying <= 0
-      | when R:
-        | $fly_up{1}
-        | leave break
-    else less $flying:
-      | B = ($cell+1).block
-      | when B and $is_enemy{B} and $ai_find_flight_attack{$flying}:
-        | leave break
+  | when $flyer and $ai_flyer_update: leave break
 | when $aistate >< patrol:
   | Ps = $owner.patrol_points.unheap
   | less Ps.end:
