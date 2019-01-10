@@ -288,7 +288,10 @@ unit.ai_update =
   | when got BtXYZ and $advance_to{BtXYZ safe/1}:
     | $backtrack <= 0
 | when $aistate >< roam and $ai_roam: leave break
-| when $site.is_hazard{$xyz}:
+| when $site.is_hazard{$xyz} and not $flying:
+  | when $can_fly_up:
+    | $fly_up{1}
+    | leave break
   | $ai_runaway{1}
   | leave break
 | $handled <= 1
