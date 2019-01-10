@@ -9,14 +9,15 @@ TODO:
 - When above water, unit and shadow should be rendered shifted 16 pixels down.
 - A way to recruit green player units, as those in tavern.
 - Pickable spell items, where picks would be choicen from player's researched spells, based on their probability density. If player has no researched spells, then don't generate anything.
-- Think about making sight (seen cells) as light gradients: that way cells further can be somewhat darker
 - Inventory for humanoids: allow them to pickup weapon and shields
 - Coordinate AI defence. When one of AI units sees reachable enemy, it should notify all seen friends about its presence. Store unit id and serial
+- Create demo version: a handcrafted single-part map in a style of Lord of Chaos, with limited creature and spell selection, yet showing most of the game's features. Provide "In a full version..." screen.
+- Think about making sight (seen cells) as light gradients: that way cells further can be somewhat darker
 - Exploding barrels.
+- Explosion damaging tiles and objects.
 - Roof collapse:
   - Each cell having stress factor, mitigated by nearby support columns. If there are not enough supporting pilars, the cell collapses, daming units below
   - Alternatively, when single pilar is destroyed, roof starts collapsing (damaging units), until it reaches vicinity of another pilar.
-- Explosion damaging tiles and objects.
 - Time of day: every 4th world map turn should night, so any site investigation during it would be with bonus for undead and handicap for all normal units, especially those who cannot see in the dark. The day turn should do the opposite, giving handicap to undead.
 - Waterfalls: when top tile is water, any exposed tiles are covered with water.
 - Action hotkeying.
