@@ -688,6 +688,12 @@ unit.effect Effect Target TargetXYZ =
 | RunActEffects = 1
 | when Es.size >< 0 or (T.is_unit and T.id><$id):
   | RunActEffects <= 0 // action doesnt affect outside site
+| when Target and not Es.end:
+  | Act = $action.act
+  | when Act and Act.tab><spell:
+    | TO = Target.owner
+    | when not $owner.human and TO.human: //ensure player notices that
+      | TO.notify{"[$title] casts [Act.title] onto your [Target.title]"}
 | till Es.end
   | E = pop Es
   | less E.is_list: E <= [E []]

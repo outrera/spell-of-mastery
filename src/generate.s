@@ -225,9 +225,11 @@ site.generate_human_player Gold PlayerActs =
   | S.move{LeaderXYZ.0}
 | $human.data.gold += Gold
 
+//It is probably a good idea for AI to pick spells in groups
+//that will make it appear like AI wizard specializing in some area
+//and makes it possible for player to counter AI's spells.
 site.generate_ai Side LeaderType Budget Dweller Spell Units Spells Rand =
 | Total = 0
-| Us = Units.shuffle
 | Picked = []
 | SpellBudget = 0
 | when Dweller:
@@ -241,11 +243,15 @@ site.generate_ai Side LeaderType Budget Dweller Spell Units Spells Rand =
 | less Dweller:
   | SpellBudget <= (Budget+3)/4
   | Budget <= (Budget*3+3)/4
-  | for U Us: when U.gold<<100 or (Budget-Total)/max{1 U.gold}>5:
-    | Count = max 1 Rand{U.maxPicks}
-    | times I Count: when Total+U.gold << Budget:
-      | Total += U.gold
-      | push U Picked
+  | OldTotal = -1
+  | while OldTotal<>Total:
+    | OldTotal <= Total
+    | Us = Units.shuffle
+    | for U Us: when U.gold<<100 or (Budget-Total)/max{1 U.gold}>5:
+      | Count = max 1 Rand{U.maxPicks}
+      | times I Count: when Total+U.gold << Budget:
+        | Total += U.gold
+        | push U Picked
 | Patrol = []
 | Guards = []
 | RGuards = []
@@ -277,14 +283,22 @@ site.generate_ai Side LeaderType Budget Dweller Spell Units Spells Rand =
 | for S Spells: S.picks.(Player.id) <= 0
 | when Spell:
   | S = $main.acts.Spell
-  | S.picks.(Player.id) <= 9000
+  | Count = 0
+  | S.picks.(Player.id) <= 0
+  | while STotal+S.gold << Budget and Count < 9000:
+    | S.picks.(Player.id) += 1
+    | STotal += S.gold
+    | Count += 1
 | less Spell:
-  | Ss = Spells.shuffle
-  | for S Ss: when S.gold<<100 or (SBudget-STotal)/max{1 S.gold}>5:
-    | Count = max 1 Rand{S.maxPicks}
-    | times I Count: when STotal+S.gold << SBudget:
-      | STotal += S.gold
-      | S.picks.(Player.id) += 1
+  | OldTotal = -1
+  | while OldTotal<>STotal:
+    | OldTotal <= STotal
+    | Ss = Spells.shuffle
+    | for S Ss: when S.gold<<100 or (SBudget-STotal)/max{1 S.gold}>5:
+      | Count = max 1 Rand{S.maxPicks}
+      | times I Count: when STotal+S.gold << SBudget:
+        | STotal += S.gold
+        | S.picks.(Player.id) += 1
 | Picked <= Picked{?name}.shuffle
 | RTs = [unit_blob unit_goblin unit_elf unit_vampire unit_observer]
 | Rs = Picked.keep{U => RTs.has{U}}

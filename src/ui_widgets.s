@@ -77,7 +77,7 @@ notification_widget.draw G X Y =
 | Font = font medium
 | C = 24
 | Clock = clock
-| for [Expires Chars] $ui.notes: when Clock < Expires:
+| for [Expires Chars] $ui.notes.flip: when Clock < Expires:
   | Font.draw{G 16 Y-C "* [Chars.text]"}
   | C+=16
 
