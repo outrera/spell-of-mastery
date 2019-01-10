@@ -77,8 +77,16 @@ notification_widget.draw G X Y =
 | Font = font medium
 | C = 24
 | Clock = clock
+| FadeT = 5.0
+| FadeA = #ff.float
 | for [Expires Chars] $ui.notes.flip: when Clock < Expires:
-  | Font.draw{G 16 Y-C "* [Chars.text]"}
+  | Msg = "* [Chars.text]"
+  | TTL = Expires-Clock
+  | if TTL < FadeT
+    then
+      | A = max 0: @int FadeA-FadeA*(TTL/FadeT)
+      | Font.draw_alpha{G 16 Y-C A Msg}
+    else Font.draw{G 16 Y-C Msg}
   | C+=16
 
 type save_dlg.$base{site start cancelCB loadCB}

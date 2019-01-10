@@ -9,9 +9,9 @@ game_fps: 24 // updates per second
 game_speed: 3 // game cycles (updates) per frame
               // how fast animations are played
 scroll_speed: 1
-max_notes: 6 //number of simultaneous notifications on screen
+max_notes: 8 //number of simultaneous notifications on screen
 note_size: 256
-note_life: 6.0 // in seconds
+note_life: 10.0 // in seconds
 debug: 0
 picks_always_available: 0
 default_ai_budget: 1000

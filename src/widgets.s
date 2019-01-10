@@ -36,6 +36,24 @@ font.draw G X Y Text =
     | G.blit{CX CY Gs.I}
     | CX += W+1
   | CY += H
+  
+font.draw_alpha G X Y Alpha Text =
+| Ls = Text.lines
+| Ws = $widths
+| Gs = $glyphs
+| H = $height
+| CodePoint = ' '.code
+| CY = Y
+| fxn: for L Ls
+  | CX = X
+  | for C L
+    | I = C.code-CodePoint
+    | W = Ws.I
+    | Glyph = Gs.I
+    | Glyph.alpha{Alpha}
+    | G.blit{CX CY Glyph}
+    | CX += W+1
+  | CY += H
 font.format MaxLineWidth Text =
 | SpaceWidth = $width{' '}
 | Words = Text.replace{'\n' ' '}.split{' '}{Word=>[Word $width{Word}]}
