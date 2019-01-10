@@ -1,15 +1,14 @@
 tier: 1
 cost: 50,6,50
 height: 1
-health: 7
+health: 10
 atk: 2
 mov: 2
 def: 0
 range: 5
 speed: 60
-//inborn: (ttl.10{})
+inborn: (scavenger)
 onHit: shell,hit{user},sound{blob_attack}
 onHarm: visual{blood_undead},sound{blob_hit}
 onDeath: sound{blob_hit}
 onMove: sound{blob_move}
-acts: (act_blobspawn)

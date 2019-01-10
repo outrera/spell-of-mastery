@@ -520,10 +520,12 @@ effect spawn What:
 | when What><auto: What <= $action.act.name
 | $owner.spawn{TargetXYZ What}
 
+int.corpses Free =
+| when Free: less $empty and not $block: leave []
+| $units.keep{?ai><corpse}
+
 effect resurrect:
-| Cell = $site.cellp{TargetXYZ}
-| less Cell.empty and not Cell.block: leave
-| Cs = Cell.units.keep{?ai><corpse}
+| Cs = TargetXYZ.cell.corpses{1}
 | when Cs.end: leave
 | C = Cs.0
 | U = $owner.spawn{TargetXYZ C.get{corpse}}
@@ -532,6 +534,16 @@ effect resurrect:
 | U.hp <= max 1 U.hp/2
 | Cs{?free}
 | 0
+
+effect eat_corpse Heal:
+| less $harmed: leave
+| Cs = TargetXYZ.cell.corpses{0}
+| when Cs.end: leave
+| for C Cs: C.free
+| $site.visual{TargetXYZ blood_undead}
+| $sound{blob_hit}
+| $harm{Me -Heal}
+| $owner.notify{"[$title] digested corpse, restoring [Heal] health"}
 
 effect morph ClassName:
 | Class = $main.classes.ClassName

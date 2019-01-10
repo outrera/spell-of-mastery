@@ -121,6 +121,8 @@ unit.humanoid = $flags.bit{26}
 unit.flying = $flags.bit{27}
 unit.`=flying` State = $flags <= $flags.bitSet{27 State}
 
+unit.scavenger = $flags.bit{28}
+
 //how many other units this unit has killed
 unit.kills = $get{kills}^~{0}
 unit.`=kills` Value = $set{kills Value}

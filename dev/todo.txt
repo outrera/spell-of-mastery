@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Remove blob's divide ability (as it would duplicate zombie). Ensure blob has its consume ability, restoring it to half of its health. AI uses this blobs ability.
+- Ensure AI puts its flyers into air, when in hazard.
 - Better algorithm for AI picking creatures: use an array of probability densities.
 - Ensure AI flyer under or above enemy flyer can still attack it - move them near and then fly up.
 - Ensure flyers have choice of floor, when there are several openings in column.

@@ -157,6 +157,11 @@ list_rotate I Xs =
 | [@Xs.drop{N} @Xs.take{N}]
 
 unit.ai_ability =
+| when $scavenger and $harmed:
+  | Rs = $reachable
+  | for _,Cell Rs: less Cell.corpses{1}.end:
+    | $order_at{Cell.xyz 0}
+    | leave 1
 | for Act list_rotate{$site.turn $acts}: when $ai_ability_sub{Act}: leave 1
 | 0
 

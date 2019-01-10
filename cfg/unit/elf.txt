@@ -2,7 +2,7 @@ tier: 2
 cost: 200,3,50
 health: 7
 atk: 3
-def: 0
+def: 1
 range: 6
 inborn: (organic humanoid)
 onHit: shell,hit{user},sound{arrow_hit}
