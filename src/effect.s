@@ -68,10 +68,12 @@ effect macro Name:
 | when no M: bad "main/macro.txt doesnt define `[Name]`"
 | $effect{M Target TargetXYZ}
 
+unit.visual Effect =
+| E = $site.visual{$xyz Effect}
+| when $flying: E.fxyz.init{E.fxyz+[0 0 64*$flying]}
+
 effect visual Effect:
-| E = $site.visual{TargetXYZ Effect}
-| when Target:
-  | E.fxyz.init{Target.fxyz+[0 0 64*Target.flying]}
+| if Target then Target.visual{Effect} else $site.visual{TargetXYZ Effect}
 
 effect visual1 Effect: //this one guards against multiple instances
 | Type = "effect_[Effect]"
@@ -661,7 +663,7 @@ effect no | No
 
 check_when Me Target C =
 | leave: case C
-  target | Target<>0
+  target | Target and Target.alive
   ally | not $owner.is_enemy{Target.owner}
   enemy | $owner.is_enemy{Target.owner}
   confirmed | $main.dialog_result><yes
@@ -738,6 +740,9 @@ unit.effect Effect Target TargetXYZ =
     else if Name >< target then T <= Target
     else if Name >< host then T <= $host
     else if Name >< self then T <= Me
+    else if Name >< same_fly then
+      | if Target and Target.flying<>$flying then T <= 0
+        else T <= Target
     else if Name >< tenant then
       | Block = $site.block_at{XYZ}
       | less Block: _goto end

@@ -5,10 +5,10 @@ gold: 30
 cool: 5
 range: 9000
 check: placeable,non_leader,any
-onInit: when{target},set{alpha 0},set{delta 10},endwhen
-       ,visual{teleport},sound{summon},self,set{alpha 0},set{delta 10},visual{teleport}
-onEnd: when{target},set{alpha 255},set{delta -10},endwhen
-      ,visual{teleport},self,set{alpha 255},set{delta -10},visual{teleport}
-      ,target,superpose
+onInit: same_fly,when{target},set{alpha 0},set{delta 10},visual{teleport},endwhen
+       ,sound{summon},self,set{alpha 0},set{delta 10},visual{teleport}
+onEnd: same_fly,when{target},set{alpha 255},set{delta -10},endwhen
+      ,self,set{alpha 255},set{delta -10},visual{teleport}
+      ,same_fly,superpose,self,visual{teleport}
 hint: superpose
 tab: spell
