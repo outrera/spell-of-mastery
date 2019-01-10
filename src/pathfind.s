@@ -259,12 +259,11 @@ can_jump Src Dst = Dst.empty and fxn Dst.floor-Dst>1
 
 unit.can_attack Src Dst = $atk and (fxn (Dst.z-Src.z) << 1 or $can_move{}{Me Src Dst})
 
-unit.reachable =
+unit.reachable_at Cell Moves =
 | Xs = []
-| when fxn $moves<1: leave Xs
-| XYZ = $xyz
+| when fxn Moves<1: leave Xs
 | Flying = $flying
-| less $engaged: $find{$moves
+| less $engaged: $site.find{$moves Me Cell
   | Dst =>
     | R = \block
     | Type = \move
@@ -281,18 +280,20 @@ unit.reachable =
       | when $threatened_at{Dst}:
         | R <= \block //engage
       | for E $reachable_nearby_enemies_at{Dst}:
-        | when $range><1 and not $afraid and $moves >> Dst^path_len+1:
+        | when $range><1 and not $afraid and Moves >> Dst^path_len+1:
           | when $can_attack{Dst E.cell}: push [attack E.cell] Xs
     | R}
-| less $flyer or $climber: for N $cell.neibs: when N.empty:
+| less $flyer or $climber: for N Cell.neibs: when N.empty:
   | F = N.floor
   | less F.block:
-    | when fxn N-F>1 and fxn $moves>>$jump_cost:
+    | when fxn N-F>1 and fxn Moves>>$jump_cost:
       | less got Xs.find{?1><F}: push [jump F] Xs
-| when fxn $moves<1 or $afraid: leave Xs
+| when fxn Moves<1 or $afraid: leave Xs
 | when fxn $range><1:
   | for E $enemies_in_range:
     | when $can_attack{$cell E.cell}: push [attack E.cell] Xs
 | when fxn $range>1:
   | for E $enemies_in_range: push [attack E.cell] Xs
 | Xs
+
+unit.reachable = $reachable_at{$cell $moves}

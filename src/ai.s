@@ -158,8 +158,7 @@ list_rotate I Xs =
 
 unit.ai_ability =
 | when $scavenger and $harmed:
-  | Rs = $reachable
-  | for _,Cell Rs: less Cell.corpses{1}.end:
+  | for _,Cell $reachable: less Cell.corpses{1}.end:
     | $order_at{Cell.xyz 0}
     | leave 1
 | for Act list_rotate{$site.turn $acts}: when $ai_ability_sub{Act}: leave 1
@@ -251,6 +250,21 @@ unit.ai_find_target GiveOrder =
     | leave 1
 | 0
 
+unit.ai_find_flight_attack State =
+| Rs = $reachable
+| XYZ = $xyz
+//| for Type,Cell $reachable{}{[?1.xyz.mdist{XYZ} ?]}.sort{?0<??0}{?1}:
+| for Type,Cell $reachable.flip:
+  | when Type><move and not (Cell+1).block:
+    | $flying <= not State
+    | Found = $reachable_at{Cell $moves}.has{?0><attack}
+    | $flying <= State
+    | when Found:
+      | $backtrack <= $xyz
+      | $order_at{Cell.xyz 0}
+      | leave 1
+| 0
+
 unit.ai_update =
 | less $moves > 0:
   | $handled <= 1
@@ -262,20 +276,28 @@ unit.ai_update =
 | when $atk:
   | R = $ai_find_target{1}
   | when R: leave break
-  | when $can_fly_down:
-    | $flying <= 0
-    | R = $ai_find_target{0}
-    | $flying <= 1
-    | when R:
-      | $fly_down{1}
-      | leave break
-  | when $can_fly_up:
-    | $flying <= 1
-    | R = $ai_find_target{0}
-    | $flying <= 0
-    | when R:
-      | $fly_up{1}
-      | leave break
+  | if $can_fly_down then
+      | $flying <= 0
+      | R = $ai_find_target{0}
+      | $flying <= 1
+      | when R:
+        | $fly_down{1}
+        | leave break
+    else when $flying:
+      | B = $cell.block
+      | when B and $is_enemy{B} and $ai_find_flight_attack{$flying}:
+        | leave break
+  | if $can_fly_up then
+      | $flying <= 1
+      | R = $ai_find_target{0}
+      | $flying <= 0
+      | when R:
+        | $fly_up{1}
+        | leave break
+    else less $flying:
+      | B = ($cell+1).block
+      | when B and $is_enemy{B} and $ai_find_flight_attack{$flying}:
+        | leave break
 | when $aistate >< patrol:
   | Ps = $owner.patrol_points.unheap
   | less Ps.end:

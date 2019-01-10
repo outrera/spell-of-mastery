@@ -1,9 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Ensure AI puts its flyers into air, when in hazard.
 - Better algorithm for AI picking creatures: use an array of probability densities.
-- Ensure AI flyer under or above enemy flyer can still attack it - move them near and then fly up.
 - Ensure flyers have choice of floor, when there are several openings in column.
 - Fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker which is still vulnerable to melee attacks. - Make griffin into a hit-n-run flyer that doesn't engage with enemy.
 - when player picks flight spell with ranged units, AI should counter that with its own flyers.
