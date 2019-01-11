@@ -15,6 +15,7 @@ CellsSeen =
 SiteSize = 1 //max site size
 SiteDepth = 1
 CellsLineSize = 1
+HMap =
 Site =
 
 //FIXME: such structs could be defined with a macro
@@ -52,12 +53,32 @@ int.north = fxn Me-CellsLineSize
 int.south = fxn Me+CellsLineSize
 int.west = fxn Me-SiteDepth
 int.east = fxn Me+SiteDepth
+int.surface =
+| X = fxn Me/SiteDepth%SiteSize
+| Y = fxn Me/CellsLineSize
+| Z = (fxn HMap.X).Y //HMap is byte array, so no fxn
+| fxn (Y*SiteSize+X)*SiteDepth+Z
 int.neibs = fxn [Me-CellsLineSize Me+CellsLineSize Me-SiteDepth Me+SiteDepth]
 int.neibs8 =
   | N = fxn Me-CellsLineSize
   | S = fxn Me+CellsLineSize
   | fxn [N S Me-SiteDepth Me+SiteDepth
          N-SiteDepth N+SiteDepth S-SiteDepth S+SiteDepth]
+int.floorneibs =
+| F = CellsFloor
+| fxn [F.(Me-CellsLineSize) F.(Me+CellsLineSize)
+       F.(Me-SiteDepth)     F.(Me+SiteDepth)]
+int.flyneibs =
+| Ns = $floorneibs
+| Ms = []
+| for N Ns:
+  | S = N.surface
+  | fxn: while N<S:
+    | when S.empty and not (S-1).empty:
+      | when Site.seen_from{Me.xyz S.xyz}: push S Ms
+    | S <= S-1
+  | less Ms.end: Ns <= [Ns Ms.list].join
+| Ns
 int.climbable = $neibs.any{?empty^not}
 int.path =
 | Cell = Me
@@ -80,7 +101,6 @@ type site{main}
    filename/`default`
    name/`default map`
    description/`describe the map here`
-   heighmap
    owners // unit owners
    units
    free_units
@@ -164,7 +184,8 @@ site.init =
 | CellsGate <= dup $ncells 0
 | CellsBlitem <= dup $ncells 0
 | CellsSeen <= dup $ncells #FFFFFFFF
-| $heighmap <= dup $maxSize: @bytes $maxSize
+| HMap <= dup $maxSize: @bytes $maxSize
+| for H HMap: H.clear{0}
 | MaxUnits = $cfg.max_units
 | $units <= MaxUnits{(unit ? Me)}
 | $free_units <= stack $units.flip
@@ -211,7 +232,7 @@ site.create_borders = // draws maps borders in clockwise order
 | Pilar = dup H Border
 | create_border_pilar X Y =
   | $set_pilar{X Y Pilar}
-  | $heighmap.X.Y <= H 
+  | HMap.X.Y <= H 
 | for X,Y points{0    0    $w+1 1   }: create_border_pilar X Y
 | for X,Y points{$w+1 0    1    $h+1}: create_border_pilar X Y
 | for X,Y points{1    $h+1 $w+1 1   }: create_border_pilar X Y
@@ -223,7 +244,7 @@ site.clear =
 | $minimap.clear{#000000}
 | $act <= 0
 | for U $units: less U.removed: U.free
-| for H $heighmap: H.clear{0}
+| for H HMap: H.clear{0}
 | for P $players: P.clear
 | $human <= $players.1
 | $human.human <= 1
@@ -704,7 +725,7 @@ site.upd_pilar X Y =
 | Cell = $cell{X Y 0}
 | upd_floor Me Cell
 | Floor = fxn (Cell+$d-2).floor
-| $heighmap.X.Y <= fxn Floor.z
+| HMap.X.Y <= fxn Floor.z
 | less $editor:
   | M = $human.seen_mask
   | less (Floor.seen&&&M)><M: leave
@@ -742,7 +763,7 @@ site.upd_neibs X Y =
 | for DX,DY Dirs: $upd_pilar{X+DX Y+DY}
 | $upd_pilar{X Y}
 
-site.height X Y = $heighmap.X.Y
+site.height X Y = HMap.X.Y
 
 site.outdoor XYZ = $height{XYZ.0 XYZ.1} << XYZ.2
 

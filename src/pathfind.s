@@ -102,11 +102,16 @@ unit.update_move_method =
 unit.list_moves Src Cost =
 | Ms = []
 | CanMove = $can_move
-| Flying = $flying
-| for Dst Src.neibs
-  | Dst <= Dst.floor
+| when $flyer:
+  | Flying = $flying
+  | for Dst Src.flyneibs
+    | when Cost < Dst.cost and CanMove{Me Src Dst}:
+      | B = (fxn Dst+Flying).block
+      | fxn: when B><0 or B.hp>0: push Dst Ms
+  | leave Ms
+| for Dst Src.floorneibs
   | when Cost < Dst.cost and CanMove{Me Src Dst}:
-    | B = (fxn Dst+Flying).block
+    | B = Dst.block
     | fxn: when B><0 or B.hp>0: push Dst Ms
 | Ms
 
