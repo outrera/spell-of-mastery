@@ -1,7 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Flyers should have wing icon, instead of boot.
+- Flyers should have wing movement mark, instead of boot.
 - Fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker which is still vulnerable to melee attacks. - Make griffin into a hit-n-run flyer that doesn't engage with enemy.
 - when player picks flight spell with ranged units, AI should counter that with its own flyers.
 - When above water, unit and shadow should be rendered shifted 16 pixels down.
@@ -9,6 +9,7 @@ TODO:
 - Pickable spell items, where picks would be choicen from player's researched spells, based on their probability density. If player has no researched spells, then don't generate anything.
 - Inventory for humanoids: allow them to pickup weapon and shields
 - Coordinate AI defence. When one of AI units sees reachable enemy, it should notify all seen friends about its presence. Store unit id and serial
+- Scenario Mode: for user made maps and maybe random generated maps too. Doesn't have world or ship.
 - Create demo version: a handcrafted single-part map in a style of Lord of Chaos, with limited creature and spell selection, yet showing most of the game's features. Provide "In a full version..." screen.
 - Think about making sight (seen cells) as light gradients: that way cells further can be somewhat darker
 - Exploding barrels.
