@@ -191,8 +191,7 @@ site.seen_cells_search MaxCost StartCell Check =
   | Src = PFQueue.pop
   | Cost = Src.cost
   | NextCost = fxn Cost+1
-  | for Dst Src.neibs
-    | Dst <= Dst.floor
+  | for Dst Src.flyneibs
     | when NextCost < Dst.cost:
       | when Check Dst:
         | Dst.cost <= NextCost
