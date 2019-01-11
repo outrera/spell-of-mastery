@@ -31,7 +31,7 @@ unit.order_at Goal Act =
 | when Act.name><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $site.cur_player.human and (Act.name><move or Act.name><attack):
   | Mark = "mark_[Act.name]"
-  | Ms = [mark_move mark_attack mark_swap]
+  | Ms = [mark_move mark_wing mark_attack mark_swap]
   | Move = Units.keep{U=>Ms.has{U.type}}
   | less Move.size
     | $owner.notify{"Cant move there"}

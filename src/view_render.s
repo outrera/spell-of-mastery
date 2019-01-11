@@ -498,7 +498,7 @@ view.render_iso =
       | less BX < -64 or BX>FBW:
         | BY = YYY + XX*YUnit2
         | less BY < 0: render_pilar Me Wr X Y BX BY RoofZ
-| when $mice_click<>left or $brush.0: when $player.seen{$cursor}:
+| when $mice_click<>left or $brush.0: when $player.explored{$cursor}:
   | BX = TX + VY + CurX*XUnit2 - CurY*XUnit2
   | BY = TY + VY + CurX*YUnit2 + CurY*YUnit2
   | render_cursor Me Wr BX BY $cursor

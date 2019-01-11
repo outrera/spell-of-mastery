@@ -172,6 +172,7 @@ site.update_picked =
     | when What><attack
       | B = Cell.block
       | when B and B.invisible: What <= \move
+    | when What><move and U.flying: What <= 'wing'
     | $set_mark{Cell.xyz 1 "mark_[What]"}
   | leave
 | when $act.range >> 9000: leave
