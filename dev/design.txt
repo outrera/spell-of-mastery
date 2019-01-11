@@ -81,7 +81,7 @@ Skeleton: undead.
 Paladin: disciplined, blessed.
 Wraith: undead, flyer, sees through walls, passess through walls, becomes invisible.
 Ifrit: flyer, fire shield damages attackers, throws fireballs, useful to counter undeads.
-Griffin: flyer, steed, counter attacks on melee attack.
+Griffin: flyer, steed, evasive, retaliating.
 Minotaur: heavy, strong, has stun-attack ability, disabling enemy for a single turn.
 Zombie: undead; any non-undead humanoid killed by zombie turns into zombie.
 Devil: teleports to a seen cell, kills in a single blow any creature (even dragon), that has killed another. If target haven't killed anyone, then deals damage equivalent to cumulative damage target has ever deed to other creatures.
@@ -118,7 +118,8 @@ Creature Properties:
 - Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near of a non-afraid enemy, like moving into adjanced cell (unless it is directly behind it), or ending its turn in a cell near an enemy. Allied units can still swap places with engaged unit, takin its place.
 - Threatened: this creature has started its turn near enemy, if at the end of its first action it remains threatened, it becomes engaged.
 - Flying: this creature is in the air: its sight is increased, it can see over obstacles, fly over enemy defenders and attack other flying creatures. While in flight, units cant pickup items on the ground.
-- Agile: creature can move near enemy, without becoming engaged. I.e. such creature can hit and run.
+- Evasive: creature can move near enemy, without becoming engaged. I.e. such creature can hit and run.
+- Retaliating: unlimited counter-attacks with full moves on any melee attack
 - Short: unit can squeeze through tight height=1 passages, while normal units require at least height=2 passages.
 - Tall: unit requires passages of height=2 or larger. Many undergound tunnels would be out of reach for such units.
 - Scavenger: creature consumes corpses to regain health. To consume just move such creature over the corpse. If creatures's health isn't full, the corpse gets consumed.
@@ -128,7 +129,7 @@ Creature Properties:
 - Poison: creature can't regenerate and loses health with time, until health drops to 1 or heal is cast.
 - Fire Aura: attacker gets damaged equivalent to their own damage, when melee attacking this creature.
 - Hasted: creature gains additional 2 additional moves per turn.
-- Invisible: invisible creatures cannot be seen or targeted by enemy players, and are not affected by engagement, their attacks gain +2 bouns against target's defence. Attacking would strip invisibility. Ending turn near enemy would also strip invisibility if unit is inside of enemy's field of view.
+- Invisible: invisible creatures cannot be seen or targeted by enemy players, and are not affected by engagement, their attacks gain +2 bouns against target's defence and doesn't trigger retaliation. Attacking would strip invisibility. Ending turn near enemy would also strip invisibility if unit is inside of enemy's field of view.
 - Shell: creature is invincible to the next physical attack.
 - Resisting: creature is invincible to the next harmful magical effect.
 - Flying: creature can move over any terrain and gains addition sight. Flying units are unaffected by fall damage.

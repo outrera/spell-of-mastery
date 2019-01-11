@@ -30,12 +30,13 @@ unit.order_at Goal Act =
   | leave
 | when Act.name><move: Goal <= 0 //otherwise it will hung in swap-loop
 | when $site.cur_player.human and (Act.name><move or Act.name><attack):
-  | Mark = "mark_[Act.name]"
-  | Ms = [mark_move mark_wing mark_attack mark_swap]
-  | Move = Units.keep{U=>Ms.has{U.type}}
-  | less Move.size
-    | $owner.notify{"Cant move there"}
-    | leave
+  | when $owner.human: //ensure it is not retaliation
+    | Mark = "mark_[Act.name]"
+    | Ms = [mark_move mark_wing mark_attack mark_swap]
+    | Move = Units.keep{U=>Ms.has{U.type}}
+    | less Move.size
+      | $owner.notify{"Cant move there"}
+      | leave
 | when $owner.human and Act.name<>attack and Act.range>>1 and Act.range<9000:
   | Move = Units.keep{?type><mark_cast}
   | less Move.size or (Act.zfree and XYZ.mdist{$xyz}><1):

@@ -5,7 +5,7 @@ health: 12
 atk: 4
 def: 2
 speed: 18
-inborn: (organic flyer nocorpse)
+inborn: (organic flyer nocorpse evasive retaliating)
 onHit: shell,hit{user},sound{cut}
 onHarm: visual{blood},sound{griffin_hit}
 onDeath: sound{griffin_die}

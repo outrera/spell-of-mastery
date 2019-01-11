@@ -57,7 +57,7 @@ move_finish Me =
   | when U.xyz.2-FloorXYZ.2<<0:
     | U.move{FloorXYZ}
     | U.strip{zmove}
-    | when U.threatened: U.set{engaged 1}
+    | U.engagement_check
     | leave
   | U.forced_order{move U.xyz-[0 0 1]}
 

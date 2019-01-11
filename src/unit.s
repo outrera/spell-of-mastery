@@ -123,6 +123,10 @@ unit.`=flying` State = $flags <= $flags.bitSet{27 State}
 
 unit.scavenger = $flags.bit{28}
 
+unit.evasive = $flags.bit{29}
+
+unit.retaliating = $flags.bit{30}
+
 //how many other units this unit has killed
 unit.kills = $get{kills}^~{0}
 unit.`=kills` Value = $set{kills Value}
@@ -414,6 +418,11 @@ unit.threatened_at Cell =
 
 unit.threatened = $threatened_at{$cell}
 
+unit.engagement_check =
+| when $threatened:
+  | less $evasive: $set{engaged 1}
+  | $reveal_nearby_enemies
+
 unit.try_detecting Enemy =
 | when Enemy.invisible and Enemy.flying><$flying and $infov{Enemy.xyz}:
   | Enemy.strip{invisible}
@@ -426,9 +435,13 @@ heal_unit Me Amount =
 | $hp += min Amount $class.hp-$health
 
 unit.counter_attack Attacker =
-| less $owner.id <> $site.player and $moves>0 and $atk: leave
+| when Attacker.invisible: leave
+| when $owner.id >< $site.player: leave //recursive
+| when $retaliating and $xyz.mdist{Attacker.xyz}><1: $mov <= $class.mov
+| less $moves>0 and $atk: leave
 | when $afraid or no $enemies_in_range.find{?id><Attacker.id}: leave
 | less $can_attack{$cell Attacker.cell}: leave
+| say $type,Attacker.type,Attacker.xyz
 | $order_at{Attacker.xyz 0}
 
 unit.attack_bonus Target =
@@ -446,9 +459,9 @@ unit.assault Target =
 | Hit = min{Def $mov}
 | $mov -= Hit
 | Def -= Hit
+| when $alive: Target.counter_attack{Me}
 | when Def > 0: //miss?
   | Target.def <= Def-1
-  | Target.counter_attack{Me}
   | when $owner.human:
     | $owner.notify{"Your [$title] missed [Target.title]."}
   | when Target.owner.human:

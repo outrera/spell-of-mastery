@@ -267,9 +267,7 @@ update_action Me =
     | leave // ensure animation finishes
   | Delay = $action.act.delay
   | $action.finish
-  | when $action.act.mov>0 and $threatened:
-    | $set{engaged 1}
-    | $reveal_nearby_enemies
+  | when $action.act.mov>0: $engagement_check
   | update_next_action Me
   | $delay <= Delay
 | $action.update

@@ -389,7 +389,7 @@ unit.fly_down Animate =
 | $remove
 | $strip{flying}
 | less Animate:
-  | when $threatened: $set{engaged 1}
+  | $engagement_check
   | leave
 | $move{XYZ+[0 0 2]}
 | $set{zmove 0}
@@ -417,7 +417,7 @@ unit.fly_up Animate =
   | $remove
   | $set{flying 1}
   | $move{XYZ}
-  | when $threatened: $set{engaged 1}
+  | $engagement_check
   | leave
 | $set{zmove 1}
 | $animate{idle}
