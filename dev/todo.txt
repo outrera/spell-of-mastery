@@ -1,6 +1,7 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
+- Flyers should have wing icon, instead of boot.
 - Fatigue for flyers, so they will be forced to land eventually: each two turns or so flying unit will gain fatigue, falling when it reaches zero. That way we can have flying ranged attacker which is still vulnerable to melee attacks. - Make griffin into a hit-n-run flyer that doesn't engage with enemy.
 - when player picks flight spell with ranged units, AI should counter that with its own flyers.
 - When above water, unit and shadow should be rendered shifted 16 pixels down.
