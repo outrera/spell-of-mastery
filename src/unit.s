@@ -441,7 +441,6 @@ unit.counter_attack Attacker =
 | less $moves>0 and $atk: leave
 | when $afraid or no $enemies_in_range.find{?id><Attacker.id}: leave
 | less $can_attack{$cell Attacker.cell}: leave
-| say $type,Attacker.type,Attacker.xyz
 | $order_at{Attacker.xyz 0}
 
 unit.attack_bonus Target =
@@ -567,6 +566,11 @@ unit.sees_facing Target =
 | if D >< TD then \back
   else if D >< -TD then \front
   else \side
+  
+unit.fatigue_dec = max 1 $stamina/3
+
+unit.stamina_fatigue = $get{stamfat}^~{0}
+unit.`=stamina_fatigue` V = $set{stamfat V}
 
 unit.sound SoundName = $site.sound_at{$floor.xyz $id^not SoundName}
 

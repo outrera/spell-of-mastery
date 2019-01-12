@@ -6,7 +6,7 @@ health: 8
 atk: 2
 def: 1
 speed: 18
-stamina: 2
+stamina: 6
 inborn: (organic climber resist)
 onAttack: sound{lizard_attack}
 onHit: shell,hit{user}//,sound{cut}

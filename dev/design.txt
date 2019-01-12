@@ -38,7 +38,8 @@ Battle View:
 - Health determines how much damage that unit could take, before perishing.
 - Attack determines how many health points that creature's attack removes from victim on its usual attack.
 - Defense determines how many moves it would cost for other creature to attack this one. While it doesn't take much strength to kill a rat, yet rat is a very agile creature, so it takes a lot of speed to hit it and really slow moving creature wont be able to catch a rat at all. At the same time, bat being fast, may bite some unarmored creature and run away. Player may pick against which attacker his creature should concentrate its defense for the next turn, ignoring attacks from other ones. Lost defense points are regenerated at the end of a turn, if creature is not engaged, based on remaining movement points. A creature that successfuly defended can counter-attack, if it has some movement points. Creatures defending against attacks coming from below get defence bonus (upto +2), while attacks from above decrease defence. Creature's facing direction also affects its defence: creature hit from side gets -1 penalty to defence, creature hit from back gets -3 penalty to defence.
-- Fatigue decreases movement points allocated at the turn's start, it grows exponentially from performing actions. Each turn fatigue is decreased by creature's stamina.
+- Fatigue decreases movement points allocated at the turn's start, it grows exponentially from performing actions. Each turn fatigue is decreased creature's stamina divided by 3.
+- Stamina determines how long that creature could remain in flying or submerge underwater (if it is not natively underwater one).
 - Sight determines how far this unit sees.
 - Range determines how far this creature can attack with its normal attack. Not that for artillery units range is usually longer than their sight.
 - Typial humanoid creature has 6 moves per turn. Bat's speed is 14 cells/turn;. Leader moves at speed of 5, preventing leader to be able to run away from most creatures. Casting spell or attacking requires 4 moves. Haste gives +4 moves, allowing most units to attack twice.
@@ -117,7 +118,7 @@ Creature Properties:
 - Leader: this creature is a leader. If it dies and its owner has no other leaders, then its owner loses.
 - Engaged: this creature is engaged into a fight with enemy, and cannot move further or retreat this turn. Creature gets this status by doing any action near of a non-afraid enemy, like moving into adjanced cell (unless it is directly behind it), or ending its turn in a cell near an enemy. Allied units can still swap places with engaged unit, takin its place.
 - Threatened: this creature has started its turn near enemy, if at the end of its first action it remains threatened, it becomes engaged.
-- Flying: this creature is in the air: its sight is increased, it can see over obstacles, fly over enemy defenders and attack other flying creatures. While in flight, units cant pickup items on the ground.
+- Flying: this creature is in the air: its sight is increased, it can see over obstacles, fly over enemy defenders and attack other flying creatures. While in flight, units cant pickup items on the ground. Flying decreases current stamina, if unit ends turn with stamina=0, it is forced to land.
 - Evasive: creature can move near enemy, without becoming engaged. I.e. such creature can hit and run.
 - Retaliating: unlimited counter-attacks with full moves on any melee attack
 - Short: unit can squeeze through tight height=1 passages, while normal units require at least height=2 passages.

@@ -11,7 +11,8 @@ type class{bank class_name Main
            height/0
            speed/0 ascendSpeed/4
            cost/0
-           mov/0 stamina/1 health/0 atk/0 def/0 sight/No range/0
+           mov/0 stamina/4 health/0 atk/0 def/0 sight/No range/0
+           endur/0
            inborn/[] acts/[]
            ai/0
            pickable/0 show/1 gate/0

@@ -17,7 +17,7 @@ unit.new_turn =
 | MovInc = Mov
 | when $slowed: MovInc <= (MovInc+1)/2
 | $mov <= min Mov $class.mov+MovInc
-| $fatigue <= max 0: min $fatigue-$stamina $mov-1
+| $fatigue <= max 0: min $fatigue-$fatigue_dec $mov-1
 
 unit.end_turn_invisibility_check =
 | when $invisible:
@@ -32,6 +32,14 @@ unit.end_turn =
   | $def += DefInc
   | $mov -= DefInc
 | when $ai><unit:
+  | when $flyer:
+    | F = $stamina_fatigue
+    | if $flying then
+        | if F < $stamina then $stamina_fatigue <= F+1
+          else if $can_fly_down then
+                | $fly_down{1}
+          else
+      else when F: $stamina_fatigue <= max 0 F-$fatigue_dec
   | for V $site.units_get{$xyz}: V.run_genes{tenant_endturn}
 | $run_genes{endturn}
 | $resting <= Resting
