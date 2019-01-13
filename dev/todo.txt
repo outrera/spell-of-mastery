@@ -1,12 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- A way to recruit green player units, as those in tavern.
 - Pickable spell items, where picks would be choicen from player's researched spells, based on their probability density. If player has no researched spells, then don't generate anything.
 - Inventory for humanoids: allow them to pickup weapon and shields
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. When creature enters ladder tile, it gains climber ability.
 - Scenario Mode: for user made maps and maybe random generated maps too. Doesn't have world or ship.
-- Create demo version: a handcrafted single-part map in a style of Lord of Chaos, with limited creature and spell selection, yet showing most of the game's features. Provide "In a full version..." screen.
+- Create demo version: a handcrafted single-part map in a style of Lord of Chaos, with limited creature and spell selection, yet showing most of the game's features: i.e. tunelling into castle dungeon and the prison break. Provide "In a full version..." screen.
 - Cortex Command style mode: each player has a number of wizard (serving as lives) and start gold, then he competes with other players for several sites. Only one wizard could be taken to attack a site. Each conquered site requires a wizard to control and provides more gold each turn.  If player is out of gold, he can sacrifice one of his wizards for more gold. Player's wizards could be displayed wandering on the world map. The player with most gold and remaining wizards wins after several turns. An build mode with ability for player to construct wizard tower protecting his wizard in the region.
 - Think about making sight (seen cells) as light gradients: that way cells further can be somewhat darker
 - Exploding barrels.
@@ -209,6 +208,8 @@ Symta Language Handicaps:
 - objects allocated on heap with autopointer cells.
 - "when A and B: C" should give warning when `:` is missing.
 - `Text.lines{}{...}` is a little confusing and verbose. Consider operator `.{}` for that.
+- `parse_int Default Text` points that we need more robust standard library number parsing utilities.
+- Better getter and setter syntatic sugar.
 - Operators `.><` and `.<>` as shorthands for skip and keep. Parens could be used for internal `<` and `>`: Skip .
 - A some file, like common.s, that would be included by default into every other file. Such file would incldue common constants, like TILE_WIDTH.
 - Stuff like `Tile.lay <= Tile.lay.tail` really needs some solution.

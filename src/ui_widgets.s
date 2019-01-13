@@ -46,15 +46,18 @@ main.show_message Title Text buttons/[ok,'Ok'] click/0 =
 
 main.dialog_result = DialogResult
 
-type site_props.$base{site callback} name description width height base
+type site_props.$base{site callback}
+   base name description width height gold
 | $name <= txt_input{''}
 | $description <= txt_input{w/240 ''}
 | $width <= txt_input{''}
 | $height <= txt_input{''}
+| $gold <= txt_input{'0'}
 | PropFields = ['Site Name:',$name 
                 'Description:',$description
                 'Width:',$width
                 'Height:',$height
+                'Start Gold:',$gold
                ]
 | MW = 104
 | MH = 92
@@ -71,6 +74,7 @@ site_props.update =
 | $description.value <= W.description
 | $width.value <= "[W.w]"
 | $height.value <= "[W.h]"
+| $gold.value <= "[W.data.gold^~{0}]"
 
 type notification_widget.widget{ui} site w/0 h/0
 notification_widget.draw G X Y =

@@ -1,0 +1,3 @@
+author: `CrossCut Games`
+license: `Public Domain`
+origin: `https://sourceforge.net/projects/runesword/`

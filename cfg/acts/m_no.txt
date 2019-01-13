@@ -4,3 +4,5 @@ mov: 0
 check: self
 animate: No
 onInit: (no)
+hint: no
+kind: any

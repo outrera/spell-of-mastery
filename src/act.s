@@ -1,7 +1,7 @@
 use util macros act_
 
 type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
-         hint/0 tab/0
+         hint/0 tab/0 kind/0
          cost/0 mov/1 fatigue/1 cool/0 needs/[] needsGene/[]
          priority/50
          range/0 zfree/0
@@ -15,6 +15,8 @@ type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
             //             boost(single unit), boost_allies(all allies),
             //             heal_allies, morph
   tab/Tab //UI tab where this action appears
+  kind/Kind //type of unit to which this act is allowed:
+            //enemy, ally, any or 0; if 0 then show only for owned units
   mov/Mov //movement points require to execute this action
   fatigue/Fatigue
   maxPicks/MaxPicks //maximum number of actions that can appear in a mission

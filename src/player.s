@@ -96,6 +96,9 @@ player.explore Cells = fxn:
       | $site.update_minimap{X Y}
       //| $site.upd_pilar{X Y} //FIXME: use this to hide changes to terrain
 
+player.gold = $data.gold
+player.`=gold` V = $data.gold <= V
+
 player.clear =
 | $total_units <= 0
 | $unit_counts.clear{0}
@@ -106,7 +109,7 @@ player.clear =
 | $picked_save_serial <= 0
 | $leader <= $site.nil
 | $data.lossage <= 0
-| $data.gold <= 0
+| $gold <= 0
 | $data.keys <= 0
 | $patrol_points.heapfree
 | $patrol_points <= []

@@ -322,6 +322,29 @@ effect explosion Size:
 
 effect notify Text: Target.owner.notify{Text}
 
+effect pnotify Text: $site.human.notify{Text}
+
+unit.price = $get{price}^~{$gold}
+
+effect hire_ask:
+| Price = $price
+| if Price
+  then $site.human.notify{"Hire this creature for [Price] gold?"}
+  else $site.human.notify{"Accept this creature into your squad?"}
+
+effect hire:
+| Price = $price
+| when $site.human.gold < Price:
+  | $site.human.notify{"Not enough gold."}
+  | leave
+| $site.human.gold -= Price
+| XYZ = Target.xyz.deep_copy
+| Target.remove
+| Target.owner <= $site.human
+| Target.colors <= Target.owner.colors
+| Target.move{XYZ}
+| Target.sound{hire}
+
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
 
 type unit_getset{unit}
@@ -454,7 +477,7 @@ effect gateway:
 effect interrupt: Target.interrupt
 
 effect gold Amount:
-| Target.owner.data.gold += Amount
+| Target.owner.gold += Amount
 
 effect add_spell Name Amount:
 | Act = $main.acts.Name

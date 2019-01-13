@@ -40,16 +40,17 @@ ui.create_panel_tab_brush =
 
 
 
-parse_int_normalized Default Text =
+parse_int Default Text =
 | if Text.size>0 and Text.all{?is_digit} then Text.int else Default
 
 ui.create_site_props_dlg = 
 | hidden: site_props $site: P =>
-  | W = parse_int_normalized{$site.w P.width.value}.clip{4 240}
-  | H = parse_int_normalized{$site.h P.height.value}.clip{4 240}
+  | W = parse_int{$site.w P.width.value}.clip{4 240}
+  | H = parse_int{$site.h P.height.value}.clip{4 240}
   | when W <> $site.w or H <> $site.h: $create{W H}
   | $site.name <= P.name.value
   | $site.description <= P.description.value
+  | $site.data.gold <= parse_int{0 P.gold.value}.clip{0 100000000}
   | $unpause
   | $siteProperties.show <= 0
 

@@ -1,5 +1,60 @@
 use gui widgets ui_icon ui_widgets
 
+ui.actClickIcon Icon =
+| HKI = $hotKeyInvoke
+| $hotKeyInvoke <= 0
+| $site.act <= 0
+| when $curActIcon: $curActIcon.picked <= 0
+| $curActIcon <= Icon
+| Unit = Icon.unit
+| O = Unit.owner
+| when $paused: leave
+| ActName = Icon.data
+| Act = $main.acts.ActName
+| ActName = Icon.data
+| Act = $main.acts.ActName
+| Cost = Act.cost
+| Cool = Unit.cooldown_of{ActName}
+| when Cool:
+  | TurnsLeft = Cool.0 + Cool.1 - Unit.site.turn
+  | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
+  | leave
+| when Unit.mov < Act.mov:
+  | O.notify{"[Act.title] requires [Act.mov] moves."}
+  | leave
+| when Act.range >< 0:
+  | $view.handle_picked_act2{Unit Act Unit.xyz Unit}
+  | leave
+| $site.act <= Act
+| $site.act_unit.init{Unit,Unit.serial}
+| $site.last_picked <= 0
+| when Act.zfree >< 2:
+  | $view.zlock <= Unit.xyz.2
+| when HKI: $view.mice_click <= \leftup //FIXME: kludge
+
+act_icon_infoline Icon =
+| ActName = Icon.data
+| Unit = Icon.unit
+| less Unit: leave ''
+| Act = Unit.main.acts.ActName
+| when no Act: leave ''
+| Info = Act.title
+| Number = Icon.text.2
+| Cool = Unit.cooldown_of{ActName}
+| Cost = Act.cost
+| if Cool then
+    | Info <= "[Info] ([Cool.0+Cool.1-Unit.site.turn] TURNS TO RECHARGE)"
+  else when got Cost and Cost:
+    | Info <= "[Info] ([Cost] MANA)"
+| Info.upcase
+
+ui.create_act_icons =
+| map I $maxUnitActIcons:
+  | Icon = icon 0: Icon => $actClickIcon{Icon}
+  | Icon.infoline_handler <= &act_icon_infoline
+  | hidden Icon
+
+
 ui.update_act_icon I Act Unit =
 | Icons = $unitActIcons
 | Active = 1
@@ -44,60 +99,15 @@ ui.on_unit_pick Unit =
                then [@Spells.take{12} Back @Spells.drop{12}]
                else [Back @Spells]
   else if $curPanelTab >< unit then
-     | As <= if Unit.removed then []
-             else [@Unit.acts.skip{?tab}
-                   @Unit.acts.keep{(?tab and ?tab<>spell)}]
+      | As <= if Unit.removed then []
+              else [@Unit.acts.skip{?tab}
+                    @Unit.acts.keep{(?tab and ?tab<>spell)}]
+      | less Unit.owner.human:
+        | when $site.human.is_ally{Unit.owner}:
+          | As <= As.keep{A => A.kind><any and A.kind><ally}
+          | when Unit.owner.id><2:
+            | As <= [Acts.act_hire @As]
+        | when $site.human.is_enemy{Unit.owner}:
+          | As <= As.keep{A => A.kind><any and A.kind><enemy}
   else leave
 | $update_panel_buttons{Unit As}
-
-ui.actClickIcon Icon =
-| HKI = $hotKeyInvoke
-| $hotKeyInvoke <= 0
-| $site.act <= 0
-| when $curActIcon: $curActIcon.picked <= 0
-| $curActIcon <= Icon
-| Unit = Icon.unit
-| O = Unit.owner
-| when $paused or O.id <> $player.id: leave
-| ActName = Icon.data
-| Act = $main.acts.ActName
-| Cost = Act.cost
-| Cool = Unit.cooldown_of{ActName}
-| when Cool:
-  | TurnsLeft = Cool.0 + Cool.1 - Unit.site.turn
-  | O.notify{"[Act.title] needs [TurnsLeft] turns to recharge"}
-  | leave
-| when Unit.mov < Act.mov:
-  | O.notify{"[Act.title] requires [Act.mov] moves."}
-  | leave
-| when Act.range >< 0:
-  | $view.handle_picked_act2{Unit Act Unit.xyz Unit}
-  | leave
-| $site.act <= Act
-| $site.act_unit.init{Unit,Unit.serial}
-| $site.last_picked <= 0
-| when Act.zfree >< 2:
-  | $view.zlock <= Unit.xyz.2
-| when HKI: $view.mice_click <= \leftup //FIXME: kludge
-
-act_icon_infoline Icon =
-| ActName = Icon.data
-| Unit = Icon.unit
-| less Unit: leave ''
-| Act = Unit.main.acts.ActName
-| when no Act: leave ''
-| Info = Act.title
-| Number = Icon.text.2
-| Cool = Unit.cooldown_of{ActName}
-| Cost = Act.cost
-| if Cool then
-    | Info <= "[Info] ([Cool.0+Cool.1-Unit.site.turn] TURNS TO RECHARGE)"
-  else when got Cost and Cost:
-    | Info <= "[Info] ([Cost] MANA)"
-| Info.upcase
-
-ui.create_act_icons =
-| map I $maxUnitActIcons:
-  | Icon = icon 0: Icon => $actClickIcon{Icon}
-  | Icon.infoline_handler <= &act_icon_infoline
-  | hidden Icon

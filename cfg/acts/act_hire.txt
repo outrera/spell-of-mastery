@@ -1,0 +1,11 @@
+icon: act_hire
+title: `Hire`
+mov: 0
+check: self
+menu: m_yes,m_no
+onMenu: insulate,hire_ask
+onInit: (hire)
+animate: No
+onEnd: ()
+hint: hire
+kind: ally
