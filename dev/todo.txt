@@ -1,17 +1,18 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- When above water, unit and shadow should be rendered shifted 16 pixels down.
+- Coordinate AI defence. When one of AI units sees reachable enemy, it should notify all seen friends about its presence. Store unit id and serial
 - A way to recruit green player units, as those in tavern.
 - Pickable spell items, where picks would be choicen from player's researched spells, based on their probability density. If player has no researched spells, then don't generate anything.
 - Inventory for humanoids: allow them to pickup weapon and shields
-- Coordinate AI defence. When one of AI units sees reachable enemy, it should notify all seen friends about its presence. Store unit id and serial
+- ladders that would allow crawl on the wall; lifts that would work even when there is no wall. When creature enters ladder tile, it gains climber ability.
 - Scenario Mode: for user made maps and maybe random generated maps too. Doesn't have world or ship.
 - Create demo version: a handcrafted single-part map in a style of Lord of Chaos, with limited creature and spell selection, yet showing most of the game's features. Provide "In a full version..." screen.
+- Cortex Command style mode: each player has a number of wizard (serving as lives) and start gold, then he competes with other players for several sites. Only one wizard could be taken to attack a site. Each conquered site requires a wizard to control and provides more gold each turn.  If player is out of gold, he can sacrifice one of his wizards for more gold. Player's wizards could be displayed wandering on the world map. The player with most gold and remaining wizards wins after several turns. An build mode with ability for player to construct wizard tower protecting his wizard in the region.
 - Think about making sight (seen cells) as light gradients: that way cells further can be somewhat darker
 - Exploding barrels.
 - Explosion damaging tiles and objects.
-- Roof collapse:
+- Roof collapse (with special floating block types for non-collapsing tiles):
   - Each cell having stress factor, mitigated by nearby support columns. If there are not enough supporting pilars, the cell collapses, daming units below
   - Alternatively, when single pilar is destroyed, roof starts collapsing (damaging units), until it reaches vicinity of another pilar.
 - Time of day: every 4th world map turn should night, so any site investigation during it would be with bonus for undead and handicap for all normal units, especially those who cannot see in the dark. The day turn should do the opposite, giving handicap to undead.
@@ -40,9 +41,6 @@ TODO:
 - AI door pathfinding can be implemented by marking impassable all doors we don't have keys to.
 - move water into separate overlay, that way it could be animated and transparent.
 - shockwave effect on terrain, for stuf like powerfull impact or underground movement.
-- ladders that would allow crawl on the wall; lifts that would work even when there is no wall. They can be implemented using portals.
-- Creatures should have "has_hands" property, so that fast moving scout flyers wont be able to snatch all objects.
-- Allow opening and closing doors by movement. While creatures without hands wont be able to open doors.
 - Better unit stat indicator: add them as icons to the right of selected unit's frame, or maybe as a popup, near mouse
 - Roof and indoor indicators should be displayed right near cursor.
 - Mouse wheel switching Z-levels.

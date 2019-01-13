@@ -128,11 +128,11 @@ unit.draw FB B =
 | when $active:
   | when S.shadow:
     | S = $site.shadow
+    | F = $floor
     | ZZ = fxn: $cell-$floor
-    | when $flying
-    | I = fxn: min (ZZ/16).abs S.nframes-1
-    | SGfx = S.I
+    | SGfx = S.0
     | ShY = fxn Y+$fxyz.2-$xyz.2*ZUnit //hack to accomodate for zmove
+    | fxn: when ($floor-1).tile.liquid: ShY += 8
     | fxn: FB.blit{X+8 ShY-38+ZZ*ZUnit SGfx}
   | fxn: when $flyer
     | YY -= 16
