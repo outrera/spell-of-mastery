@@ -5,11 +5,25 @@ OwnedUnits = 0
 SeenEnemies = 0
 PerCycle = 0
 
+unit.can_advance_to GoalXYZ safe/0 =
+| when $xyz >< GoalXYZ: leave 0
+| Path = $path_to{GoalXYZ}
+| less Path.size: leave 0
+| when Safe and Path.has{C=>$site.is_hazard{C.xyz}}: leave 0
+| Moves = map C $reachable: C.1
+| Cell = No
+| while Path.size and got Moves.find{Path.0}: Cell <= pop Path
+| when no Cell:
+  | Path = $path_around_to{10 GoalXYZ}
+  | while Path.size and got Moves.find{Path.0}: Cell <= pop Path
+  | when no Cell: leave 0
+| 1
+
 unit.advance_to GoalXYZ safe/0 =
 | when $xyz >< GoalXYZ: leave 1
 | Path = $path_to{GoalXYZ}
 | less Path.size: leave 2
-| when Safe and Path.has{C=>$site.is_hazard{C.xyz}}: leave 0
+| when Safe and Path.has{C=>$site.is_hazard{C.xyz}}: leave 1
 | Moves = map C $reachable: C.1
 | Cell = No
 | while Path.size and got Moves.find{Path.0}: Cell <= pop Path
@@ -234,20 +248,20 @@ unit.ai_find_target GiveOrder =
     | when GiveOrder:
       | $backtrack <= $xyz
       | $order_at{Cell.xyz 0}
-    | leave 1
+    | leave Block
 | when $moves:
   | Es = $enemies_in_sight
   | PursueRange = max $sight 10
   | Flt = Cs{[?1 1]}.table //filtering table
   | Es = Es.skip{E => Flt.(E.cell)><1}
   | EsR = Es.keep{E => $path_to{E.xyz}.size<PursueRange}
-  | less EsR.size: EsR <= Es.keep{E => $path_near{E.xyz}.size<PursueRange}
-  | case EsR [E@_]:
+  | when EsR.end: EsR <= Es.keep{E => $path_near{E.xyz}.size<PursueRange}
+  | for E EsR: when $can_advance_to{E.xyz}:
     | when GiveOrder:
       | $backtrack <= $xyz
       | $advance_to{E.xyz}
       | less $handled: $handled <= 1
-    | leave 1
+    | leave E
 | 0
 
 unit.ai_find_flight_attack State =
@@ -290,6 +304,15 @@ unit.ai_flyer_update =
       | leave 1
 | 0
 
+unit.ai_update_group =
+| GMove = $get{gMove}^~{0}
+| less GMove: leave 0
+| when $advance_to{GMove}:
+  | $strip{gMove}
+  | leave 0
+| less $handled: $handled <= 1
+| 1
+
 unit.ai_update =
 | less $moves > 0:
   | $handled <= 1
@@ -300,8 +323,14 @@ unit.ai_update =
 | when $ai_ability: leave break
 | when $atk:
   | R = $ai_find_target{1}
-  | when R: leave break
+  | when R:
+    | for A $allies_in_sight: when no A.get{gMove}:
+      | when A.moves: A.handled <= 0
+      | A.backtrack <= A.xyz
+      | A.set{gMove R.xyz}
+    | leave break
   | when $flyer and $ai_flyer_update: leave break
+  | when $ai_update_group: leave break
 | when $aistate >< patrol:
   | Ps = $owner.patrol_points.unheap
   | less Ps.end:

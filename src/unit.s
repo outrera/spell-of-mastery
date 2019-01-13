@@ -58,6 +58,8 @@ type unit.$class{Id Site}
 unit.enheap = Me
 unit.unheap = Me
 
+unit.handle = [$id $serial]
+
 unit.as_text = "#unit{[$type] [$id]}"
 
 unit.main = $site.main
@@ -148,8 +150,8 @@ unit.child Type =
 | $site.units_get{$xyz}
         .find{(?host and ?type><Type and ?host.serial><$serial)}
 
-unit.is_enemy Target = $owner.is_enemy{Target.owner} and Target.hp>0
-unit.is_ally Target = not $owner.is_enemy{Target.owner} and Target.hp>0
+unit.is_enemy Target = Target.hp>0 and $owner.is_enemy{Target.owner}
+unit.is_ally Target = Target.hp>0 and $owner.is_ally{Target.owner}
 
 unit.size =
 | S = $sprite.size
@@ -412,8 +414,8 @@ unit.fow_hides = $class.fow_hides
 
 unit.threatened_at Cell =
 | for E $nearby_enemies_at{Cell}: when E.flying >< $flying:
-  | when not E.afraid and E.can_attack{E.cell Cell}:
-    | when E.infov{Cell.xyz}: leave 1
+  | when (E.xyz.2-$xyz.2).abs<2 and E.can_attack{E.cell Cell}:
+    | when not E.afraid and E.infov{Cell.xyz}: leave 1
 | 0
 
 unit.threatened = $threatened_at{$cell}
@@ -434,7 +436,7 @@ heal_unit Me Amount =
 | less $class.hp: leave
 | $hp += min Amount $class.hp-$health
 
-unit.counter_attack Attacker =
+unit.retaliate Attacker =
 | when Attacker.invisible: leave
 | when $owner.id >< $site.player: leave //recursive
 | when $retaliating and $xyz.mdist{Attacker.xyz}><1: $mov <= $class.mov
@@ -458,7 +460,7 @@ unit.assault Target =
 | Hit = min{Def $mov}
 | $mov -= Hit
 | Def -= Hit
-| when $alive: Target.counter_attack{Me}
+| when $alive: Target.retaliate{Me}
 | when Def > 0: //miss?
   | Target.def <= Def-1
   | when $owner.human:

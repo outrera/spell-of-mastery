@@ -337,6 +337,10 @@ site.new_game =
 
 site.notify Text = $main.ui.notify{Text}
 
+site.unit Id Serial =
+| U = $units.id
+| if U.serial >< Serial then U else 0
+
 site.alloc_unit ClassName Owner =
 | Class = $main.classes.ClassName
 | when no Class:

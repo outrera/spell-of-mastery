@@ -226,9 +226,8 @@ unit.path_around_to Range XYZ = //Me is unit
 | if Found then Found.path else []
 
 unit.enemies_in_range =
-| O = $owner
 | check B =
-  | when O.is_enemy{B.owner} and not B.invisible:
+  | when $is_enemy{B} and not B.invisible:
     | when $flying><B.flying: leave 1
   | 0
 | $units_in_range{$range}.keep{&check}
@@ -236,10 +235,13 @@ unit.enemies_in_range =
 unit.enemies_in_sight =
 | O = $owner
 | check B =
-  | when O.is_enemy{B.owner} and not B.invisible and O.seen_cell{B.cell}:
+  | when $is_enemy{B} and not B.invisible and O.seen_cell{B.cell}:
     | when $flying><B.flying: leave 1
   | 0
 | $units_in_range{$sight}.keep{&check}
+
+unit.allies_in_sight =
+| $units_in_range{$sight}.keep{U => $is_ally{U} and U.id<>$id}
 
 unit.nearby_enemies_at Cell =
 | Es = []
