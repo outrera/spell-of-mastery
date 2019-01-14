@@ -1,7 +1,6 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Pickable spell items, where picks would be choicen from player's researched spells, based on their probability density. If player has no researched spells, then don't generate anything.
 - Inventory for humanoids: allow them to pickup weapon and shields
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. When creature enters ladder tile, it gains climber ability.
 - Scenario Mode: for user made maps and maybe random generated maps too. Doesn't have world or ship.

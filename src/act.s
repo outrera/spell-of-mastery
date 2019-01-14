@@ -201,6 +201,8 @@ unit.earned Act =
 | Act.needsGene.all{?any{&geneCheck}}
 
 //is specific act is availalble for particular unit?
-unit.can Act = $owner.enabled{Act} and Act.picks.($owner.id) and $earned{Act}
+unit.can Act =
+| Picks = Act.picks.($owner.id)
+| ($owner.enabled{Act} or Picks>0) and Picks and $earned{Act}
 
 export act

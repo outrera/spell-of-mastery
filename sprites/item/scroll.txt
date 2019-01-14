@@ -1,4 +1,4 @@
 author: `Iaroslav Lazunov (http://madpencil.com/, http://lazunov.deviantart.com/)`
 license: `Public Domain`
 origin: `http://lazunov.deviantart.com/art/Free-Vector-Fantasy-Icons-322492027`
-xy: -4,4
+xy: 0,8

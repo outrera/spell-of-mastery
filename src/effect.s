@@ -480,12 +480,18 @@ effect gold Amount:
 | Target.owner.gold += Amount
 
 effect add_spell Name Amount:
+| when Name><self: Name <= $get{sspell}
 | Act = $main.acts.Name
 | when no Act:
   | bad "add_spell: missing act [Name]"
   | leave
 | OId = Target.owner.id
-| Act.picks.OId += Amount
+| if Act.picks.OId<0 then
+    | Target.owner.notify{"[Act.title] already has maximum number of charges."}
+  else
+    | Act.picks.OId += Amount
+    | Target.owner.notify{"Found [Act.title] spell."}
+    | $free
 
 effect remove:
 | Target.free

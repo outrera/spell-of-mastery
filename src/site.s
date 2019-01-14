@@ -298,8 +298,8 @@ handle_attack_triggers Us =
          | AttackTrigger.free
     else | U.aistate <= \guard
 
-new_game_init_triggers Us = 
-| for U Us.list.copy:
+new_game_init_triggers Us =
+| for U Us.list.copy: when U.ai<>unit and U.ai:
   | if U.ai><chest then
     | for T U.site.units_get{U.xyz+[0 0 1]}:
        | when T.ai >< item:
@@ -321,7 +321,7 @@ site.new_game =
 | StartGold = $data.gold^~{0}
 | for P $players:
   | P.make_ally{P} //ally with itself
-  | P.gold <= StartGold
+  | P.gold += StartGold
 | $human <= $players.1
 | $human.human <= 1
 | $cycle <= 0
@@ -330,6 +330,7 @@ site.new_game =
 | $explore{SCfg.explored <> 0}
 | ActNames = $main.acts{}{?0}
 | InitedUnits = reinit_units $active
+| $new_game_spawn_items
 | new_game_init_triggers $active
 | PAI = $main.cfg.ai
 | $players.1.make_ally{$players.2}

@@ -1,0 +1,5 @@
+sprite: item_scroll
+aux: 1
+ai: item,spell
+box_xy: (2 2)
+trigger: when{has.humanoid hasnt.flying},add_spell{self 1},sound{pickup}

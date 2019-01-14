@@ -1,4 +1,5 @@
 sprite: item_mana
+aux: 1 //hide for now
 ai: item,mana
 trigger: mana{500},sound{pickup},notify{`Found 500 mana.`},visual{pickup},remove
 box_xy: (-1 -1)

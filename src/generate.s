@@ -163,21 +163,63 @@ player.set_act_picks Name Count =
 | when Count><default: Count <= Act.maxPicks
 | Act.picks.($id) <= Count
 
-site.generate_human_player Gold PlayerActs =
-| Ls = []
-| LeaderXYZ = []
+site.new_game_spawn_items =
 | ItemPlaces = []
+| SpellPlaces = []
 | KeyPlaces = dup 16 []
 | DoorPlaces = dup 16 []
 | for U $units: less U.removed:
-  | when U.type><trigger_spawn_key:
-    | push U.xyz KeyPlaces.(U.owner.id)
-  | when U.type><trigger_spawn_door:
-    | push U.xyz DoorPlaces.(U.owner.id)
-  | when U.owner.id >< 1:
-    | when U.type><trigger_spawn_item: push U.xyz ItemPlaces
-    | when U.type><trigger_spawn_patrol: push U.xyz Ls
-    | when U.type><trigger_spawn_leader: push U.xyz LeaderXYZ
+  | when U.type.size>14 and U.type.take{14}><"trigger_spawn_":
+    | T = U.type.drop{14}
+    | when T><key: push U.xyz KeyPlaces.(U.owner.id)
+    | when T><door: push U.xyz DoorPlaces.(U.owner.id)
+    | when U.owner.id >< 1:
+      | when T><item: push U.xyz ItemPlaces
+      | when T><spell: push U.xyz SpellPlaces
+| ItemSpells = $main.cfg.world.spells
+| place_spell XYZ Spell =
+  | S = $human.alloc_unit{"item_spell"}
+  | when Spell><random: Spell <= ItemSpells.rand
+  | S.set{sspell Spell}
+  | S.move{XYZ}
+| Items = $cfg.spawn_items.group{2}
+| TotalDensity = Items{?1}.sum.float
+| when Items.size: for XYZ ItemPlaces.shuffle:
+  | for (I=0; I<1000000; I++):
+    | ItemName,ItemDensity = Items.loop{I}
+    | when 1.0.rand < ItemDensity.float/TotalDensity:
+      | if ItemName><spell then
+        | place_spell XYZ random
+        else
+        | Item = $human.alloc_unit{"item_[ItemName]"}
+        | Item.move{XYZ}
+      | done
+| for XYZ SpellPlaces: place_spell XYZ random
+| for OwnerId,Places KeyPlaces.i: when Places.size:
+  | Places <= Places.shuffle
+  | S = $players.OwnerId.alloc_unit{item_key}
+  | S.aistate <= \spawned
+  | S.move{Places.0}
+| for OwnerId,Places DoorPlaces.i: when Places.size:
+  | Places <= Places.shuffle
+  | S = $players.OwnerId.alloc_unit{special_door_locked}
+  | S.aistate <= \spawned
+  | S.move{Places.0}
+  | for XYZ Places.tail: //remaining doors are unlocked
+    | S = $players.OwnerId.alloc_unit{special_door}
+    | S.aistate <= \spawned
+    | S.move{XYZ}
+
+
+site.generate_human_player Gold PlayerActs =
+| Ls = []
+| LeaderXYZ = []
+| for U $units: less U.removed:
+  | when U.type.size>14 and U.type.take{14}><"trigger_spawn_":
+    | T = U.type.drop{14}
+    | when U.owner.id >< 1:
+      | when T><patrol: push U.xyz Ls
+      | when T><leader: push U.xyz LeaderXYZ
 //| $players.1.make_ally{$players.2}
 //| $players.2.make_ally{$players.1}
 | Acts = $main.acts
@@ -194,36 +236,13 @@ site.generate_human_player Gold PlayerActs =
       | S = $human.alloc_unit{Type}
       | S.aistate <= \spawned
       | S.move{XYZ}
-| Items = $cfg.spawn_items.group{2}
-| TotalDensity = Items{?1}.sum.float
-| when Items.size: for XYZ ItemPlaces.shuffle:
-  | for (I=0; I<1000000; I++):
-    | ItemName,ItemDensity = Items.loop{I}
-    | when 1.0.rand < ItemDensity.float/TotalDensity:
-      | Item = $human.alloc_unit{"item_[ItemName]"}
-      | Item.aistate <= \spawned
-      | Item.move{XYZ}
-      | done
-| for OwnerId,Places KeyPlaces.i: when Places.size:
-  | Places <= Places.shuffle
-  | S = $players.OwnerId.alloc_unit{item_key}
-  | S.aistate <= \spawned
-  | S.move{Places.0}
-| for OwnerId,Places DoorPlaces.i: when Places.size:
-  | Places <= Places.shuffle
-  | S = $players.OwnerId.alloc_unit{special_door_locked}
-  | S.aistate <= \spawned
-  | S.move{Places.0}
-  | for XYZ Places.tail: //remaining doors are unlocked
-    | S = $players.OwnerId.alloc_unit{special_door}
-    | S.aistate <= \spawned
-    | S.move{XYZ}
 | when LeaderXYZ.size:
   | LeaderXYZ <= LeaderXYZ.shuffle
   | S = $human.alloc_unit{leader_mage}
   | S.aistate <= \guard
   | S.move{LeaderXYZ.0}
 | $human.data.gold += Gold
+| $data.gold <= 0
 
 //It is probably a good idea for AI to pick spells in groups
 //that will make it appear like AI wizard specializing in some area
@@ -260,17 +279,18 @@ site.generate_ai Side LeaderType Budget Dweller Spell Units Spells Rand =
 | SourceSide = 5
 | LeaderXYZ = []
 | for U $units: less U.removed: when U.owner.id >< SourceSide:
-  | when U.type><trigger_spawn_leader:
-    | push [U.xyz.copy U.facing] LeaderXYZ
-  | when U.type><trigger_spawn_patrol:
-    | push [U.xyz.copy U.facing] Patrol
-    | U.free
-  | when U.type><trigger_spawn_guard:
-    | push [U.xyz.copy U.facing] Guards
-    | U.free
-  | when U.type><trigger_spawn_ranged:
-    | push [U.xyz.copy U.facing] RGuards
-    | U.free
+  | when U.type.size>14 and U.type.take{14}><"trigger_spawn_":
+    | T = U.type.drop{14}
+    | when T><leader: push [U.xyz.copy U.facing] LeaderXYZ
+    | when T><patrol:
+      | push [U.xyz.copy U.facing] Patrol
+      | U.free
+    | when T><guard:
+      | push [U.xyz.copy U.facing] Guards
+      | U.free
+    | when T><ranged:
+      | push [U.xyz.copy U.facing] RGuards
+      | U.free
 | Player.patrol_points <= Patrol{?0}.enheap
 | when LeaderXYZ.size:
   | XYZ,Facing = LeaderXYZ.shuffle.0

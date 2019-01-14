@@ -8,5 +8,5 @@ tile_size: 64,32,32 //width,height,depth; typical isometric tile cube is 64x32x3
 tile_banks: tile,city//,deco
 class_banks: unit,leader,item,special,trigger
 bounding_boxes: 0
-spawn_items: gold,100,potion,100
+spawn_items: gold,100,potion,100,spell,100
 explored: 0 //all maps are explored from the beginning
