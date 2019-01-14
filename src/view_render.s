@@ -132,7 +132,7 @@ unit.draw FB B =
     | ZZ = fxn: $cell-$floor
     | SGfx = S.0
     | ShY = fxn Y+$fxyz.2-$xyz.2*ZUnit //hack to accomodate for zmove
-    | fxn: when ($floor-1).tile.liquid: ShY += 8
+    | fxn: when ($floor-1).tile.liquid: ShY += 16
     | fxn: FB.blit{X+8 ShY-38+ZZ*ZUnit SGfx}
   | fxn: when $flyer
     | YY -= 16

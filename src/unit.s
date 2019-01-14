@@ -542,8 +542,7 @@ unit.move XYZ =
 | C = $site.c
 | XYZ = XYZ.list //required for fxn
 | fxn $fine_move{[XYZ.0*C XYZ.1*C XYZ.2*C]}
-| when ($cell-1).tile.liquid:
-  | $fxyz.init{$fxyz+[0 0 -8]}
+| when ($cell-1).tile.liquid: $zhack <= 8
 | when $class.active: $run_genes{move}
 | Me
 
