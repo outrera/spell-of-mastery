@@ -138,7 +138,22 @@ ui.create_ingame_ui =
   | 0   $height-170 | notification_widget Me
   | 4   $height-124 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0   PY          | $playerWidget
+  
 
+ui.create_inventory_dlg =
+| Dlg = No
+| infoCB Unit = say "Description for [Unit.title]"
+| hideDlg = 
+  | Dlg.show <= 0
+  | $unpause
+| DlgW = invnt_dlg $site &infoCB &hideDlg
+| Dlg <= hidden: DlgW
+| Dlg
+
+ui.show_inventory Unit =
+| $invntDlg.widget.unit <= Unit
+| $invntDlg.show <= 1
+| $unpause
 
 ui.process_ingame_input Base In =
 | when $paused: leave 
@@ -152,6 +167,7 @@ ui.process_ingame_input Base In =
   | $view.input{In}
 
 ui.create_ingame_dlg =
+| $invntDlg <= $create_inventory_dlg
 | $saveSiteDlg <= $create_save_site_dlg
 | $loadSiteDlg <= $create_load_site_dlg
 | Ingame = dlg w/$width h/$height: mtx
@@ -159,6 +175,7 @@ ui.create_ingame_dlg =
   |  0   0| input_split $create_ingame_ui: Base In =>
             | $process_ingame_input{Base In}
   |  0   0| $inputBlocker
+  | 50  50| $invntDlg
   | 50  50| $siteProperties
   | 50  50| $loadSiteDlg
   | 50  50| $saveSiteDlg

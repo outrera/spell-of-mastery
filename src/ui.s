@@ -27,6 +27,7 @@ type ui.$tabs{main}
   menuButtonsX/0
   menuBG
   inputBlocker
+  invntDlg //inventory dialog
   siteProperties
   saveSiteDlg
   loadSiteDlg

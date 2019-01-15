@@ -34,11 +34,11 @@ type class{bank class_name Main
   aux/Aux               //auxilary unit, like mark
   speed/Speed           //cycles to move between cells
   ascendSpeed/AscendSpeed //how many pixels/cycle flyer can climb
+  durability/Durability //amount of HP attacker has to pay for bashing it
   gold                  //cost in gold of this unit
   mov/Mov               //movement points this unit gains per turn
   stamina/Stamina       //fatigue decrement speed
   hp/Health             //health points
-  durability/Durability //amount of HP attacker has to pay for bashing it
   atk/Atk               //damage this unit deals on attack
   def/Def               //how many moves it takes to hit this unit
   sight/Sight           //scout range

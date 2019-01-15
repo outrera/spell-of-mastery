@@ -345,6 +345,9 @@ effect hire:
 | Target.move{XYZ}
 | Target.sound{hire}
 
+effect inventory:
+| $site.main.ui.show_inventory{Target}
+
 effect msg Title @Body: $main.show_message{Title Body.text{' '}}
 
 type unit_getset{unit}

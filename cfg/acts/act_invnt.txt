@@ -1,0 +1,8 @@
+icon: act_invnt
+title: `Inventory`
+mov: 0
+check: self
+onInit: insulate,inventory
+animate: No
+onEnd: ()
+hint: invnt

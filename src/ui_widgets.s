@@ -59,11 +59,11 @@ type site_props.$base{site callback}
                 'Height:',$height
                 'Start Gold:',$gold
                ]
-| MW = 104
-| MH = 92
+| MW = 44 //60
+| MH = 86 //6
 | $base <= dlg: mtx
   | 0  0 | $site.main.img{ui_box}
-  | 265  18 | txt header 'Properties'
+  | 205  12 | txt header 'Properties'
   |  15+MW  40+MH | layV s/8 PropFields{(txt small ?0)}
   | 100+MW  36+MH | layV PropFields{?1}
   |  15+MW 305+MH | button 'Done' skin/medium_small: => ($callback){Me}
@@ -103,11 +103,11 @@ type save_dlg.$base{site start cancelCB loadCB}
   | $picked <= File
   | FN = File.url.1
   | when FN<>'': $filename.value <= FN
-| MW = 104
-| MH = 92
+| MW = 44
+| MH = 86
 | $base <= dlg: mtx
   |   0   0 | $site.main.img{ui_box}
-  | 300  18 | $title
+  | 240  12 | $title
   |  15+MW  10+MH | $filename
   |  15+MW  40+MH | $widget
   |  15+MW 305+MH | $button
@@ -128,16 +128,20 @@ type load_dlg.$base{site start cancelCB loadCB}
   | LoadButton.state <= if File.exists and File.urls.size >< 0
     then 'normal'
     else 'disabled'
-| MW = 104
-| MH = 92
+| MW = 44
+| MH = 86
 | $base <= dlg: mtx
   |   0   0| $site.main.img{ui_box}
-  | 300  18 | $title
+  | 240  12 | $title
   |  15+MW  10+MH | $widget
   |  15+MW 305+MH | LoadButton
   | 220+MW 305+MH | button 'Cancel' skin/medium_small: => ($cancelCB){}
 load_dlg.folder = $widget.folder
 load_dlg.`=folder` V = $widget.folder <= V
+
+type invnt_dlg.$base{site infoCB backCB} unit
+  filename base picked title widget
+| $startup_init
 
 type credits_roll.widget{ui text} cycle txt
 | $txt <= txt titleb $text
@@ -165,4 +169,4 @@ player_picker.input In =
                     | $pressed <= 0
 
 export message_box site_props credits_roll notification_widget
-       player_picker save_dlg load_dlg
+       player_picker save_dlg load_dlg invnt_dlg
