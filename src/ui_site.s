@@ -175,10 +175,10 @@ ui.create_ingame_dlg =
   |  0   0| input_split $create_ingame_ui: Base In =>
             | $process_ingame_input{Base In}
   |  0   0| $inputBlocker
-  | 50  50| $invntDlg
-  | 50  50| $siteProperties
-  | 50  50| $loadSiteDlg
-  | 50  50| $saveSiteDlg
+  | 110  50| $invntDlg
+  | 110  50| $siteProperties
+  | 110  50| $loadSiteDlg
+  | 110  50| $saveSiteDlg
   |  0   0| $message_box
 | Ingame
 
