@@ -1,0 +1,4 @@
+author: `Blarumyrran`, `Nikita Sadkov`
+origin: `https://opengameart.org/content/laurels`
+
+//based of public domain image by Blaurmyrran

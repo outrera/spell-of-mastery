@@ -104,7 +104,6 @@ bar.draw G X Y =
 | G.blit{X Y $bg}
 | G.rectangle{#347004 1 X+3 Y+3 152*$value_/100 14}
 
-
 type button.widget{Text Fn state/normal skin/medium_large}
   text/Text value on_click/Fn state_/State sprite over w h
 | $sprite <= get_main{}.spr{"ui_button_[Skin]"} 
@@ -364,8 +363,27 @@ txt_input.input In = case In
   [key backspace 1] | when $value.size: $value <= $value.lead
   [key K<1.size 1] | $value <= "[$value][K]"
 
-type img.widget{Path} path/Path
-img.render = get_main{}.img{"image_[$path]"}
+type pic.widget{Src}
+   src/Src value on_click/0 state_/normal over w/1 h/1
+pic.state = $state_
+pic.`=state` V =
+| when V><normal and $state><pressed: leave
+| $state_ <= V
+pic.render = Me
+pic.draw G PX PY =
+| Img = if $src.is_text then get_main{}.img{"[$src]"}
+        else if $src.is_fn then ($src){Me}
+        else leave
+| $w <= Img.w
+| $h <= Img.h
+| G.blit{PX PY Img}
+pic.input In = case In
+  [mice over S P] | $over <= S
+  [mice left 1 P] | case $state normal: $state_ <= \pressed
+  [mice left 0 P] | case $state pressed
+                    | when $over and $on_click: $on_click{}{}
+                    | $state_ <= \normal
+
 
 
 folder_nomalized Path = 
@@ -403,4 +421,4 @@ infoline.render =
 | $info_text.render
 
 export skin font txt button litem droplist slider folder_widget 
-       litems txt_input img infoline
+       litems txt_input pic infoline

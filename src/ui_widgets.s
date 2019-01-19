@@ -140,7 +140,7 @@ load_dlg.folder = $widget.folder
 load_dlg.`=folder` V = $widget.folder <= V
 
 type invnt_dlg.$base{site infoCB backCB} unit
-  filename base picked title widget
+  filename base picked widget
 | $startup_init
 
 type credits_roll.widget{ui text} cycle txt
