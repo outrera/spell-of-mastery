@@ -1,4 +1,5 @@
 sprite: item_shield01
-ai: artfct
+ai: item
+item: l_hand
 box_xy: (-1 -1)
 

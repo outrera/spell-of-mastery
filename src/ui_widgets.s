@@ -139,18 +139,17 @@ type load_dlg.$base{site start cancelCB loadCB}
 load_dlg.folder = $widget.folder
 load_dlg.`=folder` V = $widget.folder <= V
 
-type invnt_dlg.$base{site infoCB backCB} unit
+type invnt_dlg.$base{main infoCB backCB}
+  unit wearSlots bagSlots groundSlots
   filename base picked widget
 | $startup_init
 
 type credits_roll.widget{ui text} cycle txt
 | $txt <= txt titleb $text
-
 credits_roll.draw G PX PY =
 | R = $txt.render
 | R.draw{G PX+10 PY+$ui.height-$cycle/5}
 | $cycle++
-
 credits_roll.reset = $cycle <= 0
 
 type player_picker.widget{name index color on_click}

@@ -12,11 +12,9 @@ type class{bank class_name Main
            speed/0 ascendSpeed/4
            cost/0
            mov/0 stamina/4 health/0 atk/0 def/0 sight/No range/0
-           endur/0
            inborn/[] acts/[]
-           ai/0
+           ai/0 item/0
            pickable/0 show/1 gate/0
-           tier/0
            counter/0 trigger/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
            onMoveStep/0
            aux/0 foldable/0 draworder/100 box_xy/ZeroXY
@@ -45,11 +43,11 @@ type class{bank class_name Main
   range/Range           //attack range
   acts/Acts             //acts this unit can perform
   ai/Ai                 //how AI treats this unit
+  item/Item             //what use this item has
   aiArg/[]              //additional data for ai
   active/0              //update unit each cycle?
   pickable/Pickable     //can be picked by player?
   show/Show             //show this unit ingame
-  tier/Tier             //unit power-level
   inborn/Inborn         //inborn abilities
   counter/Counter       //counter-attack script
   onAttack/OnAttack     //called when unit starts its attack

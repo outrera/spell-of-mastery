@@ -146,7 +146,7 @@ ui.create_inventory_dlg =
 | hideDlg = 
   | Dlg.show <= 0
   | $unpause
-| DlgW = invnt_dlg $site &infoCB &hideDlg
+| DlgW = invnt_dlg $main &infoCB &hideDlg
 | Dlg <= hidden: DlgW
 | Dlg
 

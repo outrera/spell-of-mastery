@@ -1,3 +1,4 @@
 sprite: item_sword01
-ai: artfct
+ai: item
+item: r_hand
 box_xy: (-1 -1)

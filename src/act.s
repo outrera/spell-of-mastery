@@ -1,6 +1,6 @@
 use util macros act_
 
-type act{name title/0 icon/No hotkey/0 tier/1 gold/0 maxPicks/3 pickChance/50
+type act{name title/0 icon/No hotkey/0 gold/0 maxPicks/3 pickChance/50
          hint/0 tab/0 kind/0
          cost/0 mov/1 fatigue/1 cool/0 needs/[] needsGene/[]
          priority/50
