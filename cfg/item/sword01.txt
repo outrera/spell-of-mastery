@@ -1,5 +1,3 @@
 sprite: item_sword01
-ai: item,artfct
-trigger: when{has.humanoid hasnt.flying},gold{100},sound{pickup},notify{`Found 100 gold.`},visual{pickup},self,remove
+ai: artfct
 box_xy: (-1 -1)
-
