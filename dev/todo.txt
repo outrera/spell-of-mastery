@@ -2,6 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Inventory for humanoids: stats and portrait on the left, and paper doll on the right
+- Objects like tables should have platform zhack, so items on top of would lie properly. Also, items on top should be drawn after them.
 - Remove borders around boxes.
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. When creature enters ladder tile, it gains climber ability.
 - Scenario Mode: for user made maps and maybe random generated maps too. Doesn't have world or ship.
