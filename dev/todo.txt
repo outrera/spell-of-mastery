@@ -2,10 +2,11 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Inventory for humanoids:
-  - rest of the slots
-  - saving slots, when done is pressed (watch for textual slots, because only ground slots have actual unit items)
   - restrict movement by slot type
+  - move inventory code into invnt.s file
   - green slots bg for equipped trinkets, so they wont be confused with ground and backpack, which also deserves its own color.
+  - proper backpack icon for inventory
+  - simply dragging item to paper doll should place it the correct slot.
 - Objects like tables should have platform zhack, so items on top of would lie properly. Also, items on top should be drawn after them.
 - Remove borders around boxes.
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. When creature enters ladder tile, it gains climber ability.

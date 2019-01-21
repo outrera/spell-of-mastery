@@ -43,11 +43,7 @@ invnt_slot.input In = case In
                     | when $over and $on_click: $on_click{}{}
                     | $state_ <= \normal
                   | $drag_end
-invnt_dlg.update_ground_slots =
-| when not $unit or $unit.removed: leave
-| Items = $unit.cell.units{}.keep{?ai><item}
-| when Items.size>12: Items <= Items.take{12}
-| for I,Item Items.i: $groundSlots.I.item <= Item
+
 invnt_dlg.render =
 | $base.render
 
@@ -107,11 +103,41 @@ invnt_dlg.startup_init =
   | GX GY | GroundSlotsLay1
   | GX GY+38+4 | GroundSlotsLay2
   |  15+MW 340+MH | InfoButton
-  | 220+MW 340+MH | button 'Done' skin/medium_small: => ($backCB){}
+  | 220+MW 340+MH | button 'Done' skin/medium_small: =>
+                    | $set_unit{0}
+                    | ($backCB){}
+
+invnt_dlg.load_slots =
+| for S $groundSlots: S.item <= 0
+| for S $unitSlots: S.item <= 0
+| when not $unit.alive or $unit.removed: leave
+| for Type,I $unit.get{items}^~{[]}: $unitSlots.I.item <= Type
+| Items = $unit.cell.units{}.keep{?ai><item}
+| when Items.size>12: Items <= Items.take{12}
+| for I,Item Items.i: $groundSlots.I.item <= Item
+
+invnt_dlg.save_slots =
+| for I,S $groundSlots.i:
+| Items = map I,S $unitSlots.i.keep{?1.item}:
+  | Item = S.item
+  | Type = if Item.is_text then Item
+           else | T = Item.type
+                | Item.free
+                | T
+  | Type,I
+| $unit.set{items Items}
+| when $unit.removed: leave
+| for S $groundSlots:
+  | Item = S.item
+  | when Item.is_text:
+    | V = $unit.owner.alloc_unit{Item}
+    | V.move{$unit.xyz}
 
 invnt_dlg.set_unit U =
+| when $unit: $save_slots
+| less U: U <= $main.site.nil
 | $unit <= U
-| $update_ground_slots
+| $load_slots
 
 @run: main: main_root
 
