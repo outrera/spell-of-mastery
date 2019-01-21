@@ -47,7 +47,9 @@ type ui.$tabs{main}
   enterSiteDst
   enterSiteIcons1
   enterSiteIcons2
+  drag_cursor
 | $site <= $main.site
+| $drag_cursor <= drag_cursor $main
 | Prm = $cfg.ui
 | $width <= Prm.width
 | $height <= Prm.height

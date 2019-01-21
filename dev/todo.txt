@@ -1,7 +1,11 @@
 THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
-- Inventory for humanoids: stats and portrait on the left, and paper doll on the right
+- Inventory for humanoids:
+  - rest of the slots
+  - saving slots, when done is pressed (watch for textual slots, because only ground slots have actual unit items)
+  - restrict movement by slot type
+  - green slots bg for equipped trinkets, so they wont be confused with ground and backpack, which also deserves its own color.
 - Objects like tables should have platform zhack, so items on top of would lie properly. Also, items on top should be drawn after them.
 - Remove borders around boxes.
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. When creature enters ladder tile, it gains climber ability.
@@ -9,6 +13,7 @@ TODO:
 - Create demo version: a handcrafted single-part map in a style of Lord of Chaos, with limited creature and spell selection, yet showing most of the game's features: i.e. tunelling into castle dungeon and the prison break. Provide "In a full version..." screen.
 - Golem hit shaking screen and throwing target back.
 - Cortex Command style mode: each player has a number of wizard (serving as lives) and start gold, then he competes with other players for several sites. Only one wizard could be taken to attack a site. Each conquered site requires a wizard to control and provides more gold each turn.  If player is out of gold, he can sacrifice one of his wizards for more gold. Player's wizards could be displayed wandering on the world map. The player with most gold and remaining wizards wins after several turns. An build mode with ability for player to construct wizard tower protecting his wizard in the region.
+- A way to access invenory during unit picking stage, to see unit stats
 - Think about making sight (seen cells) as light gradients: that way cells further can be somewhat darker
 - Exploding barrels.
 - Explosion damaging tiles and objects.
@@ -203,6 +208,7 @@ Optimization Possibilities:
 - simple animated objects don't have to be active, and can be processed by rendering code.
 
 Symta Language Handicaps:
+- _.textify_ is being called on class, instead of unit. Get rid of it, use just as_text instead.
 - Absence of proper heap is the greatest handicap.
 - `times` macro should have 2 argument form, when there is no need for a count var.
 - do-while loop, to avoid needless `_label again`

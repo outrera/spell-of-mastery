@@ -153,7 +153,8 @@ ui.create_inventory_dlg =
 ui.show_inventory Unit =
 | $invntDlg.widget.set_unit{Unit}
 | $invntDlg.show <= 1
-| $unpause
+| $pause
+| get_gui{}.cursor <= $img{ui_cursor_point}
 
 ui.process_ingame_input Base In =
 | when $paused: leave 

@@ -61,6 +61,7 @@ unit.unheap = Me
 unit.handle = [$id $serial]
 
 unit.as_text = "#unit{[$type] [$id]}"
+unit.textify_ = $as_text //hack to work around symta runtime flaws
 
 unit.main = $site.main
 

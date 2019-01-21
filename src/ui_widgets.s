@@ -167,5 +167,8 @@ player_picker.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
+type drag_cursor{main} //used for drag'n'drop operations
+  slot saved_cursor
+
 export message_box site_props credits_roll notification_widget
-       player_picker save_dlg load_dlg invnt_dlg
+       player_picker save_dlg load_dlg invnt_dlg drag_cursor

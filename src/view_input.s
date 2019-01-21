@@ -31,7 +31,6 @@ view.handle_picked_act Target =
 | $site.act <= 0
 | $mice_click <= 0
 
-
 view.handle_pick =
 | Unit = $site.nil
 | Block0 = $site.cell{@$cursor}.block
@@ -247,7 +246,7 @@ view.update UpdatePlay =
     | $zfix <= 1
     | $key_set{edit_zfix 0}
 | X,Y,Z = $cursor
-| less $brush.0: $handle_pick
+| less $brush.0 or $ui.paused: $handle_pick
 | $site.update_picked
 | $site.update_cursor
 | when $brush.0: $update_brush

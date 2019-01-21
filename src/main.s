@@ -3,31 +3,60 @@ use enheap reader cfg sprite class tile sound site pathfind action update
     ui ui_new_game ui_shop ui_world ui_site ui_editor ui_act ui_result
     gui widgets ui_widgets save generate ai effect main2 fxn test
 
+
+drag_cursor.draw G X Y =
+| say drag
+| IG = $slot.item_gfx
+| G.blit{X-IG.w/2 Y-IG.h/2 IG}
+| G.blit{X Y $saved_cursor}
+
 type invnt_slot.widget{main location index type}
    item value on_click/0 state_/normal over w/44 h/38
+   drag
 invnt_slot.state = $state_
 invnt_slot.`=state` V =
 | when V><normal and $state><pressed: leave
 | $state_ <= V
 invnt_slot.render = Me
-invnt_slot.draw G PX PY =
-| less $item: leave 0
+invnt_slot.item_gfx =
 | Class = if $item.is_text then $main.classes.$item
           else $item.class
-| Img = Class.default_sprite.idle_frame
-| G.blit{PX+8 PY-4 Img}
+| Class.default_sprite.idle_frame
+invnt_slot.draw G PX PY =
+| less $item: leave 0
+| when $drag: leave 0
+| G.blit{PX+8 PY-4 $item_gfx}
+invnt_slot.drag_start =
+| less $item: leave
+| C = $main.ui.drag_cursor
+| C.saved_cursor <= get_gui{}.cursor
+| C.slot <= Me
+| $drag <= 1
+| get_gui{}.cursor <= C
+invnt_slot.drag_end =
+| less $drag: leave
+| [Dst _ _] = get_gui{}.widget_under_cursor
+| say Dst,Dst.is_invnt_slot
+| when Dst.is_invnt_slot and not Dst.item:
+  | Dst.item <= $item
+  | $item <= 0
+| $drag <= 0
+| C = $main.ui.drag_cursor
+| get_gui{}.cursor <= C.saved_cursor
 invnt_slot.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | case $state normal: $state_ <= \pressed
+                  | $drag_start
   [mice left 0 P] | case $state pressed
                     | when $over and $on_click: $on_click{}{}
                     | $state_ <= \normal
-
-invnt_dlg.render =
-| when not $unit or $unit.removed: leave $base.render
+                  | $drag_end
+invnt_dlg.update_ground_slots =
+| when not $unit or $unit.removed: leave
 | Items = $unit.cell.units{}.keep{?ai><item}
 | when Items.size>12: Items <= Items.take{12}
 | for I,Item Items.i: $groundSlots.I.item <= Item
+invnt_dlg.render =
 | $base.render
 
 invnt_dlg.startup_init =
@@ -43,7 +72,7 @@ invnt_dlg.startup_init =
 | GX,GY = 252,342 //ground XY
 | MW,MH = 44,86
 | SY,SD = 162,26
-| $groundSlots <= dup I 10: invnt_slot $main ground I any
+| $groundSlots <= dup I 12: invnt_slot $main ground I any
 | $bagSlots <= dup I 10: invnt_slot $main bag I any
 | $wearSlots <= list
               (invnt_slot $main body  0 head)
@@ -58,8 +87,8 @@ invnt_dlg.startup_init =
               (invnt_slot $main body  9 trinket)
               (invnt_slot $main body 10 trinket)
               (invnt_slot $main body 11 trinket)
-| GroundSlotsLay1 = layH s/4 $groundSlots.take{5}
-| GroundSlotsLay2 = layH s/4 $groundSlots.drop{5}
+| GroundSlotsLay1 = layH s/4 $groundSlots.take{6}
+| GroundSlotsLay2 = layH s/4 $groundSlots.drop{6}
 | $base <= dlg: mtx
   |   0   0| $main.img{ui_inventory}
   | 200  12 | txt header 'Inventory'
@@ -77,10 +106,11 @@ invnt_dlg.startup_init =
   | GX GY | GroundSlotsLay1
   | GX GY+38+4 | GroundSlotsLay2
   |  15+MW 340+MH | InfoButton
-  | 220+MW 340+MH | button 'Back' skin/medium_small: => ($backCB){}
+  | 220+MW 340+MH | button 'Done' skin/medium_small: => ($backCB){}
 
 invnt_dlg.set_unit U =
 | $unit <= U
+| $update_ground_slots
 
 @run: main: main_root
 
