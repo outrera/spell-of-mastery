@@ -140,7 +140,7 @@ load_dlg.folder = $widget.folder
 load_dlg.`=folder` V = $widget.folder <= V
 
 type invnt_dlg.$base{main infoCB backCB}
-  unit wearSlots bagSlots groundSlots
+  unit unitSlots groundSlots
   filename base picked widget
 | $startup_init
 
@@ -167,8 +167,14 @@ player_picker.input In =
                     | when $over: $on_click{}{Me}
                     | $pressed <= 0
 
-type drag_cursor{main} //used for drag'n'drop operations
+type drag_cursor{main} //used for item drag'n'drop operations
   slot saved_cursor
+  
+drag_cursor.draw G X Y =
+| IG = $slot.item_gfx
+| G.blit{X-IG.w/2 Y-IG.h/2 IG}
+| G.blit{X Y $saved_cursor}
+  
 
 export message_box site_props credits_roll notification_widget
        player_picker save_dlg load_dlg invnt_dlg drag_cursor

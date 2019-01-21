@@ -3,16 +3,9 @@ use enheap reader cfg sprite class tile sound site pathfind action update
     ui ui_new_game ui_shop ui_world ui_site ui_editor ui_act ui_result
     gui widgets ui_widgets save generate ai effect main2 fxn test
 
-
-drag_cursor.draw G X Y =
-| say drag
-| IG = $slot.item_gfx
-| G.blit{X-IG.w/2 Y-IG.h/2 IG}
-| G.blit{X Y $saved_cursor}
-
-type invnt_slot.widget{main location index type}
-   item value on_click/0 state_/normal over w/44 h/38
-   drag
+type invnt_slot.widget{main type}
+   item value on_click/0 state_/normal over drag w/44 h/38
+   
 invnt_slot.state = $state_
 invnt_slot.`=state` V =
 | when V><normal and $state><pressed: leave
@@ -36,7 +29,6 @@ invnt_slot.drag_start =
 invnt_slot.drag_end =
 | less $drag: leave
 | [Dst _ _] = get_gui{}.widget_under_cursor
-| say Dst,Dst.is_invnt_slot
 | when Dst.is_invnt_slot and not Dst.item:
   | Dst.item <= $item
   | $item <= 0
@@ -72,23 +64,22 @@ invnt_dlg.startup_init =
 | GX,GY = 252,342 //ground XY
 | MW,MH = 44,86
 | SY,SD = 162,26
-| $groundSlots <= dup I 12: invnt_slot $main ground I any
-| $bagSlots <= dup I 10: invnt_slot $main bag I any
-| $wearSlots <= list
-              (invnt_slot $main body  0 head)
-              (invnt_slot $main body  1 neck)
-              (invnt_slot $main body  2 body)
-              (invnt_slot $main body  3 r_arm)
-              (invnt_slot $main body  4 l_arm)
-              (invnt_slot $main body  5 feet)
-              (invnt_slot $main body  6 cloak)
-              (invnt_slot $main body  7 trinket)
-              (invnt_slot $main body  8 trinket)
-              (invnt_slot $main body  9 trinket)
-              (invnt_slot $main body 10 trinket)
-              (invnt_slot $main body 11 trinket)
+| $groundSlots <= dup I 12: invnt_slot $main any
+| Head  = invnt_slot $main head
+| Neck  = invnt_slot $main neck
+| Body  = invnt_slot $main body
+| RArm  = invnt_slot $main r_arm
+| LArm  = invnt_slot $main l_arm
+| Feet  = invnt_slot $main feet
+| Cloak = invnt_slot $main cloak
+| Trinkets = dup I 5: invnt_slot $main trinket
+| Bag = dup I 10: invnt_slot $main any
+| $unitSlots <= [Head Neck Body RArm LArm Feet Cloak @Trinkets @Bag].list
+| BagLay1 = layV s/4 Bag.take{5}
+| BagLay2 = layV s/4 Bag.drop{5}
 | GroundSlotsLay1 = layH s/4 $groundSlots.take{6}
 | GroundSlotsLay2 = layH s/4 $groundSlots.drop{6}
+| TrinketsLay = layV s/4 Trinkets
 | $base <= dlg: mtx
   |   0   0| $main.img{ui_inventory}
   | 200  12 | txt header 'Inventory'
@@ -103,6 +94,16 @@ invnt_dlg.startup_init =
   | 144 SY+SD*0 | txt medium |=>"[$unit.health]/[$unit.class.hp]"
   | 144 SY+SD*1 | txt medium |=>"[$unit.moves/$unit.class.mov]"
   | 144 SY+SD*2 | txt medium |=>"[$unit.stamina] (-[$unit.stamina_fatigue])"
+  | 327 109 | Head
+  | 327 153 | Neck
+  | 380 153 | Cloak
+  | 327 197 | Body
+  | 327 255 | Feet
+  | 274 197 | RArm
+  | 380 197 | LArm
+  | 212 94 | TrinketsLay
+  | 442 93 | BagLay1
+  | 442+44+4 93 | BagLay2
   | GX GY | GroundSlotsLay1
   | GX GY+38+4 | GroundSlotsLay2
   |  15+MW 340+MH | InfoButton
