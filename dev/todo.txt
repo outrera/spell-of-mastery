@@ -2,7 +2,10 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Inventory for humanoids:
-  - Item affecting attributes. Implement them through genes. Watch for removing max health increasing to kill units without enough health. Also watch for units with inborn genes. Items should have no effect of them.
+  - Effects affecting attributes:
+    - These should be as simple as set{incatk 1}, so items could esily make use of them.
+    - Watch for removing max health increasing to kill units without enough health.
+  - Watch for units with inborn genes. Items should have no effect of them.
   - Item genes should be undispellable. Have a special chek list for such genes.
   - Inventory tooltip infoline 
 - Objects like tables should have platform zhack, so items on top of would lie properly. Also, items on top should be drawn after them.
