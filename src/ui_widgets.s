@@ -139,11 +139,6 @@ type load_dlg.$base{site start cancelCB loadCB}
 load_dlg.folder = $widget.folder
 load_dlg.`=folder` V = $widget.folder <= V
 
-type invnt_dlg.$base{main infoCB backCB}
-  unit unitSlots groundSlots
-  filename base picked widget
-| $startup_init
-
 type credits_roll.widget{ui text} cycle txt
 | $txt <= txt titleb $text
 credits_roll.draw G PX PY =
@@ -177,4 +172,4 @@ drag_cursor.draw G X Y =
   
 
 export message_box site_props credits_roll notification_widget
-       player_picker save_dlg load_dlg invnt_dlg drag_cursor
+       player_picker save_dlg load_dlg drag_cursor

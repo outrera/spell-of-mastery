@@ -1,4 +1,4 @@
-use gui widgets ui_icon ui_widgets ui_minimap
+use gui widgets ui_icon ui_widgets ui_minimap ui_invnt
 
 Indicators = 0
 type resource_counters.widget{view} site w/0 h/0

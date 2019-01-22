@@ -1,3 +1,0 @@
-author: `Krzysztof "Ravenmore" (http://dycha.net)`
-license: `CC-BY`
-origin: `http://opengameart.org/content/golden-items-rip-upgrade-pack`

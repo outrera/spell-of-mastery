@@ -2,9 +2,7 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Inventory for humanoids:
-  - move inventory code into invnt.s file
   - green slots bg for equipped trinkets, so they wont be confused with ground and backpack, which also deserves its own color.
-  - proper backpack icon for inventory
   - slots should have engarving hinting item type, they accept
   - item affecting attributes. Watch for removing max health increasing to kill units without enough health.
 - Objects like tables should have platform zhack, so items on top of would lie properly. Also, items on top should be drawn after them.
