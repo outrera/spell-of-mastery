@@ -1,7 +1,7 @@
 use gui widgets ui_widgets ui_icon
 
 type invnt_slot.widget{main type}
-   item value on_click/0 state_/normal over drag w/44 h/38
+   item equip value on_click/0 state_/normal over drag w/44 h/38
 
 invnt_slot.state = $state_
 invnt_slot.`=state` V =
@@ -26,7 +26,9 @@ invnt_slot.drag_start =
 invnt_slot.find_slots Type = $main.ui.invntDlg.unitSlots.keep{?type><Type}
 invnt_slot.transfer_item_to Dst =
 | Dst.item <= $item
+| Dst.equip <= $equip
 | $item <= 0
+| $equip <= 0
 invnt_slot.notify Msg = $main.ui.notify{Msg}
 invnt_slot.drag_end =
 | less $drag: leave
@@ -135,13 +137,18 @@ invnt_dlg.startup_init =
                     | ($backCB){}
 
 invnt_dlg.load_slots =
-| for S $groundSlots: S.item <= 0
-| for S $unitSlots: S.item <= 0
+| for S $groundSlots:
+  | S.equip <= 0
+  | S.item <= 0
+| for S $unitSlots:
+  | S.equip <= 0
+  | S.item <= 0
 | when not $unit.alive or $unit.removed: leave
 | for Type,I $unit.get{items}^~{[]}: $unitSlots.I.item <= Type
 | Items = $unit.cell.units{}.keep{?ai><item}
 | when Items.size>12: Items <= Items.take{12}
 | for I,Item Items.i: $groundSlots.I.item <= Item
+| for S $unitSlots: when S.item and S.type<>any: S.equip <= 1
 
 invnt_dlg.save_slots =
 | for I,S $groundSlots.i:
@@ -150,10 +157,19 @@ invnt_dlg.save_slots =
   | Type = if Item.is_text then Item
            else | T = Item.type
                 | Item.free
+                | S.item <= T
                 | T
   | Type,I
 | $unit.set{items Items}
 | when $unit.removed: leave
+| for S $unitSlots:
+  | when S.item and S.type<>any and not S.equip:
+    | E = S.item_class.item.equip
+    | when got E: $unit.effect{E $unit $unit.xyz}
+| for S [@$unitSlots @$groundSlots]:
+  | when S.item and S.type><any and S.equip:
+    | E = S.item_class.item.unequip
+    | when got E: $unit.effect{E $unit $unit.xyz}
 | for S $groundSlots:
   | Item = S.item
   | when Item.is_text:

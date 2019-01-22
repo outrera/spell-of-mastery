@@ -1,0 +1,9 @@
+sprite: item_ring01
+title: `Ring of Flight`
+ai: item
+item: slot{trinket}
+//equip_check: no{heavy `Creature is too heavy to be lifted.`},unit
+equip: add{flyer},visual{wings},sound{flight}
+unequip: strip{flyer},visual{spell},sound{dispel}
+box_xy: (-1 -1)
+

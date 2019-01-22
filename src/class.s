@@ -14,6 +14,7 @@ type class{bank class_name Main
            mov/0 stamina/4 health/0 atk/0 def/0 sight/No range/0
            inborn/[] acts/[]
            ai/0 item/0
+           equip/0 unequip/0
            pickable/0 show/1 gate/0
            counter/0 trigger/0 onAttack/0 onHit/0 onHarm/0 onDeath/0 onMove/0
            onMoveStep/0
@@ -64,7 +65,10 @@ type class{bank class_name Main
   text/Text
   text_xy/Text_xy
   fow_hides/0 //unit is not seen under fog of war
-| when Item: $item <= Item.table
+| when Item:
+  | $item <= Item.table
+  | when Equip: $item.equip <= Equip
+  | when Unequip: $item.unequip <= Unequip
 | case $ai [X@Xs]:
   | $aiArg <= Xs
   | $ai <= X

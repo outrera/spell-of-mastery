@@ -2,8 +2,9 @@ THIS FILE STATES BUGS TO FIX AND FEATURES TO IMPLEMENT
 
 TODO:
 - Inventory for humanoids:
-  - slots should have engarving hinting item type, they accept
-  - item affecting attributes. Watch for removing max health increasing to kill units without enough health.
+  - Item affecting attributes. Implement them through genes. Watch for removing max health increasing to kill units without enough health. Also watch for units with inborn genes. Items should have no effect of them.
+  - Item genes should be undispellable. Have a special chek list for such genes.
+  - Inventory tooltip infoline 
 - Objects like tables should have platform zhack, so items on top of would lie properly. Also, items on top should be drawn after them.
 - Remove borders around boxes.
 - ladders that would allow crawl on the wall; lifts that would work even when there is no wall. When creature enters ladder tile, it gains climber ability.

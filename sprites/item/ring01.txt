@@ -1,0 +1,4 @@
+author: `Robert C. 'Mumu'`, `Blarumyrran <blarumyrran@gmail.com>`
+license: `Public Domain (CC0)`
+origin: `https://opengameart.org/content/flare-item-variation-60x60-only`
+xy: -2,6
