@@ -1,5 +1,5 @@
 sprite: item_shield01
 ai: item
-item: l_hand
+item: slot{larm}
 box_xy: (-1 -1)
 

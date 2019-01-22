@@ -1,4 +1,4 @@
 sprite: item_sword01
 ai: item
-item: r_hand
+item: slot{rarm}
 box_xy: (-1 -1)

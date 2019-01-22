@@ -135,7 +135,6 @@ ui.create_ingame_ui =
   | 140 PY-28       | $create_panel_tabs_header
   | 146 $height-114 | $panelTabs
   | 164 $height-20  | infoline
-  | 0   $height-170 | notification_widget Me
   | 4   $height-124 | minimap $main | X Y => $view.center_at{[X Y 0]}
   | 0   PY          | $playerWidget
   
@@ -181,6 +180,7 @@ ui.create_ingame_dlg =
   | 110  50| $loadSiteDlg
   | 110  50| $saveSiteDlg
   |  0   0| $message_box
+  | 0   $height-170 | notification_widget Me  
 | Ingame
 
 ui.update = //called by site.update each game cycle

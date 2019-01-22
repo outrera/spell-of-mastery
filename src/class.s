@@ -43,7 +43,7 @@ type class{bank class_name Main
   range/Range           //attack range
   acts/Acts             //acts this unit can perform
   ai/Ai                 //how AI treats this unit
-  item/Item             //what use this item has
+  item                  //properties for item classes
   aiArg/[]              //additional data for ai
   active/0              //update unit each cycle?
   pickable/Pickable     //can be picked by player?
@@ -64,6 +64,7 @@ type class{bank class_name Main
   text/Text
   text_xy/Text_xy
   fow_hides/0 //unit is not seen under fog of war
+| when Item: $item <= Item.table
 | case $ai [X@Xs]:
   | $aiArg <= Xs
   | $ai <= X

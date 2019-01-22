@@ -11,10 +11,10 @@ invnt_slot.`=state` V =
 | when V><normal and $state><pressed: leave
 | $state_ <= V
 invnt_slot.render = Me
-invnt_slot.item_gfx =
-| Class = if $item.is_text then $main.classes.$item
-          else $item.class
-| Class.default_sprite.idle_frame
+invnt_slot.item_class = 
+| if $item.is_text then $main.classes.$item
+  else $item.class
+invnt_slot.item_gfx = $item_class.default_sprite.idle_frame
 invnt_slot.draw G PX PY =
 | less $item: leave 0
 | when $drag: leave 0
@@ -26,15 +26,38 @@ invnt_slot.drag_start =
 | C.slot <= Me
 | $drag <= 1
 | get_gui{}.cursor <= C
+invnt_slot.find_slots Type = $main.ui.invntDlg.unitSlots.keep{?type><Type}
+invnt_slot.transfer_item_to Dst =
+| Dst.item <= $item
+| $item <= 0
+invnt_slot.notify Msg = $main.ui.notify{Msg}
 invnt_slot.drag_end =
 | less $drag: leave
 | [Dst _ _] = get_gui{}.widget_under_cursor
-| when Dst.is_invnt_slot and not Dst.item:
-  | Dst.item <= $item
-  | $item <= 0
 | $drag <= 0
 | C = $main.ui.drag_cursor
 | get_gui{}.cursor <= C.saved_cursor
+| ItemSlotType = $item_class.item.slot
+| less Dst.is_invnt_slot:
+  | less Dst.is_invnt_doll
+    | leave
+  | Slots = $find_slots{ItemSlotType}
+  | FreeSlots = Slots.skip{?item}
+  | when FreeSlots.end:
+    | $notify{"First unquip the used item."}
+    | leave
+  | Dst <= Slots.0
+| when Dst.type<>any and Dst.type<>ItemSlotType:
+  | Slots = $find_slots{ItemSlotType}
+  | FreeSlots = Slots.skip{?item}
+  | when FreeSlots.end:
+    | $notify{"First unquip the used item."}
+    | leave
+  | Dst <= Slots.0
+| when Dst.item:
+  | $notify{"This slot is already occupied."}
+  | leave
+| $transfer_item_to{Dst}
 invnt_slot.input In = case In
   [mice over S P] | $over <= S
   [mice left 1 P] | case $state normal: $state_ <= \pressed
@@ -46,6 +69,11 @@ invnt_slot.input In = case In
 
 invnt_dlg.render =
 | $base.render
+
+
+type invnt_doll.widget{}  w/228 h/228
+invnt_doll.render = Me
+invnt_doll.draw G X Y =
 
 invnt_dlg.startup_init =
 | InfoButton = button 'Info' skin/medium_small: => ($infoCB){$unit}
@@ -64,8 +92,8 @@ invnt_dlg.startup_init =
 | Head  = invnt_slot $main head
 | Neck  = invnt_slot $main neck
 | Body  = invnt_slot $main body
-| RArm  = invnt_slot $main r_arm
-| LArm  = invnt_slot $main l_arm
+| RArm  = invnt_slot $main rarm
+| LArm  = invnt_slot $main larm
 | Feet  = invnt_slot $main feet
 | Cloak = invnt_slot $main cloak
 | Trinkets = dup I 5: invnt_slot $main trinket
@@ -77,7 +105,8 @@ invnt_dlg.startup_init =
 | GroundSlotsLay2 = layH s/4 $groundSlots.drop{6}
 | TrinketsLay = layV s/4 Trinkets
 | $base <= dlg: mtx
-  |   0   0| $main.img{ui_inventory}
+  |   0   0 | $main.img{ui_inventory}
+  | 208  83 | invnt_doll
   | 200  12 | txt header 'Inventory'
   | 338 320 | txt medium 'Ground:'
   | 96  71  | UnitIcon
